@@ -10,239 +10,239 @@ import { RemoteService } from './remote.service';
 export class ApiService {
   constructor(private store: StoreService, private local: LocalService, private remote: RemoteService) {}
 
-  api_apiDataCreate(params) {
-    return this.store.isLocal ? this.local.api_apiDataCreate(params) : this.remote.api_apiDataCreate(params);
+  api_apiDataCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiDataCreate<T>(params) : this.remote.api_apiDataCreate<T>(params);
   }
 
-  api_apiDataUpdate(params) {
-    return this.store.isLocal ? this.local.api_apiDataUpdate(params) : this.remote.api_apiDataUpdate(params);
+  api_apiDataUpdate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiDataUpdate<T>(params) : this.remote.api_apiDataUpdate<T>(params);
   }
 
-  api_apiDataDelete(params) {
-    return this.store.isLocal ? this.local.api_apiDataDelete(params) : this.remote.api_apiDataDelete(params);
+  api_apiDataDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiDataDelete<T>(params) : this.remote.api_apiDataDelete<T>(params);
   }
 
-  api_apiDataDetail(params) {
-    return this.store.isLocal ? this.local.api_apiDataDetail(params) : this.remote.api_apiDataDetail(params);
+  api_apiDataDetail<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiDataDetail<T>(params) : this.remote.api_apiDataDetail<T>(params);
   }
 
-  api_apiDataList(params) {
-    return this.store.isLocal ? this.local.api_apiDataList(params) : this.remote.api_apiDataList(params);
+  api_apiDataList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiDataList<T>(params) : this.remote.api_apiDataList<T>(params);
   }
 
-  api_mockCreate(params) {
-    return this.store.isLocal ? this.local.api_mockCreate(params) : this.remote.api_mockCreate(params);
+  api_mockCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_mockCreate<T>(params) : this.remote.api_mockCreate<T>(params);
   }
 
-  api_mockUpdate(params) {
-    return this.store.isLocal ? this.local.api_mockUpdate(params) : this.remote.api_mockUpdate(params);
+  api_mockUpdate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_mockUpdate<T>(params) : this.remote.api_mockUpdate<T>(params);
   }
 
-  api_mockList(params) {
-    return this.store.isLocal ? this.local.api_mockList(params) : this.remote.api_mockList(params);
+  api_mockList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_mockList<T>(params) : this.remote.api_mockList<T>(params);
   }
 
-  api_mockDetail(params) {
-    return this.store.isLocal ? this.local.api_mockDetail(params) : this.remote.api_mockDetail(params);
+  api_mockDetail<T = any>(params) {
+    return this.store.isLocal ? this.local.api_mockDetail<T>(params) : this.remote.api_mockDetail<T>(params);
   }
 
-  api_mockDelete(params) {
-    return this.store.isLocal ? this.local.api_mockDelete(params) : this.remote.api_mockDelete(params);
+  api_mockDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_mockDelete<T>(params) : this.remote.api_mockDelete<T>(params);
   }
 
-  api_groupCreate(params) {
-    return this.store.isLocal ? this.local.api_groupCreate(params) : this.remote.api_groupCreate(params);
+  api_groupCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_groupCreate<T>(params) : this.remote.api_groupCreate<T>(params);
   }
 
-  api_groupUpdate(params) {
-    return this.store.isLocal ? this.local.api_groupUpdate(params) : this.remote.api_groupUpdate(params);
+  api_groupUpdate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_groupUpdate<T>(params) : this.remote.api_groupUpdate<T>(params);
   }
 
-  api_groupDelete(params) {
-    return this.store.isLocal ? this.local.api_groupDelete(params) : this.remote.api_groupDelete(params);
+  api_groupDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_groupDelete<T>(params) : this.remote.api_groupDelete<T>(params);
   }
 
-  api_groupDetail(params) {
-    return this.store.isLocal ? this.local.api_groupDetail(params) : this.remote.api_groupDetail(params);
+  api_groupDetail<T = any>(params) {
+    return this.store.isLocal ? this.local.api_groupDetail<T>(params) : this.remote.api_groupDetail<T>(params);
   }
 
-  api_groupList(params) {
-    return this.store.isLocal ? this.local.api_groupList(params) : this.remote.api_groupList(params);
+  api_groupList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_groupList<T>(params) : this.remote.api_groupList<T>(params);
   }
 
-  api_apiTestHistoryCreate(params) {
-    return this.store.isLocal ? this.local.api_apiTestHistoryCreate(params) : this.remote.api_apiTestHistoryCreate(params);
+  api_apiTestHistoryCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryCreate<T>(params) : this.remote.api_apiTestHistoryCreate<T>(params);
   }
 
-  api_apiTestHistoryList(params) {
-    return this.store.isLocal ? this.local.api_apiTestHistoryList(params) : this.remote.api_apiTestHistoryList(params);
+  api_apiTestHistoryList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryList<T>(params) : this.remote.api_apiTestHistoryList<T>(params);
   }
 
-  api_apiTestHistoryDetail(params) {
-    return this.store.isLocal ? this.local.api_apiTestHistoryDetail(params) : this.remote.api_apiTestHistoryDetail(params);
+  api_apiTestHistoryDetail<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryDetail<T>(params) : this.remote.api_apiTestHistoryDetail<T>(params);
   }
 
-  api_apiTestHistoryDelete(params) {
-    return this.store.isLocal ? this.local.api_apiTestHistoryDelete(params) : this.remote.api_apiTestHistoryDelete(params);
+  api_apiTestHistoryDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryDelete<T>(params) : this.remote.api_apiTestHistoryDelete<T>(params);
   }
 
-  api_environmentCreate(params) {
-    return this.store.isLocal ? this.local.api_environmentCreate(params) : this.remote.api_environmentCreate(params);
+  api_environmentCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_environmentCreate<T>(params) : this.remote.api_environmentCreate<T>(params);
   }
 
-  api_environmentUpdate(params) {
-    return this.store.isLocal ? this.local.api_environmentUpdate(params) : this.remote.api_environmentUpdate(params);
+  api_environmentUpdate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_environmentUpdate<T>(params) : this.remote.api_environmentUpdate<T>(params);
   }
 
-  api_environmentDelete(params) {
-    return this.store.isLocal ? this.local.api_environmentDelete(params) : this.remote.api_environmentDelete(params);
+  api_environmentDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_environmentDelete<T>(params) : this.remote.api_environmentDelete<T>(params);
   }
 
-  api_environmentDetail(params) {
-    return this.store.isLocal ? this.local.api_environmentDetail(params) : this.remote.api_environmentDetail(params);
+  api_environmentDetail<T = any>(params) {
+    return this.store.isLocal ? this.local.api_environmentDetail<T>(params) : this.remote.api_environmentDetail<T>(params);
   }
 
-  api_environmentList(params) {
-    return this.store.isLocal ? this.local.api_environmentList(params) : this.remote.api_environmentList(params);
+  api_environmentList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_environmentList<T>(params) : this.remote.api_environmentList<T>(params);
   }
 
-  api_userReadInfo(params) {
-    return this.remote.api_userReadInfo(params);
+  api_userReadInfo<T = any>(params) {
+    return this.remote.api_userReadInfo<T>(params);
   }
 
-  api_userUpdateInfo(params) {
-    return this.remote.api_userUpdateInfo(params);
+  api_userUpdateInfo<T = any>(params) {
+    return this.remote.api_userUpdateInfo<T>(params);
   }
 
-  api_userUpdatePassword(params) {
-    return this.remote.api_userUpdatePassword(params);
+  api_userUpdatePassword<T = any>(params) {
+    return this.remote.api_userUpdatePassword<T>(params);
   }
 
-  api_userLogin(params) {
-    return this.remote.api_userLogin(params);
+  api_userLogin<T = any>(params) {
+    return this.remote.api_userLogin<T>(params);
   }
 
-  api_userRefreshToken(params) {
-    return this.remote.api_userRefreshToken(params);
+  api_userRefreshToken<T = any>(params) {
+    return this.remote.api_userRefreshToken<T>(params);
   }
 
-  api_userLogout(params) {
-    return this.remote.api_userLogout(params);
+  api_userLogout<T = any>(params) {
+    return this.remote.api_userLogout<T>(params);
   }
 
-  api_userSearch(params) {
-    return this.remote.api_userSearch(params);
+  api_userSearch<T = any>(params) {
+    return this.remote.api_userSearch<T>(params);
   }
 
-  api_workspaceCreate(params) {
-    return this.store.isLocal ? this.local.api_workspaceCreate(params) : this.remote.api_workspaceCreate(params);
+  api_workspaceCreate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_workspaceCreate<T>(params) : this.remote.api_workspaceCreate<T>(params);
   }
 
-  api_workspaceUpdate(params) {
-    return this.store.isLocal ? this.local.api_workspaceUpdate(params) : this.remote.api_workspaceUpdate(params);
+  api_workspaceUpdate<T = any>(params) {
+    return this.store.isLocal ? this.local.api_workspaceUpdate<T>(params) : this.remote.api_workspaceUpdate<T>(params);
   }
 
-  api_workspaceDelete(params) {
-    return this.store.isLocal ? this.local.api_workspaceDelete(params) : this.remote.api_workspaceDelete(params);
+  api_workspaceDelete<T = any>(params) {
+    return this.store.isLocal ? this.local.api_workspaceDelete<T>(params) : this.remote.api_workspaceDelete<T>(params);
   }
 
-  api_workspaceSearchMember(params) {
-    return this.remote.api_workspaceSearchMember(params);
+  api_workspaceSearchMember<T = any>(params) {
+    return this.remote.api_workspaceSearchMember<T>(params);
   }
 
-  api_workspaceAddMember(params) {
-    return this.remote.api_workspaceAddMember(params);
+  api_workspaceAddMember<T = any>(params) {
+    return this.remote.api_workspaceAddMember<T>(params);
   }
 
-  api_workspaceRemoveMember(params) {
-    return this.remote.api_workspaceRemoveMember(params);
+  api_workspaceRemoveMember<T = any>(params) {
+    return this.remote.api_workspaceRemoveMember<T>(params);
   }
 
-  api_workspaceMemberQuit(params) {
-    return this.remote.api_workspaceMemberQuit(params);
+  api_workspaceMemberQuit<T = any>(params) {
+    return this.remote.api_workspaceMemberQuit<T>(params);
   }
 
-  api_workspaceAddMemberRole(params) {
-    return this.remote.api_workspaceAddMemberRole(params);
+  api_workspaceAddMemberRole<T = any>(params) {
+    return this.remote.api_workspaceAddMemberRole<T>(params);
   }
 
-  api_workspaceGetMemberPermiss(params) {
-    return this.remote.api_workspaceGetMemberPermiss(params);
+  api_workspaceGetMemberPermiss<T = any>(params) {
+    return this.remote.api_workspaceGetMemberPermiss<T>(params);
   }
 
-  api_workspaceList(params) {
-    return this.store.isLocal ? this.local.api_workspaceList(params) : this.remote.api_workspaceList(params);
+  api_workspaceList<T = any>(params) {
+    return this.store.isLocal ? this.local.api_workspaceList<T>(params) : this.remote.api_workspaceList<T>(params);
   }
 
-  api_workspaceUnkown(params) {
-    return this.remote.api_workspaceUnkown(params);
+  api_workspaceUnkown<T = any>(params) {
+    return this.remote.api_workspaceUnkown<T>(params);
   }
 
-  api_projectCreate(params) {
-    return this.remote.api_projectCreate(params);
+  api_projectCreate<T = any>(params) {
+    return this.remote.api_projectCreate<T>(params);
   }
 
-  api_projectUpdate(params) {
-    return this.remote.api_projectUpdate(params);
+  api_projectUpdate<T = any>(params) {
+    return this.remote.api_projectUpdate<T>(params);
   }
 
-  api_projectDelete(params) {
-    return this.remote.api_projectDelete(params);
+  api_projectDelete<T = any>(params) {
+    return this.remote.api_projectDelete<T>(params);
   }
 
-  api_projectExport(params) {
-    return this.remote.api_projectExport(params);
+  api_projectExport<T = any>(params) {
+    return this.remote.api_projectExport<T>(params);
   }
 
-  api_projectAddMember(params) {
-    return this.remote.api_projectAddMember(params);
+  api_projectAddMember<T = any>(params) {
+    return this.remote.api_projectAddMember<T>(params);
   }
 
-  api_projectDelMember(params) {
-    return this.remote.api_projectDelMember(params);
+  api_projectDelMember<T = any>(params) {
+    return this.remote.api_projectDelMember<T>(params);
   }
 
-  api_projectMember(params) {
-    return this.remote.api_projectMember(params);
+  api_projectMember<T = any>(params) {
+    return this.remote.api_projectMember<T>(params);
   }
 
-  api_projectMemberQuit(params) {
-    return this.remote.api_projectMemberQuit(params);
+  api_projectMemberQuit<T = any>(params) {
+    return this.remote.api_projectMemberQuit<T>(params);
   }
 
-  api_projectSetRole(params) {
-    return this.remote.api_projectSetRole(params);
+  api_projectSetRole<T = any>(params) {
+    return this.remote.api_projectSetRole<T>(params);
   }
 
-  api_projectRoleList(params) {
-    return this.remote.api_projectRoleList(params);
+  api_projectRoleList<T = any>(params) {
+    return this.remote.api_projectRoleList<T>(params);
   }
 
-  api_projectPermission(params) {
-    return this.remote.api_projectPermission(params);
+  api_projectPermission<T = any>(params) {
+    return this.remote.api_projectPermission<T>(params);
   }
 
-  api_shareCreateShare(params) {
-    return this.remote.api_shareCreateShare(params);
+  api_shareCreateShare<T = any>(params) {
+    return this.remote.api_shareCreateShare<T>(params);
   }
 
-  api_shareGetShareList(params) {
-    return this.remote.api_shareGetShareList(params);
+  api_shareGetShareList<T = any>(params) {
+    return this.remote.api_shareGetShareList<T>(params);
   }
 
-  api_shareDeleteShare(params) {
-    return this.remote.api_shareDeleteShare(params);
+  api_shareDeleteShare<T = any>(params) {
+    return this.remote.api_shareDeleteShare<T>(params);
   }
 
-  api_shareDocGetAllApi(params) {
-    return this.remote.api_shareDocGetAllApi(params);
+  api_shareDocGetAllApi<T = any>(params) {
+    return this.remote.api_shareDocGetAllApi<T>(params);
   }
 
-  api_shareDocGetApiDetail(params) {
-    return this.remote.api_shareDocGetApiDetail(params);
+  api_shareDocGetApiDetail<T = any>(params) {
+    return this.remote.api_shareDocGetApiDetail<T>(params);
   }
 
-  api_shareDocGetEnv(params) {
-    return this.remote.api_shareDocGetEnv(params);
+  api_shareDocGetEnv<T = any>(params) {
+    return this.remote.api_shareDocGetEnv<T>(params);
   }
 }
