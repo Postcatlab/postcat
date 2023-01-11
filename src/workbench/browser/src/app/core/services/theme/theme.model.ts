@@ -42,8 +42,8 @@ export type ThemeColors = {
 
   layoutHeaderText?: string;
   layoutHeaderBackground?: string;
-  layoutSiderText?: string;
-  layoutSiderBackground?: string;
+  layoutSidebarText?: string;
+  layoutSidebarBackground?: string;
 
   layoutFooterText?: string;
   layoutFooterBackground?: string;

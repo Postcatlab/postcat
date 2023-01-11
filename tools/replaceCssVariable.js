@@ -107,14 +107,13 @@ const variables = {
   '--MODAL_SHADOW': '--modal-mask-background-color',
   '--NAVBAR_BTN_BG_HOVER': '--item-hover-background-color',
   '--NAVBAR_BTN_BG': '--item-active-background-color',
-  '--NAV_BOTTOM': '--nav-item-border-width',
+  '--NAV_BOTTOM': '--menu-item-border-width',
   '--PADDING_X': '--padding-x',
   '--PADDING_Y': '--padding-y',
   '--PADDING': '--padding',
   '--MARGIN': '--margin',
-  '--MR_ICON': '--btn-icon-margin'
+  '--MR_ICON': '--button-icon-margin'
 };
-console.log(sortByKeylength(variables));
 searchFilesInDirectoryAsync(['../src/workbench/browser/src'], sortByKeylength(variables));
 //Lazy to await
 setTimeout(() => {

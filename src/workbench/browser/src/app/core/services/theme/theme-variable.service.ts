@@ -16,7 +16,7 @@ export class ThemeVariableService {
   private initColorRule() {
     const colorsDefaultRule: ThemeColorRule[] = [
       {
-        source: 'layoutSiderText',
+        source: 'layoutSidebarText',
         rule: [
           {
             action: 'replace',
@@ -32,7 +32,7 @@ export class ThemeVariableService {
             target: [
               'tableText',
               'selectText',
-              'layoutSiderText',
+              'layoutSidebarText',
               'layoutHeaderText',
               'layoutFooterText',
               'iconText',
@@ -242,7 +242,7 @@ export class ThemeVariableService {
               'switchBakcground',
               'menuBackground',
               'layoutHeaderBackground',
-              'layoutSiderBackground',
+              'layoutSidebarBackground',
               'layoutFooterBackground',
               'buttonDefaultBackground',
               'buttonDangerBackground',

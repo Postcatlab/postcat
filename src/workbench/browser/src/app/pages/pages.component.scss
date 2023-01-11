@@ -21,7 +21,7 @@
 
 :host ::ng-deep {
   .home-container {
-    --body-height: calc(100vh - var(--page-navbar-height) - var(--page-footer-toolbar-height) - var(--remote-notification-height, 0));
+    --body-height: calc(100vh - var(--layout-header-height) - var(--layout-footer-height) - var(--remote-notification-height, 0));
 
     router-outlet + * {
       display: block;

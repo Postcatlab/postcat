@@ -150,15 +150,16 @@ nz-resize-handle.container-draggable {
 }
 
 .top-save-bar {
-  @apply sticky top-0 z-10 py-2.5;
+  @apply sticky top-0 z-10 px-[20px] flex items-center;
 
   background-color: var(--bar-background-color);
   border-bottom: 1px solid var(--border-color);
+  height: var(--edit-inside-bar-height);
 }
 
 .save-container {
   overflow: auto;
-  height: calc(100% - 56px);
+  height: calc(100% - var(--edit-inside-bar-height));
 }
 
 .tree-sider {
@@ -211,5 +212,6 @@ nz-resize-handle.container-draggable {
   nz-tree-node-title {
     // prevent operate shrink
     position: relative;
+    width: 0 !important;
   }
 }

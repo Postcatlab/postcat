@@ -1,9 +1,9 @@
 .eo-sidebar {
-  background-color: var(--layout-sider-background-color);
+  background-color: var(--layout-sidebar-background-color);
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
   overflow-x: hidden;
-  width: 90px;
+  width: var(--layout-sidebar-width);
   height: 100%;
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
 }
@@ -30,12 +30,8 @@
 
 .sidebar-item {
   padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   color: var(--menu-item-text-color);
+  height: var(--layout-sidebar-item-height);
 
   &.tiny {
     padding: 4px 0 5px;

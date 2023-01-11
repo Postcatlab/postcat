@@ -17,11 +17,11 @@
       class="overflow-auto pt-[10px]"
     ></eo-ng-tree-default>
     <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-      <div class="flex items-center justify-between tree-node">
-        <div class="flex items-center w-full cursor-pointer px-[6px]">
+      <div class="flex items-center justify-between w-full tree-node">
+        <div class="px-[6px] truncate">
           {{ node.title }}
         </div>
-        <div class="flex tree-node-operate">
+        <div class="flex flex-shrink-0 tree-node-operate">
           <button
             class="tree-item-btn"
             eo-ng-button

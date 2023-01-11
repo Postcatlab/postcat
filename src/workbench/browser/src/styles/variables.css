@@ -1,16 +1,29 @@
+/* UI component */
 :root {
-  --page-navbar-height: 50px;
-  --page-footer-toolbar-height: 30px;
-  --page-nav-tabs-height: 43px;
-  --page-nav-inside-tabs-height: 43px;
   --icon-size: 16px;
-  /* Button icon right  */
-  --btn-icon-margin: 5px;
   --border-radius: 4px;
-  --padding: 15px 20px;
+
+  --layout-header-height: 40px;
+  --layout-footer-height: 30px;
+
+  --btn-icon-margin: 5px;
+  --button-height: 32px;
+  --tabs-height: 43px;
+  --tree-item-height: 30px;
+  --collapse-header-height: 46px;
+
+  --table-font-size: 14px;
+  --table-row-height: 40px;
+  --table-item-padding: 4px;
+
   --padding-x: 20px;
   --padding-y: 15px;
+  --padding: var(--padding-y) var(--padding-x);
   --margin: 20px;
-  --nav-item-border-width: 3px;
-  --tree-item-height: 30px;
+}
+/* System customer */
+:root {
+  --layout-sidebar-width: 90px;
+  --layout-sidebar-item-height: auto;
+  --edit-inside-bar-height: 53px;
 }

@@ -20,7 +20,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
         <section class="flex h-[35px]">
           <div
             class="sidebar w-[15px]"
-            [style.background]="option.colors.layoutSiderBackground"
+            [style.background]="option.colors.layoutSidebarBackground"
             [style.borderColor]="option.colors.border"
           ></div>
           <div class="tree w-[30px]" [style.background]="option.colors.treeBackground" [style.borderColor]="option.colors.border"></div>

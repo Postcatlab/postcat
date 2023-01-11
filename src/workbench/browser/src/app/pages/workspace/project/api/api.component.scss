@@ -30,7 +30,7 @@ nz-divider {
   background-color: var(--tabs-card-bar-background-color);
   box-sizing: border-box;
   padding: 0;
-  height: var(--page-nav-tabs-height);
+  height: var(--tabs-height);
   display: flex;
   margin-bottom: -1px;
   align-items: center;
@@ -49,7 +49,7 @@ nz-divider {
 
     router-outlet + * {
       display: block;
-      height: calc(var(--body-height) - var(--page-nav-tabs-height));
+      height: calc(var(--body-height) - var(--tabs-height));
       overflow: auto;
     }
 
@@ -66,7 +66,7 @@ nz-divider {
 
   .has_tab_page {
     router-outlet + * {
-      height: calc(var(--body-height) - var(--page-nav-tabs-height) - var(--page-nav-inside-tabs-height));
+      height: calc(var(--body-height) - var(--tabs-height) - var(--tabs-height));
     }
   }
 
@@ -76,10 +76,6 @@ nz-divider {
 
   .api-container-tabs {
     --tabs-background-color: var(--tree-background-color);
-
-    .ant-tabs-nav {
-      height: var(--page-nav-tabs-height);
-    }
 
     .ant-tabs-nav-list {
       width: 100%;
@@ -94,7 +90,7 @@ nz-divider {
     }
 
     eo-ng-tabset .tree-sider {
-      height: calc(var(--body-height) - var(--page-nav-tabs-height));
+      height: calc(var(--body-height) - var(--tabs-height));
     }
 
     .tree-sider {
@@ -106,11 +102,6 @@ nz-divider {
     .ant-tabs-nav {
       display: none;
     }
-  }
-
-  .ant-tabs-nav,
-  .ant-tabs-extra-content {
-    height: 43px;
   }
 
   .param-box-header {

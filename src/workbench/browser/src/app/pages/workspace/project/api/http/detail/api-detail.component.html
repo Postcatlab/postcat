@@ -1,7 +1,7 @@
-<div class="w-full px-[20px] pb-[20px]">
+<div class="w-full p-base">
   <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model?.uri" [nzActive]="true"> </nz-skeleton>
   <div *ngIf="model?.uri">
-    <div class="flex items-center justify-between mt-4">
+    <div class="flex items-center justify-between">
       <div class="flex flex-wrap items-center min-w-0">
         <nz-tag [class]="model.protocol">HTTP</nz-tag>
         <eo-api-methods-tag [type]="model.method"></eo-api-methods-tag>
