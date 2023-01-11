@@ -1,9 +1,10 @@
 import type { Table } from 'dexie';
-import { HookGenerator } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/base-hook.decorator';
 
-import { ApiOkResponse, ApiResponseOptions } from '../decorators/api-response.decorator';
+import { ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 export class BaseService<T> {
-  constructor(readonly db: Table<T>) {}
+  constructor(readonly db: Table<T>) {
+    return this;
+  }
 
   private filterData(params: Record<string, any> = {}) {
     const entries = Object.entries(params);
@@ -18,55 +19,48 @@ export class BaseService<T> {
     });
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
-  read<P extends object>(params: P) {
-    return this.db.where(params).first() as ApiResponseOptions<T>;
+  @ApiResponse()
+  read(params: Record<string, any> = {}) {
+    return this.db.where(params).first() as ApiResponsePromise<T>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
+  @ApiResponse()
   async create(params) {
     const id = await this.db.add(params);
-    return this.read({ id }) as ApiResponseOptions<T>;
+    return this.read({ id }) as ApiResponsePromise<T>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
-  async update(params) {
-    const key = await this.db.put(params);
-    return this.read({ id: key }) as ApiResponseOptions<T>;
+  @ApiResponse()
+  async update(params: Record<string, any> = {}) {
+    const { id, ...rest } = params;
+    await this.db.update(id, rest);
+    return this.read({ id }) as ApiResponsePromise<T>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
+  @ApiResponse()
   async delete(params: Record<string, any> = {}) {
-    return this.db.where(params).delete() as ApiResponseOptions<number>;
+    return this.db.where(params).delete() as ApiResponsePromise<number>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
-  async bulkRead<P extends object>(params: P) {
-    return this.filterData(params).toArray() as ApiResponseOptions<T[]>;
+  @ApiResponse()
+  async bulkRead(params: Record<string, any>) {
+    return this.filterData(params).toArray() as ApiResponsePromise<T[]>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
+  @ApiResponse()
   async bulkUpdate(params) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
-    return this.bulkRead({ id: keys }) as ApiResponseOptions<T[]>;
+    return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
+  @ApiResponse()
   bulkDelete(params: Record<string, any> = {}) {
-    return this.filterData(params).delete() as ApiResponseOptions<number>;
+    return this.filterData(params).delete() as ApiResponsePromise<number>;
   }
 
-  @HookGenerator()
-  @ApiOkResponse()
+  @ApiResponse()
   async bulkCreate(params) {
     const keys = await this.db.bulkAdd(params, { allKeys: true });
-    return this.bulkRead({ id: keys }) as ApiResponseOptions<T[]>;
+    return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 }

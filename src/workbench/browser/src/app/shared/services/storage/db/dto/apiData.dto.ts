@@ -1,5 +1,18 @@
 export interface ApiDataBulkCreateDto {
-  apiList: ApiList[];
+  apiList: Partial<ApiList[]>;
+  projectUuid: string;
+  workSpaceUuid: string;
+}
+
+export interface ApiDataUpdateDto {
+  api: Partial<ApiList>;
+  projectUuid: string;
+  workSpaceUuid: string;
+}
+export interface ApiDataBulkReadDto {
+  api: {
+    apiUuids: string[];
+  };
   projectUuid: string;
   workSpaceUuid: string;
 }
@@ -11,7 +24,8 @@ export interface ApiDataDeleteDto {
 }
 
 export interface ApiList {
-  id: number;
+  id?: number;
+  apiUuid?: string;
   groupId: number;
   groupName: string;
   projectId: number;

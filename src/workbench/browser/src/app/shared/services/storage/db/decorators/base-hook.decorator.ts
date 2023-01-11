@@ -18,7 +18,7 @@ export function HookGenerator() {
 
     if (typeof original === 'function') {
       descriptor.value = async function (...args) {
-        args = this[paramTransformer]?.(...args) ?? args;
+        args = (await this[paramTransformer]?.(...args)) ?? args;
         await this[beforeHook]?.(...args);
         const result = await original.apply(this, args);
         const afterHookresult = await this[afterHook]?.({ params: args.reduce((p, v) => ({ ...p, ...v }), {}), result });
