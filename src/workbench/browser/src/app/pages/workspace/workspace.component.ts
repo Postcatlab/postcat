@@ -14,8 +14,8 @@ export class WorkspaceComponent implements OnInit {
   @observable projectList;
   constructor(private store: StoreService, private effect: EffectService, private route: ActivatedRoute) {
     const pid = Number(this.route.snapshot.queryParams.pid);
-    const wid = Number(this.route.snapshot.queryParams.wid);
-    if (this.store.getCurrentWorkspaceID !== wid) {
+    const wid = this.route.snapshot.queryParams.wid;
+    if (this.store.getCurrentWorkspaceUuid !== wid) {
       this.effect.changeWorkspace(wid);
       this.store.setCurrentProjectID(pid);
     } else if (this.store.getCurrentProjectID !== pid && pid) {

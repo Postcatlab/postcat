@@ -10,7 +10,7 @@ import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
 export class WorkspaceMemberService {
-  workspaceID: number;
+  workSpaceUuid: string;
   role: 'Owner' | 'Editor' | string;
   roleMUI = MEMBER_MUI;
   constructor(
@@ -21,12 +21,12 @@ export class WorkspaceMemberService {
   ) {
     autorun(() => {
       this.role = this.store.getWorkspaceRole;
-      this.workspaceID = this.store.getCurrentWorkspaceID;
+      this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
     });
   }
   async addMember(ids) {
     return await this.api.api_workspaceAddMember({
-      workspaceID: this.workspaceID,
+      workspaceID: this.workSpaceUuid,
       userIDs: ids
     });
   }
@@ -43,7 +43,7 @@ export class WorkspaceMemberService {
       ];
     } else {
       const [data, error]: any = await this.api.api_workspaceSearchMember({
-        workspaceID: this.workspaceID
+        workspaceID: this.workSpaceUuid
       });
       result = data || [];
     }
@@ -57,7 +57,7 @@ export class WorkspaceMemberService {
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
-      workspaceID: this.workspaceID,
+      workspaceID: this.workSpaceUuid,
       userIDs: [item.id]
     });
   }
@@ -70,20 +70,20 @@ export class WorkspaceMemberService {
       return [null, 'warning'];
     }
     const [data, err]: any = await this.api.api_workspaceMemberQuit({
-      workspaceID: this.workspaceID
+      workspaceID: this.workSpaceUuid
     });
     if (!err) {
-      if (this.store.getCurrentWorkspaceID === this.workspaceID) {
-        await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
+      if (this.store.getCurrentWorkspaceUuid === this.workSpaceUuid) {
+        await this.effect.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }
-      this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
+      this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.workSpaceUuid !== this.workSpaceUuid));
     }
     return [data, err];
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
     const [data, err]: any = await this.api.api_workspaceUnkown({
-      workspaceID: this.workspaceID,
+      workspaceID: this.workSpaceUuid,
       roleID: roleID,
       memberID: item.id
     });

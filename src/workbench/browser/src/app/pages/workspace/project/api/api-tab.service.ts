@@ -75,7 +75,7 @@ export class ApiTabService {
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
-      this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.id}_TabCache`;
+      this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.workSpaceUuid}_TabCache`;
     });
   }
   watchApiChange(inArg: Message) {
@@ -306,7 +306,7 @@ export class ApiTabService {
     const tab = tabsInfo.tabsByID[tabsInfo.tabOrder[0]];
     if (!tab) return null;
     const { wid, pid } = tab.params;
-    if (Number(wid) !== this.store.getCurrentWorkspaceID || Number(pid) !== this.store.getCurrentProjectID) return null;
+    if (wid !== this.store.getCurrentWorkspaceUuid || Number(pid) !== this.store.getCurrentProjectID) return null;
     return tabsInfo;
   };
   handleDataBeforeCache = tabStorage => {

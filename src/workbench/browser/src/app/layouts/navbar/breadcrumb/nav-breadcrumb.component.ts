@@ -24,7 +24,7 @@ export class NavBreadcrumbComponent implements OnDestroy {
         this.projectName = this.store.getCurrentProject.name;
         this.projectID = this.store.getCurrentProject.uuid;
       }
-      this.workspaceID = this.store.getCurrentWorkspaceID;
+      this.workspaceID = this.store.getCurrentWorkspaceUuid;
     });
   }
   initLevel() {
