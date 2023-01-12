@@ -19,7 +19,7 @@ export class ThemeExtensionService {
           isExtension: true,
           baseTheme: theme.baseTheme,
           colors: this.themeVariable.getColors(
-            theme.colors,
+            theme,
             coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || coreThemes[0]
           )
         });

@@ -73,9 +73,8 @@ export class ThemeService {
     //Init Core theme
     const coreThemes = systemThemes.filter(val => val.core);
     coreThemes.forEach(theme => {
-      const themeColors: Partial<ThemeColors> = theme.customColors;
       //Colors defalut value rule
-      theme.colors = this.themeVariable.getColors(themeColors);
+      theme.colors = this.themeVariable.getColors(theme);
     });
     return coreThemes;
   }
@@ -91,7 +90,7 @@ export class ThemeService {
     //Init custom theme
     const themeCache = {};
     for (var i = 0; i < systemThemes.length; i++) {
-      const theme = systemThemes[i];
+      let theme = systemThemes[i];
       let result;
       if (!theme.core) {
         if (themeCache[theme.path]) {
@@ -118,14 +117,11 @@ export class ThemeService {
       } else {
         result = this.coreThemes.find(val => val.id === theme.id);
       }
-
+      theme = { label: theme.label, id: theme.id, baseTheme: theme.baseTheme, ...result };
       this.themes.push({
-        label: theme.label,
-        id: theme.id,
-        baseTheme: theme.baseTheme,
-        ...result,
+        ...theme,
         colors: this.themeVariable.getColors(
-          result.colors,
+          theme,
           this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || this.coreThemes[0]
         )
       });

@@ -83,7 +83,10 @@ var obj = {
     )
   ).getPropertyValue('--insert-border-color'),
   tabsCardItemActiveText: activeTab.style['color'],
-  tabsCardItemBackground: barBackground,
+  tabsCardItemBackground: getDomStyle(
+    '#workbench\\.parts\\.editor > div.content > div.grid-view-container > div > div > div > div.monaco-scrollable-element.mac > div.split-view-container > div > div > div.title.tabs.show-file-icons > div.tabs-and-actions-container > div.monaco-scrollable-element.mac > div.tabs-container > div:nth-child(1)',
+    'background-color'
+  ),
   tabsCardItemActiveBackground: activeTab.style['background-color'],
   tabsCardItemActive: 'transparent',
   activeBorder: getVariable('--vscode-focusBorder'),

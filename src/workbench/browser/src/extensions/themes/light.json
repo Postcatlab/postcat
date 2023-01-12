@@ -1,17 +1,9 @@
 {
   "colors": {
     "primary": "#7371fc",
-    "shadow": "#d9d9d9",
     "text": "#333",
     "textSecondary": "#999",
     "inputIcon": "rgba(0, 0, 0, 0.25)",
-    "success": "#00785a",
-    "successHover": "#0aa07a",
-    "warning": "#ed6a0c",
-    "danger": "#ff3c32",
-    "dangerHover": "#ff625a",
-    "info": "#2878ff",
-    "infoHover": "#498cff",
     "border": "rgba(0, 0, 0, 0.07)",
     "background": "#fff",
     "barBackground": "#fafafa",
@@ -23,6 +15,8 @@
     "divider": "rgba(0,0,0,.06)",
     "alertDefaultBackground": "rgba(149,149,149,.1)",
     "scrollbarTrackBackground": "rgba(255, 255, 255, 0.05)",
-    "scrollbarThumbBackground": "rgba(0, 0, 0, 0.2)"
+    "scrollbarThumbBackground": "rgba(0, 0, 0, 0.2)",
+    "popoverText": "#fff",
+    "popoverBackground": "rgba(0,0,0,.75)"
   }
 }

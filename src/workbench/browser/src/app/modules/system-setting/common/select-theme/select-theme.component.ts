@@ -35,7 +35,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
         ></div>
       </div>
       <div class="flex items-center justify-center mt-[10px]">
-        <p class="">{{ option.label }}</p>
+        <p class="truncate">{{ option.label }}</p>
       </div>
     </div>
   </div>`,

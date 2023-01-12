@@ -17,7 +17,7 @@ export class ThemeVariableService {
     // console.log('%c FILTER_COLOR:', `background:${'#fafafa'}`, '#fafafa');
     // console.log('%c FILTER_COLOR:', `background:${color.rgb().string()}`, color.rgb().string());
   }
-  private initColorRule() {
+  private initColorRule(base: 'dark' | 'light') {
     const colorsDefaultRule: ThemeColorRule[] = [
       {
         source: 'layoutSidebarText',
@@ -25,6 +25,11 @@ export class ThemeVariableService {
           {
             action: 'replace',
             target: ['menuItemText']
+          },
+          {
+            action: 'filter',
+            alpha: 0.1,
+            target: ['menuItemActiveBackground']
           }
         ]
       },
@@ -292,8 +297,7 @@ export class ThemeVariableService {
           {
             action: 'replace',
             target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBackground', 'menuInlineSubmenuBackground']
-          },
-          { action: 'darken', alpha: 0.03, target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground'] }
+          }
         ]
       },
       {
@@ -426,6 +430,24 @@ export class ThemeVariableService {
         });
       });
     });
+
+    //ItemHover
+    if (base === 'light') {
+      const barBackgroundRule = colorsDefaultRule.find(val => val.source === 'barBackground');
+      barBackgroundRule.rule.push({
+        action: 'darken',
+        alpha: 0.03,
+        target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
+      });
+    } else {
+      const textRule = colorsDefaultRule.find(val => val.source === 'text');
+      textRule.rule.push({
+        action: 'filter',
+        alpha: 0.2,
+        target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
+      });
+    }
+
     return colorsDefaultRule;
   }
   private getColorsBySingleRule(rule: ThemeColorSingleRule, opts: { customColors: Partial<ThemeColors>; colorKey: string }) {
@@ -474,8 +496,8 @@ export class ThemeVariableService {
     }
     return result;
   }
-  private getColorsByCustomColors(customColors: Partial<ThemeColors>): ThemeColors {
-    const rules = this.initColorRule();
+  private getColorsByCustomColors(base: 'dark' | 'light', customColors: Partial<ThemeColors>): ThemeColors {
+    const rules = this.initColorRule(base);
     const result = eoDeepCopy(customColors);
     rules.forEach(singleRule => {
       if (singleRule.default && !(result[singleRule.target] || result[singleRule.source])) {
@@ -503,25 +525,27 @@ export class ThemeVariableService {
    * Get all colors by basic colors
    *
    * @param customColors  custom theme colors
-   * @param baseTheme  base theme colors
+   * @param defaultThemeOpts  base theme colors
    */
   getColors(
-    customColors,
-    baseTheme: Partial<SystemThemeItems> = {
+    theme,
+    defaultThemeOpts: Partial<SystemThemeItems> = {
       customColors: {},
       colors: allThemeColors
     }
   ) {
     //* customRule > baseTheme.rule > system default
-    customColors = { ...baseTheme.customColors, ...customColors };
-    // ...DEFAULT_THEME_COLORS,
+    const customColors = { ...defaultThemeOpts.customColors, ...(theme.core ? theme.customColors : theme.colors) };
+    const baseThemeID = (theme.core ? theme.id : theme.baseTheme) || 'light';
     //Generate colors by custom colors
-    const colors = this.getColorsByCustomColors(customColors);
+    const colors = this.getColorsByCustomColors(baseThemeID.includes('dark') ? 'dark' : 'light', customColors);
+    console.log(colors, theme);
     const result = {} as ThemeColors;
+
     //Use default color if not set
     Object.keys(allThemeColors).forEach(colorKey => {
       if (!colors[colorKey]) {
-        result[colorKey] = baseTheme.colors[colorKey] || DEFAULT_THEME_COLORS[colorKey];
+        result[colorKey] = defaultThemeOpts.colors[colorKey] || DEFAULT_THEME_COLORS[colorKey];
       } else {
         result[colorKey] = colors[colorKey];
       }
@@ -529,7 +553,7 @@ export class ThemeVariableService {
         pcConsole.error(`Colors can't find ${colorKey} value`);
       }
     });
-    result['systemBorder'] = result.border === 'transparent' ? baseTheme.customColors.border : result.border;
+    result['systemBorder'] = result.border === 'transparent' ? defaultThemeOpts.customColors.border : result.border;
     // pcConsole.log('getColors:', result);
     return result;
   }
