@@ -897,4 +897,120 @@ export class LocalService {
         });
     });
   }
+
+  api_projectCreate<T = any>({ projectMsgs, workSpaceUuid }) {
+    if (projectMsgs == null) {
+      console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .create({ projectMsgs, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - create 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectDetail<T = any>({ projectUuids, workSpaceUuid, page, pageSize }) {
+    if (projectUuids == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (page == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 page %c', ErrorStyle, '');
+      return;
+    }
+    if (pageSize == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 pageSize %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .page({ projectUuids, workSpaceUuid, page, pageSize })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - detail 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectUpdate<T = any>({ projectUuid, name, description }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (name == null) {
+      console.log('%c Error: project - update 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (description == null) {
+      console.log('%c Error: project - update 接口 缺失参数 description %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .update({ projectUuid, name, description })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - update 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectDelete<T = any>({ projectUuids }) {
+    if (projectUuids == null) {
+      console.log('%c Error: project - delete 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .delete({ projectUuids })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - delete 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
 }

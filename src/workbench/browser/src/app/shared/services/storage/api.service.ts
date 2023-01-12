@@ -211,19 +211,19 @@ export class ApiService {
   }
 
   api_projectCreate<T = any>(params) {
-    return this.remote.api_projectCreate<T>(params);
+    return this.store.isLocal ? this.local.api_projectCreate<T>(params) : this.remote.api_projectCreate<T>(params);
   }
 
   api_projectDetail<T = any>(params) {
-    return this.remote.api_projectDetail<T>(params);
+    return this.store.isLocal ? this.local.api_projectDetail<T>(params) : this.remote.api_projectDetail<T>(params);
   }
 
   api_projectUpdate<T = any>(params) {
-    return this.remote.api_projectUpdate<T>(params);
+    return this.store.isLocal ? this.local.api_projectUpdate<T>(params) : this.remote.api_projectUpdate<T>(params);
   }
 
   api_projectDelete<T = any>(params) {
-    return this.remote.api_projectDelete<T>(params);
+    return this.store.isLocal ? this.local.api_projectDelete<T>(params) : this.remote.api_projectDelete<T>(params);
   }
 
   api_shareCreateShare<T = any>(params) {

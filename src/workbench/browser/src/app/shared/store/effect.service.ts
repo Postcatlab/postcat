@@ -249,13 +249,12 @@ export class EffectService {
 
   // ? delete
   async deleteHistory() {
-    // TODO delete history with IO
-    this.store.setHistory([]);
     const [, err] = await this.api.api_apiTestHistoryDelete({
       id: id_ID,
       projectUuid: this.store.getCurrentProjectID,
       workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
+    this.store.setHistory([]);
   }
   // * delete api
   async deleteAPI(uuid) {
@@ -303,9 +302,12 @@ export class EffectService {
   }
 
   // ? get
-  private getHistory() {
-    // TODO load history with IO
-    this.store.setHistory([]);
+  private async getHistory() {
+    const [res, err] = await this.api.api_apiTestHistoryList({});
+    if (err) {
+      return;
+    }
+    this.store.setHistory(res.data.items);
   }
   async getGroupList() {
     // * get group list data
@@ -323,7 +325,7 @@ export class EffectService {
       return;
     }
     console.log('API 数据', aRes);
-    // * merge data
+    // * merge api & group
   }
   // ! maybo no need getAPI()
   async getAPI(uuid) {
@@ -351,4 +353,5 @@ export class EffectService {
     // * update group
     // * update api list
   }
+  updateHistory() {}
 }
