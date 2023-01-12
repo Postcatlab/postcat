@@ -9,7 +9,7 @@ import { action, computed, makeObservable, reaction, observable, toJS } from 'mo
 import { filter } from 'rxjs/operators';
 
 import { eoDeepCopy } from '../../utils/index.utils';
-const LOCAL_WORKSPACE = {
+export const LOCAL_WORKSPACE = {
   title: $localize`Persional Workspace`,
   id: -1
 } as API.Workspace;

@@ -23,7 +23,7 @@ class DataSource extends Dexie {
   constructor() {
     super('postcat_core_test');
     this.version(1).stores({
-      workspace: '++id, &uuid, name',
+      workspace: '++id, &uuid, name, isLocal',
       project: '++id, &uuid, name',
       environment: '++id, name, projectUuid, workSpaceUuid',
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
@@ -37,7 +37,7 @@ class DataSource extends Dexie {
   }
 
   private async populate() {
-    const workspaceID = await this.workspace.add({ title: 'Persional Workspace' });
+    const workspaceID = await this.workspace.add({ title: 'Persional Workspace', isLocal: true });
     const workspace = await this.workspace.get(workspaceID);
 
     const projectID = await this.project.add({ name: 'Default' });
@@ -51,6 +51,12 @@ class DataSource extends Dexie {
   }
 
   initHooks() {
+    // 表字段映射
+    const uuidMap = {
+      workspace: 'workSpaceUuid',
+      project: 'projectUuid',
+      apiData: 'apiUuid'
+    };
     this.tables.forEach(table => {
       const isDefUuid = table.schema.idxByName.uuid?.keyPath;
       table.hook('creating', (primKey, obj) => {
@@ -59,6 +65,19 @@ class DataSource extends Dexie {
           // 官方默认的语法支持：https://dexie.org/docs/Version/Version.stores()#schema-syntax
           obj['uuid'] = crypto.randomUUID();
         }
+        obj.updateTime = obj.createTime = Date.now();
+      });
+      // https://dexie.org/docs/Table/Table.hook('reading')
+      table.hook('reading', obj => {
+        const uuidName = uuidMap[table.name];
+        if (uuidName) {
+          obj[uuidName] = obj.uuid;
+        }
+        return obj;
+      });
+      table.hook('updating', (modifications, primKey, obj) => {
+        obj.updateTime = Date.now();
+        return obj;
       });
     });
   }

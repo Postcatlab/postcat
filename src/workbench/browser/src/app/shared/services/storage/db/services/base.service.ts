@@ -67,12 +67,12 @@ export class BaseService<T> {
   @ApiResponse()
   async page(params) {
     let { page = 1, pageSize, ...restParams } = params;
-    const filterRows = this.filterData(restParams);
-    const total = await filterRows.count();
+    const filterRecords = this.filterData(restParams);
+    const total = await filterRecords.count();
 
     pageSize ??= total;
 
-    const items = await filterRows
+    const items = await filterRecords
       .offset(Math.max(0, page - 1))
       .limit(pageSize)
       .toArray();

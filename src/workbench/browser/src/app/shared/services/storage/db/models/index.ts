@@ -7,6 +7,7 @@ interface Base {
 
 export interface Workspace extends Base {
   title: string;
+  isLocal: boolean;
 }
 
 export interface Project extends Base {

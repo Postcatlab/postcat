@@ -43,13 +43,12 @@ declare namespace API {
     /**
      * 空间创建者ID
      */
-    creatorID: number;
+    createUserId: number;
     id: number;
     /**
      * 空间名称
      */
     title: string;
-    users: User[];
   }
 
   /**

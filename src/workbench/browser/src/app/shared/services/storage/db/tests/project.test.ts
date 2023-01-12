@@ -23,6 +23,7 @@ if (projects.length === 2) {
 } else {
   pcConsole.error('[批量创建项目]: 测试不通过');
 }
+console.log('projects', projects);
 
 // 分页获取项目列表
 const { data: projectPage } = await table.page({ projectUuids: projects.map(({ uuid }) => uuid), workSpaceUuid });
@@ -40,7 +41,6 @@ if (projectUpdateRes.name === name) {
 } else {
   pcConsole.error('[修改项目信息]: 测试不通过');
 }
-
 // 批量删除项目
 const { data: delKeys } = await table.bulkDelete({ projectUuids: projects.map(n => n.uuid) });
 if (delKeys === 2) {
