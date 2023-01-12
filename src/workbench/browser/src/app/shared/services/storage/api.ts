@@ -90,7 +90,7 @@ const http = {
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
         { 'create @post @create': '/projects', json: 'projectMsgs, workSpaceUuid' },
-        { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid, page, pageSize' },
+        { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/projects', json: 'projectUuid, name, description' },
         { 'delete @delete @delete': '/projects', body: 'projectUuids' }
       ]

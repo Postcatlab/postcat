@@ -925,7 +925,7 @@ export class LocalService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid, page, pageSize }) {
+  api_projectDetail<T = any>({ projectUuids, workSpaceUuid }) {
     if (projectUuids == null) {
       console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
@@ -934,18 +934,10 @@ export class LocalService {
       console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
-    if (page == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 page %c', ErrorStyle, '');
-      return;
-    }
-    if (pageSize == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 pageSize %c', ErrorStyle, '');
-      return;
-    }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.project
-        .page({ projectUuids, workSpaceUuid, page, pageSize })
+        .page({ projectUuids, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project - detail 接口调用成功 %c', SuccessStyle, '');

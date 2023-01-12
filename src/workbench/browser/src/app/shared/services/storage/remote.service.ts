@@ -1605,7 +1605,7 @@ export class RemoteService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid, page, pageSize }, prefix = '') {
+  api_projectDetail<T = any>({ projectUuids, workSpaceUuid }, prefix = '') {
     if (projectUuids == null) {
       console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
@@ -1614,19 +1614,11 @@ export class RemoteService {
       console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
-    if (page == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 page %c', ErrorStyle, '');
-      return;
-    }
-    if (pageSize == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 pageSize %c', ErrorStyle, '');
-      return;
-    }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/projects`, {
-          params: { projectUuids, workSpaceUuid, page, pageSize }
+          params: { projectUuids, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
