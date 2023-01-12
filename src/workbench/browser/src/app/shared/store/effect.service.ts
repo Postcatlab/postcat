@@ -175,18 +175,13 @@ export class EffectService {
     this.store.setWorkspaceList(list);
   }
   async updateProjects(workspaceID) {
-    return new Promise(resolve => {
-      // * real set workspace
-      this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          // * select first project automatic
-          this.store.setProjectList(result.data);
-          resolve([result.data, null]);
-          return;
-        }
-        resolve([null, result.data]);
-      });
-    });
+    const [result] = await this.api.api_projectDetail({ workSpaceUuid: workspaceID });
+    if (result && result.code === 0) {
+      this.store.setProjectList(result.data);
+      return [result.data, null];
+    } else {
+      [null, result.data];
+    }
   }
   updateProject(data) {
     const workspace = this.store.getCurrentWorkspace;
@@ -259,7 +254,7 @@ export class EffectService {
     const [, err] = await this.api.api_apiTestHistoryDelete({
       id: id_ID,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
   }
   // * delete api
@@ -268,7 +263,7 @@ export class EffectService {
     const [, err] = await this.api.api_apiDataDelete({
       apiUuid: uuid,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (err) {
       return;
@@ -290,7 +285,7 @@ export class EffectService {
     const [, err] = await this.api.api_mockDelete({
       id: id,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     // * update API
   }
@@ -322,7 +317,7 @@ export class EffectService {
     // * get api list data
     const [aRes, aErr] = await this.api.api_apiDataList({
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (aErr) {
       return;
@@ -336,7 +331,7 @@ export class EffectService {
     const [res, err] = await this.api.api_apiDataDetail({
       apiUuids: uuid,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (err) {
       return;
