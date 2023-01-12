@@ -24,8 +24,8 @@ export class ProjectMemberService {
   }
   async addMember(ids) {
     return await this.remote.api_projectAddMember({
-      projectID: this.projectID,
-      userIDs: ids
+      projectUuid: this.projectID,
+      userIds: ids
     });
   }
   async queryMember() {
@@ -40,8 +40,9 @@ export class ProjectMemberService {
         }
       ];
     } else {
-      const [data, error]: any = await this.remote.api_projectMember({
-        projectID: this.projectID
+      const [data, error]: any = await this.remote.api_projectMemberList({
+        projectUuid: this.projectID,
+        username: ''
       });
       result = data || [];
     }
@@ -59,13 +60,14 @@ export class ProjectMemberService {
   }
   async removeMember(item) {
     return await this.remote.api_projectDelMember({
-      projectID: this.projectID,
-      userIDs: [item.id]
+      projectUuid: this.projectID,
+      userIds: [item.id]
     });
   }
   async quitMember(members) {
     const [data, err]: any = await this.remote.api_projectMemberQuit({
-      projectID: this.projectID
+      projectUuid: this.projectID,
+      userId: ''
     });
     if (!err) {
       const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
@@ -76,9 +78,8 @@ export class ProjectMemberService {
   async changeRole(item) {
     const roleID = item.role.id === 3 ? 4 : 3;
     const [data, err]: any = await this.remote.api_projectSetRole({
-      projectID: this.projectID,
-      roleID: roleID,
-      memberID: item.id
+      projectUuid: this.projectID,
+      userRole: roleID
     });
     if (!err) {
       item.role.id = roleID;

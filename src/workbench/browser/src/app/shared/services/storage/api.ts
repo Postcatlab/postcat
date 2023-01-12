@@ -85,14 +85,14 @@ const http = {
         { 'exportGroup @post': '/projects/collections', json: 'projectUuid' },
         { 'memberList @get': '/projects/users', query: 'username, projectUuid' },
         { 'addMember @post': '/projects/users', json: 'userIds, projectUuid' },
-        { 'delMember @delete': '/projects/users', query: 'userIds, projectUuid' },
-        { 'memberQuit @delete': '/projects/users/quit', json: 'userId, projectUuid' },
+        { 'delMember @delete': '/projects/users', body: 'userIds, projectUuid' },
+        { 'memberQuit @delete': '/projects/users/quit', body: 'userId, projectUuid' },
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
         { 'create @post': '/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get': '/projects', query: 'projectUuid, workSpaceUuid, page, pageSize' },
         { 'update @put': '/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete': '/projects', json: 'projectUuids' }
+        { 'delete @delete': '/projects', body: 'projectUuids' }
       ]
     },
     {

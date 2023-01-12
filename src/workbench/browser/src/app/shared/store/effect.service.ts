@@ -10,7 +10,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { reaction, toJS } from 'mobx';
+import { reaction } from 'mobx';
 
 @Injectable({
   providedIn: 'root'
@@ -142,7 +142,7 @@ export class EffectService {
   async getProjectPermission() {
     //TODO localworkspace no need to set permission
     // * update project auth
-    const [data, err]: any = await this.api.api_projectPermission({ projectID: this.store.getCurrentProjectID });
+    const [data, err]: any = await this.api.api_projectUserPermission({ projectID: this.store.getCurrentProjectID });
     if (err) {
       return;
     }

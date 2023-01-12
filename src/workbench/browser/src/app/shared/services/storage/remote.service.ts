@@ -1463,7 +1463,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/projects/users`, {
-          params: { userIds, projectUuid }
+          body: { userIds, projectUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1492,19 +1492,23 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.delete(`${prefix}/projects/users/quit`, { userId, projectUuid }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:memberQuit - api_projectMemberQuit 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/projects/users/quit`, {
+          body: { userId, projectUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:memberQuit - api_projectMemberQuit 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:memberQuit - api_projectMemberQuit 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:memberQuit - api_projectMemberQuit 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1666,19 +1670,23 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.delete(`${prefix}/projects`, { projectUuids }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:delete - api_projectDelete 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/projects`, {
+          body: { projectUuids }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:delete - api_projectDelete 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:delete - api_projectDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:delete - api_projectDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
