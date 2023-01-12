@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OperateProjectFormComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/components/operate-project-form.compoent';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -24,7 +25,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   constructor(
-    private storage: StorageService,
+    private apiService: ApiService,
     private setting: SettingService,
     private effect: EffectService,
     private store: StoreService,
@@ -45,6 +46,7 @@ export class ProjectListComponent implements OnInit {
 
   editProject(item: any): void {
     const model = {
+      ...item,
       name: item.name
     };
     const modal = this.modalService.create({
@@ -54,12 +56,9 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
-        this.storage.run('projectUpdate', [this.WorkspaceID, model, item.uuid], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+        await this.effect.updateProject(model);
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }
@@ -72,12 +71,9 @@ export class ProjectListComponent implements OnInit {
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {
-        this.storage.run('projectRemove', [this.WorkspaceID, item.uuid], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+        await this.apiService.api_projectDelete({ projectUuids: [item.uuid] });
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }

@@ -191,25 +191,24 @@ export class EffectService {
       projectMsgs: [data]
     });
   }
-  updateProject(data) {
-    const workspace = this.store.getCurrentWorkspace;
-    return new Promise(resolve => {
-      this.storage.run('projectUpdate', [workspace.workSpaceUuid, data, data.uuid], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          const project = result.data;
-          const projects = this.store.getProjectList;
-          projects.some(val => {
-            if (val.uuid === project.uuid) {
-              Object.assign(val, project);
-              return true;
-            }
-          });
-          this.store.setProjectList(projects);
-          this.store.setCurrentProjectID(project.uuid);
-          resolve(true);
+  async updateProject(data) {
+    data = {
+      ...data,
+      description: data.description ?? ''
+    };
+    const [project] = await this.api.api_projectUpdate(data);
+
+    if (project) {
+      const projects = this.store.getProjectList;
+      projects.some(val => {
+        if (val.uuid === project.uuid) {
+          Object.assign(val, project);
+          return true;
         }
       });
-    });
+      this.store.setProjectList(projects);
+      this.store.setCurrentProjectID(project.uuid);
+    }
   }
 
   async updateShareLink(): Promise<string> {
