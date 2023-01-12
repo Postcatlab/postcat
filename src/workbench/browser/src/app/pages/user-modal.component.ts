@@ -516,7 +516,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.message.send({ type: 'update-share-link', data: {} });
       {
         await this.effect.updateWorkspaces();
-        await this.effect.changeWorkspace(data.id);
+        await this.effect.changeWorkspace(data.workSpaceUuid);
       }
       if (this.store.getWorkspaceList.length === 2) {
         const modal = this.modal.create({

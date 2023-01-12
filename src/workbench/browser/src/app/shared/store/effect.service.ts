@@ -31,7 +31,7 @@ export class EffectService {
     queueMicrotask(async () => {
       await this.updateWorkspaces();
       // * update title
-      document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
+      document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
       this.updateProjects().then(() => {
         if (this.store.getProjectList.length === 0) {
           this.router.navigate(['/home/workspace/overview']);
@@ -137,7 +137,7 @@ export class EffectService {
     //   this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceUuid } });
     // }
     // * update title
-    document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
+    document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
     // * update workspace role
     this.getWorkspacePermission();
     this.getProjectPermission();
@@ -183,32 +183,28 @@ export class EffectService {
     }
   }
   async createProject(data) {
-    const workspace = this.store.getCurrentWorkspace;
-
     await this.api.api_projectCreate({
-      workSpaceUuid: workspace.workSpaceUuid,
       projectMsgs: [data]
     });
   }
-  updateProject(data) {
-    const workspace = this.store.getCurrentWorkspace;
-    return new Promise(resolve => {
-      this.storage.run('projectUpdate', [workspace.workSpaceUuid, data, data.uuid], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          const project = result.data;
-          const projects = this.store.getProjectList;
-          projects.some(val => {
-            if (val.uuid === project.uuid) {
-              Object.assign(val, project);
-              return true;
-            }
-          });
-          this.store.setProjectList(projects);
-          this.store.setCurrentProjectID(project.uuid);
-          resolve(true);
+  async updateProject(data) {
+    data = {
+      ...data,
+      description: data.description ?? ''
+    };
+    const [project] = await this.api.api_projectUpdate(data);
+
+    if (project) {
+      const projects = this.store.getProjectList;
+      projects.some(val => {
+        if (val.uuid === project.uuid) {
+          Object.assign(val, project);
+          return true;
         }
       });
-    });
+      this.store.setProjectList(projects);
+      this.store.setCurrentProjectID(project.uuid);
+    }
   }
 
   async updateShareLink(): Promise<string> {
