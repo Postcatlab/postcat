@@ -89,10 +89,10 @@ const http = {
         { 'memberQuit @delete': '/projects/users/quit', body: 'userId, projectUuid' },
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
-        { 'create @post': '/projects', json: 'projectMsgs, workSpaceUuid' },
-        { 'detail @get': '/projects', query: 'projectUuid, workSpaceUuid, page, pageSize' },
-        { 'update @put': '/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete': '/projects', body: 'projectUuids' }
+        { 'create @post @create': '/projects', json: 'projectMsgs, workSpaceUuid' },
+        { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid, page, pageSize' },
+        { 'update @put @update': '/projects', json: 'projectUuid, name, description' },
+        { 'delete @delete @delete': '/projects', body: 'projectUuids' }
       ]
     },
     {

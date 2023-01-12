@@ -254,13 +254,12 @@ export class EffectService {
 
   // ? delete
   async deleteHistory() {
-    // TODO delete history with IO
-    this.store.setHistory([]);
     const [, err] = await this.api.api_apiTestHistoryDelete({
       id: id_ID,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
+    this.store.setHistory([]);
   }
   // * delete api
   async deleteAPI(uuid) {
@@ -268,7 +267,7 @@ export class EffectService {
     const [, err] = await this.api.api_apiDataDelete({
       apiUuid: uuid,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (err) {
       return;
@@ -290,7 +289,7 @@ export class EffectService {
     const [, err] = await this.api.api_mockDelete({
       id: id,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     // * update API
   }
@@ -308,9 +307,12 @@ export class EffectService {
   }
 
   // ? get
-  private getHistory() {
-    // TODO load history with IO
-    this.store.setHistory([]);
+  private async getHistory() {
+    const [res, err] = await this.api.api_apiTestHistoryList({});
+    if (err) {
+      return;
+    }
+    this.store.setHistory(res.data.items);
   }
   async getGroupList() {
     // * get group list data
@@ -322,13 +324,13 @@ export class EffectService {
     // * get api list data
     const [aRes, aErr] = await this.api.api_apiDataList({
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (aErr) {
       return;
     }
     console.log('API 数据', aRes);
-    // * merge data
+    // * merge api & group
   }
   // ! maybo no need getAPI()
   async getAPI(uuid) {
@@ -336,7 +338,7 @@ export class EffectService {
     const [res, err] = await this.api.api_apiDataDetail({
       apiUuids: uuid,
       projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceID
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
     });
     if (err) {
       return;
@@ -356,4 +358,5 @@ export class EffectService {
     // * update group
     // * update api list
   }
+  updateHistory() {}
 }
