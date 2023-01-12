@@ -38,9 +38,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   async getProjectList() {
-    console.log('不可能', this.WorkspaceID);
     const [data]: any = await this.effect.updateProjects(this.WorkspaceID);
-    console.log('data', data);
     this.projectList = data || [];
     this.initLoading = false;
   }
@@ -101,12 +99,11 @@ export class ProjectListComponent implements OnInit {
       },
       nzOnOk: async () => {
         if (!model.name) return;
-        this.storage.run('projectCreate', [this.store.getCurrentWorkspace.workSpaceUuid, model], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+
+        await this.effect.createProject(model);
+
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }
