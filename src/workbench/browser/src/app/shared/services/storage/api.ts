@@ -92,7 +92,7 @@ const http = {
         { 'create @post @bulkCreate': '/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete @delete': '/projects', body: 'projectUuids' }
+        { 'delete @delete @bulkDelete': '/projects', body: 'projectUuids' }
       ]
     },
     {

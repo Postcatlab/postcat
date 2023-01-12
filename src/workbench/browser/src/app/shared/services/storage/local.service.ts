@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { db } from './db';
 
@@ -10,9 +11,13 @@ const SuccessStyle = 'background-color: #316745; color: #fff;padding:3px;box-siz
   providedIn: 'root'
 })
 export class LocalService {
-  constructor() {}
+  constructor(private store: StoreService) {}
 
-  api_apiDataCreate<T = any>({ apiList, projectUuid, workSpaceUuid }) {
+  api_apiDataCreate<T = any>({
+    apiList,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
     if (apiList == null) {
       console.log('%c Error: apiData - create 接口 缺失参数 apiList %c', ErrorStyle, '');
       return;
@@ -43,7 +48,7 @@ export class LocalService {
     });
   }
 
-  api_apiDataUpdate<T = any>({ api, projectUuid, workSpaceUuid }) {
+  api_apiDataUpdate<T = any>({ api, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (api == null) {
       console.log('%c Error: apiData - update 接口 缺失参数 api %c', ErrorStyle, '');
       return;
@@ -74,7 +79,11 @@ export class LocalService {
     });
   }
 
-  api_apiDataDelete<T = any>({ apiUuid, projectUuid, workSpaceUuid }) {
+  api_apiDataDelete<T = any>({
+    apiUuid,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
     if (apiUuid == null) {
       console.log('%c Error: apiData - delete 接口 缺失参数 apiUuid %c', ErrorStyle, '');
       return;
@@ -105,7 +114,11 @@ export class LocalService {
     });
   }
 
-  api_apiDataDetail<T = any>({ apiUuids, projectUuid, workSpaceUuid }) {
+  api_apiDataDetail<T = any>({
+    apiUuids,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
     if (apiUuids == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
       return;
@@ -136,7 +149,7 @@ export class LocalService {
     });
   }
 
-  api_apiDataList<T = any>({ projectUuid, workSpaceUuid }) {
+  api_apiDataList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -163,7 +176,15 @@ export class LocalService {
     });
   }
 
-  api_mockCreate<T = any>({ name, apiUuid, createWay, response, projectUuid, workSpaceUuid, ...items }) {
+  api_mockCreate<T = any>({
+    name,
+    apiUuid,
+    createWay,
+    response,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (name == null) {
       console.log('%c Error: mock - create 接口 缺失参数 name %c', ErrorStyle, '');
       return;
@@ -214,7 +235,12 @@ export class LocalService {
     });
   }
 
-  api_mockUpdate<T = any>({ id, projectUuid, workSpaceUuid, ...items }) {
+  api_mockUpdate<T = any>({
+    id,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (id == null) {
       console.log('%c Error: mock - update 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -245,7 +271,13 @@ export class LocalService {
     });
   }
 
-  api_mockList<T = any>({ apiUuid, projectUuid, workSpaceUuid, page, pageSize }) {
+  api_mockList<T = any>({
+    apiUuid,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    page,
+    pageSize
+  }) {
     if (apiUuid == null) {
       console.log('%c Error: mock - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
       return;
@@ -284,7 +316,7 @@ export class LocalService {
     });
   }
 
-  api_mockDetail<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_mockDetail<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: mock - detail 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -315,7 +347,7 @@ export class LocalService {
     });
   }
 
-  api_mockDelete<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_mockDelete<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: mock - delete 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -346,7 +378,14 @@ export class LocalService {
     });
   }
 
-  api_groupCreate<T = any>({ module, type, name, projectUuid, workSpaceUuid, ...items }) {
+  api_groupCreate<T = any>({
+    module,
+    type,
+    name,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (module == null) {
       console.log('%c Error: group - create 接口 缺失参数 module %c', ErrorStyle, '');
       return;
@@ -385,7 +424,12 @@ export class LocalService {
     });
   }
 
-  api_groupUpdate<T = any>({ id, projectUuid, workSpaceUuid, ...items }) {
+  api_groupUpdate<T = any>({
+    id,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (id == null) {
       console.log('%c Error: group - update 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -416,7 +460,7 @@ export class LocalService {
     });
   }
 
-  api_groupDelete<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_groupDelete<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: group - delete 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -447,7 +491,7 @@ export class LocalService {
     });
   }
 
-  api_groupDetail<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_groupDetail<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: group - detail 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -478,7 +522,7 @@ export class LocalService {
     });
   }
 
-  api_groupList<T = any>({ projectUuid, workSpaceUuid }) {
+  api_groupList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -505,7 +549,14 @@ export class LocalService {
     });
   }
 
-  api_apiTestHistoryCreate<T = any>({ apiUuid, general, request, response, projectUuid, workSpaceUuid }) {
+  api_apiTestHistoryCreate<T = any>({
+    apiUuid,
+    general,
+    request,
+    response,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
     if (apiUuid == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
       return;
@@ -555,7 +606,13 @@ export class LocalService {
     });
   }
 
-  api_apiTestHistoryList<T = any>({ apiUuid, projectUuid, workSpaceUuid, page, pageSize }) {
+  api_apiTestHistoryList<T = any>({
+    apiUuid,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    page,
+    pageSize
+  }) {
     if (apiUuid == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
       return;
@@ -594,7 +651,11 @@ export class LocalService {
     });
   }
 
-  api_apiTestHistoryDetail<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_apiTestHistoryDetail<T = any>({
+    id,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
     if (id == null) {
       console.log('%c Error: apiTestHistory - detail 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -625,7 +686,7 @@ export class LocalService {
     });
   }
 
-  api_apiTestHistoryDelete<T = any>({ projectUuid, workSpaceUuid }) {
+  api_apiTestHistoryDelete<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -652,7 +713,12 @@ export class LocalService {
     });
   }
 
-  api_environmentCreate<T = any>({ name, projectUuid, workSpaceUuid, ...items }) {
+  api_environmentCreate<T = any>({
+    name,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (name == null) {
       console.log('%c Error: environment - create 接口 缺失参数 name %c', ErrorStyle, '');
       return;
@@ -683,7 +749,13 @@ export class LocalService {
     });
   }
 
-  api_environmentUpdate<T = any>({ id, name, projectUuid, workSpaceUuid, ...items }) {
+  api_environmentUpdate<T = any>({
+    id,
+    name,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
     if (id == null) {
       console.log('%c Error: environment - update 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -718,7 +790,7 @@ export class LocalService {
     });
   }
 
-  api_environmentDelete<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_environmentDelete<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: environment - delete 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -749,7 +821,7 @@ export class LocalService {
     });
   }
 
-  api_environmentDetail<T = any>({ id, projectUuid, workSpaceUuid }) {
+  api_environmentDetail<T = any>({ id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (id == null) {
       console.log('%c Error: environment - detail 接口 缺失参数 id %c', ErrorStyle, '');
       return;
@@ -780,7 +852,7 @@ export class LocalService {
     });
   }
 
-  api_environmentList<T = any>({ projectUuid, workSpaceUuid }) {
+  api_environmentList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: environment - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -830,7 +902,7 @@ export class LocalService {
     });
   }
 
-  api_workspaceUpdate<T = any>({ title, workSpaceUuid }) {
+  api_workspaceUpdate<T = any>({ title, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (title == null) {
       console.log('%c Error: workspace - update 接口 缺失参数 title %c', ErrorStyle, '');
       return;
@@ -898,7 +970,7 @@ export class LocalService {
     });
   }
 
-  api_projectCreate<T = any>({ projectMsgs, workSpaceUuid }) {
+  api_projectCreate<T = any>({ projectMsgs, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectMsgs == null) {
       console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
       return;
@@ -925,7 +997,7 @@ export class LocalService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid }) {
+  api_projectDetail<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuids == null) {
       console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
@@ -952,7 +1024,7 @@ export class LocalService {
     });
   }
 
-  api_projectUpdate<T = any>({ projectUuid, name, description }) {
+  api_projectUpdate<T = any>({ projectUuid = this.store.getCurrentProjectID, name, description }) {
     if (projectUuid == null) {
       console.log('%c Error: project - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -991,7 +1063,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.project
-        .delete({ projectUuids })
+        .bulkDelete({ projectUuids })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project - delete 接口调用成功 %c', SuccessStyle, '');
