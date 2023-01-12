@@ -105,7 +105,11 @@ export class LocalService {
     });
   }
 
-  api_apiDataDetail<T = any>({ projectUuid, workSpaceUuid }) {
+  api_apiDataDetail<T = any>({ apiUuids, projectUuid, workSpaceUuid }) {
+    if (apiUuids == null) {
+      console.log('%c Error: apiData - detail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
+      return;
+    }
     if (projectUuid == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -117,7 +121,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .read({ projectUuid, workSpaceUuid })
+        .read({ apiUuids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - detail 接口调用成功 %c', SuccessStyle, '');
@@ -132,11 +136,7 @@ export class LocalService {
     });
   }
 
-  api_apiDataList<T = any>({ api, projectUuid, workSpaceUuid }) {
-    if (api == null) {
-      console.log('%c Error: apiData - list 接口 缺失参数 api %c', ErrorStyle, '');
-      return;
-    }
+  api_apiDataList<T = any>({ projectUuid, workSpaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -148,7 +148,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .bulkRead({ api, projectUuid, workSpaceUuid })
+        .bulkRead({ projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - list 接口调用成功 %c', SuccessStyle, '');

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
 import { MEMBER_MUI } from '../../../../shared/models/member.model';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
@@ -11,19 +10,14 @@ export class ProjectMemberService {
   projectID: number;
   role: 'Owner' | 'Editor' | string;
   roleMUI = MEMBER_MUI;
-  constructor(
-    private remote: RemoteService,
-    private store: StoreService,
-    private message: EoNgFeedbackMessageService,
-    private effect: EffectService
-  ) {
+  constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
     autorun(() => {
       this.role = this.store.getProjectRole;
       this.projectID = this.store.getCurrentProjectID;
     });
   }
   async addMember(ids) {
-    return await this.remote.api_projectAddMember({
+    return await this.api.api_projectAddMember({
       projectUuid: this.projectID,
       userIds: ids
     });
@@ -40,7 +34,7 @@ export class ProjectMemberService {
         }
       ];
     } else {
-      const [data, error]: any = await this.remote.api_projectMemberList({
+      const [data, error]: any = await this.api.api_projectMemberList({
         projectUuid: this.projectID,
         username: ''
       });
@@ -59,13 +53,13 @@ export class ProjectMemberService {
     return result;
   }
   async removeMember(item) {
-    return await this.remote.api_projectDelMember({
+    return await this.api.api_projectDelMember({
       projectUuid: this.projectID,
       userIds: [item.id]
     });
   }
   async quitMember(members) {
-    const [data, err]: any = await this.remote.api_projectMemberQuit({
+    const [data, err]: any = await this.api.api_projectMemberQuit({
       projectUuid: this.projectID,
       userId: ''
     });
@@ -77,7 +71,7 @@ export class ProjectMemberService {
   }
   async changeRole(item) {
     const roleID = item.role.id === 3 ? 4 : 3;
-    const [data, err]: any = await this.remote.api_projectSetRole({
+    const [data, err]: any = await this.api.api_projectSetRole({
       projectUuid: this.projectID,
       userRole: roleID
     });
@@ -90,7 +84,7 @@ export class ProjectMemberService {
   }
   searchUser(search) {
     return new Promise(resolve => {
-      this.remote
+      this.api
         .api_workspaceSearchMember({
           workSpaceUuid: this.store.getCurrentWorkspaceID,
           username: search.trim(),

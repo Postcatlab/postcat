@@ -10,9 +10,6 @@ export interface ApiDataUpdateDto {
   workSpaceUuid: string;
 }
 export interface ApiDataBulkReadDto {
-  api: {
-    apiUuids: string[];
-  };
   projectUuid: string;
   workSpaceUuid: string;
 }

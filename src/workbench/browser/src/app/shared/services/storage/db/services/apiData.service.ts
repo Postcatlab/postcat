@@ -26,9 +26,8 @@ export class ApiDataService extends BaseService<ApiData> {
   }
 
   bulkRead(params: ApiDataBulkReadDto) {
-    const { api, workSpaceUuid, projectUuid } = params;
+    const { workSpaceUuid, projectUuid } = params;
     return this.baseService.bulkRead({
-      uuid: api.apiUuids,
       workSpaceUuid,
       projectUuid
     });

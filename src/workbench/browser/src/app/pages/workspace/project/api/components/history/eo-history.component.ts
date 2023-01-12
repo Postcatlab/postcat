@@ -16,6 +16,7 @@ export class HistoryComponent {
   nzSelectedKeys: NzTreeNodeKey[];
 
   constructor(private router: Router, public store: StoreService, private effect: EffectService) {}
+
   gotoTestHistory(e) {
     this.nzSelectedKeys = [];
     const origin = e.node.origin;

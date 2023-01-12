@@ -6,8 +6,8 @@ const http = {
         { 'create @post @create': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
         { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
         { 'delete @delete @delete': '/api/remove', body: 'apiUuid, projectUuid, workSpaceUuid' },
-        { 'detail @get @read': '/api', query: 'projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/list', query: 'api, projectUuid, workSpaceUuid' }
+        { 'detail @get @read': '/api', query: 'apiUuids, projectUuid, workSpaceUuid' },
+        { 'list @get @bulkRead': '/api/list', query: 'projectUuid, workSpaceUuid' }
       ]
     },
     {

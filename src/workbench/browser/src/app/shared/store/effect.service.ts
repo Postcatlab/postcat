@@ -9,8 +9,10 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { uuid } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
+import { id_ID } from 'ng-zorro-antd/i18n';
 
 @Injectable({
   providedIn: 'root'
@@ -253,25 +255,48 @@ export class EffectService {
     });
   }
 
-  // *** data engine
+  // *** Data engine
 
   // ? delete
-  deleteHistory() {
+  async deleteHistory() {
     // TODO delete history with IO
     this.store.setHistory([]);
+    const [, err] = await this.api.api_apiTestHistoryDelete({
+      id: id_ID,
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceID
+    });
   }
   // * delete api
-  async deleteAPI() {
+  async deleteAPI(uuid) {
     // * delete API
-    // * update mock
+    const [, err] = await this.api.api_apiDataDelete({
+      apiUuid: uuid,
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceID
+    });
+    if (err) {
+      return;
+    }
+    console.log('删除 API');
   }
   // * delete group and api
   async deleteGroup(group) {
     // * delete group
+    const [, err] = await this.api.api_groupDelete({});
+    if (err) {
+      return;
+    }
+    console.log('删除 Group');
     // * call deleteAPI()
   }
-  async deleteMock() {
+  async deleteMock(id) {
     // * delete mock
+    const [, err] = await this.api.api_mockDelete({
+      id: id,
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceID
+    });
     // * update API
   }
 
@@ -292,13 +317,35 @@ export class EffectService {
     // TODO load history with IO
     this.store.setHistory([]);
   }
-  getGroupList() {
+  async getGroupList() {
     // * get group list data
+    const [gRes, gErr] = await this.api.api_groupList({});
+    if (gErr) {
+      return;
+    }
+    console.log('Group 数据', gRes);
     // * get api list data
+    const [aRes, aErr] = await this.api.api_apiDataList({
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceID
+    });
+    if (aErr) {
+      return;
+    }
+    console.log('API 数据', aRes);
     // * merge data
   }
-  getAPI() {
+  // ! maybo no need getAPI()
+  async getAPI(uuid) {
     // * get API data
+    const [res, err] = await this.api.api_apiDataDetail({
+      apiUuids: uuid,
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceID
+    });
+    if (err) {
+      return;
+    }
   }
 
   // ? update

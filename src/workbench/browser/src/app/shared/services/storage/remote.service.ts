@@ -26,7 +26,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/api`, { apiList, projectUuid, workSpaceUuid }).subscribe({
+      this.http.post(`${prefix}/api/api`, { apiList, projectUuid, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData:create - api_apiDataCreate 接口请求成功 %c', SuccessStyle, '');
@@ -57,7 +57,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/api`, { api, projectUuid, workSpaceUuid }).subscribe({
+      this.http.put(`${prefix}/api/api`, { api, projectUuid, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData:update - api_apiDataUpdate 接口请求成功 %c', SuccessStyle, '');
@@ -89,7 +89,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/api/remove`, {
+        .delete(`${prefix}/api/api/remove`, {
           body: { apiUuid, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -108,7 +108,11 @@ export class RemoteService {
     });
   }
 
-  api_apiDataDetail<T = any>({ projectUuid, workSpaceUuid }, prefix = '') {
+  api_apiDataDetail<T = any>({ apiUuids, projectUuid, workSpaceUuid }, prefix = '') {
+    if (apiUuids == null) {
+      console.log('%c Error: apiData - detail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
+      return;
+    }
     if (projectUuid == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -120,8 +124,8 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api`, {
-          params: { projectUuid, workSpaceUuid }
+        .get(`${prefix}/api/api`, {
+          params: { apiUuids, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -139,11 +143,7 @@ export class RemoteService {
     });
   }
 
-  api_apiDataList<T = any>({ api, projectUuid, workSpaceUuid }, prefix = '') {
-    if (api == null) {
-      console.log('%c Error: apiData - list 接口 缺失参数 api %c', ErrorStyle, '');
-      return;
-    }
+  api_apiDataList<T = any>({ projectUuid, workSpaceUuid }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -155,8 +155,8 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/list`, {
-          params: { api, projectUuid, workSpaceUuid }
+        .get(`${prefix}/api/api/list`, {
+          params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -202,7 +202,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/mock`, {
+        .post(`${prefix}/api/mock`, {
           name,
           apiUuid,
           createWay,
@@ -242,7 +242,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/mock`, { id, projectUuid, workSpaceUuid, ...items }).subscribe({
+      this.http.put(`${prefix}/api/mock`, { id, projectUuid, workSpaceUuid, ...items }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c mock:update - api_mockUpdate 接口请求成功 %c', SuccessStyle, '');
@@ -282,7 +282,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/mock/list`, {
+        .get(`${prefix}/api/mock/list`, {
           params: { apiUuid, projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
@@ -317,7 +317,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/mock`, {
+        .get(`${prefix}/api/mock`, {
           params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -352,7 +352,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/mock`, {
+        .delete(`${prefix}/api/mock`, {
           body: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -395,7 +395,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/group`, {
+        .post(`${prefix}/api/group`, {
           module,
           type,
           name,
@@ -434,19 +434,26 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/group`, { id, projectUuid, workSpaceUuid, ...items }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c group:update - api_groupUpdate 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .put(`${prefix}/api/group`, {
+          id,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c group:update - api_groupUpdate 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c group:update - api_groupUpdate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c group:update - api_groupUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -466,7 +473,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/group`, {
+        .delete(`${prefix}/api/group`, {
           body: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -501,7 +508,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/group`, {
+        .get(`${prefix}/api/group`, {
           params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -532,7 +539,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/group/list`, {
+        .get(`${prefix}/api/group/list`, {
           params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -579,7 +586,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/api/history`, {
+        .post(`${prefix}/api/api/history`, {
           apiUuid,
           general,
           request,
@@ -627,7 +634,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/history/list`, {
+        .get(`${prefix}/api/api/history/list`, {
           params: { apiUuid, projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
@@ -662,7 +669,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/history`, {
+        .get(`${prefix}/api/api/history`, {
           params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -693,7 +700,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/api/history`, {
+        .delete(`${prefix}/api/api/history`, {
           body: { projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -728,7 +735,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/environment`, {
+        .post(`${prefix}/api/environment`, {
           name,
           projectUuid,
           workSpaceUuid,
@@ -770,7 +777,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .put(`${prefix}/environment`, {
+        .put(`${prefix}/api/environment`, {
           id,
           name,
           projectUuid,
@@ -809,7 +816,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/environment`, {
+        .delete(`${prefix}/api/environment`, {
           body: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -844,7 +851,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/environment`, {
+        .get(`${prefix}/api/environment`, {
           params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -875,7 +882,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/environment/list`, {
+        .get(`${prefix}/api/environment/list`, {
           params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
@@ -896,7 +903,7 @@ export class RemoteService {
 
   api_userReadInfo<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/common/user/info`, params).subscribe({
+      this.http.post(`${prefix}/api/common/user/info`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c user:readInfo - api_userReadInfo 接口请求成功 %c', SuccessStyle, '');
@@ -914,7 +921,7 @@ export class RemoteService {
 
   api_userUpdateInfo<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/common/user/update-userinfo`, params).subscribe({
+      this.http.post(`${prefix}/api/common/user/update-userinfo`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c user:updateInfo - api_userUpdateInfo 接口请求成功 %c', SuccessStyle, '');
@@ -938,7 +945,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/common/user/change-password`, {
+        .post(`${prefix}/api/common/user/change-password`, {
           body: { password, ...items }
         })
         .subscribe({
@@ -969,7 +976,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/user/login`, {
+        .post(`${prefix}/api/user/login`, {
           body: { username, password }
         })
         .subscribe({
@@ -990,7 +997,7 @@ export class RemoteService {
 
   api_userRefreshToken<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/common/sso/refresh`, params).subscribe({
+      this.http.post(`${prefix}/api/common/sso/refresh`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c user:refreshToken - api_userRefreshToken 接口请求成功 %c', SuccessStyle, '');
@@ -1008,7 +1015,7 @@ export class RemoteService {
 
   api_userLogout<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/common/sso/logout`, params).subscribe({
+      this.http.post(`${prefix}/api/common/sso/logout`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c user:logout - api_userLogout 接口请求成功 %c', SuccessStyle, '');
@@ -1032,7 +1039,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/user`, {
+        .post(`${prefix}/api/user`, {
           params: { username }
         })
         .subscribe({
@@ -1058,7 +1065,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/workspaces`, { titles }).subscribe({
+      this.http.post(`${prefix}/api/workspaces`, { titles }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c workspace:create - api_workspaceCreate 接口请求成功 %c', SuccessStyle, '');
@@ -1085,7 +1092,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/workspaces`, { title, workSpaceUuid }).subscribe({
+      this.http.put(`${prefix}/api/workspaces`, { title, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c workspace:update - api_workspaceUpdate 接口请求成功 %c', SuccessStyle, '');
@@ -1109,7 +1116,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/workspaces`, {
+        .delete(`${prefix}/api/workspaces`, {
           body: { workSpaceUuids }
         })
         .subscribe({
@@ -1148,7 +1155,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/workspaces/users`, {
+        .get(`${prefix}/api/workspaces/users`, {
           params: { username, page, pageSize, workSpaceUuid }
         })
         .subscribe({
@@ -1178,7 +1185,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/workspaces/users`, { userIds, workSpaceUuid }).subscribe({
+      this.http.post(`${prefix}/api/workspaces/users`, { userIds, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c workspace:addMember - api_workspaceAddMember 接口请求成功 %c', SuccessStyle, '');
@@ -1206,7 +1213,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/workspaces/users`, {
+        .delete(`${prefix}/api/workspaces/users`, {
           body: { userIds, workSpaceUuid }
         })
         .subscribe({
@@ -1233,7 +1240,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/workspaces/users/quit`, {
+        .delete(`${prefix}/api/workspaces/users/quit`, {
           body: { workSpaceUuid }
         })
         .subscribe({
@@ -1263,19 +1270,24 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/workspaces/users/roles`, { userRole, workSpaceUuid }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .post(`${prefix}/api/workspaces/users/roles`, {
+          userRole,
+          workSpaceUuid
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1287,7 +1299,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/workspaces/users/roles`, {
+        .get(`${prefix}/api/workspaces/users/roles`, {
           params: { workSpaceUuid }
         })
         .subscribe({
@@ -1308,7 +1320,7 @@ export class RemoteService {
 
   api_workspaceList<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/workspaces`, params).subscribe({
+      this.http.get(`${prefix}/api/workspaces`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c workspace:list - api_workspaceList 接口请求成功 %c', SuccessStyle, '');
@@ -1326,7 +1338,7 @@ export class RemoteService {
 
   api_workspaceUnkown<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/workspaces`, params).subscribe({
+      this.http.get(`${prefix}/api/workspaces`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c workspace:unkown - api_workspaceUnkown 接口请求成功 %c', SuccessStyle, '');
@@ -1350,7 +1362,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/project/exports`, {
+        .get(`${prefix}/api/project/exports`, {
           params: { projectUuid }
         })
         .subscribe({
@@ -1376,7 +1388,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/projects/collections`, { projectUuid }).subscribe({
+      this.http.post(`${prefix}/api/projects/collections`, { projectUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:exportGroup - api_projectExportGroup 接口请求成功 %c', SuccessStyle, '');
@@ -1404,7 +1416,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/projects/users`, {
+        .get(`${prefix}/api/projects/users`, {
           params: { username, projectUuid }
         })
         .subscribe({
@@ -1434,7 +1446,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/projects/users`, { userIds, projectUuid }).subscribe({
+      this.http.post(`${prefix}/api/projects/users`, { userIds, projectUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:addMember - api_projectAddMember 接口请求成功 %c', SuccessStyle, '');
@@ -1462,7 +1474,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/projects/users`, {
+        .delete(`${prefix}/api/projects/users`, {
           body: { userIds, projectUuid }
         })
         .subscribe({
@@ -1493,7 +1505,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/projects/users/quit`, {
+        .delete(`${prefix}/api/projects/users/quit`, {
           body: { userId, projectUuid }
         })
         .subscribe({
@@ -1523,7 +1535,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/projects/users/roles`, { projectUuid, userRole }).subscribe({
+      this.http.post(`${prefix}/api/projects/users/roles`, { projectUuid, userRole }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:setRole - api_projectSetRole 接口请求成功 %c', SuccessStyle, '');
@@ -1547,7 +1559,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/projects/users/roles`, {
+        .get(`${prefix}/api/projects/users/roles`, {
           params: { projectUuid }
         })
         .subscribe({
@@ -1577,7 +1589,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/projects`, { projectMsgs, workSpaceUuid }).subscribe({
+      this.http.post(`${prefix}/api/projects`, { projectMsgs, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:create - api_projectCreate 接口请求成功 %c', SuccessStyle, '');
@@ -1613,7 +1625,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/projects`, {
+        .get(`${prefix}/api/projects`, {
           params: { projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
@@ -1647,7 +1659,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/projects`, { projectUuid, name, description }).subscribe({
+      this.http.put(`${prefix}/api/projects`, { projectUuid, name, description }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:update - api_projectUpdate 接口请求成功 %c', SuccessStyle, '');
@@ -1671,7 +1683,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/projects`, {
+        .delete(`${prefix}/api/projects`, {
           body: { projectUuids }
         })
         .subscribe({
@@ -1692,7 +1704,7 @@ export class RemoteService {
 
   api_shareCreateShare<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/shared`, params).subscribe({
+      this.http.post(`${prefix}/api/shared`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c share:createShare - api_shareCreateShare 接口请求成功 %c', SuccessStyle, '');
@@ -1710,7 +1722,7 @@ export class RemoteService {
 
   api_shareGetShareList<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/shared`, params).subscribe({
+      this.http.get(`${prefix}/api/shared`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c share:getShareList - api_shareGetShareList 接口请求成功 %c', SuccessStyle, '');
@@ -1728,7 +1740,7 @@ export class RemoteService {
 
   api_shareDeleteShare<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.delete(`${prefix}/shared`, params).subscribe({
+      this.http.delete(`${prefix}/api/shared`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c share:deleteShare - api_shareDeleteShare 接口请求成功 %c', SuccessStyle, '');
@@ -1751,7 +1763,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/shared-docs/${uniqueID}/collections`, {}).subscribe({
+      this.http.get(`${prefix}/api/shared-docs/${uniqueID}/collections`, {}).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c shareDoc:getAllAPI - api_shareDocGetAllApi 接口请求成功 %c', SuccessStyle, '');
@@ -1778,7 +1790,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/shared-docs/${uniqueID}/api/${apiDataUUID}`, {}).subscribe({
+      this.http.get(`${prefix}/api/shared-docs/${uniqueID}/api/${apiDataUUID}`, {}).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c shareDoc:getApiDetail - api_shareDocGetApiDetail 接口请求成功 %c', SuccessStyle, '');
@@ -1801,7 +1813,7 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/shared-docs/${uniqueID}/environments`, {}).subscribe({
+      this.http.get(`${prefix}/api/shared-docs/${uniqueID}/environments`, {}).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c shareDoc:getEnv - api_shareDocGetEnv 接口请求成功 %c', SuccessStyle, '');
