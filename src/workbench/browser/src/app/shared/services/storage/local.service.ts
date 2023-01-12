@@ -910,7 +910,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.project
-        .create({ projectMsgs, workSpaceUuid })
+        .bulkCreate({ projectMsgs, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project - create 接口调用成功 %c', SuccessStyle, '');
