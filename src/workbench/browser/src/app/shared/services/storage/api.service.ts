@@ -178,20 +178,16 @@ export class ApiService {
     return this.remote.api_workspaceUnkown<T>(params);
   }
 
-  api_projectCreate<T = any>(params) {
-    return this.remote.api_projectCreate<T>(params);
+  api_projectExportProject<T = any>(params) {
+    return this.remote.api_projectExportProject<T>(params);
   }
 
-  api_projectUpdate<T = any>(params) {
-    return this.remote.api_projectUpdate<T>(params);
+  api_projectExportGroup<T = any>(params) {
+    return this.remote.api_projectExportGroup<T>(params);
   }
 
-  api_projectDelete<T = any>(params) {
-    return this.remote.api_projectDelete<T>(params);
-  }
-
-  api_projectExport<T = any>(params) {
-    return this.remote.api_projectExport<T>(params);
+  api_projectMemberList<T = any>(params) {
+    return this.remote.api_projectMemberList<T>(params);
   }
 
   api_projectAddMember<T = any>(params) {
@@ -202,10 +198,6 @@ export class ApiService {
     return this.remote.api_projectDelMember<T>(params);
   }
 
-  api_projectMember<T = any>(params) {
-    return this.remote.api_projectMember<T>(params);
-  }
-
   api_projectMemberQuit<T = any>(params) {
     return this.remote.api_projectMemberQuit<T>(params);
   }
@@ -214,12 +206,24 @@ export class ApiService {
     return this.remote.api_projectSetRole<T>(params);
   }
 
-  api_projectRoleList<T = any>(params) {
-    return this.remote.api_projectRoleList<T>(params);
+  api_projectUserPermission<T = any>(params) {
+    return this.remote.api_projectUserPermission<T>(params);
   }
 
-  api_projectPermission<T = any>(params) {
-    return this.remote.api_projectPermission<T>(params);
+  api_projectCreate<T = any>(params) {
+    return this.remote.api_projectCreate<T>(params);
+  }
+
+  api_projectDetail<T = any>(params) {
+    return this.remote.api_projectDetail<T>(params);
+  }
+
+  api_projectUpdate<T = any>(params) {
+    return this.remote.api_projectUpdate<T>(params);
+  }
+
+  api_projectDelete<T = any>(params) {
+    return this.remote.api_projectDelete<T>(params);
   }
 
   api_shareCreateShare<T = any>(params) {

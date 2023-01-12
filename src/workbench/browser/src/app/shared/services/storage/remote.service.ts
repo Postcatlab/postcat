@@ -1342,100 +1342,99 @@ export class RemoteService {
     });
   }
 
-  api_projectCreate<T = any>(params, prefix = '') {
+  api_projectExportProject<T = any>({ projectUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - exportProject 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/project`, params).subscribe({
+      this.http
+        .get(`${prefix}/project/exports`, {
+          params: { projectUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:exportProject - api_projectExportProject 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:exportProject - api_projectExportProject 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectExportGroup<T = any>({ projectUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - exportGroup 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.post(`${prefix}/projects/collections`, { projectUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project:create - api_projectCreate 接口请求成功 %c', SuccessStyle, '');
+            console.log('%c project:exportGroup - api_projectExportGroup 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           resolve([null, { code, data }]);
         },
         error: error => {
-          console.log('%c project:create - api_projectCreate 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c project:exportGroup - api_projectExportGroup 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_projectUpdate<T = any>({ uuid, ...items }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: project - update 接口 缺失参数 uuid %c', ErrorStyle, '');
+  api_projectMemberList<T = any>({ username, projectUuid }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: project - memberList 接口 缺失参数 username %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: project - memberList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.put(`${prefix}/project/${uuid}`, { ...items }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:update - api_projectUpdate 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/projects/users`, {
+          params: { username, projectUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:memberList - api_projectMemberList 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:memberList - api_projectMemberList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:update - api_projectUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
-  api_projectDelete<T = any>({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: project - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
+  api_projectAddMember<T = any>({ userIds, projectUuid }, prefix = '') {
+    if (userIds == null) {
+      console.log('%c Error: project - addMember 接口 缺失参数 userIds %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: project - addMember 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.delete(`${prefix}/project/${uuid}`, {}).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:delete - api_projectDelete 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:delete - api_projectDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_projectExport<T = any>(params, prefix = '') {
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/project/export`, params).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:export - api_projectExport 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:export - api_projectExport 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_projectAddMember<T = any>({ projectID, userIDs }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - addMember 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-    if (userIDs == null) {
-      console.log('%c Error: project - addMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/project/${projectID}/member/add`, { userIDs }).subscribe({
+      this.http.post(`${prefix}/projects/users`, { userIds, projectUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:addMember - api_projectAddMember 接口请求成功 %c', SuccessStyle, '');
@@ -1451,20 +1450,20 @@ export class RemoteService {
     });
   }
 
-  api_projectDelMember<T = any>({ projectID, userIDs }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - delMember 接口 缺失参数 projectID %c', ErrorStyle, '');
+  api_projectDelMember<T = any>({ userIds, projectUuid }, prefix = '') {
+    if (userIds == null) {
+      console.log('%c Error: project - delMember 接口 缺失参数 userIds %c', ErrorStyle, '');
       return;
     }
-    if (userIDs == null) {
-      console.log('%c Error: project - delMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
+    if (projectUuid == null) {
+      console.log('%c Error: project - delMember 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/project/${projectID}/member/remove`, {
-          body: { userIDs }
+        .delete(`${prefix}/projects/users`, {
+          params: { userIds, projectUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1482,37 +1481,18 @@ export class RemoteService {
     });
   }
 
-  api_projectMember<T = any>({ projectID }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - member 接口 缺失参数 projectID %c', ErrorStyle, '');
+  api_projectMemberQuit<T = any>({ userId, projectUuid }, prefix = '') {
+    if (userId == null) {
+      console.log('%c Error: project - memberQuit 接口 缺失参数 userId %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: project - memberQuit 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/project/${projectID}/member/list`, {}).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:member - api_projectMember 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:member - api_projectMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_projectMemberQuit<T = any>({ projectID }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - memberQuit 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/project/${projectID}/member/leave`, {}).subscribe({
+      this.http.delete(`${prefix}/projects/users/quit`, { userId, projectUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:memberQuit - api_projectMemberQuit 接口请求成功 %c', SuccessStyle, '');
@@ -1528,82 +1508,174 @@ export class RemoteService {
     });
   }
 
-  api_projectSetRole<T = any>({ projectID, roleID, memberID }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - setRole 接口 缺失参数 projectID %c', ErrorStyle, '');
+  api_projectSetRole<T = any>({ projectUuid, userRole }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - setRole 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
-    if (roleID == null) {
-      console.log('%c Error: project - setRole 接口 缺失参数 roleID %c', ErrorStyle, '');
-      return;
-    }
-    if (memberID == null) {
-      console.log('%c Error: project - setRole 接口 缺失参数 memberID %c', ErrorStyle, '');
+    if (userRole == null) {
+      console.log('%c Error: project - setRole 接口 缺失参数 userRole %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http
-        .post(`${prefix}/project/${projectID}/member/setRole`, {
-          roleID,
-          memberID
-        })
-        .subscribe({
-          next: ({ code, data }: any) => {
-            if (code === 0) {
-              console.log('%c project:setRole - api_projectSetRole 接口请求成功 %c', SuccessStyle, '');
-              return resolve([data, null]);
-            }
-            resolve([null, { code, data }]);
-          },
-          error: error => {
-            console.log('%c project:setRole - api_projectSetRole 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_projectRoleList<T = any>({ projectID }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - roleList 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/project/${projectID}/roles`, {}).subscribe({
+      this.http.post(`${prefix}/projects/users/roles`, { projectUuid, userRole }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project:roleList - api_projectRoleList 接口请求成功 %c', SuccessStyle, '');
+            console.log('%c project:setRole - api_projectSetRole 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           resolve([null, { code, data }]);
         },
         error: error => {
-          console.log('%c project:roleList - api_projectRoleList 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c project:setRole - api_projectSetRole 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_projectPermission<T = any>({ projectID }, prefix = '') {
-    if (projectID == null) {
-      console.log('%c Error: project - permission 接口 缺失参数 projectID %c', ErrorStyle, '');
+  api_projectUserPermission<T = any>({ projectUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - userPermission 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/project/${projectID}/rolePermission`, {}).subscribe({
+      this.http
+        .get(`${prefix}/projects/users/roles`, {
+          params: { projectUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:userPermission - api_projectUserPermission 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:userPermission - api_projectUserPermission 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectCreate<T = any>({ projectMsgs, workSpaceUuid }, prefix = '') {
+    if (projectMsgs == null) {
+      console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.post(`${prefix}/projects`, { projectMsgs, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project:permission - api_projectPermission 接口请求成功 %c', SuccessStyle, '');
+            console.log('%c project:create - api_projectCreate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           resolve([null, { code, data }]);
         },
         error: error => {
-          console.log('%c project:permission - api_projectPermission 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c project:create - api_projectCreate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_projectDetail<T = any>({ projectUuid, workSpaceUuid, page, pageSize }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (page == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 page %c', ErrorStyle, '');
+      return;
+    }
+    if (pageSize == null) {
+      console.log('%c Error: project - detail 接口 缺失参数 pageSize %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/projects`, {
+          params: { projectUuid, workSpaceUuid, page, pageSize }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:detail - api_projectDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:detail - api_projectDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectUpdate<T = any>({ projectUuid, name, description }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (name == null) {
+      console.log('%c Error: project - update 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (description == null) {
+      console.log('%c Error: project - update 接口 缺失参数 description %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.put(`${prefix}/projects`, { projectUuid, name, description }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project:update - api_projectUpdate 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c project:update - api_projectUpdate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_projectDelete<T = any>({ projectUuids }, prefix = '') {
+    if (projectUuids == null) {
+      console.log('%c Error: project - delete 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.delete(`${prefix}/projects`, { projectUuids }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project:delete - api_projectDelete 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c project:delete - api_projectDelete 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

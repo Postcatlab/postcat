@@ -81,20 +81,20 @@ const http = {
     {
       name: 'project',
       data: [
-        { 'create @post': '/project' },
-        { 'update @put': '/project/{uuid}', json: '...' },
-        { 'delete @delete': '/project/{uuid}' },
-        { 'export @get': '/project/export' },
-        { 'addMember @post': '/project/{projectID}/member/add', json: 'userIDs' },
-        { 'delMember @delete': '/project/{projectID}/member/remove', body: 'userIDs' },
-        { 'member @get': '/project/{projectID}/member/list' },
-        { 'memberQuit @post': '/project/{projectID}/member/leave' },
-        { 'setRole @post': '/project/{projectID}/member/setRole', json: 'roleID, memberID' },
-        { 'roleList @get': '/project/{projectID}/roles' },
-        { 'permission @get': '/project/{projectID}/rolePermission' }
+        { 'exportProject @get': '/project/exports', query: 'projectUuid' },
+        { 'exportGroup @post': '/projects/collections', json: 'projectUuid' },
+        { 'memberList @get': '/projects/users', query: 'username, projectUuid' },
+        { 'addMember @post': '/projects/users', json: 'userIds, projectUuid' },
+        { 'delMember @delete': '/projects/users', query: 'userIds, projectUuid' },
+        { 'memberQuit @delete': '/projects/users/quit', json: 'userId, projectUuid' },
+        { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
+        { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
+        { 'create @post': '/projects', json: 'projectMsgs, workSpaceUuid' },
+        { 'detail @get': '/projects', query: 'projectUuid, workSpaceUuid, page, pageSize' },
+        { 'update @put': '/projects', json: 'projectUuid, name, description' },
+        { 'delete @delete': '/projects', json: 'projectUuids' }
       ]
     },
-
     {
       name: 'share',
       data: [{ 'createShare @post': '/shared' }, { 'getShareList @get': '/shared' }, { 'deleteShare @delete': '/shared' }]
