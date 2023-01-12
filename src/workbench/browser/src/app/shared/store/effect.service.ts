@@ -32,7 +32,7 @@ export class EffectService {
       await this.updateWorkspaces();
       // * update title
       document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
-      this.updateProjects().then(() => {
+      this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
         if (this.store.getProjectList.length === 0) {
           this.router.navigate(['/home/workspace/overview']);
         }
@@ -168,13 +168,13 @@ export class EffectService {
     if (wErr) {
       // * Switch store to local workspace
       this.store.setWorkspaceList([]);
-      this.updateProjects();
+      this.updateProjects(this.store.getCurrentWorkspaceUuid);
       return;
     }
     this.store.setWorkspaceList(list);
   }
-  async updateProjects() {
-    const [data] = await this.api.api_projectDetail({ projectUuids: [] });
+  async updateProjects(workSpaceUuid) {
+    const [data] = await this.api.api_projectDetail({ projectUuids: [], workSpaceUuid });
     if (data) {
       this.store.setProjectList(data.items);
       return [data.items, null];
