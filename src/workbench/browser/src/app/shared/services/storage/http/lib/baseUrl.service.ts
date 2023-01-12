@@ -21,7 +21,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   //   return this.store.getCurrentProjectID;
   // }
   // get workspaceID() {
-  //   return this.store.getCurrentWorkspaceID;
+  //   return this.store.getCurrentWorkspaceUuid;
   // }
   // get apiPrefix() {
   //   return `/${this.workspaceID}/${this.projectID}/`;

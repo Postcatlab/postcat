@@ -322,7 +322,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.store.getCurrentWorkspaceID === -1) {
+    if (this.store.getCurrentWorkspace?.isLocal) {
       // * local workspace, then return
       return;
     }
@@ -540,7 +540,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                     this.storage.run(
                       'projectCreate',
                       [
-                        this.store.getCurrentWorkspace.id,
+                        this.store.getCurrentWorkspace.workSpaceUuid,
                         {
                           name: project.name
                         }

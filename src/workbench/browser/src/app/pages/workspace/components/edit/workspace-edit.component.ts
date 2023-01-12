@@ -83,7 +83,7 @@ export class WorkspaceSettingComponent {
   }
 
   delete() {
-    const wid = this.store.getCurrentWorkspaceID;
+    const wid = this.store.getCurrentWorkspaceUuid;
     this.modal.confirm({
       nzTitle: $localize`Are you sure delete this workspace?`,
       nzOkText: $localize`Delete`,
@@ -97,8 +97,8 @@ export class WorkspaceSettingComponent {
           return;
         }
         this.message.success($localize`Delete success !`);
-        await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
-        this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== wid));
+        await this.effect.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+        this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.workSpaceUuid !== wid));
       }
     });
   }
@@ -106,7 +106,7 @@ export class WorkspaceSettingComponent {
     $event.stopPropagation();
     if (!this.validateForm.valid) return;
     this.isSaveBtnLoading = true;
-    const id = this.store.getCurrentWorkspaceID;
+    const id = this.store.getCurrentWorkspaceUuid;
     const { title } = this.validateForm.value;
     const [data, err]: any = await this.api.api_workspaceUpdate({
       workspaceID: id,

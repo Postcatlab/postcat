@@ -44,11 +44,13 @@ declare namespace API {
      * 空间创建者ID
      */
     createUserId: number;
-    id: number;
+    workSpaceUuid: string;
     /**
      * 空间名称
      */
     title: string;
+    /** 是否为本地空间，只有本地创建的空间才有这个字段 */
+    isLocal?: boolean;
   }
 
   /**

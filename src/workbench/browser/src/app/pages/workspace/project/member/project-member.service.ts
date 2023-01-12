@@ -92,7 +92,7 @@ export class ProjectMemberService {
     return new Promise(resolve => {
       this.remote
         .api_workspaceSearchMember({
-          workSpaceUuid: this.store.getCurrentWorkspaceID,
+          workSpaceUuid: this.store.getCurrentWorkspaceUuid,
           username: search.trim(),
           page: 1,
           pageSize: 20

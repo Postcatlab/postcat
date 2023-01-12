@@ -39,7 +39,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
           <p class="workspace-title text-tips" i18n>LOCAL</p>
           <li
             class="workspace-item flex items-center"
-            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }"
+            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.workSpaceUuid === localWorkspace.id }"
             nz-menu-item
           >
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
@@ -83,7 +83,7 @@ export class SelectWorkspaceComponent {
   get cloudWorkspaces() {
     return this.searchWorkspace(
       this.searchValue,
-      this.store.getWorkspaceList.filter(val => val.id !== -1)
+      this.store.getWorkspaceList.filter(val => !val.isLocal)
     );
   }
   changeWorkspace(workspaceID) {

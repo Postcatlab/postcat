@@ -21,7 +21,7 @@ export class BaseService<T> {
 
   @ApiResponse()
   read(params: Record<string, any> = {}) {
-    return this.db.where(params).first() as ApiResponsePromise<T>;
+    return this.filterData(params).first() as ApiResponsePromise<T>;
   }
 
   @ApiResponse()

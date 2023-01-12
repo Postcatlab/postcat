@@ -87,10 +87,10 @@ export class ProjectSettingComponent implements OnInit {
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: () => {
-        this.storage.run('projectRemove', [this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID], (result: StorageRes) => {
+        this.storage.run('projectRemove', [this.store.getCurrentWorkspaceUuid, this.store.getCurrentProjectID], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
             this.router.navigate(['/home/workspace/overview']);
-            this.effect.updateProjects(this.store.getCurrentWorkspaceID);
+            this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
             modal.destroy();
           }
         });

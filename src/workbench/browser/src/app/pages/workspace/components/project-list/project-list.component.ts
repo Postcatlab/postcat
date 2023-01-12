@@ -20,7 +20,7 @@ export class ProjectListComponent implements OnInit {
   projectList: any[] = [];
 
   get WorkspaceID() {
-    return this.store.getCurrentWorkspaceID;
+    return this.store.getCurrentWorkspaceUuid;
   }
 
   constructor(
@@ -99,7 +99,7 @@ export class ProjectListComponent implements OnInit {
       },
       nzOnOk: async () => {
         if (!model.name) return;
-        this.storage.run('projectCreate', [this.store.getCurrentWorkspace.id, model], (result: StorageRes) => {
+        this.storage.run('projectCreate', [this.store.getCurrentWorkspace.workSpaceUuid, model], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
             this.getProjectList();
             modal.destroy();
