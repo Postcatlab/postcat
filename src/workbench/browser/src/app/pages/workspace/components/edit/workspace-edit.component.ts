@@ -11,7 +11,7 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
 
 @Component({
   selector: 'eo-workspace-setting',
-  template: `<form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
+  template: `<form *ngIf="validateForm" auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-label i18n nzFor="title">Workspace Name</nz-form-label>
         <nz-form-control nzErrorTip="Please input your new work name">

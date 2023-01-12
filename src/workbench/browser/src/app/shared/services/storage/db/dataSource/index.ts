@@ -41,7 +41,7 @@ class DataSource extends Dexie {
     const workspaceID = await this.workspace.add({ title: 'Persional Workspace', isLocal: true });
     const workspace = await this.workspace.get(workspaceID);
 
-    const projectID = await this.project.add({ name: 'Default' });
+    const projectID = await this.project.add({ name: 'Default', workSpaceUuid: workspace.uuid });
     const project = await this.project.get(projectID);
 
     const params = { workSpaceUuid: workspace.uuid, projectUuid: project.uuid };

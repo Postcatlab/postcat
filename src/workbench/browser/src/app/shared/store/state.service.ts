@@ -42,7 +42,7 @@ export class StoreService {
   @observable private currentWorkspaceUuid = StorageUtil.get<string>('currentWorkspaceUuid');
   @observable private currentWorkspace: API.Workspace;
   //  Local workspace always keep in last
-  @observable private workspaceList: API.Workspace[] = [];
+  @observable private workspaceList: API.Workspace[];
 
   // ? project
   @observable private projectList: Project[] = [];
@@ -209,13 +209,17 @@ export class StoreService {
   }
 
   constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
-    makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
-    queueMicrotask(async () => {
-      const result = await db.workspace.read();
+
+    db.workspace.read().then(result => {
       this.localWorkspace = result.data as API.Workspace;
+      this.currentWorkspaceUuid ??= this.localWorkspace.workSpaceUuid;
+      this.currentWorkspace ??= this.localWorkspace;
+      this.workspaceList ??= [this.localWorkspace];
       console.log('当前本地空间', this.localWorkspace);
     });
+
+    makeObservable(this); // don't forget to add this if the class has observable fields
   }
 
   // * actions
