@@ -9,7 +9,6 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { uuid } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
 import { id_ID } from 'ng-zorro-antd/i18n';
@@ -33,7 +32,7 @@ export class EffectService {
       await this.updateWorkspaces();
       // * update title
       document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
-      this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
+      this.updateProjects().then(() => {
         if (this.store.getProjectList.length === 0) {
           this.router.navigate(['/home/workspace/overview']);
         }
@@ -117,7 +116,7 @@ export class EffectService {
     // TODO localworkspace no need to set permission
     {
       // * update workspace auth
-      const [data, err]: any = await this.api.api_workspaceUnkown({ workspaceID: this.store.getCurrentWorkspaceUuid });
+      const [data, err]: any = await this.api.api_workspaceUnkown({});
       if (err) {
         return;
       }
@@ -169,13 +168,13 @@ export class EffectService {
     if (wErr) {
       // * Switch store to local workspace
       this.store.setWorkspaceList([]);
-      this.updateProjects(this.store.getCurrentWorkspaceUuid);
+      this.updateProjects();
       return;
     }
     this.store.setWorkspaceList(list);
   }
-  async updateProjects(workspaceID) {
-    const [data] = await this.api.api_projectDetail({ workSpaceUuid: workspaceID, projectUuids: [] });
+  async updateProjects() {
+    const [data] = await this.api.api_projectDetail({ projectUuids: [] });
     if (data) {
       this.store.setProjectList(data.items);
       return [data.items, null];
@@ -258,9 +257,7 @@ export class EffectService {
   // ? delete
   async deleteHistory() {
     const [, err] = await this.api.api_apiTestHistoryDelete({
-      id: id_ID,
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
+      id: id_ID
     });
     this.store.setHistory([]);
   }
@@ -268,9 +265,7 @@ export class EffectService {
   async deleteAPI(uuid) {
     // * delete API
     const [, err] = await this.api.api_apiDataDelete({
-      apiUuid: uuid,
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
+      apiUuid: uuid
     });
     if (err) {
       return;
@@ -290,9 +285,7 @@ export class EffectService {
   async deleteMock(id) {
     // * delete mock
     const [, err] = await this.api.api_mockDelete({
-      id: id,
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
+      id: id
     });
     // * update API
   }
@@ -325,23 +318,18 @@ export class EffectService {
     }
     console.log('Group 数据', gRes);
     // * get api list data
-    const [aRes, aErr] = await this.api.api_apiDataList({
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
-    });
+    const [aRes, aErr] = await this.api.api_apiDataList({});
     if (aErr) {
       return;
     }
     console.log('API 数据', aRes);
     // * merge api & group
   }
-  // ! maybo no need getAPI()
+  // ! maybe no need getAPI()
   async getAPI(uuid) {
     // * get API data
     const [res, err] = await this.api.api_apiDataDetail({
-      apiUuids: uuid,
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
+      apiUuids: uuid
     });
     if (err) {
       return;

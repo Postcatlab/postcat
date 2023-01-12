@@ -30,6 +30,10 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiDataList<T>(params) : this.remote.api_apiDataList<T>(params);
   }
 
+  api_apiDataGetGroup<T = any>(params) {
+    return this.remote.api_apiDataGetGroup<T>(params);
+  }
+
   api_mockCreate<T = any>(params) {
     return this.store.isLocal ? this.local.api_mockCreate<T>(params) : this.remote.api_mockCreate<T>(params);
   }
@@ -180,10 +184,6 @@ export class ApiService {
 
   api_projectExportProject<T = any>(params) {
     return this.remote.api_projectExportProject<T>(params);
-  }
-
-  api_projectExportGroup<T = any>(params) {
-    return this.remote.api_projectExportGroup<T>(params);
   }
 
   api_projectMemberList<T = any>(params) {

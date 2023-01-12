@@ -7,7 +7,8 @@ const http = {
         { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
         { 'delete @delete @delete': '/api/remove', body: 'apiUuid, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api', query: 'apiUuids, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/list', query: 'projectUuid, workSpaceUuid' }
+        { 'list @get @bulkRead': '/api/list', query: 'projectUuid, workSpaceUuid' },
+        { 'getGroup @post': '/projects/collections', json: 'projectUuid' }
       ]
     },
     {
@@ -82,7 +83,6 @@ const http = {
       name: 'project',
       data: [
         { 'exportProject @get': '/project/exports', query: 'projectUuid' },
-        { 'exportGroup @post': '/projects/collections', json: 'projectUuid' },
         { 'memberList @get': '/projects/users', query: 'username, projectUuid' },
         { 'addMember @post': '/projects/users', json: 'userIds, projectUuid' },
         { 'delMember @delete': '/projects/users', body: 'userIds, projectUuid' },

@@ -190,6 +190,29 @@ export class RemoteService {
     });
   }
 
+  api_apiDataGetGroup<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - getGroup 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.post(`${prefix}/api/projects/collections`, { projectUuid }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData:getGroup - api_apiDataGetGroup 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c apiData:getGroup - api_apiDataGetGroup 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
   api_mockCreate<T = any>(
     {
       name,
@@ -1466,29 +1489,6 @@ export class RemoteService {
             resolve([null, error]);
           }
         });
-    });
-  }
-
-  api_projectExportGroup<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
-    if (projectUuid == null) {
-      console.log('%c Error: project - exportGroup 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/api/projects/collections`, { projectUuid }).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c project:exportGroup - api_projectExportGroup 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c project:exportGroup - api_projectExportGroup 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
     });
   }
 
