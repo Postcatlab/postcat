@@ -65,7 +65,7 @@ export class ProjectSettingComponent implements OnInit {
 
   ngOnInit(): void {
     autorun(() => {
-      this.projectName = this.store.getCurrentProject.name;
+      this.projectName = this.store.getCurrentProject?.name;
     });
   }
 
