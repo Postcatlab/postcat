@@ -183,6 +183,14 @@ export class EffectService {
       return [null, data];
     }
   }
+  async createProject(data) {
+    const workspace = this.store.getCurrentWorkspace;
+
+    await this.api.api_projectCreate({
+      workSpaceUuid: workspace.workSpaceUuid,
+      projectMsgs: [data]
+    });
+  }
   updateProject(data) {
     const workspace = this.store.getCurrentWorkspace;
     return new Promise(resolve => {
