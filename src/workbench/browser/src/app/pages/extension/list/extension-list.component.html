@@ -12,14 +12,11 @@
           <div class="flex flex-col w-full">
             <div class="flex flex-col w-full">
               <div class="flex items-center justify-between">
-                <div
-                  class="shrink-0 block w-[30px] h-[30px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
-                  [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
-                ></div>
+                <nz-avatar [nzSrc]="it.logo" nzShape="square"></nz-avatar>
                 <div *ngIf="type !== 'installed'">
                   <span
                     *ngIf="extensionService.installedMap?.has(it.name)"
-                    class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
+                    class="p-1 text-xs rounded-sm text-success border-all whitespace-nowrap"
                     i18n
                     >Installed</span
                   >

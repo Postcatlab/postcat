@@ -25,7 +25,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
           ></div>
           <div class="tree w-[30px]" [style.background]="option.colors.treeBackground" [style.borderColor]="option.colors.border"></div>
           <div class="content flex-1 flex items-center justify-center" [style.background]="option.colors.background">
-            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.colors.primary"></div>
+            <div class="text-primary w-[30px]  h-[15px]" [style.background]="option.colors.primary"></div>
           </div>
         </section>
         <div

@@ -17,13 +17,14 @@ export class ExtensionListComponent implements OnInit {
   @Input() @observable keyword = '';
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
   renderList = [];
+  promise = [];
   loading = false;
   constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
       this.renderList = [];
-      this.renderList = await this.searchPlugin(this.type, this.keyword);
+      this.searchPlugin(this.type, this.keyword);
     });
   }
   clickExtension(event, item) {
