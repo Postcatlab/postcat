@@ -6301,16 +6301,16 @@ eo-ng-auto-complete@0.0.112:
     tslib "^2.3.0"
 
 eo-ng-button@0.0.115:
-  version "0.0.114"
-  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.114.tgz#00085b97d56d252944ad1c70f16564b74e9eae5a"
-  integrity sha512-/YEiLL/KNvrTUFA5AwqiTO7MVBfFxPkaEwvXaRq/ERI1boCfL5U178E95QrsqwtK3ardLiiCzqWAVhwXNcnb4w==
+  version "0.0.115"
+  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.115.tgz#1703fb1e7288ec5b091a816dcbc5e39eb5dfd2d5"
+  integrity sha512-aBtuMRff42ZpkzXVUDpfQ+HbM1J4lax30IsYZChRgDcreduYd9eim+64ym7KR1n32EXre3QNdEVTU1k46s2A/A==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-checkbox@0.0.113:
-  version "0.0.113"
-  resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.113.tgz#5fda131b4b822a72a02f5246170dab1bc24d3549"
-  integrity sha512-pAyNB9u2iLw+q9yx86UqxhAh8/kRXfqcYZNwYLed0fBoeUPyI8d7bfi5X6I+AY9OQ3j7m48bxwsGbKKqSeacoA==
+eo-ng-checkbox@0.0.114:
+  version "0.0.114"
+  resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.114.tgz#465d39f3e25b602f8a9ec34a6e4c7af2a49f0e40"
+  integrity sha512-LqP9AdmKYf57+4rMH1L3K6xbhfJpWC9kuB/QOsAkdEjTXZx2WUj8xY4UONb1BIlgw5T8nm0k4r+bpbqFmLsVhw==
   dependencies:
     tslib "^2.3.0"
 
@@ -6321,10 +6321,10 @@ eo-ng-dropdown@0.0.113:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-feedback@0.0.114:
-  version "0.0.114"
-  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.114.tgz#6bcbe4e61c3297692e1606944e9d0e924aadaf92"
-  integrity sha512-284DwwQiM8MwBJoctRM8mAHAw5O/MDYR5aiKEbCyZayXo4MbSWAayZHWyDOoXvzavJUVzXuQmbBLu2YUag3lYw==
+eo-ng-feedback@0.0.115:
+  version "0.0.115"
+  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.115.tgz#dca19dc51a29c2366c95e4742aaae83a533da26b"
+  integrity sha512-tZrFSladO9oToNYAkj9R7ad6Y4Xv4MkOEXaIIMgU1/0FMZtqW182RFfGG1rz5MK1cGdg52XbXnCIgLYCCVr/gg==
   dependencies:
     tslib "^2.3.0"
 

@@ -402,6 +402,7 @@ export class ThemeVariableService {
       ]
     });
     //Toast/Alert
+    //* AlertText generate Background
     const alertColors: ThemeColorSingleRule[] = [
       {
         action: 'replace',
@@ -539,7 +540,6 @@ export class ThemeVariableService {
     const baseThemeID = (theme.core ? theme.id : theme.baseTheme) || 'light';
     //Generate colors by custom colors
     const colors = this.getColorsByCustomColors(baseThemeID.includes('dark') ? 'dark' : 'light', customColors);
-    console.log(colors, theme);
     const result = {} as ThemeColors;
 
     //Use default color if not set

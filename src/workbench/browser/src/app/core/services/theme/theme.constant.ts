@@ -3,6 +3,12 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import darkDefault from '../../../../extensions/themes/dark.json';
 import lightDefault from '../../../../extensions/themes/light.json';
+const debugTheme = {
+  label: $localize`Debug Theme`,
+  id: 'pc-debug',
+  baseTheme: 'pc-dark',
+  path: 'debug.json'
+};
 /**
  * Color value,set default value
  */
@@ -10,7 +16,8 @@ export const DEFAULT_THEME_COLORS = {
   progressSuccess: '#52c41a',
   switchText: '#fff',
   modalMaskBackground: 'rgba(0, 0, 0, 0.35)',
-  buttonPrimaryText: '#fff'
+  buttonPrimaryText: '#fff',
+  checkboxInner: '#fff'
 };
 
 /**
@@ -72,16 +79,7 @@ export const SYSTEM_THEME: SystemThemeItems[] = [
     baseTheme: 'pc-dark',
     path: 'orange.json'
   },
-  ...(APP_CONFIG.production
-    ? []
-    : [
-        {
-          label: $localize`Debug Theme`,
-          id: 'pc-debug',
-          baseTheme: 'pc',
-          path: 'debug.json'
-        }
-      ])
+  ...(APP_CONFIG.production ? [] : [debugTheme])
 ];
 export type SystemThemeItems = {
   label: string;

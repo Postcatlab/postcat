@@ -24,7 +24,7 @@ export class ExtensionListComponent implements OnInit {
     makeObservable(this);
     autorun(async () => {
       this.renderList = [];
-      this.searchPlugin(this.type, this.keyword);
+      this.renderList = await this.searchPlugin(this.type, this.keyword);
     });
   }
   clickExtension(event, item) {

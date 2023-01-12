@@ -189,6 +189,7 @@ export type ThemeColors = {
   checkboxBorder?: string;
   checkboxBackground?: string;
   checkboxCheckedBackground?: string;
+  checkboxInner?: string;
   checkboxCheckedBorder?: string;
   checkboxCheckedText?: string;
 
