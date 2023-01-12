@@ -63,7 +63,9 @@ export class ProjectService extends BaseService<Project> {
   /** 获取项目列表  */
   page(params: ProjectPageDto) {
     const { projectUuids, ...rest } = params;
-    rest['uuid'] = projectUuids;
+    if (projectUuids.length) {
+      rest['uuid'] = projectUuids;
+    }
     return this.baseService.page(rest);
   }
 

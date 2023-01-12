@@ -146,12 +146,12 @@ export class EffectService {
   async getProjectPermission() {
     //TODO localworkspace no need to set permission
     // * update project auth
-    const [data, err]: any = await this.api.api_projectUserPermission({ projectID: this.store.getCurrentProjectID });
-    if (err) {
-      return;
-    }
-    this.store.setPermission(data.permissions, 'project');
-    this.store.setRole(data.role.name, 'project');
+    // const [data, err]: any = await this.api.api_projectUserPermission({ projectID: this.store.getCurrentProjectID });
+    // if (err) {
+    //   return;
+    // }
+    // this.store.setPermission(data.permissions, 'project');
+    // this.store.setRole(data.role.name, 'project');
   }
   async changeProject(pid) {
     if (!pid) {
@@ -175,12 +175,12 @@ export class EffectService {
     this.store.setWorkspaceList(list);
   }
   async updateProjects(workspaceID) {
-    const [result] = await this.api.api_projectDetail({ workSpaceUuid: workspaceID });
-    if (result && result.code === 0) {
-      this.store.setProjectList(result.data);
-      return [result.data, null];
+    const [data] = await this.api.api_projectDetail({ workSpaceUuid: workspaceID, projectUuids: [] });
+    if (data) {
+      this.store.setProjectList(data.items);
+      return [data.items, null];
     } else {
-      [null, result.data];
+      return [null, data];
     }
   }
   updateProject(data) {

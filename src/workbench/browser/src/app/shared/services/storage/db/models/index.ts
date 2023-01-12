@@ -12,6 +12,7 @@ export interface Workspace extends Base {
 
 export interface Project extends Base {
   name: string;
+  workSpaceUuid: string;
   description?: string;
 }
 
