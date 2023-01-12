@@ -10,6 +10,7 @@ import {
   ApiTestHistory,
   Mock
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { merge } from 'lodash-es';
 
 class DataSource extends Dexie {
   workspace!: Table<Workspace, number | string>;
@@ -76,8 +77,8 @@ class DataSource extends Dexie {
         return obj;
       });
       table.hook('updating', (modifications, primKey, obj) => {
-        obj.updateTime = Date.now();
-        return obj;
+        const newObj = merge({}, obj, modifications);
+        return { ...newObj, updateTime: Date.now() };
       });
     });
   }
