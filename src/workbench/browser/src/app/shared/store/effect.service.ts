@@ -32,7 +32,7 @@ export class EffectService {
     queueMicrotask(async () => {
       await this.updateWorkspaces();
       // * update title
-      document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
+      document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
       this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
         if (this.store.getProjectList.length === 0) {
           this.router.navigate(['/home/workspace/overview']);
@@ -138,7 +138,7 @@ export class EffectService {
     //   this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceUuid } });
     // }
     // * update title
-    document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
+    document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
     // * update workspace role
     this.getWorkspacePermission();
     this.getProjectPermission();
@@ -184,10 +184,7 @@ export class EffectService {
     }
   }
   async createProject(data) {
-    const workspace = this.store.getCurrentWorkspace;
-
     await this.api.api_projectCreate({
-      workSpaceUuid: workspace.workSpaceUuid,
       projectMsgs: [data]
     });
   }

@@ -35,11 +35,11 @@ import { ModalService } from '../../../../shared/services/modal.service';
             <eo-iconpark-icon name="add"></eo-iconpark-icon>
           </button>
         </div> -->
-        <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
+        <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.workSpaceUuid)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
           <li
             class="workspace-item flex items-center"
-            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.workSpaceUuid === localWorkspace.id }"
+            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.workSpaceUuid === localWorkspace.workSpaceUuid }"
             nz-menu-item
           >
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
