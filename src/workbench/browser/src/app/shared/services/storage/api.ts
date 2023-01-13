@@ -3,7 +3,7 @@ const http = {
     {
       name: 'apiData',
       data: [
-        { 'create @post @create': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
+        { 'create @post @bulkCreate': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
         { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
         { 'delete @delete @delete': '/api/remove', body: 'apiUuid, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api', query: 'apiUuids, projectUuid, workSpaceUuid' },
