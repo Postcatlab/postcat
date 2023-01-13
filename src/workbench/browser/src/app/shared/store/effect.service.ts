@@ -29,32 +29,34 @@ export class EffectService {
     private lang: LanguageService,
     private web: WebService
   ) {
-    queueMicrotask(async () => {
-      await this.updateWorkspaces();
-      // * update title
-      document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
-      this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
-        if (this.store.getProjectList.length === 0) {
-          this.router.navigate(['/home/workspace/overview']);
-        }
-        this.getProjectPermission();
-        this.getWorkspacePermission();
-      });
-      reaction(
-        () => this.store.isLogin,
-        async () => {
-          if (this.store.isLogin) {
-            await this.updateWorkspaces();
+    this.init();
+  }
+
+  async init() {
+    await this.updateWorkspaces();
+    // * update title
+    document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
+    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
+      if (this.store.getProjectList.length === 0) {
+        this.router.navigate(['/home/workspace/overview']);
+      }
+      this.getProjectPermission();
+      this.getWorkspacePermission();
+    });
+    reaction(
+      () => this.store.isLogin,
+      async () => {
+        if (this.store.isLogin) {
+          await this.updateWorkspaces();
+        } else {
+          if (this.store.isLocal) {
+            this.store.setWorkspaceList([]);
           } else {
-            if (this.store.isLocal) {
-              this.store.setWorkspaceList([]);
-            } else {
-              this.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
-            }
+            this.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
           }
         }
-      );
-    });
+      }
+    );
   }
 
   getGroups(projectID = 1): Promise<any[]> {

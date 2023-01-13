@@ -214,16 +214,17 @@ export class StoreService {
 
   constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
-
-    db.workspace.read().then(result => {
-      this.localWorkspace = result.data as API.Workspace;
-      this.currentWorkspaceUuid ??= this.localWorkspace.workSpaceUuid;
-      this.currentWorkspace ??= this.localWorkspace;
-      this.workspaceList ??= [this.localWorkspace];
-      console.log('当前本地空间', this.localWorkspace);
-    });
-
+    this.initWorkspace();
     makeObservable(this); // don't forget to add this if the class has observable fields
+  }
+
+  async initWorkspace() {
+    const result = await db.workspace.read();
+    this.localWorkspace = result.data as API.Workspace;
+    this.currentWorkspaceUuid ??= this.localWorkspace.workSpaceUuid;
+    this.currentWorkspace ??= this.localWorkspace;
+    this.workspaceList ??= [this.localWorkspace];
+    console.log('当前本地空间', this.localWorkspace);
   }
 
   // * actions
