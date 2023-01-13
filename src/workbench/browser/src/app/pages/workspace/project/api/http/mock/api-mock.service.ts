@@ -25,7 +25,9 @@ export class ApiMockService {
    */
   async getMocks(apiUuid: number) {
     const [data, err] = await this.api.api_mockList({
-      apiUuid
+      apiUuid,
+      page: 1,
+      pageSize: 1
     });
     return data;
   }

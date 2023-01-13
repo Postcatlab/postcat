@@ -96,6 +96,10 @@ const http = {
       ]
     },
     {
+      name: 'role',
+      data: [{ 'list @get': '/roles', query: 'roleModule' }]
+    },
+    {
       name: 'share',
       data: [{ 'createShare @post': '/shared' }, { 'getShareList @get': '/shared' }, { 'deleteShare @delete': '/shared' }]
     },

@@ -241,6 +241,10 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectDelete<T>(params) : this.remote.api_projectDelete<T>(params);
   }
 
+  api_roleList<T = any>(params: { roleModule: any }) {
+    return this.remote.api_roleList<T>(params);
+  }
+
   api_shareCreateShare<T = any>(params: any) {
     return this.remote.api_shareCreateShare<T>(params);
   }

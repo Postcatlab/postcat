@@ -496,9 +496,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
     // * click event callback
     this.isSaveBtnLoading = true;
     const btnSaveRunning = async () => {
-      const { newWorkName: title } = this.validateWorkspaceNameForm.value;
+      const { newWorkName: titles } = this.validateWorkspaceNameForm.value;
       const localProjects = this.store.getProjectList;
-      const [data, err]: any = await this.api.api_workspaceCreate({ title });
+      const [data, err]: any = await this.api.api_workspaceCreate({ titles });
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
         if (err.status === 401) {

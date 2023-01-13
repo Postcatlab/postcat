@@ -109,7 +109,6 @@ export class WorkspaceSettingComponent {
     const id = this.store.getCurrentWorkspaceUuid;
     const { title } = this.validateForm.value;
     const [data, err]: any = await this.api.api_workspaceUpdate({
-      workspaceID: id,
       title
     });
     if (err) {

@@ -87,9 +87,9 @@ export class AccountComponent implements OnInit {
     // * click event callback
     this.isResetBtnBtnLoading = true;
     const btnResetBtnRunning = async () => {
-      const { newPassword: newPassword } = this.validatePasswordForm.value;
+      const { newPassword: password } = this.validatePasswordForm.value;
       const [data, err]: any = await this.api.api_userUpdatePassword({
-        newPassword
+        password
       });
       if (err) {
         this.eMessage.error($localize`Validation failed`);

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { autorun, observable, makeObservable } from 'mobx';
+import { autorun, reaction, observable, makeObservable } from 'mobx';
 
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
@@ -23,8 +23,13 @@ export class ExtensionListComponent implements OnInit {
     makeObservable(this);
     autorun(async () => {
       this.renderList = [];
-      this.renderList = await this.searchPlugin(this.type, this.keyword);
     });
+    reaction(
+      () => this.type,
+      async type => {
+        this.renderList = await this.searchPlugin(type, this.keyword);
+      }
+    );
   }
   clickExtension(event, item) {
     this.selectChange.emit(item);

@@ -26,8 +26,7 @@ export class WorkspaceMemberService {
   }
   async addMember(ids) {
     return await this.api.api_workspaceAddMember({
-      workspaceID: this.workSpaceUuid,
-      userIDs: ids
+      userIds: ids
     });
   }
   async queryMember() {
@@ -42,9 +41,7 @@ export class WorkspaceMemberService {
         }
       ];
     } else {
-      const [data, error]: any = await this.api.api_workspaceSearchMember({
-        workspaceID: this.workSpaceUuid
-      });
+      const [data, error]: any = await this.api.api_workspaceSearchMember({ username: '', page: 0, pageSize: 1 });
       result = data || [];
     }
     result.forEach(member => {
@@ -57,8 +54,7 @@ export class WorkspaceMemberService {
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
-      workspaceID: this.workSpaceUuid,
-      userIDs: [item.id]
+      userIds: [item.id]
     });
   }
   async quitMember(members) {
@@ -69,9 +65,7 @@ export class WorkspaceMemberService {
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.api.api_workspaceMemberQuit({
-      workspaceID: this.workSpaceUuid
-    });
+    const [data, err]: any = await this.api.api_workspaceMemberQuit({});
     if (!err) {
       if (this.store.getCurrentWorkspaceUuid === this.workSpaceUuid) {
         await this.effect.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
