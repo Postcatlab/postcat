@@ -33,7 +33,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .create({ apiList, projectUuid, workSpaceUuid })
+        .bulkCreate({ apiList, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - create 接口调用成功 %c', SuccessStyle, '');
