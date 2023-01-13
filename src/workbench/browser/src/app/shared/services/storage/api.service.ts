@@ -18,7 +18,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiDataUpdate<T>(params) : this.remote.api_apiDataUpdate<T>(params);
   }
 
-  api_apiDataDelete<T = any>(params: { apiUuid: any; projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiDataDelete<T = any>(params: { apiUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
     return this.store.isLocal ? this.local.api_apiDataDelete<T>(params) : this.remote.api_apiDataDelete<T>(params);
   }
 
