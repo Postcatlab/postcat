@@ -4,7 +4,6 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/models';
-import { MessageService } from '../../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
 
 @Component({
@@ -20,12 +19,7 @@ export class ApiGroupEditComponent implements OnInit {
   validateForm!: FormGroup;
   isDelete: boolean;
 
-  constructor(
-    private fb: FormBuilder,
-    private messageService: MessageService,
-    private modalRef: NzModalRef,
-    private storage: StorageService
-  ) {}
+  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private storage: StorageService) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
