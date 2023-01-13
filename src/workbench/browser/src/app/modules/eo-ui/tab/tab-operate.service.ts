@@ -22,6 +22,8 @@ export class TabOperateService {
    */
   BASIC_TABS: Array<Partial<TabItem>>;
   setting = {
+    //* intial url followQueryParams
+    followQueryParams: true,
     //* Cache pagedata in tab
     disabledCache: false,
     //* Allow development mode debug not exist router at init
@@ -96,6 +98,9 @@ export class TabOperateService {
     }
     //Tab from last choose
     const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+    if (this.setting.followQueryParams) {
+      targetTab.params = { ...validTabItem.params, ...targetTab.params };
+    }
     this.selectedIndex = tabCache.selectedIndex;
     this.navigateTabRoute(targetTab);
   }
