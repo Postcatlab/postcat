@@ -73,8 +73,10 @@ export class ApiTabService {
     this.messageService.get().subscribe((inArg: Message) => {
       this.watchApiChange(inArg);
     });
+    // autorun(() => {
+    this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
+    // });
     autorun(() => {
-      this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
       this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.workSpaceUuid}_TabCache`;
     });
   }
