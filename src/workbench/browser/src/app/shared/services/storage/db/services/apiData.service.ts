@@ -1,6 +1,7 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
 import {
   ApiDataBulkCreateDto,
+  ApiDataBulkReadDetailDto,
   ApiDataBulkReadDto,
   ApiDataDeleteDto,
   ApiDataUpdateDto
@@ -23,6 +24,17 @@ export class ApiDataService extends BaseService<ApiData> {
       projectUuid
     }));
     return this.baseService.bulkCreate(items);
+  }
+
+  bulkReadDetail(params: ApiDataBulkReadDetailDto) {
+    const { apiUuids, workSpaceUuid, projectUuid } = params;
+    return this.baseService.bulkRead(
+      apiUuids.map(uuid => ({
+        uuid,
+        workSpaceUuid,
+        projectUuid
+      }))
+    );
   }
 
   bulkRead(params: ApiDataBulkReadDto) {

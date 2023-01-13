@@ -33,21 +33,21 @@ export class ApiGroupTreeComponent implements OnInit {
   apiItemsMenu = [
     {
       title: $localize`Edit`,
-      click: inArg => this.editAPI(inArg.group)
+      click: inArg => this.operateApiEvent({ eventName: 'editApi', node: inArg.group })
     },
     {
       title: $localize`:@Copy:Copy`,
-      click: inArg => this.copyAPI(inArg.api)
+      click: inArg => this.operateApiEvent({ eventName: 'copyApi', node: inArg.origin })
     },
     {
       title: $localize`:@Delete:Delete`,
-      click: inArg => this.deleteAPI(inArg.api)
+      click: inArg => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.api })
     }
   ];
   groupItemsMenu = [
     {
       title: $localize`Add API`,
-      click: inArg => this.addAPI(inArg.group)
+      click: inArg => this.operateApiEvent({ eventName: 'addAPI', node: inArg.group })
     },
     {
       title: $localize`Add Subgroup`,
@@ -148,7 +148,29 @@ export class ApiGroupTreeComponent implements OnInit {
   };
 
   toggleExpand() {}
-  clickTreeItem(data) {}
+  /**
+   * Group tree item click.
+   *
+   * @param event
+   */
+  clickTreeItem(event: NzFormatEmitEvent): void {
+    const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
+    switch (eventName) {
+      case 'clickFolder': {
+        event.node.isExpanded = !event.node.isExpanded;
+        this.toggleExpand();
+        break;
+      }
+      case 'clickFixedItem': {
+        this.operateApiEvent({ ...event, eventName: 'jumpOverview' });
+        break;
+      }
+      case 'clickItem': {
+        this.operateApiEvent({ ...event, eventName: 'detailApi' });
+        break;
+      }
+    }
+  }
   onSearchFunc(data) {
     return true;
   }
@@ -178,7 +200,7 @@ export class ApiGroupTreeComponent implements OnInit {
       }
       case 'addAPI': {
         this.router.navigate([`${prefix}/http/edit`], {
-          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') }
+          queryParams: { groupID: inArg.node?.origin.key }
         });
         break;
       }

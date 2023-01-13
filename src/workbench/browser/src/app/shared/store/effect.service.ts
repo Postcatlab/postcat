@@ -330,14 +330,16 @@ export class EffectService {
     this.store.setApiGroupTree(apiGroupTree);
   }
   // ! maybe no need getAPI()
-  async getAPI(uuid) {
+  async getAPI(apiUuids: string[]) {
     // * get API data
     const [res, err] = await this.api.api_apiDataDetail({
-      apiUuids: uuid
+      apiUuids
     });
+    console.log('res, err', res, err);
     if (err) {
       return;
     }
+    return res;
   }
 
   // ? update

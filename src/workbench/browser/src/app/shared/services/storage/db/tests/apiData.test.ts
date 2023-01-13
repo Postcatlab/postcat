@@ -17,7 +17,7 @@ if (apiDataAddRes.length === sampleApiData.apiList.length) {
 }
 
 // 获取api列表
-const buldReadParams = { ...params, api: { apiUuids: apiDataAddRes.map(n => n.uuid) } };
+const buldReadParams = { ...params, apiUuids: apiDataAddRes.map(n => n.uuid) };
 const { data: apiDataList } = await table.bulkRead(buldReadParams);
 if (apiDataList.length === sampleApiData.apiList.length) {
   pcConsole.success('[获取api列表]: 测试通过');

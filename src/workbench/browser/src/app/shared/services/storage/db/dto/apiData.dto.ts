@@ -14,8 +14,13 @@ export interface ApiDataBulkReadDto {
   workSpaceUuid: string;
 }
 
+export interface ApiDataBulkReadDetailDto {
+  apiUuids: string[];
+  projectUuid: string;
+  workSpaceUuid: string;
+}
+
 export interface ApiDataDeleteDto {
-  apiUuid: string;
   projectUuid: string;
   workSpaceUuid: string;
 }

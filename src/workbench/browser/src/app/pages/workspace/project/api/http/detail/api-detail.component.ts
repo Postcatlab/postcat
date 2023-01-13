@@ -4,6 +4,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
@@ -25,7 +26,7 @@ export class ApiDetailComponent implements OnInit {
   };
   constructor(
     private route: ActivatedRoute,
-    private apiService: ProjectApiService,
+    private effectService: EffectService,
     public electron: ElectronService,
     public store: StoreService,
     private message: EoNgFeedbackMessageService
@@ -45,10 +46,11 @@ export class ApiDetailComponent implements OnInit {
   async init() {
     if (!this.model) {
       this.model = {} as ApiData;
-      const id = Number(this.route.snapshot.queryParams.uuid);
-      if (id) {
-        this.model = await this.apiService.get(id);
+      const uuid = this.route.snapshot.queryParams.uuid;
+      if (uuid) {
+        this.model = await this.effectService.getAPI([uuid]);
         this.originModel = cloneDeep(this.model);
+        console.log('this.model', this.model);
       } else {
         console.error(`Can't no find api`);
       }
