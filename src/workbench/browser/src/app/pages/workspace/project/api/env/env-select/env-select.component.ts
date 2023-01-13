@@ -42,7 +42,6 @@ export class EnvSelectComponent implements OnInit {
   gloablParams: any = [];
   renderEnv: Environment = {
     name: '',
-    projectID: -1,
     hostUri: '',
     parameters: []
   };

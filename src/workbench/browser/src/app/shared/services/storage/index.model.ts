@@ -45,7 +45,7 @@ export interface Environment extends StorageModel {
    *
    * @type {number}
    */
-  uuid?: number;
+  id?: number;
   /**
    * Env name
    *
@@ -58,7 +58,7 @@ export interface Environment extends StorageModel {
    *
    * @type {number}
    */
-  projectID: number;
+  projectUuid?: number;
 
   /**
    * Host uri

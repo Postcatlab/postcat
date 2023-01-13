@@ -12,7 +12,7 @@
       *ngFor="let item of store.getEnvList"
       class="flex items-center justify-between px-2 py-1 env-item"
       (click)="editEnv(item)"
-      [ngClass]="{ 'env-item-active': item.uuid === id }"
+      [ngClass]="{ 'env-item-active': item.id === id }"
     >
       <span class="flex-1 truncate name">{{ item.name }}</span>
       <div class="env-operate">
@@ -27,7 +27,7 @@
           nz-popconfirm
           i18n-nzPopconfirmTitle
           nzPopconfirmTitle="Are you sure you want to delete?"
-          (nzOnConfirm)="handleDeleteEnv($event, item.uuid)"
+          (nzOnConfirm)="handleDeleteEnv($event, item.id)"
         >
           <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
         </button>
