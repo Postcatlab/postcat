@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { autorun, reaction, observable, makeObservable } from 'mobx';
+import { autorun, reaction, computed, observable, makeObservable } from 'mobx';
 
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
@@ -16,20 +16,33 @@ export class ExtensionListComponent implements OnInit {
   @Input() @observable type: string = ExtensionGroupType.all;
   @Input() @observable keyword = '';
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
-  renderList = [];
+  allList = [];
+  officialList = [];
+  installedList = [];
   loading = false;
+  @computed get renderList() {
+    if (this.type === 'all') {
+      return this.allList;
+    }
+    if (this.type === 'official') {
+      return this.officialList;
+    }
+    return this.installedList;
+  }
   constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
-      this.renderList = [];
-    });
-    reaction(
-      () => this.type,
-      async type => {
-        this.renderList = await this.searchPlugin(type, this.keyword);
+      if (this.type === 'all') {
+        this.allList = await this.searchPlugin(this.type, this.keyword);
+        return;
       }
-    );
+      if (this.type === 'official') {
+        this.officialList = await this.searchPlugin(this.type, this.keyword);
+        return;
+      }
+      this.installedList = await this.searchPlugin(this.type, this.keyword);
+    });
   }
   clickExtension(event, item) {
     this.selectChange.emit(item);
