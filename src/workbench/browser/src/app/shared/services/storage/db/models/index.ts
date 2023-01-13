@@ -17,6 +17,7 @@ export interface Project extends Base {
 }
 
 export interface Group extends Base {
+  type: number;
   name?: string;
   path?: string;
   depth?: number;

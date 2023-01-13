@@ -243,10 +243,10 @@ export class EffectService {
 
   // ? delete
   async deleteHistory() {
-    const [, err] = await this.api.api_apiTestHistoryDelete({
-      id: id_ID
-    });
-    this.store.setHistory([]);
+    // const [, err] = await this.api.api_apiTestHistoryDelete({
+    //   id: id_ID
+    // });
+    // this.store.setHistory([]);
   }
   // * delete api
   async deleteAPI(uuid) {
@@ -282,13 +282,13 @@ export class EffectService {
   }
 
   // ? get
-  private async getHistory() {
-    const [res, err] = await this.api.api_apiTestHistoryList({});
-    if (err) {
-      return;
-    }
-    this.store.setHistory(res.data.items);
-  }
+  // private async getHistory() {
+  //   const [res, err] = await this.api.api_apiTestHistoryList({});
+  //   if (err) {
+  //     return;
+  //   }
+  //   this.store.setHistory(res.data.items);
+  // }
 
   private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {
     const apiDataFilters = apiDatas.filter(apiData => {
@@ -354,12 +354,12 @@ export class EffectService {
     await this.api.api_apiDataCreate({ apiList: apiData });
     this.getGroupList();
   }
-  async createGroup(group: Group) {
+  async createGroup(group) {
     // * update group
     await this.api.api_groupCreate(group);
     this.getGroupList();
   }
-  async updateGroup(group: Group) {
+  async updateGroup(group) {
     // * update group
     // * update api list
     await this.api.api_groupUpdate(group);

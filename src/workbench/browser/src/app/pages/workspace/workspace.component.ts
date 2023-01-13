@@ -6,7 +6,7 @@ import { EffectService } from '../../shared/store/effect.service';
 
 @Component({
   selector: 'eo-workspace',
-  template: `<router-outlet *ngIf="storeService.getCurrentWorkspace"></router-outlet>`,
+  template: `<router-outlet *ngIf="storeService.getCurrentWorkspace?.workSpaceUuid"></router-outlet>`,
   styles: []
 })
 export class WorkspaceComponent implements OnInit {
