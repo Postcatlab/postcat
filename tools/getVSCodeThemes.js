@@ -31,7 +31,6 @@ var barBackground = getDomStyle(
   '#workbench\\.parts\\.editor > div.content > div.grid-view-container > div > div > div > div.monaco-scrollable-element.mac > div.split-view-container > div > div > div.title.tabs.show-file-icons',
   'background-color'
 );
-var dropdownItemHoverBackground = getVariable('--vscode-menu-selectionBackground');
 var obj = {
   icon: getVariable('--vscode-icon-foreground'),
   text: getVariable('--vscode-foreground'),
@@ -48,8 +47,8 @@ var obj = {
   inputBorder: getVariable('--vscode-commandCenter-border'),
   selectBorder: getVariable('--vscode-commandCenter-border'),
   inputPlaceholder: getVariable('--vscode-input-placeholderForeground'),
-  selectItemSelectedText: getVariable('--vscode-menu-foreground'),
-  selectItemSelectedBackground: dropdownItemHoverBackground,
+  selectItemSelectedText: getVariable('--vscode-menu-selectionForeground'),
+  selectItemSelectedBackground: getVariable('--vscode-menu-selectionBackground'),
   layoutHeaderBackground: getDomStyle('#workbench.parts.titlebar', 'background-color'),
   layoutSidebarBackground: getDomStyle('#workbench.parts.activitybar', 'background-color'),
   layoutSidebarText: getVariable('--vscode-activityBar-inactiveForeground'),
@@ -81,7 +80,7 @@ var obj = {
   tableHeaderText: getDomStyle('.monaco-workbench', 'color'),
   scrollbarThumbBackground: getVariable('--vscode-scrollbarSlider-background'),
   dropdownBackground: getVariable('--vscode-dropdown-background'),
-  dropdownItemHoverBackground: dropdownItemHoverBackground,
+  dropdownItemHoverBackground: getVariable('--vscode-menu-selectionBackground'),
   dropdownItemHoverText: getVariable('--vscode-list-activeSelectionForeground')
 };
 console.log(
