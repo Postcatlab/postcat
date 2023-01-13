@@ -9,8 +9,6 @@ import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
-import { eoDeepCopy } from '../../utils/index.utils';
-
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 

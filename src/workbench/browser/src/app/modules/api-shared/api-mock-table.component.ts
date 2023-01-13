@@ -36,7 +36,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     this.initTable();
   }
   async handleDeleteMockItem(item, index) {
-    await this.apiMock.deleteMock(item.uuid);
+    await this.apiMock.deleteMock(item.id);
     this.mockList.splice(index, 1)[0];
     this.mockList = [...this.mockList];
     this.message.success($localize`Delete Succeeded`);
@@ -104,7 +104,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     ];
   }
   async ngOnChanges(changes) {
-    if (changes?.apiData?.currentValue?.uuid) {
+    if (changes?.apiData?.currentValue?.id) {
       this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
       this.mockList.forEach(item => {
         if (item.createWay === 'system') {
@@ -126,12 +126,12 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     this.message.success($localize`Copied`);
   }
   async addOrEditModal(item, index?) {
-    if (item.uuid) {
-      await this.apiMock.updateMock(item, Number(item.uuid));
+    if (item.id) {
+      await this.apiMock.updateMock(item);
       this.message.success($localize`Edited successfully`);
       this.mockList[index] = item;
     } else {
-      item.apiDataID = this.apiData.uuid;
+      item.apiUuid = this.apiData.uuid;
       const result = await this.apiMock.createMock(item);
       Object.assign(item, result.data, {
         createWay: 'custom'
@@ -154,8 +154,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         .replace(/:{3}/g, '://'),
       'https://github.com/'
     );
-    if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', `${mock.uuid}`);
+    if (mock?.createWay === 'custom' && mock.id) {
+      url.searchParams.set('mockID', `${mock.id}`);
     }
     return decodeURIComponent(url.toString());
   }

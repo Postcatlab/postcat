@@ -307,3 +307,12 @@ export const b64DecodeUnicode = (str: string) => {
 export const decodeUnicode = (str: string) => {
   return unescape(str.replace(/\\u/gi, '%u'));
 };
+
+export const JSONParse = (text, reviver?) => {
+  try {
+    return JSON.parse(text, reviver);
+  } catch (ex) {
+    pcConsole.warn('JSONParse error:', ex);
+    return {};
+  }
+};

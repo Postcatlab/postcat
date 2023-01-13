@@ -36,20 +36,20 @@ export class EnvListComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  handleDeleteEnv($event, uuid: string) {
+  handleDeleteEnv($event, id: string) {
     $event?.stopPropagation();
     // * delete localstrage
-    this.effect.deleteEnv(uuid);
+    this.effect.deleteEnv(id);
     this.message.send({
       type: 'deleteEnvSuccess',
       data: {
-        uuids: [uuid]
+        uuids: [id]
       }
     });
   }
   editEnv(item) {
     this.router.navigate(['/home/workspace/project/api/env/edit'], {
-      queryParams: { uuid: item.uuid }
+      queryParams: { uuid: item.id }
     });
   }
   addEnv(pid = 1) {

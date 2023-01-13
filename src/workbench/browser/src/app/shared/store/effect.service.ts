@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -19,12 +18,11 @@ import { id_ID } from 'ng-zorro-antd/i18n';
 })
 export class EffectService {
   constructor(
-    private apiService: ProjectApiService,
+    private projectApi: ProjectApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
     private api: ApiService,
-    private message: MessageService,
     private router: Router,
     private lang: LanguageService,
     private web: WebService
@@ -67,13 +65,12 @@ export class EffectService {
     });
   }
 
-  deleteEnv(uuid) {
-    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        const envList = this.store.getEnvList.filter(it => it.uuid !== uuid);
-        this.store.setEnvList(envList);
-      }
-    });
+  async deleteEnv(id) {
+    const [data, err] = await this.api.api_environmentDelete({ id });
+    if (data) {
+      const envList = this.store.getEnvList.filter(it => it.id !== id);
+      this.store.setEnvList(envList);
+    }
   }
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
@@ -89,7 +86,7 @@ export class EffectService {
 
   async exportProjectData(projectID = 1) {
     const apiGroup = await this.getGroups(projectID);
-    const result: StorageRes = await this.apiService.getAll(projectID);
+    const result: StorageRes = await this.projectApi.getAll(projectID);
     const { success, empty } = StorageResStatus;
     if ([success, empty].includes(result.status)) {
       return {
@@ -131,12 +128,9 @@ export class EffectService {
     // * real set workspace
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
-    // if (this.store.getProjectList.length === 1) {
+
     this.router.navigate(['/home/workspace/overview']);
-    // } else {
-    //   // * refresh view
-    //   this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceUuid } });
-    // }
+
     // * update title
     document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
     // * update workspace role
@@ -223,30 +217,24 @@ export class EffectService {
     return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
   }
 
-  updateEnvList() {
-    return new Promise(resolve => {
-      if (this.store.isShare) {
-        this.api
-          .api_shareDocGetEnv({
-            uniqueID: this.store.getShareID
-          })
-          .then(([data, err]) => {
-            if (err) {
-              return resolve([]);
-            }
-            this.store.setEnvList(data);
-            return resolve(data || []);
-          });
-        return;
-      }
-      this.storage.run('environmentLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.store.setEnvList(result.data || []);
-          return resolve(result.data || []);
-        }
-        return resolve([]);
-      });
-    });
+  async updateEnvList() {
+    if (this.store.isShare) {
+      this.api
+        .api_shareDocGetEnv({
+          uniqueID: this.store.getShareID
+        })
+        .then(([data, err]) => {
+          if (err) {
+            return [];
+          }
+          this.store.setEnvList(data);
+          return data || [];
+        });
+      return;
+    }
+    const [envList, err] = await this.api.api_environmentList({});
+    this.store.setEnvList(envList || []);
+    return envList;
   }
 
   // *** Data engine
@@ -261,22 +249,16 @@ export class EffectService {
   // * delete api
   async deleteAPI(uuid) {
     // * delete API
-    const [, err] = await this.api.api_apiDataDelete({
+    await this.api.api_apiDataDelete({
       apiUuid: uuid
     });
-    if (err) {
-      return;
-    }
-    console.log('删除 API');
+    this.getGroupList();
   }
   // * delete group and api
   async deleteGroup(group) {
     // * delete group
-    const [, err] = await this.api.api_groupDelete({});
-    if (err) {
-      return;
-    }
-    console.log('删除 Group');
+    await this.api.api_groupDelete(group);
+    this.getGroupList();
     // * call deleteAPI()
   }
   async deleteMock(id) {
@@ -292,9 +274,7 @@ export class EffectService {
     // TODO add history
     this.store.setHistory([]);
   }
-  createGroup() {
-    // * update group
-  }
+
   createMock() {
     // * update API
   }
@@ -367,9 +347,21 @@ export class EffectService {
   updateMock() {
     // * update mock
   }
-  updateGroup() {
+  async createAPI(apiData: ApiData[]) {
+    // * update group
+    await this.api.api_apiDataCreate({ apiList: apiData });
+    this.getGroupList();
+  }
+  async createGroup(group: Group) {
+    // * update group
+    await this.api.api_groupCreate(group);
+    this.getGroupList();
+  }
+  async updateGroup(group: Group) {
     // * update group
     // * update api list
+    await this.api.api_groupUpdate(group);
+    this.getGroupList();
   }
   updateHistory() {}
 }

@@ -363,7 +363,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
         await this.mock.add(
-          this.createMockObj(data, { name: '默认 Mock', createWay: 'system', projectID: this.store.getCurrentProjectID })
+          this.createMockObj(data, { name: '默认 Mock', createWay: 'system', projectUuid: this.store.getCurrentProjectID })
         );
       }
     });

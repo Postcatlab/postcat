@@ -55,7 +55,7 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
     return {
       validate: true,
       data: {
-        projectID: env.projectID,
+        projectUuid: env.projectUuid,
         name: env.name,
         hostUri: env.hostUri,
         parameters: env.parameters

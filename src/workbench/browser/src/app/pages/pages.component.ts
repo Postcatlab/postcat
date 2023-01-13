@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { filter } from 'rxjs';
 
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
