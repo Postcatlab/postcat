@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { autorun, reaction, computed, observable, makeObservable } from 'mobx';
+import { autorun, computed, observable, makeObservable } from 'mobx';
 
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';

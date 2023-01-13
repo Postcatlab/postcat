@@ -80,12 +80,12 @@ export class LocalService {
   }
 
   api_apiDataDelete<T = any>({
-    apiUuid,
+    apiUuids,
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid
   }) {
-    if (apiUuid == null) {
-      console.log('%c Error: apiData - delete 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+    if (apiUuids == null) {
+      console.log('%c Error: apiData - delete 接口 缺失参数 apiUuids %c', ErrorStyle, '');
       return;
     }
     if (projectUuid == null) {
@@ -99,7 +99,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .delete({ apiUuid, projectUuid, workSpaceUuid })
+        .bulkDelete({ apiUuids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - delete 接口调用成功 %c', SuccessStyle, '');
