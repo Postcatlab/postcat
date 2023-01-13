@@ -56,9 +56,9 @@ export class ApiDataService extends BaseService<ApiData> {
     });
   }
 
-  delete(params: ApiDataDeleteDto) {
-    const { apiUuid, ...rest } = params;
-    rest['uuid'] = apiUuid;
-    return this.baseService.delete(rest);
+  bulkDelete(params: ApiDataDeleteDto) {
+    const { apiUuids, ...rest } = params;
+    rest['uuid'] = apiUuids.map(uuid => uuid);
+    return this.baseService.bulkDelete(rest);
   }
 }

@@ -21,6 +21,7 @@ export interface ApiDataBulkReadDetailDto {
 }
 
 export interface ApiDataDeleteDto {
+  apiUuids: string[];
   projectUuid: string;
   workSpaceUuid: string;
 }

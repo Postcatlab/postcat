@@ -252,7 +252,7 @@ export class EffectService {
   async deleteAPI(uuid) {
     // * delete API
     await this.api.api_apiDataDelete({
-      apiUuid: uuid
+      apiUuids: [uuid]
     });
     this.getGroupList();
   }
