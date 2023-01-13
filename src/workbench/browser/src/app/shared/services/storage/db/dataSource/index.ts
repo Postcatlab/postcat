@@ -74,9 +74,11 @@ class DataSource extends Dexie {
       table.hook('reading', obj => {
         const uuidName = uuidMap[table.name];
         if (uuidName) {
+          // 在数据返回到前端之前，将数据库中的 uuid 字段转为特定名称的 xxxUuid，这里主要是为了对齐后端返回的字段
           obj[uuidName] = obj.uuid;
         }
         if (table.name === 'workspace') {
+          // 主要用于区分本地空间和远程空间
           obj.isLocal = true;
         }
         return obj;

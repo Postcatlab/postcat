@@ -7,12 +7,17 @@ import { EffectService } from '../../shared/store/effect.service';
 
 @Component({
   selector: 'eo-workspace',
-  template: `<router-outlet></router-outlet>`,
+  template: `<router-outlet *ngIf="storeService.getCurrentWorkspace"></router-outlet>`,
   styles: []
 })
 export class WorkspaceComponent implements OnInit {
   @observable projectList;
-  constructor(private store: StoreService, private effect: EffectService, private route: ActivatedRoute) {
+  constructor(
+    private store: StoreService,
+    private effect: EffectService,
+    private route: ActivatedRoute,
+    public storeService: StoreService
+  ) {
     const pid = this.route.snapshot.queryParams.pid;
     const wid = this.route.snapshot.queryParams.wid;
     if (this.store.getCurrentWorkspaceUuid !== wid) {

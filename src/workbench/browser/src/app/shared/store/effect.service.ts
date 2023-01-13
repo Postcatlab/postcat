@@ -261,13 +261,10 @@ export class EffectService {
   // * delete api
   async deleteAPI(uuid) {
     // * delete API
-    const [, err] = await this.api.api_apiDataDelete({
+    await this.api.api_apiDataDelete({
       apiUuid: uuid
     });
-    if (err) {
-      return;
-    }
-    console.log('删除 API');
+    this.getGroupList();
   }
   // * delete group and api
   async deleteGroup(group) {
@@ -361,6 +358,11 @@ export class EffectService {
   }
   updateMock() {
     // * update mock
+  }
+  async createAPI(apiData: ApiData[]) {
+    // * update group
+    await this.api.api_apiDataCreate({ apiList: apiData });
+    this.getGroupList();
   }
   async createGroup(group: Group) {
     // * update group
