@@ -553,7 +553,7 @@ export class ThemeVariableService {
         pcConsole.error(`Colors can't find ${colorKey} value`);
       }
     });
-    result['systemBorder'] = result.border === 'transparent' ? defaultThemeOpts.customColors.border : result.border;
+    result['systemBorder'] = result.border === 'transparent' ? result.inputBorder : result.border;
     // pcConsole.log('getColors:', result);
     return result;
   }

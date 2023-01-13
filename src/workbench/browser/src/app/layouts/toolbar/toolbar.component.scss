@@ -14,8 +14,11 @@
 
   .ant-btn-text {
     color: var(--layout-footer-text-color);
+    height: calc(var(--layout-footer-height) - 4px);
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:active {
       background-color: var(--layout-footer-item-hover-background-color);
     }
   }

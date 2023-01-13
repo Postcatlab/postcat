@@ -6,7 +6,7 @@
 }
 
 .page-body {
-  height: var(--body-height);
+  // height: var(--body-height);
 }
 
 .home-container {
@@ -23,11 +23,12 @@
   .home-container {
     --body-height: calc(100vh - var(--layout-header-height) - var(--layout-footer-height) - var(--remote-notification-height, 0));
 
+    height: var(--body-height);
+
     router-outlet + * {
       display: block;
-      height: var(--body-height);
 
-      // overflow: hidden auto;
+      // height: var(--body-height);
     }
   }
 }
