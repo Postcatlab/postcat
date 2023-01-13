@@ -1,3 +1,5 @@
+import { reverseObjKV } from 'eo/workbench/browser/src/app/shared/services/storage/db/utils';
+
 export enum ProtocolEnum {
   HTTP = 0,
   HTTPS = 1,
@@ -13,6 +15,8 @@ export enum ProtocolEnum {
   GRPC = 11
 }
 
+export const protocalMap = reverseObjKV(ProtocolEnum);
+
 export enum RequestMethodEnum {
   POST = 0,
   GET = 1,
@@ -22,6 +26,8 @@ export enum RequestMethodEnum {
   OPTIONS = 5,
   PATCH = 6
 }
+
+export const requestMethodMap = reverseObjKV(RequestMethodEnum);
 
 export enum ContentTypeEnum {
   FROM_DATA = 0,

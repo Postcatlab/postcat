@@ -13,7 +13,7 @@ import { EffectService } from '../../shared/store/effect.service';
 export class WorkspaceComponent implements OnInit {
   @observable projectList;
   constructor(private store: StoreService, private effect: EffectService, private route: ActivatedRoute) {
-    const pid = Number(this.route.snapshot.queryParams.pid);
+    const pid = this.route.snapshot.queryParams.pid;
     const wid = this.route.snapshot.queryParams.wid;
     if (this.store.getCurrentWorkspaceUuid !== wid) {
       this.effect.changeWorkspace(wid);

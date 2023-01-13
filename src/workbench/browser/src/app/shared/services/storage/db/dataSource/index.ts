@@ -10,6 +10,8 @@ import {
   ApiTestHistory,
   Mock
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/project.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/workspace.service';
 import { merge } from 'lodash-es';
 
 class DataSource extends Dexie {
@@ -20,7 +22,6 @@ class DataSource extends Dexie {
   apiData!: Table<ApiData, number | string>;
   apiTestHistory!: Table<ApiTestHistory, number | string>;
   mock!: Table<Mock, number | string>;
-
   constructor() {
     super('postcat_core_test');
     this.version(1).stores({
@@ -38,13 +39,14 @@ class DataSource extends Dexie {
   }
 
   private async populate() {
-    const workspaceID = await this.workspace.add({ title: 'Persional Workspace' });
-    const workspace = await this.workspace.get(workspaceID);
+    const workspaceService = new WorkspaceService();
+    const projectService = new ProjectService();
 
-    const projectID = await this.project.add({ name: 'Default', workSpaceUuid: workspace.uuid });
-    const project = await this.project.get(projectID);
+    const { data: workspace } = await workspaceService.create({ title: 'Persional Workspace' });
 
-    const params = { workSpaceUuid: workspace.uuid, projectUuid: project.uuid };
+    const { data: project } = await projectService.bulkCreate({ projectMsgs: [{ name: 'Default' }], workSpaceUuid: workspace.uuid });
+
+    const params = { workSpaceUuid: workspace.uuid, projectUuid: project.at(0).uuid };
 
     const sampleApiData = genSimpleApiData(params);
     // @ts-ignore

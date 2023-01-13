@@ -4,7 +4,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid }) => {
   return {
     apiList: [
       {
-        groupId: 0,
+        groupId: 1,
         groupName: '',
         projectId: 1,
         lifecycle: 0,
@@ -689,7 +689,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid }) => {
         }
       },
       {
-        groupId: 0,
+        groupId: 1,
         groupName: '',
         projectId: 1,
         lifecycle: 0,

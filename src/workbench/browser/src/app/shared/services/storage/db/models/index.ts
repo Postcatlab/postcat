@@ -17,14 +17,11 @@ export interface Project extends Base {
 }
 
 export interface Group extends Base {
-  moduleGroupId: number;
-  module: string;
-  type: number;
-  name: string;
-  path: string;
-  depth: number;
-  parentId: number;
-  sort: number;
+  name?: string;
+  path?: string;
+  depth?: number;
+  parentId?: number;
+  sort?: number;
   projectUuid: string;
   workSpaceUuid: string;
 }
