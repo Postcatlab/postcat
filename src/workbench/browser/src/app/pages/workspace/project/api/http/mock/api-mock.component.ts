@@ -30,7 +30,7 @@ export class ApiMockComponent implements OnInit {
   @ViewChild('mockTable')
   mockTable: ApiMockTableComponent;
 
-  apiDataID: number;
+  apiUuid: number;
   apiData: ApiData;
   titleTips = $localize`Postcat Client is required to use local mock.`;
 
@@ -41,11 +41,11 @@ export class ApiMockComponent implements OnInit {
     private modal: ModalService,
     private api: ProjectApiService
   ) {
-    this.apiDataID = Number(this.route.snapshot.queryParams.uuid);
+    this.apiUuid = Number(this.route.snapshot.queryParams.uuid);
   }
 
   async ngOnInit() {
-    this.apiData = await this.api.get(this.apiDataID);
+    this.apiData = await this.api.get(this.apiUuid);
     this.eoOnInit.emit(this.apiData);
   }
   jumpToClient() {
