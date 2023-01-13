@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/models';
-import { Group, StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
+import { StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-group-edit',
@@ -19,7 +21,7 @@ export class ApiGroupEditComponent implements OnInit {
   validateForm!: FormGroup;
   isDelete: boolean;
 
-  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private storage: StorageService) {}
+  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private storage: StorageService, private effect: EffectService) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
@@ -48,7 +50,7 @@ export class ApiGroupEditComponent implements OnInit {
     if (this.isDelete) {
       this.delete();
     } else {
-      if (this.group.uuid) {
+      if (this.group.id) {
         this.update();
       } else {
         this.create();
@@ -56,24 +58,14 @@ export class ApiGroupEditComponent implements OnInit {
     }
   }
 
-  create(): void {
-    this.storage.run('groupCreate', [this.group], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.modalRef.destroy();
-      } else {
-        console.error(result.data);
-      }
-    });
+  async create() {
+    await this.effect.createGroup(this.group);
+    this.modalRef.destroy();
   }
 
-  update(): void {
-    this.storage.run('groupUpdate', [this.group, this.group.uuid], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.modalRef.destroy();
-      } else {
-        console.error(result.data);
-      }
-    });
+  async update() {
+    await this.effect.updateGroup(this.group);
+    this.modalRef.destroy();
   }
 
   /**
@@ -99,13 +91,7 @@ export class ApiGroupEditComponent implements OnInit {
    * Delete all tree items
    */
   delete(): void {
-    const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
-    this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
+    this.effect.deleteGroup(this.group);
     this.modalRef.destroy();
-    this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        //delete group api
-      }
-    });
   }
 }

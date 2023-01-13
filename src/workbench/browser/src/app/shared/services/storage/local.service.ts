@@ -379,23 +379,23 @@ export class LocalService {
   }
 
   api_groupCreate<T = any>({
-    module,
     type,
     name,
+    parentId,
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid,
     ...items
   }) {
-    if (module == null) {
-      console.log('%c Error: group - create 接口 缺失参数 module %c', ErrorStyle, '');
-      return;
-    }
     if (type == null) {
       console.log('%c Error: group - create 接口 缺失参数 type %c', ErrorStyle, '');
       return;
     }
     if (name == null) {
       console.log('%c Error: group - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (parentId == null) {
+      console.log('%c Error: group - create 接口 缺失参数 parentId %c', ErrorStyle, '');
       return;
     }
     if (projectUuid == null) {
@@ -409,7 +409,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.group
-        .create({ module, type, name, projectUuid, workSpaceUuid, ...items })
+        .create({ type, name, parentId, projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c group - create 接口调用成功 %c', SuccessStyle, '');

@@ -24,7 +24,7 @@ const http = {
     {
       name: 'group',
       data: [
-        { 'create @post @create': '/group', json: 'module, type, name, projectUuid, workSpaceUuid, ...' },
+        { 'create @post @create': '/group', json: 'type, name, parentId, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/group', json: 'id, projectUuid, workSpaceUuid, ...' },
         { 'delete @delete @delete': '/group', body: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/group', query: 'id, projectUuid, workSpaceUuid' },

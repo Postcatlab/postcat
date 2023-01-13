@@ -434,19 +434,19 @@ export class RemoteService {
   }
 
   api_groupCreate<T = any>(
-    { module, type, name, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
+    { type, name, parentId, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
     prefix = ''
   ) {
-    if (module == null) {
-      console.log('%c Error: group - create 接口 缺失参数 module %c', ErrorStyle, '');
-      return;
-    }
     if (type == null) {
       console.log('%c Error: group - create 接口 缺失参数 type %c', ErrorStyle, '');
       return;
     }
     if (name == null) {
       console.log('%c Error: group - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (parentId == null) {
+      console.log('%c Error: group - create 接口 缺失参数 parentId %c', ErrorStyle, '');
       return;
     }
     if (projectUuid == null) {
@@ -461,9 +461,9 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .post(`${prefix}/api/group`, {
-          module,
           type,
           name,
+          parentId,
           projectUuid,
           workSpaceUuid,
           ...items
