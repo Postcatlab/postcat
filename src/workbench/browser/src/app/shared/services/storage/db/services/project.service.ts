@@ -34,15 +34,27 @@ export class ProjectService extends BaseService<Project> {
     ];
   }
 
-  bulkCreate(params: ProjectBulkCreateDto) {
+  async bulkCreate(params: ProjectBulkCreateDto) {
     const { projectMsgs, workSpaceUuid } = params;
 
-    return this.baseService.bulkCreate(
+    const result = await this.baseService.bulkCreate(
       projectMsgs.map(item => ({
         ...item,
         workSpaceUuid
       }))
     );
+
+    const groups = result.data?.map(item => ({
+      type: 0,
+      name: '根分组',
+      depth: 0,
+      projectUuid: item.uuid,
+      workSpaceUuid: item.workSpaceUuid
+    }));
+
+    this.apiGroupTable.bulkAdd(groups);
+
+    return result;
   }
 
   async update(params: ProjectUpdateDto) {

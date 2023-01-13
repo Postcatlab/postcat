@@ -22,7 +22,7 @@
       <li nz-menu-item (click)="addAPI({})">
         <a i18n="@@AddAPI">New API</a>
       </li>
-      <li nz-menu-item (click)="addGroup(null)"><a i18n>New Group</a></li>
+      <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
       <li nz-menu-divider></li>
       <li nz-menu-item (click)="importAPI()">
         <a i18n>Import API</a>
@@ -34,8 +34,8 @@
 <!-- Custom Group -->
 <div class="group-tree">
   <eo-ng-tree-default
-    *ngIf="treeNodes.length"
-    [nzData]="treeNodes"
+    *ngIf="store.getApiGroupTree.length"
+    [nzData]="store.getApiGroupTree"
     [nzSelectedKeys]="nzSelectedKeys"
     #apiGroup
     [nzSearchValue]="searchValue"
@@ -49,7 +49,7 @@
     (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"
   ></eo-ng-tree-default>
-  <nz-skeleton [nzLoading]="isLoading && !treeNodes.length" [nzActive]="true">
+  <nz-skeleton [nzLoading]="isLoading && !store.getApiGroupTree.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <!-- Folder -->
@@ -80,8 +80,8 @@
         <div class="flex items-center justify-between tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
             <div class="flex-shrink-0 width-box" style="width: 6px" *ngIf="node.level === 0"></div>
-            <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
-              node.origin.method.length > 5 ? node.origin.method.slice(0, 3) : node.origin.method
+            <b class="method_text method_text_{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">{{
+              getRequestMethodText(node).length > 5 ? getRequestMethodText(node).slice(0, 3) : getRequestMethodText(node)
             }}</b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
@@ -111,6 +111,6 @@
       </div>
     </ng-template>
 
-    <nz-empty *ngIf="!treeNodes.length" nzNotFoundImage="simple"> </nz-empty>
+    <nz-empty *ngIf="!store.getApiGroupTree.length" nzNotFoundImage="simple"> </nz-empty>
   </nz-skeleton>
 </div>

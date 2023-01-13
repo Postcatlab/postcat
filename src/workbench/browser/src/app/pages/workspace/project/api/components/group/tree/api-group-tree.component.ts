@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { requestMethodMap } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
@@ -17,8 +18,8 @@ export class ApiGroupTreeComponent implements OnInit {
    * Expanded keys of tree.
    */
   expandKeys: string[] = [];
+  requestMethodMap = requestMethodMap;
   nzSelectedKeys = [];
-  treeNodes = [];
   searchValue = '';
   isLoading = true;
   isEdit: boolean;
@@ -60,12 +61,18 @@ export class ApiGroupTreeComponent implements OnInit {
     // * get group data from store
     this.effect.getGroupList();
   }
+  getRequestMethodText(node) {
+    return this.requestMethodMap[node.origin?.protocol];
+  }
   editGroup(group) {}
   addAPI(group) {}
   deleteAPI(api) {}
   copyAPI(api) {}
   editAPI(group) {}
-  addGroup(group) {}
+  addGroup(group = null) {
+    if (group) {
+    }
+  }
   importAPI() {}
 
   /**

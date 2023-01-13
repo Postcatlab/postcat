@@ -3,7 +3,7 @@ import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
-import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
@@ -23,7 +23,7 @@ export class StoreService {
   // ? api & group(includes api) & mock
   @observable.shallow private currentAPI = {};
   @observable.shallow private currentMock = {};
-  @observable.shallow private currentGroup = {};
+  @observable.shallow private apiGroupTree = [];
 
   // ? history
   @observable private testHistory = [];
@@ -38,6 +38,9 @@ export class StoreService {
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
 
+  // ? group
+  @observable private rootGroup: Group;
+
   // ? workspace
   @observable private currentWorkspaceUuid = StorageUtil.get<string>('currentWorkspaceUuid');
   @observable private currentWorkspace: API.Workspace;
@@ -47,7 +50,7 @@ export class StoreService {
   // ? project
   @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
-  @observable private currentProject: Project = { name: '' };
+  @observable private currentProject: Project;
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
@@ -93,9 +96,6 @@ export class StoreService {
   @computed get getCurrentAPI() {
     return this.currentAPI;
   }
-  @computed get getCurrentGroup() {
-    return this.currentGroup;
-  }
   @computed get getCurrentMock() {
     return this.currentMock;
   }
@@ -119,6 +119,12 @@ export class StoreService {
         uuid: null
       }
     );
+  }
+  @computed get getRootGroup() {
+    return this.rootGroup;
+  }
+  @computed get getApiGroupTree() {
+    return this.apiGroupTree;
   }
   @computed get getEnvList() {
     return this.envList;
@@ -250,6 +256,15 @@ export class StoreService {
     }
   }
 
+  // ? group
+  @action setRootGroup(group: Group) {
+    this.rootGroup = group;
+  }
+
+  @action setApiGroupTree(tree = []) {
+    this.apiGroupTree = tree;
+  }
+
   // ? share
   @action setShareId(data = '') {
     this.shareId = data;
@@ -276,13 +291,13 @@ export class StoreService {
   // ? project
   @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;
-    const uuid = projects.length ? this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0].uuid : -1;
-    this.setCurrentProjectID(uuid);
+    const uuid = this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0]?.uuid;
+    uuid && this.setCurrentProjectID(uuid);
   }
-  @action setCurrentProjectID(projectID: number) {
-    this.currentProjectID = projectID;
-    this.currentProject = this.projectList?.find(val => val.uuid === projectID);
-    StorageUtil.set('currentProjectID', projectID);
+  @action setCurrentProjectID(projectUuid: string) {
+    this.currentProjectID = projectUuid;
+    this.currentProject = this.projectList?.find(val => val.uuid === projectUuid);
+    StorageUtil.set('currentProjectID', projectUuid);
   }
   // ? user && auth
   @action setUserProfile(data: API.User = null) {

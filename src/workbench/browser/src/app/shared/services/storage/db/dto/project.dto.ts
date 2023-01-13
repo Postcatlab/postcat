@@ -7,7 +7,7 @@ export interface ProjectBulkCreateDto {
 
 export interface ProjectMsg {
   name: string;
-  description: string;
+  description?: string;
 }
 
 export interface ProjectDeleteDto {
