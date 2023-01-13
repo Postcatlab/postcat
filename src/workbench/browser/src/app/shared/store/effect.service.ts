@@ -272,11 +272,8 @@ export class EffectService {
   // * delete group and api
   async deleteGroup(group) {
     // * delete group
-    const [, err] = await this.api.api_groupDelete({});
-    if (err) {
-      return;
-    }
-    console.log('删除 Group');
+    await this.api.api_groupDelete(group);
+    this.getGroupList();
     // * call deleteAPI()
   }
   async deleteMock(id) {
@@ -292,9 +289,7 @@ export class EffectService {
     // TODO add history
     this.store.setHistory([]);
   }
-  createGroup() {
-    // * update group
-  }
+
   createMock() {
     // * update API
   }
@@ -367,9 +362,16 @@ export class EffectService {
   updateMock() {
     // * update mock
   }
-  updateGroup() {
+  async createGroup(group: Group) {
+    // * update group
+    await this.api.api_groupCreate(group);
+    this.getGroupList();
+  }
+  async updateGroup(group: Group) {
     // * update group
     // * update api list
+    await this.api.api_groupUpdate(group);
+    this.getGroupList();
   }
   updateHistory() {}
 }
