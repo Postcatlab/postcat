@@ -24,7 +24,7 @@ class DataSource extends Dexie {
   constructor() {
     super('postcat_core_test');
     this.version(1).stores({
-      workspace: '++id, &uuid, name, isLocal',
+      workspace: '++id, &uuid, name',
       project: '++id, &uuid, name',
       environment: '++id, name, projectUuid, workSpaceUuid',
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
@@ -38,7 +38,7 @@ class DataSource extends Dexie {
   }
 
   private async populate() {
-    const workspaceID = await this.workspace.add({ title: 'Persional Workspace', isLocal: true });
+    const workspaceID = await this.workspace.add({ title: 'Persional Workspace' });
     const workspace = await this.workspace.get(workspaceID);
 
     const projectID = await this.project.add({ name: 'Default', workSpaceUuid: workspace.uuid });
@@ -73,6 +73,9 @@ class DataSource extends Dexie {
         const uuidName = uuidMap[table.name];
         if (uuidName) {
           obj[uuidName] = obj.uuid;
+        }
+        if (table.name === 'workspace') {
+          obj.isLocal = true;
         }
         return obj;
       });
