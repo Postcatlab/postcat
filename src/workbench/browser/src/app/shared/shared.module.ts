@@ -11,6 +11,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
+import { ApiFormaterPipe } from 'eo/workbench/browser/src/app/shared/pipes/api.pipe';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -55,9 +56,9 @@ const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsMod
 
 @NgModule({
   imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],
-  declarations: [...COMPONENTS, ...DIRECTIVES],
+  declarations: [...COMPONENTS, ...DIRECTIVES, ApiFormaterPipe],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ...DIRECTIVES],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ...DIRECTIVES, ApiFormaterPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule {}

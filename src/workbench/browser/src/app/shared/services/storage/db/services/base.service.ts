@@ -2,9 +2,7 @@ import type { Table } from 'dexie';
 
 import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 export class BaseService<T> {
-  constructor(readonly db: Table<T>) {
-    return this;
-  }
+  constructor(readonly db: Table<T>) {}
 
   private filterData(params: Record<string, any> = {}) {
     const entries = Object.entries(params);

@@ -6,11 +6,17 @@ import {
   ProjectDeleteDto,
   ProjectUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
+import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { ApiData, Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
+import { GroupService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/group.service';
 
 export class ProjectService extends BaseService<Project> {
   baseService = new BaseService(dataSource.project);
+  apiDataService = new ApiDataService();
+  groupService = new GroupService();
+
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
   apiTestHistoryTable = dataSource.apiTestHistory;
@@ -52,7 +58,13 @@ export class ProjectService extends BaseService<Project> {
       workSpaceUuid: item.workSpaceUuid
     }));
 
-    this.apiGroupTable.bulkAdd(groups);
+    this.groupService.bulkCreate(groups).then(({ data }) => {
+      data.forEach(group => {
+        const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
+        // @ts-ignore
+        this.apiDataService.bulkCreate(sampleApiData);
+      });
+    });
 
     return result;
   }

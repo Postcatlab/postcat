@@ -22,7 +22,7 @@ if (Object.entries(entity).every(([key, value]) => Object.is(group[key], value))
 
 // 获取分组详情
 const { data: groupInfo } = await table.read({ ...params, id: group.id });
-if (Object.keys(groupInfo).length) {
+if (groupInfo.uuid === group.uuid) {
   pcConsole.success('[获取分组详情]: 测试通过');
 } else {
   pcConsole.error('[获取分组详情]: 测试不通过');

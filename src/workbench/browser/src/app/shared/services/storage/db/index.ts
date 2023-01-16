@@ -17,8 +17,6 @@ export const db = {
 } as const;
 
 if (process.env.NODE_ENV === 'development') {
-  queueMicrotask(async () => {
-    const module = await import('./tests/index');
-    module.setupTest();
-  });
+  const module = await import('./tests/index');
+  module.setupTests();
 }

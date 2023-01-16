@@ -335,11 +335,10 @@ export class EffectService {
     const [res, err] = await this.api.api_apiDataDetail({
       apiUuids
     });
-    console.log('res, err', res, err);
     if (err) {
       return;
     }
-    return res;
+    return res[0];
   }
 
   // ? update

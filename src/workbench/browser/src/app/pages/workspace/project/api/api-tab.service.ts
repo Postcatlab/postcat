@@ -75,8 +75,6 @@ export class ApiTabService {
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
-    });
-    autorun(() => {
       this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.workSpaceUuid}_TabCache`;
     });
   }
