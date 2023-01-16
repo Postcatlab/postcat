@@ -1,5 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
+import { migrationToV3 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource/migration';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import {
   Workspace,
@@ -15,24 +16,26 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/s
 import { merge } from 'lodash-es';
 
 class DataSource extends Dexie {
-  workspace!: Table<Workspace, number | string>;
-  project!: Table<Project, number | string>;
-  group!: Table<Group, number | string>;
-  environment!: Table<Environment, number | string>;
-  apiData!: Table<ApiData, number | string>;
-  apiTestHistory!: Table<ApiTestHistory, number | string>;
-  mock!: Table<Mock, number | string>;
+  workspace!: Table<Workspace, number>;
+  project!: Table<Project, number>;
+  group!: Table<Group, number>;
+  environment!: Table<Environment, number>;
+  apiData!: Table<ApiData, number>;
+  apiTestHistory!: Table<ApiTestHistory, number>;
+  mock!: Table<Mock, number>;
   constructor() {
     super('postcat_core_test');
-    this.version(1).stores({
-      workspace: '++id, &uuid, name',
-      project: '++id, &uuid, name',
-      environment: '++id, name, projectUuid, workSpaceUuid',
-      group: '++id, projectUuid, workSpaceUuid, parentId, name',
-      apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
-      apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
-      mock: '++id, name, projectUuid, workSpaceUuid'
-    });
+    this.version(1)
+      .stores({
+        workspace: '++id, &uuid, name',
+        project: '++id, &uuid, name workSpaceUuid',
+        environment: '++id, name, projectUuid, workSpaceUuid',
+        group: '++id, projectUuid, workSpaceUuid, parentId, name',
+        apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
+        apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
+        mock: '++id, name, projectUuid, workSpaceUuid'
+      })
+      .upgrade(migrationToV3);
     this.open();
     this.initHooks();
     this.on('populate', () => this.populate());

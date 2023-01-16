@@ -3,6 +3,8 @@ export type { ApiData } from './apiData';
 interface Base {
   id?: number;
   uuid?: string;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface Workspace extends Base {
