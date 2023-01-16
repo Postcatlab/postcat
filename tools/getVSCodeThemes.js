@@ -44,6 +44,9 @@ var obj = {
   border: document.getElementById('workbench.parts.titlebar').style['border-bottom']
     ? getDomStyle('#workbench.parts.titlebar', 'border-bottom-color')
     : 'transparent',
+  tabsBadge: getVariable('--vscode-tab-inactiveForeground'),
+  tabsActiveBadge: getVariable('--vscode-tab-activeForeground'),
+  inputIcon: getVariable('--vscode-input-foreground'),
   inputBorder: getVariable('--vscode-commandCenter-border'),
   selectBorder: getVariable('--vscode-commandCenter-border'),
   inputPlaceholder: getVariable('--vscode-input-placeholderForeground'),

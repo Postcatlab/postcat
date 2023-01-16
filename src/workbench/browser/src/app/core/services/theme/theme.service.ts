@@ -9,7 +9,6 @@ import StorageUtil from '../../../utils/storage/Storage';
 import { ThemeExtensionService } from './theme-extension.service';
 import { ThemeVariableService } from './theme-variable.service';
 import { SYSTEM_THEME, SystemUIThemeType, SystemThemeItems } from './theme.constant';
-import { ThemeColors } from './theme.model';
 
 @Injectable({
   providedIn: 'root'

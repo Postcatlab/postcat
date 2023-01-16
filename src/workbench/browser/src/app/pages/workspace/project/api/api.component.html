@@ -126,11 +126,7 @@
           <eo-ng-tab *ngFor="let tab of renderTabs">
             <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
               {{ tab.title }}
-              <nz-badge
-                *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.id]"
-                class="ant-badge-theme-color"
-                nzStatus="default"
-              ></nz-badge>
+              <nz-badge *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.id]" class="" nzStatus="default"></nz-badge>
             </a>
           </eo-ng-tab>
         </eo-ng-tabset>

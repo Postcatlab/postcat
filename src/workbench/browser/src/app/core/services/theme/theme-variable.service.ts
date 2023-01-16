@@ -182,6 +182,15 @@ export class ThemeVariableService {
         ]
       },
       {
+        source: 'tabsBadge',
+        rule: [
+          {
+            action: 'replace',
+            target: ['tabsActiveBadge']
+          }
+        ]
+      },
+      {
         source: 'primary',
         rule: [
           {
@@ -190,6 +199,8 @@ export class ThemeVariableService {
               'menuItemActive',
               'switchActive',
               'tabsActive',
+              'tabsBadge',
+              'tabsActiveBadge',
               'buttonPrimaryBackground',
               'checkboxCheckedBackground',
               'radioCheckedBorder',

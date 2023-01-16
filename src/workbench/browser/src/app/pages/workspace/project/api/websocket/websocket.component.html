@@ -64,11 +64,7 @@
             [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Headers</span
           >
-          <nz-badge
-            *ngIf="bindGetApiParamNum(model.request.requestHeaders)"
-            class="ml-1 ant-badge-theme-color"
-            nzStatus="success"
-          ></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-test-header
           [disabled]="isConnecting"
@@ -83,7 +79,7 @@
           <span i18n eoNgFeedbackTooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Query Params</span
           >
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock"

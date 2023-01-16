@@ -84,6 +84,8 @@ export type ThemeColors = {
   buttonDangerActiveBackground?: string;
   buttonDangerShadow?: string;
 
+  tabsBadge?: string;
+  tabsActiveBadge?: string;
   tabsBackground?: string;
   tabsText?: string;
   tabsActive?: string;

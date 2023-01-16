@@ -45,7 +45,7 @@
           <eo-ng-tab [nzTitle]="headerTitleTmp">
             <ng-template #headerTitleTmp>
               <span i18n>Request Headers</span>
-              <nz-badge *ngIf="bindGetApiParamNum(model.requestHeaders)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+              <nz-badge *ngIf="bindGetApiParamNum(model.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
             </ng-template>
             <eo-api-edit-header tid="requestHeaders" (modelChange)="emitChangeFun()" [(model)]="model.requestHeaders"> </eo-api-edit-header>
           </eo-ng-tab>
@@ -54,7 +54,7 @@
             <ng-template #bodyTitleTmp>
               <span i18n>Body</span>
               <nz-badge
-                class="ml-1 ant-badge-theme-color"
+                class="ml-1"
                 *ngIf="
                   ['formData', 'json', 'xml'].includes(model.requestBodyType)
                     ? bindGetApiParamNum(model.requestBody)
@@ -76,14 +76,14 @@
           <eo-ng-tab [nzTitle]="queryTitleTmp">
             <ng-template #queryTitleTmp>
               <span i18n>Query</span>
-              <nz-badge *ngIf="bindGetApiParamNum(model.queryParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+              <nz-badge *ngIf="bindGetApiParamNum(model.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
             </ng-template>
             <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [(model)]="model.queryParams"> </eo-api-edit-query>
           </eo-ng-tab>
           <eo-ng-tab [nzTitle]="restTitleTmp">
             <ng-template #restTitleTmp>
               <span i18n>REST</span>
-              <nz-badge *ngIf="bindGetApiParamNum(model.restParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+              <nz-badge *ngIf="bindGetApiParamNum(model.restParams)" class="ml-1" nzStatus="success"></nz-badge>
             </ng-template>
             <eo-api-edit-rest tid="restParams" [(model)]="model.restParams" (modelChange)="emitChangeFun()"> </eo-api-edit-rest>
           </eo-ng-tab>
@@ -97,7 +97,7 @@
           <eo-ng-tab [nzTitle]="responseHeaderTitleTmp">
             <ng-template #responseHeaderTitleTmp>
               <span i18n>Response Headers</span>
-              <nz-badge *ngIf="bindGetApiParamNum(model.responseHeaders)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+              <nz-badge *ngIf="bindGetApiParamNum(model.responseHeaders)" class="ml-1" nzStatus="success"></nz-badge>
             </ng-template>
             <eo-api-edit-header tid="responseHeaders" [(model)]="model.responseHeaders" (modelChange)="emitChangeFun()">
             </eo-api-edit-header>
@@ -106,7 +106,7 @@
             <ng-template #responseTitleTmp>
               <span i18n>Response</span>
               <nz-badge
-                class="ml-1 ant-badge-theme-color"
+                class="ml-1"
                 *ngIf="
                   ['formData', 'json', 'xml'].includes(model.responseBodyType)
                     ? bindGetApiParamNum(model.responseBody)

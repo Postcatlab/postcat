@@ -74,9 +74,14 @@
 .ant-btn-sm {
   padding: 0 9px;
 }
-.ant-badge-theme-color {
+.ant-tabs-nav {
   .ant-badge-status-dot {
-    background-color: var(--primary-color);
+    background-color: var(--tabs-badge-color);
+  }
+  .ant-tabs-tab-active {
+    .ant-badge-status-dot {
+      background-color: var(--tabs-active-badge-color);
+    }
   }
 }
 
@@ -85,6 +90,7 @@
   border-color: transparent;
   color: var(--text-color);
 }
+
 .ant-select-tree-list-holder-inner {
   max-width: 500px;
 }

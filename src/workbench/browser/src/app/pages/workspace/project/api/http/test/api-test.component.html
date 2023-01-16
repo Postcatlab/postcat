@@ -47,11 +47,7 @@
       <eo-ng-tab [nzTitle]="headerTitleTmp">
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
-          <nz-badge
-            *ngIf="bindGetApiParamNum(model.request.requestHeaders)"
-            class="ml-1 ant-badge-theme-color"
-            nzStatus="success"
-          ></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-test-header
           class="eo_theme_iblock"
@@ -64,7 +60,7 @@
         <ng-template #bodyTitleTmp>
           <span i18n>Body</span>
           <nz-badge
-            class="ml-1 ant-badge-theme-color"
+            class="ml-1"
             *ngIf="
               ['formData', 'json', 'xml'].includes(model.request.requestBodyType)
                 ? bindGetApiParamNum(model.request.requestBody)
@@ -89,7 +85,7 @@
       <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
           <span i18n>Query</span>
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock"
@@ -100,7 +96,7 @@
       <eo-ng-tab [nzTitle]="restTitleTmp">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.restParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.restParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-test-rest
           class="eo_theme_iblock"
@@ -111,7 +107,7 @@
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
-          <nz-badge class="ml-1 ant-badge-theme-color" *ngIf="model.beforeScript?.trim()" nzStatus="success"></nz-badge>
+          <nz-badge class="ml-1" *ngIf="model.beforeScript?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
           *ngIf="model.requestTabIndex === 4"
@@ -125,7 +121,7 @@
       <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
         <ng-template #suffixScriptTitleTmp>
           <span i18n>After-response Script</span>
-          <nz-badge class="ml-1 ant-badge-theme-color" *ngIf="model.afterScript?.trim()" nzStatus="success"></nz-badge>
+          <nz-badge class="ml-1" *ngIf="model.afterScript?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
           *ngIf="model.requestTabIndex === 5"

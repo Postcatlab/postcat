@@ -84,6 +84,8 @@
   "buttonDangerActiveBackground": "",
   "buttonDangerShadow": "",
 
+  "tabsBadge": "",
+  "tabsActiveBadge": "",
   "tabsBackground": "",
   "tabsText": "",
   "tabsActive": "",
