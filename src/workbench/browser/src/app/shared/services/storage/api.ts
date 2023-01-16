@@ -35,7 +35,7 @@ const http = {
       name: 'apiTestHistory',
       data: [
         { 'create @post @create': '/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/history/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'list @get @bulkRead': '/api/history/list', query: 'projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/api/history', query: 'id, projectUuid, workSpaceUuid' },
         { 'delete @delete @bulkDelete': '/api/history', body: 'projectUuid, workSpaceUuid' }
       ]

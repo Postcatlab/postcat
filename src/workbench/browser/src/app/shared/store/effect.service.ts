@@ -33,7 +33,7 @@ export class EffectService {
   async init() {
     await this.updateWorkspaces();
     // * update title
-    document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
+    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
       if (this.store.getProjectList.length === 0) {
         this.router.navigate(['/home/workspace/overview']);
@@ -134,7 +134,8 @@ export class EffectService {
     this.router.navigate(['/home/workspace/overview']);
 
     // * update title
-    document.title = `Postcat - ${this.store.getCurrentWorkspace?.title}`;
+    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
+
     // * update workspace role
     this.getWorkspacePermission();
     this.getProjectPermission();
@@ -241,12 +242,9 @@ export class EffectService {
 
   // *** Data engine
 
-  // ? delete
   async deleteHistory() {
-    // const [, err] = await this.api.api_apiTestHistoryDelete({
-    //   id: id_ID
-    // });
-    // this.store.setHistory([]);
+    const [, err] = await this.api.api_apiTestHistoryDelete({});
+    this.store.setHistory([]);
   }
   // * delete api
   async deleteAPI(uuid) {
@@ -271,7 +269,6 @@ export class EffectService {
     // * update API
   }
 
-  // ? create
   createHistory() {
     // TODO add history
     this.store.setHistory([]);
@@ -281,14 +278,13 @@ export class EffectService {
     // * update API
   }
 
-  // ? get
-  // private async getHistory() {
-  //   const [res, err] = await this.api.api_apiTestHistoryList({});
-  //   if (err) {
-  //     return;
-  //   }
-  //   this.store.setHistory(res.data.items);
-  // }
+  async getHistory() {
+    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1 });
+    if (err) {
+      return;
+    }
+    this.store.setHistory(res.data.items);
+  }
 
   private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {
     const apiDataFilters = apiDatas.filter(apiData => {

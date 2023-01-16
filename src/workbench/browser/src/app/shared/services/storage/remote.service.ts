@@ -698,13 +698,9 @@ export class RemoteService {
   }
 
   api_apiTestHistoryList<T = any>(
-    { apiUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, page, pageSize },
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, page, pageSize },
     prefix = ''
   ) {
-    if (apiUuid == null) {
-      console.log('%c Error: apiTestHistory - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return;
-    }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -725,7 +721,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/api/history/list`, {
-          params: { apiUuid, projectUuid, workSpaceUuid, page, pageSize }
+          params: { projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
           next: ({ code, data }: any) => {

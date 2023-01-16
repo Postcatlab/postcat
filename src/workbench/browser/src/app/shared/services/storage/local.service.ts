@@ -33,7 +33,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .create({ apiList, projectUuid, workSpaceUuid })
+        .bulkCreate({ apiList, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - create 接口调用成功 %c', SuccessStyle, '');
@@ -607,16 +607,11 @@ export class LocalService {
   }
 
   api_apiTestHistoryList<T = any>({
-    apiUuid,
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid,
     page,
     pageSize
   }) {
-    if (apiUuid == null) {
-      console.log('%c Error: apiTestHistory - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return;
-    }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -636,7 +631,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiTestHistory
-        .bulkRead({ apiUuid, projectUuid, workSpaceUuid, page, pageSize })
+        .bulkRead({ projectUuid, workSpaceUuid, page, pageSize })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiTestHistory - list 接口调用成功 %c', SuccessStyle, '');

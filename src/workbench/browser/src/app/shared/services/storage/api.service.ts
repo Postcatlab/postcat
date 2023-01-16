@@ -93,7 +93,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiTestHistoryCreate<T>(params) : this.remote.api_apiTestHistoryCreate<T>(params);
   }
 
-  api_apiTestHistoryList<T = any>(params: { apiUuid: any; projectUuid?: any; workSpaceUuid?: any; page: any; pageSize: any }) {
+  api_apiTestHistoryList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; page: any; pageSize: any }) {
     return this.store.isLocal ? this.local.api_apiTestHistoryList<T>(params) : this.remote.api_apiTestHistoryList<T>(params);
   }
 

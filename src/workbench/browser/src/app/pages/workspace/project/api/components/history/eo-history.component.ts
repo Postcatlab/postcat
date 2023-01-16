@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -9,13 +9,17 @@ import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
   templateUrl: './eo-history.component.html',
   styleUrls: ['./eo-history.component.scss']
 })
-export class HistoryComponent {
+export class HistoryComponent implements OnInit {
   TEXT_BY_PROTOCOL = {
     ws: 'WS'
   };
   nzSelectedKeys: NzTreeNodeKey[];
 
   constructor(private router: Router, public store: StoreService, private effect: EffectService) {}
+
+  ngOnInit(): void {
+    this.effect.getHistory();
+  }
 
   gotoTestHistory(e) {
     this.nzSelectedKeys = [];
