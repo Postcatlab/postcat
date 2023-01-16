@@ -27,7 +27,7 @@ import {
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
-import { ApiBodyType, IMPORT_MUI } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmpty } from 'lodash-es';
@@ -38,8 +38,7 @@ import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/opera
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
-import { RequestMethod } from '../../../../../../modules/api-shared/api.model';
-import { MessageService } from '../../../../../../shared/services/message';
+import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
@@ -115,7 +114,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     private apiTest: ApiTestService,
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
-    private messageService: MessageService,
+    private effectService: EffectService,
     private lang: LanguageService,
     private elementRef: ElementRef
   ) {
@@ -166,20 +165,17 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
-      let id = this.route.snapshot.queryParams.uuid;
+      let uuid = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
       let requestInfo = null;
-      if (id && id.includes('history_')) {
-        id = Number(id.replace('history_', ''));
-        const historyData = await this.apiTest.getHistory(id);
+      if (uuid && uuid.includes('history_')) {
+        uuid = uuid.replace('history_', '');
+        const historyData = await this.apiTest.getHistory(uuid);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
         requestInfo = history.testData;
         this.restoreResponseFromHistory(history.response);
       } else {
-        id = Number(id);
-        requestInfo = await this.apiTest.getApi({
-          id
-        });
+        requestInfo = await this.effectService.getAPI([uuid]);
         this.model.testResult = {
           response: {},
           request: {}
@@ -188,6 +184,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model.request = requestInfo;
+        console.log('this.model', this.model);
       } else {
         return;
       }

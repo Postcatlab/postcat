@@ -25,17 +25,15 @@ class DataSource extends Dexie {
   mock!: Table<Mock, number>;
   constructor() {
     super('postcat_core_test');
-    this.version(1)
-      .stores({
-        workspace: '++id, &uuid, name',
-        project: '++id, &uuid, name workSpaceUuid',
-        environment: '++id, name, projectUuid, workSpaceUuid',
-        group: '++id, projectUuid, workSpaceUuid, parentId, name',
-        apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
-        apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
-        mock: '++id, name, projectUuid, workSpaceUuid'
-      })
-      .upgrade(migrationToV3);
+    this.version(1).stores({
+      workspace: '++id, &uuid, name',
+      project: '++id, &uuid, name, workSpaceUuid',
+      environment: '++id, name, projectUuid, workSpaceUuid',
+      group: '++id, projectUuid, workSpaceUuid, parentId, name',
+      apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
+      apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
+      mock: '++id, name, projectUuid, workSpaceUuid'
+    });
     this.open();
     this.initHooks();
     this.on('populate', () => this.populate());

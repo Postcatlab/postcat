@@ -1,4 +1,4 @@
-import { ApiBodyType, RequestMethodEnum } from '../enums/api.enum';
+import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 export interface ApiData {
   id?: number;
@@ -61,7 +61,7 @@ export interface ApiAttrInfo {
   beforeInject?: string;
   afterInject?: string;
   authInfo?: string;
-  requestMethod: RequestMethodEnum;
+  requestMethod: RequestMethod;
   contentType: ApiBodyType | number;
   createTime?: number;
   updateTime?: number;

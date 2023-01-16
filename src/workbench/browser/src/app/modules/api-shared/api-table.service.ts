@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { has, omit } from 'lodash-es';
 
 import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/api/http/edit/extra-setting/api-params-extra-setting.component';
@@ -10,7 +9,7 @@ import { BodyParam } from '../../shared/services/storage/db/models/apiData';
 import { eoDeepCopy, JSONParse } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
+import { ApiBodyType, ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}

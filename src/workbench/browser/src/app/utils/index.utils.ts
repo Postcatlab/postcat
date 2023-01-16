@@ -78,8 +78,8 @@ export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
  * @param obj
  */
 export const reverseObj = obj =>
-  Object.keys(obj).reduce((acc, key) => {
-    acc[obj[key]] = key;
+  Object.entries<any>(obj).reduce((acc, [key, value]) => {
+    acc[value] = key;
     return acc;
   }, {});
 /**
@@ -88,11 +88,11 @@ export const reverseObj = obj =>
  * @param obj
  */
 export const enumsToArr = obj =>
-  Object.values(obj)
-    .filter(val => !isNumber(val))
-    .map((val: string) => ({
-      key: val,
-      value: obj[val]
+  Object.entries(obj)
+    .filter(([, val]) => !isNumber(val))
+    .map(([key, value]) => ({
+      key,
+      value
     }));
 export const isEmptyObj = obj => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = obj => {

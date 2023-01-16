@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';

@@ -1,10 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ApiBodyType, IMPORT_MUI, JsonRootType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import {
+  ApiBodyType,
+  ApiEditBody,
+  ApiTableConf,
+  IMPORT_MUI,
+  JsonRootType
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { isNumber } from 'lodash-es';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
