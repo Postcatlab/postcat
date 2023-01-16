@@ -88,11 +88,11 @@ export const reverseObj = obj =>
  * @param obj
  */
 export const enumsToArr = obj =>
-  Object.entries(obj)
+  Object.entries<any>(obj)
     .filter(([, val]) => !isNumber(val))
     .map(([key, value]) => ({
-      key,
-      value
+      key: value,
+      value: key
     }));
 export const isEmptyObj = obj => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = obj => {
