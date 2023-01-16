@@ -5,24 +5,28 @@ import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model'
  * API body FormData param type
  */
 export enum ApiParamsTypeFormData {
-  string = 'string',
-  file = 'file',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  byte = 'byte',
-  short = 'short',
-  long = 'long',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  null = 'null'
+  string = 0,
+  file = 1,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  byte = 9,
+  short = 10,
+  long = 11,
+  array = 12,
+  object = 13,
+  number = 14,
+  null = 15
 }
 
+export const ApiParamsTypeByNumber = Object.keys(ApiParamsTypeFormData).map(val => ({
+  title: val,
+  value: ApiParamsTypeFormData[val]
+}));
 /**
  * API body Json or xml param type
  */
@@ -108,12 +112,24 @@ export interface ApiEditBody extends BasiApiEditParams {
    */
   children?: ApiEditBody[];
 }
+/**
+ * Import string by api body type
+ */
+export const IMPORT_MUI = {
+  2: 'json',
+  3: 'xml',
+  4: 'binary',
+  1: 'raw',
+  0: 'formData',
+  6: 'json'
+};
 export enum ApiBodyType {
-  'Form-data' = 'formData',
-  JSON = 'json',
-  XML = 'xml',
-  Raw = 'raw',
-  Binary = 'binary'
+  FormData = 0,
+  Raw = 1,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Binary = 4
 }
 /**
  * Json Root Type

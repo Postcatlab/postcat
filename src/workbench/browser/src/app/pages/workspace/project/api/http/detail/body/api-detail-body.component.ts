@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiEditBody, ApiTableConf, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -13,14 +13,12 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() tid: string;
   @Input() model: string | ApiEditBody[] | any;
-  @Input() bodyType: ApiBodyType | string;
-  @Input() jsonRootType: JsonRootType | string;
+  @Input() bodyType: ApiBodyType | number;
   listConf: ApiTableConf = {};
   cache: object = {};
-  CONST: any = {
-    JSON_ROOT_TYPE: Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }))
-  };
-
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   private destroy$: Subject<void> = new Subject<void>();
   constructor(private apiTable: ApiTableService) {}
   beforeChangeBodyByType(type) {
@@ -37,7 +35,6 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType).map(val => ({ key: val, value: ApiBodyType[val] }));
     this.initListConf();
   }
   ngOnDestroy() {

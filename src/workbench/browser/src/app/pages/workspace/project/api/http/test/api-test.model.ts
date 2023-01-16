@@ -1,4 +1,4 @@
-import { JsonRootType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, JsonRootType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
 
 export enum ApiTestParamsTypeFormData {
   text = 'string',
@@ -61,12 +61,6 @@ export interface ApiTestBody extends BasiApiTestParams {
    * child param
    */
   children?: ApiTestBody[];
-}
-
-export enum ApiTestBodyType {
-  'Form-data' = 'formData',
-  Raw = 'raw',
-  Binary = 'binary'
 }
 
 export interface ApiTestHistoryResponse {
@@ -168,7 +162,7 @@ export interface ApiTestHistoryFrame {
     protocol: string;
     method: string;
     requestHeaders: any | ApiTestHeaders[];
-    requestBodyType: string | 'formData' | 'raw';
+    requestBodyType: number | ApiBodyType.FormData | ApiBodyType.Raw;
     requestBody: any | object[] | string;
   };
 
@@ -230,9 +224,8 @@ export interface ApiTestData {
   /**
    * 请求的参数类型
    *
-   * @type {ApiTestBodyType|string}
    */
-  requestBodyType?: ApiTestBodyType | string;
+  requestBodyType?: ApiBodyType | number;
 
   /**
    * 请求头数据，数据用json存储

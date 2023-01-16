@@ -14,15 +14,15 @@ describe('test the xml2json', () => {
         tagName: 'out',
         attr: 'attr="happy"',
         content: '\nout\nout',
-        children: [
+        childList: [
           {
             tagName: 'in',
             attr: 'attr="sad"',
             content: '\nin',
-            children: [],
-          },
-        ],
-      },
+            childList: []
+          }
+        ]
+      }
     ];
     const json = xml2json(xml);
     expect(json).toEqual(result);
@@ -46,44 +46,44 @@ describe('test form2json', () => {
     const result = [
       {
         key: 'cache-control',
-        value: 'no-cache',
+        value: 'no-cache'
       },
       {
         key: 'content-encoding',
-        value: 'gzip',
+        value: 'gzip'
       },
       {
         key: 'content-type',
-        value: 'application/json; charset=utf-8',
+        value: 'application/json; charset=utf-8'
       },
       {
         key: 'date',
-        value: 'Thu, 13 Jan 2022 03',
+        value: 'Thu, 13 Jan 2022 03'
       },
       {
         key: 'lb',
-        value: '180.149.153.242',
+        value: '180.149.153.242'
       },
       {
         key: 'proc_node',
-        value: 'v8core-1-5d48ffd84b-v6q8q',
+        value: 'v8core-1-5d48ffd84b-v6q8q'
       },
       {
         key: 'server',
-        value: 'nginx',
+        value: 'nginx'
       },
       {
         key: 'ssl_node',
-        value: 'ssl-015.mweibo.yf.intra.weibo.cn',
+        value: 'ssl-015.mweibo.yf.intra.weibo.cn'
       },
       {
         key: 'vary',
-        value: 'Accept-Encoding',
+        value: 'Accept-Encoding'
       },
       {
         key: 'x-powered-by',
-        value: 'PHP/7.2.1',
-      },
+        value: 'PHP/7.2.1'
+      }
     ];
     const json = form2json(form);
     expect(json).toEqual(result);
@@ -108,7 +108,7 @@ describe('test form2json', () => {
       { key: 'formDataStructure', value: '' },
       { key: 'formDataStructure', value: 'formDataStructure' },
       { key: 'formDataStructure', value: '' },
-      { key: 'a', value: '' },
+      { key: 'a', value: '' }
     ];
     const json = form2json(form);
     expect(json).toEqual(result);
@@ -152,17 +152,17 @@ describe('test the parseTree', () => {
         {
           dom1: {},
           dom2: false,
-          dom3: [],
-        },
+          dom3: []
+        }
       ],
       object: {
         dom1: '',
-        dom2: 0,
+        dom2: 0
       },
       null: null,
       float: 11.11,
       int: 1,
-      boolean: false,
+      boolean: false
     };
     const result = [
       {
@@ -172,7 +172,7 @@ describe('test the parseTree', () => {
         type: 'string',
         required: true,
         example: '',
-        listDepth: 0,
+        listDepth: 0
       },
       {
         name: 'array',
@@ -181,7 +181,7 @@ describe('test the parseTree', () => {
         type: 'array',
         description: '',
         listDepth: 0,
-        children: [
+        childList: [
           {
             name: 'dom1',
             required: true,
@@ -189,7 +189,7 @@ describe('test the parseTree', () => {
             type: 'object',
             description: '',
             listDepth: 1,
-            children: [],
+            childList: []
           },
           {
             name: 'dom2',
@@ -198,7 +198,7 @@ describe('test the parseTree', () => {
             type: 'boolean',
             required: true,
             example: '',
-            listDepth: 1,
+            listDepth: 1
           },
           {
             name: 'dom3',
@@ -207,9 +207,9 @@ describe('test the parseTree', () => {
             type: 'array',
             description: '',
             listDepth: 1,
-            children: [],
-          },
-        ],
+            childList: []
+          }
+        ]
       },
       {
         name: 'object',
@@ -218,7 +218,7 @@ describe('test the parseTree', () => {
         type: 'object',
         description: '',
         listDepth: 0,
-        children: [
+        childList: [
           {
             name: 'dom1',
             value: '',
@@ -226,7 +226,7 @@ describe('test the parseTree', () => {
             type: 'string',
             required: true,
             example: '',
-            listDepth: 1,
+            listDepth: 1
           },
           {
             name: 'dom2',
@@ -235,9 +235,9 @@ describe('test the parseTree', () => {
             type: 'number',
             required: true,
             example: '',
-            listDepth: 1,
-          },
-        ],
+            listDepth: 1
+          }
+        ]
       },
       {
         name: 'null',
@@ -246,7 +246,7 @@ describe('test the parseTree', () => {
         type: 'null',
         required: true,
         example: '',
-        listDepth: 0,
+        listDepth: 0
       },
       {
         name: 'float',
@@ -255,7 +255,7 @@ describe('test the parseTree', () => {
         type: 'number',
         required: true,
         example: 11.11,
-        listDepth: 0,
+        listDepth: 0
       },
       {
         name: 'int',
@@ -264,7 +264,7 @@ describe('test the parseTree', () => {
         type: 'number',
         required: true,
         example: 1,
-        listDepth: 0,
+        listDepth: 0
       },
       {
         name: 'boolean',
@@ -273,9 +273,9 @@ describe('test the parseTree', () => {
         type: 'boolean',
         required: true,
         example: '',
-        listDepth: 0,
-      },
+        listDepth: 0
+      }
     ];
-    expect(Object.keys(data).map((it) => parseTree(it, data[it]))).toEqual(result);
+    expect(Object.keys(data).map(it => parseTree(it, data[it]))).toEqual(result);
   });
 });

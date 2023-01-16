@@ -58,7 +58,7 @@ export const eoFormatRequestData = (
       case ApiBodyType.Raw: {
         return inData.requestBody;
       }
-      case ApiBodyType['Form-data']: {
+      case ApiBodyType['FormData']: {
         const typeMUI = {
           string: '0',
           file: '1',
@@ -89,7 +89,7 @@ export const eoFormatRequestData = (
     methodType: METHOD.indexOf(data.method).toString(),
     httpHeader: PROTOCOL.indexOf(data.protocol),
     headers: formatList(data.requestHeaders),
-    requestType: REQUEST_BODY_TYPE.indexOf(data.requestBodyType).toString(),
+    requestType: data.requestBodyType.toString(),
     apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType).toString(),
     params: formatBody(data),
     auth: { status: '0' },
@@ -158,12 +158,12 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
           method: history.requestInfo.method,
           protocol: PROTOCOL[history.requestInfo.apiProtocol],
           requestHeaders: history.requestInfo.headers,
-          requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
+          requestBodyType: history.requestInfo.requestType,
           requestBody: history.requestInfo.params
         }
       }
     });
-  if (result.history.request.requestBodyType === 'formData') {
+  if (result.history.request.requestBodyType === ApiBodyType.FormData) {
     result.history.request.requestBody = result.history.request.requestBody.map(val => ({
       name: val.key,
       type: 'string',

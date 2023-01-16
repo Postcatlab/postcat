@@ -68,6 +68,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
   private COLUMN_VISIBLE_KEY: string;
+
   //Default Table unique ID
   private DEFAULT_ID: string;
   private showItems = [];
@@ -124,6 +125,13 @@ export class EoTableProComponent implements OnInit, OnChanges {
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
           this.nzData.push(eoDeepCopy(this.nzDataItem));
         }
+      }
+      /**
+       * Table column key has quote child attribute,such as 'a.b.c'
+       */
+      const hasQuoteKey = this.columns.some(col => col.key?.includes('.'));
+      if (hasQuoteKey) {
+        this.nzData = this.generateQuoteKeyValue(this.nzData);
       }
     }
   }
@@ -209,6 +217,40 @@ export class EoTableProComponent implements OnInit, OnChanges {
       this.initConfig();
     });
   }
+  private getValueByChian(chain, object) {
+    return chain.reduce((o, i) => o?.[i], object);
+  }
+  private generateQuoteKeyValue(nzData) {
+    let result = eoDeepCopy(nzData) || [];
+    const chains = this.columns
+      .filter(col => col.key?.includes('.'))
+      .map(val => {
+        const arr = val.key.split('.');
+        const valResult = {
+          arr,
+          str: val.key,
+          name: arr.at(-1)
+        };
+        return valResult;
+      });
+    const loop = items => {
+      items.forEach((item, index) => {
+        chains.forEach(chain => {
+          const value = this.getValueByChian(chain.arr, item);
+          if (value) {
+            item[chain.str] = value;
+          }
+        });
+        if (item[this.tableConfig.childKey]) {
+          item[this.tableConfig.childKey] = loop(item[this.tableConfig.childKey]);
+        }
+      });
+      return items;
+    };
+    result = loop(result);
+    return result;
+  }
+
   private initConfig() {
     const theaderConf = [];
     const tbodyConf = [];
@@ -419,7 +461,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    // pcConsole.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

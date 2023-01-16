@@ -91,7 +91,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
-
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   get isEmptyTestPage(): boolean {
     const { uuid } = this.route.snapshot.queryParams;
     return !this.store.isShare && (!uuid || uuid.includes('history_'));

@@ -1,5 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ApiParamsTypeJsonOrXml, ParamsEnum, ApiEditBody } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  ApiParamsTypeJsonOrXml,
+  ParamsEnum,
+  ApiEditBody,
+  ApiParamsTypeByNumber
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { REQURIED_ENUMS } from 'eo/workbench/browser/src/app/shared/models/shared.model';
 import { isNil } from 'ng-zorro-antd/core/util';
@@ -80,13 +85,14 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         ? [
             {
               title: $localize`Type`,
-              key: 'type'
+              key: 'dataType',
+              enums: ApiParamsTypeByNumber
             }
           ]
         : []),
       {
         title: $localize`Required`,
-        key: 'required',
+        key: 'isRequired',
         enums: REQURIED_ENUMS
       },
       {

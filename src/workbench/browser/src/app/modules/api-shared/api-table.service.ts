@@ -5,10 +5,11 @@ import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/ap
 import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
+import { BodyParam2 } from '../../shared/services/storage/db/models/apiData';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
+import { ApiBodyType, ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
@@ -20,7 +21,43 @@ export class ApiTableService {
         nzWidth: '60%',
         nzComponentParams: {
           in: opts.in,
-          model: [omit(item, ['children'])],
+          model: [
+            {
+              responseUuid: '',
+              name: 'today',
+              paramType: 0,
+              partType: 0,
+              dataType: 0,
+              dataTypeValue: '',
+              structureId: '',
+              structureParamId: '',
+              contentType: '',
+              isRequired: 0,
+              binaryRawData: '',
+              description: '',
+              orderNo: 0,
+              createTime: '',
+              updateTime: '',
+              paramAttr: {
+                minLength: '',
+                maxLength: '',
+                minValue: 0,
+                maxValue: 100,
+                paramLimit: '',
+                paramValueList: '',
+                paramMock: '',
+                attr: '',
+                structureIsHide: 0,
+                example: '中国',
+                createTime: '',
+                updateTime: '',
+                dbArr: '',
+                paramNote: ''
+              },
+              eoKey: '9e53e403-4781-408e-96ca-5dbf46822b41'
+            }
+          ],
+          // [omit(item, ['childList'])],
           isEdit: opts.isEdit
         }
       };
@@ -65,17 +102,18 @@ export class ApiTableService {
         columnVisible: 'fixed',
         key: 'name'
       },
-      type: {
+      dataType: {
         title: $localize`Type`,
         type: 'select',
-        key: 'type',
+        key: 'dataType',
         filterable: inArg.isEdit ? false : true,
-        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined
+        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined,
+        enums: ApiParamsTypeByNumber
       },
-      required: {
+      isRequired: {
         title: $localize`Required`,
         type: 'checkbox',
-        key: 'required',
+        key: 'isRequired',
         filterable: inArg.isEdit ? false : true,
         enums: REQURIED_ENUMS,
         width: 120
@@ -88,7 +126,7 @@ export class ApiTableService {
       example: {
         title: $localize`Example`,
         type: 'input',
-        key: 'example'
+        key: 'paramAttr.example'
       },
       editOperate: {
         type: 'btnList',
@@ -122,7 +160,13 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            showFn: ({ data }) => data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
+            showFn: ({ data }: { data: BodyParam2 }) =>
+              data.paramAttr.paramValueList?.length ||
+              data.paramAttr.minValue ||
+              data.paramAttr.maxValue ||
+              data.paramAttr.maxLength ||
+              data.paramAttr.minLength ||
+              data.paramAttr.example,
             title: $localize`More Settings`,
             click: item => {
               this.showMore(item.data, {
@@ -142,7 +186,7 @@ export class ApiTableService {
         manualAdd: opts.manualAdd,
         showBtnWhenHoverRow: inArg.isEdit ? false : true,
         rowSortable: inArg.isEdit ? true : false,
-        isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
+        isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['FormData'] ? false : true,
         toolButton: {
           columnVisible: true
         }
@@ -151,16 +195,16 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['name', 'type', 'required', 'description', 'example'];
+        columnsArr = ['name', 'dataType', 'isRequired', 'description', 'example'];
         break;
       }
       default: {
-        columnsArr = ['name', 'required', 'description', 'example'];
+        columnsArr = ['name', 'isRequired', 'description', 'example'];
         break;
       }
     }
     columnsArr.push(inArg.module === 'preview' ? 'previewOperate' : 'editOperate');
-    const types = inArg.format === ApiBodyType['Form-data'] ? ApiParamsTypeFormData : ApiParamsTypeJsonOrXml;
+    const types = inArg.format === ApiBodyType['FormData'] ? ApiParamsTypeFormData : ApiParamsTypeJsonOrXml;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -186,7 +230,7 @@ export class ApiTableService {
             const insert: any = {
               action: 'insert'
             };
-            if (inArg.format === 'xml') {
+            if (inArg.format === ApiBodyType.XML) {
               insert.showFn = item => item.level !== 0;
             }
             column.btns.unshift({ action: 'addChild' }, insert);
@@ -211,7 +255,7 @@ export class ApiTableService {
   initTestTable(
     inArg: {
       in: 'body' | 'header' | 'query' | 'rest';
-      format?: 'Form-data';
+      format?: 'FormData';
     },
     opts: any = {}
   ): { columns: ColumnItem[]; setting: TableProSetting } {
@@ -233,7 +277,7 @@ export class ApiTableService {
       required: {
         type: 'checkbox',
         left: true,
-        key: 'required',
+        key: 'isRequired',
         enums: REQURIED_ENUMS
       },
       value: {

@@ -30,13 +30,23 @@
     <!-- Query params -->
     <nz-collapse *ngIf="model.requestParams?.queryParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Query">
-        <eo-api-detail-form tid="queryParams" class="api-detail-form-table" [model]="model.queryParams" module="query"></eo-api-detail-form>
+        <eo-api-detail-form
+          tid="queryParams"
+          class="api-detail-form-table"
+          [model]="model.requestParams?.queryParams"
+          module="query"
+        ></eo-api-detail-form>
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Rest params -->
     <nz-collapse *ngIf="model.requestParams?.restParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="REST">
-        <eo-api-detail-form tid="restParams" class="api-detail-form-table" [model]="model.restParams" module="rest"></eo-api-detail-form>
+        <eo-api-detail-form
+          tid="restParams"
+          class="api-detail-form-table"
+          [model]="model.requestParams?.restParams"
+          module="rest"
+        ></eo-api-detail-form>
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Body -->
@@ -46,36 +56,40 @@
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Body</span>
             <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.requestBodyType] }}</nz-tag>
-            <nz-tag *ngIf="model.requestBodyType === 'json'" nzColor="default" i18n>{{
-              CONST.JSON_ROOT_TYPE[model.requestBodyJsonType]
-            }}</nz-tag>
+            <nz-tag
+              *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.requestParams?.bodyParams[0]?.contentType)"
+              nzColor="default"
+              i18n
+              >{{ model.requestParams?.bodyParams[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
+            >
           </div>
         </ng-template>
-        <eo-api-detail-body
-          tid="requestBody"
-          [bodyType]="model.requestBodyType"
-          [model]="model.requestBody"
-          [jsonRootType]="model.requestBodyJsonType"
-        ></eo-api-detail-body>
+        <eo-api-detail-body tid="requestBody" [bodyType]="model.requestBodyType" [model]="model.requestBody"></eo-api-detail-body>
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Response -->
-    <nz-collapse *ngIf="model.responseList?.length" class="w-full mt-[20px]">
+    <nz-collapse *ngIf="model.responseList[0]?.responseParams?.bodyParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" [nzHeader]="responseParamsHeader">
         <ng-template #responseParamsHeader>
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Response</span>
-            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseBodyType] }}</nz-tag>
-            <nz-tag *ngIf="model.responseBodyType === 'json'" nzColor="default" i18n>{{
-              CONST.JSON_ROOT_TYPE[model.responseBodyJsonType]
-            }}</nz-tag>
+            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList[0]?.responseParams?.bodyParams[0]?.contentType] }}</nz-tag>
+            <nz-tag
+              *ngIf="
+                [TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList[0]?.responseParams?.bodyParams[0]?.contentType)
+              "
+              nzColor="default"
+              i18n
+              >{{
+                model.responseList[0]?.responseParams?.bodyParams[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object'
+              }}</nz-tag
+            >
           </div>
         </ng-template>
         <eo-api-detail-body
           tid="responseBody"
-          [bodyType]="model.responseBodyType"
+          [bodyType]="model.responseList[0]?.contentType"
           [model]="model.responseList[0]?.responseParams?.bodyParams"
-          [jsonRootType]="model.responseBodyJsonType"
         ></eo-api-detail-body>
       </nz-collapse-panel>
     </nz-collapse>

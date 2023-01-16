@@ -135,7 +135,7 @@ export class ParamsImportComponent implements OnInit {
       }
       return {
         ...data,
-        children: data?.children?.length ? array2obj(data.children) : {}
+        childList: data?.childList?.length ? array2obj(data.childList) : {}
       };
     };
 
@@ -143,7 +143,7 @@ export class ParamsImportComponent implements OnInit {
       Object.entries(data).map(([name, value]: any[]) => ({
         name,
         ...value,
-        children: value?.children ? obj2array(value.children) : []
+        childList: value?.childList ? obj2array(value.childList) : []
       }));
 
     const combineFunc = {

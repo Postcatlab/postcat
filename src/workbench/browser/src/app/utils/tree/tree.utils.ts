@@ -12,8 +12,8 @@ export const getTreeTotalCount = (trees): number => {
   let result = 0;
   result += trees.length;
   trees.forEach(val => {
-    if (val.children?.length) {
-      result += getTreeTotalCount(val.children);
+    if (val.childList?.length) {
+      result += getTreeTotalCount(val.childList);
     }
   });
   return result;
@@ -23,7 +23,7 @@ const filterTree = (
   result,
   filterFn,
   opts = {
-    childKey: 'children'
+    childKey: 'childList'
   }
 ) =>
   result.filter(item => {
@@ -48,7 +48,7 @@ export const filterTableData = (
 ) => {
   //TODO add pickBy support
   //Set default Options
-  opts.childKey = opts.childKey || 'children';
+  opts.childKey = opts.childKey || 'childList';
   opts.omitBy = opts.omitBy || ['eoKey'];
   //Omit useless fieild
   const result = inData.map(val => omitDeep(val, opts.omitBy));
@@ -76,13 +76,13 @@ export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentI
     if (data.parentID === parentID) {
       const child = {
         ...data,
-        children: []
+        childList: []
       };
       if (!data.isLeaf) {
-        listToTree(list, child.children, data.key);
+        listToTree(list, child.childList, data.key);
       }
-      if (child.children.length <= 0) {
-        delete child.children;
+      if (child.childList.length <= 0) {
+        delete child.childList;
       }
       tree.push(child);
     }
@@ -92,9 +92,9 @@ export const flatData = data => {
   // * DFS
   const arr = [];
   data.forEach(item => {
-    const loop = ({ children = [], ...it }) => {
+    const loop = ({ childList = [], ...it }) => {
       arr.push(it);
-      children.forEach(x => loop(x));
+      childList.forEach(x => loop(x));
     };
     loop(item);
   });
@@ -125,7 +125,7 @@ export const getExpandGroupByKey: (component, key) => string[] = (component, key
  * @returns
  */
 export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {}) => {
-  const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
+  const { key = 'name', valueKey = 'description', childKey = 'childList' } = opts;
   return list?.reduce?.((prev, curr) => {
     try {
       curr = typeof curr === 'string' ? JSON.parse(curr) : curr;

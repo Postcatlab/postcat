@@ -11,7 +11,7 @@ import { from, fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiEditViewData, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, ApiEditViewData, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../../../utils/index.utils';
@@ -42,7 +42,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
-
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   constructor(
     private router: Router,
     private route: ActivatedRoute,

@@ -1,7 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { JsonRootType, ApiEditBody, ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  JsonRootType,
+  ApiEditBody,
+  ApiBodyType,
+  ApiTableConf,
+  IMPORT_MUI
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -18,7 +24,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tid: string;
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
-  @Input() bodyType: ApiBodyType | string;
+  @Input() bodyType: ApiBodyType | number;
   @Input() jsonRootType: JsonRootType | string;
   @Output() readonly jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
@@ -30,10 +36,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     setting: {}
   };
   cache: any = {};
-
-  CONST: any = {
-    JSON_ROOT_TYPE: Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }))
-  };
   itemStructure: ApiEditBody = {
     name: '',
     type: 'string',
@@ -41,7 +43,13 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     example: '',
     description: ''
   };
-  private bodyType$: Subject<string> = new Subject<string>();
+  IMPORT_MUI = IMPORT_MUI;
+  API_BODY_TYPE;
+  JSON_ROOT_TYPE = Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }));
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
+  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
@@ -72,7 +80,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
+    this.API_BODY_TYPE = Object.keys(ApiBodyType)
       .filter(val => this.supportType.includes(ApiBodyType[val]))
       .map(val => ({ key: val, value: ApiBodyType[val] }));
   }
@@ -130,12 +138,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    if (['formData', 'json'].includes(this.bodyType)) {
+    if ([ApiBodyType.XML, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
         this.model.push(eoDeepCopy(this.itemStructure));
       }
     }
-    if (this.bodyType === 'xml') {
+    if (this.bodyType === ApiBodyType.XML) {
       if (!this.model.length) {
         this.model.push(
           Object.assign(eoDeepCopy(this.itemStructure), {

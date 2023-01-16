@@ -60,7 +60,7 @@ export class ApiTestUtilService {
         restParams: [],
         uri: tmpResult.url,
         queryParams: tmpResult.query,
-        requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
+        requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as unknown as ApiBodyType)
           ? inData.request.requestBody
           : inData.request?.requestBody?.map(val => (val.required = true)),
         requestHeaders: inData.response?.headers,
@@ -97,7 +97,7 @@ export class ApiTestUtilService {
   private text2EditBody(keyName, text: string = '') {
     const result = {};
     const bodyInfo = text2table(text);
-    if (bodyInfo.textType !== 'raw') {
+    if (bodyInfo.textType !== ApiBodyType.Raw) {
       result[`${keyName}`] = bodyInfo.data.map(val => omitDeep(val, ['value']));
     } else {
       result[`${keyName}`] = bodyInfo.data;
@@ -176,7 +176,7 @@ export class ApiTestUtilService {
         );
         break;
       }
-      case ApiBodyType['Form-data']: {
+      case ApiBodyType['FormData']: {
         inData.requestBody.forEach(val => {
           val.value = val.example;
           val.type = val.type === 'file' ? 'file' : 'string';

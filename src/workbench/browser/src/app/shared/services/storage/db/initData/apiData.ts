@@ -51,47 +51,6 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
           createTime: '',
           updateTime: ''
         },
-        dubboApiAttrInfo: {
-          serverHost: '',
-          interfaceName: '',
-          methodName: '',
-          appName: '',
-          group: '',
-          version: '',
-          apiNumber: '',
-          createTime: '',
-          updateTime: ''
-        },
-        soapApiAttrInfo: {
-          beforeInject: '',
-          afterInject: '',
-          authInfo: '',
-          requestMethod: 0,
-          contentType: 0,
-          wsdlContent: '',
-          testData: '',
-          soapOperation: '',
-          soapAction: '',
-          soapBinding: '',
-          soapService: '',
-          createTime: '',
-          updateTime: ''
-        },
-        grpcApiAttrInfo: {
-          authInfo: '',
-          serverHost: '',
-          interfaceName: '',
-          methodName: '',
-          appName: '',
-          group: '',
-          version: '',
-          proto: '',
-          apiRequestMetadata: '',
-          responseMetadata: '',
-          responseTrailingMetadata: '',
-          createTime: '',
-          updateTime: ''
-        },
         requestParams: {
           headerParams: [],
           bodyParams: [],
