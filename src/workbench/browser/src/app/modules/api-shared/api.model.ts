@@ -1,4 +1,7 @@
+import { ApiBodyType, JsonRootType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+
 import { StorageModel } from '../../shared/services/storage/index.model';
+import { enumsToArr } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 /**
@@ -23,29 +26,28 @@ export enum ApiParamsTypeFormData {
   null = 15
 }
 
-export const ApiParamsTypeByNumber = Object.keys(ApiParamsTypeFormData).map(val => ({
-  title: val,
-  value: ApiParamsTypeFormData[val]
+export const ApiParamsTypeByNumber = enumsToArr(ApiParamsTypeFormData).map(val => ({
+  title: val.key,
+  value: val.value
 }));
 /**
  * API body Json or xml param type
  */
 export enum ApiParamsTypeJsonOrXml {
-  string = 'string',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  short = 'short',
-  long = 'long',
-  char = 'char',
-  null = 'null'
+  string = 0,
+  array = 12,
+  object = 13,
+  number = 14,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  short = 10,
+  long = 11,
+  null = 15
 }
 export interface ParamsEnum {
   /**
@@ -112,35 +114,6 @@ export interface ApiEditBody extends BasiApiEditParams {
    */
   children?: ApiEditBody[];
 }
-/**
- * Import string by api body type
- */
-export const IMPORT_MUI = {
-  2: 'json',
-  3: 'xml',
-  4: 'binary',
-  1: 'raw',
-  0: 'formData',
-  6: 'json'
-};
-export enum ApiBodyType {
-  FormData = 0,
-  Raw = 1,
-  JSON = 2,
-  JSONArray = 6,
-  XML = 3,
-  Binary = 4
-}
-/**
- * Json Root Type
- *
- * @description body type is json,set root type of object/array
- */
-export enum JsonRootType {
-  Object = 'object',
-  Array = 'array'
-}
-
 export enum RequestMethod {
   POST = 'POST',
   GET = 'GET',

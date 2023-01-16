@@ -1,6 +1,7 @@
+import { ApiBodyType, JsonRootType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import isXml from 'is-xml';
 
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
+import { ApiEditBody } from '../../modules/api-shared/api.model';
 import { whatType, whatTextType } from '../index.utils';
 
 export const isXML = data => isXml(data);

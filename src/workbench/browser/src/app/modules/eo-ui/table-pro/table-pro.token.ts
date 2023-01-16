@@ -23,7 +23,7 @@ export const TABLE_PRO_DEFUALT_CONFIG: TableProConfig = {
   fullScreenIcon: 'full-screen',
   fullScreenTitle: $localize`Full Screen`,
   columnVisibleTitle: $localize`Column Visible`,
-  columnVisibleIcon: 'view-list-781pg17c',
+  columnVisibleIcon: 'view-list',
   btnAddRowIcon: 'add',
   btnAddRowTitle: $localize`Add Row`,
   btnAddChildRowIcon: 'add',

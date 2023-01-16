@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditRest, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-edit-rest',
@@ -17,16 +18,18 @@ export class ApiEditRestComponent implements OnInit {
    * Table ID
    */
   @Input() tid: string;
-  @Input() model: ApiEditRest[];
+  @Input() model: RestParam[];
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   listConf: ApiTableConf = {
     columns: [],
     setting: {}
   };
-  itemStructure: ApiEditRest = {
+  itemStructure: RestParam = {
     name: '',
-    required: true,
-    example: '',
+    isRequired: 1,
+    paramAttr: {
+      example: ''
+    },
     description: ''
   };
   constructor(private apiTable: ApiTableService, private cdRef: ChangeDetectorRef) {}

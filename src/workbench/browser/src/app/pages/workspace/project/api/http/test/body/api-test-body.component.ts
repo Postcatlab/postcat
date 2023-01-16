@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiTableConf, IMPORT_MUI } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
+import { ApiBodyType, IMPORT_MUI } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';

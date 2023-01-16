@@ -1,7 +1,15 @@
 <div class="flex items-center justify-start h-10 param-box-header">
   <div class="flex items-center h-full">
     <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
-      <label *ngFor="let item of API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
+      <span *ngFor="let item of API_BODY_TYPE">
+        <label eo-ng-radio *ngIf="item.value !== TYPE_API_BODY.JSON" [nzValue]="item.value">{{ item.key }}</label>
+        <label
+          eo-ng-radio
+          *ngIf="item.value === TYPE_API_BODY.JSON"
+          [nzValue]="jsonRootType === TYPE_API_BODY.JSON ? TYPE_API_BODY.JSON : TYPE_API_BODY.JSONArray"
+          >{{ item.key }}</label
+        >
+      </span>
     </eo-ng-radio-group>
   </div>
   <div *ngIf="[TYPE_API_BODY['FormData'], TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray, TYPE_API_BODY.XML].includes(bodyType)">
@@ -11,7 +19,6 @@
       [contentType]="IMPORT_MUI[bodyType]"
       (baseDataChange)="handleParamsImport($event)"
       (beforeHandleImport)="beforeHandleImport($event)"
-      [rootType]="jsonRootType"
     ></params-import>
   </div>
 </div>

@@ -1,3 +1,4 @@
+import { isNumber } from '@micro-zoe/micro-app/libs/utils';
 import { reverseObjKV } from 'eo/workbench/browser/src/app/shared/services/storage/db/utils';
 
 export enum ProtocolEnum {
@@ -38,3 +39,31 @@ export enum ContentTypeEnum {
   OTHER = 5,
   JSON_ARRAY = 6
 }
+export enum ApiBodyType {
+  FormData = 0,
+  Raw = 1,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Binary = 4
+}
+/**
+ * Json Root Type
+ *
+ * @description body type is json,set root type of object/array
+ */
+export enum JsonRootType {
+  Object = 2,
+  Array = 6
+}
+/**
+ * Import string by api body type
+ */
+export const IMPORT_MUI = {
+  2: 'json',
+  3: 'xml',
+  4: 'binary',
+  1: 'raw',
+  0: 'formData',
+  6: 'json'
+};

@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -51,7 +51,6 @@ export class ApiDetailComponent implements OnInit {
       if (uuid) {
         this.model = await this.effectService.getAPI([uuid]);
         this.originModel = cloneDeep(this.model);
-        console.log('this.model', this.model);
       } else {
         console.error(`Can't no find api`);
       }

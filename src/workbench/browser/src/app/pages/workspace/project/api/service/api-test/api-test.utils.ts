@@ -1,12 +1,11 @@
 import { formatDate } from '@angular/common';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 
-import { ApiBodyType } from '../../../../../../modules/api-shared/api.model';
 import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
 const PROTOCOL = ['http', 'https'];
-const REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
 
 /**
@@ -90,7 +89,9 @@ export const eoFormatRequestData = (
     httpHeader: PROTOCOL.indexOf(data.protocol),
     headers: formatList(data.requestHeaders),
     requestType: data.requestBodyType.toString(),
-    apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType).toString(),
+    apiRequestParamJsonType: '0',
+    //TODO
+    // apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType),
     params: formatBody(data),
     auth: { status: '0' },
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },

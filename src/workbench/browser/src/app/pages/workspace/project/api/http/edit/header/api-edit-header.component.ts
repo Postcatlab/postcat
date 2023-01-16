@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { HeaderParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-edit-header',
@@ -16,7 +17,7 @@ import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modul
     ></eo-ng-table-pro> `
 })
 export class ApiEditHeaderComponent implements OnInit {
-  @Input() model: ApiEditHeaders[];
+  @Input() model: HeaderParam[];
   /**
    * Table ID
    */
@@ -26,10 +27,12 @@ export class ApiEditHeaderComponent implements OnInit {
     columns: [],
     setting: {}
   };
-  itemStructure: ApiEditHeaders = {
+  itemStructure: HeaderParam = {
     name: '',
-    required: true,
-    example: '',
+    isRequired: 1,
+    paramAttr: {
+      example: ''
+    },
     description: ''
   };
   constructor(private apiTable: ApiTableService) {}

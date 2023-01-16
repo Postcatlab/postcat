@@ -169,7 +169,10 @@ export interface ParamAttr {
   minValue: MinValue;
   maxValue: MaxValue;
   paramLimit: string;
-  paramValueList: string;
+  /**
+   * Params value list (JSON format)
+   */
+  paramValueList: string | any;
   paramMock: string;
   attr: string;
   structureIsHide: number;
@@ -200,25 +203,8 @@ export interface BodyParam {
   orderNo: number;
   createTime: number;
   updateTime: number;
-  paramAttr: ParamAttr2;
+  paramAttr: ParamAttr;
   childList: any[];
-}
-
-export interface ParamAttr2 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue2;
-  maxValue: MaxValue2;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
 }
 
 export interface MinValue2 {}

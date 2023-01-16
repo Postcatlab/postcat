@@ -1,5 +1,5 @@
 import Ajv from 'ajv';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData, Environment, Group } from '../../index.model';

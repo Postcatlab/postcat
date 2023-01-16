@@ -1,13 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {
-  ApiParamsTypeJsonOrXml,
-  ParamsEnum,
-  ApiEditBody,
-  ApiParamsTypeByNumber
-} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsTypeFormData } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { REQURIED_ENUMS } from 'eo/workbench/browser/src/app/shared/models/shared.model';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import { isNil } from 'ng-zorro-antd/core/util';
+
+import { cpSync } from 'fs';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
@@ -15,11 +13,12 @@ import { isNil } from 'ng-zorro-antd/core/util';
   styleUrls: ['./api-params-extra-setting.component.scss']
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
-  @Input() model: { type: string | ApiParamsTypeJsonOrXml } & ApiEditBody;
+  @Input() model: BodyParam;
   @Input() isEdit = true;
   @Input() in: 'body' | 'header' | 'query' | 'rest';
   showValueTable = false;
   showLengthTable = false;
+  showEnums = false;
   listConfBasicInfo;
   listConfLenthInterval: ColumnItem[] = [
     {
@@ -37,15 +36,14 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     {
       title: $localize`Minimum`,
       type: 'inputNumber',
-      key: 'minimum'
+      key: 'minValue'
     },
     {
       title: $localize`Maximum`,
       type: 'inputNumber',
-      key: 'maximum'
+      key: 'maxValue'
     }
   ];
-
   itemStructureEnums: ParamsEnum = {
     value: '',
     description: ''
@@ -102,7 +100,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     ];
   }
   transferPreviewTable() {
-    ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach(configName => {
+    ['listConfLenthInterval', 'listConfEnums', 'listConfValueInterval'].forEach(configName => {
       this[configName].forEach((column, index) => {
         //Change edit to preview
         if (column.type === 'btnList') {
@@ -122,8 +120,8 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       console.log(this.listConfEnums);
     }
     //Init Enum List
-    if (this.isEdit && this.model[0] && !this.model[0]?.enum?.length) {
-      this.model[0].enum = this.model[0].enum || [];
+    if (this.isEdit && this.model?.paramAttr?.paramValueList && !this.model?.paramAttr?.paramValueList.length) {
+      this.model.paramAttr.paramValueList = this.model.paramAttr.paramValueList || [];
     }
     //Set Length/Value preview
     if (this.in !== 'body') {
@@ -131,11 +129,20 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       this.showValueTable = false;
     } else {
       if (this.isEdit) {
-        this.showLengthTable = ['string'].includes(this.model[0].type);
-        this.showValueTable = ['int', 'float', 'double', 'short', 'long', 'number'].includes(this.model[0].type);
+        this.showLengthTable = [ApiParamsTypeFormData.string].includes(this.model.dataType);
+        this.showValueTable = [
+          ApiParamsTypeFormData.int,
+          ApiParamsTypeFormData.float,
+          ApiParamsTypeFormData.double,
+          ApiParamsTypeFormData.short,
+          ApiParamsTypeFormData.long,
+          ApiParamsTypeFormData.number
+        ].includes(this.model.dataType);
+        this.showEnums = ![ApiParamsTypeFormData.null, ApiParamsTypeFormData.boolean].includes(this.model.dataType);
       } else {
-        this.showLengthTable = !isNil(this.model[0].minLength || this.model[0].maxLength);
-        this.showValueTable = !isNil(this.model[0].minimum || this.model[0].maximum);
+        this.showLengthTable = !isNil(this.model.paramAttr.minLength || this.model.paramAttr.maxLength);
+        this.showValueTable = !isNil(this.model.paramAttr.minValue || this.model.paramAttr.maxValue);
+        this.showEnums = this.model.paramAttr?.paramValueList?.length;
       }
     }
   }

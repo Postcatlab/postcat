@@ -1,14 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import {
-  JsonRootType,
-  ApiEditBody,
-  ApiBodyType,
-  ApiTableConf,
-  IMPORT_MUI
-} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, IMPORT_MUI, JsonRootType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { isNumber } from 'lodash-es';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
@@ -23,10 +19,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() tid: string;
   @Input() model: string | object[] | any;
-  @Input() supportType: string[];
+  @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() bodyType: ApiBodyType | number;
-  @Input() jsonRootType: JsonRootType | string;
-  @Output() readonly jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
@@ -45,10 +39,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   };
   IMPORT_MUI = IMPORT_MUI;
   API_BODY_TYPE;
-  JSON_ROOT_TYPE = Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }));
+  JSON_ROOT_TYPE = enumsToArr(JsonRootType);
+
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
+  jsonRootType: number = JsonRootType.Object;
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
@@ -66,7 +62,9 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   jsonRootTypeDataChange(jsonRootType) {
-    this.jsonRootTypeChange.emit(jsonRootType);
+    console.log(jsonRootType);
+    this.bodyType = jsonRootType;
+    // this.jsonRootTypeChange.emit(jsonRootType);
     this.modelChange.emit(this.model);
   }
   rawChange(code) {
@@ -80,7 +78,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    this.API_BODY_TYPE = Object.keys(ApiBodyType)
+    this.API_BODY_TYPE = Object.values(ApiBodyType)
       .filter(val => this.supportType.includes(ApiBodyType[val]))
       .map(val => ({ key: val, value: ApiBodyType[val] }));
   }
@@ -96,7 +94,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   beforeHandleImport(result) {
-    this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
+    // this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
   }
   tableChange($event) {
     this.modelChange.emit(this.model);

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/modules/api-shared/api-test-util.service';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ApiBodyType, ProtocolEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
-import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
+import { RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { ApiTestHistory } from '../../../../../../shared/services/storage/index.model';
 import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
@@ -15,7 +16,7 @@ export class ApiTestService {
       projectID: -1,
       groupID: 0,
       uri: '',
-      protocol: RequestProtocol.HTTP,
+      protocol: ProtocolEnum.HTTP,
       method: RequestMethod.POST,
       uuid: 0,
       requestBodyType: ApiBodyType.Raw,

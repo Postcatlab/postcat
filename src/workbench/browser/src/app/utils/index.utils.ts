@@ -1,3 +1,5 @@
+import { isNumber } from 'lodash-es';
+
 window.pcConsole = {
   log(...args) {
     console.log('%c EO_LOG: ', 'background-color:#2a4073; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
@@ -85,11 +87,13 @@ export const reverseObj = obj =>
  *
  * @param obj
  */
-export const objectToArray = obj =>
-  Object.keys(obj).map(val => ({
-    key: val,
-    value: obj[val]
-  }));
+export const enumsToArr = obj =>
+  Object.values(obj)
+    .filter(val => !isNumber(val))
+    .map((val: string) => ({
+      key: val,
+      value: obj[val]
+    }));
 export const isEmptyObj = obj => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = obj => {
   const list = Object.keys(obj);
@@ -308,11 +312,11 @@ export const decodeUnicode = (str: string) => {
   return unescape(str.replace(/\\u/gi, '%u'));
 };
 
-export const JSONParse = (text, reviver?) => {
+export const JSONParse = (text, defaultVal = {}, reviver?) => {
   try {
     return JSON.parse(text, reviver);
   } catch (ex) {
     pcConsole.warn('JSONParse error:', ex);
-    return {};
+    return defaultVal;
   }
 };

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { QueryParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-edit-query',
@@ -17,16 +18,18 @@ import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules
 })
 export class ApiEditQueryComponent implements OnInit {
   @Input() tid: string;
-  @Input() model: ApiEditQuery[];
+  @Input() model: QueryParam[];
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   listConf: ApiTableConf = {
     columns: [],
     setting: {}
   };
-  itemStructure: ApiEditQuery = {
+  itemStructure: QueryParam = {
     name: '',
-    required: true,
-    example: '',
+    isRequired: 1,
+    paramAttr: {
+      example: ''
+    },
     description: ''
   };
   constructor(private apiTable: ApiTableService, private cdRef: ChangeDetectorRef) {}

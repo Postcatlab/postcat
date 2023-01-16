@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
@@ -8,7 +9,6 @@ import { ApiData, ApiTestHistory } from '../../shared/services/storage/index.mod
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
-import { ApiBodyType } from './api.model';
 
 @Injectable()
 export class ApiTestUtilService {

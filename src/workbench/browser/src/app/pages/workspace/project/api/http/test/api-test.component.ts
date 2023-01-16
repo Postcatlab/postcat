@@ -27,6 +27,7 @@ import {
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiBodyType, IMPORT_MUI } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmpty } from 'lodash-es';
@@ -37,9 +38,9 @@ import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/opera
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
-import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
+import { RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../../../shared/services/message';
-import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../../../utils/index.utils';
+import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 
@@ -88,7 +89,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   responseContainerHeight: number;
 
   isRequestBodyLoaded = false;
-  REQUEST_METHOD = objectToArray(RequestMethod);
+  REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
   get TYPE_API_BODY(): typeof ApiBodyType {

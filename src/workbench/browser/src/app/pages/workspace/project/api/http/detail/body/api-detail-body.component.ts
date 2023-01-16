@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { Subject } from 'rxjs';
 
 @Component({

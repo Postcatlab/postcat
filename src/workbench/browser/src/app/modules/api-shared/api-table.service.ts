@@ -1,72 +1,42 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { has, omit } from 'lodash-es';
 
 import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
-import { BodyParam2 } from '../../shared/services/storage/db/models/apiData';
-import { eoDeepCopy } from '../../utils/index.utils';
+import { BodyParam } from '../../shared/services/storage/db/models/apiData';
+import { eoDeepCopy, JSONParse } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiBodyType, ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
+import { ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
   showMore(item, opts: { in: string; isEdit: boolean }) {
     return new Promise(resolve => {
+      item = eoDeepCopy(omit(item, ['childList']));
+      item.paramAttr = item.paramAttr || {};
+      item.paramAttr.paramValueList = JSONParse(item.paramAttr.paramValueList, []);
       const modalConf: ModalOptions = {
         nzTitle: $localize`More Settings`,
         nzContent: ApiParamsExtraSettingComponent,
         nzWidth: '60%',
         nzComponentParams: {
           in: opts.in,
-          model: [
-            {
-              responseUuid: '',
-              name: 'today',
-              paramType: 0,
-              partType: 0,
-              dataType: 0,
-              dataTypeValue: '',
-              structureId: '',
-              structureParamId: '',
-              contentType: '',
-              isRequired: 0,
-              binaryRawData: '',
-              description: '',
-              orderNo: 0,
-              createTime: '',
-              updateTime: '',
-              paramAttr: {
-                minLength: '',
-                maxLength: '',
-                minValue: 0,
-                maxValue: 100,
-                paramLimit: '',
-                paramValueList: '',
-                paramMock: '',
-                attr: '',
-                structureIsHide: 0,
-                example: '中国',
-                createTime: '',
-                updateTime: '',
-                dbArr: '',
-                paramNote: ''
-              },
-              eoKey: '9e53e403-4781-408e-96ca-5dbf46822b41'
-            }
-          ],
-          // [omit(item, ['childList'])],
+          model: item,
           isEdit: opts.isEdit
         }
       };
       if (opts.isEdit) {
         modalConf.nzOnOk = () => {
-          const model = eoDeepCopy(modal.componentInstance.model[0]);
-          model.enum = filterTableData(model.enum, {
-            primaryKey: 'value'
-          });
+          const model = modal.componentInstance.model[0];
+          model.paramAttr.paramValueList = JSON.stringify(
+            filterTableData(model.enum, {
+              primaryKey: 'value'
+            })
+          );
           resolve(model);
           modal.destroy();
         };
@@ -160,7 +130,7 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            showFn: ({ data }: { data: BodyParam2 }) =>
+            showFn: ({ data }: { data: BodyParam }) =>
               data.paramAttr.paramValueList?.length ||
               data.paramAttr.minValue ||
               data.paramAttr.maxValue ||

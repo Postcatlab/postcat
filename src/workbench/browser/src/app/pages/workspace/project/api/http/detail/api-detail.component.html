@@ -55,16 +55,17 @@
         <ng-template #bodyParamsHeader>
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Body</span>
-            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.requestBodyType] }}</nz-tag>
-            <nz-tag
-              *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.requestParams?.bodyParams[0]?.contentType)"
-              nzColor="default"
-              i18n
-              >{{ model.requestParams?.bodyParams[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
-            >
+            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.apiAttrInfo.contentType] }}</nz-tag>
+            <nz-tag *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.apiAttrInfo.contentType)" nzColor="default" i18n>{{
+              model.apiAttrInfo.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object'
+            }}</nz-tag>
           </div>
         </ng-template>
-        <eo-api-detail-body tid="requestBody" [bodyType]="model.requestBodyType" [model]="model.requestBody"></eo-api-detail-body>
+        <eo-api-detail-body
+          tid="requestBody"
+          [bodyType]="model.apiAttrInfo.contentType"
+          [model]="model.requestParams?.bodyParams"
+        ></eo-api-detail-body>
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Response -->
