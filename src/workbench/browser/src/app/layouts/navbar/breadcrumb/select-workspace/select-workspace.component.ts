@@ -86,7 +86,7 @@ export class SelectWorkspaceComponent {
   get cloudWorkspaces() {
     return this.searchWorkspace(
       this.searchValue,
-      this.store.getWorkspaceList.filter(val => !val.isLocal)
+      this.store.getWorkspaceList.filter(val => !val?.isLocal)
     );
   }
   changeWorkspace(workspaceID) {

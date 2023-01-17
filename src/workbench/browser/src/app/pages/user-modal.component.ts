@@ -6,6 +6,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { interval, Subject } from 'rxjs';
@@ -182,7 +183,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public fb: UntypedFormBuilder,
     private storage: StorageService,
     private router: Router,
-    private web: WebService
+    private web: WebService,
+    private remote: RemoteService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -476,25 +478,19 @@ export class UserModalComponent implements OnInit, OnDestroy {
     const btnSaveRunning = async () => {
       const { newWorkName: titles } = this.validateWorkspaceNameForm.value;
       const localProjects = this.store.getProjectList;
-      const [data, err]: any = await this.api.api_workspaceCreate({ titles });
+      // ! Attention: data is array
+      const [data, err]: any = await this.remote.api_workspaceCreate({ titles: [titles] });
+      const workspace = data.at(0);
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
-      this.message.send({ type: 'update-share-link', data: {} });
       {
         await this.effect.updateWorkspaces();
-        await this.effect.changeWorkspace(data.workSpaceUuid);
+        await this.effect.changeWorkspace(workspace.workSpaceUuid);
       }
       if (this.store.getWorkspaceList.length === 2) {
         const modal = this.modal.create({
