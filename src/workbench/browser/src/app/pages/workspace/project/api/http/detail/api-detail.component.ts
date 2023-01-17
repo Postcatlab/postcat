@@ -9,7 +9,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
 
-import { reverseObj } from '../../../../../../utils/index.utils';
+import { enumsToObject } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 @Component({
   selector: 'api-detail',
@@ -21,7 +21,7 @@ export class ApiDetailComponent implements OnInit {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
   CONST = {
-    BODY_TYPE: reverseObj(ApiBodyType)
+    BODY_TYPE: enumsToObject(ApiBodyType)
   };
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;

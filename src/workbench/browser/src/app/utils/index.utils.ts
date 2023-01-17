@@ -73,27 +73,28 @@ export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
   }
 };
 /**
- * reverse object key and value
+ * Reverse Typescript enum key and value
  *
- * @param obj
+ * @param enum
  */
-export const reverseObj = obj =>
-  Object.entries<any>(obj).reduce((acc, [key, value]) => {
+export const enumsToObject = tEnum =>
+  Object.entries<any>(tEnum).reduce((acc, [key, value]) => {
     acc[value] = key;
     return acc;
   }, {});
 /**
- * reverse object key and value
+ * Reverse Typescript enums key and value
  *
- * @param obj
+ * @param enum
  */
-export const enumsToArr = obj =>
-  Object.entries<any>(obj)
-    .filter(([, val]) => !isNumber(val))
-    .map(([key, value]) => ({
-      key: value,
-      value: key
+export const enumsToArr = tEnum =>
+  Object.values(tEnum)
+    .filter(val => !isNumber(val))
+    .map((val: string) => ({
+      key: val,
+      value: tEnum[val]
     }));
+
 export const isEmptyObj = obj => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = obj => {
   const list = Object.keys(obj);

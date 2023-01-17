@@ -5,7 +5,8 @@ import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspa
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { copyText, eoDeepCopy, copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.model';
+import { ApiData } from '../../shared/services/storage/db/models/apiData';
+import { ApiMockEntity } from '../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock-table',

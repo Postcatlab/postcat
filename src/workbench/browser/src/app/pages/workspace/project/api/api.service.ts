@@ -4,7 +4,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import { ApiService } from '../../../../shared/services/storage/api.service';
-import { ApiData, StorageRes } from '../../../../shared/services/storage/index.model';
+import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
 import { EffectService } from '../../../../shared/store/effect.service';
 
 @Injectable({
@@ -23,12 +23,7 @@ export class ProjectApiService {
     if (err) {
       this.message.error($localize`Can't find this Api`);
     }
-    return result;
-  }
-  getAll(projectID): Promise<StorageRes> {
-    return new Promise(resolve => {
-      this.storage.run('apiDataLoadAllByProjectID', [projectID], resolve);
-    });
+    return result[0];
   }
   async edit(apiData: ApiData) {
     return await this.api.api_apiDataUpdate({ api: apiData });
@@ -50,8 +45,5 @@ export class ProjectApiService {
     });
     if (err) return;
     this.effect.getGroupList();
-  }
-  bulkDelete(apis) {
-    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {});
   }
 }

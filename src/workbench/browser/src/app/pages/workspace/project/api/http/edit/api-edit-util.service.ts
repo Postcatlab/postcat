@@ -11,10 +11,10 @@ import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
 
-  parseApiStorage2UI(apiData) {
+  parseApiStorage2UI(apiData: ApiData) {
     const result = apiData;
-    result.protocol = RequestProtocol.HTTP;
-    result.groupId = (result.groupId === 0 ? -1 : result.groupId || -1).toString();
+    // result.protocol = RequestProtocol.HTTP;
+    // result.groupId = (result.groupId === 0 ? -1 : result.groupId || -1).toString();
     return result;
   }
 
