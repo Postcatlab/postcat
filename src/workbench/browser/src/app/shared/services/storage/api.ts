@@ -56,8 +56,8 @@ const http = {
       data: [
         { 'readInfo @post': '/common/user/info' }, // 查看个人信息
         { 'updateInfo @post': '/common/user/update-userinfo' }, // 更新个人资料
-        { 'updatePassword @post': '/common/user/change-password', body: 'password, ...' }, // 更改个人密码
-        { 'login @post': '/user/login', body: 'username, password' },
+        { 'updatePassword @post': '/common/user/change-password', json: 'password, ...' }, // 更改个人密码
+        { 'login @post': '/user/login', json: 'username, password' },
         { 'refreshToken @post': '/common/sso/refresh' }, // 刷新token
         { 'logout @post': '/common/sso/logout' }, // 退出登录
         { 'search @post': '/user', query: 'username' } // 搜索用户
