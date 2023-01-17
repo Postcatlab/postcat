@@ -368,8 +368,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.status$.next('tested');
   }
-  private async addHistory(histoy: ApiTestHistoryFrame, id) {
-    await this.apiTest.addHistory(histoy, id);
+  private async addHistory(history: ApiTestHistoryFrame, apiUuid: string) {
+    await this.apiTest.addHistory(history, apiUuid);
   }
   /**
    * Receive Test Server Message
@@ -411,7 +411,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!message.response.statusCode || this.store.isShare) {
       return;
     }
-    this.addHistory(message.history, Number(queryParams.uuid));
+    this.addHistory(message.history, queryParams.uuid);
   }
   setTestSecondsTimmer() {
     if (this.timer$) {
