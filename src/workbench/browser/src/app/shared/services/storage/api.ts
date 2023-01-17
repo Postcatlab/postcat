@@ -75,7 +75,7 @@ const http = {
         { 'memberQuit @delete': '/workspaces/users/quit', body: 'workSpaceUuid' },
         { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
         { 'getMemberPermiss @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
-        { 'list @get @bulkRead': '/workspaces' },
+        { 'list @get': '/workspaces' },
         { 'roles @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
         { 'setRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' }
       ]

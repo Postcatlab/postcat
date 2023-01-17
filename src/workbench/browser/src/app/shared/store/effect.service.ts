@@ -176,7 +176,7 @@ export class EffectService {
     }
   }
   async updateProject(data) {
-    const [project] = await this.api.api_projectUpdate(data);
+    const [project] = await this.api.api_projectUpdate({ description: '', ...data });
     if (project) {
       const projects = this.store.getProjectList;
       projects.some(val => {

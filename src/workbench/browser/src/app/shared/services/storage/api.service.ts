@@ -8,9 +8,6 @@ import { RemoteService } from './remote.service';
   providedIn: 'root'
 })
 export class ApiService {
-  api_workspaceUnkown(arg0: { workspaceID: string; roleID: number; memberID: any }): any {
-    throw new Error('Method not implemented.');
-  }
   constructor(private store: StoreService, private local: LocalService, private remote: RemoteService) {}
 
   api_apiDataCreate<T = any>(params: { apiList: any; projectUuid?: any; workSpaceUuid?: any }) {
@@ -193,7 +190,7 @@ export class ApiService {
   }
 
   api_workspaceList<T = any>(params: any) {
-    return this.store.isLocal ? this.local.api_workspaceList<T>(params) : this.remote.api_workspaceList<T>(params);
+    return this.remote.api_workspaceList<T>(params);
   }
 
   api_workspaceRoles<T = any>(params: { workSpaceUuid?: any }) {

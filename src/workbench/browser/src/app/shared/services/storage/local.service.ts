@@ -947,24 +947,6 @@ export class LocalService {
     });
   }
 
-  api_workspaceList<T = any>(params) {
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      db.workspace
-        .bulkRead(params)
-        .then(({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c workspace - list 接口调用成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          return resolve([null, { code, data }]);
-        })
-        .catch(error => {
-          console.log('%c workspace - list 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
   api_projectCreate<T = any>({ projectMsgs, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectMsgs == null) {
       console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
