@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 
 import { ApiTestHeaders } from '../../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiTableService } from '../api-table.service';
-import { ApiTableConf } from '../api.model';
+import { ApiEditHeaders, ApiTableConf } from '../api.model';
 @Component({
   selector: 'eo-api-test-header',
   templateUrl: './api-test-header.component.html',
@@ -12,7 +12,7 @@ import { ApiTableConf } from '../api.model';
 })
 export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
-  @Input() model: ApiTestHeaders[];
+  @Input() model: ApiEditHeaders[] | any; // TODO
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: ApiTableConf = {

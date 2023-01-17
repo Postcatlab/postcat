@@ -2,7 +2,7 @@
   <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
       <eo-ng-input-group nzCompact>
-        <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.method" formControlName="method">
+        <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.apiAttrInfo.requestMethod" formControlName="method">
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <div
@@ -48,14 +48,14 @@
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
           <nz-badge
-            *ngIf="bindGetApiParamNum(model.request.requestHeaders)"
+            *ngIf="bindGetApiParamNum(model.request.requestParams.headerParams)"
             class="ml-1 ant-badge-theme-color"
             nzStatus="success"
           ></nz-badge>
         </ng-template>
         <eo-api-test-header
           class="eo_theme_iblock"
-          [(model)]="model.request.requestHeaders"
+          [(model)]="model.request.requestParams.headerParams"
           (modelChange)="emitChangeFun('requestHeaders')"
         ></eo-api-test-header>
       </eo-ng-tab>
@@ -66,9 +66,9 @@
           <nz-badge
             class="ml-1 ant-badge-theme-color"
             *ngIf="
-              [TYPE_API_BODY['FormData']].includes(model.request.requestBodyType)
-                ? bindGetApiParamNum(model.request.requestBody)
-                : model.request.requestBody?.length
+              [TYPE_API_BODY['FormData']].includes(model.request.apiAttrInfo.contentType)
+                ? bindGetApiParamNum(model.request.requestParams.bodyParams)
+                : model.request.requestParams.bodyParams?.length
             "
             nzStatus="success"
           ></nz-badge>
@@ -78,9 +78,9 @@
           [(contentType)]="model.contentType"
           [(autoSetContentType)]="model.autoSetContentType"
           (contentTypeChange)="changeContentType($event)"
-          [(bodyType)]="model.request.requestBodyType"
+          [(bodyType)]="model.request.apiAttrInfo.contentType"
           (bodyTypeChange)="changeBodyType($event)"
-          [(model)]="model.request.requestBody"
+          [(model)]="model.request.requestParams.bodyParams"
           (modelChange)="emitChangeFun('requestBody')"
           [supportType]="['formData', 'raw', 'binary']"
         >
@@ -89,22 +89,30 @@
       <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
           <span i18n>Query</span>
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+          <nz-badge
+            *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)"
+            class="ml-1 ant-badge-theme-color"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock"
-          [(model)]="model.request.queryParams"
+          [(model)]="model.request.requestParams.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
         ></eo-api-test-query>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="restTitleTmp">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.restParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
+          <nz-badge
+            *ngIf="bindGetApiParamNum(model.request.requestParams.restParams)"
+            class="ml-1 ant-badge-theme-color"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
         <eo-api-test-rest
           class="eo_theme_iblock"
-          [(model)]="model.request.restParams"
+          [(model)]="model.request.requestParams.restParams"
           (modelChange)="emitChangeFun('restParams')"
         ></eo-api-test-rest>
       </eo-ng-tab>

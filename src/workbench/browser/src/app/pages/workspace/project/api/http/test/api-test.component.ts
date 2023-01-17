@@ -27,6 +27,7 @@ import {
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
@@ -48,7 +49,7 @@ const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
 
 interface testViewModel {
-  request: ApiTestData;
+  request: ApiData;
   beforeScript: string;
   afterScript: string;
   testStartTime?: number;
@@ -241,7 +242,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
       base: 'query'
     }).url;
   }
@@ -254,10 +255,16 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   updateParamsbyUri(url) {
-    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url'
-    }).query;
-    this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
+    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.requestParams.queryParams,
+      {
+        base: 'url'
+      }
+    ).query;
+    this.model.request.requestParams.restParams = [
+      ...generateRestFromUrl(this.model.request.uri, this.model.request.requestParams.restParams)
+    ];
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
@@ -294,7 +301,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changeContentType(contentType) {
-    this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(contentType, this.model.request.requestHeaders);
+    this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
+      contentType,
+      this.model.request.requestParams.headerParams
+    );
   }
   changeBodyType($event) {
     this.initContentType();
@@ -445,8 +455,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private initContentType() {
-    if (this.model.request.requestBodyType === ApiBodyType.Raw) {
-      this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestHeaders) || 'text/plain';
+    const contentType = this.model.request.apiAttrInfo.contentType;
+    if (contentType === ApiBodyType.Raw) {
+      this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
     }
   }
   private watchEnvChange() {

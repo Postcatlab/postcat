@@ -3,7 +3,6 @@
     <button type="button" eo-ng-button nzType="primary" (click)="saveApi()" i18n>Save</button>
   </div>
   <div class="save-container p-[20px]" *ngIf="model.apiAttrInfo">
-    {{ REQUEST_METHOD | json }}
     <eo-ng-input-group nzCompact>
       <eo-ng-select class="!w-[15%] !min-w-[100px] !max-w-[200px]" formControlName="requestMethod">
         <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>

@@ -311,12 +311,34 @@ export const DEFAULT_HEADER = [
 
 export enum ApiBodyType {
   FormData = 0,
-  Raw = 1,
   JSON = 2,
   JSONArray = 6,
   XML = 3,
+  Raw = 1,
   Binary = 4
 }
+export const API_BODY_TYPE = [
+  {
+    key: 'Form-Data',
+    value: ApiBodyType.FormData
+  },
+  {
+    key: 'JSON',
+    value: ApiBodyType.JSON
+  },
+  {
+    key: 'XML',
+    value: ApiBodyType.XML
+  },
+  {
+    key: 'Raw',
+    value: ApiBodyType.Raw
+  },
+  {
+    key: 'Binary',
+    value: ApiBodyType.Binary
+  }
+];
 /**
  * Json Root Type
  *
