@@ -1,8 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { JsonRootType, ApiEditBody, ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import {
+  ApiBodyType,
+  ApiEditBody,
+  ApiTableConf,
+  IMPORT_MUI,
+  JsonRootType
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
@@ -17,10 +23,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() tid: string;
   @Input() model: string | object[] | any;
-  @Input() supportType: string[];
-  @Input() bodyType: ApiBodyType | string;
-  @Input() jsonRootType: JsonRootType | string;
-  @Output() readonly jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
+  @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
+  @Input() bodyType: ApiBodyType | number;
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
@@ -30,10 +34,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     setting: {}
   };
   cache: any = {};
-
-  CONST: any = {
-    JSON_ROOT_TYPE: Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }))
-  };
   itemStructure: ApiEditBody = {
     name: '',
     type: 'string',
@@ -41,7 +41,15 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     example: '',
     description: ''
   };
-  private bodyType$: Subject<string> = new Subject<string>();
+  IMPORT_MUI = IMPORT_MUI;
+  API_BODY_TYPE;
+  JSON_ROOT_TYPE = enumsToArr(JsonRootType);
+
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
+  jsonRootType: number = JsonRootType.Object;
+  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
@@ -58,7 +66,9 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   jsonRootTypeDataChange(jsonRootType) {
-    this.jsonRootTypeChange.emit(jsonRootType);
+    console.log(jsonRootType);
+    this.bodyType = jsonRootType;
+    // this.jsonRootTypeChange.emit(jsonRootType);
     this.modelChange.emit(this.model);
   }
   rawChange(code) {
@@ -72,7 +82,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
+    this.API_BODY_TYPE = Object.values(ApiBodyType)
       .filter(val => this.supportType.includes(ApiBodyType[val]))
       .map(val => ({ key: val, value: ApiBodyType[val] }));
   }
@@ -88,7 +98,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   beforeHandleImport(result) {
-    this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
+    // this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
   }
   tableChange($event) {
     this.modelChange.emit(this.model);
@@ -130,12 +140,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    if (['formData', 'json'].includes(this.bodyType)) {
+    if ([ApiBodyType.XML, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
         this.model.push(eoDeepCopy(this.itemStructure));
       }
     }
-    if (this.bodyType === 'xml') {
+    if (this.bodyType === ApiBodyType.XML) {
       if (!this.model.length) {
         this.model.push(
           Object.assign(eoDeepCopy(this.itemStructure), {

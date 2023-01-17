@@ -1,4 +1,4 @@
-import { Injectable, ɵɵsetComponentScope } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { RequestProtocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
@@ -13,13 +13,13 @@ export class ApiEditUtilService {
   parseApiStorage2UI(apiData) {
     const result = apiData;
     result.protocol = RequestProtocol.HTTP;
-    result.groupID = (result.groupID === 0 ? -1 : result.groupID || -1).toString();
+    result.groupId = (result.groupId === 0 ? -1 : result.groupId || -1).toString();
     return result;
   }
 
   private parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
+    result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(tableName => {
       if (whatType(result[tableName]) !== 'array') {
         return;

@@ -1,47 +1,78 @@
 import { StorageModel } from '../../shared/services/storage/index.model';
+import { enumsToArr, reverseObj } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 /**
  * API body FormData param type
  */
 export enum ApiParamsTypeFormData {
-  string = 'string',
-  file = 'file',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  byte = 'byte',
-  short = 'short',
-  long = 'long',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  null = 'null'
+  string = 0,
+  file = 1,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  byte = 9,
+  short = 10,
+  long = 11,
+  array = 12,
+  object = 13,
+  number = 14,
+  null = 15
 }
 
+export enum ContentType {
+  FROM_DATA = 0,
+  RAW = 1,
+  JSON_OBJECT = 2,
+  XML = 3,
+  BINARY = 4,
+  OTHER = 5,
+  JSON_ARRAY = 6
+}
+
+export enum Protocol {
+  HTTP = 0,
+  HTTPS = 1,
+  WS = 2,
+  WSS = 3,
+  TCP = 4,
+  UDP = 5,
+  SOCKET = 6,
+  WEBSOCKET = 7,
+  SOAP = 8,
+  HSF = 9,
+  DUBBO = 10,
+  GRPC = 11
+}
+
+export const protocalMap = reverseObj(Protocol);
+
+export const ApiParamsTypeByNumber = enumsToArr(ApiParamsTypeFormData).map(val => ({
+  title: val.key,
+  value: val.value
+}));
 /**
  * API body Json or xml param type
  */
 export enum ApiParamsTypeJsonOrXml {
-  string = 'string',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  short = 'short',
-  long = 'long',
-  char = 'char',
-  null = 'null'
+  string = 0,
+  array = 12,
+  object = 13,
+  number = 14,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  short = 10,
+  long = 11,
+  null = 15
 }
 export interface ParamsEnum {
   /**
@@ -108,32 +139,19 @@ export interface ApiEditBody extends BasiApiEditParams {
    */
   children?: ApiEditBody[];
 }
-export enum ApiBodyType {
-  'Form-data' = 'formData',
-  JSON = 'json',
-  XML = 'xml',
-  Raw = 'raw',
-  Binary = 'binary'
-}
-/**
- * Json Root Type
- *
- * @description body type is json,set root type of object/array
- */
-export enum JsonRootType {
-  Object = 'object',
-  Array = 'array'
-}
 
 export enum RequestMethod {
-  POST = 'POST',
-  GET = 'GET',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-  HEAD = 'HEAD',
-  OPTIONS = 'OPTIONS',
-  PATCH = 'PATCH'
+  POST = 0,
+  GET = 1,
+  PUT = 2,
+  DELETE = 3,
+  HEAD = 4,
+  OPTIONS = 5,
+  PATCH = 6
 }
+
+export const requestMethodMap = reverseObj(RequestMethod);
+
 /**
  * @deprecated auto judge from url
  */
@@ -290,3 +308,32 @@ export const DEFAULT_HEADER = [
   { title: 'x-api-key', restricted: false },
   { title: 'Connection', restricted: true }
 ];
+
+export enum ApiBodyType {
+  FormData = 0,
+  Raw = 1,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Binary = 4
+}
+/**
+ * Json Root Type
+ *
+ * @description body type is json,set root type of object/array
+ */
+export enum JsonRootType {
+  Object = 2,
+  Array = 6
+}
+/**
+ * Import string by api body type
+ */
+export const IMPORT_MUI = {
+  2: 'json',
+  3: 'xml',
+  4: 'binary',
+  1: 'raw',
+  0: 'formData',
+  6: 'json'
+};

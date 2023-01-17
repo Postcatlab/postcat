@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
@@ -11,10 +12,10 @@ import { from, fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiEditViewData, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
-import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../../../utils/index.utils';
+import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../../../utils/tree/tree.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
 
@@ -24,25 +25,27 @@ import { ApiEditUtilService } from './api-edit-util.service';
   styleUrls: ['./api-edit.component.scss']
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
-  @Input() model: ApiEditViewData;
+  @Input() model: ApiData;
   /**
    * Intial model from outside,check form is change
    * * Usually restored from tab
    */
-  @Input() initialModel: ApiEditViewData;
-  @Output() readonly modelChange = new EventEmitter<ApiEditViewData>();
-  @Output() readonly eoOnInit = new EventEmitter<ApiEditViewData>();
-  @Output() readonly afterSaved = new EventEmitter<ApiEditViewData>();
+  @Input() initialModel: ApiData;
+  @Output() readonly modelChange = new EventEmitter<ApiData>();
+  @Output() readonly eoOnInit = new EventEmitter<ApiData>();
+  @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
   groups: any[];
   initTimes = 0;
   expandKeys: string[];
-  REQUEST_METHOD = objectToArray(RequestMethod);
+  REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
-  private changeGroupID$: Subject<string | number> = new Subject();
-
+  private changegroupId$: Subject<string | number> = new Subject();
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -64,13 +67,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   async init() {
     this.initTimes++;
     const id = Number(this.route.snapshot.queryParams.uuid);
-    const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
+    const groupId = Number(this.route.snapshot.queryParams.groupId || 0);
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = {} as ApiEditViewData;
+      this.model = this.apiEdit.getPureApi({ groupId });
       const initTimes = this.initTimes;
       const result = await this.apiEdit.getApi({
         id,
-        groupID
+        groupId
       });
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
@@ -79,12 +82,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
-
+    pcConsole.log(eoDeepCopy(this.model));
     //Storage origin api data
     if (!this.initialModel) {
       if (!id) {
         // New API/New API from other page such as test page
-        this.initialModel = this.apiEdit.getPureApi({ groupID });
+        this.initialModel = this.apiEdit.getPureApi({ groupId });
       } else {
         this.initialModel = eoDeepCopy(this.model);
       }
@@ -93,7 +96,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.initBasicForm();
     this.watchBasicForm();
     this.initShortcutKey();
-    this.changeGroupID$.next(this.model.groupID);
+    this.changegroupId$.next(this.model.groupId);
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
   }
@@ -118,11 +121,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.getApiGroup();
-    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe(id => {
+    this.changegroupId$.pipe(debounceTime(300), take(1)).subscribe(id => {
       /**
        * Expand Select Group
        */
-      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId.toString());
     });
   }
   async saveApi() {
@@ -190,7 +193,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   private resetRestFromUrl(url: string) {
     //Need On push reset params
-    this.model.restParams = [...generateRestFromUrl(url, this.model.restParams)];
+    this.model.requestParams.restParams = [...generateRestFromUrl(url, this.model.requestParams.restParams)];
   }
   getApiGroup() {
     // ! Sooner or later need to refactor
@@ -208,7 +211,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         [].concat(result.data).forEach((item: Group) => {
-          delete item.updatedAt;
           treeItems.push({
             title: item.name,
             key: item.uuid.toString(),
@@ -220,22 +222,22 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         treeItems.sort((a, b) => a.weight - b.weight);
       }
       listToTree(treeItems, this.groups, '0');
-      this.resetGroupID();
+      this.resetgroupId();
     });
   }
   /**
    * Reset Group ID after group list load
-   * Resolve the problem that groupID change but view not change
+   * Resolve the problem that groupId change but view not change
    */
-  private resetGroupID() {
-    let groupID = '-1';
-    if (this.model && this.model.groupID) {
-      groupID = this.model.groupID;
-      this.model.groupID = '';
+  private resetgroupId() {
+    let groupId = -1;
+    if (this.model && this.model.groupId) {
+      groupId = this.model.groupId;
+      this.model.groupId = 0;
     }
     setTimeout(() => {
-      this.model.groupID = groupID;
-      this.changeGroupID$.next(groupID);
+      this.model.groupId = groupId;
+      this.changegroupId$.next(groupId);
     }, 0);
   }
   /**
@@ -244,10 +246,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private initBasicForm() {
     //Prevent init error
     if (!this.model) {
-      this.model = {} as ApiEditViewData;
+      this.model = {} as ApiData;
     }
     const controls = {};
-    ['method', 'uri', 'groupID', 'name'].forEach(name => {
+    ['method', 'uri', 'groupId', 'name'].forEach(name => {
       controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);

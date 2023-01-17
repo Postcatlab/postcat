@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -205,12 +206,12 @@ export class ApiTabService {
     if (model && !isEmptyObj(model)) {
       //Set title/method
       replaceTab.title = model.name;
-      replaceTab.extends.method = model.method;
+      replaceTab.extends.method = requestMethodMap[model.method];
       if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
           replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
-          replaceTab.extends.method = model.request.method;
+          replaceTab.extends.method = requestMethodMap[model.request.method];
         }
         //Only Untitle request need set url to tab title
         const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;

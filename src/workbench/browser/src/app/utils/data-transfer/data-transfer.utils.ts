@@ -15,7 +15,7 @@ const parseTree = (key, value) => {
       example: '',
       type: 'object',
       description: '',
-      children: Object.keys(value).map(it => parseTree(it, value[it]))
+      childList: Object.keys(value).map(it => parseTree(it, value[it]))
     };
   }
   if (whatType(value) === 'array') {
@@ -40,7 +40,7 @@ const parseTree = (key, value) => {
       example: '',
       type: 'array',
       description: '',
-      children: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
+      childList: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
     };
   }
   // * value is string & number & null
@@ -66,7 +66,7 @@ export const form2json = tmpl =>
       return { key: key?.trim(), value: value?.trim() };
     });
 
-const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: string; attr: string }> => {
+const xml2jsonArr = (tmpl): Array<{ tagName: string; childList: any[]; content: string; attr: string }> => {
   // * delete <?xml ... ?>
   let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
   if (xml === '') {
@@ -91,7 +91,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
         result.push(last);
       } else {
         const parent = stack.pop();
-        parent.children.push(last);
+        parent.childList.push(last);
         stack.push(parent);
       }
       index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
@@ -105,11 +105,11 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
       if (str.slice(-2) === '/>') {
         // * single tag
         const parent = stack.pop();
-        parent.children.push({
+        parent.childList.push({
           tagName: label.trim(),
           attr: attr.trim(),
           content: '',
-          children: []
+          childList: []
         });
         stack.push(parent);
         xml = xml.trim().substring(str.length);
@@ -119,7 +119,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
         tagName: label.trim(),
         attr: attr.trim(),
         content: '',
-        children: []
+        childList: []
       });
       index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
       xml = xml.substring(index + str.length);
@@ -156,9 +156,9 @@ export const xml2json = text => {
   const data: any[] = xml2jsonArr(text);
   const deep = (list = []) =>
     list.reduce(
-      (total, { tagName, content, attr, children }) => ({
+      (total, { tagName, content, attr, childList }) => ({
         ...total,
-        [tagName]: children?.length > 0 ? deep(children || []) : content
+        [tagName]: childList?.length > 0 ? deep(childList || []) : content
         // attribute: attr,  // * not support the key for now cause ui has not show it
       }),
       {}
@@ -228,13 +228,13 @@ export const text2table: (text: string) => uiData = text => {
     data: text
   };
   const textType = whatTextType(text);
-  result.textType = ['xml', 'json'].includes(textType) ? (textType as ApiBodyType) : ApiBodyType.Raw;
+  result.textType = textType === 'xml' ? ApiBodyType.XML : textType === 'json' ? ApiBodyType.JSON : ApiBodyType.Raw;
   switch (result.textType) {
-    case 'xml': {
+    case ApiBodyType.XML: {
       result.data = json2Table(xml2json(text));
       break;
     }
-    case 'json': {
+    case ApiBodyType.JSON: {
       result.data = json2Table(JSON.parse(result.data));
       break;
     }
@@ -279,19 +279,19 @@ export const table2json = function (arr: ApiEditBody[], inputOptions) {
         }
       }
       inputObject[tmpKey] = val.example;
-      if (val.children && val.children.length > 0) {
+      if (val.childList && val.childList.length > 0) {
         switch (val.type) {
           case 'array': {
             if (inputOptions.checkXmlAttr) {
               inputObject['@eo_attr'][tmpKey] = [inputObject['@eo_attr'][tmpKey]];
             }
             inputObject[tmpKey] = [{}];
-            loopFun(val.children, inputObject[tmpKey][0]);
+            loopFun(val.childList, inputObject[tmpKey][0]);
             break;
           }
           default: {
             inputObject[tmpKey] = {};
-            loopFun(val.children, inputObject[tmpKey]);
+            loopFun(val.childList, inputObject[tmpKey]);
             break;
           }
         }

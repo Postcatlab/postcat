@@ -1,4 +1,5 @@
-import { ApiBodyType, JsonRootType, RequestProtocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { RequestProtocol, RequestMethod, ApiBodyType, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+
 import { ApiData } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [

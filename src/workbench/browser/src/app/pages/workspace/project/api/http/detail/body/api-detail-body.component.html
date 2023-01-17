@@ -2,7 +2,7 @@
 <!-- JSON -->
 <!-- XML -->
 <eo-ng-table-pro
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  *ngIf="[TYPE_API_BODY['FormData'], TYPE_API_BODY.XML, TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray].includes(bodyType)"
   [columns]="listConf.columns"
   [setting]="listConf.setting"
   [(nzData)]="model"
@@ -10,11 +10,11 @@
 <!-- Raw -->
 <eo-monaco-editor
   [(code)]="model"
-  *ngIf="bodyType === 'raw'"
+  *ngIf="bodyType === TYPE_API_BODY.Raw"
   [config]="{ readOnly: true }"
   [autoType]="true"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<pre class="mx-2.5 mb-0 py-2.5" *ngIf="bodyType === 'binary'">{{ model }}</pre>
+<pre class="mx-2.5 mb-0 py-2.5" *ngIf="bodyType === TYPE_API_BODY.Binary">{{ model }}</pre>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiTableConf, IMPORT_MUI } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
@@ -9,7 +9,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ApiTestBody, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 const whatTextTypeMap = {
   xml: 'application/xml',
@@ -27,8 +27,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() supportType: string[];
   @Input() autoSetContentType = true;
   @Input() contentType: ContentType;
-  @Input() bodyType: ApiTestBodyType | string;
-  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
+  @Input() bodyType: ApiBodyType | number;
+  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | number> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @Output() readonly autoSetContentTypeChange: EventEmitter<boolean> = new EventEmitter();
@@ -45,6 +45,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
     API_BODY_TYPE: []
   };
+  IMPORT_MUI = IMPORT_MUI;
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json'
@@ -55,7 +59,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     type: 'string',
     value: ''
   };
-  private bodyType$: Subject<string> = new Subject<string>();
+  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
@@ -69,8 +73,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
 
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiTestBodyType.Binary:
-      case ApiTestBodyType.Raw: {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
         this.cache[type] = this.model;
         break;
       }
@@ -96,9 +100,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiTestBodyType)
-      .filter(val => this.supportType.includes(ApiTestBodyType[val]))
-      .map(val => ({ key: val, value: ApiTestBodyType[val] }));
+    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
+      .filter(val => this.supportType.includes(ApiBodyType[val]))
+      .map(val => ({ key: val, value: ApiBodyType[val] }));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -158,8 +162,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   private setModel() {
     switch (this.bodyType) {
-      case ApiTestBodyType.Binary:
-      case ApiTestBodyType.Raw: {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
         this.model = this.cache[this.bodyType] || '';
         break;
       }

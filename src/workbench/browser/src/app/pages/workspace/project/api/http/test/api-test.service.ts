@@ -4,7 +4,7 @@ import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
-import { RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, Protocol, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { ApiTestHistory } from '../../../../../../shared/services/storage/index.model';
 import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
@@ -15,10 +15,10 @@ export class ApiTestService {
       projectID: -1,
       groupID: 0,
       uri: '',
-      protocol: RequestProtocol.HTTP,
+      protocol: Protocol.HTTP,
       method: RequestMethod.POST,
       uuid: 0,
-      requestBodyType: 'raw',
+      requestBodyType: ApiBodyType.Raw,
       requestBodyJsonType: 'object',
       requestBody: '',
       beforeScript: '',

@@ -1,40 +1,42 @@
+import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+
 export interface ApiData {
   id?: number;
   uuid?: string;
   projectUuid?: string;
-  groupId: number;
-  groupName: string;
-  projectId: number;
-  lifecycle: number;
+  groupId?: number;
+  groupName?: string;
+  projectId?: number;
+  lifecycle?: number;
   name: string;
   uri: string;
   protocol: number;
-  status: number;
-  starred: number;
-  encoding: string;
-  isShared: number;
-  tag: string;
-  orderNum: number;
-  hashkey: string;
-  managerId: number;
-  managerName: string;
-  updateUserId: number;
-  updateUserName: string;
-  createUserId: number;
-  createUserName: string;
-  createTime: number;
-  updateTime: number;
-  introduction: Introduction;
-  relation: Relation;
+  status?: number;
+  starred?: number;
+  encoding?: string;
+  isShared?: number;
+  tag?: string;
+  orderNum?: number;
+  hashkey?: string;
+  managerId?: number;
+  managerName?: string;
+  updateUserId?: number;
+  updateUserName?: string;
+  createUserId?: number;
+  createUserName?: string;
+  createTime?: number;
+  updateTime?: number;
+  introduction?: Introduction;
+  relation?: Relation;
   apiAttrInfo: ApiAttrInfo;
-  dubboApiAttrInfo: DubboApiAttrInfo;
-  soapApiAttrInfo: SoapApiAttrInfo;
-  grpcApiAttrInfo: GrpcApiAttrInfo;
+  dubboApiAttrInfo?: DubboApiAttrInfo;
+  soapApiAttrInfo?: SoapApiAttrInfo;
+  grpcApiAttrInfo?: GrpcApiAttrInfo;
   requestParams: RequestParams;
   responseList: ResponseList[];
-  resultList: ResultList[];
-  writeHistory: number;
-  historyInfo: HistoryInfo;
+  resultList?: ResultList[];
+  writeHistory?: number;
+  historyInfo?: HistoryInfo;
 }
 
 export interface Introduction {
@@ -56,13 +58,13 @@ export interface Relation {
 }
 
 export interface ApiAttrInfo {
-  beforeInject: string;
-  afterInject: string;
-  authInfo: string;
-  requestMethod: number;
-  contentType: number;
-  createTime: number;
-  updateTime: number;
+  beforeInject?: string;
+  afterInject?: string;
+  authInfo?: string;
+  requestMethod: RequestMethod;
+  contentType: ApiBodyType | number;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface DubboApiAttrInfo {
@@ -117,40 +119,37 @@ export interface RequestParams {
 }
 
 export interface HeaderParam {
-  responseUuid: string;
+  responseUuid?: string;
   name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr;
-  childList: any[];
+  paramType?: number;
+  partType?: number;
+  structureId?: number;
+  structureParamId?: string;
+  contentType?: string;
+  isRequired?: number;
+  binaryRawData?: string;
+  description?: string;
+  orderNo?: number;
+  createTime?: number;
+  updateTime?: number;
+  paramAttr?: ParamAttr;
 }
 
 export interface ParamAttr {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue;
-  maxValue: MaxValue;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
+  minLength?: number;
+  maxLength?: number;
+  minValue?: number;
+  maxValue?: number;
+  paramLimit?: string;
+  paramValueList?: string;
+  paramMock?: string;
+  attr?: string;
+  structureIsHide?: number;
+  example?: string;
+  createTime?: number;
+  updateTime?: number;
+  dbArr?: string;
+  paramNote?: string;
 }
 
 export interface MinValue {}
@@ -173,25 +172,8 @@ export interface BodyParam {
   orderNo: number;
   createTime: number;
   updateTime: number;
-  paramAttr: ParamAttr2;
+  paramAttr: ParamAttr;
   childList: any[];
-}
-
-export interface ParamAttr2 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue2;
-  maxValue: MaxValue2;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
 }
 
 export interface MinValue2 {}
@@ -199,40 +181,21 @@ export interface MinValue2 {}
 export interface MaxValue2 {}
 
 export interface QueryParam {
-  responseUuid: string;
+  responseUuid?: string;
   name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr3;
-  childList: any[];
-}
-
-export interface ParamAttr3 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue3;
-  maxValue: MaxValue3;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
+  paramType?: number;
+  partType?: number;
+  structureId?: number;
+  structureParamId?: string;
+  contentType?: string;
+  isRequired?: number;
+  binaryRawData?: string;
+  description?: string;
+  orderNo?: number;
+  createTime?: number;
+  updateTime?: number;
+  paramAttr?: ParamAttr;
+  childList?: any[];
 }
 
 export interface MinValue3 {}
@@ -240,40 +203,22 @@ export interface MinValue3 {}
 export interface MaxValue3 {}
 
 export interface RestParam {
-  responseUuid: string;
+  responseUuid?: string;
   name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr4;
-  childList: any[];
-}
-
-export interface ParamAttr4 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue4;
-  maxValue: MaxValue4;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
+  paramType?: number;
+  partType?: number;
+  dataTypeValue?: string;
+  structureId?: number;
+  structureParamId?: string;
+  contentType?: string;
+  isRequired?: number;
+  binaryRawData?: string;
+  description?: string;
+  orderNo?: number;
+  createTime?: number;
+  updateTime?: number;
+  paramAttr?: ParamAttr;
+  childList?: any[];
 }
 
 export interface MinValue4 {}
@@ -281,84 +226,25 @@ export interface MinValue4 {}
 export interface MaxValue4 {}
 
 export interface ResponseList {
-  responseUuid: string;
-  apiUuid: string;
-  name: string;
-  httpCode: string;
-  contentType: number;
-  isDefault: number;
-  createTime: number;
-  updateTime: number;
+  responseUuid?: string;
+  apiUuid?: string;
+  name?: string;
+  httpCode?: string;
+  contentType?: number;
+  isDefault?: number;
+  createTime?: number;
+  updateTime?: number;
   responseParams: ResponseParams;
 }
 
 export interface ResponseParams {
-  headerParams: HeaderParam2[];
-  bodyParams: BodyParam2[];
-  queryParams: QueryParam2[];
-  restParams: RestParam2[];
-}
-
-export interface HeaderParam2 {
-  responseUuid: string;
-  name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr5;
-  childList: any[];
-}
-
-export interface ParamAttr5 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue5;
-  maxValue: MaxValue5;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
+  headerParams: HeaderParam[];
+  bodyParams: BodyParam[];
 }
 
 export interface MinValue5 {}
 
 export interface MaxValue5 {}
-
-export interface BodyParam2 {
-  responseUuid: string;
-  name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr6;
-  childList: any[];
-}
 
 export interface ParamAttr6 {
   minLength: number;

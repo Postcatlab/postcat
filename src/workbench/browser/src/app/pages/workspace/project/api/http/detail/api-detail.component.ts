@@ -2,14 +2,13 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
 
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { reverseObj } from '../../../../../../utils/index.utils';
 @Component({
   selector: 'api-detail',
@@ -21,9 +20,11 @@ export class ApiDetailComponent implements OnInit {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
   CONST = {
-    BODY_TYPE: reverseObj(ApiBodyType),
-    JSON_ROOT_TYPE: reverseObj(JsonRootType)
+    BODY_TYPE: reverseObj(ApiBodyType)
   };
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
   constructor(
     private route: ActivatedRoute,
     private effectService: EffectService,
@@ -50,7 +51,6 @@ export class ApiDetailComponent implements OnInit {
       if (uuid) {
         this.model = await this.effectService.getAPI([uuid]);
         this.originModel = cloneDeep(this.model);
-        console.log('this.model', this.model);
       } else {
         console.error(`Can't no find api`);
       }

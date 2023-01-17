@@ -14,7 +14,7 @@ export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiDa
   if (validate(apiData)) {
     ['requestBody', 'responseBody'].forEach(keyName => {
       if (
-        [ApiBodyType['Form-data'], ApiBodyType.JSON, ApiBodyType.XML].includes(apiData[`${keyName}Type`]) &&
+        [ApiBodyType['FormData'], ApiBodyType.JSON, ApiBodyType.XML].includes(apiData[`${keyName}Type`]) &&
         whatType(apiData[keyName]) !== 'array'
       ) {
         //Handle xml\formdata\json  data

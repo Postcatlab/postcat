@@ -1,39 +1,55 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
-import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
-import { ApiBodyType, ApiEditViewData, JsonRootType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
 import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
 export class ApiEditService {
-  constructor(private storage: StorageService, private apiEditUtil: ApiEditUtilService, private apiService: ProjectApiService) {}
-  getPureApi({ groupID }) {
+  constructor(
+    private storage: StorageService,
+    private effect: EffectService,
+    private apiEditUtil: ApiEditUtilService,
+    private apiService: ProjectApiService
+  ) {}
+  getPureApi({ groupId }): ApiData {
     return {
       name: '',
-      projectID: -1,
       uri: '/',
-      groupID,
-      protocol: RequestProtocol.HTTP,
-      method: RequestMethod.POST,
-      requestBodyType: ApiBodyType.JSON,
-      requestBodyJsonType: JsonRootType.Object,
-      requestBody: [],
-      queryParams: [],
-      restParams: [],
-      requestHeaders: [],
-      responseHeaders: [],
-      responseBodyType: ApiBodyType.JSON,
-      responseBodyJsonType: JsonRootType.Object,
-      responseBody: []
+      groupId,
+      protocol: Protocol.HTTP,
+      apiAttrInfo: {
+        requestMethod: RequestMethod.POST,
+        contentType: ApiBodyType.JSON
+      },
+      requestParams: {
+        headerParams: [],
+        bodyParams: [],
+        queryParams: [],
+        restParams: []
+      },
+      responseList: [
+        {
+          name: $localize`default`,
+          httpCode: '200',
+          contentType: ApiBodyType.JSON,
+          responseParams: {
+            headerParams: [],
+            bodyParams: []
+          }
+        }
+      ]
     };
   }
-  async getApi({ id, groupID }): Promise<ApiEditViewData> {
+  async getApi({ id, groupId }): Promise<ApiData> {
     let result = {} as ApiData;
     if (!id) {
       // From test page/copy api data;
       let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
-      const pureApi = this.getPureApi({ groupID });
+      const pureApi = this.getPureApi({ groupId });
       if (tmpApiData) {
         //Add From Test
         window.sessionStorage.removeItem('apiDataWillbeSave');
@@ -42,13 +58,13 @@ export class ApiEditService {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];
         });
-        result.projectID = pureApi.projectID;
       } else {
         //Add directly
         result = pureApi;
       }
     } else {
-      result = await this.apiService.get(id);
+      //@ts-ignore
+      result = await this.effect.getAPI(id);
     }
     return this.apiEditUtil.parseApiStorage2UI(result);
   }

@@ -52,7 +52,7 @@ registerLocaleData(zh);
     {
       provide: TABLE_PRO_CONFIG,
       useValue: {
-        childKey: 'children'
+        childKey: 'childList'
       }
     },
     {
