@@ -2,17 +2,17 @@ import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { from, fromEvent, Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
@@ -66,7 +66,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    */
   async init() {
     this.initTimes++;
-    const id = Number(this.route.snapshot.queryParams.uuid);
+    const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId || 0);
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.apiEdit.getPureApi({ groupId });
@@ -82,7 +82,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
-    pcConsole.log(eoDeepCopy(this.model));
     //Storage origin api data
     if (!this.initialModel) {
       if (!id) {
@@ -139,27 +138,30 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
+
     let formData: any = { ...this.model, ...this.validateForm.value };
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatSavingApiData(formData);
-    const result: StorageRes = await this.apiEdit.editApi(formData);
-    if (result.status === StorageResStatus.success) {
-      this.message.success(title);
-      //@ts-ignore
-      this.initialModel = this.apiEditUtil.formatEditingApiData({ ...this.model, ...this.validateForm.value });
-      if (busEvent === 'addApi') {
-        this.router.navigate(['/home/workspace/project/api/http/detail'], {
-          queryParams: {
-            pageID: Number(this.route.snapshot.queryParams.pageID),
-            uuid: result.data.uuid
-          }
-        });
-      }
-      this.messageService.send({ type: `${busEvent}Success`, data: result.data });
-    } else {
+    pcConsole.log('saveAPI', formData);
+    return;
+    const [result, err] = await this.apiEdit.editApi(formData);
+    if (err) {
       this.message.error($localize`Failed Operation`);
+      return;
     }
+    // Add success
+    this.message.success(title);
+    this.initialModel = this.apiEditUtil.formatEditingApiData({ ...this.model, ...this.validateForm.value });
+    if (busEvent === 'addApi') {
+      this.router.navigate(['/home/workspace/project/api/http/detail'], {
+        queryParams: {
+          pageID: Number(this.route.snapshot.queryParams.pageID),
+          uuid: result.uuid
+        }
+      });
+    }
+    this.messageService.send({ type: `${busEvent}Success`, data: result });
     this.afterSaved.emit(this.initialModel);
   }
   emitChangeFun() {

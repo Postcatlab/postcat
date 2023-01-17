@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { RequestProtocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
 
 import { ModalService } from '../../../../../../shared/services/modal.service';
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 @Injectable()
 export class ApiEditUtilService {
@@ -20,11 +21,19 @@ export class ApiEditUtilService {
   private parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
     result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(tableName => {
-      if (whatType(result[tableName]) !== 'array') {
+    ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
+      if (whatType(result.requestParams[tableName]) !== 'array') {
         return;
       }
-      result[tableName] = filterTableData(result[tableName], {
+      result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
+        filterFn: filterArrFun
+      });
+    });
+    ['bodyParams', 'headerParams'].forEach(tableName => {
+      if (whatType(result.responseList[0].responseParams[tableName]) !== 'array') {
+        return;
+      }
+      result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
         filterFn: filterArrFun
       });
     });
@@ -37,8 +46,8 @@ export class ApiEditUtilService {
    * @param formData
    * @returns apiData
    */
-  formatEditingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, val => val?.name || val?.description || val?.example);
+  formatEditingApiData(formData: ApiData): ApiData {
+    return this.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val?.description || val.paramAttr?.example);
   }
   /**
    * Handle api data to be saved

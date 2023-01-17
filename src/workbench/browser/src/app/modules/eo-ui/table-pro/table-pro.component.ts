@@ -18,7 +18,7 @@ import {
 import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
-import { filterTableData, getTreeTotalCount } from '../../../utils/tree/tree.utils';
+import { filterTableData, generateQuoteKeyValue, getTreeTotalCount } from '../../../utils/tree/tree.utils';
 import { ColumnItem, IconBtn, TableProSetting } from './table-pro.model';
 import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './table-pro.token';
 @Component({
@@ -126,12 +126,22 @@ export class EoTableProComponent implements OnInit, OnChanges {
           this.nzData.push(eoDeepCopy(this.nzDataItem));
         }
       }
-      /**
-       * Table column key has quote child attribute,such as 'a.b.c'
-       */
       const hasQuoteKey = this.columns.some(col => col.key?.includes('.'));
-      if (hasQuoteKey) {
-        this.nzData = this.generateQuoteKeyValue(this.nzData);
+      if (hasQuoteKey && !this.setting.isEdit) {
+        const chains = this.columns
+          .filter(col => col.key?.includes('.'))
+          .map(val => {
+            const arr = val.key.split('.');
+            const valResult = {
+              arr,
+              str: val.key,
+              name: arr.at(-1)
+            };
+            return valResult;
+          });
+        this.nzData = generateQuoteKeyValue(chains, this.nzData, {
+          childKey: this.tableConfig.childKey
+        });
       }
     }
   }
@@ -216,39 +226,6 @@ export class EoTableProComponent implements OnInit, OnChanges {
     Promise.resolve().then(() => {
       this.initConfig();
     });
-  }
-  private getValueByChian(chain, object) {
-    return chain.reduce((o, i) => o?.[i], object);
-  }
-  private generateQuoteKeyValue(nzData) {
-    let result = eoDeepCopy(nzData) || [];
-    const chains = this.columns
-      .filter(col => col.key?.includes('.'))
-      .map(val => {
-        const arr = val.key.split('.');
-        const valResult = {
-          arr,
-          str: val.key,
-          name: arr.at(-1)
-        };
-        return valResult;
-      });
-    const loop = items => {
-      items.forEach((item, index) => {
-        chains.forEach(chain => {
-          const value = this.getValueByChian(chain.arr, item);
-          if (value) {
-            item[chain.str] = value;
-          }
-        });
-        if (item[this.tableConfig.childKey]) {
-          item[this.tableConfig.childKey] = loop(item[this.tableConfig.childKey]);
-        }
-      });
-      return items;
-    };
-    result = loop(result);
-    return result;
   }
 
   private initConfig() {

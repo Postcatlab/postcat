@@ -13,6 +13,7 @@ import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { GroupApiDataModel } from '../../../../../../../shared/models';
+import { ProjectApiService } from '../../../api.service';
 
 @Component({
   selector: 'eo-api-group-tree',
@@ -67,6 +68,7 @@ export class ApiGroupTreeComponent implements OnInit {
     public electron: ElectronService,
     public store: StoreService,
     private effect: EffectService,
+    private projectApi: ProjectApiService,
     private modalService: ModalService,
     private router: Router,
     private message: EoNgFeedbackMessageService
@@ -200,7 +202,7 @@ export class ApiGroupTreeComponent implements OnInit {
       }
       case 'addAPI': {
         this.router.navigate([`${prefix}/http/edit`], {
-          queryParams: { groupID: inArg.node?.origin.key }
+          queryParams: { groupId: inArg.node?.origin.key }
         });
         break;
       }
@@ -232,18 +234,14 @@ export class ApiGroupTreeComponent implements OnInit {
             apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
           }</strong> ? You cannot restore it once deleted!`,
           nzOnOk: () => {
-            this.effect.deleteAPI(apiInfo.uuid);
+            this.projectApi.delete(apiInfo.uuid);
           }
         });
         break;
       }
       case 'copyApi': {
         const { uuid, createdAt, ...apiData } = inArg.node.origin;
-        apiData.name += ' Copy';
-        const result = await this.effect.createAPI([apiData]);
-        this.router.navigate(['/home/workspace/project/api/http/edit'], {
-          // queryParams: { pageID: Date.now(), uuid: result.data.uuid }
-        });
+        this.projectApi.copy(apiData);
         break;
       }
     }

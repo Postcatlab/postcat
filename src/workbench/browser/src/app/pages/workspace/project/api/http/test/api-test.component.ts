@@ -40,6 +40,7 @@ import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
 import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
+import { ProjectApiService } from '../../api.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 
@@ -114,7 +115,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     private apiTest: ApiTestService,
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
-    private effectService: EffectService,
+    private projectApi: ProjectApiService,
     private lang: LanguageService,
     private elementRef: ElementRef
   ) {
@@ -175,7 +176,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         requestInfo = history.testData;
         this.restoreResponseFromHistory(history.response);
       } else {
-        requestInfo = await this.effectService.getAPI([uuid]);
+        requestInfo = await this.projectApi.get(uuid);
         this.model.testResult = {
           response: {},
           request: {}
