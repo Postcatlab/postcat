@@ -134,7 +134,7 @@ export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
    *
    * @type {string|number}
    */
-  apiDataID: string | number;
+  apiUuid: string;
 }
 
 export type ApiMockEntity = Mock;

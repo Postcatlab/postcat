@@ -18,7 +18,7 @@ export class HistoryComponent implements OnInit {
   constructor(private router: Router, public store: StoreService, private effect: EffectService) {}
 
   ngOnInit(): void {
-    this.effect.getHistory();
+    this.effect.getHistoryList();
   }
 
   gotoTestHistory(e) {
@@ -27,7 +27,7 @@ export class HistoryComponent implements OnInit {
     const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/workspace/project/api/${protocol}/test`], {
       queryParams: {
-        uuid: `history_${origin.uuid}`
+        uuid: `history_${origin.id}`
       }
     });
   }
