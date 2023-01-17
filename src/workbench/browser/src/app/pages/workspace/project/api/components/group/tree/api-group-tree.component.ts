@@ -8,6 +8,7 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
@@ -31,6 +32,7 @@ export class ApiGroupTreeComponent implements OnInit {
   searchValue = '';
   isLoading = true;
   isEdit: boolean;
+  apiGroupTree = [];
   apiItemsMenu = [
     {
       title: $localize`Edit`,
@@ -78,6 +80,9 @@ export class ApiGroupTreeComponent implements OnInit {
     this.isEdit = !this.store.isShare;
     // * get group data from store
     this.effect.getGroupList();
+    autorun(() => {
+      this.apiGroupTree = this.store.getApiGroupTree;
+    });
   }
   getRequestMethodText(node) {
     return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
