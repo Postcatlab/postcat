@@ -304,7 +304,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.model.request.uuid) {
       return false;
     }
-    if (!this.initialModel.request || !this.model.request) {
+    if (!this.initialModel?.request || !this.model.request) {
       return false;
     }
     // console.log(
