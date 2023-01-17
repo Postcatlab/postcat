@@ -80,7 +80,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList();
   }
   getRequestMethodText(node) {
-    return this.requestMethodMap[node.origin?.protocol];
+    return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
   }
   renderRequestMethodText(node) {
     return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);

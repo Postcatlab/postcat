@@ -1,4 +1,4 @@
-<div class="test_wrap" *ngIf="model.request.apiAttrInfo">
+<div class="test_wrap" *ngIf="model.request?.apiAttrInfo">
   <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
       <eo-ng-input-group nzCompact>

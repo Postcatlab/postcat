@@ -455,7 +455,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private initContentType() {
-    const contentType = this.model.request.apiAttrInfo.contentType;
+    const contentType = this.model.request?.apiAttrInfo.contentType;
     if (contentType === ApiBodyType.Raw) {
       this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
     }
@@ -496,9 +496,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.model = this.resetModel();
     }
     const controls = {};
-    ['method', 'uri'].forEach(name => {
-      controls[name] = [this.model.request[name], [Validators.required]];
-    });
+    controls['uri'] = [this.model.request.uri, [Validators.required]];
+    controls['method'] = [this.model.request.apiAttrInfo?.requestMethod, [Validators.required]];
     this.validateForm = this.fb.group(controls);
   }
 }

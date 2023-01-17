@@ -36,7 +36,6 @@ import { ModalService } from '../../../../shared/services/modal.service';
             <eo-iconpark-icon name="add"></eo-iconpark-icon>
           </button>
         </div>
-        -->
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.workSpaceUuid)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
           <li
