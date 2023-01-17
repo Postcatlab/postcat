@@ -10,7 +10,6 @@ import { lastValueFrom } from 'rxjs';
 
 import { WebExtensionService } from './webExtension.service';
 
-import { version } from 'os';
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'

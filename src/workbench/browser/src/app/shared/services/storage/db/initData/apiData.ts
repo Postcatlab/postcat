@@ -101,7 +101,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
             apiUuid: '',
             name: '',
             httpCode: '',
-            contentType: 0,
+            contentType: 2,
             isDefault: 0,
             createTime: '',
             updateTime: '',

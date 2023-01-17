@@ -206,12 +206,12 @@ export class ApiTabService {
     if (model && !isEmptyObj(model)) {
       //Set title/method
       replaceTab.title = model.name;
-      replaceTab.extends.method = requestMethodMap[model.method];
+      replaceTab.extends.method = requestMethodMap[model.apiAttrInfo.requestMethod];
       if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
           replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
-          replaceTab.extends.method = requestMethodMap[model.request.method];
+          replaceTab.extends.method = requestMethodMap[model.request.apiAttrInfo.requestMethod];
         }
         //Only Untitle request need set url to tab title
         const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;

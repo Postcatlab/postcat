@@ -74,16 +74,12 @@
         <ng-template #responseParamsHeader>
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Response</span>
-            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList[0]?.responseParams?.bodyParams[0]?.contentType] }}</nz-tag>
+            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList[0]?.contentType] }}</nz-tag>
             <nz-tag
-              *ngIf="
-                [TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList[0]?.responseParams?.bodyParams[0]?.contentType)
-              "
+              *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList[0]?.contentType)"
               nzColor="default"
               i18n
-              >{{
-                model.responseList[0]?.responseParams?.bodyParams[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object'
-              }}</nz-tag
+              >{{ model.responseList[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
             >
           </div>
         </ng-template>

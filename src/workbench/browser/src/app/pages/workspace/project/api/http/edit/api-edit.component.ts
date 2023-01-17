@@ -5,6 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
@@ -50,8 +51,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
-    private apiEdit: ApiEditService
+    private apiEdit: ApiEditService,
+    private effect: EffectService
   ) {
+    this.initShortcutKey();
     this.initBasicForm();
   }
   /**
@@ -87,9 +90,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
+    this.model = this.apiEditUtil.formatStorageApiDataToUI(this.model);
     this.initBasicForm();
     this.watchBasicForm();
-    this.initShortcutKey();
     this.changegroupId$.next(this.model.groupId);
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
@@ -137,7 +140,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     let formData: any = { ...this.model, ...this.validateForm.value };
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
-    formData = this.apiEditUtil.formatSavingApiData(formData);
+    formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
     pcConsole.log('saveAPI', formData);
     return;
     const [result, err] = await this.apiEdit.editApi(formData);
@@ -205,6 +208,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false
       }
     ];
+    console.log(this.effect.getGroupList());
     // this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
     //   if (result.status === StorageResStatus.success) {
     //     [].concat(result.data).forEach((item: Group) => {

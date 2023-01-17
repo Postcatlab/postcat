@@ -233,7 +233,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.checkForm()) {
       return;
     }
-    const apiData = this.apiTestUtil.formatSavingApiData({
+    const apiData = this.apiTestUtil.formatUIApiDataToStorage({
       history: this.model.testResult,
       testData: { ...this.model.request }
     });

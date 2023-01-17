@@ -157,23 +157,22 @@ export interface ParamAttr {
 }
 
 export interface BodyParam {
-  responseUuid: string;
+  responseUuid?: string;
   name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
+  paramType?: number;
+  partType?: number;
+  dataType?: number;
+  dataTypeValue?: string;
+  structureId?: number;
+  structureParamId?: string;
   isRequired: number;
-  binaryRawData: string;
+  binaryRawData?: string;
   description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
+  orderNo?: number;
+  createTime?: number;
+  updateTime?: number;
   paramAttr: ParamAttr;
-  childList: BodyParam[];
+  childList?: BodyParam[];
 }
 
 export interface QueryParam {
