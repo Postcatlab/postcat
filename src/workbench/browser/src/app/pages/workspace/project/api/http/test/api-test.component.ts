@@ -508,12 +508,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           contentType: ContentTypeEnum.RAW,
           requestMethod: 0
         },
-        requestParams: {
-          headerParams: [],
-          bodyParams: [],
-          queryParams: [],
-          restParams: []
-        },
+        requestParams: {},
         script: {
           beforeScript: '',
           afterScript: ''

@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiTableConf, IMPORT_MUI } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiTableConf, API_BODY_TYPE, IMPORT_MUI } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
-import { pairwise, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { pairwise, takeUntil } from 'rxjs/operators';
 
 import { ApiTestBody, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
@@ -24,7 +24,7 @@ const whatTextTypeMap = {
 })
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
-  @Input() supportType: string[];
+  @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() autoSetContentType = true;
   @Input() contentType: ContentType;
   @Input() bodyType: ApiBodyType | number;
@@ -100,9 +100,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.values(ApiBodyType)
-      .filter(val => this.supportType.includes(ApiBodyType[val]))
-      .map(val => ({ key: ApiBodyType[val].charAt(0).toLocaleLowerCase() + ApiBodyType[val].slice(1), value: val }));
+    this.CONST.API_BODY_TYPE = API_BODY_TYPE.filter(val => this.supportType.includes(val.value));
   }
   ngOnDestroy() {
     this.destroy$.next();

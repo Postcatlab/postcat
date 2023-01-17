@@ -78,7 +78,7 @@
           (bodyTypeChange)="changeBodyType($event)"
           [(model)]="model.request.requestParams.bodyParams"
           (modelChange)="emitChangeFun('requestBody')"
-          [supportType]="['FormData', 'Raw', 'Binary']"
+          [supportType]="[TYPE_API_BODY.FormData, TYPE_API_BODY.Raw, TYPE_API_BODY.Binary]"
         >
         </eo-api-test-body>
       </eo-ng-tab>
