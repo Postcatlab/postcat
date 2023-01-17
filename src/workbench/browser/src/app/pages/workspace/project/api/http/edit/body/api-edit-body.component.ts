@@ -79,6 +79,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.rawChange$.next(code);
   }
   changeBodyType(type?) {
+    console.log('changeBodyType');
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.setModel();
@@ -95,7 +96,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes) {
     if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
       this.beforeChangeBodyByType(this.bodyType);
-      //TODO when body type changes,it should not be set model
       this.setModel();
       this.initListConf();
     }
@@ -143,19 +143,18 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    if ([ApiBodyType.XML, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
+    if ([ApiBodyType.FormData, ApiBodyType.XML, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
         this.model.push(eoDeepCopy(this.itemStructure));
       }
     }
     if (this.bodyType === ApiBodyType.XML) {
       if (!this.model.length) {
-        this.model.push(
-          Object.assign(eoDeepCopy(this.itemStructure), {
-            type: 'object',
-            name: 'root'
-          })
-        );
+        const rootItem: BodyParam = Object.assign(eoDeepCopy(this.itemStructure), {
+          dataType: ApiParamsTypeFormData.object,
+          name: 'root'
+        });
+        this.model.push(rootItem);
       }
     }
   }

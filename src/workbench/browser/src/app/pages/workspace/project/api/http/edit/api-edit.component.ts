@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { ApiData, Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
+import { autorun, toJS } from 'mobx';
+import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
@@ -53,7 +54,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private apiEdit: ApiEditService,
-    private effect: EffectService,
     private store: StoreService
   ) {
     this.initShortcutKey();
@@ -80,7 +80,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.model = result;
       }
     }
-    pcConsole.log('apiedit', this.model);
+    pcConsole.log('api-edit', this.model);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
     //Storage origin api data
@@ -92,7 +92,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    this.model = this.apiEditUtil.formatStorageApiDataToUI(this.model);
     this.initBasicForm();
     this.watchBasicForm();
     this.changegroupId$.next(this.model.groupId);
@@ -198,50 +197,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.model.requestParams.restParams = [...generateRestFromUrl(url, this.model.requestParams.restParams)];
   }
   getApiGroup() {
-    // ! Sooner or later need to refactor
-    this.groups = this.store.getGroupTree;
-    const treeItems: any = [
-      {
-        title: $localize`Root directory`,
-        // ! actually is 0, but 0 will hidden in nz component, so use -1 replace 0
-        key: '-1',
-        weight: 0,
-        parentID: '0',
-        isLeaf: false
-      }
-    ];
-    console.log(this.effect.getGroupList());
-    // this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
-    //   if (result.status === StorageResStatus.success) {
-    //     [].concat(result.data).forEach((item: Group) => {
-    //       treeItems.push({
-    //         title: item.name,
-    //         key: item.uuid.toString(),
-    //         weight: item.weight || 0,
-    //         parentID: (item.parentID || 0).toString(),
-    //         isLeaf: false
-    //       });
-    //     });
-    //     treeItems.sort((a, b) => a.weight - b.weight);
-    //   }
-    //   listToTree(treeItems, this.groups, '0');
-    //   this.resetgroupId();
-    // });
-  }
-  /**
-   * Reset Group ID after group list load
-   * Resolve the problem that groupId change but view not change
-   */
-  private resetgroupId() {
-    let groupId = -1;
-    if (this.model && this.model.groupId) {
-      groupId = this.model.groupId;
-      this.model.groupId = 0;
-    }
-    setTimeout(() => {
-      this.model.groupId = groupId;
-      this.changegroupId$.next(groupId);
-    }, 0);
+    autorun(() => {
+      this.groups = this.store.getGroupTree;
+    });
   }
   /**
    * Init basic form,such as url,method
@@ -252,12 +210,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.model = {} as ApiData;
     }
     const controls = {
-      requestMethod: [this.model?.apiAttrInfo?.requestMethod, [Validators.required]]
+      requestMethod: [this.model?.apiAttrInfo?.requestMethod, [Validators.required]],
+      groupId: [this.model.groupId || 0, [Validators.required]]
     };
-    ['uri', 'groupId', 'name'].forEach(name => {
-      controls[name] = [this.model[name], [Validators.required]];
+    ['uri', 'name'].forEach(name => {
+      controls[name] = [this.model[name] || '', [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
+    pcConsole.log('initBasicForm', controls);
   }
 
   private watchBasicForm() {
