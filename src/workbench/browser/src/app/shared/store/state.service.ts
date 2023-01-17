@@ -177,7 +177,7 @@ export class StoreService {
 
   // ? user && auth
   @computed get isLogin() {
-    return !!this.userProfile?.username;
+    return !!this.userProfile?.userName;
   }
   @computed get getUserProfile() {
     return this.userProfile;
@@ -305,9 +305,9 @@ export class StoreService {
   }
 
   @action setLoginInfo(data = null) {
-    this.loginInfo = data;
-    StorageUtil.set('accessToken', data.accessToken);
-    StorageUtil.set('refreshToken', data.refreshToken);
+    this.loginInfo = { accessToken: data.jwt, refreshToken: data.rjwt };
+    StorageUtil.set('accessToken', data.jwt);
+    StorageUtil.set('refreshToken', data.rjwt);
   }
 
   @action clearAuth() {

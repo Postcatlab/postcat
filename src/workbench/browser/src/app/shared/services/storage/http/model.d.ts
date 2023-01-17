@@ -69,8 +69,8 @@ declare namespace API {
     /**
      * 用户名
      */
-    username: string;
-    workspaces: Workspace[];
+    userName: string;
+    userNickName: string;
   }
 
   /**
