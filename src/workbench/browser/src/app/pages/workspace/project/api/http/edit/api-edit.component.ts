@@ -5,8 +5,6 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
@@ -50,10 +48,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
-    private store: StoreService,
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
-    private storage: StorageService,
     private apiEdit: ApiEditService
   ) {
     this.initBasicForm();

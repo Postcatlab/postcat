@@ -34,15 +34,6 @@ export enum ContentType {
   JSON_ARRAY = 6
 }
 
-export enum ApiBodyType {
-  FormData = 0,
-  Raw = 1,
-  JSON = 2,
-  JSONArray = 6,
-  XML = 3,
-  Binary = 4
-}
-
 export enum Protocol {
   HTTP = 0,
   HTTPS = 1,
@@ -318,6 +309,36 @@ export const DEFAULT_HEADER = [
   { title: 'Connection', restricted: true }
 ];
 
+export enum ApiBodyType {
+  FormData = 0,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Raw = 1,
+  Binary = 4
+}
+export const API_BODY_TYPE = [
+  {
+    key: 'Form-Data',
+    value: ApiBodyType.FormData
+  },
+  {
+    key: 'JSON',
+    value: ApiBodyType.JSON
+  },
+  {
+    key: 'XML',
+    value: ApiBodyType.XML
+  },
+  {
+    key: 'Raw',
+    value: ApiBodyType.Raw
+  },
+  {
+    key: 'Binary',
+    value: ApiBodyType.Binary
+  }
+];
 /**
  * Json Root Type
  *

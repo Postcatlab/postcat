@@ -5,6 +5,7 @@ import {
   ApiBodyType,
   ApiEditBody,
   ApiTableConf,
+  API_BODY_TYPE,
   IMPORT_MUI,
   JsonRootType
 } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
@@ -82,9 +83,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    this.API_BODY_TYPE = Object.values(ApiBodyType)
-      .filter(val => this.supportType.includes(ApiBodyType[val]))
-      .map(val => ({ key: val, value: ApiBodyType[val] }));
+    this.API_BODY_TYPE = API_BODY_TYPE.filter(val => this.supportType.includes(val.value));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -93,6 +92,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes) {
     if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
       this.beforeChangeBodyByType(this.bodyType);
+      //TODO when body type changes,it should not be set model
       this.setModel();
       this.initListConf();
     }
@@ -129,6 +129,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Add last row| RestoreData From cache| XML first row type must be object
    */
   private setModel() {
+    console.log(this.bodyType);
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
