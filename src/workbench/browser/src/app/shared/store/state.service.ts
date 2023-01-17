@@ -43,7 +43,7 @@ export class StoreService {
   @observable private currentWorkspaceUuid = StorageUtil.get<string>('currentWorkspaceUuid');
   @observable private currentWorkspace: API.Workspace;
   //  Local workspace always keep in last
-  @observable private workspaceList: API.Workspace[];
+  @observable private workspaceList: API.Workspace[] = [];
 
   // ? project
   @observable private projectList: Project[] = [];
@@ -132,7 +132,7 @@ export class StoreService {
   }
   // ? data source
   @computed get isLocal() {
-    return !this.isShare && this.currentWorkspace?.isLocal;
+    return !!(!this.isShare && this.currentWorkspace?.isLocal);
   }
   @computed get mockUrl() {
     const mockUrl = window.electron?.getMockUrl?.();
