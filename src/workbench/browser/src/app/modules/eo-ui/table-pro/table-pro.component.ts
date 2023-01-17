@@ -293,6 +293,12 @@ export class EoTableProComponent implements OnInit, OnChanges {
         case 'checkbox': {
           header.type = 'checkbox';
           body.type = 'checkbox';
+          if (col.enums?.length) {
+            body.valueRef = {
+              true: col.enums[0].value,
+              false: col.enums[1].value
+            };
+          }
           break;
         }
         case 'inputNumber': {

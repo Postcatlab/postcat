@@ -109,8 +109,8 @@ export class ApiTestUtilService {
    * @param inData.testData - test request info
    * @returns
    */
-  formatSavingApiData(inData): ApiData {
-    // console.log('formatSavingApiData', eoDeepCopy(inData));
+  formatUIApiDataToStorage(inData): ApiData {
+    // console.log('formatUIApiDataToStorage', eoDeepCopy(inData));
     const result = {
       ...inData.testData,
       responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],

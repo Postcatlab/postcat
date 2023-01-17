@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { RequestProtocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { omit } from 'lodash-es';
 
 import { ModalService } from '../../../../../../shared/services/modal.service';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
@@ -20,7 +18,7 @@ export class ApiEditUtilService {
 
   private parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
+    // result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (whatType(result.requestParams[tableName]) !== 'array') {
         return;
@@ -55,7 +53,24 @@ export class ApiEditUtilService {
    * @param formData
    * @returns apiData
    */
-  formatSavingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, val => val?.name);
+  formatUIApiDataToStorage(formData): ApiData {
+    const result = this.parseApiUI2Storage(formData, val => {
+      val.paramAttr.example = val['paramAttr.example'];
+      delete val['paramAttr.example'];
+      return val?.name;
+    });
+    return result;
+  }
+  /**
+   * Handle storage api data to ui
+   *
+   * @param apiData
+   * @returns formData
+   */
+  formatStorageApiDataToUI(apiData) {
+    return this.parseApiUI2Storage(apiData, val => {
+      val['paramAttr.example'] = val.paramAttr.example || '';
+      return true;
+    });
   }
 }

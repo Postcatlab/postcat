@@ -30,9 +30,9 @@ export class ApiTableService {
       };
       if (opts.isEdit) {
         modalConf.nzOnOk = () => {
-          const model = modal.componentInstance.model[0];
+          const model = eoDeepCopy(modal.componentInstance.model);
           model.paramAttr.paramValueList = JSON.stringify(
-            filterTableData(model.enum, {
+            filterTableData(model.paramAttr.paramValueList, {
               primaryKey: 'value'
             })
           );
@@ -243,7 +243,7 @@ export class ApiTableService {
         key: 'type',
         width: 150
       },
-      required: {
+      isRequired: {
         type: 'checkbox',
         left: true,
         key: 'isRequired',
@@ -277,11 +277,11 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['required', 'name', 'type', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'type', 'value', 'editOperate'];
         break;
       }
       default: {
-        columnsArr = ['required', 'name', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'value', 'editOperate'];
         break;
       }
     }

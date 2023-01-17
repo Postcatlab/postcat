@@ -280,18 +280,18 @@ export class EffectService {
     if (gErr) {
       return;
     }
-    console.log('Group 数据', groupList);
+    // console.log('Group 数据', groupList);
     // * get api list data
     const [apiList, aErr] = await this.api.api_apiDataList({});
     if (aErr) {
       return;
     }
-    console.log('API 数据', apiList);
+    // console.log('API 数据', apiList);
     const rootGroupIndex = groupList.findIndex(n => n.depth === 0);
     this.store.setRootGroup(groupList.splice(rootGroupIndex, 1).at(0));
     // * merge api & group
     const apiGroupTree = this.genApiGroupTree(groupList, apiList, this.store.getRootGroup.id);
-    console.log('merge api & group', apiGroupTree);
+    // console.log('merge api & group', apiGroupTree);
     this.store.setApiGroupTree(apiGroupTree);
   }
   updateMock() {
