@@ -97,12 +97,14 @@ export class EffectService {
     // TODO localworkspace no need to set permission
     {
       // * update workspace auth
-      const [data, err]: any = await this.api.api_workspaceUnkown({});
+      const [data, err]: any = await this.api.api_workspaceRoles({});
       if (err) {
         return;
       }
-      this.store.setPermission(data.permissions, 'workspace');
-      this.store.setRole(data.role.name, 'workspace');
+      const { roles, permissions } = data;
+      console.log('yyy', roles, permissions);
+      this.store.setPermission(permissions, 'workspace');
+      this.store.setRole(roles, 'workspace');
     }
   }
   async changeWorkspace(workspaceID: string) {

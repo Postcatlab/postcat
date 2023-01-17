@@ -631,7 +631,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiTestHistory
-        .bulkRead({ projectUuid, workSpaceUuid, page, pageSize })
+        .page({ projectUuid, workSpaceUuid, page, pageSize })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiTestHistory - list 接口调用成功 %c', SuccessStyle, '');
