@@ -5,7 +5,6 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -255,25 +254,6 @@ export class EffectService {
     this.store.setHistory(res.data?.items);
   }
 
-  private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {
-    const apiDataFilters = apiDatas.filter(apiData => {
-      apiData['title'] = apiData.name;
-      apiData['key'] = apiData['apiUuid'];
-      apiData['isLeaf'] = true;
-      return apiData.groupId === groupId;
-    });
-    const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
-
-    return [
-      ...apiGroupFilters.map(group => ({
-        ...group,
-        title: group.name,
-        key: group.id,
-        children: this.genApiGroupTree(apiGroups, apiDatas, group.id)
-      })),
-      ...apiDataFilters
-    ];
-  }
   async getGroupList() {
     // * get group list data
     const [groupList = [], gErr] = await this.api.api_groupList({});
@@ -289,10 +269,9 @@ export class EffectService {
     // console.log('API 数据', apiList);
     const rootGroupIndex = groupList.findIndex(n => n.depth === 0);
     this.store.setRootGroup(groupList.splice(rootGroupIndex, 1).at(0));
-    // * merge api & group
-    const apiGroupTree = this.genApiGroupTree(groupList, apiList, this.store.getRootGroup.id);
-    // console.log('merge api & group', apiGroupTree);
-    this.store.setApiGroupTree(apiGroupTree);
+    // * set api & group list
+    this.store.setGroupList(groupList);
+    this.store.setApiList(apiList);
   }
   updateMock() {
     // * update mock

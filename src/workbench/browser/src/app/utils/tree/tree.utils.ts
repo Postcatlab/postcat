@@ -1,7 +1,9 @@
+import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import omitDeep from 'omit-deep-lodash';
 
 import { GroupTreeItem } from '../../shared/models';
 import { eoDeepCopy, whatType } from '../index.utils';
+
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
@@ -175,3 +177,23 @@ export const fieldTypeMap = new Map<string, any>([
   ['null', null],
   ['string', 'default_value']
 ]);
+
+export const genApiGroupTree = (apiGroups: Group[], apiDatas: ApiData[], groupId: number) => {
+  const apiDataFilters = apiDatas.filter(apiData => {
+    apiData['title'] = apiData.name;
+    apiData['key'] = apiData['apiUuid'];
+    apiData['isLeaf'] = true;
+    return apiData.groupId === groupId;
+  });
+  const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
+
+  return [
+    ...apiGroupFilters.map(group => ({
+      ...group,
+      title: group.name,
+      key: group.id,
+      children: genApiGroupTree(apiGroups, apiDatas, group.id)
+    })),
+    ...apiDataFilters
+  ];
+};

@@ -5,6 +5,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
@@ -21,7 +22,7 @@ export class StoreService {
   // ? api & group(includes api) & mock
   @observable.shallow private currentAPI = {};
   @observable.shallow private currentMock = {};
-  @observable.shallow private apiGroupTree = [];
+  @observable private apiList = [];
 
   // ? history
   @observable private testHistory = [];
@@ -38,6 +39,7 @@ export class StoreService {
 
   // ? group
   @observable private rootGroup: Group;
+  @observable private groupList: Group[] = [];
 
   // ? workspace
   @observable private currentWorkspaceUuid = StorageUtil.get<string>('currentWorkspaceUuid');
@@ -100,6 +102,9 @@ export class StoreService {
   @computed get getTestHistory() {
     return this.testHistory.reverse().map(n => ({ ...n, title: n.request?.uri, key: n.uuid }));
   }
+  @computed get getGroupTree() {
+    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
+  }
 
   // ? router
   @computed get getUrl() {
@@ -122,7 +127,7 @@ export class StoreService {
     return this.rootGroup;
   }
   @computed get getApiGroupTree() {
-    return this.apiGroupTree;
+    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
   }
   @computed get getEnvList() {
     return this.envList;
@@ -260,8 +265,12 @@ export class StoreService {
     this.rootGroup = group;
   }
 
-  @action setApiGroupTree(tree = []) {
-    this.apiGroupTree = tree;
+  @action setApiList(list = []) {
+    this.apiList = list;
+  }
+
+  @action setGroupList(list = []) {
+    this.groupList = list;
   }
 
   // ? share

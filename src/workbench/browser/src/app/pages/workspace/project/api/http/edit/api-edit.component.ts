@@ -6,6 +6,7 @@ import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
@@ -52,7 +53,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private apiEdit: ApiEditService,
-    private effect: EffectService
+    private effect: EffectService,
+    private store: StoreService
   ) {
     this.initShortcutKey();
     this.initBasicForm();
@@ -197,7 +199,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   getApiGroup() {
     // ! Sooner or later need to refactor
-    this.groups = [];
+    this.groups = this.store.getGroupTree;
     const treeItems: any = [
       {
         title: $localize`Root directory`,
