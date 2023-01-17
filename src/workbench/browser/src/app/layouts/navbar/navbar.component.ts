@@ -88,26 +88,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.store.setUserProfile({
       id: -1,
       password: '',
-      username: '',
-      workspaces: []
+      userName: '',
+      userNickName: ''
     });
     this.eMessage.success($localize`Successfully logged out !`);
-    const refreshToken = this.store.getLoginInfo.refreshToken;
     this.store.clearAuth();
-    {
-      const [data, err]: any = await this.api.api_userLogout({
-        refreshToken
-      });
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
+    const [, err]: any = await this.api.api_userLogout({});
+    if (err) {
+      return;
     }
   }
 

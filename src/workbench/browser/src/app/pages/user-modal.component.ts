@@ -228,8 +228,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
           this.store.setUserProfile({
             id: -1,
             password: '',
-            username: '',
-            workspaces: []
+            userName: '',
+            userNickName: ''
           });
           return;
         }
@@ -411,42 +411,20 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       // * get login form values
       const formData = this.validateLoginForm.value;
+
       const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
-        this.eMessage.error($localize`Please check the account/password, the account must be a email !`);
-        if ([401, 403].includes(err.status)) {
-          this.isLoginBtnBtnLoading = false;
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
         return;
       }
       this.store.setLoginInfo(data);
-
       // * 关闭弹窗
       this.isLoginModalVisible = false;
-
-      this.message.send({ type: 'update-share-link', data: {} });
       {
         const [data, err]: any = await this.api.api_userReadInfo({});
         if (err) {
-          if (err.status === 401) {
-            this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.isLogin) {
-              return;
-            }
-            this.message.send({ type: 'http-401', data: {} });
-          }
           return;
         }
         this.store.setUserProfile(data);
-      }
-
-      if (!data.isFirstLogin) {
-        return;
       }
     };
     await btnLoginBtnRunning();
