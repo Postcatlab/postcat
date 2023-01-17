@@ -71,7 +71,7 @@
         </ng-template>
         <eo-api-test-body
           class="eo_theme_iblock"
-          [(contentType)]="model.contentType"
+          [(contentType)]="$$contentType"
           [(autoSetContentType)]="model.autoSetContentType"
           (contentTypeChange)="changeContentType($event)"
           [(bodyType)]="model.request.apiAttrInfo.contentType"

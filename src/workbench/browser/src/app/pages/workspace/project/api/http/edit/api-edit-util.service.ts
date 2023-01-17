@@ -13,7 +13,7 @@ export class ApiEditUtilService {
     const result = eoDeepCopy(formData);
     // result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
-      if (whatType(result.requestParams[tableName]) !== 'array') {
+      if (whatType(result.requestParams?.[tableName]) !== 'array') {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
@@ -21,7 +21,7 @@ export class ApiEditUtilService {
       });
     });
     ['bodyParams', 'headerParams'].forEach(tableName => {
-      if (whatType(result.responseList[0].responseParams[tableName]) !== 'array') {
+      if (whatType(result.responseList?.[0].responseParams[tableName]) !== 'array') {
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {

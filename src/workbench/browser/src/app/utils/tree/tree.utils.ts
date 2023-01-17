@@ -185,7 +185,7 @@ export const genApiGroupTree = (apiGroups: Group[], apiDatas: ApiData[], groupId
     apiData['isLeaf'] = true;
     return apiData.groupId === groupId;
   });
-  const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
+  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId);
   return [
     ...apiGroupFilters.map(group => ({
       ...group,
