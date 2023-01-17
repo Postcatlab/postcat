@@ -49,6 +49,7 @@ export class TabOperateService {
         });
     //parse result for router change
     const tabCache = this.filterValidTab(tabStorage);
+    // debugger;
     const validTabItem = this.generateTabFromUrl(this.router.url);
     const executeWhenNoTab = () => {
       if (!validTabItem) {

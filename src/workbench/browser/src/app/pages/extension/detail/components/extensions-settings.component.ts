@@ -6,7 +6,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 @Component({
   selector: 'eo-extension-setting',
   template: `
-    <div class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]" style="border-color: var(--BORDER)">
+    <div class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]" style="border-color: var(--border-color)">
       <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
     </div>
 
@@ -18,7 +18,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
           </nz-form-label>
         </ng-container>
         <!-- 二级说明 -->
-        <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-gray-400">
+        <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
           {{ properties[field]?.description }}
         </div>
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">

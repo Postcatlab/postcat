@@ -78,6 +78,9 @@ export class WebService {
               item
             );
           });
+      })
+      .catch(e => {
+        pcConsole.log('get postcat client download link error');
       });
   }
 

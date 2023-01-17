@@ -16,7 +16,7 @@ import { GroupApiDataModel } from '../../../../../../../shared/models';
 import { ProjectApiService } from '../../../api.service';
 
 @Component({
-  selector: 'eo-api-group-tree',
+  selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
   styleUrls: ['./api-group-tree.component.scss']
 })

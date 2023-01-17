@@ -10,8 +10,9 @@ import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
 import { ElectronService, WebService } from '../../core/services';
+import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
 import { LanguageService } from '../../core/services/language/language.service';
-import { ThemeService } from '../../core/services/theme.service';
+import { ThemeService } from '../../core/services/theme/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 @Component({
@@ -46,7 +47,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private api: ApiService,
     public lang: LanguageService,
     public store: StoreService,
-    public dataSourceService: DataSourceService
+    public dataSourceService: DataSourceService,
+    public feature: FeatureControlService
   ) {
     this.resourceInfo = this.web.resourceInfo;
   }

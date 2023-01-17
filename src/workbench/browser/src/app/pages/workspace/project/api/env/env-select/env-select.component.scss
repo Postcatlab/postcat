@@ -3,10 +3,10 @@
 }
 
 .content {
-  color: var(--MAIN_TEXT);
+  color: var(--text-color);
 }
 
 .title {
-  background-color: var(--NAVBAR_BTN_BG);
-  color: var(--MAIN_TEXT);
+  background-color: var(--item-active-background-color);
+  color: var(--text-color);
 }

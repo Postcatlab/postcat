@@ -9,7 +9,7 @@ import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/mo
 import { StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
 
 @Component({
-  selector: 'eo-api-group-edit',
+  selector: 'pc-api-group-edit',
   templateUrl: './api-group-edit.component.html',
   styleUrls: ['./api-group-edit.component.scss']
 })

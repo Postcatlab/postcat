@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
@@ -21,14 +20,7 @@ describe('ApiGroupTreeComponent', () => {
   let fixture: ComponentFixture<ApiGroupTreeComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        NzModalModule,
-        NzMenuModule,
-        NzTreeModule,
-        NzDropDownModule,
-        StorageModule.forRoot({ setting: storageSettingData })
-      ],
+      imports: [BrowserAnimationsModule, NzModalModule, NzMenuModule, NzTreeModule, StorageModule.forRoot({ setting: storageSettingData })],
       providers: [
         GroupService,
         {

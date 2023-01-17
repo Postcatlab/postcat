@@ -3,30 +3,30 @@
 }
 
 .env-list {
-  height: calc(100% - 40px);
+  height: calc(100% - var(--tree-item-height));
   overflow: auto;
 }
 
-.env-item:hover,
-.env-item-active {
-  background-color: rgb(0 0 0 / 10%);
-}
+// .env-item:hover,
+// .env-item-active {
+//   background-color: rgb(0 0 0 / 10%);
+// }
 
-.env-item {
-  cursor: pointer;
-  height: 40px;
+// .env-item {
+//   cursor: pointer;
+//   height: var(--tree-item-height);
 
-  .env-operate {
-    display: none;
-  }
+//   .env-operate {
+//     display: none;
+//   }
 
-  &:hover {
-    .env-operate {
-      display: inherit;
-    }
+//   &:hover {
+//     .env-operate {
+//       display: inherit;
+//     }
 
-    a {
-      opacity: 1;
-    }
-  }
-}
+//     a {
+//       opacity: 1;
+//     }
+//   }
+// }

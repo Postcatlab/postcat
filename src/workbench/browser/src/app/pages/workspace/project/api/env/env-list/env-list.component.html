@@ -8,31 +8,37 @@
     </div>
   </header>
   <section class="pt-[10px] env-list">
-    <div
-      *ngFor="let item of store.getEnvList"
-      class="flex items-center justify-between px-2 py-1 env-item"
-      (click)="editEnv(item)"
-      [ngClass]="{ 'env-item-active': item.id === id }"
-    >
-      <span class="flex-1 truncate name">{{ item.name }}</span>
-      <div class="env-operate">
-        <button
-          class="delete-btn"
-          eo-ng-button
-          nzType="text"
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Delete"
-          (click)="$event.stopPropagation()"
-          eoNgFeedbackTooltip
-          nz-popconfirm
-          i18n-nzPopconfirmTitle
-          nzPopconfirmTitle="Are you sure you want to delete?"
-          (nzOnConfirm)="handleDeleteEnv($event, item.id)"
-        >
-          <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
-        </button>
+    <nz-empty *ngIf="!envList.length" nzNotFoundImage="simple"> </nz-empty>
+    <eo-ng-tree-default
+      [nzData]="envList"
+      nzBlockNode
+      (nzClick)="editEnv($event)"
+      [nzTreeTemplate]="nzFixedTreeTemplate"
+      class="overflow-auto pt-[10px]"
+    ></eo-ng-tree-default>
+    <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
+      <div class="flex items-center justify-between w-full tree-node">
+        <div class="px-[6px] truncate">
+          {{ node.title }}
+        </div>
+        <div class="flex flex-shrink-0 tree-node-operate">
+          <button
+            class="tree-item-btn"
+            eo-ng-button
+            nzType="text"
+            i18n-nzTooltipTitle
+            nzTooltipTitle="Delete"
+            (click)="$event.stopPropagation()"
+            eoNgFeedbackTooltip
+            nz-popconfirm
+            i18n-nzPopconfirmTitle
+            nzPopconfirmTitle="Are you sure you want to delete?"
+            (nzOnConfirm)="handleDeleteEnv($event, node.key)"
+          >
+            <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
+          </button>
+        </div>
       </div>
-    </div>
-    <nz-empty *ngIf="!store.getEnvList.length" nzNotFoundImage="simple"> </nz-empty>
+    </ng-template>
   </section>
 </div>

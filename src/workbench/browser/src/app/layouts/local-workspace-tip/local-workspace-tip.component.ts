@@ -10,14 +10,23 @@ import { StorageUtil } from '../../utils/storage/Storage';
 
 @Component({
   selector: 'eo-local-workspace-tip',
-  template: ` <div *ngIf="isShow" class="remote-notification ant-alert-warning">
-    <eo-iconpark-icon name="link-cloud-faild" class="text-[13px] mr-[5px]"></eo-iconpark-icon>
-    <span i18n>The current data is stored locally,If you want to collaborate,Please</span>
-    <button class="ml-[5px]" eo-ng-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
-      switch to the cloud workspace
-    </button>
-    <eo-iconpark-icon name="close" class="absolute right-[20px] cursor-pointer" (click)="closeNotification()"></eo-iconpark-icon>
-  </div>`,
+  template: `
+    <eo-ng-feedback-alert
+      *ngIf="isShow"
+      class="remote-notification"
+      nzType="warning"
+      [nzMessage]="templateRefMsg"
+      nzCloseable
+      (nzOnClose)="closeNotification()"
+    ></eo-ng-feedback-alert>
+    <ng-template #templateRefMsg>
+      <eo-iconpark-icon name="link-cloud-faild" class="text-[13px] mr-[5px]"></eo-iconpark-icon>
+      <span i18n>The current data is stored locally,If you want to collaborate,Please</span>
+      <button class="ml-[5px]" eo-ng-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
+        switch to the cloud workspace
+      </button></ng-template
+    >
+  `,
   styleUrls: ['./local-workspace-tip.component.scss']
 })
 export class LocalWorkspaceTipComponent implements OnInit {
@@ -31,8 +40,9 @@ export class LocalWorkspaceTipComponent implements OnInit {
     private effect: EffectService
   ) {}
   ngOnInit(): void {
+    this.isShow = StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     autorun(() => {
-      const status = this.store.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+      const status = this.store.isLocal && this.store.isLogin && this.isShow;
       Promise.resolve().then(() => {
         this.isShowChange.emit(status);
       });
@@ -51,6 +61,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
   };
 
   closeNotification() {
+    this.isShow = false;
     StorageUtil.set(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false');
   }
 }

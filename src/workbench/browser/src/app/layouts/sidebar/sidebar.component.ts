@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
 import { SidebarModuleInfo } from './sidebar.model';
 import { SidebarService } from './sidebar.service';
 
@@ -17,14 +18,15 @@ import { SidebarService } from './sidebar.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  modules: Array<ModuleInfo | SidebarModuleInfo | any>;
+  modules: Array<ExtensionInfo | SidebarModuleInfo | any>;
   routerSubscribe: Subscription;
   constructor(
     private router: Router,
     public sidebar: SidebarService,
     private messageService: MessageService,
     private extension: ExtensionService,
-    public store: StoreService
+    public store: StoreService,
+    private feature: FeatureControlService
   ) {}
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();
@@ -70,7 +72,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.messageService.get().subscribe((inArg: Message) => {
       if (inArg.type === 'installedExtensionsChange') {
         if (!this.sidebar.visible) return;
-        const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map(n => n.name) : [...inArg.data.keys()];
+        const installedMap = inArg.data.installedMap;
+        const extensionIDs = Array.isArray(installedMap) ? installedMap.map(n => n.name) : [...installedMap.keys()];
         this.modules = this.modules.filter(n => n.isOffical || extensionIDs.includes(n.id));
         this.initSidebarViews();
         if (!this.modules.some(val => this.router.url.includes(val.activeRoute))) {
@@ -110,6 +113,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
         ]
       : [];
+    const memberItem = this.feature.config.cloudFeature
+      ? [
+          {
+            title: $localize`Member`,
+            id: '@eo-core-member',
+            isOffical: true,
+            icon: 'peoples',
+            activeRoute: 'home/workspace/project/member',
+            route: 'home/workspace/project/member'
+          }
+        ]
+      : [];
 
     const defaultModule = [
       {
@@ -137,14 +152,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/workspace/project/api',
         route: 'home/workspace/project/api/http/test'
       },
-      // {
-      //   title: $localize`Member`,
-      //   id: '@eo-core-member',
-      //   isOffical: true,
-      //   icon: 'peoples',
-      //   activeRoute: 'home/workspace/project/member',
-      //   route: 'home/workspace/project/member'
-      // },
+      ...memberItem,
       ...settingItem
     ];
     const isShare = this.store.isShare;

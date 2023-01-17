@@ -1,8 +1,9 @@
 .eo-sidebar {
-  border-right: 1px solid var(--BORDER);
+  background-color: var(--layout-sidebar-background-color);
+  border-right: 1px solid var(--border-color);
   overflow-y: auto;
   overflow-x: hidden;
-  width: 90px;
+  width: var(--layout-sidebar-width);
   height: 100%;
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
 }
@@ -16,8 +17,8 @@
 }
 
 .app-logo {
-  height: var(--ICONPARK_SIZE);
-  width: var(--ICONPARK_SIZE);
+  height: var(--icon-size);
+  width: var(--icon-size);
 }
 
 .icon {
@@ -29,12 +30,8 @@
 
 .sidebar-item {
   padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--TIPS_TEXT_COLOR);
+  color: var(--menu-item-text-color);
+  height: var(--layout-sidebar-item-height);
 
   &.tiny {
     padding: 4px 0 5px;
@@ -43,17 +40,17 @@
   &:hover,
   &.sidebar-item-active {
     font-weight: bold;
-    background-color: var(--NAVBAR_BTN_BG);
-    color: var(--MAIN_TEXT);
+    background-color: var(--menu-item-active-background-color);
+    color: var(--menu-item-active-text-color);
 
     i.icon {
-      color: var(--MAIN_TEXT);
+      color: inherit;
     }
   }
 }
 
 ::ng-deep {
-  .eo-theme-dark .eo-sidebar .app-logo {
+  .theme-pc-dark .eo-sidebar .app-logo {
     filter: invert(100%) sepia(1%) saturate(89%) hue-rotate(300deg) brightness(113%) contrast(100%);
   }
 }

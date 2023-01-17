@@ -18,32 +18,27 @@ export class ApiTestUtilService {
       {
         status: 'info',
         cap: 199,
-        class: 'code_blue',
-        fontClass: 'cb'
+        class: 'test-default'
       },
       {
         status: 'success',
         cap: 299,
-        class: 'code_green',
-        fontClass: 'cg'
+        class: 'test-success'
       },
       {
         status: 'redirect',
         cap: 399,
-        class: 'code_yellow',
-        fontClass: 'cy'
+        class: 'test-warning'
       },
       {
         status: 'clientError',
         cap: 499,
-        class: 'code_red',
-        fontClass: 'cr'
+        class: 'test-error'
       },
       {
         status: 'serverError',
         cap: 599,
-        class: 'code_red',
-        fontClass: 'cr'
+        class: 'test-error'
       }
     ];
     return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);

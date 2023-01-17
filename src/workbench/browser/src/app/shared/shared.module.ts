@@ -32,10 +32,10 @@ const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective];
 const SHARED_UI_MODULE = [
   NzFormModule,
   EoNgButtonModule,
+  EoNgDropdownModule,
   EoNgCheckboxModule,
   EoNgSelectModule,
   EoNgInputModule,
-  EoNgDropdownModule,
   EoNgRadioModule,
   EoNgAutoCompleteModule,
   EoNgFeedbackMessageModule,
@@ -51,8 +51,8 @@ const SHARED_UI_MODULE = [
   NzModalModule,
   NzListModule,
   NzPopconfirmModule
-] as const;
-const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
+];
+const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule];
 
 @NgModule({
   imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],

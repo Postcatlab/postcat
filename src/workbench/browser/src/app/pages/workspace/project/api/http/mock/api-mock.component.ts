@@ -14,7 +14,7 @@ import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db
   styles: [
     `
       :host {
-        padding: var(--PADDING);
+        padding: var(--padding);
       }
     `
   ]

@@ -1,33 +1,37 @@
 .p-base {
-  padding: var(--PADDING_Y) var(--PADDING_X);
+  padding: var(--padding-y) var(--padding-x);
 }
 
 .px-base {
-  padding-left: var(--PADDING_X);
-  padding-right: var(--PADDING_X);
+  padding-left: var(--padding-x);
+  padding-right: var(--padding-x);
 }
 
 .border {
-  border: 1px solid var(--BORDER);
+  border: 1px solid var(--border-color);
 }
 
 .debug-border {
   // * use it only for debug, not prod
-  border: 1px solid red;
+  border: 1px solid var(--danger-color);
 }
 
 .rounded-r {
-  border-radius: 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS) 0 !important;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
 }
 
 .rounded-l {
-  border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS) !important;
+  border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
 }
 
 .text-tips {
-  color: var(--TIPS_TEXT_COLOR);
+  color: var(--text-secondary-color);
 }
 
-.text-main-color {
-  color: var(--MAIN_THEME_COLOR);
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-success {
+  color: var(--success-color);
 }

@@ -479,6 +479,8 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
         }
       }
     };
+  //TODO compatible with old version
+  tmpSanboxObj.eo = tmpSanboxObj.pc;
   const tmpVm = new NodeVM({
       sandbox: tmpSanboxObj,
       require: {

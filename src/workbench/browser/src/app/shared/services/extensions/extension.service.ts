@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslateService } from 'eo/platform/common/i18n';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { FeatureInfo, ModuleInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { FeatureInfo, ExtensionInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
+
+import { WebExtensionService } from './webExtension.service';
+
+import { version } from 'os';
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,8 @@ export class ExtensionService {
   disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
   HOST = APP_CONFIG.EXTENSION_URL;
-  installedList: ModuleInfo[] = [];
-  installedMap: Map<string, ModuleInfo>;
+  installedList: ExtensionInfo[] = [];
+  installedMap: Map<string, ExtensionInfo>;
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
@@ -29,27 +31,34 @@ export class ExtensionService {
   ) {}
   async init() {
     if (!this.electron.isElectron) {
-      //Install  extensions
-      const { data } = await lastValueFrom<any>(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
-      for (let i = 0; i < this.webExtensionService.installedList.length; i++) {
-        const target = data.find(m => m.name === this.webExtensionService.installedList[i].name);
-        if (target) {
-          this.installExtension({
-            name: target.name
-          });
-        }
-      }
+      //Install newest extensions
+      const { data } = await this.requestList();
+      const installedName = [];
+
+      //ReInstall Newest extension
+      this.webExtensionService.installedList.forEach(val => {
+        const target = data.find(m => m.name === val.name);
+        if (!target) return;
+        installedName.push(target.name);
+      });
+
       //Install default extensions
       defaultExtensions.forEach(name => {
         const target = data.find(m => m.name === name);
-        if (target && !this.installedList.some(m => m.name === target.name)) {
-          this.installExtension({
-            name: target.name
-          });
-        }
+        if (!target || this.installedList.some(m => m.name === target.name)) return;
+        installedName.push(target.name);
       });
+
+      for (let i = 0; i < installedName.length; i++) {
+        const name = installedName[i];
+        await this.installExtension({
+          name
+        });
+      }
     } else {
-      this.updateInstalledInfo(this.getExtensions());
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'init'
+      });
     }
   }
   getExtensions() {
@@ -65,41 +74,70 @@ export class ExtensionService {
   getInstalledList() {
     return this.installedList;
   }
-  updateInstalledInfo(data) {
+  updateInstalledInfo(data, opts) {
     this.installedMap = data;
     this.installedMap.forEach((val, key) => {
       val['enable'] = this.isEnable(val.name);
     });
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
-    this.emitInstalledExtensionsChangeEvent();
+    this.messageService.send({
+      type: 'installedExtensionsChange',
+      data: {
+        installedMap: this.installedMap,
+        ...opts
+      }
+    });
   }
   isInstalled(name) {
     return this.installedList.includes(name);
   }
   public async requestList() {
-    const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+    const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`), {
+      defaultValue: []
+    });
+    const debugExtensions = [];
+    for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
+      const name = this.webExtensionService.debugExtensionNames[i];
+      const hasExist = this.installedList.some(val => val.name === name);
+      if (hasExist) continue;
+      debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+    }
     result.data = [
       ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package
       ...this.installedList.map(module => {
-        if (this.installedList.find(it => it.name === module.name)) {
-          module.i18n = result.data.find(it => it.name === module.name)?.i18n;
+        const extension = result.data.find(it => it.name === module.name);
+        if (extension) {
+          module.i18n = extension.i18n;
         }
         return module;
-      })
+      }),
+      ...debugExtensions
     ];
-    result.data = result.data.map(module => this.translateModule(module));
+
+    //Handle featue data
+    result.data = result.data.map(module => {
+      let result = this.webExtensionService.translateModule(module);
+      if (typeof result.author === 'object') {
+        result.author = result.author['name'] || '';
+      }
+      return result;
+    });
+
+    //Get debug extensions
+    this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
     return result;
   }
-  async getDetail(id, name): Promise<any> {
-    let result = {} as ModuleInfo;
+  async getDetail(name): Promise<any> {
+    let result = {} as ExtensionInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    if (this.installedMap.has(id)) {
-      Object.assign(result, this.installedMap.get(id), { installed: true, enable: this.isEnable(result.name) });
+    if (this.installedMap.has(name)) {
+      Object.assign(result, this.installedMap.get(name), { installed: true });
+      result.enable = this.isEnable(result.name);
     }
-    result = this.translateModule(result);
+    result = this.webExtensionService.translateModule(result);
     return result;
   }
   /**
@@ -110,7 +148,10 @@ export class ExtensionService {
    */
   async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
     const successCallback = () => {
-      this.updateInstalledInfo(this.getExtensions());
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'install',
+        name
+      });
       if (!this.isEnable(name)) {
         this.toggleEnableExtension(name, true);
       }
@@ -133,10 +174,16 @@ export class ExtensionService {
     }
   }
   async uninstallExtension(name): Promise<boolean> {
+    const successCallback = () => {
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'uninstall',
+        name
+      });
+    };
     if (this.electron.isElectron) {
       const { code, data, modules } = await window.electron.uninstallExtension(name);
       if (code === 0) {
-        this.updateInstalledInfo(this.getExtensions());
+        successCallback();
         return true;
       }
       console.error(data);
@@ -144,7 +191,7 @@ export class ExtensionService {
     } else {
       const isSuccess = await this.webExtensionService.unInstallExtension(name);
       if (isSuccess) {
-        this.updateInstalledInfo(this.getExtensions());
+        successCallback();
       }
       return isSuccess;
     }
@@ -159,7 +206,10 @@ export class ExtensionService {
     } else {
       this.disableExtension(id);
     }
-    this.updateInstalledInfo(this.installedMap);
+    this.updateInstalledInfo(this.installedMap, {
+      action: isEnable ? 'enable' : 'disable',
+      name: id
+    });
   }
   private enableExtension(names: string | string[]) {
     const enableNames = Array().concat(names) as string[];
@@ -189,15 +239,7 @@ export class ExtensionService {
     if (this.electron.isElectron) {
       extensions = window.electron.getExtensionsByFeature(featureKey);
     } else {
-      this.installedList.forEach(item => {
-        const feature: T = item.features?.[featureKey];
-        if (feature) {
-          extensions.set(item.name, {
-            extensionID: item.name,
-            ...feature
-          });
-        }
-      });
+      extensions = this.webExtensionService.getExtensionsByFeature(featureKey, this.installedList);
     }
     return extensions || new Map();
   }
@@ -229,27 +271,19 @@ export class ExtensionService {
       return [];
     }
   }
-  private emitInstalledExtensionsChangeEvent() {
-    this.messageService.send({ type: 'installedExtensionsChange', data: this.installedMap });
-  }
   private async requestDetail(id) {
+    const debugExtension = this.webExtensionService.debugExtensions.find(val => val.name === id);
+    if (debugExtension) {
+      return {
+        code: 0,
+        data: debugExtension
+      };
+    }
     return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(err => [0, err]);
   }
   private updateExtensionIDs() {
     return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
-  }
-  private translateModule(module: ModuleInfo) {
-    const lang = this.language.systemLanguage;
-
-    //If extension from web,transalte package content from http moduleInfo
-    //Locale extension will translate from local i18n file
-    const locale = module.i18n?.find(val => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
-    return module;
   }
 }

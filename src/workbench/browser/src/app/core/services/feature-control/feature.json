@@ -1,0 +1,7 @@
+{
+  "cloudFeature": true,
+  "apimanage.test": true,
+  "apimanage.document": true,
+  "apimanage.edit": true,
+  "apimanage.mock": true
+}

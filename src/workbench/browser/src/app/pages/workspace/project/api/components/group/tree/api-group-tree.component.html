@@ -1,4 +1,4 @@
-<header class="flex py-[10px] px-[10px]">
+<header class="flex items-center py-[10px] px-[10px]">
   <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
     <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
   </eo-ng-input-group>
@@ -61,9 +61,9 @@
             </svg>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <span class="flex tree-node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
+          <span class="flex tree-node-operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
             <ng-container *ngIf="isEdit">
-              <button eo-ng-button nzType="text" class="more-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
+              <button eo-ng-button nzType="text" class="tree-item-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
                 <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
               </button>
               <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
@@ -80,15 +80,15 @@
         <div class="flex items-center justify-between tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
             <div class="flex-shrink-0 width-box" style="width: 6px" *ngIf="node.level === 0"></div>
-            <b class="method_text method_text_{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">
+            <b class="method_text method_text-{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">
               {{ renderRequestMethodText(node) }}</b
             >
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <div class="flex tree-node_operate">
+          <div class="flex tree-node-operate">
             <ng-container *ngIf="isEdit">
               <button
-                class="more-btn"
+                class="tree-item-btn"
                 eo-ng-button
                 nzType="text"
                 eo-ng-dropdown

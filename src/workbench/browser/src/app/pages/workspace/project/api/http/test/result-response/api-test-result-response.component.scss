@@ -8,24 +8,28 @@
   border-style: solid;
 }
 
-.code_blue {
-  background-color: var(--BLUE_NORMAL);
-  border-color: var(--BLUE_NORMAL);
+.test-success {
+  background-color: #00785a;
+  border: 1px solid #05654d;
+  color: #fff;
 }
 
-.code_green {
-  background-color: var(--GREEN_NORMAL);
-  border-color: var(--GREEN_DEEP);
+.test-default {
+  background-color: #a9a9a9;
+  border: 1px solid #a9a9a9;
+  color: #fff;
 }
 
-.code_yellow {
-  background-color: var(--RED_NORMAL);
-  border-color: var(--RED_LIGHT);
+.test-error {
+  background-color: #ff3c32;
+  border: 1px solid #ff3c32;
+  color: #fff;
 }
 
-.code_red {
-  background-color: var(--RED_NORMAL);
-  border-color: var(--RED_NORMAL);
+.test-warning {
+  background-color: #ff3c32;
+  border: 1px solid #ff625a;
+  color: #fff;
 }
 
 :host ::ng-deep {

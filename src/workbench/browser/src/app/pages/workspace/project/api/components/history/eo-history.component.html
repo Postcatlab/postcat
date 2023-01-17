@@ -36,7 +36,7 @@
     <div class="flex items-center w-full cursor-pointer px-[6px]">
       <b
         class="block w-12 method_type"
-        [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
+        [ngClass]="'method-text-' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
         >{{ origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</b
       >
       <span class="flex-1 overflow-hidden text-[12px] truncate">{{ origin.request?.uri }}</span>

@@ -1,12 +1,15 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics" },
+  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics", "cache": { "enabled": true } },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "eoapi": {
+    "postcat": {
       "root": "",
-      "i18n": { "sourceLocale": { "code": "en" }, "locales": { "zh": { "translation": "locale/messages.zh.xlf" } } },
+      "i18n": {
+        "sourceLocale": { "code": "en", "baseHref": "" },
+        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
+      },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": { "@schematics/angular:application": { "strict": true } },
@@ -25,14 +28,10 @@
             "assets": [
               "src/icon.ico",
               "src/assets",
+              "src/extensions",
               { "glob": "**/*", "input": "../../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
             ],
-            "styles": [
-              { "input": "src/styles/light.less", "bundleName": "light", "inject": false },
-              { "input": "src/styles/dark.less", "bundleName": "dark", "inject": false },
-              "src/styles.scss"
-            ],
-            "stylePreprocessorOptions": { "includePaths": ["src/styles/themes"] },
+            "styles": ["src/styles/antd.less", "src/styles.scss"],
             "scripts": ["src/assets/libs/protocolcheck.js"],
             "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },
             "allowedCommonJsDependencies": ["brace", "qs", "rxjs"]
@@ -44,6 +43,7 @@
               "sourceMap": true,
               "namedChunks": false,
               "localize": false,
+              "preserveSymlinks": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
@@ -54,6 +54,7 @@
               "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
+              "preserveSymlinks": true,
               "localize": ["zh"],
               "extractLicenses": true,
               "vendorChunk": false,
@@ -61,6 +62,7 @@
               "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }]
             },
             "production": {
+              "preserveSymlinks": false,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -86,12 +88,12 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": { "browserTarget": "eoapi:build", "proxyConfig": "proxy.conf.json" },
           "configurations": {
-            "dev": { "browserTarget": "eoapi:build:dev" },
-            "devCn": { "browserTarget": "eoapi:build:devCn" },
-            "production": { "browserTarget": "eoapi:build:production" }
+            "dev": { "browserTarget": "postcat:build:dev" },
+            "devCn": { "browserTarget": "postcat:build:devCn" },
+            "production": { "browserTarget": "postcat:build:production" }
           }
         },
-        "extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n", "options": { "browserTarget": "eoapi:build" } },
+        "extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n", "options": { "browserTarget": "postcat:build" } },
         "test": {
           "inlineStyleLanguage": "scss",
           "builder": "@angular-builders/custom-webpack:karma",
@@ -109,13 +111,13 @@
         "lint": { "builder": "@angular-eslint/builder:lint", "options": { "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"] } }
       }
     },
-    "eoapi-e2e": {
+    "postcat-e2e": {
       "root": "e2e",
       "projectType": "application",
       "architect": { "lint": { "builder": "@angular-eslint/builder:lint", "options": { "lintFilePatterns": ["e2e/**/*.ts"] } } }
     }
   },
-  "defaultProject": "eoapi",
+  "defaultProject": "postcat",
   "schematics": {
     "@schematics/angular:component": { "prefix": "eo", "style": "scss", "inlineStyle": true, "inlineTemplate": true },
     "@schematics/angular:directive": { "prefix": "eo" }

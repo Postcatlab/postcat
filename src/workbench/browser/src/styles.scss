@@ -12,21 +12,17 @@
 @import '../../../node_modules/eo-ng-tabs/styles';
 @import '../../../node_modules/eo-ng-tree/styles';
 @import '../../../node_modules/eo-ng-table/styles';
+@import '../../../node_modules/eo-ng-layout/styles';
 @import '../../../node_modules/eo-ng-feedback/styles';
+@import '../../../node_modules/eo-ng-dropdown/styles';
 
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: var(--background-color);
   font-family: Arial, Helvetica, sans-serif, 'Source Sans Pro', 'Helvetica Neue';
-}
-
-:root {
-  --NAVBAR_HEIGHT: 50px;
-  --FOOTER_HEIGHT: 30px;
-  --PAGE_TABS_HEIGHT: 43px;
-  --PAGE_INSIDE_TABS_HEIGHT: 43px;
 }
 
 img,
@@ -40,45 +36,44 @@ object {
   vertical-align: unset;
 }
 
-.method_text_GET {
-  color: var(--BLUE_TAG_BG);
-}
-
 .eo-link {
-  color: var(--BLUE_DEEPER);
+  color: var(--text-link-color);
 }
 
-.method_text_POST {
-  // color: var(--GREEN_TAG_BG);
-  @apply text-green-700;
+.method-text-GET {
+  color: var(--info-color);
 }
 
-.method_text_DELETE {
-  color: var(--RED_NORMAL);
+.method-text-POST {
+  color: var(--success-color);
 }
 
-.method_text_HEAD {
-  color: var(--YELLOW_NORMAL);
+.method-text-DELETE {
+  color: var(--danger-color);
 }
 
-.method_text_WS {
+.method-text-HEAD {
+  color: var(--warning-color);
+}
+
+.method-text-WS {
   color: #507ea4;
 }
 
-.method_text_WSS {
+.method-text-WSS {
   color: #165e83;
 }
 
-.method_text_PATCH {
-  color: var(--ORANGE_TAG_BG);
+.method-text-PATCH {
+  color: var(--warning-color);
 }
 
-.method_text_PUT {
+.method-text-PUT {
   color: #82ae46;
 }
 
-.method_text_OPTIONS {
-  color: var(--BLACK_TAG_BG);
+.method-text-OPTIONS {
+  color: #507ea4;
 }
 
 ::-webkit-scrollbar {
@@ -88,14 +83,14 @@ object {
 
 ::-webkit-scrollbar-thumb {
   background-clip: content-box;
-  background-color: var(--SCROLL_BAR);
+  background-color: var(--scrollbar-thumb-background-color);
   border-color: #eee0;
   border-style: solid;
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-track {
-  // background-color: var(--SCROLL_BAR_BG);
+  // background-color: var( --scrollbar-track-background-color);
   border-color: transparent;
   border-style: solid;
   border-left-width: 0 0 0 1px;
@@ -110,10 +105,10 @@ nz-resize-handle.container-draggable {
   flex: none;
   top: 0;
   z-index: 10;
-  background-color: var(--BORDER);
+  background-color: var(--system-border-color);
 
   &:hover {
-    background-color: var(--MAIN_THEME_COLOR);
+    background-color: var(--primary-color);
   }
 
   &.vertical {
@@ -146,22 +141,77 @@ nz-resize-handle.container-draggable {
 
 .table-border-all {
   .eo-ng-table {
-    border: 1px solid var(--BORDER);
+    border: 1px solid var(--table-border-color);
   }
 }
 
 .border-all {
-  border: 1px solid var(--BORDER);
+  border: 1px solid var(--system-border-color);
 }
 
 .top-save-bar {
-  @apply sticky top-0 z-10 py-2.5;
+  @apply sticky top-0 z-10 px-[20px] flex items-center;
 
-  background-color: var(--BTN_SEC_BG_HOVER);
-  border-bottom: 1px solid var(--BORDER);
+  background-color: var(--bar-background-color);
+  border-bottom: 1px solid var(--border-color);
+  height: var(--edit-inside-bar-height);
 }
 
 .save-container {
   overflow: auto;
-  height: calc(100% - 56px);
+  height: calc(100% - var(--edit-inside-bar-height));
+}
+
+.tree-sider {
+  background-color: var(--tree-background-color);
+
+  &,
+  .ant-btn-text {
+    color: var(--tree-text-color);
+  }
+
+  .ant-tree-treenode {
+    padding: initial;
+    align-items: center;
+    margin: 0;
+    border-radius: initial;
+    height: var(--tree-item-height);
+  }
+
+  .ant-tree-node-content-wrapper {
+    height: var(--tree-item-height);
+    line-height: var(--tree-item-height);
+    flex: auto;
+
+    &:hover {
+      background-color: initial;
+    }
+  }
+
+  .tree-item-btn {
+    padding: 3px;
+    height: calc(var(--tree-item-height) - 10px);
+  }
+
+  .tree-node {
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
+
+    .tree-node-operate {
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
+    }
+
+    &:hover .tree-node-operate {
+      display: initial;
+    }
+  }
+
+  nz-tree-node-title {
+    // prevent operate shrink
+    position: relative;
+    width: 0 !important;
+  }
 }

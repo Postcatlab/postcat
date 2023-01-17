@@ -4,10 +4,10 @@
       <b class="mr-[14px] text-[18px] truncate max-w-[500px]" i18n>{{ title }}</b>
     </div>
     <div class="flex">
-      <!-- <button class="!ml-[10px]" eo-ng-button (click)="invite()">
+      <button *ngIf="feature.config.cloudFeature" class="!ml-[10px]" eo-ng-button (click)="invite()">
         <eo-iconpark-icon class="mr-[5px]" name="add"></eo-iconpark-icon>
         <span i18n>Invite Member</span>
-      </button> -->
+      </button>
       <button class="!ml-[10px]" eo-ng-button nzType="primary" (click)="eoProjectList.createProject()">
         <eo-iconpark-icon class="mr-[5px]" name="add"></eo-iconpark-icon>
         <span i18n>New Project</span>
@@ -19,7 +19,7 @@
       <eo-ng-tab i18n-nzTitle nzTitle="Project">
         <eo-project-list #eoProjectList></eo-project-list>
       </eo-ng-tab>
-      <!-- <eo-ng-tab i18n-nzTitle nzTitle="Members">
+      <eo-ng-tab i18n-nzTitle nzTitle="Members" *ngIf="feature.config.cloudFeature">
         <div class="half-part-container">
           <eo-ng-feedback-alert
             *ngIf="store.isLocal"
@@ -38,7 +38,7 @@
           >
           <eo-workspace-member *ngIf="nzSelectedIndex === 1"></eo-workspace-member>
         </div>
-      </eo-ng-tab> -->
+      </eo-ng-tab>
       <eo-ng-tab i18n-nzTitle *ngIf="!store.isLocal && store.getWorkspaceRole === 'Owner'" nzTitle="Setting">
         <eo-workspace-setting class="half-part-container"></eo-workspace-setting>
       </eo-ng-tab>

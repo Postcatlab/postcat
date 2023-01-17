@@ -39,14 +39,15 @@ eo-api-test-rest {
   }
 }
 
-.env_front_uri {
+.env-front-uri {
   max-width: 240px;
   height: 40px;
   display: flex;
   align-items: center;
   padding: 0 10px;
-  background-color: var(--TABLE_HEADER_BG);
-  border: 1px solid var(--BORDER);
+  color: var(--disabled-text-color);
+  background-color: var(--disabled-background-color);
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -57,17 +58,17 @@ div.ant-typography {
 
 :host ::ng-deep {
   .ant-select-open eo-ng-select-top-control {
-    background-color: var(--MAIN_BG) !important;
+    background-color: var(--background-color) !important;
   }
 
   eo-ng-select eo-ng-select-top-control,
   .main-bg {
-    background-color: var(--BTN_SEC_BG_HOVER) !important;
+    background-color: var(--bar-background-color) !important;
 
     &:focus,
     &:active,
     &:target {
-      background-color: var(--MAIN_BG) !important;
+      background-color: var(--background-color) !important;
     }
   }
 

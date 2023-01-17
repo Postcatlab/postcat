@@ -1,15 +1,3 @@
-::ng-deep {
-  //   .cdk-overlay-container {
-  //     * {
-  //       transition: none !important;
-  //     }
-  //   }
-  //   .select-workspace-class {
-  //     .iconpark-icon {
-  //     }
-  //   }
-}
-
 .workspace-title {
   padding: 0 10px;
   font-size: 12px;
@@ -23,5 +11,5 @@
 }
 
 .active-item {
-  color: var(--MAIN_THEME_COLOR);
+  color: var(--primary-color);
 }
