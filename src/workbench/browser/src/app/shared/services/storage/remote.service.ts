@@ -1053,7 +1053,8 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .post(`${prefix}/api/common/user/change-password`, {
-          body: { password, ...items }
+          password,
+          ...items
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1082,23 +1083,19 @@ export class RemoteService {
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http
-        .post(`${prefix}/api/user/login`, {
-          body: { username, password }
-        })
-        .subscribe({
-          next: ({ code, data }: any) => {
-            if (code === 0) {
-              console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
-              return resolve([data, null]);
-            }
-            resolve([null, { code, data }]);
-          },
-          error: error => {
-            console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
+      this.http.post(`${prefix}/api/user/login`, { username, password }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
           }
-        });
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
     });
   }
 
