@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -18,7 +17,6 @@ import { reaction } from 'mobx';
 })
 export class EffectService {
   constructor(
-    private projectApi: ProjectApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
@@ -84,22 +82,6 @@ export class EffectService {
         }
       });
     });
-  }
-
-  async exportProjectData(projectID = 1) {
-    const apiGroup = await this.getGroups(projectID);
-    const result: StorageRes = await this.projectApi.getAll(projectID);
-    const { success, empty } = StorageResStatus;
-    if ([success, empty].includes(result.status)) {
-      return {
-        collections: this.exportCollects(apiGroup, result.data),
-        environments: []
-      };
-    }
-    return {
-      collections: [],
-      environments: []
-    };
   }
 
   exportCollects(apiGroup: any[], apiData: any[], parentID = 0) {
