@@ -13,14 +13,14 @@
     eo-ng-dropdown
     [nzDropdownMenu]="menu"
     nzPlacement="bottomRight"
-    (click)="addAPI({})"
+    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
   >
     <eo-iconpark-icon name="add"></eo-iconpark-icon>
   </button>
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <a>
-        <li nz-menu-item i18n="@@AddAPI" (click)="addAPI({})"> New API </li>
+        <li nz-menu-item i18n="@@AddAPI" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"> New API </li>
       </a>
       <a>
         <li nz-menu-item (click)="addGroup()" i18n>New Group</li>
@@ -83,8 +83,8 @@
           <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
             <div class="flex-shrink-0 width-box" style="width: 6px" *ngIf="node.level === 0"></div>
             <b class="method-text method-text-{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">
-              {{ renderRequestMethodText(node) }}</b
-            >
+              {{ renderRequestMethodText(node) }}
+            </b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
           <div class="flex tree-node-operate">

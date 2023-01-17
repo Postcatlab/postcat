@@ -8,6 +8,9 @@ import { RemoteService } from './remote.service';
   providedIn: 'root'
 })
 export class ApiService {
+  api_workspaceUnkown(arg0: { workspaceID: string; roleID: number; memberID: any }): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private store: StoreService, private local: LocalService, private remote: RemoteService) {}
 
   api_apiDataCreate<T = any>(params: { apiList: any; projectUuid?: any; workSpaceUuid?: any }) {

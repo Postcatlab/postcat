@@ -251,12 +251,11 @@ export class EffectService {
   }
 
   async getHistory() {
-    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1 });
-    console.log('res', res);
+    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1000 });
     if (err) {
       return;
     }
-    this.store.setHistory(res.data?.items);
+    this.store.setHistory(res?.items);
   }
 
   async getGroupList() {
