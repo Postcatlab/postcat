@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://mockapi.eolink.com/Dr31QyT4b832495fe945fb9420215f167e33b2dc1fb4f27",
+    "target": "http://54.255.141.14:9010",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
