@@ -1,5 +1,5 @@
 import { StorageModel } from '../../shared/services/storage/index.model';
-import { enumsToArr, reverseObj } from '../../utils/index.utils';
+import { enumsToArr, enumsToObject } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 /**
@@ -58,8 +58,7 @@ export enum Protocol {
   GRPC = 11
 }
 
-export const protocalMap = reverseObj(Protocol);
-export const contentTypeMap = reverseObj(ContentType);
+export const protocalMap = enumsToObject(Protocol);
 
 export const ApiParamsTypeByNumber = enumsToArr(ApiParamsTypeFormData).map(val => ({
   title: val.key,
@@ -160,7 +159,7 @@ export enum RequestMethod {
   PATCH = 6
 }
 
-export const requestMethodMap = reverseObj(RequestMethod);
+export const requestMethodMap = enumsToObject(RequestMethod);
 
 /**
  * @deprecated auto judge from url

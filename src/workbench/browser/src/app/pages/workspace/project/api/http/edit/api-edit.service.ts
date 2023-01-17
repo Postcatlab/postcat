@@ -2,21 +2,12 @@ import { Injectable } from '@angular/core';
 import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 
-import { resolveObjectURL } from 'buffer';
 @Injectable()
 export class ApiEditService {
-  constructor(
-    private storage: StorageService,
-    private effect: EffectService,
-    private apiEditUtil: ApiEditUtilService,
-    private apiService: ProjectApiService
-  ) {}
+  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService) {}
   getPureApi({ groupId }): ApiData {
     return {
       name: '',
@@ -47,7 +38,7 @@ export class ApiEditService {
     };
   }
   async getApi({ id, groupId }): Promise<ApiData> {
-    let result = {} as ApiData;
+    let result = this.getPureApi({ groupId }) as ApiData;
     if (!id) {
       // From test page/copy api data;
       let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
@@ -65,17 +56,16 @@ export class ApiEditService {
         result = pureApi;
       }
     } else {
-      //@ts-ignore
-      result = await this.effect.getAPI([id]);
+      result = await this.projectApi.get(id);
     }
     return this.apiEditUtil.parseApiStorage2UI(result);
   }
   async editApi(apiData): Promise<[ApiData, any]> {
     const busEvent = apiData.uuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
-      return await this.apiService.edit(apiData);
+      return await this.projectApi.edit(apiData);
     } else {
-      return await this.apiService.add(apiData);
+      return await this.projectApi.add(apiData);
     }
   }
 }

@@ -39,7 +39,7 @@ import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/opera
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
-import { ApiBodyType, contentTypeMap, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 import { TestServerService } from '../../service/api-test/test-server.service';

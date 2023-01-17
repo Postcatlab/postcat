@@ -6,8 +6,7 @@ import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-mock',
@@ -59,7 +58,7 @@ export class ApiMockComponent implements OnInit {
       nzComponentParams: {
         model: {
           name: '',
-          response: this.apiMock.getMockResponseByAPI(this.apiData.responseBody)
+          response: this.apiMock.getMockResponseByAPI(this.apiData.responseList[0].responseParams.bodyParams)
         }
       },
       nzOnOk: async () => {

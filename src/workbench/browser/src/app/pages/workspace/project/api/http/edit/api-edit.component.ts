@@ -14,9 +14,8 @@ import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { MessageService } from '../../../../../../shared/services/message';
-import { Group, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
-import { listToTree, getExpandGroupByKey } from '../../../../../../utils/tree/tree.utils';
+import { getExpandGroupByKey } from '../../../../../../utils/tree/tree.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
 
 @Component({
@@ -80,6 +79,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.model = result;
       }
     }
+    pcConsole.log('apiedit', this.model);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
     //Storage origin api data
@@ -91,7 +91,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-
     this.initBasicForm();
     this.watchBasicForm();
     this.initShortcutKey();
@@ -210,22 +209,22 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false
       }
     ];
-    this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        [].concat(result.data).forEach((item: Group) => {
-          treeItems.push({
-            title: item.name,
-            key: item.uuid.toString(),
-            weight: item.weight || 0,
-            parentID: (item.parentID || 0).toString(),
-            isLeaf: false
-          });
-        });
-        treeItems.sort((a, b) => a.weight - b.weight);
-      }
-      listToTree(treeItems, this.groups, '0');
-      this.resetgroupId();
-    });
+    // this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
+    //   if (result.status === StorageResStatus.success) {
+    //     [].concat(result.data).forEach((item: Group) => {
+    //       treeItems.push({
+    //         title: item.name,
+    //         key: item.uuid.toString(),
+    //         weight: item.weight || 0,
+    //         parentID: (item.parentID || 0).toString(),
+    //         isLeaf: false
+    //       });
+    //     });
+    //     treeItems.sort((a, b) => a.weight - b.weight);
+    //   }
+    //   listToTree(treeItems, this.groups, '0');
+    //   this.resetgroupId();
+    // });
   }
   /**
    * Reset Group ID after group list load
@@ -250,8 +249,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (!this.model) {
       this.model = {} as ApiData;
     }
-    const controls = {};
-    ['method', 'uri', 'groupId', 'name'].forEach(name => {
+    const controls = {
+      requestMethod: [this.model?.apiAttrInfo?.requestMethod, [Validators.required]]
+    };
+    ['uri', 'groupId', 'name'].forEach(name => {
       controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
