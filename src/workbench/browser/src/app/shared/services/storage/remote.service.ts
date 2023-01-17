@@ -1467,6 +1467,38 @@ export class RemoteService {
     });
   }
 
+  api_workspaceSetRole<T = any>({ userRole, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
+    if (userRole == null) {
+      console.log('%c Error: workspace - setRole 接口 缺失参数 userRole %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - setRole 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .post(`${prefix}/api/workspaces/users/roles`, {
+          userRole,
+          workSpaceUuid
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c workspace:setRole - api_workspaceSetRole 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c workspace:setRole - api_workspaceSetRole 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
   api_projectExportProject<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: project - exportProject 接口 缺失参数 projectUuid %c', ErrorStyle, '');
@@ -1638,6 +1670,33 @@ export class RemoteService {
           resolve([null, error]);
         }
       });
+    });
+  }
+
+  api_projectGetRole<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: project - getRole 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/projects/users/roles/own`, {
+          params: { projectUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c project:getRole - api_projectGetRole 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c project:getRole - api_projectGetRole 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
     });
   }
 

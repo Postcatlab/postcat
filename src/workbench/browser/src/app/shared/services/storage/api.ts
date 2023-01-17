@@ -76,7 +76,8 @@ const http = {
         { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
         { 'getMemberPermiss @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
         { 'list @get @bulkRead': '/workspaces' },
-        { 'roles @get': '/workspaces/users/roles', query: 'workSpaceUuid' }
+        { 'roles @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
+        { 'setRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' }
       ]
     },
     {
@@ -88,6 +89,7 @@ const http = {
         { 'delMember @delete': '/projects/users', body: 'userIds, projectUuid' },
         { 'memberQuit @delete': '/projects/users/quit', body: 'userId, projectUuid' },
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
+        { 'getRole @get': '/projects/users/roles/own', query: 'projectUuid' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
         { 'create @post @bulkCreate': '/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid' },

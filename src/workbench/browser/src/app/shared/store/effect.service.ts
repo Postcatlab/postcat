@@ -94,18 +94,18 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async getWorkspacePermission() {
-    // TODO localworkspace no need to set permission
-    {
-      // * update workspace auth
-      const [data, err]: any = await this.api.api_workspaceRoles({});
-      if (err) {
-        return;
-      }
-      const { roles, permissions } = data;
-      console.log('yyy', roles, permissions);
-      this.store.setPermission(permissions, 'workspace');
-      this.store.setRole(roles, 'workspace');
+    // * local workspace no need to set permission
+    if (this.store.isLocal) {
+      return;
     }
+    // * update workspace auth
+    const [data, err]: any = await this.api.api_workspaceRoles({});
+    if (err) {
+      return;
+    }
+    const { roles, permissions } = data;
+    this.store.setPermission(permissions, 'workspace');
+    this.store.setRole(roles, 'workspace');
   }
   async changeWorkspace(workspaceID: string) {
     // * real set workspace
@@ -124,14 +124,18 @@ export class EffectService {
     this.getProjectPermission();
   }
   async getProjectPermission() {
-    //TODO localworkspace no need to set permission
+    // * localworkspace no need to set permission
+    if (this.store.isLocal) {
+      return;
+    }
     // * update project auth
-    // const [data, err]: any = await this.api.api_projectUserPermission({ projectID: this.store.getCurrentProjectID });
-    // if (err) {
-    //   return;
-    // }
-    // this.store.setPermission(data.permissions, 'project');
-    // this.store.setRole(data.role.name, 'project');
+    const [data, err]: any = await this.api.api_projectGetRole({});
+    if (err) {
+      return;
+    }
+    const project = data.at(0);
+    this.store.setPermission(project.permissions, 'project');
+    this.store.setRole(project.role.name, 'project');
   }
   async changeProject(pid) {
     if (!pid) {
@@ -163,10 +167,13 @@ export class EffectService {
       return [null, data];
     }
   }
-  async createProject(data) {
-    await this.api.api_projectCreate({
-      projectMsgs: [data]
+  async createProject(msg) {
+    const [, err] = await this.api.api_projectCreate({
+      projectMsgs: [msg]
     });
+    if (err) {
+      return;
+    }
   }
   async updateProject(data) {
     const [project] = await this.api.api_projectUpdate(data);
@@ -214,6 +221,9 @@ export class EffectService {
       return;
     }
     const [envList, err] = await this.api.api_environmentList({});
+    if (err) {
+      return;
+    }
     this.store.setEnvList(envList || []);
     return envList;
   }

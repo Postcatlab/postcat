@@ -229,7 +229,6 @@ export class StoreService {
     this.currentWorkspaceUuid ??= this.localWorkspace.workSpaceUuid;
     this.currentWorkspace ??= this.localWorkspace;
     this.workspaceList ??= [this.localWorkspace];
-    console.log('当前本地空间', this.localWorkspace);
   }
 
   // * actions

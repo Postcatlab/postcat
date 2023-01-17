@@ -43,7 +43,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
             [ngClass]="{ 'active-item': store.getCurrentWorkspace?.workSpaceUuid === localWorkspace?.workSpaceUuid }"
             nz-menu-item
           >
-            <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
+            <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace?.title }}</li
           >
         </div>
         <ng-container *ngIf="feature.config.cloudFeature">
@@ -60,7 +60,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
             >
               <div class="flex h-full items-center">
                 <eo-iconpark-icon class="mr-[5px]" name="link-cloud-sucess"> </eo-iconpark-icon>
-                <span class="truncate mw-[250px]"> {{ item.title }}</span>
+                <span class="truncate mw-[250px]"> {{ item?.title }}</span>
               </div>
             </li>
           </div>
@@ -103,6 +103,6 @@ export class SelectWorkspaceComponent {
       return list;
     }
     const searchText = text.toLocaleLowerCase();
-    return list.filter(val => val.title.toLocaleLowerCase().includes(searchText));
+    return list.filter(val => val?.title.toLocaleLowerCase().includes(searchText));
   }
 }
