@@ -283,7 +283,7 @@ export class EffectService {
     if (err) {
       return;
     }
-    this.store.setHistory(res.data.items);
+    this.store.setHistory(res.data?.items);
   }
 
   private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {

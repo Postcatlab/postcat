@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
-import { migrationToV3 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource/migration';
+import { setupVersions } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource/versions';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import {
   Workspace,
@@ -25,17 +25,15 @@ class DataSource extends Dexie {
   mock!: Table<Mock, number>;
   constructor() {
     super('postcat_core_test');
-    this.version(1)
-      .stores({
-        workspace: '++id, &uuid, name',
-        project: '++id, &uuid, name workSpaceUuid',
-        environment: '++id, name, projectUuid, workSpaceUuid',
-        group: '++id, projectUuid, workSpaceUuid, parentId, name',
-        apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
-        apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
-        mock: '++id, name, projectUuid, workSpaceUuid'
-      })
-      .upgrade(migrationToV3);
+    this.version(1).stores({
+      workspace: '++id, &uuid, name',
+      project: '++id, &uuid, name, workSpaceUuid',
+      environment: '++id, name, projectUuid, workSpaceUuid',
+      group: '++id, projectUuid, workSpaceUuid, parentId, name',
+      apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
+      apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
+      mock: '++id, name, projectUuid, workSpaceUuid'
+    });
     this.open();
     this.initHooks();
     this.on('populate', () => this.populate());
@@ -95,3 +93,5 @@ class DataSource extends Dexie {
 }
 
 export const dataSource = new DataSource();
+
+export type DataSourceInstance = typeof dataSource;

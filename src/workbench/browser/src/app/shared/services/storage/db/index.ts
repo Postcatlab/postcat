@@ -17,6 +17,6 @@ export const db = {
 } as const;
 
 if (process.env.NODE_ENV === 'development') {
-  const module = await import('./tests/index');
-  module.setupTests();
+  // const module = await import('./tests/index');
+  // module.setupTests();
 }
