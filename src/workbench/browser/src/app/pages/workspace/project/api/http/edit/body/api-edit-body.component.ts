@@ -27,6 +27,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() bodyType: ApiBodyType | number;
+  @Input() jsonRootType: number = JsonRootType.Object;
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
@@ -52,7 +53,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
-  jsonRootType: number = JsonRootType.Object;
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
@@ -70,16 +70,14 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
   jsonRootTypeDataChange(jsonRootType) {
-    console.log(jsonRootType);
     this.bodyType = jsonRootType;
-    // this.jsonRootTypeChange.emit(jsonRootType);
+    this.bodyTypeChange.emit(this.bodyType);
     this.modelChange.emit(this.model);
   }
   rawChange(code) {
     this.rawChange$.next(code);
   }
-  changeBodyType(type?) {
-    console.log('changeBodyType');
+  changeBodyType() {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.setModel();
@@ -94,7 +92,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
+    if (
+      changes.model &&
+      ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0)
+    ) {
       this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();

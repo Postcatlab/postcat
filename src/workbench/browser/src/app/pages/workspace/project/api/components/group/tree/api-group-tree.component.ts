@@ -8,13 +8,13 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
-import { GroupApiDataModel } from '../../../../../../../shared/models';
 import { ProjectApiService } from '../../../api.service';
 
 @Component({
@@ -81,17 +81,16 @@ export class ApiGroupTreeComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = !this.store.isShare;
     // * get group data from store
-    this.effect.getGroupList();
+    this.effect.getGroupList().then(() => {
+      this.isLoading = false;
+    });
     autorun(() => {
       this.apiGroupTree = this.store.getApiGroupTree;
       setTimeout(() => {
         this.expandKeys = this.getExpandKeys();
+        this.nzSelectedKeys = this.getSelectKeys();
       }, 0);
     });
-    setTimeout(() => {
-      this.nzSelectedKeys = this.getSelectKeys();
-      console.log(this.nzSelectedKeys);
-    }, 0);
   }
   getSelectKeys() {
     if (
@@ -216,11 +215,31 @@ export class ApiGroupTreeComponent implements OnInit {
    */
   treeItemDrop = (event: NzFormatEmitEvent) => {
     const dragNode = event.dragNode;
-    const groupApiData: GroupApiDataModel = { group: [], api: [] };
-    // * update group list
+    const node = eoDeepCopy(dragNode.origin);
+    // Get group sort index
+    let index;
+    if (dragNode.parentNode) {
+      index = dragNode.parentNode.getChildren().findIndex(val => val.key === node.key);
+    } else {
+      index = this.apiGroup
+        .getTreeNodes()
+        .filter(n => n.level === 0)
+        .findIndex(val => val.key === node.key);
+    }
+    if (dragNode.isLeaf) {
+      //TODO sort api
+    } else {
+      // * Update group
+      node.parentId = dragNode.parentNode?.key || this.store.getRootGroup.id;
+      node.sort = index;
+      this.effect.updateGroup(node);
+    }
+    console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
-  toggleExpand() {}
+  toggleExpand() {
+    this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
+  }
   /**
    * Group tree item click.
    *

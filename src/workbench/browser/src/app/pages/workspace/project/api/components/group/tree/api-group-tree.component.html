@@ -56,7 +56,7 @@
         <!-- Folder -->
         <div class="flex items-center justify-between tree-node" *ngIf="!node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 25px - 8px * var(--tree-level))'">
-            <div class="flex-shrink-0 width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
+            <!-- <div class="flex-shrink-0 width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div> -->
             <svg class="iconpark-icon mr-[5px] flex-shrink-0">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
             </svg>

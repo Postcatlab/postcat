@@ -299,7 +299,6 @@ export class ApiTabService {
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = { ...currentTab.content.test, ...inData.model.model };
     }
-    console.log(currentTab, inData);
     this.updateTab(currentTab, inData);
   }
   handleDataBeforeGetCache = tabsInfo => {

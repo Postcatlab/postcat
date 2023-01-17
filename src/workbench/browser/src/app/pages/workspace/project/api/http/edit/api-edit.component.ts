@@ -8,6 +8,7 @@ import { ApiData, Group } from 'eo/workbench/browser/src/app/shared/services/sto
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
+import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun, toJS } from 'mobx';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
@@ -162,12 +163,12 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     if (!this.initialModel || !this.model) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    );
+    // console.log(
+    //   'api edit origin:',
+    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);
@@ -195,7 +196,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
       setTimeout(() => {
         //@ts-ignore
         const existGroup = this.apiGroup?.getTreeNodeByKey(this.model.groupId);
-        console.log(existGroup);
+        this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
         if (!existGroup) {
           this.model.groupId = this.store.getRootGroup.id;
         }

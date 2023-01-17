@@ -109,7 +109,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
+    if (
+      changes.model &&
+      ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0)
+    ) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }

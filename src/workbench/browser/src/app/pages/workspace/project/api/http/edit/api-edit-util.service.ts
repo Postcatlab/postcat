@@ -60,7 +60,7 @@ export class ApiEditUtilService {
    */
   formatStorageApiDataToUI(apiData) {
     return this.parseApiUI2Storage(apiData, val => {
-      val['paramAttr.example'] = val.paramAttr.example || '';
+      val['paramAttr.example'] = val.paramAttr?.example || '';
       return true;
     });
   }

@@ -20,16 +20,11 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
-import {
-  ApiTestData,
-  ApiTestHistoryFrame,
-  ContentType
-} from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import { ApiTestHistoryFrame, ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmpty } from 'lodash-es';
@@ -183,15 +178,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       let uuid = this.route.snapshot.queryParams.uuid;
-
-      if (!uuid) return;
-
       const initTimes = this.initTimes;
       let requestInfo = null;
       if (uuid && uuid.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const historyData = await this.apiTest.getHistory(uuid);
-        console.log('historyData', historyData);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
         requestInfo = history.testData;
         this.restoreResponseFromHistory(history.response);
@@ -235,6 +226,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
+    console.log(this.model);
     this.eoOnInit.emit(this.model);
     this.cdRef.detectChanges();
   }
