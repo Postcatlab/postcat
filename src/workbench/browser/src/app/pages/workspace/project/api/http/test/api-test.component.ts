@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { ApiEditUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -116,7 +117,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     private testServer: TestServerService,
     private projectApi: ProjectApiService,
     private lang: LanguageService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private apiEditUtil: ApiEditUtilService
   ) {
     this.initBasicForm();
     this.testServer.init(message => {
@@ -190,6 +192,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           ...requestInfo
         };
+        this.model.request = this.apiEditUtil.formatStorageApiDataToUI(this.model.request);
       } else {
         return;
       }
