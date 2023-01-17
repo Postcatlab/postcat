@@ -1440,21 +1440,30 @@ export class RemoteService {
     });
   }
 
-  api_workspaceUnkown<T = any>(params, prefix = '') {
+  api_workspaceRoles<T = any>({ workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - roles 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.get(`${prefix}/api/workspaces`, params).subscribe({
-        next: ({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c workspace:unkown - api_workspaceUnkown 接口请求成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/api/workspaces/users/roles`, {
+          params: { workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c workspace:roles - api_workspaceRoles 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c workspace:roles - api_workspaceRoles 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { code, data }]);
-        },
-        error: error => {
-          console.log('%c workspace:unkown - api_workspaceUnkown 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 

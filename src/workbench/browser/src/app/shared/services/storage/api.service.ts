@@ -193,8 +193,8 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_workspaceList<T>(params) : this.remote.api_workspaceList<T>(params);
   }
 
-  api_workspaceUnkown<T = any>(params: any) {
-    return this.remote.api_workspaceUnkown<T>(params);
+  api_workspaceRoles<T = any>(params: { workSpaceUuid?: any }) {
+    return this.remote.api_workspaceRoles<T>(params);
   }
 
   api_projectExportProject<T = any>(params: { projectUuid?: any }) {
