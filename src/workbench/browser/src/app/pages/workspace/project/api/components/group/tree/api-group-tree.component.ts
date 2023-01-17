@@ -127,7 +127,7 @@ export class ApiGroupTreeComponent implements OnInit {
       action: 'delete'
     });
   }
-  addAPI(group) {}
+  addAPI(group = this.store.getRootGroup) {}
   deleteAPI(api) {}
   copyAPI(api) {}
   editAPI(group) {}

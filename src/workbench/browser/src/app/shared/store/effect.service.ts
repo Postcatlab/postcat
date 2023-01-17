@@ -249,9 +249,11 @@ export class EffectService {
     // * update API
   }
 
-  createHistory() {
+  async createApiTestHistory(params) {
     // TODO add history
-    this.store.setHistory([]);
+    const [data] = await this.api.api_apiTestHistoryCreate(params);
+    this.store.setHistory([...this.store.getTestHistory, ...data?.items]);
+    return data;
   }
 
   createMock() {
@@ -259,11 +261,11 @@ export class EffectService {
   }
 
   async getHistory() {
-    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1 });
+    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1000 });
     if (err) {
       return;
     }
-    this.store.setHistory(res.data?.items);
+    this.store.setHistory(res?.items);
   }
 
   async getGroupList() {
