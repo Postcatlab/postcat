@@ -1,18 +1,15 @@
-import { compileNgModule } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
-import { MEMBER_MUI } from '../../../../shared/models/member.model';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
 export class WorkspaceMemberService {
   workSpaceUuid: string;
-  role: 'Owner' | 'Editor' | string;
-  roleMUI = MEMBER_MUI;
+  role: 'Workspace Owner' | 'Workspace Editor' | string;
+  roleMUI = [];
   constructor(
     private api: ApiService,
     private store: StoreService,
@@ -23,6 +20,14 @@ export class WorkspaceMemberService {
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
     });
+    this.getRoleList();
+  }
+  async getRoleList() {
+    const [data, err] = await this.api.api_roleList({ roleModule: 1 });
+    if (err) {
+      return;
+    }
+    this.roleMUI = data;
   }
   async addMember(ids) {
     return await this.api.api_workspaceAddMember({
@@ -76,14 +81,12 @@ export class WorkspaceMemberService {
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.api.api_workspaceUnkown({
-      workspaceID: this.workSpaceUuid,
-      roleID: roleID,
-      memberID: item.id
+    const [data, err]: any = await this.api.api_workspaceSetRole({
+      userRole: [{ userId: item.id, roleIds: [roleID] }]
     });
     if (!err) {
       item.role.id = roleID;
-      item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
+      item.role.name = item.role.name === 'Workspace Owner' ? 'Workspace Editor' : 'Workspace Owner';
       item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
     }
     return [data, err];
