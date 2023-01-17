@@ -217,7 +217,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       controls[name] = [this.model[name] || '', [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
-    pcConsole.log(controls);
+    pcConsole.log('initBasicForm', controls);
   }
 
   private watchBasicForm() {
