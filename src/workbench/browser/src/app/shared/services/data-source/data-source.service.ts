@@ -75,10 +75,10 @@ export class DataSourceService {
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
-    if (this.web.isVercel) {
-      pcConsole.error(`Vercel can't operate remote data`);
-      return;
-    }
+    // if (this.web.isVercel) {
+    //   pcConsole.error(`Vercel can't operate remote data`);
+    //   return;
+    // }
     if (this.web.isWeb) {
       if (!this.store.isLogin) {
         this.messageService.send({ type: 'login', data: {} });

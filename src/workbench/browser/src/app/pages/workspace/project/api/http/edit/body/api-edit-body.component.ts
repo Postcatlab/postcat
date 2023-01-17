@@ -143,7 +143,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    if ([ApiBodyType.FormData, ApiBodyType.XML, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
+    if ([ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.JSONArray].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
         this.model.push(eoDeepCopy(this.itemStructure));
       }

@@ -16,7 +16,7 @@
       </div>
     </div>
     <p class="truncate mt-[10px]">{{ model.name }}</p>
-    <!-- Request headers -->
+    <!-- Request Headers -->
     <nz-collapse *ngIf="model.requestParams?.headerParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request Headers">
         <eo-api-detail-form

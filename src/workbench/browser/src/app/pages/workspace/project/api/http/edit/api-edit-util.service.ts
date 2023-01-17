@@ -3,15 +3,13 @@ import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ModalService } from '../../../../../../shared/services/modal.service';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 @Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
-  constructor(private modalService: ModalService) {}
+  constructor() {}
 
   private parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    // result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (whatType(result.requestParams[tableName]) !== 'array') {
         return;

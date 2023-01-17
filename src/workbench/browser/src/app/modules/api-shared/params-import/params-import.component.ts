@@ -6,6 +6,7 @@ import qs from 'qs';
 
 import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-transfer/data-transfer.utils';
 import { whatType } from '../../../utils/index.utils';
+import { ApiParamsTypeJsonOrXml } from '../api.model';
 
 const titleHash = new Map()
   .set('xml', $localize`Import XML`)
@@ -15,7 +16,7 @@ const titleHash = new Map()
   .set('query', $localize`Import Query`);
 
 const egHash = new Map()
-  .set('xml', '<name>Jack</name>')
+  .set('xml', '<root><id>1</id><name>Jack</name></root>')
   .set('formData', 'name: Jack\nage: 18')
   .set('query', '/api?name=Jack&age=18')
   .set('json', `{ "name": "Jack", "age": 18 }`)
@@ -154,7 +155,9 @@ export class ParamsImportComponent implements OnInit {
 
     const endParse = (data, type) => {
       if (['xml'].includes(type)) {
-        return [data.at(0)];
+        const rootItem = data.at(0);
+        rootItem.dataType = ApiParamsTypeJsonOrXml.object;
+        return [rootItem];
       }
       return data;
     };
