@@ -203,7 +203,7 @@ export class ApiTestUtilService {
     if (!existHeader) {
       return;
     }
-    return existHeader.value;
+    return existHeader.paramAttr?.example;
   }
   /**
    * @param type content-type be added/replaced

@@ -34,6 +34,15 @@ export enum ContentType {
   JSON_ARRAY = 6
 }
 
+export enum ApiBodyType {
+  FormData = 0,
+  Raw = 1,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Binary = 4
+}
+
 export enum Protocol {
   HTTP = 0,
   HTTPS = 1,
@@ -50,6 +59,7 @@ export enum Protocol {
 }
 
 export const protocalMap = reverseObj(Protocol);
+export const contentTypeMap = reverseObj(ContentType);
 
 export const ApiParamsTypeByNumber = enumsToArr(ApiParamsTypeFormData).map(val => ({
   title: val.key,
@@ -309,14 +319,6 @@ export const DEFAULT_HEADER = [
   { title: 'Connection', restricted: true }
 ];
 
-export enum ApiBodyType {
-  FormData = 0,
-  Raw = 1,
-  JSON = 2,
-  JSONArray = 6,
-  XML = 3,
-  Binary = 4
-}
 /**
  * Json Root Type
  *

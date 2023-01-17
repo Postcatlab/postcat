@@ -12,7 +12,7 @@ import { ApiTableConf } from '../api.model';
   styleUrls: ['./api-test-query.component.scss']
 })
 export class ApiTestQueryComponent implements OnInit, OnDestroy {
-  @Input() model: ApiTestQuery[];
+  @Input() model: ApiTestQuery[] | any; // TODO
   @Input() disabled: boolean;
   @Input() nzTrClick: (...rest: any[]) => any;
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
