@@ -196,7 +196,6 @@ export class ApiTabService {
   updateTab(currentTab, inData) {
     const model = inData.model;
     const contentID = currentTab.id;
-
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
@@ -206,7 +205,7 @@ export class ApiTabService {
     if (model && !isEmptyObj(model)) {
       //Set title/method
       replaceTab.title = model.name;
-      replaceTab.extends.method = requestMethodMap[model.apiAttrInfo.requestMethod];
+      replaceTab.extends.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
       if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
           replaceTab.extends.method = model.request.protocol?.toUpperCase();

@@ -5,7 +5,7 @@ import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.u
 
 import { ModalService } from '../../../../../../shared/services/modal.service';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
 
