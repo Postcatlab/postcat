@@ -48,15 +48,7 @@ export class ApiTestService {
     return result;
   }
   getHistory(id): Promise<ApiTestHistory> {
-    return new Promise(resolve => {
-      this.storage.run('apiTestHistoryLoad', [id], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          console.error(result.data);
-        }
-      });
-    });
+    return this.effectService.getHistory(id);
   }
   addHistory(history: ApiTestHistoryFrame | any, apiUuid): Promise<any> {
     return this.effectService.createApiTestHistory({

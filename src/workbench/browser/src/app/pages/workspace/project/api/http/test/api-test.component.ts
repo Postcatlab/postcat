@@ -173,6 +173,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       if (uuid && uuid.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const historyData = await this.apiTest.getHistory(uuid);
+        console.log('historyData', historyData);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
         requestInfo = history.testData;
         this.restoreResponseFromHistory(history.response);

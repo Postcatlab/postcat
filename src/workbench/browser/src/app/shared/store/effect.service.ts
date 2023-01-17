@@ -242,7 +242,7 @@ export class EffectService {
   async createApiTestHistory(params) {
     // TODO add history
     const [data] = await this.api.api_apiTestHistoryCreate(params);
-    this.store.setHistory([...this.store.getTestHistory, ...data?.items]);
+    this.store.setHistory([...this.store.getTestHistory, data]);
     return data;
   }
 
@@ -250,7 +250,15 @@ export class EffectService {
     // * update API
   }
 
-  async getHistory() {
+  async getHistory(id) {
+    const [res, err] = await this.api.api_apiTestHistoryDetail({ id: Number(id) });
+    if (err) {
+      return;
+    }
+    return res;
+  }
+
+  async getHistoryList() {
     const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1000 });
     if (err) {
       return;

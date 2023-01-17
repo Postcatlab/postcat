@@ -51,7 +51,7 @@ export class ApiTestUtilService {
     });
     const result = {
       testData: {
-        uuid: inData.apiDataID,
+        uuid: inData.apiUuid,
         restParams: [],
         uri: tmpResult.url,
         queryParams: tmpResult.query,
