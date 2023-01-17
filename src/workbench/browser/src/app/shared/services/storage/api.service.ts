@@ -190,11 +190,15 @@ export class ApiService {
   }
 
   api_workspaceList<T = any>(params: any) {
-    return this.store.isLocal ? this.local.api_workspaceList<T>(params) : this.remote.api_workspaceList<T>(params);
+    return this.remote.api_workspaceList<T>(params);
   }
 
-  api_workspaceUnkown<T = any>(params: any) {
-    return this.remote.api_workspaceUnkown<T>(params);
+  api_workspaceRoles<T = any>(params: { workSpaceUuid?: any }) {
+    return this.remote.api_workspaceRoles<T>(params);
+  }
+
+  api_workspaceSetRole<T = any>(params: { userRole: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceSetRole<T>(params);
   }
 
   api_projectExportProject<T = any>(params: { projectUuid?: any }) {
@@ -219,6 +223,10 @@ export class ApiService {
 
   api_projectSetRole<T = any>(params: { projectUuid?: any; userRole: any }) {
     return this.remote.api_projectSetRole<T>(params);
+  }
+
+  api_projectGetRole<T = any>(params: { projectUuid?: any }) {
+    return this.remote.api_projectGetRole<T>(params);
   }
 
   api_projectUserPermission<T = any>(params: { projectUuid?: any }) {

@@ -3,13 +3,19 @@ import { ApiTestUtilService } from 'eo/workbench/browser/src/app/modules/api-sha
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 import { ApiBodyType, Protocol, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { ApiTestHistory } from '../../../../../../shared/services/storage/index.model';
 import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
 export class ApiTestService {
-  constructor(private apiService: ProjectApiService, private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
+  constructor(
+    private apiService: ProjectApiService,
+    private apiTestUtils: ApiTestUtilService,
+    private storage: StorageService,
+    private effectService: EffectService
+  ) {}
   async getApi({ id }): Promise<ApiTestData> {
     let result: ApiTestData = {
       projectID: -1,
@@ -42,34 +48,12 @@ export class ApiTestService {
     return result;
   }
   getHistory(id): Promise<ApiTestHistory> {
-    return new Promise(resolve => {
-      this.storage.run('apiTestHistoryLoad', [id], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          console.error(result.data);
-        }
-      });
-    });
+    return this.effectService.getHistory(id);
   }
-  addHistory(history: ApiTestHistoryFrame | any, apiID): Promise<any> {
-    return new Promise(resolve => {
-      this.storage.run(
-        'apiTestHistoryCreate',
-        [
-          {
-            apiDataID: apiID,
-            ...history
-          }
-        ],
-        (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            resolve(result.data);
-          } else {
-            console.error(result.data);
-          }
-        }
-      );
+  addHistory(history: ApiTestHistoryFrame | any, apiUuid): Promise<any> {
+    return this.effectService.createApiTestHistory({
+      ...history,
+      apiUuid
     });
   }
 }

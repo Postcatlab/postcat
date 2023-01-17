@@ -71,14 +71,14 @@
         </ng-template>
         <eo-api-test-body
           class="eo_theme_iblock"
-          [(contentType)]="model.contentType"
+          [(contentType)]="$$contentType"
           [(autoSetContentType)]="model.autoSetContentType"
           (contentTypeChange)="changeContentType($event)"
           [(bodyType)]="model.request.apiAttrInfo.contentType"
           (bodyTypeChange)="changeBodyType($event)"
           [(model)]="model.request.requestParams.bodyParams"
           (modelChange)="emitChangeFun('requestBody')"
-          [supportType]="['formData', 'raw', 'binary']"
+          [supportType]="['FormData', 'Raw', 'Binary']"
         >
         </eo-api-test-body>
       </eo-ng-tab>

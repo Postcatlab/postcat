@@ -40,7 +40,7 @@ import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/opera
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
-import { ApiBodyType, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
@@ -48,6 +48,14 @@ import { ApiTestService } from './api-test.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
+
+const contentTypeMap = {
+  0: 'application/json',
+  1: 'text/plain',
+  2: 'application/json',
+  3: 'application/xml',
+  6: 'application/json'
+} as const;
 
 interface testViewModel {
   request: ApiData;
@@ -92,12 +100,19 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
+  $$contentType: ContentType = contentTypeMap[0];
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
   get isEmptyTestPage(): boolean {
     const { uuid } = this.route.snapshot.queryParams;
     return !this.store.isShare && (!uuid || uuid.includes('history_'));
+  }
+  get contentType(): ContentType {
+    return contentTypeMap[this.model.request.apiAttrInfo.contentType];
+  }
+  set contentType(value) {
+    this.$$contentType = value;
   }
 
   private initTimes = 0;
@@ -168,11 +183,15 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       let uuid = this.route.snapshot.queryParams.uuid;
+
+      if (!uuid) return;
+
       const initTimes = this.initTimes;
       let requestInfo = null;
       if (uuid && uuid.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const historyData = await this.apiTest.getHistory(uuid);
+        console.log('historyData', historyData);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
         requestInfo = history.testData;
         this.restoreResponseFromHistory(history.response);
@@ -186,6 +205,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model.request = {
+          ...this.model.request,
           script: {
             beforeScript: '',
             afterScript: ''
@@ -284,7 +304,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.model.request.uuid) {
       return false;
     }
-    if (!this.initialModel.request || !this.model.request) {
+    if (!this.initialModel?.request || !this.model.request) {
       return false;
     }
     // console.log(
@@ -368,8 +388,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.status$.next('tested');
   }
-  private async addHistory(histoy: ApiTestHistoryFrame, id) {
-    await this.apiTest.addHistory(histoy, id);
+  private async addHistory(history: ApiTestHistoryFrame, apiUuid: string) {
+    await this.apiTest.addHistory(history, apiUuid);
   }
   /**
    * Receive Test Server Message
@@ -411,7 +431,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!message.response.statusCode || this.store.isShare) {
       return;
     }
-    this.addHistory(message.history, Number(queryParams.uuid));
+    this.addHistory(message.history, queryParams.uuid);
   }
   setTestSecondsTimmer() {
     if (this.timer$) {
@@ -461,7 +481,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private initContentType() {
-    const contentType = this.model.request?.apiAttrInfo.contentType;
+    const contentType = this.model.request?.apiAttrInfo?.contentType;
     if (contentType === ApiBodyType.Raw) {
       this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
     }
@@ -481,10 +501,19 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   private resetModel() {
     return {
-      contentType: 'text/plain',
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {
+        apiAttrInfo: {
+          contentType: ContentTypeEnum.RAW,
+          requestMethod: 0
+        },
+        requestParams: {
+          headerParams: [],
+          bodyParams: [],
+          queryParams: [],
+          restParams: []
+        },
         script: {
           beforeScript: '',
           afterScript: ''

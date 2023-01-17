@@ -100,9 +100,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
+    this.CONST.API_BODY_TYPE = Object.values(ApiBodyType)
       .filter(val => this.supportType.includes(ApiBodyType[val]))
-      .map(val => ({ key: val, value: ApiBodyType[val] }));
+      .map(val => ({ key: ApiBodyType[val].charAt(0).toLocaleLowerCase() + ApiBodyType[val].slice(1), value: val }));
   }
   ngOnDestroy() {
     this.destroy$.next();

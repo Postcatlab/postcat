@@ -35,7 +35,7 @@ const http = {
       name: 'apiTestHistory',
       data: [
         { 'create @post @create': '/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/history/list', query: 'projectUuid, workSpaceUuid, page, pageSize' },
+        { 'list @get @page': '/api/history/list', query: 'projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/api/history', query: 'id, projectUuid, workSpaceUuid' },
         { 'delete @delete @bulkDelete': '/api/history', body: 'projectUuid, workSpaceUuid' }
       ]
@@ -75,8 +75,9 @@ const http = {
         { 'memberQuit @delete': '/workspaces/users/quit', body: 'workSpaceUuid' },
         { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
         { 'getMemberPermiss @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
-        { 'list @get @bulkRead': '/workspaces' },
-        { 'unkown @get': '/workspaces' }
+        { 'list @get': '/workspaces' },
+        { 'roles @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
+        { 'setRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' }
       ]
     },
     {
@@ -88,6 +89,7 @@ const http = {
         { 'delMember @delete': '/projects/users', body: 'userIds, projectUuid' },
         { 'memberQuit @delete': '/projects/users/quit', body: 'userId, projectUuid' },
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
+        { 'getRole @get': '/projects/users/roles/own', query: 'projectUuid' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
         { 'create @post @bulkCreate': '/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid' },

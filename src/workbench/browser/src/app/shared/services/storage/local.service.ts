@@ -631,7 +631,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiTestHistory
-        .bulkRead({ projectUuid, workSpaceUuid, page, pageSize })
+        .page({ projectUuid, workSpaceUuid, page, pageSize })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiTestHistory - list 接口调用成功 %c', SuccessStyle, '');
@@ -942,24 +942,6 @@ export class LocalService {
         })
         .catch(error => {
           console.log('%c workspace - delete 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_workspaceList<T = any>(params) {
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      db.workspace
-        .bulkRead(params)
-        .then(({ code, data }: any) => {
-          if (code === 0) {
-            console.log('%c workspace - list 接口调用成功 %c', SuccessStyle, '');
-            return resolve([data, null]);
-          }
-          return resolve([null, { code, data }]);
-        })
-        .catch(error => {
-          console.log('%c workspace - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
