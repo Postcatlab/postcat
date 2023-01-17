@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
-import { ApiBodyType, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, protocalMap, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const PROTOCOL = ['http', 'https'];
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
@@ -82,12 +82,12 @@ export const eoFormatRequestData = (
   const result: TestLocalNodeData = {
     lang: opts.lang,
     globals: opts.globals,
-    URL: formatUri(data.uri, data.restParams),
-    method: requestMethodMap[data.method],
-    methodType: data.method,
-    httpHeader: PROTOCOL.indexOf(data.protocol),
-    headers: formatList(data.requestHeaders),
-    requestType: data.requestBodyType.toString(),
+    URL: formatUri(data.uri, data.requestParams.restParams),
+    method: requestMethodMap[data.apiAttrInfo.requestMethod],
+    methodType: data.apiAttrInfo.requestMethod,
+    httpHeader: protocalMap[data.protocol],
+    headers: formatList(data.requestParams.headerParams),
+    requestType: data.apiAttrInfo.contentType.toString(),
     apiRequestParamJsonType: '0',
     //TODO
     // apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType),

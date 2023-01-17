@@ -3,12 +3,13 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import {
   ApiBodyType,
-  ApiEditBody,
+  ApiParamsTypeFormData,
   ApiTableConf,
   API_BODY_TYPE,
   IMPORT_MUI,
   JsonRootType
 } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -35,12 +36,14 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     setting: {}
   };
   cache: any = {};
-  itemStructure: ApiEditBody = {
+  itemStructure: BodyParam = {
     name: '',
-    type: 'string',
-    required: true,
-    example: '',
-    description: ''
+    dataType: ApiParamsTypeFormData.string,
+    isRequired: 1,
+    description: '',
+    paramAttr: {
+      example: ''
+    }
   };
   IMPORT_MUI = IMPORT_MUI;
   API_BODY_TYPE;
@@ -129,7 +132,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Add last row| RestoreData From cache| XML first row type must be object
    */
   private setModel() {
-    console.log(this.bodyType);
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
