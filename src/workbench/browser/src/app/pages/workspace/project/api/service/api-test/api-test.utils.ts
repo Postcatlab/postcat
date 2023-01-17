@@ -1,10 +1,9 @@
 import { formatDate } from '@angular/common';
+import { ApiBodyType, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 
 import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
 const PROTOCOL = ['http', 'https'];
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
 
@@ -84,8 +83,8 @@ export const eoFormatRequestData = (
     lang: opts.lang,
     globals: opts.globals,
     URL: formatUri(data.uri, data.restParams),
-    method: data.method,
-    methodType: METHOD.indexOf(data.method).toString(),
+    method: requestMethodMap[data.method],
+    methodType: data.method,
     httpHeader: PROTOCOL.indexOf(data.protocol),
     headers: formatList(data.requestHeaders),
     requestType: data.requestBodyType.toString(),

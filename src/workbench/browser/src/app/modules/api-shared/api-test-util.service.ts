@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';

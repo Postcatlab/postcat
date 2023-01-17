@@ -14,7 +14,7 @@ export interface TestLocalNodeData {
    *
    * @type {string}
    */
-  methodType: string;
+  methodType: number;
   /**
    * API  protocal type
    *

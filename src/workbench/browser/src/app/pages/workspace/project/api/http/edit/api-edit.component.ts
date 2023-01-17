@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
-import { ApiBodyType, RequestMethodEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -39,7 +39,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   groups: any[];
   initTimes = 0;
   expandKeys: string[];
-  REQUEST_METHOD = enumsToArr(RequestMethodEnum);
+  REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
   private changegroupId$: Subject<string | number> = new Subject();

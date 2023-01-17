@@ -1,6 +1,4 @@
-import { ProtocolEnum, JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
-
-import { RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType, JsonRootType, Protocol, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 
 export enum ApiTestParamsTypeFormData {
   text = 'string',
@@ -214,7 +212,7 @@ export interface ApiTestData {
    *
    * @type {RequestProtocol|string}
    */
-  protocol: ProtocolEnum | number;
+  protocol: Protocol | number;
 
   /**
    * Request method [POST, GET, PUT, ...]

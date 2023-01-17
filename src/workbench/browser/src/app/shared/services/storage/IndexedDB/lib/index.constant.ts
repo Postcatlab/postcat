@@ -1,5 +1,4 @@
-import { RequestProtocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ApiBodyType, JsonRootType } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { RequestProtocol, RequestMethod, ApiBodyType, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 import { ApiData } from '../../index.model';
 

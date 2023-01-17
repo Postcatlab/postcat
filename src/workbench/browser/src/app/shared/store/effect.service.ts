@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -11,8 +12,6 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
-
-import { ApiBodyType } from '../services/storage/db/enums/api.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -276,7 +275,7 @@ export class EffectService {
     if (err) {
       return;
     }
-    this.store.setHistory(res.data.items);
+    this.store.setHistory(res.data?.items);
   }
 
   private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {

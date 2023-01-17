@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
-import { ApiBodyType, ProtocolEnum, RequestMethodEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
@@ -22,9 +22,9 @@ export class ApiEditService {
       name: '',
       uri: '/',
       groupId,
-      protocol: ProtocolEnum.HTTP,
+      protocol: Protocol.HTTP,
       apiAttrInfo: {
-        requestMethod: RequestMethodEnum.POST,
+        requestMethod: RequestMethod.POST,
         contentType: ApiBodyType.JSON
       },
       requestParams: {

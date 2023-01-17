@@ -1,4 +1,4 @@
-import { ContentTypeEnum, ProtocolEnum, RequestMethodEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/enums/api.enum';
+import { ContentType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) => {
   return {
@@ -10,7 +10,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         lifecycle: 0,
         name: $localize`Get City Weather Today`,
         uri: 'http://www.weather.com.cn/data/cityinfo/{cityCode}.html',
-        protocol: ProtocolEnum.HTTP,
+        protocol: Protocol.HTTP,
         status: 0,
         starred: 0,
         encoding: '',
@@ -46,8 +46,8 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
           beforeInject: '',
           afterInject: '',
           authInfo: '',
-          requestMethod: RequestMethodEnum.GET,
-          contentType: ContentTypeEnum.RAW,
+          requestMethod: RequestMethod.GET,
+          contentType: ContentType.RAW,
           createTime: '',
           updateTime: ''
         },
@@ -448,7 +448,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         lifecycle: 0,
         name: $localize`COVID-19 national epidemic`,
         uri: 'https://view.inews.qq.com/g2/getOnsInfo',
-        protocol: ProtocolEnum.HTTP,
+        protocol: Protocol.HTTP,
         status: 0,
         starred: 0,
         encoding: '',
