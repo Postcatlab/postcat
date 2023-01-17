@@ -252,7 +252,7 @@ export class ApiTableService {
       value: {
         title: $localize`Value`,
         type: 'input',
-        key: 'value'
+        key: 'paramAttr.example'
       },
       editOperate: {
         type: 'btnList',
