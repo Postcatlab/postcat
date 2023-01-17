@@ -71,7 +71,11 @@ export class ProjectListComponent implements OnInit {
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {
-        await this.apiService.api_projectDelete({ projectUuids: [item.uuid] });
+        const [, err] = await this.apiService.api_projectDelete({ projectUuids: [item.projectUuid] });
+        if (err) {
+          return;
+        }
+        // * update project list
         this.getProjectList();
         modal.destroy();
       }
@@ -94,10 +98,12 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
-        if (!model.name) return;
+        if (!model.name) {
+          return;
+        }
 
         await this.effect.createProject(model);
-
+        // * update project list
         this.getProjectList();
         modal.destroy();
       }
