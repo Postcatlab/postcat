@@ -1,19 +1,20 @@
 import isXml from 'is-xml';
 
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
+import { ApiBodyType, ApiEditBody, ApiParamsTypeFormData, JsonRootType } from '../../modules/api-shared/api.model';
+import { BodyParam } from '../../shared/services/storage/db/models/apiData';
 import { whatType, whatTextType } from '../index.utils';
 
 export const isXML = data => isXml(data);
 /**
  * Parse item to eoTableComponent need
  */
-const parseTree = (key, value) => {
+const parseTree = (key, value): BodyParam | unknown => {
   if (whatType(value) === 'object') {
     return {
       name: key,
-      required: true,
-      example: '',
-      type: 'object',
+      isRequired: 1,
+      'paramAttr.example': '',
+      dataType: ApiParamsTypeFormData.string,
       description: '',
       childList: Object.keys(value).map(it => parseTree(it, value[it]))
     };
@@ -25,20 +26,20 @@ const parseTree = (key, value) => {
     if (whatType(data) === 'string') {
       return {
         name: key,
-        required: true,
+        isRequired: 1,
         //TODO only test page has value
         value: JSON.stringify(value),
         //TODO only edit page has example
-        example: JSON.stringify(value),
-        type: 'array',
+        'paramAttr.example': JSON.stringify(value),
+        dataType: ApiParamsTypeFormData.array,
         description: ''
       };
     }
     return {
       name: key,
-      required: true,
-      example: '',
-      type: 'array',
+      isRequired: 1,
+      'paramAttr.example': '',
+      dataType: ApiParamsTypeFormData.array,
       description: '',
       childList: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
     };
@@ -46,11 +47,11 @@ const parseTree = (key, value) => {
   // * value is string & number & null
   return {
     name: key,
+    isRequired: 1,
     value: value == null ? '' : value.toString(),
     description: '',
-    type: whatType(value),
-    required: true,
-    example: value == null ? '' : value.toString()
+    'paramAttr.example': value == null ? '' : value.toString(),
+    dataType: ApiParamsTypeFormData[whatType(value)]
   };
 };
 /**

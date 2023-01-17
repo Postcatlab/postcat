@@ -9,7 +9,7 @@
       </eo-ng-select>
       <nz-form-item nz-col class="flex-1">
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-          <input type="text" class="rounded-r" [(ngModel)]="model.uri" name="uri" eo-ng-input formControlName="uri" />
+          <input type="text" class="rounded-r" name="uri" eo-ng-input formControlName="uri" />
         </nz-form-control>
       </nz-form-item>
     </eo-ng-input-group>
@@ -22,8 +22,6 @@
             [nzExpandedKeys]="expandKeys"
             [nzDropdownMatchSelectWidth]="false"
             [nzNodes]="groups"
-            [(ngModel)]="model.groupId"
-            (nzOpenChange)="getApiGroup()"
             [nzShowSearch]="true"
             #apiGroup
             formControlName="groupId"
@@ -33,7 +31,7 @@
       </nz-form-item>
       <nz-form-item nz-col class="flex-1 !mb-0">
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name" [nzValidateStatus]="this.validateForm.controls.name">
-          <input type="text" class="rounded-r" [(ngModel)]="model.name" name="name" eo-ng-input formControlName="name" />
+          <input type="text" class="rounded-r" name="name" eo-ng-input formControlName="name" />
         </nz-form-control>
       </nz-form-item>
     </eo-ng-input-group>
