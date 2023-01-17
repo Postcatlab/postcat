@@ -22,8 +22,11 @@ export class TabOperateService {
    */
   BASIC_TABS: Array<Partial<TabItem>>;
   setting = {
-    //* Cache pagedata in tab
-    disabledCache: true,
+    /**
+     * Cache pagedata in tab
+     * Force cache in production environment
+     */
+    disabledCache: APP_CONFIG.production ? false : true,
     //* Allow development mode debug not exist router at init
     allowNotExistRouter: !APP_CONFIG.production,
     //* Allow open new tab by url at init

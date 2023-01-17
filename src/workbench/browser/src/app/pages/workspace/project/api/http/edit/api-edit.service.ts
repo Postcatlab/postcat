@@ -7,6 +7,8 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 import { ApiEditUtilService } from './api-edit-util.service';
+
+import { resolveObjectURL } from 'buffer';
 @Injectable()
 export class ApiEditService {
   constructor(
@@ -64,18 +66,16 @@ export class ApiEditService {
       }
     } else {
       //@ts-ignore
-      result = await this.effect.getAPI(id);
+      result = await this.effect.getAPI([id]);
     }
     return this.apiEditUtil.parseApiStorage2UI(result);
   }
-  editApi(apiData): Promise<StorageRes> {
+  async editApi(apiData): Promise<[ApiData, any]> {
     const busEvent = apiData.uuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
-      return new Promise(resolve => {
-        this.storage.run('apiDataUpdate', [apiData, apiData.uuid], resolve);
-      });
+      return await this.apiService.edit(apiData);
     } else {
-      return this.apiService.add(apiData);
+      return await this.apiService.add(apiData);
     }
   }
 }

@@ -10,6 +10,7 @@ import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
 
 import { reverseObj } from '../../../../../../utils/index.utils';
+import { ProjectApiService } from '../../api.service';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -27,7 +28,7 @@ export class ApiDetailComponent implements OnInit {
   }
   constructor(
     private route: ActivatedRoute,
-    private effectService: EffectService,
+    private projectApi: ProjectApiService,
     public electron: ElectronService,
     public store: StoreService,
     private message: EoNgFeedbackMessageService
@@ -49,7 +50,7 @@ export class ApiDetailComponent implements OnInit {
       this.model = {} as ApiData;
       const uuid = this.route.snapshot.queryParams.uuid;
       if (uuid) {
-        this.model = await this.effectService.getAPI([uuid]);
+        this.model = await this.projectApi.get(uuid);
         this.originModel = cloneDeep(this.model);
       } else {
         console.error(`Can't no find api`);

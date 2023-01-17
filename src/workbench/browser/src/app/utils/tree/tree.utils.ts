@@ -1,7 +1,7 @@
 import omitDeep from 'omit-deep-lodash';
 
 import { GroupTreeItem } from '../../shared/models';
-import { whatType } from '../index.utils';
+import { eoDeepCopy, whatType } from '../index.utils';
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
@@ -18,7 +18,32 @@ export const getTreeTotalCount = (trees): number => {
   });
   return result;
 };
-
+const getValueByChian = (chain, object) => {
+  return chain.reduce((o, i) => o?.[i], object);
+};
+/**
+ * Table column key has quote child attribute,such as 'a.b.c'
+ * Generate a new array with quote child attribute
+ */
+export const generateQuoteKeyValue = (chains, nzData, opts = { childKey: 'childList' }) => {
+  let result = eoDeepCopy(nzData) || [];
+  const loop = items => {
+    items.forEach((item, index) => {
+      chains.forEach(chain => {
+        const value = getValueByChian(chain.arr, item);
+        if (value) {
+          item[chain.str] = value;
+        }
+      });
+      if (item[opts.childKey]) {
+        item[opts.childKey] = loop(item[opts.childKey]);
+      }
+    });
+    return items;
+  };
+  result = loop(result);
+  return result;
+};
 const filterTree = (
   result,
   filterFn,
