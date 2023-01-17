@@ -50,8 +50,6 @@ const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGH
 
 interface testViewModel {
   request: ApiData;
-  beforeScript: string;
-  afterScript: string;
   testStartTime?: number;
   contentType: ContentType;
   autoSetContentType: boolean;
@@ -156,8 +154,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
    * Restore data from history
    */
   restoreResponseFromHistory(response) {
-    this.model.beforeScript = response?.beforeScript || '';
-    this.model.afterScript = response?.afterScript || '';
+    this.model.request.script.beforeScript = response?.beforeScript || '';
+    this.model.request.script.afterScript = response?.afterScript || '';
     this.model.responseTabIndex = 0;
     this.model.testResult = response;
     this.model.testResult.request ??= {};
@@ -185,8 +183,13 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
-        this.model.request = requestInfo;
-        console.log('this.model', this.model);
+        this.model.request = {
+          script: {
+            beforeScript: '',
+            afterScript: ''
+          },
+          ...requestInfo
+        };
       } else {
         return;
       }
@@ -291,8 +294,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (
       originText !== afterText ||
-      this.initialModel.beforeScript !== this.model.beforeScript ||
-      this.initialModel.afterScript !== this.model.afterScript
+      this.initialModel.request.script.beforeScript !== this.model.request.script.beforeScript ||
+      this.initialModel.request.script.afterScript !== this.model.request.script.afterScript
     ) {
       // console.log('api test formChange true!', originText.split(afterText));
       return true;
@@ -347,8 +350,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.store.getCurrentEnv,
         globals: getGlobals(),
-        beforeScript: this.model.beforeScript,
-        afterScript: this.model.afterScript,
+        beforeScript: this.model.request.script.beforeScript,
+        afterScript: this.model.request.script.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en'
       })
     });
@@ -478,9 +481,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       contentType: 'text/plain',
       requestTabIndex: 1,
       responseTabIndex: 0,
-      request: {},
-      beforeScript: '',
-      afterScript: '',
+      request: {
+        script: {
+          beforeScript: '',
+          afterScript: ''
+        }
+      },
       testResult: {
         response: {},
         request: {}

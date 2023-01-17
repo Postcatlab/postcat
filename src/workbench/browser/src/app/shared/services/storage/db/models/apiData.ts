@@ -37,6 +37,10 @@ export interface ApiData {
   resultList?: ResultList[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
+  script?: {
+    beforeScript: '';
+    afterScript: '';
+  };
 }
 
 export interface Introduction {
