@@ -4,23 +4,24 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 import { EffectService } from '../../shared/store/effect.service';
 
+import { debug } from 'console';
+
 @Component({
   selector: 'eo-workspace',
-  template: `<router-outlet *ngIf="storeService.getCurrentWorkspace?.workSpaceUuid"></router-outlet>`,
+  template: `<router-outlet *ngIf="store.getCurrentWorkspace?.workSpaceUuid"></router-outlet>`,
   styles: []
 })
 export class WorkspaceComponent implements OnInit {
-  hasWorkspace = false;
-
-  constructor(private effect: EffectService, private route: ActivatedRoute, public storeService: StoreService) {}
+  constructor(private effect: EffectService, private route: ActivatedRoute, public store: StoreService) {}
 
   async ngOnInit() {
     const { pid, wid } = this.route.snapshot.queryParams;
-    if (this.storeService.getCurrentWorkspaceUuid !== wid) {
+    if (this.store.getCurrentWorkspaceUuid !== wid) {
       this.effect.switchWorkspace(wid);
-      this.storeService.setCurrentProjectID(pid);
+      this.store.setCurrentProjectID(pid);
+      return;
     }
-    if (this.storeService.getCurrentProjectID !== pid && pid) {
+    if (this.store.getCurrentProjectID !== pid && pid) {
       this.effect.switchProject(pid);
     }
   }

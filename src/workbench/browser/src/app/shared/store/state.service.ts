@@ -17,7 +17,12 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
   providedIn: 'root'
 })
 export class StoreService {
-  private localWorkspace: API.Workspace;
+  private localWorkspace: API.Workspace = {
+    createUserId: -1,
+    workSpaceUuid: '-1',
+    title: $localize`Persional Workspace`,
+    isLocal: true
+  };
   // * observable data
   // ? api & group(includes api) & mock
   @observable.shallow private currentAPI = {};
@@ -42,8 +47,7 @@ export class StoreService {
   @observable private groupList: Group[] = [];
 
   // ? workspace
-  @observable private currentWorkspaceUuid = StorageUtil.get<string>('currentWorkspaceUuid');
-  @observable private currentWorkspace: API.Workspace;
+  @observable private currentWorkspace: API.Workspace = StorageUtil.get('currentWorkspace');
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [];
 
@@ -159,7 +163,7 @@ export class StoreService {
     return this.workspaceList;
   }
   @computed get getCurrentWorkspaceUuid() {
-    return this.currentWorkspaceUuid;
+    return this.currentWorkspace.workSpaceUuid;
   }
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
@@ -226,9 +230,8 @@ export class StoreService {
   async initWorkspace() {
     const result = await db.workspace.read();
     this.localWorkspace = result.data as API.Workspace;
-    this.currentWorkspaceUuid ??= this.localWorkspace.workSpaceUuid;
-    this.currentWorkspace ??= this.localWorkspace;
-    this.workspaceList ??= [this.localWorkspace];
+    this.setCurrentWorkspace(this.currentWorkspace || this.localWorkspace);
+    this.setWorkspaceList(this.getWorkspaceList.filter(val => val.isLocal));
   }
 
   // * actions
@@ -279,22 +282,29 @@ export class StoreService {
   }
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
-    this.workspaceList = [this.localWorkspace, ...data.filter(it => !it.isLocal)];
-    const workspace = this.workspaceList.find(val => val.workSpaceUuid === this.currentWorkspaceUuid) || this.getLocalWorkspace;
-    this.setCurrentWorkspaceUuid(workspace.workSpaceUuid);
+    this.workspaceList = [...data];
+    if (this.localWorkspace) {
+      this.workspaceList.unshift(this.localWorkspace);
+    }
+    const workspace = this.workspaceList.find(val => val.workSpaceUuid === this.getCurrentWorkspaceUuid) || this.getLocalWorkspace;
+    this.setCurrentWorkspace(workspace);
   }
   @action updateWorkspace(workspace: API.Workspace) {
     const index = this.workspaceList.findIndex(val => val.workSpaceUuid === workspace.workSpaceUuid);
     this.workspaceList[index] = workspace;
-    if (this.currentWorkspaceUuid === workspace.workSpaceUuid) {
-      this.currentWorkspace = workspace;
+    if (this.getCurrentWorkspaceUuid === workspace.workSpaceUuid) {
+      this.setCurrentWorkspace(workspace);
     }
   }
-  @action setCurrentWorkspaceUuid(workSpaceUuid: string) {
-    this.currentWorkspaceUuid = workSpaceUuid;
-    this.currentWorkspace = this.workspaceList?.find(val => val.workSpaceUuid === workSpaceUuid);
-    StorageUtil.set('currentWorkspaceUuid', this.currentWorkspaceUuid);
+  @action setCurrentWorkspace(workspace) {
+    if (!workspace) {
+      console.error("workspace can't not be null");
+      return;
+    }
+    this.currentWorkspace = workspace;
+    StorageUtil.set('currentWorkspace', workspace);
   }
+
   // ? project
   @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;

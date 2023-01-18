@@ -78,8 +78,9 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async switchWorkspace(workspaceID: string) {
-    // * real set workspace
-    this.store.setCurrentWorkspaceUuid(workspaceID);
+    const workspace = this.store.getWorkspaceList.find(it => it.workSpaceUuid === workspaceID);
+    this.store.setCurrentWorkspace(workspace);
+
     // * real set workspace
     await this.router.navigate(['**']);
 
@@ -122,6 +123,7 @@ export class EffectService {
       this.router.navigate(['/home/workspace/overview']);
       return;
     }
+    debugger;
     this.store.setCurrentProjectID(pid);
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
