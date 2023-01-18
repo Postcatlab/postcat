@@ -1,15 +1,22 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiTableConf, API_BODY_TYPE, IMPORT_MUI } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  ApiTableConf,
+  API_BODY_TYPE,
+  IMPORT_MUI
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { transferFileToDataUrl, whatTextType, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
 import { pairwise, takeUntil } from 'rxjs/operators';
 
-import { ApiTestBody, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 const whatTextTypeMap = {
   xml: 'application/xml',
@@ -49,15 +56,20 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
+  get API_PARAMS_TYPE(): typeof ApiParamsType {
+    return ApiParamsType;
+  }
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json'
   };
-  itemStructure: ApiTestBody = {
-    required: true,
+  itemStructure: BodyParam = {
+    isRequired: 1,
     name: '',
-    type: 'string',
-    value: ''
+    dataType: ApiParamsType.string,
+    paramAttr: {
+      example: ''
+    }
   };
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
@@ -173,9 +185,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    if (typeof this.model === 'object') {
+    if (whatType(this.model) === 'array') {
       this.model.forEach(row => {
-        if (row.type === 'file') {
+        if (row.dataType === ApiParamsType.file) {
           row.files = [];
         }
       });
@@ -209,15 +221,15 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.listConf.setting = config.setting;
     this.listConf.columns.forEach(col => {
       switch (col.key) {
-        case 'value': {
+        case 'paramAttr.example': {
           col.slot = this.formValue;
           break;
         }
-        case 'type': {
-          col.change = item => {
-            if (item.type === 'file') {
+        case 'dataType': {
+          col.change = (item: BodyParam | any) => {
+            if (item.dataType === ApiParamsType.file) {
               item.files = [];
-              item.value = '';
+              item.paramAttr.example = '';
             } else {
               delete item.files;
             }

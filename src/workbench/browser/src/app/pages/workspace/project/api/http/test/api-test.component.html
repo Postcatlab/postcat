@@ -107,11 +107,11 @@
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
-          <nz-badge class="ml-1" *ngIf="model.request.script?.beforeScript?.trim()" nzStatus="success"></nz-badge>
+          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.beforeInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
           *ngIf="model.requestTabIndex === 4"
-          [(code)]="model.request.script.beforeScript"
+          [(code)]="model.request.apiAttrInfo.beforeInject"
           (codeChange)="emitChangeFun('beforeScript')"
           [treeData]="BEFORE_DATA"
           [completions]="beforeScriptCompletions"
@@ -121,11 +121,11 @@
       <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
         <ng-template #suffixScriptTitleTmp>
           <span i18n>After-response Script</span>
-          <nz-badge class="ml-1" *ngIf="model.request.script?.afterScript?.trim()" nzStatus="success"></nz-badge>
+          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.afterInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
           *ngIf="model.requestTabIndex === 5"
-          [(code)]="model.request.script.afterScript"
+          [(code)]="model.request.apiAttrInfo.afterInject"
           (codeChange)="emitChangeFun('afterScript')"
           [treeData]="AFTER_DATA"
           [completions]="afterScriptCompletions"

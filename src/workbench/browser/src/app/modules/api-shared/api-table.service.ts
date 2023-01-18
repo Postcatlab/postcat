@@ -6,10 +6,10 @@ import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/htt
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
 import { BodyParam } from '../../shared/services/storage/db/models/apiData';
-import { eoDeepCopy, JSONParse } from '../../utils/index.utils';
+import { enumsToArr, eoDeepCopy, JSONParse } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiBodyType, ApiParamsTypeByNumber, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
+import { ApiBodyType, ApiParamsType, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
@@ -76,8 +76,7 @@ export class ApiTableService {
         type: 'select',
         key: 'dataType',
         filterable: inArg.isEdit ? false : true,
-        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined,
-        enums: ApiParamsTypeByNumber
+        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined
       },
       isRequired: {
         title: $localize`Required`,
@@ -173,7 +172,6 @@ export class ApiTableService {
       }
     }
     columnsArr.push(inArg.module === 'preview' ? 'previewOperate' : 'editOperate');
-    const types = inArg.format === ApiBodyType['FormData'] ? ApiParamsTypeFormData : ApiParamsTypeJsonOrXml;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -187,10 +185,11 @@ export class ApiTableService {
           }
           break;
         }
-        case 'type': {
-          column.enums = Object.keys(types).map(val => ({
-            title: val,
-            value: types[val]
+        case 'dataType': {
+          const types = inArg.format === ApiBodyType.FormData ? ApiParamsType : ApiParamsTypeJsonOrXml;
+          column.enums = enumsToArr(types).map(val => ({
+            title: val.key,
+            value: val.value
           }));
           break;
         }
@@ -237,10 +236,10 @@ export class ApiTableService {
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name'
       },
-      type: {
+      dataType: {
         title: $localize`Type`,
         type: 'select',
-        key: 'type',
+        key: 'dataType',
         width: 150
       },
       isRequired: {
@@ -277,7 +276,7 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['isRequired', 'name', 'type', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'dataType', 'value', 'editOperate'];
         break;
       }
       default: {
@@ -285,7 +284,6 @@ export class ApiTableService {
         break;
       }
     }
-    const types = ApiTestParamsTypeFormData;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -299,11 +297,17 @@ export class ApiTableService {
           }
           break;
         }
-        case 'type': {
-          column.enums = Object.keys(types).map(val => ({
-            title: val,
-            value: types[val]
-          }));
+        case 'dataType': {
+          column.enums = [
+            {
+              title: 'string',
+              value: ApiParamsType.string
+            },
+            {
+              title: 'file',
+              value: ApiParamsType.file
+            }
+          ];
           break;
         }
         case 'editOperate': {

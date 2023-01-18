@@ -1,4 +1,5 @@
-import { ApiBodyType, JsonRootType, Protocol, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { BodyParam, HeaderParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 export enum ApiTestParamsTypeFormData {
   text = 'string',
@@ -26,42 +27,7 @@ export const CONTENT_TYPE_BY_ABRIDGE = [
     value: 'application/javascript'
   }
 ] as const;
-export type ContentType = typeof CONTENT_TYPE_BY_ABRIDGE[number]['value'];
-interface BasiApiTestParams {
-  /**
-   * send this param when test
-   */
-  required: boolean;
-  /**
-   * param name
-   */
-  name: string;
-  /**
-   * param value
-   */
-  value: string;
-}
-export type ApiTestHeaders = BasiApiTestParams;
-export type ApiTestQuery = BasiApiTestParams;
-export type ApiTestRest = BasiApiTestParams;
-export interface ApiTestBody extends BasiApiTestParams {
-  /**
-   * param type
-   */
-  type: string;
-  /**
-   * If value is file,value is base64 string
-   */
-  files?: string;
-  /**
-   * XML attribute
-   */
-  attribute?: string;
-  /**
-   * child param
-   */
-  children?: ApiTestBody[];
-}
+export type ContentType = (typeof CONTENT_TYPE_BY_ABRIDGE)[number]['value'];
 
 export interface ApiTestHistoryResponse {
   headers: object[];
@@ -161,9 +127,9 @@ export interface ApiTestHistoryFrame {
     uri: string;
     protocol: string;
     method: string;
-    requestHeaders: any | ApiTestHeaders[];
+    requestHeaders: any | HeaderParam[];
     requestBodyType: number | ApiBodyType.FormData | ApiBodyType.Raw;
-    requestBody: any | object[] | string;
+    requestBody: any | BodyParam[] | string;
   };
 
   /**
@@ -184,86 +150,4 @@ export interface ApiTestHistoryFrame {
      */
     reportList: string[] | object[];
   };
-}
-
-/**
- * API Test Data
- * Only has request info
- */
-export interface ApiTestData {
-  /**
-   * For adding test history
-   */
-  uuid: number;
-  projectID: number;
-  groupID: number;
-  /**
-   * For adding test history
-   */
-  name?: string;
-  /**
-   * Request url,Usually value is path
-   *
-   * @type {string}
-   */
-  uri: string;
-  /**
-   * API protocol [http, https, ...]
-   *
-   * @type {RequestProtocol|string}
-   */
-  protocol: Protocol | number;
-
-  /**
-   * Request method [POST, GET, PUT, ...]
-   *
-   * @type {RequestMethod|string}
-   */
-  method: RequestMethod | string;
-
-  /**
-   * 请求的参数类型
-   *
-   */
-  requestBodyType?: ApiBodyType | number;
-
-  /**
-   * 请求头数据，数据用json存储
-   */
-  requestHeaders?: ApiTestHeaders[];
-
-  /**
-   * 请求的 JSON 参数根类型
-   *
-   * @type {JsonRootType|string}
-   */
-  requestBodyJsonType?: JsonRootType | string;
-
-  /**
-   * 请求参数(多层结构)，数据用json存储
-   *
-   */
-  requestBody?: ApiTestBody[] | string;
-
-  /**
-   * get请求参数，数据用json存储
-   *
-   * @type {object[]}
-   */
-  queryParams?: ApiTestQuery[];
-
-  /**
-   * rest请求参数，数据用json存储
-   *
-   * @type {object[]}
-   */
-  restParams?: Array<Record<string, any>>;
-  /**
-   * Javascript code before test
-   */
-  beforeScript?: string;
-  /**
-   * Javascript code after api response
-   */
-  afterScript?: string;
 }

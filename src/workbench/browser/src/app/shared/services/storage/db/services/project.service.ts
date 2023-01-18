@@ -27,7 +27,7 @@ export class ProjectService extends BaseService<Project> {
     super(dataSource.project);
   }
 
-  private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {
+  private genApiGroupTree(apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) {
     const apiDataFilters = apiDatas.filter(apiData => apiData.groupId === groupId);
     const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
 

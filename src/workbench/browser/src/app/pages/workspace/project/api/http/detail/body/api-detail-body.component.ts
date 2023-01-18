@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiEditBody, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -12,7 +13,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Table ID
    */
   @Input() tid: string;
-  @Input() model: string | ApiEditBody[] | any;
+  @Input() model: string | BodyParam[] | any;
   @Input() bodyType: ApiBodyType | number;
   listConf: ApiTableConf = {};
   cache: object = {};

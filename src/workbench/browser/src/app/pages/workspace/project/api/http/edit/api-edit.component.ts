@@ -191,7 +191,9 @@ export class ApiEditComponent implements OnDestroy, OnInit {
       this.groups = this.store.getGroupTree;
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
-        this.initialModel.groupId = this.model.groupId;
+        if (this.initialModel) {
+          this.initialModel.groupId = this.model.groupId;
+        }
       }
       setTimeout(() => {
         //@ts-ignore

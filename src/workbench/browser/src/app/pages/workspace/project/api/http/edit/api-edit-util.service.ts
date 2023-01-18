@@ -8,7 +8,7 @@ import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 export class ApiEditUtilService {
   constructor() {}
 
-  private parseApiUI2Storage(formData, filterArrFun): ApiData {
+  parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (whatType(result.requestParams?.[tableName]) !== 'array') {

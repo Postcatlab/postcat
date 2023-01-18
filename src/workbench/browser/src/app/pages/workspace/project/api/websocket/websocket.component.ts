@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
-import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -23,17 +24,8 @@ interface testViewModel {
   requestTabIndex: number;
   protocol: string;
   msg: string;
-  request: {
-    requestHeaders: ApiTestHeaders[];
-    uri: string;
-    protocol: 'ws' | string;
-    queryParams: ApiTestQuery[];
-  };
-  response: {
-    requestHeaders: ApiTestHeaders[];
-    responseHeaders: ApiTestHeaders[];
-    responseBody: any;
-  };
+  request: any;
+  response: any;
 }
 @Component({
   selector: 'websocket-content',
@@ -150,14 +142,18 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
       base: 'query'
     }).url;
   }
   changeUri() {
-    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url'
-    }).query;
+    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.requestParams.queryParams,
+      {
+        base: 'url'
+      }
+    ).query;
   }
   emitChangeFun(where) {
     if (where === 'queryParams') {
@@ -356,7 +352,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       request: {
         requestHeaders: [],
         uri: '',
-        protocol: 'ws',
+        protocol: Protocol.WEBSOCKET,
         queryParams: []
       },
       response: {

@@ -1,7 +1,4 @@
-import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
-
-import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
-import { RestParam } from '../shared/services/storage/db/models/apiData';
+import { QueryParam, RestParam } from '../shared/services/storage/db/models/apiData';
 
 /**
  * get rest param from url,format like {restName}
@@ -15,14 +12,14 @@ export const uniqueSlash = (path: string) =>
     .replace(/:\/{2,}/g, ':::')
     .replace(/\/{2,}/g, '/')
     .replace(/:{3}/g, '://');
-const jointQuery = (url = '', query: ApiTestQuery[] | ApiEditQuery[]) => {
+const jointQuery = (url = '', query: QueryParam[]) => {
   //Joint query
   let search = '';
   query.forEach(val => {
-    if (!(val.name && val.required)) {
+    if (!(val.name && val.isRequired)) {
       return;
     }
-    search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
+    search += `${val.name}=${val.paramAttr?.example || ''}&`;
   });
   search = search ? `?${search.slice(0, -1)}` : '';
   return `${url.split('?')[0]}${search}`;
@@ -50,10 +47,12 @@ export const transferUrlAndQuery = (
   const uiQuery = query;
   //Get url query
   new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
-    const item: ApiTestQuery = {
-      required: true,
+    const item: QueryParam = {
+      isRequired: 1,
       name,
-      value: val
+      paramAttr: {
+        example: val
+      }
     };
     urlQuery.push(item);
   });
@@ -63,7 +62,7 @@ export const transferUrlAndQuery = (
     url = jointQuery(url, result);
   } else {
     if (opts.base === 'url') {
-      result = [...urlQuery, ...uiQuery.filter(val => !val.required)];
+      result = [...urlQuery, ...uiQuery.filter((val: QueryParam) => !val.isRequired)];
     } else {
       result = uiQuery;
       url = jointQuery(url, result);

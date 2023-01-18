@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import {
   ApiBodyType,
-  ApiParamsTypeFormData,
+  ApiParamsType,
   ApiTableConf,
   API_BODY_TYPE,
   IMPORT_MUI,
@@ -39,7 +39,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   cache: any = {};
   itemStructure: BodyParam = {
     name: '',
-    dataType: ApiParamsTypeFormData.string,
+    dataType: ApiParamsType.string,
     isRequired: 1,
     description: '',
     paramAttr: {
@@ -152,20 +152,25 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     if (this.bodyType === ApiBodyType.XML) {
       if (!this.model.length) {
         const rootItem: BodyParam = Object.assign(eoDeepCopy(this.itemStructure), {
-          dataType: ApiParamsTypeFormData.object,
+          dataType: ApiParamsType.object,
           name: 'root'
         });
         this.model.push(rootItem);
       }
     }
   }
-
+  nzCheckAddChild(item) {
+    //Add child row, must be object/array
+    if (![ApiParamsType.object, ApiParamsType.array].includes(item.data.dataType)) {
+      item.data.dataType = ApiParamsType.object;
+    }
+  }
   private initListConf() {
     const config = this.apiTable.initTable(
       {
         in: 'body',
         id: this.tid,
-        format: this.bodyType as ApiBodyType,
+        format: this.bodyType,
         isEdit: true
       },
       {
@@ -178,7 +183,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
     if (this.bodyType === ApiBodyType.XML) {
-      this.checkAddRow = item => item.eoKey !== this.model[0].eoKey;
+      this.checkAddRow = item => {
+        console.log(item);
+        return item.eoKey !== this.model[0].eoKey;
+      };
       this.nzDragCheck = (current, next) => {
         if (next.level === 0) {
           this.message.warning($localize`XML can have only one root node`);

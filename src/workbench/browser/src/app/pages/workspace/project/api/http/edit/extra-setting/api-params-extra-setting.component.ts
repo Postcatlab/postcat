@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsTypeFormData } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { REQURIED_ENUMS } from 'eo/workbench/browser/src/app/shared/models/shared.model';
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
@@ -129,16 +129,16 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       this.showValueTable = false;
     } else {
       if (this.isEdit) {
-        this.showLengthTable = [ApiParamsTypeFormData.string].includes(this.model.dataType);
+        this.showLengthTable = [ApiParamsType.string].includes(this.model.dataType);
         this.showValueTable = [
-          ApiParamsTypeFormData.int,
-          ApiParamsTypeFormData.float,
-          ApiParamsTypeFormData.double,
-          ApiParamsTypeFormData.short,
-          ApiParamsTypeFormData.long,
-          ApiParamsTypeFormData.number
+          ApiParamsType.int,
+          ApiParamsType.float,
+          ApiParamsType.double,
+          ApiParamsType.short,
+          ApiParamsType.long,
+          ApiParamsType.number
         ].includes(this.model.dataType);
-        this.showEnums = ![ApiParamsTypeFormData.null, ApiParamsTypeFormData.boolean].includes(this.model.dataType);
+        this.showEnums = ![ApiParamsType.null, ApiParamsType.boolean].includes(this.model.dataType);
       } else {
         this.showLengthTable = !isNil(this.model.paramAttr.minLength || this.model.paramAttr.maxLength);
         this.showValueTable = !isNil(this.model.paramAttr.minValue || this.model.paramAttr.maxValue);

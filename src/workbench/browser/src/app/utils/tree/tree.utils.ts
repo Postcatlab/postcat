@@ -181,7 +181,7 @@ export const fieldTypeMap = new Map<string, any>([
   ['string', 'default_value']
 ]);
 
-export const genApiGroupTree = (apiGroups: Group[], apiDatas: ApiData[], groupId: number) => {
+export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) => {
   const apiDataFilters = apiDatas.filter(apiData => {
     apiData['title'] = apiData.name;
     apiData['key'] = apiData['apiUuid'];
