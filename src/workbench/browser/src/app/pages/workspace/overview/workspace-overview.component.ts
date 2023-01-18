@@ -35,7 +35,7 @@ export class WorkspaceOverviewComponent implements OnInit {
     autorun(() => {
       this.title = this.store.getCurrentWorkspace?.title;
       console.log('this.store.getWorkspaceRole', this.store.getWorkspaceRole);
-      // this.isOwner = this.store.getWorkspaceRole?.find(it => it.name === 'Workspace Owner');
+      this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
     });
   }
   createWorkspace() {

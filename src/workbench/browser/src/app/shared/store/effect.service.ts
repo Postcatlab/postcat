@@ -38,7 +38,7 @@ export class EffectService {
     });
     autorun(async () => {
       if (this.store.isLogin) {
-        await this.updateWorkspaces();
+        await this.updateWorkspaceList();
         return;
       }
       if (this.store.isLocal) {
@@ -47,13 +47,27 @@ export class EffectService {
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
+    const workspaceRoleList = await this.getRoleList(1);
+    this.store.setRoleList(workspaceRoleList, 'workspace');
+    const projectRoleList = await this.getRoleList(2);
+    this.store.setRoleList(projectRoleList, 'project');
   }
-  async deleteEnv(id) {
-    const [data, err] = await this.api.api_environmentDelete({ id });
-    if (data) {
-      const envList = this.store.getEnvList.filter(it => it.id !== id);
-      this.store.setEnvList(envList);
+
+  async getRoleList(type) {
+    const [data, err] = await this.api.api_roleList({ roleModule: type });
+    if (err) {
+      return;
     }
+    return data;
+  }
+
+  async deleteEnv(id) {
+    const [, err] = await this.api.api_environmentDelete({ id });
+    if (err) {
+      return;
+    }
+    const envList = this.store.getEnvList.filter(it => it.id !== id);
+    this.store.setEnvList(envList);
   }
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
@@ -123,7 +137,6 @@ export class EffectService {
       this.router.navigate(['/home/workspace/overview']);
       return;
     }
-    debugger;
     this.store.setCurrentProjectID(pid);
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
@@ -132,7 +145,7 @@ export class EffectService {
     this.store.setPermission(permissions, 'project');
     this.store.setRole(roles, 'project');
   }
-  async updateWorkspaces() {
+  async updateWorkspaceList() {
     const [list, wErr]: any = await this.api.api_workspaceList({});
     if (wErr) {
       // * Switch store to local workspace

@@ -55,6 +55,10 @@ export class StoreService {
   @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
   @observable private currentProject: Project;
+  @observable private roleList = {
+    workspace: [],
+    project: []
+  };
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
@@ -91,8 +95,8 @@ export class StoreService {
   // ? UI
   @observable private rightBarStatus = false;
   @observable.shallow private role = {
-    workspace: 'Workspace Owner',
-    project: 'Project Owner'
+    workspace: [],
+    project: []
   };
 
   // * computed data
@@ -168,6 +172,9 @@ export class StoreService {
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
   }
+  @computed get getWorkspaceRoleList() {
+    return this.roleList.workspace;
+  }
 
   get getLocalWorkspace() {
     return this.localWorkspace;
@@ -182,6 +189,9 @@ export class StoreService {
   }
   @computed get getCurrentProject() {
     return this.currentProject;
+  }
+  @computed get getProjectRoleList() {
+    return this.roleList.project;
   }
 
   // ? user && auth
@@ -334,11 +344,15 @@ export class StoreService {
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 
+  @action setRoleList(data, type) {
+    this.roleList[type] = data;
+  }
+
   @action setRole(role, type) {
-    if (this.isLocal) {
-      this.role[type] = 'Workspace Owner';
-      return;
-    }
+    // if (this.isLocal) {
+    //   this.role[type] = { name: 'Workspace Owner' };
+    //   return;
+    // }
     this.role[type] = role;
   }
 

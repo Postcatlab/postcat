@@ -8,8 +8,7 @@ import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
 export class WorkspaceMemberService {
   workSpaceUuid: string;
-  role: 'Workspace Owner' | 'Workspace Editor' | string;
-  roleMUI = [];
+  role: any;
   constructor(
     private api: ApiService,
     private store: StoreService,
@@ -20,14 +19,6 @@ export class WorkspaceMemberService {
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
     });
-    this.getRoleList();
-  }
-  async getRoleList() {
-    const [data, err] = await this.api.api_roleList({ roleModule: 1 });
-    if (err) {
-      return;
-    }
-    this.roleMUI = data;
   }
   async addMember(ids) {
     return await this.api.api_workspaceAddMember({
@@ -50,7 +41,7 @@ export class WorkspaceMemberService {
       result = data || [];
     }
     result.forEach(member => {
-      member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
+      member.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === member.role.id).title;
       if (member.id === this.store.getUserProfile.id) {
         member.myself = true;
       }
@@ -87,7 +78,7 @@ export class WorkspaceMemberService {
     if (!err) {
       item.role.id = roleID;
       item.role.name = item.role.name === 'Workspace Owner' ? 'Workspace Editor' : 'Workspace Owner';
-      item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
+      item.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === roleID).title;
     }
     return [data, err];
   }

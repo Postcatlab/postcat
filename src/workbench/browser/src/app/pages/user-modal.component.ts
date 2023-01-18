@@ -489,7 +489,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       {
-        await this.effect.updateWorkspaces();
+        await this.effect.updateWorkspaceList();
         await this.effect.switchWorkspace(workspace.workSpaceUuid);
       }
       if (this.store.getWorkspaceList.length === 2) {

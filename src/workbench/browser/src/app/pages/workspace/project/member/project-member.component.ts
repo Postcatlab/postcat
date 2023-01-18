@@ -2,14 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
-import { MemberService } from '../../../../modules/member-list/member.service';
-import { MEMBER_MUI } from '../../../../shared/models/member.model';
+import { ProjectMemberService } from './project-member.service';
 
 @Component({
   selector: 'eo-project-member',
@@ -90,15 +89,14 @@ export class ProjectMemberComponent implements OnInit {
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
   userList = [];
-  roleMUI = MEMBER_MUI;
   constructor(
     public modal: NzModalService,
     public store: StoreService,
     public message: MessageService,
-    public api: RemoteService,
+    public api: ApiService,
     public eMessage: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
-    private member: MemberService
+    private member: ProjectMemberService
   ) {
     this.isInvateModalVisible = false;
     this.isSelectBtnLoading = false;
