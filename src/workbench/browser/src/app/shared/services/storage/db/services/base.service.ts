@@ -46,8 +46,13 @@ export class BaseService<T> {
   }
 
   @ApiResponse()
-  async bulkUpdate(params) {
+  async bulkUpdate(params: any[]) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
+    const promiseArr = params.map(item => {
+      const { id, ...rest } = item;
+      return this.db.update(id, rest);
+    });
+    await Promise.all(promiseArr);
     return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 
