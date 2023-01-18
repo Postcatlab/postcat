@@ -1,11 +1,10 @@
 import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -196,7 +195,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (this.store.isShare) {
         return;
       }
-      await this.testService.addHistory({ protocol: 'websocket', ...data }, 0);
+      await this.testService.addHistory({ protocol: Protocol.WEBSOCKET, ...data }, 0);
       return;
     }
     // * connecting

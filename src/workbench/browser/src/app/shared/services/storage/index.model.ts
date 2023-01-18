@@ -167,7 +167,6 @@ export interface BasiApiEditParams {
    */
   enum?: any;
 }
-import { ApiTestHistoryFrame } from '../../../pages/workspace/project/api/http/test/api-test.model';
 
 /**
  * Date base model
@@ -287,7 +286,7 @@ export interface Project extends StorageModel {
 /**
  * API测试历史对象接口
  */
-export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
+export interface ApiTestHistory extends StorageModel {
   /**
    * Project primary key ID
    *

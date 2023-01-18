@@ -6,7 +6,10 @@ import {
   protocalMap,
   requestMethodMap
 } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import {
+  TestServerRes,
+  requestDataOpts
+} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BodyParam, RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
@@ -74,7 +77,6 @@ export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env
       }
     }
   };
-  console.log(opts.env);
   const result: TestLocalNodeData = {
     lang: opts.lang,
     globals: opts.globals,
@@ -102,8 +104,8 @@ export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env
   }
   return result;
 };
-export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestRes => {
-  let result: ApiTestRes;
+export const eoFormatResponseData = ({ globals, report, history, id }): TestServerRes => {
+  let result: TestServerRes;
   const reportList = report.reportList || [];
   //preScript code tips
   if (report.errorReason) {
@@ -125,7 +127,8 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       globals,
       id,
       response: {
-        reportList
+        reportList,
+        ...report.general
       }
     };
     return result;
@@ -143,31 +146,8 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       status: 'finish',
       id,
       globals,
-      general: report.general,
-      response,
-      //For add test history
-      history: {
-        general: report.general,
-        response,
-        beforeScript: history.beforeInject,
-        afterScript: history.afterInject,
-        request: {
-          uri: history.requestInfo.URL,
-          method: history.requestInfo.method,
-          protocol: PROTOCOL[history.requestInfo.apiProtocol],
-          requestHeaders: history.requestInfo.headers,
-          requestBodyType: history.requestInfo.requestType,
-          requestBody: history.requestInfo.params
-        }
-      }
+      response
     });
-  if (result.history.request.requestBodyType === ApiBodyType.FormData) {
-    result.history.request.requestBody = result.history.request.requestBody.map(val => ({
-      name: val.key,
-      type: 'string',
-      value: val.value
-    }));
-  }
   return result;
 };
 export const DEFAULT_UNIT_TEST_RESULT = {

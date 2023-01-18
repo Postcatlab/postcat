@@ -130,7 +130,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
       return;
     }
     let formData: any = this.getFormdata();
-    const busEvent = formData.uuid ? 'editApi' : 'addApi';
+    const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
     pcConsole.log('saveAPI', formData);
@@ -146,7 +146,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
-          uuid: result.uuid
+          uuid: result.apiUuid
         }
       });
     }

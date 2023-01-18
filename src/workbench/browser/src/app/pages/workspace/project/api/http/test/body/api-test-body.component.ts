@@ -78,19 +78,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.initListConf();
   }
 
-  beforeChangeBodyByType(type) {
-    switch (type) {
-      case ApiBodyType.Binary:
-      case ApiBodyType.Raw: {
-        this.cache[type] = this.model;
-        break;
-      }
-      default: {
-        this.cache[type] = [...this.model];
-        break;
-      }
-    }
-  }
   changeContentType(contentType) {
     this.contentTypeChange.emit(contentType);
     this.autoSetContentTypeChange.emit(false);
@@ -117,7 +104,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       changes.model &&
       ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0)
     ) {
-      this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
   }
@@ -155,7 +141,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   rawDataChange(code: string) {
-    this.modelChange.emit(code);
+    this.model[0].binaryRawData = code;
+    this.modelChange.emit(this.model);
     const contentType = whatTextTypeMap[whatTextType(code)];
     if (contentType && this.autoSetContentType !== false) {
       this.contentType = contentType;
@@ -171,7 +158,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        this.model = this.cache[this.bodyType] || '';
+        this.model = this.cache[this.bodyType] || [
+          {
+            binaryRawData: this.model?.[0]?.binaryRawData || ''
+          }
+        ];
         break;
       }
       default: {
