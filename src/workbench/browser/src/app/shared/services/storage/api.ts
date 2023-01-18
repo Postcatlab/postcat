@@ -5,7 +5,7 @@ const http = {
       data: [
         { 'create @post @bulkCreate': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
         { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
-        { 'delete @delete @bulkDelete': '/api/remove', body: 'apiUuids, projectUuid, workSpaceUuid' },
+        { 'delete @delete @bulkDelete': '/api/remove', query: 'apiUuids, projectUuid, workSpaceUuid' },
         { 'detail @get @bulkReadDetail': '/api', query: 'apiUuids, projectUuid, workSpaceUuid' },
         { 'list @get @bulkRead': '/api/list', query: 'projectUuid, workSpaceUuid' },
         { 'getGroup @post': '/projects/collections', json: 'projectUuid' }
@@ -18,7 +18,7 @@ const http = {
         { 'update @put @update': '/mock', json: 'id, projectUuid, workSpaceUuid, ...' },
         { 'list @get @bulkRead': '/mock/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/mock', query: 'id, projectUuid, workSpaceUuid' },
-        { 'delete @delete @delete': '/mock', body: 'id, projectUuid, workSpaceUuid' }
+        { 'delete @delete @delete': '/mock', query: 'id, projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -26,7 +26,7 @@ const http = {
       data: [
         { 'create @post @create': '/group', json: 'type, name, parentId, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/group', json: 'id, projectUuid, workSpaceUuid, ...' },
-        { 'delete @delete @delete': '/group', body: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'list @get @bulkRead': '/group/list', query: 'projectUuid, workSpaceUuid' }
       ]
@@ -37,7 +37,7 @@ const http = {
         { 'create @post @create': '/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
         { 'list @get @page': '/api/history/list', query: 'projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/api/history', query: 'id, projectUuid, workSpaceUuid' },
-        { 'delete @delete @bulkDelete': '/api/history', body: 'projectUuid, workSpaceUuid' }
+        { 'delete @delete @bulkDelete': '/api/history', query: 'projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -45,7 +45,7 @@ const http = {
       data: [
         { 'create @post @create': '/environment', json: 'name, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/environment', json: 'id, name, projectUuid, workSpaceUuid, ...' },
-        { 'delete @delete @delete': '/environment', body: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/environment', query: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/environment', query: 'id, projectUuid, workSpaceUuid' },
         { 'list @get @bulkRead': '/environment/list', query: 'projectUuid, workSpaceUuid' }
       ]
@@ -68,11 +68,11 @@ const http = {
       data: [
         { 'create @post @create': '/workspaces', json: 'titles' }, // 批量创建空间
         { 'update @put @update': '/workspaces', json: 'title, workSpaceUuid' },
-        { 'delete @delete @delete': '/workspaces', body: 'workSpaceUuids' },
+        { 'delete @delete @delete': '/workspaces', query: 'workSpaceUuids' },
         { 'searchMember @get': '/workspaces/users', query: 'username, page, pageSize, workSpaceUuid' },
         { 'addMember @post': '/workspaces/users', json: 'userIds, workSpaceUuid' },
-        { 'removeMember @delete': '/workspaces/users', body: 'userIds, workSpaceUuid' },
-        { 'memberQuit @delete': '/workspaces/users/quit', body: 'workSpaceUuid' },
+        { 'removeMember @delete': '/workspaces/users', query: 'userIds, workSpaceUuid' },
+        { 'memberQuit @delete': '/workspaces/users/quit', query: 'workSpaceUuid' },
         { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
         { 'getMemberPermiss @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
         { 'list @get': '/workspaces' },

@@ -100,7 +100,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/api/remove`, {
-          body: { apiUuids, projectUuid, workSpaceUuid }
+          params: { apiUuids, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -415,7 +415,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/mock`, {
-          body: { id, projectUuid, workSpaceUuid }
+          params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -545,7 +545,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/group`, {
-          body: { id, projectUuid, workSpaceUuid }
+          params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -793,7 +793,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/api/history`, {
-          body: { projectUuid, workSpaceUuid }
+          params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -918,7 +918,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/environment`, {
-          body: { id, projectUuid, workSpaceUuid }
+          params: { id, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1221,7 +1221,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/workspaces`, {
-          body: { workSpaceUuids }
+          params: { workSpaceUuids }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1318,7 +1318,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/workspaces/users`, {
-          body: { userIds, workSpaceUuid }
+          params: { userIds, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1345,7 +1345,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/workspaces/users/quit`, {
-          body: { workSpaceUuid }
+          params: { workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
