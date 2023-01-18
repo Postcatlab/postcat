@@ -8,6 +8,9 @@ export class BaseService<T> {
     const entries = Object.entries(params);
     return this.db.filter(obj => {
       return entries.every(([key, value]) => {
+        if (!Reflect.has(obj as unknown as object, key)) {
+          return true;
+        }
         if (Array.isArray(value)) {
           return value.includes(obj[key]);
         } else {
