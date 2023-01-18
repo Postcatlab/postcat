@@ -284,7 +284,7 @@ export class EffectService {
     }
     // console.log('Group 数据', groupList);
     // * get api list data
-    const [apiList, aErr] = await this.api.api_apiDataList({});
+    const [apiList = [], aErr] = await this.api.api_apiDataList({});
     if (aErr) {
       return;
     }

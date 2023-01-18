@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { rest } from 'lodash-es';
 
 import { ApiService } from '../../../../shared/services/storage/api.service';
 import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
@@ -31,12 +32,21 @@ export class ProjectApiService {
   async add(apiData: ApiData) {
     return await this.api.api_apiDataCreate({ apiList: [apiData] });
   }
-  async copy(apiData: ApiData) {
+  async copy(apiID: string) {
+    const apiData = await this.get(apiID);
     apiData.name += ' Copy';
-    const [result, err] = await this.add(apiData);
+    delete apiData.uuid;
+    delete apiData.id;
+    const [result, err] = await await this.api.api_apiDataCreate({ apiList: [apiData] });
+    if (err) {
+      console.error(err);
+      this.message.error($localize`Copy API failed`);
+      return;
+    }
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
-      queryParams: { pageID: Date.now(), uuid: result.uuid }
+      queryParams: { pageID: Date.now(), uuid: result[0].uuid }
     });
+    this.effect.getGroupList();
   }
   async delete(uuid) {
     // * delete API

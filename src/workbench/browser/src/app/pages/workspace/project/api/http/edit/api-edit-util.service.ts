@@ -3,17 +3,15 @@ import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ModalService } from '../../../../../../shared/services/modal.service';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 @Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
-  constructor(private modalService: ModalService) {}
+  constructor() {}
 
   private parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    // result.groupId = Number(result.groupId === '-1' ? '0' : result.groupId);
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
-      if (whatType(result.requestParams[tableName]) !== 'array') {
+      if (whatType(result.requestParams?.[tableName]) !== 'array') {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
@@ -21,7 +19,7 @@ export class ApiEditUtilService {
       });
     });
     ['bodyParams', 'headerParams'].forEach(tableName => {
-      if (whatType(result.responseList[0].responseParams[tableName]) !== 'array') {
+      if (whatType(result.responseList?.[0].responseParams[tableName]) !== 'array') {
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
@@ -62,7 +60,7 @@ export class ApiEditUtilService {
    */
   formatStorageApiDataToUI(apiData) {
     return this.parseApiUI2Storage(apiData, val => {
-      val['paramAttr.example'] = val.paramAttr.example || '';
+      val['paramAttr.example'] = val.paramAttr?.example || '';
       return true;
     });
   }

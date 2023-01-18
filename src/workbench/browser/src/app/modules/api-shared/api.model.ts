@@ -33,7 +33,6 @@ export enum ContentType {
   OTHER = 5,
   JSON_ARRAY = 6
 }
-
 export enum Protocol {
   HTTP = 0,
   HTTPS = 1,

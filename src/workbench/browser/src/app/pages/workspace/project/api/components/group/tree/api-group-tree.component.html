@@ -13,14 +13,14 @@
     eo-ng-dropdown
     [nzDropdownMenu]="menu"
     nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
+    (click)="addAPI()"
   >
     <eo-iconpark-icon name="add"></eo-iconpark-icon>
   </button>
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <a>
-        <li nz-menu-item i18n="@@AddAPI" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"> New API </li>
+        <li nz-menu-item i18n="@@AddAPI" (click)="addAPI()"> New API </li>
       </a>
       <a>
         <li nz-menu-item (click)="addGroup()" i18n>New Group</li>
@@ -36,7 +36,6 @@
 <!-- Custom Group -->
 <div class="group-tree">
   <eo-ng-tree-default
-    *ngIf="store.getApiGroupTree.length"
     [nzData]="apiGroupTree"
     [nzSelectedKeys]="nzSelectedKeys"
     #apiGroup
@@ -51,13 +50,13 @@
     (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"
   ></eo-ng-tree-default>
-  <nz-skeleton [nzLoading]="isLoading && !store.getApiGroupTree.length" [nzActive]="true">
+  <nz-skeleton [nzLoading]="isLoading && !apiGroupTree.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <!-- Folder -->
         <div class="flex items-center justify-between tree-node" *ngIf="!node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 25px - 8px * var(--tree-level))'">
-            <div class="flex-shrink-0 width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
+            <!-- <div class="flex-shrink-0 width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div> -->
             <svg class="iconpark-icon mr-[5px] flex-shrink-0">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
             </svg>
@@ -102,7 +101,7 @@
               </button>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click({ group: node })">
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click(node)">
                     {{ item.title }}
                   </li>
                 </ul>

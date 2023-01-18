@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
@@ -8,12 +8,13 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
-import { GroupApiDataModel } from '../../../../../../../shared/models';
 import { ProjectApiService } from '../../../api.service';
 
 @Component({
@@ -36,21 +37,21 @@ export class ApiGroupTreeComponent implements OnInit {
   apiItemsMenu = [
     {
       title: $localize`Edit`,
-      click: inArg => this.operateApiEvent({ eventName: 'editApi', node: inArg.group })
+      click: node => this.editAPI(node.origin)
     },
     {
       title: $localize`:@Copy:Copy`,
-      click: inArg => this.operateApiEvent({ eventName: 'copyApi', node: inArg.origin })
+      click: node => this.copyAPI(node.origin)
     },
     {
       title: $localize`:@Delete:Delete`,
-      click: inArg => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.api })
+      click: node => this.deleteAPI(node.origin)
     }
   ];
   groupItemsMenu = [
     {
       title: $localize`Add API`,
-      click: inArg => this.operateApiEvent({ eventName: 'addAPI', node: inArg.group })
+      click: inArg => this.addAPI(inArg.group.origin)
     },
     {
       title: $localize`Add Subgroup`,
@@ -73,16 +74,39 @@ export class ApiGroupTreeComponent implements OnInit {
     private projectApi: ProjectApiService,
     private modalService: ModalService,
     private router: Router,
+    private route: ActivatedRoute,
     private message: EoNgFeedbackMessageService
   ) {}
 
   ngOnInit(): void {
     this.isEdit = !this.store.isShare;
     // * get group data from store
-    this.effect.getGroupList();
+    this.effect.getGroupList().then(() => {
+      this.isLoading = false;
+    });
     autorun(() => {
       this.apiGroupTree = this.store.getApiGroupTree;
+      setTimeout(() => {
+        this.expandKeys = this.getExpandKeys();
+        this.nzSelectedKeys = this.getSelectKeys();
+      }, 0);
     });
+  }
+  getSelectKeys() {
+    if (
+      this.route.snapshot.queryParams.uuid &&
+      ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path))
+    ) {
+      return [this.route.snapshot.queryParams.uuid];
+    } else {
+      return [];
+    }
+  }
+  getExpandKeys() {
+    if (!this.route.snapshot.queryParams.uuid) {
+      return;
+    }
+    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
     return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
@@ -127,10 +151,33 @@ export class ApiGroupTreeComponent implements OnInit {
       action: 'delete'
     });
   }
-  addAPI(group = this.store.getRootGroup) {}
-  deleteAPI(api) {}
-  copyAPI(api) {}
-  editAPI(group) {}
+  addAPI(group?) {
+    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    this.router.navigate([`${prefix}/http/edit`], {
+      queryParams: { groupId: group?.key }
+    });
+  }
+  deleteAPI(apiInfo) {
+    console.log(apiInfo);
+    this.modalService.confirm({
+      nzTitle: $localize`Deletion Confirmation?`,
+      nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
+        apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
+      }</strong> ? You cannot restore it once deleted!`,
+      nzOnOk: () => {
+        this.projectApi.delete(apiInfo.uuid);
+      }
+    });
+  }
+  copyAPI(api) {
+    this.projectApi.copy(api.key);
+  }
+  editAPI(api) {
+    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    this.router.navigate([`${prefix}/http/edit`], {
+      queryParams: { uuid: api.key }
+    });
+  }
   addGroup(group = this.store.getRootGroup) {
     this.groupModal($localize`Add Group`, {
       group: {
@@ -141,7 +188,25 @@ export class ApiGroupTreeComponent implements OnInit {
       action: 'new'
     });
   }
-  importAPI() {}
+  importAPI() {
+    const title = $localize`:@@ImportAPI:Import API`;
+    const modal = this.modalService.create({
+      nzTitle: title,
+      nzContent: ImportApiComponent,
+      nzComponentParams: {},
+      nzOnOk: () =>
+        new Promise(resolve => {
+          modal.componentInstance.submit(status => {
+            if (status) {
+              this.message.success($localize`${title} successfully`);
+              modal.destroy();
+            } else {
+              this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+            }
+          });
+        })
+    });
+  }
 
   /**
    * Drag & drop tree item.
@@ -150,11 +215,31 @@ export class ApiGroupTreeComponent implements OnInit {
    */
   treeItemDrop = (event: NzFormatEmitEvent) => {
     const dragNode = event.dragNode;
-    const groupApiData: GroupApiDataModel = { group: [], api: [] };
-    // * update group list
+    const node = eoDeepCopy(dragNode.origin);
+    // Get group sort index
+    let index;
+    if (dragNode.parentNode) {
+      index = dragNode.parentNode.getChildren().findIndex(val => val.key === node.key);
+    } else {
+      index = this.apiGroup
+        .getTreeNodes()
+        .filter(n => n.level === 0)
+        .findIndex(val => val.key === node.key);
+    }
+    if (dragNode.isLeaf) {
+      //TODO sort api
+    } else {
+      // * Update group
+      node.parentId = dragNode.parentNode?.key || this.store.getRootGroup.id;
+      node.sort = index;
+      this.effect.updateGroup(node);
+    }
+    console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
-  toggleExpand() {}
+  toggleExpand() {
+    this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
+  }
   /**
    * Group tree item click.
    *
@@ -168,87 +253,17 @@ export class ApiGroupTreeComponent implements OnInit {
         this.toggleExpand();
         break;
       }
-      case 'clickFixedItem': {
-        this.operateApiEvent({ ...event, eventName: 'jumpOverview' });
-        break;
-      }
       case 'clickItem': {
-        this.operateApiEvent({ ...event, eventName: 'detailApi' });
+        // * jump to api detail page
+        const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+        this.router.navigate([`${prefix}/http/detail`], {
+          queryParams: { uuid: event.node.key }
+        });
         break;
       }
     }
   }
   onSearchFunc(data) {
     return true;
-  }
-
-  /**
-   * Group tree click api event
-   * Router jump page or Event emit
-   *
-   * @param inArg NzFormatEmitEvent
-   */
-  async operateApiEvent(inArg: NzFormatEmitEvent | any) {
-    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
-    inArg.event?.stopPropagation();
-    switch (inArg.eventName) {
-      case 'editApi':
-      case 'detailApi': {
-        this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key }
-        });
-        break;
-      }
-      case 'jumpOverview': {
-        this.router.navigate([`${prefix}/overview`], {
-          queryParams: { uuid: 'overview' }
-        });
-        break;
-      }
-      case 'addAPI': {
-        this.router.navigate([`${prefix}/http/edit`], {
-          queryParams: { groupId: inArg.node?.origin.key }
-        });
-        break;
-      }
-      case 'importAPI': {
-        const title = $localize`:@@ImportAPI:Import API`;
-        const modal = this.modalService.create({
-          nzTitle: title,
-          nzContent: ImportApiComponent,
-          nzComponentParams: {},
-          nzOnOk: () =>
-            new Promise(resolve => {
-              modal.componentInstance.submit(status => {
-                if (status) {
-                  this.message.success($localize`${title} successfully`);
-                  modal.destroy();
-                } else {
-                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-                }
-              });
-            })
-        });
-        break;
-      }
-      case 'deleteApi': {
-        const apiInfo = inArg.node;
-        this.modalService.confirm({
-          nzTitle: $localize`Deletion Confirmation?`,
-          nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
-            apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
-          }</strong> ? You cannot restore it once deleted!`,
-          nzOnOk: () => {
-            this.projectApi.delete(apiInfo.uuid);
-          }
-        });
-        break;
-      }
-      case 'copyApi': {
-        const { uuid, createdAt, ...apiData } = inArg.node.origin;
-        this.projectApi.copy(apiData);
-        break;
-      }
-    }
   }
 }

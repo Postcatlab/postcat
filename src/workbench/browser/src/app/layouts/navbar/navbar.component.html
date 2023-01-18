@@ -12,7 +12,6 @@
     <!-- share -->
     <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link>
     <!-- Extension -->
-    <span>{{ store.isLocal }}</span>
     <ng-container *ngIf="!store.isShare">
       <button
         eo-ng-button

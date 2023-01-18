@@ -12,4 +12,8 @@
 
 .active-item {
   color: var(--primary-color);
+
+  &:hover {
+    color: var(--dropdown-item-hover-text-color);
+  }
 }

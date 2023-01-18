@@ -31,7 +31,7 @@ export class ExtensionService {
   async init() {
     if (!this.electron.isElectron) {
       //Install newest extensions
-      const { data } = await this.requestList();
+      const { data } = await this.requestList('init');
       const installedName = [];
 
       //ReInstall Newest extension
@@ -91,17 +91,21 @@ export class ExtensionService {
   isInstalled(name) {
     return this.installedList.includes(name);
   }
-  public async requestList() {
+  public async requestList(type = 'list') {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`), {
       defaultValue: []
     });
     const debugExtensions = [];
-    for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
-      const name = this.webExtensionService.debugExtensionNames[i];
-      const hasExist = this.installedList.some(val => val.name === name);
-      if (hasExist) continue;
-      debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+
+    if (type !== 'init') {
+      for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
+        const name = this.webExtensionService.debugExtensionNames[i];
+        const hasExist = this.installedList.some(val => val.name === name);
+        if (hasExist) continue;
+        debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+      }
     }
+
     result.data = [
       ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package

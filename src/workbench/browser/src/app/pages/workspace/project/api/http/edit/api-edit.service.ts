@@ -65,7 +65,8 @@ export class ApiEditService {
     if (busEvent === 'editApi') {
       return await this.projectApi.edit(apiData);
     } else {
-      return await this.projectApi.add(apiData);
+      const [result, err] = await this.projectApi.add(apiData);
+      return [result[0], err];
     }
   }
 }

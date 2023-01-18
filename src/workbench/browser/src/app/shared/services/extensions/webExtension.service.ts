@@ -9,8 +9,6 @@ import { WebService } from '../../../core/services';
 import { LanguageService } from '../../../core/services/language/language.service';
 import { ExtensionInfo } from '../../models/extension-manager';
 
-import { resolveObjectURL } from 'buffer';
-
 type ExtensionItem = {
   name: string;
   version: string;
@@ -33,7 +31,23 @@ export class WebExtensionService {
   debugExtensionNames;
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService) {
-    this.debugExtensionNames = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme', 'github-postcat-theme'] : [];
+    this.debugExtensionNames =
+      !APP_CONFIG.production || this.web.isVercel
+        ? [
+            'github-postcat-theme',
+            'vscode-postcat-abyss',
+            'vscode-postcat-brown',
+            'vscode-postcat-dracula',
+            'vscode-postcat-hc',
+            'vscode-postcat-one-dark',
+            'vscode-postcat-purple',
+            'vscode-postcat-red',
+            'vscode-postcat-solarized',
+            'vscode-postcat-theme',
+            'vscode-postcat-tomorrow',
+            'vscode-postcat-vue'
+          ]
+        : [];
   }
   async installExtension(extName: string, version = 'latest', entry = '') {
     const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;

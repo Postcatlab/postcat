@@ -1,4 +1,6 @@
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 
 import { GroupTreeItem } from '../../shared/models';
@@ -128,7 +130,7 @@ export const flatData = data => {
   return arr;
 };
 
-export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
+export const getExpandGroupByKey: (component: NzTreeComponent | NzTreeSelectComponent, key) => string[] = (component, key) => {
   if (!component) {
     return [];
   }
@@ -185,7 +187,7 @@ export const genApiGroupTree = (apiGroups: Group[], apiDatas: ApiData[], groupId
     apiData['isLeaf'] = true;
     return apiData.groupId === groupId;
   });
-  const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
+  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId);
   return [
     ...apiGroupFilters.map(group => ({
       ...group,
