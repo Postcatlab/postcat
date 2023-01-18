@@ -1,5 +1,11 @@
 {
-  "/": {
+  "/api": {
+    "target": "http://54.255.141.14:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/usercenter": {
     "target": "http://54.255.141.14:8080",
     "secure": false,
     "changeOrigin": true,
