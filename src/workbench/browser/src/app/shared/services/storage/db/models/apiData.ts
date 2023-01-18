@@ -167,7 +167,7 @@ export interface BodyParam {
   structureParamId?: string;
   isRequired: number;
   binaryRawData?: string;
-  description: string;
+  description?: string;
   orderNo?: number;
   createTime?: number;
   updateTime?: number;

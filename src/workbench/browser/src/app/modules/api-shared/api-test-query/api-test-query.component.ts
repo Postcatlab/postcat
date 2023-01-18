@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestQuery } from '../../../pages/workspace/project/api/http/test/api-test.model';
+import { QueryParam } from '../../../shared/services/storage/db/models/apiData';
 import { ApiTableService } from '../api-table.service';
 import { ApiTableConf } from '../api.model';
 
@@ -12,7 +12,7 @@ import { ApiTableConf } from '../api.model';
   styleUrls: ['./api-test-query.component.scss']
 })
 export class ApiTestQueryComponent implements OnInit, OnDestroy {
-  @Input() model: ApiTestQuery[] | any; // TODO
+  @Input() model: QueryParam[] | any; // TODO
   @Input() disabled: boolean;
   @Input() nzTrClick: (...rest: any[]) => any;
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
@@ -20,10 +20,12 @@ export class ApiTestQueryComponent implements OnInit, OnDestroy {
     columns: [],
     setting: {}
   };
-  itemStructure: ApiTestQuery = {
-    required: true,
+  itemStructure: QueryParam = {
+    isRequired: 1,
     name: '',
-    value: ''
+    paramAttr: {
+      example: ''
+    }
   };
 
   private modelChange$: Subject<void> = new Subject();

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { QueryParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({

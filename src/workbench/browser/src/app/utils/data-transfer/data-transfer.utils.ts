@@ -1,6 +1,6 @@
 import isXml from 'is-xml';
 
-import { ApiBodyType, ApiEditBody, ApiParamsTypeFormData, JsonRootType } from '../../modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType } from '../../modules/api-shared/api.model';
 import { BodyParam } from '../../shared/services/storage/db/models/apiData';
 import { whatType, whatTextType } from '../index.utils';
 
@@ -14,7 +14,7 @@ const parseTree = (key, value): BodyParam | unknown => {
       name: key,
       isRequired: 1,
       'paramAttr.example': '',
-      dataType: ApiParamsTypeFormData.string,
+      dataType: ApiParamsType.string,
       description: '',
       childList: Object.keys(value).map(it => parseTree(it, value[it]))
     };
@@ -31,7 +31,7 @@ const parseTree = (key, value): BodyParam | unknown => {
         value: JSON.stringify(value),
         //TODO only edit page has example
         'paramAttr.example': JSON.stringify(value),
-        dataType: ApiParamsTypeFormData.array,
+        dataType: ApiParamsType.array,
         description: ''
       };
     }
@@ -39,7 +39,7 @@ const parseTree = (key, value): BodyParam | unknown => {
       name: key,
       isRequired: 1,
       'paramAttr.example': '',
-      dataType: ApiParamsTypeFormData.array,
+      dataType: ApiParamsType.array,
       description: '',
       childList: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
     };
@@ -51,7 +51,7 @@ const parseTree = (key, value): BodyParam | unknown => {
     value: value == null ? '' : value.toString(),
     description: '',
     'paramAttr.example': value == null ? '' : value.toString(),
-    dataType: ApiParamsTypeFormData[whatType(value)]
+    dataType: ApiParamsType[whatType(value)]
   };
 };
 /**
@@ -150,7 +150,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; childList: any[]; content: 
 type uiData = {
   textType: ApiBodyType;
   rootType: JsonRootType;
-  data: ApiEditBody | any;
+  data: BodyParam | any;
 };
 
 export const xml2json = text => {

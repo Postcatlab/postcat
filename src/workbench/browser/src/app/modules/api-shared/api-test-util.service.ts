@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, ApiParamsTypeFormData, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
 
 import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
-import { ApiTestData, ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
+import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiData } from '../../shared/services/storage/db/models';
 import { HeaderParam } from '../../shared/services/storage/db/models/apiData';
 import { ApiTestHistory } from '../../shared/services/storage/index.model';
@@ -76,8 +76,8 @@ export class ApiTestUtilService {
    * @param formData
    * @returns apiData
    */
-  formatEditingApiData(formData): ApiTestData {
-    const result = eoDeepCopy(formData) as ApiTestData;
+  formatEditingApiData(formData): ApiData {
+    const result = eoDeepCopy(formData) as ApiData;
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach(tableName => {
       if (whatType(result[tableName]) !== 'array') {
         return;
@@ -166,7 +166,7 @@ export class ApiTestUtilService {
       case ApiBodyType['FormData']: {
         inData.requestParams.bodyParams.forEach(val => {
           val.value = val.example;
-          val.dataType = val.dataType === ApiParamsTypeFormData.file ? ApiParamsTypeFormData.file : ApiParamsTypeFormData.string;
+          val.dataType = val.dataType === ApiParamsType.file ? ApiParamsType.file : ApiParamsType.string;
         });
         break;
       }

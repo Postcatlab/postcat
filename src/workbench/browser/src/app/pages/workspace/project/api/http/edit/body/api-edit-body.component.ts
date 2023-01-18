@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import {
   ApiBodyType,
-  ApiParamsTypeFormData,
+  ApiParamsType,
   ApiTableConf,
   API_BODY_TYPE,
   IMPORT_MUI,
@@ -39,7 +39,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   cache: any = {};
   itemStructure: BodyParam = {
     name: '',
-    dataType: ApiParamsTypeFormData.string,
+    dataType: ApiParamsType.string,
     isRequired: 1,
     description: '',
     paramAttr: {
@@ -152,7 +152,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     if (this.bodyType === ApiBodyType.XML) {
       if (!this.model.length) {
         const rootItem: BodyParam = Object.assign(eoDeepCopy(this.itemStructure), {
-          dataType: ApiParamsTypeFormData.object,
+          dataType: ApiParamsType.object,
           name: 'root'
         });
         this.model.push(rootItem);
@@ -161,8 +161,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   nzCheckAddChild(item) {
     //Add child row, must be object/array
-    if (![ApiParamsTypeFormData.object, ApiParamsTypeFormData.array].includes(item.data.dataType)) {
-      item.data.dataType = ApiParamsTypeFormData.object;
+    if (![ApiParamsType.object, ApiParamsType.array].includes(item.data.dataType)) {
+      item.data.dataType = ApiParamsType.object;
     }
   }
   private initListConf() {
@@ -170,7 +170,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       {
         in: 'body',
         id: this.tid,
-        format: this.bodyType as ApiBodyType,
+        format: this.bodyType,
         isEdit: true
       },
       {
