@@ -180,7 +180,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       let uuid = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
       let requestInfo = null;
-      if (uuid && uuid.includes('history_')) {
+      if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const historyData = await this.apiTest.getHistory(uuid);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
@@ -203,7 +203,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           ...requestInfo
         };
-        this.model.request = this.apiEditUtil.formatStorageApiDataToUI(this.model.request);
+        this.model.request = this.apiTestUtil.getTestDataFromApi(this.model.request);
       } else {
         return;
       }
@@ -226,7 +226,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
-    console.log(this.model);
+    pcConsole.log('apitest', this.model);
     this.eoOnInit.emit(this.model);
     this.cdRef.detectChanges();
   }

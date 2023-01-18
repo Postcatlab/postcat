@@ -159,7 +159,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
-
+  nzCheckAddChild(item) {
+    //Add child row, must be object/array
+    if (![ApiParamsTypeFormData.object, ApiParamsTypeFormData.array].includes(item.data.dataType)) {
+      item.data.dataType = ApiParamsTypeFormData.object;
+    }
+  }
   private initListConf() {
     const config = this.apiTable.initTable(
       {
@@ -178,7 +183,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
     if (this.bodyType === ApiBodyType.XML) {
-      this.checkAddRow = item => item.eoKey !== this.model[0].eoKey;
+      this.checkAddRow = item => {
+        console.log(item);
+        return item.eoKey !== this.model[0].eoKey;
+      };
       this.nzDragCheck = (current, next) => {
         if (next.level === 0) {
           this.message.warning($localize`XML can have only one root node`);

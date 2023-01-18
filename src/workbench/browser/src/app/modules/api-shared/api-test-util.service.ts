@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsTypeFormData, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
 
+import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ApiTestData, ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
-import { ApiData, ApiTestHistory } from '../../shared/services/storage/index.model';
+import { ApiData } from '../../shared/services/storage/db/models';
+import { HeaderParam } from '../../shared/services/storage/db/models/apiData';
+import { ApiTestHistory } from '../../shared/services/storage/index.model';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 
 @Injectable()
 export class ApiTestUtilService {
-  constructor() {}
+  constructor(private apiEditUtil: ApiEditUtilService) {}
   getHTTPStatus(statusCode) {
     const HTTP_CODE_STATUS = [
       {
@@ -134,66 +137,54 @@ export class ApiTestUtilService {
     return result;
   }
 
-  getTestDataFromApi(inData): ApiTestData {
-    inData ||= {};
-    const editToTestParams = arr => {
-      arr = arr || [];
-      arr.forEach(val => {
-        val.value = val.example;
-        delete val.example;
-      });
-    };
-    ['queryParams', 'restParams', 'requestHeaders'].forEach(keyName => {
-      editToTestParams(inData?.[keyName]);
-    });
+  getTestDataFromApi(inData: ApiData): ApiData {
+    inData = this.apiEditUtil.formatStorageApiDataToUI(inData);
     //handle query and url
-    const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {
+    const tmpResult = transferUrlAndQuery(inData.uri, inData.requestParams.queryParams, {
       base: 'url',
       replaceType: 'merge'
     });
     inData.uri = tmpResult.url;
-    inData.queryParams = tmpResult.query;
+    inData.requestParams.queryParams = tmpResult.query;
+
     //parse body
-    switch (inData.requestBodyType) {
+    const requestBodyType = inData.apiAttrInfo.contentType;
+    switch (requestBodyType) {
+      case ApiBodyType.JSONArray:
       case ApiBodyType.JSON: {
-        inData.requestBody = JSON.stringify(
-          table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType
+        inData.requestParams.bodyParams = JSON.stringify(
+          table2json(inData.requestParams.bodyParams, {
+            rootType: requestBodyType === ApiBodyType.JSON ? JsonRootType.Object : JsonRootType.Array
           })
         );
         break;
       }
       case ApiBodyType.XML: {
-        inData.requestBody = json2xml(
-          table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType
-          })
-        );
+        inData.requestParams.bodyParams = json2xml(table2json(inData.requestParams.bodyParams));
         break;
       }
       case ApiBodyType['FormData']: {
-        inData.requestBody.forEach(val => {
+        inData.requestParams.bodyParams.forEach(val => {
           val.value = val.example;
-          val.type = val.type === 'file' ? 'file' : 'string';
-          delete val.example;
+          val.dataType = val.dataType === ApiParamsTypeFormData.file ? ApiParamsTypeFormData.file : ApiParamsTypeFormData.string;
         });
         break;
       }
       case ApiBodyType.Binary: {
-        inData.requestBody = '';
+        inData.requestParams.bodyParams = '';
         break;
       }
     }
-    if (['json', 'xml'].includes(inData.requestBodyType)) {
+    if ([ApiBodyType.JSON, ApiBodyType.JSONArray, ApiBodyType.XML].includes(requestBodyType)) {
       //Add/Replace Content-type
-      const contentType: ContentType = inData.requestBodyType === 'xml' ? 'application/xml' : 'application/json';
-      inData.requestHeaders = this.addOrReplaceContentType(contentType, inData.requestHeaders);
+      const contentType: ContentType = requestBodyType === ApiBodyType.XML ? 'application/xml' : 'application/json';
+      inData.requestParams.headerParams = this.addOrReplaceContentType(contentType, inData.requestParams.headerParams);
       //Xml、Json change content-type to raw in test page
-      inData.requestBodyType = 'raw';
+      inData.apiAttrInfo.contentType = ApiBodyType.Raw;
     }
     return inData;
   }
-  getContentType(headers) {
+  getContentType(headers = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (!existHeader) {
       return;
@@ -204,18 +195,19 @@ export class ApiTestUtilService {
    * @param type content-type be added/replaced
    * @param headers
    */
-  addOrReplaceContentType(contentType: ContentType, headers: any[] = []) {
+  addOrReplaceContentType(contentType: ContentType, headers: HeaderParam[] = []) {
     const result = headers;
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
-      existHeader.value = contentType;
+      existHeader.paramAttr.example = contentType;
       return result;
     }
     headers.unshift({
-      required: true,
+      isRequired: 1,
       name: 'content-type',
-      value: contentType
-      // editable:false
+      paramAttr: {
+        example: contentType
+      }
     });
     return result;
   }
@@ -253,7 +245,6 @@ export class ApiTestUtilService {
         return;
       }
       const item = { ...val, required: val.hasOwnProperty('required') ? val.required : true, example: val.value };
-      delete item.value;
       result.push(item);
     });
     return result;

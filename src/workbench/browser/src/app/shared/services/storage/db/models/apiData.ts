@@ -117,7 +117,7 @@ export interface GrpcApiAttrInfo {
 
 export interface RequestParams {
   headerParams: HeaderParam[];
-  bodyParams: BodyParam[];
+  bodyParams: any | BodyParam[] | string;
   queryParams: QueryParam[];
   restParams: RestParam[];
 }

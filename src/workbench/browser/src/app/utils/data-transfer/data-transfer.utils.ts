@@ -254,8 +254,7 @@ export const text2table: (text: string) => uiData = text => {
  * @param inputOptions
  * @returns
  */
-export const table2json = function (arr: ApiEditBody[], inputOptions) {
-  inputOptions = inputOptions || {};
+export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAttr?: boolean; rootType?: JsonRootType } = {}) {
   let result = {};
   const loopFun = (inputArr, inputObject) => {
     if (inputOptions.checkXmlAttr) {

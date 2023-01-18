@@ -1,4 +1,5 @@
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
@@ -180,7 +181,7 @@ export const fieldTypeMap = new Map<string, any>([
   ['string', 'default_value']
 ]);
 
-export const genApiGroupTree = (apiGroups: Group[], apiDatas: ApiData[], groupId: number) => {
+export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) => {
   const apiDataFilters = apiDatas.filter(apiData => {
     apiData['title'] = apiData.name;
     apiData['key'] = apiData['apiUuid'];

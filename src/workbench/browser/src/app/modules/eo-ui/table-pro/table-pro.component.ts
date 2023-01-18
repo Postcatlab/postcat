@@ -39,6 +39,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   @Input() columnVisibleStatus = {};
 
   @Input() nzCheckAddRow;
+  @Input() nzCheckAddChild;
   @Input() nzDragCheck;
 
   @Input() nzTrClick: (...rest: any[]) => void;
@@ -47,7 +48,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
 
   @ViewChild('enumsTmp', { read: TemplateRef }) enumsTmp: TemplateRef<HTMLDivElement>;
 
-  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
+  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit', 'addChild'];
   //Default buttom template match action
   private TABLE_DEFAULT_BTN: { [key: string]: Partial<IconBtn> };
   iconBtns: IconBtn[] = [];
@@ -84,7 +85,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       addChild: {
         icon: this.tableConfig.btnAddChildRowIcon,
         title: this.tableConfig.btnAddChildRowTitle,
-        fnName: 'addChild'
+        fnName: 'addChildRow'
       },
       insert: {
         icon: this.tableConfig.btnInsertRowIcon,
@@ -165,7 +166,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   }
 
   btnClick(btnItem, index, item, apis) {
-    // console.log('eo-table-pro:btnClick:', btnItem, index, item, apis);
+    console.log('eo-table-pro:btnClick:', btnItem, index, item, apis);
     if (btnItem.click) {
       btnItem.click(item, index, apis);
       return;
@@ -181,7 +182,12 @@ export class EoTableProComponent implements OnInit, OnChanges {
       }
       switch (btnItem.fnName) {
         case 'insertRow': {
-          apis[btnItem.fnName](index, 'down', false);
+          apis.insertRow(index, 'down', false);
+          break;
+        }
+        case 'addChildRow': {
+          this.nzCheckAddChild?.(item, index);
+          apis[btnItem.fnName](index);
           break;
         }
         default: {
