@@ -277,7 +277,7 @@ export class EffectService {
     this.store.setHistory(res?.items);
   }
 
-  async getGroupList() {
+  async getGroupList(params = {}) {
     // * get group list data
     const [groupList = [], gErr] = await this.api.api_groupList({});
     if (gErr) {
@@ -285,7 +285,7 @@ export class EffectService {
     }
     // console.log('Group 数据', groupList);
     // * get api list data
-    const [apiListRes, aErr] = await this.api.api_apiDataList({});
+    const [apiListRes, aErr] = await this.api.api_apiDataList(params);
     if (aErr) {
       return;
     }
