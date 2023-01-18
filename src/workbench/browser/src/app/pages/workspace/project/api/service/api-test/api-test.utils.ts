@@ -74,6 +74,7 @@ export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env
       }
     }
   };
+  console.log(opts.env);
   const result: TestLocalNodeData = {
     lang: opts.lang,
     globals: opts.globals,

@@ -61,7 +61,7 @@ class DataSource extends Dexie {
         if (isDefUuid) {
           // dexie 貌似没有直接提供自动生成 uuid 功能，所以这里简单实现一下
           // 官方默认的语法支持：https://dexie.org/docs/Version/Version.stores()#schema-syntax
-          obj['uuid'] = crypto.randomUUID();
+          obj['uuid'] ??= crypto.randomUUID();
         }
         obj.updateTime = obj.createTime = Date.now();
       });

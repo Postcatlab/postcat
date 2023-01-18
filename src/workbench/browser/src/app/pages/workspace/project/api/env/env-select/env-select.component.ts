@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
+import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
-
-import { Environment } from '../../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'env-list',
@@ -18,7 +17,7 @@ import { Environment } from '../../../../../../shared/services/storage/index.mod
       <span class="px-1 w-2/3  text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
     <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12 text-tips" i18n>No Global variables</span>
-    <div *ngIf="renderEnv?.uuid">
+    <div *ngIf="renderEnv?.id">
       <div *ngIf="renderEnv.hostUri">
         <span class="flex items-center px-6 h-12 title" i18n>Environment Host</span>
         <div>
@@ -40,7 +39,7 @@ import { Environment } from '../../../../../../shared/services/storage/index.mod
 })
 export class EnvSelectComponent implements OnInit {
   gloablParams: any = [];
-  renderEnv: Environment = {
+  renderEnv: Partial<Environment> = {
     name: '',
     hostUri: '',
     parameters: []
@@ -53,7 +52,7 @@ export class EnvSelectComponent implements OnInit {
           ...it,
           parameters: it.parameters.filter(item => item.name || item.value)
         }))
-        .find((it: any) => it.uuid === this.store.getCurrentEnv?.uuid);
+        .find((it: any) => it.id === this.store.getCurrentEnv?.id);
     });
     this.gloablParams = this.getGlobalParams();
   }

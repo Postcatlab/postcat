@@ -12,7 +12,7 @@ import { StoreService } from '../../../shared/store/state.service';
 })
 export class NavBreadcrumbComponent implements OnDestroy {
   level: 'project' | 'workspace';
-  projectName: string;
+  projectName: string = 'Default';
   projectID;
   workspaceID;
   private routerSubscribe;
@@ -20,7 +20,6 @@ export class NavBreadcrumbComponent implements OnDestroy {
     this.initLevel();
     this.watchRouterChange();
     autorun(() => {
-      console.log('this.store.getCurrentProjec', this.store.getCurrentProject);
       if (this.store.getCurrentProject?.name) {
         this.projectName = this.store.getCurrentProject.name;
         this.projectID = this.store.getCurrentProject.projectUuid;

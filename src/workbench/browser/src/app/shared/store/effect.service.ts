@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun, reaction } from 'mobx';
+import { autorun, toJS } from 'mobx';
+
+import { db } from '../services/storage/db';
 
 @Injectable({
   providedIn: 'root'
@@ -21,24 +22,32 @@ export class EffectService {
     private router: Router,
     private lang: LanguageService,
     private web: WebService,
-    private remote: RemoteService
+    private route: ActivatedRoute
   ) {
-    this.init();
-  }
-
-  async init() {
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
-    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
-      if (this.store.getProjectList.length === 0) {
-        this.router.navigate(['/home/workspace/overview']);
-      }
-      this.getProjectPermission();
-      this.getWorkspacePermission();
-    });
+    this.init();
+  }
+  async init() {
+    const result = await db.workspace.read();
+    this.store.setLocalWorkspace(result.data as API.Workspace);
+    //User first use postcat
+    if (!this.store.getCurrentWorkspaceUuid) {
+      this.store.setCurrentWorkspace(this.store.getLocalWorkspace);
+    }
+    //Init workspace
     autorun(async () => {
       if (this.store.isLogin) {
+        //* Get workspace list
         await this.updateWorkspaceList();
+
+        //* Fixed workspaceID and projectID
+        const { pid, wid } = this.route.snapshot.queryParams;
+        if (this.store.getCurrentWorkspaceUuid !== wid) {
+          this.switchWorkspace(wid);
+          this.store.setCurrentProjectID(pid);
+          return;
+        }
         return;
       }
       if (this.store.isLocal) {
@@ -47,10 +56,30 @@ export class EffectService {
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
+
+    // * Fetch role list
     const workspaceRoleList = await this.getRoleList(1);
     this.store.setRoleList(workspaceRoleList, 'workspace');
     const projectRoleList = await this.getRoleList(2);
     this.store.setRoleList(projectRoleList, 'project');
+
+    // * Init project
+    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
+      if (this.store.getProjectList.length === 0) {
+        this.router.navigate(['/home/workspace/overview']);
+      }
+
+      // * Fixed projectID
+      const { pid } = this.route.snapshot.queryParams;
+      if (this.store.getCurrentProjectID !== pid && pid) {
+        this.switchProject(pid);
+        return;
+      }
+
+      //* Reset permission
+      this.getProjectPermission();
+      this.getWorkspacePermission();
+    });
   }
 
   async getRoleList(type) {

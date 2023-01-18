@@ -26,7 +26,6 @@ export class EnvListComponent implements OnDestroy {
   ) {
     autorun(() => {
       if (this.store.getEnvList) {
-        console.log(values(this.store.getEnvList));
         this.envList = (this.store.getEnvList || []).map(n => ({ ...n, title: n.name, key: n.id }));
       }
     });

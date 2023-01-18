@@ -64,36 +64,52 @@ export const migrationToV4 = async (trans: Transaction) => {
       });
   };
 
-  await modify('project');
+  // 因为 modify 的回调是同步操作，所以需要将回调里面的异步操作保存的数组里面
+  const rootGroupPromiseArr = [];
+  await modify('project', async item => {
+    rootGroupPromiseArr.push(
+      trans.table('group').add({
+        type: 0,
+        name: '根分组',
+        depth: 0,
+        projectUuid: item.uuid,
+        workSpaceUuid: workspace.uuid
+      })
+    );
+  });
 
-  await modify('apiData', item => {
+  const result = await Promise.all(rootGroupPromiseArr);
+  // console.log('result', result);
+
+  await modify('apiData', async item => {
+    item.groupId = item.groupID;
     item.projectUuid = item.projectID;
+    if (item.groupID === 0) {
+      const rootGroup = await trans.table('group').where({ projectUuid: item.projectID, depth: 0 }).first();
+      // console.log('apiData rootGroup', rootGroup);
+      if (rootGroup) {
+        trans.table('apiData').update(item.id, { groupId: rootGroup.id });
+      }
+    }
     Object.assign(item, convertApiData(item));
   });
 
-  await modify('environment', item => {
-    item.projectUuid = item.projectID;
-  });
-
   await modify('group', async item => {
+    item.parentId = item.parentID;
     // 给父分组为虚拟根目录的 group
     if (item.parentID === 0) {
-      const exitRootGroup = await trans.table('group').where({ projectUuid: item.projectID }).first();
-      if (exitRootGroup) {
-        item.parentId = exitRootGroup.id;
-      } else {
-        const rootGroup = await trans.table('group').add({
-          type: 0,
-          name: '根分组',
-          depth: 0,
-          projectUuid: item.projectID,
-          workSpaceUuid: workspace.uuid
-        });
-        item.parentId = rootGroup.id;
+      const rootGroup = await trans.table('group').where({ projectUuid: item.projectID, depth: 0 }).first();
+      // console.log('group rootGroup', rootGroup);
+      if (rootGroup) {
+        trans.table('group').update(item.id, { parentId: rootGroup.id });
       }
     }
     item.projectUuid = item.projectID;
     item.sort = item.weight;
+  });
+
+  await modify('environment', item => {
+    item.projectUuid = item.projectID;
   });
 
   await modify('mock', item => {

@@ -38,7 +38,7 @@ export class ProjectService extends BaseService<Project> {
 
     const groups = result.data?.map(item => ({
       type: 0,
-      name: '根分组',
+      name: $localize`Root Group`,
       depth: 0,
       projectUuid: item.uuid,
       workSpaceUuid: item.workSpaceUuid

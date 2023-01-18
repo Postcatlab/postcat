@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
+
+import { JSONParse } from '../../utils/index.utils';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -17,12 +17,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
   providedIn: 'root'
 })
 export class StoreService {
-  private localWorkspace: API.Workspace = {
-    createUserId: -1,
-    workSpaceUuid: '-1',
-    title: $localize`Persional Workspace`,
-    isLocal: true
-  };
+  private localWorkspace: API.Workspace;
   // * observable data
   // ? api & group(includes api) & mock
   @observable.shallow private currentAPI = {};
@@ -47,7 +42,9 @@ export class StoreService {
   @observable private groupList: Group[] = [];
 
   // ? workspace
-  @observable private currentWorkspace: API.Workspace = StorageUtil.get('currentWorkspace');
+  @observable private currentWorkspace: Partial<API.Workspace> = StorageUtil.get('currentWorkspace') || {
+    isLocal: true
+  };
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [];
 
@@ -121,13 +118,13 @@ export class StoreService {
 
   // ? env
   @computed get getCurrentEnv() {
-    const [data] = this.envList.filter(it => it.uuid === this.envUuid);
+    const [data] = this.envList.filter(it => it.id === this.envUuid);
     return (
       data || {
         hostUri: '',
         parameters: [],
         frontURI: '',
-        uuid: null
+        id: null
       }
     );
   }
@@ -167,7 +164,7 @@ export class StoreService {
     return this.workspaceList;
   }
   @computed get getCurrentWorkspaceUuid() {
-    return this.currentWorkspace.workSpaceUuid;
+    return this.currentWorkspace?.workSpaceUuid;
   }
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
@@ -179,7 +176,6 @@ export class StoreService {
   get getLocalWorkspace() {
     return this.localWorkspace;
   }
-
   // ? project
   @computed get getProjectList() {
     return this.projectList;
@@ -231,25 +227,19 @@ export class StoreService {
     return this.rightBarStatus;
   }
 
-  constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
-    this.initWorkspace();
+  constructor(private setting: SettingService, private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
   }
-
-  async initWorkspace() {
-    const result = await db.workspace.read();
-    this.localWorkspace = result.data as API.Workspace;
-    this.setCurrentWorkspace(this.currentWorkspace || this.localWorkspace);
-    this.setWorkspaceList(this.getWorkspaceList.filter(val => val.isLocal));
-  }
-
   // * actions
   // ? history
   @action setHistory(data = []) {
     this.testHistory = data;
   }
 
+  @action setLocalWorkspace(data) {
+    this.localWorkspace = data;
+  }
   // ? router
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
@@ -263,8 +253,11 @@ export class StoreService {
   }
 
   @action setEnvList(data = []) {
-    this.envList = data;
-    const isHere = data.find(it => it.uuid === this.envUuid);
+    this.envList = data.map(val => {
+      val.parameters = JSONParse(val.parameters, []);
+      return val;
+    });
+    const isHere = data.find(it => it.id === this.envUuid);
     if (!isHere) {
       this.envUuid = null;
       //  for delete env
@@ -296,8 +289,7 @@ export class StoreService {
     if (this.localWorkspace) {
       this.workspaceList.unshift(this.localWorkspace);
     }
-    const workspace = this.workspaceList.find(val => val.workSpaceUuid === this.getCurrentWorkspaceUuid) || this.getLocalWorkspace;
-    this.setCurrentWorkspace(workspace);
+    console.log('setWorkspaceList');
   }
   @action updateWorkspace(workspace: API.Workspace) {
     const index = this.workspaceList.findIndex(val => val.workSpaceUuid === workspace.workSpaceUuid);
@@ -323,7 +315,6 @@ export class StoreService {
   }
   @action setCurrentProjectID(projectUuid: string) {
     this.currentProjectID = projectUuid;
-    console.log('this.projectList', toJS(this.projectList));
     this.currentProject = this.projectList?.find(val => val?.projectUuid === projectUuid);
     StorageUtil.set('currentProjectID', projectUuid);
   }
