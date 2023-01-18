@@ -25,7 +25,5 @@ export interface TestServer {
 export interface requestDataOpts {
   env: Environment | any;
   globals: object;
-  beforeScript: string;
-  afterScript: string;
   lang: string;
 }

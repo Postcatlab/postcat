@@ -1,7 +1,14 @@
 import { formatDate } from '@angular/common';
-import { ApiBodyType, protocalMap, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  JsonRootType,
+  protocalMap,
+  requestMethodMap
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { BodyParam, RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const PROTOCOL = ['http', 'https'];
@@ -14,16 +21,16 @@ const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
  * @param rest
  * @returns
  */
-export const formatUri = (uri, rest = []) => {
+export const formatUri = (uri, rest: RestParam[] = []) => {
   if (!Array.isArray(rest)) {
     return uri;
   }
   let result = uri;
   const restByName = rest.reduce((acc, val) => {
-    if (!val.required || !val.name) {
+    if (!(val.isRequired && val.name)) {
       return acc;
     }
-    return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
+    return { ...acc, [val.name]: val.paramAttr?.example || '' };
   }, {});
   Object.keys(restByName).forEach(restName => {
     try {
@@ -33,48 +40,36 @@ export const formatUri = (uri, rest = []) => {
   return result;
 };
 
-export const eoFormatRequestData = (
-  data: ApiData,
-  opts: requestDataOpts = { env: {}, beforeScript: '', afterScript: '', lang: 'en', globals: {} },
-  locale
-) => {
-  const formatList = inArr => {
+export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env: {}, lang: 'en', globals: {} }, locale) => {
+  const formatHeaders = inArr => {
     if (!Array.isArray(inArr)) {
       return [];
     }
     return inArr
       .filter(val => val.name)
-      .map(val => ({
-        checkbox: val.required,
+      .map((val: BodyParam) => ({
+        checkbox: !!val.isRequired,
         headerName: val.name,
-        headerValue: val.value
+        headerValue: val.paramAttr.example
       }));
   };
-  const formatBody = inData => {
-    switch (inData.requestBodyType) {
+  const formatBody = (inData: ApiData) => {
+    switch (inData.apiAttrInfo.contentType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        return inData.requestBody;
+        return inData.requestParams.bodyParams[0].binaryRawData;
       }
       case ApiBodyType['FormData']: {
-        const typeMUI = {
-          string: '0',
-          file: '1',
-          boolean: '8',
-          array: '12',
-          object: '13',
-          number: '14',
-          null: '15'
-        };
-        return inData.requestBody
+        return inData.requestParams.bodyParams
           .filter(val => val.name)
           .map(val => ({
-            checkbox: val.required,
+            checkbox: !!val.isRequired,
             listDepth: 0,
             paramKey: val.name,
+            //@ts-ignore
             files: val.files?.map(file => file.content),
-            paramType: typeMUI[val.type],
-            paramInfo: val.value === undefined ? val.example : val.value
+            paramType: val.dataType === ApiParamsType.file ? '1' : '0',
+            paramInfo: val.paramAttr?.example
           }));
       }
     }
@@ -84,24 +79,26 @@ export const eoFormatRequestData = (
     globals: opts.globals,
     URL: formatUri(data.uri, data.requestParams.restParams),
     method: requestMethodMap[data.apiAttrInfo.requestMethod],
-    methodType: data.apiAttrInfo.requestMethod,
-    httpHeader: protocalMap[data.protocol],
-    headers: formatList(data.requestParams.headerParams),
+    methodType: data.apiAttrInfo.requestMethod.toString(),
+    httpHeader: data.protocol,
+    headers: formatHeaders(data.requestParams.headerParams),
     requestType: data.apiAttrInfo.contentType.toString(),
-    apiRequestParamJsonType: '0',
-    //TODO
-    // apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType),
     params: formatBody(data),
     auth: { status: '0' },
+    apiRequestParamJsonType: '0',
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
     env: {
       paramList: (opts.env.parameters || []).map(val => ({ paramKey: val.name, paramValue: val.value })),
       frontURI: opts.env.hostUri
     },
-    beforeInject: opts.beforeScript,
-    afterInject: opts.afterScript,
+    beforeInject: data.apiAttrInfo.beforeInject || '',
+    afterInject: data.apiAttrInfo.afterInject || '',
     testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale)
   };
+  const rootType = [JsonRootType.Object, JsonRootType.Array].indexOf(data.apiAttrInfo.contentType);
+  if (rootType !== -1) {
+    result.apiRequestParamJsonType = rootType.toString();
+  }
   return result;
 };
 export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestRes => {

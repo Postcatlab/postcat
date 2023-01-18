@@ -14,7 +14,7 @@ export interface TestLocalNodeData {
    *
    * @type {string}
    */
-  methodType: number;
+  methodType: string;
   /**
    * API  protocal type
    *
@@ -50,11 +50,7 @@ export interface TestLocalNodeData {
         checkbox: boolean;
         paramKey: string;
         paramType: string;
-        /**
-         * value
-         */
         paramInfo: string;
-        childList: object[];
       }>;
   /**
    * request auth,baisc auth/jwt

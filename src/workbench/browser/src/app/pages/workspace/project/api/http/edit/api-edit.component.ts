@@ -12,7 +12,7 @@ import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tre
 import { autorun, toJS } from 'mobx';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
@@ -160,7 +160,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    if (!this.initialModel || !this.model) {
+    if (!(this.initialModel && this.model)) {
       return false;
     }
     // console.log(

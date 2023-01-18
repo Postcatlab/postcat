@@ -1079,7 +1079,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/api/common/user/change-password`, {
+        .post(`${prefix}/usercenter/common/user/change-password`, {
           password,
           ...items
         })

@@ -30,6 +30,7 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
+{{ model | json }}
 <eo-ng-table-pro
   *ngIf="[TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray, TYPE_API_BODY.XML, TYPE_API_BODY['FormData']].includes(bodyType)"
   [columns]="listConf.columns"
@@ -45,7 +46,7 @@
 <!-- Raw -->
 <eo-monaco-editor
   *ngIf="bodyType === TYPE_API_BODY.Raw"
-  [(code)]="model"
+  [(code)]="model[0].binaryRawData"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
   [autoType]="true"
   (codeChange)="rawChange($event)"
@@ -59,6 +60,6 @@
     (ngModelChange)="rawChange($event)"
     placeholder="Binary Description"
     eo-ng-input
-    [(ngModel)]="model"
+    [(ngModel)]="model[0].binaryRawData"
   ></textarea>
 </div>

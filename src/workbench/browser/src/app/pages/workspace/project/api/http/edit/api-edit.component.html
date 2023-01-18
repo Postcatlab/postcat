@@ -65,7 +65,7 @@
                     model.apiAttrInfo.contentType
                   )
                     ? bindGetApiParamNum(model.requestParams.bodyParams)
-                    : model.requestParams.bodyParams.length
+                    : model.requestParams?.bodyParams?.[0]?.binaryRawData?.length
                 "
                 nzStatus="success"
               ></nz-badge>

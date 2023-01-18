@@ -117,7 +117,7 @@ export interface GrpcApiAttrInfo {
 
 export interface RequestParams {
   headerParams: HeaderParam[];
-  bodyParams: any | BodyParam[] | string;
+  bodyParams: BodyParam[];
   queryParams: QueryParam[];
   restParams: RestParam[];
 }
@@ -158,20 +158,20 @@ export interface ParamAttr {
 
 export interface BodyParam {
   responseUuid?: string;
-  name: string;
+  name?: string;
   paramType?: number;
   partType?: number;
   dataType?: number;
   dataTypeValue?: string;
   structureId?: number;
   structureParamId?: string;
-  isRequired: number;
+  isRequired?: number;
   binaryRawData?: string;
   description?: string;
   orderNo?: number;
   createTime?: number;
   updateTime?: number;
-  paramAttr: ParamAttr;
+  paramAttr?: ParamAttr;
   childList?: BodyParam[];
 }
 

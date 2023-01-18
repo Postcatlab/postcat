@@ -140,10 +140,11 @@ export class ApiTestUtilService {
 
     //parse body
     const requestBodyType = inData.apiAttrInfo.contentType;
+    let binaryRawData = '';
     switch (requestBodyType) {
       case ApiBodyType.JSONArray:
       case ApiBodyType.JSON: {
-        inData.requestParams.bodyParams = JSON.stringify(
+        binaryRawData = JSON.stringify(
           table2json(inData.requestParams.bodyParams, {
             rootType: requestBodyType === ApiBodyType.JSON ? JsonRootType.Object : JsonRootType.Array
           })
@@ -151,20 +152,26 @@ export class ApiTestUtilService {
         break;
       }
       case ApiBodyType.XML: {
-        inData.requestParams.bodyParams = json2xml(table2json(inData.requestParams.bodyParams));
+        binaryRawData = json2xml(table2json(inData.requestParams.bodyParams));
         break;
       }
       case ApiBodyType['FormData']: {
         inData.requestParams.bodyParams.forEach(val => {
-          val.value = val.example;
           val.dataType = val.dataType === ApiParamsType.file ? ApiParamsType.file : ApiParamsType.string;
         });
         break;
       }
       case ApiBodyType.Binary: {
-        inData.requestParams.bodyParams = '';
+        binaryRawData = '';
         break;
       }
+    }
+    if (requestBodyType !== ApiBodyType.FormData) {
+      inData.requestParams.bodyParams = [
+        {
+          binaryRawData: binaryRawData
+        }
+      ];
     }
     if ([ApiBodyType.JSON, ApiBodyType.JSONArray, ApiBodyType.XML].includes(requestBodyType)) {
       //Add/Replace Content-type

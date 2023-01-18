@@ -1,20 +1,8 @@
 {
-  "/api/common": {
-    "target": "http://54.255.141.14:9007",
+  "/": {
+    "target": "http://54.255.141.14:8080",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug",
-    "pathRewrite": {
-      "^/api": ""
-    }
-  },
-  "/api": {
-    "target": "http://54.255.141.14:9010",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug",
-    "pathRewrite": {
-      "^/api": ""
-    }
+    "logLevel": "debug"
   }
 }

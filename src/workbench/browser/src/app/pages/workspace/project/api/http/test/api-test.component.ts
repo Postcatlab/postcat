@@ -284,11 +284,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
-    if (
-      originText !== afterText ||
-      this.initialModel.request.script.beforeScript !== this.model.request.script.beforeScript ||
-      this.initialModel.request.script.afterScript !== this.model.request.script.afterScript
-    ) {
+    if (originText !== afterText) {
       // console.log('api test formChange true!', originText.split(afterText));
       return true;
     }
@@ -336,17 +332,16 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     return true;
   }
   private test() {
-    this.testServer.send('unitTest', {
+    const testData = {
       id: JSON.stringify(this.route.snapshot.queryParams),
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.store.getCurrentEnv,
         globals: getGlobals(),
-        beforeScript: this.model.request.script.beforeScript,
-        afterScript: this.model.request.script.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en'
       })
-    });
+    };
+    this.testServer.send('unitTest', testData);
     this.model.testStartTime = Date.now();
     this.status$.next('testing');
   }
@@ -479,7 +474,16 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           beforeInject: '',
           afterInject: ''
         },
-        requestParams: {}
+        requestParams: {
+          queryParams: [],
+          headerParams: [],
+          restParams: [],
+          bodyParams: [
+            {
+              binaryRawData: ''
+            }
+          ]
+        }
       },
       testResult: {
         response: {},

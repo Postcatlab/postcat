@@ -14,7 +14,6 @@ import { transferFileToDataUrl, whatTextType, whatType } from 'eo/workbench/brow
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
-import { pairwise, takeUntil } from 'rxjs/operators';
 
 import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
@@ -71,15 +70,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       example: ''
     }
   };
-  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
   }
   constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
-    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
-      this.beforeChangeBodyByType(val[0]);
-    });
     this.initListConf();
   }
 
@@ -101,7 +96,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.autoSetContentTypeChange.emit(false);
   }
   changeBodyType(type?) {
-    this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.initListConf();
     this.setModel();

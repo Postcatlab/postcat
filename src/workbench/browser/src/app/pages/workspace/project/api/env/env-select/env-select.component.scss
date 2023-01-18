@@ -1,5 +1,6 @@
 .preview {
   color: rgb(0 0 0 / 85%);
+  background-color: var(--background-color);
 }
 
 .content {
@@ -9,4 +10,20 @@
 .title {
   background-color: var(--item-active-background-color);
   color: var(--text-color);
+}
+
+::ng-deep {
+  .eo-env-preview {
+    .ant-popover-arrow-content::before {
+      display: none;
+    }
+
+    .ant-popover-inner-content {
+      padding: 0;
+    }
+  }
+
+  .env-selector-dropdown {
+    width: 224px;
+  }
 }

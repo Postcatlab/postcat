@@ -66,7 +66,6 @@ export class ApiTabService {
     { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'preview', title: 'Mock' }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
-  tabStorageKey: string;
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
@@ -76,7 +75,6 @@ export class ApiTabService {
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
-      this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.workSpaceUuid}_TabCache`;
     });
   }
   watchApiChange(inArg: Message) {
@@ -306,7 +304,7 @@ export class ApiTabService {
     const tab = tabsInfo.tabsByID[tabsInfo.tabOrder[0]];
     if (!tab) return null;
     const { wid, pid } = tab.params;
-    if (wid !== this.store.getCurrentWorkspaceUuid || Number(pid) !== this.store.getCurrentProjectID) return null;
+    if (wid !== this.store.getCurrentWorkspaceUuid || pid !== this.store.getCurrentProjectID) return null;
     return tabsInfo;
   };
   handleDataBeforeCache = tabStorage => {

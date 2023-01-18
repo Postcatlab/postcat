@@ -24,7 +24,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Table ID
    */
   @Input() tid: string;
-  @Input() model: string | object[] | any;
+  @Input() model: BodyParam[];
   @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() bodyType: ApiBodyType | number;
   @Input() jsonRootType: number = JsonRootType.Object;
@@ -55,11 +55,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
-  private rawChange$: Subject<string> = new Subject<string>();
+  private rawChange$: Subject<BodyParam[]> = new Subject<BodyParam[]>();
   constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
-    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
-      this.beforeChangeBodyByType(val[0]);
-    });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe(model => {
       if (this.bodyType !== ApiBodyType.Raw) {
@@ -75,7 +72,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   rawChange(code) {
-    this.rawChange$.next(code);
+    this.model[0].binaryRawData = code;
+    this.rawChange$.next(this.model);
   }
   changeBodyType() {
     this.bodyType$.next(this.bodyType);
@@ -96,13 +94,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       changes.model &&
       ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0)
     ) {
-      this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();
     }
   }
   beforeHandleImport(result) {
-    // this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
+    this.jsonRootType = Array.isArray(result) ? JsonRootType.Array : JsonRootType.Object;
   }
   tableChange($event) {
     this.modelChange.emit(this.model);
@@ -110,22 +107,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
-  }
-  private beforeChangeBodyByType(type) {
-    switch (type) {
-      case ApiBodyType.Binary:
-      case ApiBodyType.Raw: {
-        if (typeof this.model !== 'string') {
-          return;
-        }
-        this.cache[type] = this.model || '';
-        break;
-      }
-      default: {
-        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
-        break;
-      }
-    }
   }
   /**
    * Set model after change bodyType
@@ -136,7 +117,11 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        this.model = this.cache[this.bodyType] || '';
+        this.model = this.cache[this.bodyType] || [
+          {
+            binaryRawData: this.model?.[0]?.binaryRawData || ''
+          }
+        ];
         break;
       }
       default: {
@@ -185,6 +170,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     if (this.bodyType === ApiBodyType.XML) {
       this.checkAddRow = item => {
         console.log(item);
+        //@ts-ignore
         return item.eoKey !== this.model[0].eoKey;
       };
       this.nzDragCheck = (current, next) => {

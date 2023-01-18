@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -10,16 +11,19 @@ export class ApiEditUtilService {
 
   parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
+    //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
-      if (whatType(result.requestParams?.[tableName]) !== 'array') {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
         filterFn: filterArrFun
       });
     });
+
+    //Parse response body
     ['bodyParams', 'headerParams'].forEach(tableName => {
-      if (whatType(result.responseList?.[0].responseParams[tableName]) !== 'array') {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {

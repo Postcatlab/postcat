@@ -109,15 +109,3 @@ nz-divider {
     box-sizing: border-box;
   }
 }
-
-::ng-deep {
-  .eo-env-preview {
-    .ant-popover-inner-content {
-      padding: 0;
-    }
-  }
-
-  .env-selector-dropdown {
-    width: 224px;
-  }
-}
