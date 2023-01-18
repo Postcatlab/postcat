@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
 import { MessageService } from '../../../shared/services/message';
@@ -32,8 +32,7 @@ export class WorkspaceOverviewComponent implements OnInit {
   ngOnInit(): void {
     autorun(() => {
       this.title = this.store.getCurrentWorkspace?.title;
-      console.log('this.store.getWorkspaceRole', this.store.getWorkspaceRole);
-      this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
+      this.isOwner = this.store.getWorkspaceRole.find(it => ['Workspace Owner'].includes(it.name));
     });
   }
   createWorkspace() {

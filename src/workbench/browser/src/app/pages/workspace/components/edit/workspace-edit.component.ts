@@ -97,8 +97,8 @@ export class WorkspaceSettingComponent {
           return;
         }
         this.message.success($localize`Delete success !`);
+        await this.effect.updateWorkspaceList();
         await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
-        this.effect.updateWorkspaceList();
       }
     });
   }

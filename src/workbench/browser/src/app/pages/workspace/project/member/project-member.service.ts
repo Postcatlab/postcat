@@ -6,10 +6,11 @@ import { autorun } from 'mobx';
 
 @Injectable()
 export class ProjectMemberService {
-  role: 'Owner' | 'Editor' | string;
+  role: any[] = [];
   constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
     autorun(async () => {
-      // this.role = this.store.getProjectRole;
+      console.log('this.store.getProjectRole', this.store.getProjectRole);
+      this.role = this.store.getProjectRole;
     });
   }
 
