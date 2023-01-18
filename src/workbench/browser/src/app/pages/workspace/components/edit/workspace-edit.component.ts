@@ -28,7 +28,7 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
       <nz-list nzItemLayout="horizontal">
         <nz-list-item *ngFor="let item of overviewList">
           <div class="flex items-center justify-between w-full px-base">
-            <b class="w-1/4">{{ item.title }}</b>
+            <b class="w-2/4">{{ item.title }}</b>
             <!-- <span class="w-6/12 text-tips">{{ item.desc }}</span> -->
             <button eo-ng-button nzType="default" [nzDanger]="item.type === 'delete'" (click)="clickItem($event, item)">{{
               item.title
@@ -90,7 +90,7 @@ export class WorkspaceSettingComponent {
       nzOkDanger: true,
       nzOnOk: async () => {
         const [data, err]: any = await this.api.api_workspaceDelete({
-          workSpaceUuids: wid
+          workSpaceUuids: [wid]
         });
         if (err) {
           this.message.error($localize`Delete failed !`);
@@ -98,13 +98,15 @@ export class WorkspaceSettingComponent {
         }
         this.message.success($localize`Delete success !`);
         await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
-        this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.workSpaceUuid !== wid));
+        this.effect.updateWorkspaceList();
       }
     });
   }
   async save($event) {
     $event.stopPropagation();
-    if (!this.validateForm.valid) return;
+    if (!this.validateForm.valid) {
+      return;
+    }
     this.isSaveBtnLoading = true;
     const id = this.store.getCurrentWorkspaceUuid;
     const { title } = this.validateForm.value;
@@ -116,7 +118,7 @@ export class WorkspaceSettingComponent {
       return;
     }
     this.message.success($localize`Edit workspace successfully !`);
-    this.store.updateWorkspace(eoDeepCopy(data));
+    this.effect.updateWorkspaceList();
     this.isSaveBtnLoading = false;
   }
 }
