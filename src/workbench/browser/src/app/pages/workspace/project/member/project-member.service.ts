@@ -65,7 +65,7 @@ export class ProjectMemberService {
     });
     if (!err) {
       const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
-      this.effect.changeProject(project.uuid);
+      this.effect.switchProject(project.uuid);
     }
     return [data, err];
   }

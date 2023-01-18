@@ -1,6 +1,8 @@
 import type { Transaction } from 'dexie';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/workspace.service';
 
+import { convertApiData } from './convert';
+
 /** indexedDB 升级到 v3
  *
  * @description 这里主要是为了创建临时表存储旧表的数据，为下面 升级 v4 做铺垫
@@ -53,12 +55,12 @@ export const migrationToV4 = async (trans: Transaction) => {
     return trans
       .table(tableName)
       .toCollection()
-      .modify(item => {
+      .modify((item, ctx) => {
         item.createTime = item.createdAt;
         item.updateTime = item.updatedAt;
         item.id ??= item.uuid;
         item.workSpaceUuid = workspace.uuid;
-        callback?.(item);
+        callback?.(item, ctx);
       });
   };
 
@@ -66,13 +68,30 @@ export const migrationToV4 = async (trans: Transaction) => {
 
   await modify('apiData', item => {
     item.projectUuid = item.projectID;
+    Object.assign(item, convertApiData(item));
   });
 
   await modify('environment', item => {
     item.projectUuid = item.projectID;
   });
 
-  await modify('group', item => {
+  await modify('group', async item => {
+    // 给父分组为虚拟根目录的 group
+    if (item.parentID === 0) {
+      const exitRootGroup = await trans.table('group').where({ projectUuid: item.projectID }).first();
+      if (exitRootGroup) {
+        item.parentId = exitRootGroup.id;
+      } else {
+        const rootGroup = await trans.table('group').add({
+          type: 0,
+          name: '根分组',
+          depth: 0,
+          projectUuid: item.projectID,
+          workSpaceUuid: workspace.uuid
+        });
+        item.parentId = rootGroup.id;
+      }
+    }
     item.projectUuid = item.projectID;
     item.sort = item.weight;
   });
