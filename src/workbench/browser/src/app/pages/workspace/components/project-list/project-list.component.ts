@@ -63,7 +63,7 @@ export class ProjectListComponent implements OnInit {
     });
   }
   changeProject(item) {
-    this.effect.changeProject(item.projectUuid);
+    this.effect.switchProject(item.projectUuid);
   }
   delProject(item: any): void {
     const modal = this.modalService.confirm({

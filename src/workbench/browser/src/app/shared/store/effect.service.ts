@@ -77,6 +77,21 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
+  async switchWorkspace(workspaceID: string) {
+    // * real set workspace
+    this.store.setCurrentWorkspaceUuid(workspaceID);
+    // * real set workspace
+    await this.router.navigate(['**']);
+
+    this.router.navigate(['/home/workspace/overview']);
+    // * update title
+    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
+
+    // * update workspace role
+    const { roles, permissions } = await this.getWorkspacePermission();
+    this.store.setPermission(permissions, 'workspace');
+    this.store.setRole(roles, 'workspace');
+  }
   async getWorkspacePermission() {
     // * local workspace no need to set permission
     if (this.store.isLocal) {
@@ -87,24 +102,7 @@ export class EffectService {
     if (err) {
       return;
     }
-    const { roles, permissions } = data;
-    this.store.setPermission(permissions, 'workspace');
-    this.store.setRole(roles, 'workspace');
-  }
-  async switchWorkspace(workspaceID: string) {
-    // * real set workspace
-    this.store.setCurrentWorkspaceUuid(workspaceID);
-    // * real set workspace
-    await this.updateProjects(workspaceID);
-    await this.router.navigate(['**']);
-
-    this.router.navigate(['/home/workspace/overview']);
-    // * update title
-    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
-
-    // * update workspace role
-    this.getWorkspacePermission();
-    this.getProjectPermission();
+    return data;
   }
   async getProjectPermission() {
     // * localworkspace no need to set permission
@@ -116,11 +114,10 @@ export class EffectService {
     if (err) {
       return;
     }
-    const project = data.at(0);
-    this.store.setPermission(project.permissions, 'project');
-    this.store.setRole(project.roles, 'project');
+    return data.at(0);
   }
-  async changeProject(pid) {
+
+  async switchProject(pid) {
     if (!pid) {
       this.router.navigate(['/home/workspace/overview']);
       return;
@@ -129,7 +126,9 @@ export class EffectService {
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
     // * update project role
-    await this.getProjectPermission();
+    const { permissions, roles } = await this.getProjectPermission();
+    this.store.setPermission(permissions, 'project');
+    this.store.setRole(roles, 'project');
   }
   async updateWorkspaces() {
     const [list, wErr]: any = await this.api.api_workspaceList({});

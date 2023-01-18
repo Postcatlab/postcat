@@ -21,7 +21,7 @@ export class WorkspaceComponent implements OnInit {
       this.storeService.setCurrentProjectID(pid);
     }
     if (this.storeService.getCurrentProjectID !== pid && pid) {
-      this.effect.changeProject(pid);
+      this.effect.switchProject(pid);
     }
   }
 }
