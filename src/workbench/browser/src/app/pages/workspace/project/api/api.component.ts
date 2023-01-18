@@ -145,7 +145,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.renderTabs = this.store.isShare ? this.TABS.filter(it => it.isShare) : this.TABS;
     this.envUuid = this.store.getEnvUuid;
     autorun(() => {
-      this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.uuid }));
+      this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.id }));
     });
     reaction(
       () => this.envUuid,
