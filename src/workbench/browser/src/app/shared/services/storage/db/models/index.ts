@@ -28,6 +28,7 @@ export interface Group extends Base {
   sort?: number;
   projectUuid: string;
   workSpaceUuid: string;
+  children?: Group[];
 }
 
 export interface Environment extends Base {

@@ -170,7 +170,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         requestInfo = history.testData;
         // this.restoreResponseFromHistory(history.response);
       } else {
-        requestInfo = await this.projectApi.get(uuid);
+        if (!uuid) {
+          requestInfo = this.resetModel().request;
+        } else {
+          requestInfo = await this.projectApi.get(uuid);
+        }
         this.model.testResult = {
           response: {},
           request: {}

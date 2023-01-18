@@ -194,7 +194,7 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
       ...group,
       title: group.name,
       key: group.id,
-      children: genApiGroupTree(apiGroups, apiDatas, group.id)
+      children: genApiGroupTree([...(group.children || [])], apiDatas, group.id)
     })),
     ...apiDataFilters
   ];

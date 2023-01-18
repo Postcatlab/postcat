@@ -22,6 +22,9 @@ export class ApiEditUtilService {
     });
 
     //Parse response body
+    if (!result.responseList) {
+      return result;
+    }
     ['bodyParams', 'headerParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
         return;

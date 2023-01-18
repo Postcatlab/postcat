@@ -23,7 +23,10 @@ export class ProjectApiService {
     const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid] });
     if (err) {
       this.message.error($localize`Can't find this Api`);
+      return;
     }
+    // TODO
+    result[0].responseParams ??= result[0].responseParam;
     return result[0];
   }
   async edit(apiData: ApiData) {

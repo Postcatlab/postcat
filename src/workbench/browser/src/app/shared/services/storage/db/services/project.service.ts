@@ -26,20 +26,6 @@ export class ProjectService extends BaseService<Project> {
   constructor() {
     super(dataSource.project);
   }
-
-  private genApiGroupTree(apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) {
-    const apiDataFilters = apiDatas.filter(apiData => apiData.groupId === groupId);
-    const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
-
-    return [
-      ...apiGroupFilters.map(group => ({
-        ...group,
-        children: this.genApiGroupTree(apiGroups, apiDatas, group.id)
-      })),
-      ...apiDataFilters
-    ];
-  }
-
   async bulkCreate(params: ProjectBulkCreateDto) {
     const { projectMsgs, workSpaceUuid } = params;
 
@@ -102,15 +88,6 @@ export class ProjectService extends BaseService<Project> {
       const result = await Promise.all(promises);
       console.log('删除项目', result);
     }
-  }
-
-  /** 获取所有 API 及分组 */
-  @ApiResponse()
-  async collections(projectUuid: string) {
-    const apiDatas = await this.apiDataTable.where({ projectUuid }).sortBy('orderNum');
-    const apiGroups = await this.apiGroupTable.where({ projectUuid }).sortBy('sort');
-
-    return this.genApiGroupTree(apiGroups, apiDatas, 0);
   }
 
   /** 导出整个项目 */
