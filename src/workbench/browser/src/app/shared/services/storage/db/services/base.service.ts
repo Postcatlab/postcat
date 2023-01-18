@@ -8,6 +8,9 @@ export class BaseService<T> {
     const entries = Object.entries(params);
     return this.db.filter(obj => {
       return entries.every(([key, value]) => {
+        if (!Reflect.has(obj as unknown as object, key)) {
+          return true;
+        }
         if (Array.isArray(value)) {
           return value.includes(obj[key]);
         } else {
@@ -46,8 +49,13 @@ export class BaseService<T> {
   }
 
   @ApiResponse()
-  async bulkUpdate(params) {
+  async bulkUpdate(params: any[]) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
+    const promiseArr = params.map(item => {
+      const { id, ...rest } = item;
+      return this.db.update(id, rest);
+    });
+    await Promise.all(promiseArr);
     return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 

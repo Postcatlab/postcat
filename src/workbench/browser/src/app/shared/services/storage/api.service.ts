@@ -26,7 +26,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiDataDetail<T>(params) : this.remote.api_apiDataDetail<T>(params);
   }
 
-  api_apiDataList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiDataList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
     return this.store.isLocal ? this.local.api_apiDataList<T>(params) : this.remote.api_apiDataList<T>(params);
   }
 

@@ -9,6 +9,16 @@ export interface ApiDataUpdateDto {
   projectUuid: string;
   workSpaceUuid: string;
 }
+
+export interface ApiDataPageDto {
+  projectUuid: string;
+  workSpaceUuid: string;
+  groupIds?: number[];
+  keyword?: string;
+  page?: number;
+  pageSize?: number;
+}
+
 export interface ApiDataBulkReadDto {
   projectUuid: string;
   workSpaceUuid: string;

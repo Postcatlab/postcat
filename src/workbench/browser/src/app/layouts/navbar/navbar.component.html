@@ -8,6 +8,7 @@
     </a>
     <eo-nav-breadcrumb *ngIf="!store.isShare" class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
   </div>
+  <span>{{ store.isLocal }}</span>
   <div class="flex items-center electron-can-be-click">
     <!-- share -->
     <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link>
