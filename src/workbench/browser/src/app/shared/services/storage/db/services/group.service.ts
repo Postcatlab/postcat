@@ -13,6 +13,22 @@ export class GroupService extends BaseService<Group> {
     super(dataSource.group);
   }
 
+  async bulkRead(params) {
+    const result = await this.baseService.bulkRead(params);
+    const genGroupTree = (groups: Group[], paranId) => {
+      return groups
+        .filter(n => n.parentId === paranId)
+        .map(m => ({
+          ...m,
+          children: genGroupTree(groups, m.id)
+        }));
+    };
+    const rootGroup = result.data?.find(n => n.depth === 0);
+    rootGroup['children'] = genGroupTree(result.data, rootGroup?.id);
+    result.data = [rootGroup];
+    return result;
+  }
+
   async delete(params: GroupDeleteDto) {
     const result = await this.baseService.delete(params);
     await this.afterDelete(params, result);
