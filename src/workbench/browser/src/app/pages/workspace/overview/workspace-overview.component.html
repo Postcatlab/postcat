@@ -39,7 +39,7 @@
           <eo-workspace-member *ngIf="nzSelectedIndex === 1"></eo-workspace-member>
         </div>
       </eo-ng-tab>
-      <eo-ng-tab i18n-nzTitle *ngIf="!store.isLocal && store.getWorkspaceRole === 'Workspace Owner'" nzTitle="Setting">
+      <eo-ng-tab i18n-nzTitle *ngIf="!store.isLocal && isOwner" nzTitle="Setting">
         <eo-workspace-setting class="half-part-container"></eo-workspace-setting>
       </eo-ng-tab>
     </eo-ng-tabset>

@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { autorun } from 'mobx';
+import { autorun, toJS } from 'mobx';
 import { filter } from 'rxjs';
 
 import { StoreService } from '../../../shared/store/state.service';
@@ -22,7 +22,7 @@ export class NavBreadcrumbComponent implements OnDestroy {
     autorun(() => {
       if (this.store.getCurrentProject?.name) {
         this.projectName = this.store.getCurrentProject.name;
-        this.projectID = this.store.getCurrentProject.uuid;
+        this.projectID = this.store.getCurrentProject.projectUuid;
       }
       this.workspaceID = this.store.getCurrentWorkspaceUuid;
     });
