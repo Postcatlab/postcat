@@ -6,7 +6,7 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
-import { Environment, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
+import { Environment } from '../../../../../../shared/services/storage/index.model';
 import { EffectService } from '../../../../../../shared/store/effect.service';
 import { eoDeepCopy, JSONParse } from '../../../../../../utils/index.utils';
 

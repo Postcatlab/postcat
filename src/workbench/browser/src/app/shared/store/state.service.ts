@@ -10,6 +10,8 @@ import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
+import { JSONParse } from '../../utils/index.utils';
+
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
@@ -117,13 +119,13 @@ export class StoreService {
 
   // ? env
   @computed get getCurrentEnv() {
-    const [data] = this.envList.filter(it => it.uuid === this.envUuid);
+    const [data] = this.envList.filter(it => it.id === this.envUuid);
     return (
       data || {
         hostUri: '',
         parameters: [],
         frontURI: '',
-        uuid: null
+        id: null
       }
     );
   }
@@ -253,8 +255,11 @@ export class StoreService {
   }
 
   @action setEnvList(data = []) {
-    this.envList = data;
-    const isHere = data.find(it => it.uuid === this.envUuid);
+    this.envList = data.map(val => {
+      val.parameters = JSONParse(val.parameters, []);
+      return val;
+    });
+    const isHere = data.find(it => it.id === this.envUuid);
     if (!isHere) {
       this.envUuid = null;
       //  for delete env

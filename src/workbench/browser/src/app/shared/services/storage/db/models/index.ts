@@ -34,7 +34,7 @@ export interface Group extends Base {
 export interface Environment extends Base {
   name: string;
   hostUri: string;
-  parameters: string;
+  parameters: any | string;
   projectUuid: string;
   workSpaceUuid: string;
 }
