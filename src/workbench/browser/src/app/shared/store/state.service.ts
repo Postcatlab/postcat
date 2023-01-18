@@ -137,7 +137,7 @@ export class StoreService {
   }
   // ? data source
   @computed get isLocal() {
-    return !!(!this.isShare && this.currentWorkspace?.isLocal);
+    return !this.isShare && this.currentWorkspace?.isLocal;
   }
   @computed get mockUrl() {
     const mockUrl = window.electron?.getMockUrl?.();

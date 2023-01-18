@@ -288,6 +288,7 @@ export class EffectService {
     this.store.setRootGroup(rootGroup);
     // * set api & group list
     this.store.setGroupList(rootGroup.children);
+    Reflect.deleteProperty(rootGroup, 'children');
     this.store.setApiList(items);
   }
   updateMock() {
