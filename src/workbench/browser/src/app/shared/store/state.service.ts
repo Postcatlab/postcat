@@ -222,9 +222,9 @@ export class StoreService {
   }
 
   constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
+    makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
     this.initWorkspace();
-    makeObservable(this); // don't forget to add this if the class has observable fields
   }
 
   async initWorkspace() {
@@ -286,7 +286,7 @@ export class StoreService {
     if (this.localWorkspace) {
       this.workspaceList.unshift(this.localWorkspace);
     }
-    const workspace = this.workspaceList.find(val => val.workSpaceUuid === this.getCurrentWorkspaceUuid) || this.getLocalWorkspace;
+    const workspace = this.workspaceList.find(val => val.workSpaceUuid === this.getCurrentWorkspaceUuid);
     this.setCurrentWorkspace(workspace);
   }
   @action updateWorkspace(workspace: API.Workspace) {
@@ -313,7 +313,6 @@ export class StoreService {
   }
   @action setCurrentProjectID(projectUuid: string) {
     this.currentProjectID = projectUuid;
-    console.log('this.projectList', toJS(this.projectList));
     this.currentProject = this.projectList?.find(val => val?.projectUuid === projectUuid);
     StorageUtil.set('currentProjectID', projectUuid);
   }
