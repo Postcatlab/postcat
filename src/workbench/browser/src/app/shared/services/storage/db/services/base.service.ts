@@ -72,16 +72,17 @@ export class BaseService<T> {
 
   @ApiResponse()
   async page(params) {
-    let { page = 1, pageSize, ...restParams } = params;
+    // sort: 排序正逆 ASC DESC(默认)
+    // order: 排序字段 默认 updateTime
+    let { page = 1, pageSize, sort = 'DESC', order = 'updateTime', ...restParams } = params;
     const filterRecords = this.filterData(restParams);
     const total = await filterRecords.count();
 
     pageSize ??= total;
 
-    const items = await filterRecords
-      .offset(Math.max(0, page - 1))
-      .limit(pageSize)
-      .toArray();
+    const collection = filterRecords.offset(Math.max(0, page - 1)).limit(pageSize);
+
+    const items = await (sort === 'DESC' ? collection.reverse() : collection).sortBy(order);
 
     const paginator = {
       page,
