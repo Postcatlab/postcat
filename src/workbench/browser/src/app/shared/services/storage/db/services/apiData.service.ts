@@ -4,6 +4,7 @@ import {
   ApiDataBulkReadDetailDto,
   ApiDataBulkReadDto,
   ApiDataDeleteDto,
+  ApiDataPageDto,
   ApiDataUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -41,6 +42,14 @@ export class ApiDataService extends BaseService<ApiData> {
       workSpaceUuid,
       projectUuid
     });
+  }
+
+  page(params: ApiDataPageDto) {
+    const { groupIds, ...restParams } = params;
+    if (groupIds?.length) {
+      restParams['groupId'] = groupIds;
+    }
+    return this.baseService.page(restParams);
   }
 
   async update(params: ApiDataUpdateDto) {
