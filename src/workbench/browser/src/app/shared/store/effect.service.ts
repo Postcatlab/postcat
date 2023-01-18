@@ -7,7 +7,9 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun, reaction, toJS } from 'mobx';
+import { autorun, toJS } from 'mobx';
+
+import { db } from '../services/storage/db';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +24,21 @@ export class EffectService {
     private web: WebService,
     private route: ActivatedRoute
   ) {
-    this.init();
-  }
-
-  async init() {
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
+    this.init();
+  }
+  async init() {
+    const result = await db.workspace.read();
+    this.store.setLocalWorkspace(result.data as API.Workspace);
+    //User first use postcat
+    if (!this.store.getCurrentWorkspaceUuid) {
+      this.store.setCurrentWorkspace(this.store.getLocalWorkspace);
+    }
+    //Init workspace
     autorun(async () => {
       if (this.store.isLogin) {
+        //* Get workspace list
         await this.updateWorkspaces();
 
         //* Fixed workspaceID and projectID
@@ -47,7 +56,7 @@ export class EffectService {
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
-
+    //Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
       if (this.store.getProjectList.length === 0) {
         this.router.navigate(['/home/workspace/overview']);
@@ -284,13 +293,12 @@ export class EffectService {
   }
 
   async getGroupList(params = {}) {
-    console.log('getGroupList', params);
     // * get group list data
     const [groupList = [], gErr] = await this.api.api_groupList({});
     if (gErr) {
       return;
     }
-    console.log('Group 数据', structuredClone(groupList));
+    // console.log('Group 数据', structuredClone(groupList));
     // * get api list data
     const [apiListRes, aErr] = await this.api.api_apiDataList(params);
     if (aErr) {
@@ -298,7 +306,7 @@ export class EffectService {
     }
     const { items, paginator } = apiListRes;
 
-    console.log('API 数据', items);
+    // console.log('API 数据', items);
     const rootGroup = groupList.at(0);
     this.store.setRootGroup(rootGroup);
     // * set api & group list
