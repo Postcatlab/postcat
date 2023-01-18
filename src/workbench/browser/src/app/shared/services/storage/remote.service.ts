@@ -1597,7 +1597,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/projects/users`, {
-          body: { userIds, projectUuid }
+          params: { userIds, projectUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1628,7 +1628,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/projects/users/quit`, {
-          body: { userId, projectUuid }
+          params: { userId, projectUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
@@ -1825,7 +1825,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .delete(`${prefix}/api/projects`, {
-          body: { projectUuids }
+          params: { projectUuids }
         })
         .subscribe({
           next: ({ code, data }: any) => {

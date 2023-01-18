@@ -86,15 +86,15 @@ const http = {
         { 'exportProject @get': '/project/exports', query: 'projectUuid' },
         { 'memberList @get': '/projects/users', query: 'username, projectUuid' },
         { 'addMember @post': '/projects/users', json: 'userIds, projectUuid' },
-        { 'delMember @delete': '/projects/users', body: 'userIds, projectUuid' },
-        { 'memberQuit @delete': '/projects/users/quit', body: 'userId, projectUuid' },
+        { 'delMember @delete': '/projects/users', query: 'userIds, projectUuid' },
+        { 'memberQuit @delete': '/projects/users/quit', query: 'userId, projectUuid' },
         { 'setRole @post': '/projects/users/roles', json: 'projectUuid, userRole' },
         { 'getRole @get': '/projects/users/roles/own', query: 'projectUuid' },
         { 'userPermission @get': '/projects/users/roles', query: 'projectUuid' },
         { 'create @post @bulkCreate': '/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get @page': '/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete @bulkDelete': '/projects', body: 'projectUuids' }
+        { 'delete @delete @bulkDelete': '/projects', query: 'projectUuids' }
       ]
     },
     {
