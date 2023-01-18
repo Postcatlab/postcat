@@ -272,14 +272,14 @@ export class EffectService {
     if (gErr) {
       return;
     }
-    // console.log('Group 数据', groupList);
+    console.log('Group 数据', groupList);
     // * get api list data
     const [apiListRes, aErr] = await this.api.api_apiDataList(params);
     if (aErr) {
       return;
     }
     const { items, paginator } = apiListRes;
-    // console.log('API 数据', items);
+    console.log('API 数据', items);
     const rootGroupIndex = groupList.findIndex(n => n.depth === 0);
     this.store.setRootGroup(groupList.splice(rootGroupIndex, 1).at(0));
     // * set api & group list

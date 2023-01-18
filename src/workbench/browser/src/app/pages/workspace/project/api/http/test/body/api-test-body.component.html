@@ -46,7 +46,7 @@
 <!-- XML -->
 <!-- Raw -->
 <eo-monaco-editor
-  [(code)]="model"
+  [(code)]="model[0].binaryRawData"
   (codeChange)="rawDataChange($event)"
   *ngIf="bodyType === TYPE_API_BODY.Raw"
   [editorType]="editorType"
