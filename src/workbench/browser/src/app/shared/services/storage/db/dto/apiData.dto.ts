@@ -13,10 +13,10 @@ export interface ApiDataUpdateDto {
 export interface ApiDataPageDto {
   projectUuid: string;
   workSpaceUuid: string;
-  groupIds: number[];
-  keyword: string;
-  page: number;
-  pageSize: number;
+  groupIds?: number[];
+  keyword?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ApiDataBulkReadDto {
