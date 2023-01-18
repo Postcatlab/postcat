@@ -31,9 +31,10 @@ export class EffectService {
   async init() {
     const result = await db.workspace.read();
     this.store.setLocalWorkspace(result.data as API.Workspace);
-    const userFirstUse = !this.store.getCurrentWorkspaceUuid;
-    //User first use postcat
-    if (userFirstUse) {
+    const isUserFirstUse = !this.store.getCurrentWorkspaceUuid;
+
+    //User first use postcat,select localwork space
+    if (isUserFirstUse) {
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }
     //Init workspace
@@ -53,7 +54,8 @@ export class EffectService {
     });
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
-      if (userFirstUse) {
+      // Use first user postcat,auto into Default project
+      if (isUserFirstUse) {
         this.switchProject(this.store.getProjectList[0].projectUuid);
         return;
       }
