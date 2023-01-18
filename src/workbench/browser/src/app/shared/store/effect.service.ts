@@ -2,22 +2,19 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { reaction } from 'mobx';
+import { autorun, reaction } from 'mobx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EffectService {
   constructor(
-    private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
     private api: ApiService,
@@ -30,7 +27,6 @@ export class EffectService {
   }
 
   async init() {
-    await this.updateWorkspaces();
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
@@ -40,32 +36,18 @@ export class EffectService {
       this.getProjectPermission();
       this.getWorkspacePermission();
     });
-    reaction(
-      () => this.store.isLogin,
-      async () => {
-        if (this.store.isLogin) {
-          await this.updateWorkspaces();
-        } else {
-          if (this.store.isLocal) {
-            this.store.setWorkspaceList([]);
-          } else {
-            this.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
-          }
-        }
+    autorun(async () => {
+      if (this.store.isLogin) {
+        await this.updateWorkspaces();
+        return;
       }
-    );
-  }
-
-  getGroups(projectID = 1): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        }
-      });
+      if (this.store.isLocal) {
+        this.store.setWorkspaceList([]);
+        return;
+      }
+      this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
   }
-
   async deleteEnv(id) {
     const [data, err] = await this.api.api_environmentDelete({ id });
     if (data) {
@@ -109,7 +91,7 @@ export class EffectService {
     this.store.setPermission(permissions, 'workspace');
     this.store.setRole(roles, 'workspace');
   }
-  async changeWorkspace(workspaceID: string) {
+  async switchWorkspace(workspaceID: string) {
     // * real set workspace
     this.store.setCurrentWorkspaceUuid(workspaceID);
     // * real set workspace
@@ -234,6 +216,9 @@ export class EffectService {
 
   async deleteHistory() {
     const [, err] = await this.api.api_apiTestHistoryDelete({});
+    if (err) {
+      return;
+    }
     this.store.setHistory([]);
   }
   // * delete group and api
@@ -248,6 +233,9 @@ export class EffectService {
     const [, err] = await this.api.api_mockDelete({
       id: id
     });
+    if (err) {
+      return;
+    }
     // * update API
   }
 

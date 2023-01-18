@@ -81,7 +81,7 @@ export class SelectWorkspaceComponent {
   ) {}
   get localWorkspace() {
     const result = this.searchWorkspace(this.searchValue, [this.store.getLocalWorkspace]);
-    return result[0];
+    return result.at(0);
   }
   get cloudWorkspaces() {
     return this.searchWorkspace(
@@ -91,7 +91,7 @@ export class SelectWorkspaceComponent {
   }
 
   changeWorkspace(workspaceID) {
-    this.effect.changeWorkspace(workspaceID);
+    this.effect.switchWorkspace(workspaceID);
   }
   addWorkspace() {
     this.dataSourceService.checkRemoteCanOperate(() => {

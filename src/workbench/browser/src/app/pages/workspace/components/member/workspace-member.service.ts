@@ -73,7 +73,7 @@ export class WorkspaceMemberService {
     const [data, err]: any = await this.api.api_workspaceMemberQuit({});
     if (!err) {
       if (this.store.getCurrentWorkspaceUuid === this.workSpaceUuid) {
-        await this.effect.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+        await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }
       this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.workSpaceUuid !== this.workSpaceUuid));
     }

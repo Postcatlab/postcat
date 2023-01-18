@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
-import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 
 import { ElectronService } from '../core/services';
@@ -14,7 +14,7 @@ const mockReg = /\/mock-(\d+)/;
 export class MockService {
   constructor(
     private indexedDBStorage: IndexedDBStorage,
-    private storageService: StorageService,
+    private store: StoreService,
     private settingService: SettingService,
     private electron: ElectronService
   ) {}
@@ -125,7 +125,7 @@ export class MockService {
   }
 
   async batchMatchApiData(projectID = 1, req) {
-    const apiDatas = await this.getAllApi(projectID);
+    const apiDatas = this.store.getApiGroupTree;
     let result;
     for (const api of apiDatas) {
       result = await this.matchApiData(api, req);
@@ -170,19 +170,6 @@ export class MockService {
           reject(error);
         }
       );
-    });
-  }
-  /**
-   * get all api
-   */
-  getAllApi(projectID = 1): Promise<ApiData[]> {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('apiDataLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          return resolve(result.data);
-        }
-        return reject(result);
-      });
     });
   }
 }

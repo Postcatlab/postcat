@@ -17,7 +17,7 @@ export class WorkspaceComponent implements OnInit {
   async ngOnInit() {
     const { pid, wid } = this.route.snapshot.queryParams;
     if (this.storeService.getCurrentWorkspaceUuid !== wid) {
-      this.effect.changeWorkspace(wid);
+      this.effect.switchWorkspace(wid);
       this.storeService.setCurrentProjectID(pid);
     }
     if (this.storeService.getCurrentProjectID !== pid && pid) {

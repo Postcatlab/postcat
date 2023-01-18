@@ -57,7 +57,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }
-    this.effect.changeWorkspace(workspaces.find(val => !val.isLocal)?.workSpaceUuid);
+    this.effect.switchWorkspace(workspaces.find(val => !val.isLocal)?.workSpaceUuid);
   };
 
   closeNotification() {

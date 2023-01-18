@@ -97,7 +97,7 @@ export class WorkspaceSettingComponent {
           return;
         }
         this.message.success($localize`Delete success !`);
-        await this.effect.changeWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+        await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
         this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.workSpaceUuid !== wid));
       }
     });
