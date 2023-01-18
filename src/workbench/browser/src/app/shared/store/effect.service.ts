@@ -266,12 +266,13 @@ export class EffectService {
   }
 
   async getGroupList(params = {}) {
+    console.log('getGroupList', params);
     // * get group list data
     const [groupList = [], gErr] = await this.api.api_groupList({});
     if (gErr) {
       return;
     }
-    // console.log('Group 数据', structuredClone(groupList));
+    console.log('Group 数据', structuredClone(groupList));
     // * get api list data
     const [apiListRes, aErr] = await this.api.api_apiDataList(params);
     if (aErr) {
@@ -279,7 +280,7 @@ export class EffectService {
     }
     const { items, paginator } = apiListRes;
 
-    // console.log('API 数据', items);
+    console.log('API 数据', items);
     const rootGroup = groupList.at(0);
     this.store.setRootGroup(rootGroup);
     // * set api & group list
