@@ -56,6 +56,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
+  get API_PARAMS_TYPE(): typeof ApiParamsType {
+    return ApiParamsType;
+  }
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json'

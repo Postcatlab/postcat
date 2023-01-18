@@ -13,7 +13,6 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ApiEditUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -127,8 +126,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     private testServer: TestServerService,
     private projectApi: ProjectApiService,
     private lang: LanguageService,
-    private elementRef: ElementRef,
-    private apiEditUtil: ApiEditUtilService
+    private elementRef: ElementRef
   ) {
     this.initBasicForm();
     this.testServer.init(message => {
@@ -145,21 +143,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       const height = this.elementRef.nativeElement.parentElement.offsetHeight;
       this.responseContainerHeight = Number.isNaN(localHeight) ? height / 2 : localHeight;
     });
-  }
-
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('EO_LOG[eo-api-test]: Ctrl + s');
-          // 或者 return false;
-          event.preventDefault();
-          this.saveApi();
-        }
-      });
   }
 
   /**
@@ -185,7 +168,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         const historyData = await this.apiTest.getHistory(uuid);
         const history = this.apiTestUtil.getTestDataFromHistory(historyData);
         requestInfo = history.testData;
-        this.restoreResponseFromHistory(history.response);
+        // this.restoreResponseFromHistory(history.response);
       } else {
         requestInfo = await this.projectApi.get(uuid);
         this.model.testResult = {
@@ -197,10 +180,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       if (initTimes >= this.initTimes) {
         this.model.request = {
           ...this.model.request,
-          script: {
-            beforeScript: '',
-            afterScript: ''
-          },
           ...requestInfo
         };
         this.model.request = this.apiTestUtil.getTestDataFromApi(this.model.request);
@@ -266,10 +245,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
-      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
-        this.modelChange.emit(this.model);
-      }, 0);
+      //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      this.modelChange.emit(this.model);
     });
   }
   updateParamsbyUri(url) {
@@ -498,13 +475,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       request: {
         apiAttrInfo: {
           contentType: ContentTypeEnum.RAW,
-          requestMethod: 0
+          requestMethod: 0,
+          beforeInject: '',
+          afterInject: ''
         },
-        requestParams: {},
-        script: {
-          beforeScript: '',
-          afterScript: ''
-        }
+        requestParams: {}
       },
       testResult: {
         response: {},
@@ -524,5 +499,20 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     controls['uri'] = [this.model.request.uri, [Validators.required]];
     controls['method'] = [this.model.request.apiAttrInfo?.requestMethod, [Validators.required]];
     this.validateForm = this.fb.group(controls);
+  }
+
+  private initShortcutKey() {
+    fromEvent(document, 'keydown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: KeyboardEvent) => {
+        const { ctrlKey, metaKey, code } = event;
+        // 判断 Ctrl+S
+        if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
+          console.log('EO_LOG[eo-api-test]: Ctrl + s');
+          // 或者 return false;
+          event.preventDefault();
+          this.saveApi();
+        }
+      });
   }
 }

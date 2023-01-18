@@ -236,10 +236,10 @@ export class ApiTableService {
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name'
       },
-      type: {
+      dataType: {
         title: $localize`Type`,
         type: 'select',
-        key: 'type',
+        key: 'dataType',
         width: 150
       },
       isRequired: {
@@ -276,7 +276,7 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['isRequired', 'name', 'type', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'dataType', 'value', 'editOperate'];
         break;
       }
       default: {
@@ -284,11 +284,6 @@ export class ApiTableService {
         break;
       }
     }
-    enum ApiTestParamsTypeFormData {
-      text = 'string',
-      file = 'file'
-    }
-    const types = ApiTestParamsTypeFormData;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -302,11 +297,17 @@ export class ApiTableService {
           }
           break;
         }
-        case 'type': {
-          column.enums = Object.keys(types).map(val => ({
-            title: val,
-            value: types[val]
-          }));
+        case 'dataType': {
+          column.enums = [
+            {
+              title: 'string',
+              value: ApiParamsType.string
+            },
+            {
+              title: 'file',
+              value: ApiParamsType.file
+            }
+          ];
           break;
         }
         case 'editOperate': {

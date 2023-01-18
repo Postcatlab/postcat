@@ -7,7 +7,7 @@ import omitDeep from 'omit-deep-lodash';
 import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiData } from '../../shared/services/storage/db/models';
-import { HeaderParam } from '../../shared/services/storage/db/models/apiData';
+import { BodyParam, HeaderParam } from '../../shared/services/storage/db/models/apiData';
 import { ApiTestHistory } from '../../shared/services/storage/index.model';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
@@ -77,16 +77,7 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiData {
-    const result = eoDeepCopy(formData) as ApiData;
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach(tableName => {
-      if (whatType(result[tableName]) !== 'array') {
-        return;
-      }
-      result[tableName] = filterTableData(result[tableName], {
-        filterFn: val => val.name || val.value
-      });
-    });
-    return result;
+    return this.apiEditUtil.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val.paramAttr?.example);
   }
 
   /**

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 // eslint-disable-next-line import/order
-import { ApiParamsType, JsonRootType, ApiBodyType } from '../../../modules/api-shared/api.model';
+import { ApiParamsType, JsonRootType, ApiBodyType, RequestMethod } from '../../../modules/api-shared/api.model';
 
 export type ApiEditHeaders = BasiApiEditParams;
 export type ApiEditQuery = BasiApiEditParams;
