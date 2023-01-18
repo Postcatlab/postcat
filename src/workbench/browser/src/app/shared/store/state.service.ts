@@ -285,11 +285,11 @@ export class StoreService {
   }
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
+    console.log('setWorkspaceList');
     this.workspaceList = [...data];
     if (this.localWorkspace) {
       this.workspaceList.unshift(this.localWorkspace);
     }
-    console.log('setWorkspaceList');
   }
   @action updateWorkspace(workspace: API.Workspace) {
     const index = this.workspaceList.findIndex(val => val.workSpaceUuid === workspace.workSpaceUuid);

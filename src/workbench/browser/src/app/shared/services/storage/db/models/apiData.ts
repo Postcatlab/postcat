@@ -2,7 +2,7 @@ import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules
 
 export interface ApiData {
   id?: number;
-  uuid?: string;
+  apiUuid?: string;
   projectUuid?: string;
   groupId?: number;
   groupName?: string;

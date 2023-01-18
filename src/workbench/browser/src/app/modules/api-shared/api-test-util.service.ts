@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
 
 import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
-import { ApiData } from '../../shared/services/storage/db/models';
+import { ApiData, ApiTestHistory } from '../../shared/services/storage/db/models';
 import { BodyParam, HeaderParam } from '../../shared/services/storage/db/models/apiData';
-import { ApiTestHistory } from '../../shared/services/storage/index.model';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
-import { filterTableData } from '../../utils/tree/tree.utils';
 
 @Injectable()
 export class ApiTestUtilService {
@@ -48,26 +45,26 @@ export class ApiTestUtilService {
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
     //handle query and url
-    const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
-      base: 'url',
-      replaceType: 'merge'
-    });
-    const result = {
-      testData: {
-        uuid: inData.apiUuid,
-        restParams: [],
-        uri: tmpResult.url,
-        queryParams: tmpResult.query,
-        requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as unknown as ApiBodyType)
-          ? inData.request.requestBody
-          : inData.request?.requestBody?.map(val => (val.required = true)),
-        requestHeaders: inData.response?.headers,
-        ...inData.request
-      },
-      response: eoDeepCopy(inData)
-    };
-    (result.testData.requestHeaders || []).map(val => (val.required = true));
-    return result;
+    // const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
+    //   base: 'url',
+    //   replaceType: 'merge'
+    // });
+    // const result = {
+    //   testData: {
+    //     uuid: inData.apiUuid,
+    //     restParams: [],
+    //     uri: tmpResult.url,
+    //     queryParams: tmpResult.query,
+    //     requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.apiAttrInfo.requestBodyType as unknown as ApiBodyType)
+    //       ? inData.request.requestBody
+    //       : inData.request?.requestBody?.map(val => (val.required = true)),
+    //     requestHeaders: inData.response?.headers,
+    //     ...inData.request
+    //   },
+    //   response: eoDeepCopy(inData)
+    // };
+    // (result.testData.requestHeaders || []).map(val => (val.required = true));
+    return inData;
   }
   /**
    * Handle api data for judge page has edit

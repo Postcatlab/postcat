@@ -38,7 +38,7 @@ export class ProjectApiService {
   async copy(apiID: string) {
     const apiData = await this.get(apiID);
     apiData.name += ' Copy';
-    delete apiData.uuid;
+    delete apiData.apiUuid;
     delete apiData.id;
     const [result, err] = await await this.api.api_apiDataCreate({ apiList: [apiData] });
     if (err) {

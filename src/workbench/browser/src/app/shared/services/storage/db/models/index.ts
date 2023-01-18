@@ -1,3 +1,7 @@
+import { ApiTestResData } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+
+import { ApiData } from './apiData';
+
 export type { ApiData } from './apiData';
 
 interface Base {
@@ -46,10 +50,9 @@ export interface Mock extends Base {
   workSpaceUuid: string;
 }
 export interface ApiTestHistory extends Base {
-  apiUuid: string;
-  general: string;
-  request: string;
-  response: string;
-  projectUuid: string;
-  workSpaceUuid: string;
+  apiUuid?: string;
+  request: Partial<ApiData>;
+  response: ApiTestResData;
+  projectUuid?: string;
+  workSpaceUuid?: string;
 }

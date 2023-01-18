@@ -106,7 +106,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   }
   async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue?.id) {
-      this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
+      this.mockList = await this.apiMock.getMocks(this.apiData.apiUuid);
       this.mockList.forEach(item => {
         if (item.createWay === 'system') {
           item.response = this.apiMock.getMockResponseByAPI(item.response);
@@ -132,7 +132,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
       this.message.success($localize`Edited successfully`);
       this.mockList[index] = item;
     } else {
-      item.apiUuid = this.apiData.uuid;
+      item.apiUuid = this.apiData.apiUuid;
       const result = await this.apiMock.createMock(item);
       Object.assign(item, result.data, {
         createWay: 'custom'

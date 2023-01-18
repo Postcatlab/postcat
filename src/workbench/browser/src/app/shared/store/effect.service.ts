@@ -31,30 +31,43 @@ export class EffectService {
   async init() {
     const result = await db.workspace.read();
     this.store.setLocalWorkspace(result.data as API.Workspace);
-    //User first use postcat
-    if (!this.store.getCurrentWorkspaceUuid) {
-      this.store.setCurrentWorkspace(this.store.getLocalWorkspace);
+    const isUserFirstUse = !this.store.getCurrentWorkspaceUuid;
+
+    //User first use postcat,select localwork space
+    if (isUserFirstUse) {
+      this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }
     //Init workspace
     autorun(async () => {
       if (this.store.isLogin) {
         //* Get workspace list
         await this.updateWorkspaceList();
-
-        //* Fixed workspaceID and projectID
-        const { pid, wid } = this.route.snapshot.queryParams;
-        if (this.store.getCurrentWorkspaceUuid !== wid) {
-          this.switchWorkspace(wid);
-          this.store.setCurrentProjectID(pid);
-          return;
-        }
+        this.fixedID();
         return;
       }
       if (this.store.isLocal) {
         this.store.setWorkspaceList([]);
+        this.fixedID();
         return;
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+    });
+    // * Init project
+    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
+      // Use first user postcat,auto into Default project
+      if (isUserFirstUse) {
+        this.switchProject(this.store.getProjectList[0].projectUuid);
+        return;
+      }
+      if (this.store.getProjectList.length === 0) {
+        this.router.navigate(['/home/workspace/overview']);
+      }
+      // * Fixed projectID
+      const { pid } = this.route.snapshot.queryParams;
+      if (this.store.getCurrentProjectID !== pid && pid) {
+        this.switchProject(pid);
+        return;
+      }
     });
 
     // * Fetch role list
@@ -62,26 +75,20 @@ export class EffectService {
     this.store.setRoleList(workspaceRoleList, 'workspace');
     const projectRoleList = await this.getRoleList(2);
     this.store.setRoleList(projectRoleList, 'project');
-
-    // * Init project
-    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
-      if (this.store.getProjectList.length === 0) {
-        this.router.navigate(['/home/workspace/overview']);
-      }
-
-      // * Fixed projectID
-      const { pid } = this.route.snapshot.queryParams;
-      if (this.store.getCurrentProjectID !== pid && pid) {
-        this.switchProject(pid);
-        return;
-      }
-
-      //* Reset permission
-      this.getProjectPermission();
-      this.getWorkspacePermission();
-    });
   }
+  /**
+   * Fixed workspaceID and projectID
+   * Jump to the exist workspace and project
+   */
+  private fixedID() {
+    const { pid, wid } = this.route.snapshot.queryParams;
+    const isWorkspaceExist = this.store.getWorkspaceList.some(it => it.workSpaceUuid === wid);
 
+    if (this.store.getCurrentWorkspaceUuid === wid && isWorkspaceExist) return;
+
+    this.switchWorkspace(wid);
+    this.store.setCurrentProjectID(pid);
+  }
   async getRoleList(type) {
     const [data, err] = await this.api.api_roleList({ roleModule: type });
     if (err) {
@@ -121,7 +128,7 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async switchWorkspace(workspaceID: string) {
-    const workspace = this.store.getWorkspaceList.find(it => it.workSpaceUuid === workspaceID);
+    const workspace = this.store.getWorkspaceList.find(it => it.workSpaceUuid === workspaceID) || this.store.getLocalWorkspace;
     this.store.setCurrentWorkspace(workspace);
 
     // * real set workspace
@@ -315,6 +322,10 @@ export class EffectService {
     if (gErr) {
       return;
     }
+
+    const rootGroup = groupList.at(0);
+    this.store.setRootGroup(rootGroup);
+
     // console.log('Group 数据', structuredClone(groupList));
     // * get api list data
     const [apiListRes, aErr] = await this.api.api_apiDataList(params);
@@ -322,10 +333,7 @@ export class EffectService {
       return;
     }
     const { items, paginator } = apiListRes;
-
-    // console.log('API 数据', items);
-    const rootGroup = groupList.at(0);
-    this.store.setRootGroup(rootGroup);
+    console.log('API 数据', items);
     // * set api & group list
     this.store.setGroupList(rootGroup.children);
     Reflect.deleteProperty(rootGroup, 'children');

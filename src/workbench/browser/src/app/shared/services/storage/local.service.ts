@@ -149,7 +149,7 @@ export class LocalService {
     });
   }
 
-  api_apiDataList<T = any>({ projectUuid = 1, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items }) {
+  api_apiDataList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items }) {
     if (projectUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -523,9 +523,7 @@ export class LocalService {
     });
   }
 
-  api_groupList<T = any>({ projectUuid = 1, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
-    console.log('projectUuid', projectUuid);
-    console.log('workSpaceUuid', workSpaceUuid);
+  api_groupList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;

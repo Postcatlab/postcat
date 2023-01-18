@@ -19,11 +19,11 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
-import { ApiTestHistoryFrame, ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import { ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
-import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmpty } from 'lodash-es';
@@ -165,9 +165,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       let requestInfo = null;
       if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
-        const historyData = await this.apiTest.getHistory(uuid);
-        const history = this.apiTestUtil.getTestDataFromHistory(historyData);
-        requestInfo = history.testData;
+        const historyData: ApiTestHistory = await this.apiTest.getHistory(uuid);
+        // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+        requestInfo = historyData.request;
         // this.restoreResponseFromHistory(history.response);
       } else {
         if (!uuid) {
@@ -274,7 +274,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    if (this.model.request.uuid) {
+    if (this.model.request.apiUuid) {
       return false;
     }
     if (!this.initialModel?.request || !this.model.request) {
@@ -356,37 +356,35 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.status$.next('tested');
   }
-  private async addHistory(history: ApiTestHistoryFrame, apiUuid: string) {
+  private async addHistory(history: ApiTestHistory, apiUuid: string) {
     await this.apiTest.addHistory(history, apiUuid);
   }
   /**
    * Receive Test Server Message
    */
-  private receiveMessage(message: ApiTestRes) {
+  private receiveMessage(message: TestServerRes) {
     console.log('[api test componnet]receiveMessage', message);
-    const tmpHistory = {
-      general: message.general,
-      request: message.history.request || {},
-      response: message.response || {}
-    };
-    let queryParams: { pageID: string; uuid?: string };
-    try {
-      queryParams = JSON.parse(message.id);
-    } catch (e) {}
-    if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
-      //* Other tab test finish,support multiple tab test same time
-      this.afterTested.emit({
-        id: queryParams.pageID,
-        url: '/home/workspace/project/api/http/test',
-        model: {
-          testStartTime: 0,
-          testResult: tmpHistory
-        }
-      });
-    } else {
-      this.model.testResult = tmpHistory;
-      this.status$.next('tested');
-    }
+    // const tmpHistory = {
+    //   response: message.response || {}
+    // };
+    // let queryParams: { pageID: string; uuid?: string };
+    // try {
+    //   queryParams = JSON.parse(message.id);
+    // } catch (e) {}
+    // if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
+    //   //* Other tab test finish,support multiple tab test same time
+    //   this.afterTested.emit({
+    //     id: queryParams.pageID,
+    //     url: '/home/workspace/project/api/http/test',
+    //     model: {
+    //       testStartTime: 0,
+    //       testResult: tmpHistory
+    //     }
+    //   });
+    // } else {
+    //   this.model.testResult = message.response || {};
+    //   this.status$.next('tested');
+    // }
     if (message.status === 'error') {
       return;
     }
@@ -399,7 +397,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!message.response.statusCode || this.store.isShare) {
       return;
     }
-    this.addHistory(message.history, queryParams.uuid);
+    // this.addHistory(message.history, queryParams.uuid);
   }
   setTestSecondsTimmer() {
     if (this.timer$) {

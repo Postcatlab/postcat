@@ -7,7 +7,7 @@ import {
   ProjectUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
-import { ApiData, Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 import { GroupService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/group.service';
@@ -35,12 +35,11 @@ export class ProjectService extends BaseService<Project> {
         workSpaceUuid
       }))
     );
-
     const groups = result.data?.map(item => ({
       type: 0,
       name: $localize`Root Group`,
       depth: 0,
-      projectUuid: item.uuid,
+      projectUuid: item.projectUuid,
       workSpaceUuid: item.workSpaceUuid
     }));
 
