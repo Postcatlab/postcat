@@ -124,7 +124,7 @@ export interface RequestParams {
 
 export interface HeaderParam {
   responseUuid?: string;
-  name: string;
+  name?: string;
   paramType?: number;
   partType?: number;
   structureId?: number;
@@ -177,7 +177,7 @@ export interface BodyParam {
 
 export interface QueryParam {
   responseUuid?: string;
-  name: string;
+  name?: string;
   paramType?: number;
   partType?: number;
   structureId?: number;
@@ -195,7 +195,7 @@ export interface QueryParam {
 
 export interface RestParam {
   responseUuid?: string;
-  name: string;
+  name?: string;
   paramType?: number;
   partType?: number;
   dataTypeValue?: string;
