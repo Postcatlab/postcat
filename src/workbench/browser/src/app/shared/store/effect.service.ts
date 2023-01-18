@@ -51,13 +51,6 @@ export class EffectService {
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
-
-    // * Fetch role list
-    const workspaceRoleList = await this.getRoleList(1);
-    this.store.setRoleList(workspaceRoleList, 'workspace');
-    const projectRoleList = await this.getRoleList(2);
-    this.store.setRoleList(projectRoleList, 'project');
-
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
       if (userFirstUse) {
@@ -74,6 +67,12 @@ export class EffectService {
         return;
       }
     });
+
+    // * Fetch role list
+    const workspaceRoleList = await this.getRoleList(1);
+    this.store.setRoleList(workspaceRoleList, 'workspace');
+    const projectRoleList = await this.getRoleList(2);
+    this.store.setRoleList(projectRoleList, 'project');
   }
   /**
    * Fixed workspaceID and projectID
