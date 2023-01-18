@@ -25,6 +25,8 @@ export class ProjectApiService {
       this.message.error($localize`Can't find this Api`);
       return;
     }
+    // TODO
+    result[0].responseParams ??= result[0].responseParam;
     return result[0];
   }
   async edit(apiData: ApiData) {

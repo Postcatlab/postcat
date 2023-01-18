@@ -279,10 +279,6 @@ export class EffectService {
     }
     const { items, paginator } = apiListRes;
 
-    items.forEach(item => {
-      // TODO 抹平后端字段差异
-      item.responseParams ??= item.responseParam;
-    });
     // console.log('API 数据', items);
     const rootGroup = groupList.at(0);
     this.store.setRootGroup(rootGroup);
