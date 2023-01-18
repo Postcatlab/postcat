@@ -161,7 +161,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .bulkRead({ projectUuid, workSpaceUuid })
+        .page({ projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - list 接口调用成功 %c', SuccessStyle, '');

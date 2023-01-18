@@ -115,7 +115,7 @@ export class EffectService {
     await this.router.navigate(['**']);
 
     this.router.navigate(['/home/workspace/overview']);
-
+    console.log('Yes');
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
@@ -135,7 +135,7 @@ export class EffectService {
     }
     const project = data.at(0);
     this.store.setPermission(project.permissions, 'project');
-    this.store.setRole(project.role.name, 'project');
+    this.store.setRole(project.roles, 'project');
   }
   async changeProject(pid) {
     if (!pid) {
@@ -176,18 +176,19 @@ export class EffectService {
     }
   }
   async updateProject(data) {
-    const [project] = await this.api.api_projectUpdate({ description: '', ...data });
-    if (project) {
-      const projects = this.store.getProjectList;
-      projects.some(val => {
-        if (val.uuid === project.uuid) {
-          Object.assign(val, project);
-          return true;
-        }
-      });
-      this.store.setProjectList(projects);
-      this.store.setCurrentProjectID(project.uuid);
+    const [project, err] = await this.api.api_projectUpdate({ ...data, description: 'description' });
+    if (err) {
+      return;
     }
+    const projects = this.store.getProjectList;
+    projects.some(val => {
+      if (val.uuid === project.uuid) {
+        Object.assign(val, project);
+        return true;
+      }
+    });
+    this.store.setProjectList(projects);
+    this.store.setCurrentProjectID(project.uuid);
   }
 
   async updateShareLink(): Promise<string> {
