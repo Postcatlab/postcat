@@ -111,7 +111,6 @@ export class EffectService {
   }
   async changeWorkspace(workspaceID: string) {
     // * real set workspace
-    console.log('workspaceID', workspaceID);
     this.store.setCurrentWorkspaceUuid(workspaceID);
     // * real set workspace
     await this.updateProjects(workspaceID);
@@ -189,7 +188,6 @@ export class EffectService {
         return true;
       }
     });
-    console.log('project', project);
     this.store.setProjectList(projects);
     this.store.setCurrentProjectID(project.uuid);
   }

@@ -326,7 +326,7 @@ export class StoreService {
 
   @action setRole(role, type) {
     if (this.isLocal) {
-      this.role[type] = 'Owner';
+      this.role[type] = 'Workspace Owner';
       return;
     }
     this.role[type] = role;

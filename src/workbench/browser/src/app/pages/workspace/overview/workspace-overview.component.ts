@@ -17,6 +17,7 @@ export class WorkspaceOverviewComponent implements OnInit {
   @ViewChild('eoProjectList') eoProjectList: ProjectListComponent;
   title = 'Workspaces';
   nzSelectedIndex = 0;
+  isOwner = false;
   constructor(
     private dataSourceService: DataSourceService,
     private nzMessage: EoNgFeedbackMessageService,
@@ -33,6 +34,8 @@ export class WorkspaceOverviewComponent implements OnInit {
   ngOnInit(): void {
     autorun(() => {
       this.title = this.store.getCurrentWorkspace?.title;
+      console.log('this.store.getWorkspaceRole', this.store.getWorkspaceRole);
+      // this.isOwner = this.store.getWorkspaceRole?.find(it => it.name === 'Workspace Owner');
     });
   }
   createWorkspace() {

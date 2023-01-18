@@ -15,12 +15,12 @@ export class WorkspaceComponent implements OnInit {
   constructor(private effect: EffectService, private route: ActivatedRoute, public storeService: StoreService) {}
 
   async ngOnInit() {
-    const pid = this.route.snapshot.queryParams.pid;
-    const wid = this.route.snapshot.queryParams.wid;
+    const { pid, wid } = this.route.snapshot.queryParams;
     if (this.storeService.getCurrentWorkspaceUuid !== wid) {
       this.effect.changeWorkspace(wid);
       this.storeService.setCurrentProjectID(pid);
-    } else if (this.storeService.getCurrentProjectID !== pid && pid) {
+    }
+    if (this.storeService.getCurrentProjectID !== pid && pid) {
       this.effect.changeProject(pid);
     }
   }
