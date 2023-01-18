@@ -101,7 +101,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.routerSubscribe?.unsubscribe();
   }
   private getModules() {
-    const settingItem = ['Owner'].includes(this.store.getProjectRole)
+    const settingItem = true
       ? [
           {
             title: $localize`Setting`,

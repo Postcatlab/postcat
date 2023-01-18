@@ -40,7 +40,7 @@ export class EffectService {
     autorun(async () => {
       if (this.store.isLogin) {
         //* Get workspace list
-        await this.updateWorkspaces();
+        await this.updateWorkspaceList();
         this.fixedID();
         return;
       }
@@ -51,7 +51,14 @@ export class EffectService {
       }
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
-    //Init project
+
+    // * Fetch role list
+    const workspaceRoleList = await this.getRoleList(1);
+    this.store.setRoleList(workspaceRoleList, 'workspace');
+    const projectRoleList = await this.getRoleList(2);
+    this.store.setRoleList(projectRoleList, 'project');
+
+    // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
       if (userFirstUse) {
         this.switchProject(this.store.getProjectList[0].projectUuid);
@@ -81,12 +88,21 @@ export class EffectService {
     this.switchWorkspace(wid);
     this.store.setCurrentProjectID(pid);
   }
-  async deleteEnv(id) {
-    const [data, err] = await this.api.api_environmentDelete({ id });
-    if (data) {
-      const envList = this.store.getEnvList.filter(it => it.id !== id);
-      this.store.setEnvList(envList);
+  async getRoleList(type) {
+    const [data, err] = await this.api.api_roleList({ roleModule: type });
+    if (err) {
+      return;
     }
+    return data;
+  }
+
+  async deleteEnv(id) {
+    const [, err] = await this.api.api_environmentDelete({ id });
+    if (err) {
+      return;
+    }
+    const envList = this.store.getEnvList.filter(it => it.id !== id);
+    this.store.setEnvList(envList);
   }
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
@@ -164,7 +180,7 @@ export class EffectService {
     this.store.setPermission(permissions, 'project');
     this.store.setRole(roles, 'project');
   }
-  async updateWorkspaces() {
+  async updateWorkspaceList() {
     const [list, wErr]: any = await this.api.api_workspaceList({});
     if (wErr) {
       // * Switch store to local workspace
