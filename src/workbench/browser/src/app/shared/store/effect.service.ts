@@ -6,6 +6,7 @@ import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -22,7 +23,8 @@ export class EffectService {
     private api: ApiService,
     private router: Router,
     private lang: LanguageService,
-    private web: WebService
+    private web: WebService,
+    private remote: RemoteService
   ) {
     this.init();
   }
@@ -109,13 +111,13 @@ export class EffectService {
   }
   async changeWorkspace(workspaceID: string) {
     // * real set workspace
+    console.log('workspaceID', workspaceID);
     this.store.setCurrentWorkspaceUuid(workspaceID);
     // * real set workspace
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
 
     this.router.navigate(['/home/workspace/overview']);
-    console.log('Yes');
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
@@ -187,6 +189,7 @@ export class EffectService {
         return true;
       }
     });
+    console.log('project', project);
     this.store.setProjectList(projects);
     this.store.setCurrentProjectID(project.uuid);
   }

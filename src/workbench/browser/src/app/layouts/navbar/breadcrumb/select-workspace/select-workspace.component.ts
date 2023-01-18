@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -89,6 +89,7 @@ export class SelectWorkspaceComponent {
       this.store.getWorkspaceList.filter(val => !val?.isLocal)
     );
   }
+
   changeWorkspace(workspaceID) {
     this.effect.changeWorkspace(workspaceID);
   }

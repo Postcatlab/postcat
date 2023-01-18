@@ -87,8 +87,8 @@ export class StoreService {
   // ? UI
   @observable private rightBarStatus = false;
   @observable.shallow private role = {
-    workspace: 'Owner',
-    project: 'Owner'
+    workspace: 'Workspace Owner',
+    project: 'Project Owner'
   };
 
   // * computed data
@@ -303,7 +303,8 @@ export class StoreService {
   }
   @action setCurrentProjectID(projectUuid: string) {
     this.currentProjectID = projectUuid;
-    this.currentProject = this.projectList?.find(val => val.uuid === projectUuid);
+    console.log('this.projectList', toJS(this.projectList));
+    this.currentProject = this.projectList?.find(val => val?.projectUuid === projectUuid);
     StorageUtil.set('currentProjectID', projectUuid);
   }
   // ? user && auth
