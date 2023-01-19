@@ -26,6 +26,7 @@ import { ApiTestResData, TestServerRes } from 'eo/workbench/browser/src/app/page
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
@@ -35,12 +36,10 @@ import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/opera
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
 import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../../../../../modules/api-shared/api.model';
-import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
+import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
-
-import { cpSync } from 'fs';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -223,10 +222,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     const apiData = this.apiTestUtil.formatUIApiDataToStorage({
-      history: this.model.testResult,
-      testData: { ...this.model.request }
+      request: this.model.request,
+      response: this.model.testResult
     });
-    window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
+    StorageUtil.set('apiDataWillbeSave', apiData);
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)
@@ -353,9 +352,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   private receiveMessage(message: TestServerRes) {
     pcConsole.log('[api test componnet]receiveMessage', message);
     let queryParams: { pageID: string; uuid?: string };
-    try {
-      queryParams = JSON.parse(message.id);
-    } catch (e) {}
+    queryParams = JSONParse(message.id);
+
     if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
       //* Other tab test finish,support multiple tab test same time
       //* Update Test Result

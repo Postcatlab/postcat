@@ -12,7 +12,7 @@ import {
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { takeUntil, debounceTime, pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-api-edit-body',
@@ -57,6 +57,9 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<BodyParam[]> = new Subject<BodyParam[]>();
   constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
+    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
+      this.beforeChangeBodyByType(val[0]);
+    });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe(model => {
       if (this.bodyType !== ApiBodyType.Raw) {
@@ -91,6 +94,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges(changes) {
     if (changes.model?.firstChange) {
+      this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();
     }
@@ -104,6 +108,19 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
+  }
+  private beforeChangeBodyByType(type) {
+    switch (type) {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        this.cache[type] = this.model || [{ binaryRawData: '' }];
+        break;
+      }
+      default: {
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
+        break;
+      }
+    }
   }
   /**
    * Set model after change bodyType

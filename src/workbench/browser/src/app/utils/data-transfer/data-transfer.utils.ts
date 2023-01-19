@@ -2,7 +2,7 @@ import isXml from 'is-xml';
 
 import { ApiBodyType, ApiParamsType, JsonRootType } from '../../modules/api-shared/api.model';
 import { BodyParam } from '../../shared/services/storage/db/models/apiData';
-import { whatType, whatTextType } from '../index.utils';
+import { whatType, whatTextType, JSONParse } from '../index.utils';
 
 export const isXML = data => isXml(data);
 /**
@@ -148,8 +148,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; childList: any[]; content: 
 };
 
 type uiData = {
-  textType: ApiBodyType;
-  rootType: JsonRootType;
+  contentType: ApiBodyType;
   data: BodyParam | any;
 };
 
@@ -224,13 +223,19 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
  */
 export const text2table: (text: string) => uiData = text => {
   const result: uiData = {
-    textType: ApiBodyType.Raw,
-    rootType: JsonRootType.Object,
+    contentType: ApiBodyType.Raw,
     data: text
   };
   const textType = whatTextType(text);
-  result.textType = textType === 'xml' ? ApiBodyType.XML : textType === 'json' ? ApiBodyType.JSON : ApiBodyType.Raw;
-  switch (result.textType) {
+  result.contentType =
+    textType === 'xml'
+      ? ApiBodyType.XML
+      : textType === 'json'
+      ? whatType(JSONParse(text)) === 'array'
+        ? ApiBodyType.JSONArray
+        : ApiBodyType.JSON
+      : ApiBodyType.Raw;
+  switch (result.contentType) {
     case ApiBodyType.XML: {
       result.data = json2Table(xml2json(text));
       break;

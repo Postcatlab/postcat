@@ -13,7 +13,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Table ID
    */
   @Input() tid: string;
-  @Input() model: string | BodyParam[] | any;
+  @Input() model: BodyParam[];
   @Input() bodyType: ApiBodyType | number;
   listConf: ApiTableConf = {};
   cache: object = {};

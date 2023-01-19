@@ -44,7 +44,7 @@
 <!-- [nzScroll]="{ y: '300px' }" -->
 <!-- Raw -->
 <eo-monaco-editor
-  *ngIf="bodyType === TYPE_API_BODY.Raw"
+  *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
   [(code)]="model[0].binaryRawData"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
   [autoType]="true"
@@ -52,7 +52,7 @@
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<div class="p-[10px]" *ngIf="bodyType === TYPE_API_BODY.Binary">
+<div class="p-[10px]" *ngIf="bodyType === TYPE_API_BODY.Binary && model[0]">
   <textarea
     rows="4"
     i18n-placeholder

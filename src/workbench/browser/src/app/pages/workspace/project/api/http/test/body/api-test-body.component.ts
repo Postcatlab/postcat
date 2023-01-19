@@ -13,7 +13,7 @@ import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/
 import { transferFileToDataUrl, whatTextType, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
 import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
@@ -70,11 +70,15 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       example: ''
     }
   };
+  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
   }
   constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
+    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
+      this.beforeChangeBodyByType(val[0]);
+    });
     this.initListConf();
   }
 
@@ -83,6 +87,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.autoSetContentTypeChange.emit(false);
   }
   changeBodyType(type?) {
+    this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.initListConf();
     this.setModel();
@@ -99,8 +104,22 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  private beforeChangeBodyByType(type) {
+    switch (type) {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        this.cache[type] = this.model || [{ binaryRawData: '' }];
+        break;
+      }
+      default: {
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
+        break;
+      }
+    }
+  }
   ngOnChanges(changes) {
     if (changes.model?.firstChange) {
+      this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
   }
@@ -164,15 +183,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       }
       default: {
         this.model = this.cache[this.bodyType] || [];
+        this.model.forEach(row => {
+          if (row.dataType === ApiParamsType.file) {
+            row.files = [];
+          }
+        });
         break;
       }
-    }
-    if (whatType(this.model) === 'array') {
-      this.model.forEach(row => {
-        if (row.dataType === ApiParamsType.file) {
-          row.files = [];
-        }
-      });
     }
   }
   formdataSelectFiles(target, item) {

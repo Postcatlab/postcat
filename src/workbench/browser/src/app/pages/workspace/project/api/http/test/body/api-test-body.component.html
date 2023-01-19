@@ -46,16 +46,16 @@
 <!-- XML -->
 <!-- Raw -->
 <eo-monaco-editor
-  [(code)]="model[0].binaryRawData"
   (codeChange)="rawDataChange($event)"
-  *ngIf="bodyType === TYPE_API_BODY.Raw"
+  *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
+  [(code)]="model[0].binaryRawData"
   [editorType]="editorType"
   [config]="editorConfig"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<div class="px-5 min-h-[60%]" *ngIf="bodyType === TYPE_API_BODY.Binary">
+<div class="px-5 min-h-[60%]" *ngIf="bodyType === TYPE_API_BODY.Binary && model[0]">
   <nz-upload
     nzType="drag"
     [nzBeforeUpload]="uploadBinary"

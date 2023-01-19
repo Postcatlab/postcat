@@ -36,6 +36,7 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
     },
     responseList: [
       {
+        isDefault: 1,
         contentType: transformContentType(responseBodyType, responseBodyJsonType),
         responseParams: {
           headerParams: transformParams(responseHeaders),

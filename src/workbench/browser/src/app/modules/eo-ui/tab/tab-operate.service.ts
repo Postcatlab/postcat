@@ -26,7 +26,7 @@ export class TabOperateService {
      * Cache pagedata in tab
      * Force cache in production environment
      */
-    disabledCache: APP_CONFIG.production ? false : true,
+    disabledCache: APP_CONFIG.production ? false : false,
     //* Allow development mode debug not exist router at init
     allowNotExistRouter: !APP_CONFIG.production,
     //* Allow open new tab by url at init

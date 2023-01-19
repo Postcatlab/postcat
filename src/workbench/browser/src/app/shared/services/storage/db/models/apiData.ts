@@ -218,7 +218,7 @@ export interface ResponseList {
   name?: string;
   httpCode?: string;
   contentType?: number;
-  isDefault?: number;
+  isDefault: number;
   createTime?: number;
   updateTime?: number;
   responseParams: ResponseParams;
