@@ -154,20 +154,24 @@
       (nzSelectChange)="handleBottomTabSelect($event)"
     >
       <eo-ng-tab i18n-nzTitle nzTitle="Response">
-        <eo-api-test-result-response [model]="model.testResult?.response" [uri]="model.request.uri"> </eo-api-test-result-response>
+        <eo-api-test-result-response [model]="model.testResult" [uri]="model.request.uri"> </eo-api-test-result-response>
       </eo-ng-tab>
       <div>
-        <eo-ng-tab *ngIf="model.testResult?.response?.headers" i18n-nzTitle nzTitle="Response Headers">
-          <eo-api-test-result-header class="p-base" [model]="model.testResult?.response?.headers"></eo-api-test-result-header>
+        <eo-ng-tab *ngIf="model.testResult?.headers" i18n-nzTitle nzTitle="Response Headers">
+          <eo-api-test-result-header class="p-base" [model]="model.testResult?.headers"></eo-api-test-result-header>
         </eo-ng-tab>
       </div>
-      <eo-ng-tab *ngIf="model.testResult.request.requestBody" i18n-nzTitle nzTitle="Body">
+      <eo-ng-tab *ngIf="model.testResult?.request?.body" i18n-nzTitle nzTitle="Body">
         <!-- TODO use isRequestBodyLoaded -->
-        <eo-api-test-result-request-body *ngIf="model.responseTabIndex === 2" [model]="model.testResult.request.requestBody || ''">
+        <eo-api-test-result-request-body
+          *ngIf="model.responseTabIndex === 2"
+          [model]="model.testResult.request.body"
+          [contentType]="model.testResult.request.contentType"
+        >
         </eo-api-test-result-request-body>
       </eo-ng-tab>
-      <eo-ng-tab *ngIf="model.testResult?.request?.requestHeaders" i18n-nzTitle nzTitle="Request Headers">
-        <eo-api-test-result-header class="p-base" [model]="model.testResult?.request?.requestHeaders"> </eo-api-test-result-header>
+      <eo-ng-tab *ngIf="model.testResult?.request?.headers" i18n-nzTitle nzTitle="Request Headers">
+        <eo-api-test-result-header class="p-base" [model]="model.testResult?.request?.headers"> </eo-api-test-result-header>
       </eo-ng-tab>
     </eo-ng-tabset>
     <ng-template #extraTemplate>
@@ -175,7 +179,7 @@
         <button eo-ng-button nzType="text">
           <eo-iconpark-icon
             name="download"
-            *ngIf="!isEmpty(model.testResult?.response)"
+            *ngIf="!isEmpty(model.testResult?.body)"
             class="cursor-pointer"
             i18n-nzTooltipTitle
             eoNgFeedbackTooltip

@@ -29,7 +29,7 @@ const whatTextTypeMap = {
   styleUrls: ['./api-test-body.component.scss']
 })
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: string | object[] | any;
+  @Input() model: string | BodyParam[] | any;
   @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() autoSetContentType = true;
   @Input() contentType: ContentType;

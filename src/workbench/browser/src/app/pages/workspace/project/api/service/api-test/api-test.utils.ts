@@ -1,20 +1,14 @@
 import { formatDate } from '@angular/common';
-import {
-  ApiBodyType,
-  ApiParamsType,
-  JsonRootType,
-  protocalMap,
-  requestMethodMap
-} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import {
   TestServerRes,
-  requestDataOpts
+  requestDataOpts,
+  ApiTestResData
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BodyParam, RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-const PROTOCOL = ['http', 'https'];
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
 
 /**
@@ -105,6 +99,7 @@ export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env
   return result;
 };
 export const eoFormatResponseData = ({ globals, report, history, id }): TestServerRes => {
+  pcConsole.log('eoFormatResponseData', globals, report, history, id);
   let result: TestServerRes;
   const reportList = report.reportList || [];
   //preScript code tips
@@ -121,6 +116,8 @@ export const eoFormatResponseData = ({ globals, report, history, id }): TestServ
       content: report.response?.errorReason
     });
   }
+
+  //Test error
   if (['error'].includes(report.status)) {
     result = {
       status: 'error',
@@ -133,51 +130,53 @@ export const eoFormatResponseData = ({ globals, report, history, id }): TestServ
     };
     return result;
   }
-  let { httpCode, ...response } = history.resultInfo;
-  response = {
-    statusCode: httpCode,
-    ...response,
+
+  //Test success
+  const response: ApiTestResData = {
+    statusCode: history.resultInfo.httpCode,
+    ...history.general,
+    time: history.resultInfo.testDeny,
+    responseLength: history.resultInfo.responseLength,
+    responseType: history.resultInfo.responseType,
+    body: history.resultInfo.body,
+    contentType: history.resultInfo.contentType,
     reportList,
-    body: response.body || '',
-    headers: response.headers.map(val => ({ name: val.key, value: val.value }))
+    headers: (history.resultInfo.headers || []).map(val => ({ name: val.key, value: val.value })),
+    blobFileName: report.blobFileName,
+    request: {
+      uri: history.requestInfo.URL,
+      headers: history.requestInfo.headers,
+      body: history.requestInfo.params,
+      contentType: ['formData', 'raw', 'json', 'xml', 'binary'][history.requestInfo.requestType] || 'raw'
+    }
   };
-  (response = { blobFileName: report.blobFileName, ...response }),
-    (result = {
-      status: 'finish',
-      id,
-      globals,
-      response
-    });
+
+  result = {
+    status: 'finish',
+    id,
+    globals,
+    response
+  };
   return result;
 };
-export const DEFAULT_UNIT_TEST_RESULT = {
-  general: { redirectTimes: 0, downloadSize: 0, downloadRate: 0, time: '0.00ms' },
-  response: {
-    statusCode: 0,
-    headers: [],
-    testDeny: '0.00',
-    responseLength: 0,
-    responseType: 'text',
-    reportList: [],
-    body: $localize`The test service connection failed, please submit an Issue to contact the community`
-  },
-  report: {
-    request: {
-      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-      requestBodyType: 'raw',
-      requestBody: '{}'
-    }
-  },
-  history: {
-    request: {
-      uri: 'http:///',
-      method: 'POST',
-      protocol: 'http',
-      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-      requestBodyJsonType: 'object',
-      requestBodyType: 'raw',
-      requestBody: '{}'
-    }
+export const DEFAULT_UNIT_TEST_RESULT: ApiTestResData = {
+  redirectTimes: 0,
+  downloadSize: 0,
+  downloadRate: '0',
+  time: '0',
+  statusCode: 0,
+  timingSummary: [],
+  headers: [],
+  responseLength: 0,
+  responseType: 'text',
+  contentType: 'text/html',
+  body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+  reportList: [],
+  request: {
+    uri: 'http:///',
+    headers: [{ name: 'Content-Type', value: 'application/json' }],
+    body: '{}',
+    contentType: 'raw'
   }
 };
 
