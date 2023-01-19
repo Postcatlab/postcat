@@ -24,7 +24,7 @@ const http = {
     {
       name: 'group',
       data: [
-        { 'create @post @create': '/api/group', only: '' },
+        { 'create @post @bulkCreate': '/api/group', only: '' },
         { 'update @put @update': '/api/group', json: 'id, projectUuid, workSpaceUuid, ...' },
         { 'delete @delete @delete': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
