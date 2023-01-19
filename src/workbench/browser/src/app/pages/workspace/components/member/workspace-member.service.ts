@@ -62,7 +62,7 @@ export class WorkspaceMemberService {
     if (this.store.isLocal) {
       return;
     }
-    if (members.isSelf) {
+    if (members.isCreator) {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );
