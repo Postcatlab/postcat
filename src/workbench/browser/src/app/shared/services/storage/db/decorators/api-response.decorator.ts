@@ -1,3 +1,5 @@
+import { isFunction } from 'lodash-es';
+
 /** 普通响应 promise */
 export type ApiResponsePromise<T> = Promise<ApiResponseOptions<T>>;
 /** 分页 promise */
@@ -42,9 +44,11 @@ export function ApiResponse(options: ApiResponseOptions = {}): MethodDecorator {
 
     if (typeof original === 'function') {
       descriptor.value = async function (...args) {
+        const fnArr = args.filter(n => isFunction(n));
         try {
           // 模拟 network，使用 JSON.stringify 将数据序列化
-          const data = await original.apply(this, JSON.parse(JSON.stringify(args)));
+          const params = JSON.parse(JSON.stringify(args))?.[0];
+          const data = await original.call(this, params, ...fnArr);
           if (data instanceof ResObj) {
             return new ResObj(data.data, options);
           } else {
