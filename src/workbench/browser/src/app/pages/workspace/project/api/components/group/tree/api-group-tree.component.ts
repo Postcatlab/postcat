@@ -216,21 +216,28 @@ export class ApiGroupTreeComponent implements OnInit {
     const dragNode = event.dragNode;
     const node = eoDeepCopy(dragNode.origin);
     // Get group sort index
-    let index;
+    let sort;
+    let parentNode = dragNode.parentNode;
     if (dragNode.parentNode) {
-      index = dragNode.parentNode.getChildren().findIndex(val => val.key === node.key);
+      const childs = dragNode.parentNode.getChildren();
+      const index = childs.findIndex(val => val.key === node.key);
+      sort = childs.length - index;
     } else {
-      index = this.apiGroup
-        .getTreeNodes()
-        .filter(n => n.level === 0)
-        .findIndex(val => val.key === node.key);
+      const childs = this.apiGroup.getTreeNodes().filter(n => n.level === 0);
+      const index = childs.findIndex(val => val.key === node.key);
+      sort = childs.length - index;
     }
     if (dragNode.isLeaf) {
-      //TODO sort api
+      this.projectApi.edit({
+        apiUuid: node.apiUuid,
+        //@ts-ignore
+        groupId: parentNode?.key || this.store.getRootGroup.id,
+        orderNum: sort
+      });
     } else {
       // * Update group
       node.parentId = dragNode.parentNode?.key || this.store.getRootGroup.id;
-      node.sort = index;
+      node.sort = sort;
       this.effect.updateGroup(node);
     }
     console.log(dragNode, node, dragNode.parentNode?.key);
