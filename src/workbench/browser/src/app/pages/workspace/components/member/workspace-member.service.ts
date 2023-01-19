@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -15,7 +14,6 @@ export class WorkspaceMemberService {
     private api: ApiService,
     private store: StoreService,
     private effect: EffectService,
-    private member: MemberService,
     private message: EoNgFeedbackMessageService
   ) {
     autorun(() => {
