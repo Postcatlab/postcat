@@ -10,7 +10,7 @@ export class ApiTestService {
   }
   addHistory(history: ApiTestHistory): Promise<any> {
     return this.effectService.createApiTestHistory({
-      apiUuid: history.apiUuid,
+      apiUuid: history.apiUuid || -1,
       general: '{}',
       request: JSON.stringify(history.request),
       response: JSON.stringify(history.response)

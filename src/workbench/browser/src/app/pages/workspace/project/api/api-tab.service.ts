@@ -206,7 +206,7 @@ export class ApiTabService {
       replaceTab.extends.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
       if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
-          replaceTab.extends.method = model.request.protocol?.toUpperCase();
+          replaceTab.extends.method = 'WS';
         } else {
           replaceTab.extends.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
         }
