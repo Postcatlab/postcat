@@ -11,7 +11,8 @@
 }
 
 .active-item {
-  color: var(--primary-color);
+  color: var(--dropdown-item-hover-text-color);
+  background-color: var(--dropdown-item-hover-background-color);
 
   &:hover {
     color: var(--dropdown-item-hover-text-color);

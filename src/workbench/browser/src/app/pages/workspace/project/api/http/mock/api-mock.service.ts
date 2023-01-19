@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { formatUri } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { table2json } from 'eo/workbench/browser/src/app/utils/data-transfer/data-transfer.utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Injectable()
@@ -29,8 +32,7 @@ export class ApiMockService {
       page: 1,
       pageSize: 200
     });
-    console.log(data);
-    return data;
+    return data?.items || [];
   }
   /**
    * create mock
@@ -39,8 +41,7 @@ export class ApiMockService {
    * @returns
    */
   async createMock(mock) {
-    const [data, err] = await this.api.api_mockCreate(mock);
-    return data;
+    return await this.api.api_mockCreate(mock);
   }
   /**
    * update mock
@@ -53,10 +54,14 @@ export class ApiMockService {
     return data;
   }
   async deleteMock(id: number) {
+    console.log(id);
     const [data, err] = await this.api.api_mockDelete({ id });
     return data;
   }
-  getMockResponseByAPI(responseBody) {
-    return JSON.stringify(tree2obj(responseBody));
+  getMockResponseByAPI(apiData: ApiData) {
+    const body = [ApiBodyType.Raw, ApiBodyType.Binary].includes(apiData.responseList?.[0].contentType)
+      ? apiData.responseList?.[0]?.responseParams?.bodyParams?.[0].binaryRawData
+      : apiData.responseList?.[0]?.responseParams?.bodyParams;
+    return typeof body === 'string' ? body : JSON.stringify(table2json(body));
   }
 }
