@@ -112,10 +112,11 @@ export class ProjectMemberComponent implements OnInit {
           return;
         }
         const result = await this.member.searchUser(value);
-        const memberList = this.memberListRef.list.map(it => it.userName);
+        const memberList = this.memberListRef.list.map(it => it.username);
         this.userList = result.filter(it => {
           return !memberList.includes(it.userName);
         });
+        console.log('this.userList', this.userList);
       },
       { delay: 300 }
     );
