@@ -1551,16 +1551,23 @@ export class RemoteService {
     });
   }
 
-  api_projectExportProject<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
+  api_projectExportProject<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
     if (projectUuid == null) {
       console.log('%c Error: project - exportProject 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - exportProject 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project/exports`, {
-          params: { projectUuid }
+        .get(`${prefix}/api/projects/exports`, {
+          params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {

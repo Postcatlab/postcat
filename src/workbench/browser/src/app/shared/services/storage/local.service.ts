@@ -301,7 +301,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.mock
-        .bulkRead({ apiUuid, projectUuid, workSpaceUuid, page, pageSize })
+        .page({ apiUuid, projectUuid, workSpaceUuid, page, pageSize })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c mock - list 接口调用成功 %c', SuccessStyle, '');
@@ -534,7 +534,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.group
-        .bulkRead({ projectUuid, workSpaceUuid })
+        .page({ projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');

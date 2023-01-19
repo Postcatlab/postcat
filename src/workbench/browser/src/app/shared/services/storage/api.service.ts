@@ -201,7 +201,7 @@ export class ApiService {
     return this.remote.api_workspaceSetRole<T>(params);
   }
 
-  api_projectExportProject<T = any>(params: { projectUuid?: any }) {
+  api_projectExportProject<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
     return this.remote.api_projectExportProject<T>(params);
   }
 
