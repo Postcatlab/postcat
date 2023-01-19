@@ -69,33 +69,33 @@
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Response -->
-    <nz-collapse *ngIf="model.responseList[0]?.responseParams?.bodyParams?.length" class="w-full mt-[20px]">
+    <nz-collapse *ngIf="model.responseList?.[0]?.responseParams?.bodyParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" [nzHeader]="responseParamsHeader">
         <ng-template #responseParamsHeader>
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Response</span>
-            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList[0]?.contentType] }}</nz-tag>
+            <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList?.[0]?.contentType] }}</nz-tag>
             <nz-tag
-              *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList[0]?.contentType)"
+              *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList?.[0]?.contentType)"
               nzColor="default"
               i18n
-              >{{ model.responseList[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
+              >{{ model.responseList?.[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
             >
           </div>
         </ng-template>
         <eo-api-detail-body
           tid="responseBody"
-          [bodyType]="model.responseList[0]?.contentType"
-          [model]="model.responseList[0]?.responseParams?.bodyParams"
+          [bodyType]="model.responseList?.[0]?.contentType"
+          [model]="model.responseList?.[0]?.responseParams?.bodyParams"
         ></eo-api-detail-body>
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Response headers -->
-    <nz-collapse *ngIf="model.responseList[0]?.responseParams?.headerParams?.length" class="w-full mt-[20px]">
+    <nz-collapse *ngIf="model.responseList?.[0]?.responseParams?.headerParams?.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response Headers">
         <eo-api-detail-form
           class="api-detail-form-table"
-          [model]="model.responseList[0]?.responseParams?.headerParams"
+          [model]="model.responseList?.[0]?.responseParams?.headerParams"
           module="header"
           tid="responseHeaders"
         ></eo-api-detail-form>

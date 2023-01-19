@@ -105,7 +105,7 @@ export class StoreService {
     return this.currentMock;
   }
   @computed get getTestHistory() {
-    return this.testHistory.reverse().map(n => ({ ...n, title: n.request?.uri, key: n.uuid }));
+    return this.testHistory.reverse().map(n => ({ ...n, title: n.request?.uri, key: n.id }));
   }
   @computed get getGroupTree() {
     return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
