@@ -9,12 +9,17 @@ import { filter, map, tap, Observable, catchError } from 'rxjs';
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   protocolReg = new RegExp('^(http|https)://');
-  constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
+  constructor(
+    private store: StoreService,
+    private messageService: MessageService,
+    private web: WebService,
+    private setting: SettingService
+  ) {
     super();
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const serverUrl = !this.web.isWeb ? 'https://postcat.com/' : '';
+    const serverUrl = this.store.remoteUrl;
     req = req.clone({
       url: this.protocolReg.test(req.url) ? req.url : `${serverUrl}${req.url}`,
       headers: new HttpHeaders({
