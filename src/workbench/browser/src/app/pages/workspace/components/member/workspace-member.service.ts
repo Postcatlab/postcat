@@ -46,7 +46,7 @@ export class WorkspaceMemberService {
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        isSelf: roles.some(item => item.createUserId === id), // * Is my workspace
+        isCreator: roles.some(item => item.createUserId === id), // * Is my workspace
         isOwner: roles.some(it => it.name === 'Workspace Owner'),
         isEditor: roles.some(it => it.name === 'Workspace Editor'),
         ...items
@@ -62,7 +62,7 @@ export class WorkspaceMemberService {
     if (this.store.isLocal) {
       return;
     }
-    if (members.isSelf) {
+    if (members.isCreator) {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );

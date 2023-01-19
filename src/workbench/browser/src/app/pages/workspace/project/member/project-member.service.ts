@@ -39,7 +39,7 @@ export class ProjectMemberService {
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        isSelf: roles.some(item => item.createUserId === id), // * Is my project
+        isCreator: roles.some(item => item.createUserId === id), // * Is my project
         isOwner: roles.some(it => it.name === 'Project Owner'),
         isEditor: roles.some(it => it.name === 'Project Editor'),
         ...items
