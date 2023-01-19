@@ -11,6 +11,12 @@ export class ApiEditUtilService {
 
   parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
+    const mui = {
+      headerParams: 0,
+      bodyParams: 1,
+      queryParams: 2,
+      restParams: 3
+    };
     //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
@@ -18,6 +24,7 @@ export class ApiEditUtilService {
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
         filterFn: item => {
+          item.partType = mui[tableName];
           item.paramType = 0;
           return filterArrFun(item);
         }
@@ -34,6 +41,7 @@ export class ApiEditUtilService {
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
         filterFn: item => {
+          item.partType = mui[tableName];
           item.paramType = 1;
           return filterArrFun(item);
         }
