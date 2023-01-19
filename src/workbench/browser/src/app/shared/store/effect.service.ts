@@ -45,6 +45,9 @@ export class EffectService {
         //* Get workspace list
         await this.updateWorkspaceList();
         this.fixedID();
+        const { roles, permissions } = await this.getWorkspacePermission();
+        this.store.setPermission(permissions, 'workspace');
+        this.store.setRole(roles, 'workspace');
         return;
       }
       if (this.store.isLocal) {
