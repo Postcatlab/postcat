@@ -124,7 +124,7 @@ export class RemoteService {
   }
 
   api_apiDataDetail<T = any>(
-    { apiUuids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { apiUuids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
     prefix = ''
   ) {
     if (apiUuids == null) {
@@ -143,7 +143,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/api`, {
-          params: { apiUuids, projectUuid, workSpaceUuid }
+          params: { apiUuids, projectUuid, workSpaceUuid, ...items }
         })
         .subscribe({
           next: ({ code, data }: any) => {

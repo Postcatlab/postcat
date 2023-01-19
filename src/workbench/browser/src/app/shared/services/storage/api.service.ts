@@ -22,7 +22,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiDataDelete<T>(params) : this.remote.api_apiDataDelete<T>(params);
   }
 
-  api_apiDataDetail<T = any>(params: { apiUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiDataDetail<T = any>(params: { apiUuids: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
     return this.store.isLocal ? this.local.api_apiDataDetail<T>(params) : this.remote.api_apiDataDetail<T>(params);
   }
 

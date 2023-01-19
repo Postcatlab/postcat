@@ -117,7 +117,8 @@ export class LocalService {
   api_apiDataDetail<T = any>({
     apiUuids,
     projectUuid = this.store.getCurrentProjectID,
-    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
   }) {
     if (apiUuids == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
@@ -134,7 +135,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        .bulkReadDetail({ apiUuids, projectUuid, workSpaceUuid })
+        .bulkReadDetail({ apiUuids, projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiData - detail 接口调用成功 %c', SuccessStyle, '');
