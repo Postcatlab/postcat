@@ -224,9 +224,9 @@ export class EffectService {
     this.store.setCurrentProjectID(project.projectUuid);
   }
 
-  async updateShareLink(): Promise<string> {
+  async updateShareLink() {
     // * update share link
-    const [res, err]: any = await this.api.api_shareCreateShare({});
+    const [data, err]: any = await this.api.api_shareCreateShare({});
     if (err) {
       return 'Error ... ';
     }
@@ -236,7 +236,7 @@ export class EffectService {
       .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
+    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${data.sharedUuid}`;
   }
 
   async updateEnvList() {
