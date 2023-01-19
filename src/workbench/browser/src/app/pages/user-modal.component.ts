@@ -416,6 +416,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
 
       const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
+        this.eMessage.error($localize`Please check you username or password`);
         return;
       }
       this.store.setLoginInfo(data);

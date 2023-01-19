@@ -4,6 +4,7 @@ export interface ApiData {
   id?: number;
   apiUuid?: string;
   projectUuid?: string;
+  workSpaceUuid?: string;
   groupId?: number;
   groupName?: string;
   projectId?: number;

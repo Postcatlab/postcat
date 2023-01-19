@@ -54,6 +54,7 @@ export class ApiEditUtilService {
   formatUIApiDataToStorage(formData): ApiData {
     const result = this.parseApiUI2Storage(formData, val => {
       val.paramAttr.example = val['paramAttr.example'];
+      val.orderNo = 0;
       delete val['paramAttr.example'];
       return val?.name;
     });

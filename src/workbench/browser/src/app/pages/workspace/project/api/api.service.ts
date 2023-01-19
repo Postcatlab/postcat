@@ -18,6 +18,7 @@ export class ProjectApiService {
   ) {}
   async get(uuid): Promise<ApiData> {
     const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid] });
+    console.log(result);
     if (err) {
       this.message.error($localize`Can't find this Api`);
       return;

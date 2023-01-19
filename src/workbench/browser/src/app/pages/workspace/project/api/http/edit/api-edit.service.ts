@@ -47,7 +47,7 @@ export class ApiEditService {
       const pureApi = this.getPureApi({ groupId });
       if (tmpApiData) {
         //Add From Test
-        window.sessionStorage.removeItem('apiDataWillbeSave');
+        StorageUtil.remove('apiDataWillbeSave');
         Object.keys(pureApi).forEach(keyName => {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];

@@ -56,8 +56,8 @@ const filterTree = (
     childKey: 'childList'
   }
 ) =>
-  result.filter(item => {
-    const hasKeep = filterFn ? filterFn(item) : true;
+  result.filter((item, index) => {
+    const hasKeep = filterFn ? filterFn(item, index) : true;
     if (!hasKeep) {
       return false;
     }

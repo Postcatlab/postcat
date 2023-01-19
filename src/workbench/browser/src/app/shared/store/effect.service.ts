@@ -309,7 +309,7 @@ export class EffectService {
   }
 
   async getHistoryList() {
-    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 1000 });
+    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 200 });
     if (err) {
       return;
     }
@@ -328,7 +328,7 @@ export class EffectService {
 
     // console.log('Group 数据', structuredClone(groupList));
     // * get api list data
-    const [apiListRes, aErr] = await this.api.api_apiDataList(params);
+    const [apiListRes, aErr] = await this.api.api_apiDataList({ ...params, statuses: 0 });
     if (aErr) {
       return;
     }
