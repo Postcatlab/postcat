@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { makeObservable, observable, reaction } from 'mobx';
@@ -10,6 +10,10 @@ import { StoreService } from '../../../../shared/store/state.service';
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal">
       <nz-list-header>
+        <!-- {{ userList | json }}
+        <select name="pets" id="pet-select">
+          <option *ngFor="let option of userList" [value]="option.userNickName">{{ option.userNickName }}</option>
+        </select> -->
         <eo-ng-select
           class="w-full"
           nzAllowClear
@@ -21,10 +25,10 @@ import { StoreService } from '../../../../shared/store/state.service';
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"
         >
-          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userName" [nzValue]="option.userName">
+          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userNickName" [nzValue]="option.id">
             <div class="flex w-full justify-between option">
               <div class="flex flex-col justify-between">
-                <span class="font-bold">{{ option.userName }}</span>
+                <span class="font-bold">{{ option.userNickName }}</span>
                 <span class="text-tips">{{ option.email }}</span>
               </div>
               <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
@@ -48,29 +52,18 @@ export class WorkspaceMemberComponent implements OnInit {
   @observable searchValue = '';
   userCache;
   userList = [];
-  constructor(
-    public store: StoreService,
-    private message: EoNgFeedbackMessageService,
-    public member: MemberService,
-    private cdk: ChangeDetectorRef
-  ) {}
+  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
 
   ngOnInit(): void {
     makeObservable(this);
     reaction(
       () => this.searchValue,
       async value => {
-        if (value.trim() === '') {
-          return;
-        }
         const result = await this.member.searchUser(value.trim());
-        const memberList = [];
-        // const memberList = this.memberListRef.list.map(it => it.userName);
-        setTimeout(() => {
-          this.userList = result.filter(it => {
-            return !memberList.includes(it.userName);
-          });
-        }, 0);
+        const memberList = this.memberListRef.list.map(it => it.username);
+        console.log('result', result);
+        this.userList = result ? result.filter(it => !memberList.includes(it.userNickName)) : [];
+        console.log(this.userList);
       },
       { delay: 300 }
     );

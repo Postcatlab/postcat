@@ -46,6 +46,7 @@ export class WorkspaceMemberService {
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
+        roleTitle: roles.at(0)?.name,
         isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
         isOwner: roles.find(it => it.name === 'Workspace Owner'),
         isEditor: roles.find(it => it.name === 'Workspace Editor'),

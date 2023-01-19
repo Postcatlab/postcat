@@ -108,9 +108,6 @@ export class ProjectMemberComponent implements OnInit {
     reaction(
       () => this.searchValue,
       async value => {
-        if (value.trim() === '') {
-          return;
-        }
         const result = await this.member.searchUser(value);
         const memberList = this.memberListRef.list.map(it => it.username);
         this.userList = result.filter(it => {

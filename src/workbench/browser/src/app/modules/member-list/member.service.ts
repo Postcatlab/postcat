@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 export type UserMeta = {
   userName: string;
+  username?: string;
+  userNickName: string;
   roleTitle: string;
   myself: boolean;
   id: number;
