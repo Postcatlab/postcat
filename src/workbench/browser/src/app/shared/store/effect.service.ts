@@ -319,17 +319,18 @@ export class EffectService {
 
   async getGroupList(params = {}) {
     // * get group list data
-    const [groupList = [], gErr] = await this.api.api_groupList({});
+    const [groupList = [], gErr] = await (this.store.isShare ? this.api.api_groupList({}) : this.api.api_groupList({}));
     if (gErr) {
       return;
     }
-
     const rootGroup = groupList.at(0);
     this.store.setRootGroup(rootGroup);
 
     // console.log('Group 数据', structuredClone(groupList));
     // * get api list data
-    const [apiListRes, aErr] = await this.api.api_apiDataList({ ...params, statuses: 0 });
+    const [apiListRes, aErr] = await (this.store.isShare
+      ? this.api.api_apiDataList({ ...params, statuses: 0 })
+      : this.api.api_apiDataList({ ...params, statuses: 0 }));
     if (aErr) {
       return;
     }
