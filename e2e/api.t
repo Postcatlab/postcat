@@ -32,11 +32,7 @@ wait
 goto "http://localhost:4200"
 
 find:
-<<<<<<< HEAD
-    [input "Search"] [button { width: 32px }]=addBtn
-=======
     [input 'Search'] [button 'xpath:body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-sider > div > nz-content > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > pc-api-group-tree > header > div']=addBtn
->>>>>>> feat/theme
 
 addBtn -> hover
 
