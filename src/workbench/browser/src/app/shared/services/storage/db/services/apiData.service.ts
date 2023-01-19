@@ -57,7 +57,12 @@ export class ApiDataService extends BaseService<ApiData> {
       const items = await (sort === 'DESC' ? collection.reverse() : collection).sortBy(order);
       // TODO 由于 dexie 3.0 尚未支持 orderBy 方法，so...
       // https://dexie.org/docs/Table/Table.orderBy()
-      return items.sort((a, b) => b.orderNum - a.orderNum);
+      return items
+        .sort((a, b) => b.orderNum - a.orderNum)
+        .map(n => ({
+          ...n,
+          ...n?.apiAttrInfo
+        }));
     });
   }
 
