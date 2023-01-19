@@ -136,7 +136,9 @@ object {
     display: none;
   }
 
+  .ant-popover-inner,
   .ant-popover-inner-content {
-    padding: 0;
+    color: rgb(0 0 0 / 85%);
+    background-color: var(--background-color);
   }
 }
