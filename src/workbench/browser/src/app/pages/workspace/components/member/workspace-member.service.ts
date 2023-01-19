@@ -38,7 +38,7 @@ export class WorkspaceMemberService {
         }
       ];
     }
-    const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
+    const [data, err]: any = await this.api.api_workspaceSearchMember(search);
     if (err) {
       return;
     }
@@ -91,7 +91,8 @@ export class WorkspaceMemberService {
     return !err;
   }
   async searchUser(search) {
-    const [data, err] = await this.api.api_workspaceSearchMember(search);
+    console.log('search', search);
+    const [data, err] = await this.api.api_userSearch({ username: search.trim() });
     if (err) {
       return;
     }
