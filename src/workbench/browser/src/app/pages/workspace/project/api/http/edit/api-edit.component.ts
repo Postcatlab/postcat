@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
-import { ApiData, Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
@@ -76,13 +76,11 @@ export class ApiEditComponent implements OnDestroy, OnInit {
         id,
         groupId
       });
-
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model = result;
       }
     }
-    pcConsole.log('api-edit', this.model, this.initialModel);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
     //Storage origin api data
@@ -164,17 +162,17 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    );
+    // console.log(
+    //   'api edit origin:',
+    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);
     if (originText !== afterText) {
-      // console.log('api edit formChange true!', originText.split(afterText));
+      console.log('api edit formChange true!', originText.split(afterText)[0]);
       return true;
     }
     return false;

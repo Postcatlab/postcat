@@ -133,7 +133,7 @@ export class ApiService {
     return this.remote.api_userUpdateInfo<T>(params);
   }
 
-  api_userUpdatePassword<T = any>(params: { password: any; [key: string]: any }) {
+  api_userUpdatePassword<T = any>(params: { password: any }) {
     return this.remote.api_userUpdatePassword<T>(params);
   }
 

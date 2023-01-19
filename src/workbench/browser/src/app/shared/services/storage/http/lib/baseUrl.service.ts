@@ -8,12 +8,20 @@ import { filter, map, tap, Observable, catchError } from 'rxjs';
 // implements StorageInterface
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
-  constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
+  protocolReg = new RegExp('^(http|https)://');
+  constructor(
+    private store: StoreService,
+    private messageService: MessageService,
+    private web: WebService,
+    private setting: SettingService
+  ) {
     super();
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const serverUrl = this.store.remoteUrl;
     req = req.clone({
+      url: this.protocolReg.test(req.url) ? req.url : `${serverUrl}${req.url}`,
       headers: new HttpHeaders({
         Authorization: this.store.getLoginInfo?.accessToken || ''
       })

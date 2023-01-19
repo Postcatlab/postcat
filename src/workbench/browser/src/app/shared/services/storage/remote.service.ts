@@ -1051,32 +1051,27 @@ export class RemoteService {
     });
   }
 
-  api_userUpdatePassword<T = any>({ password, ...items }, prefix = '') {
+  api_userUpdatePassword<T = any>({ password }, prefix = '') {
     if (password == null) {
       console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http
-        .post(`${prefix}/usercenter/common/user/change-password`, {
-          password,
-          ...items
-        })
-        .subscribe({
-          next: ({ code, data }: any) => {
-            if (code === 0) {
-              console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
-              return resolve([data, null]);
-            }
-            console.log('Error: ', JSON.stringify(data, null, 2));
-            resolve([null, { code, data }]);
-          },
-          error: error => {
-            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
+      this.http.put(`${prefix}/api/user/password`, { password }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
           }
-        });
+          console.log('Error: ', JSON.stringify(data, null, 2));
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
     });
   }
 

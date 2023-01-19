@@ -4,6 +4,7 @@ export type UserMeta = {
   roleTitle: string;
   myself: boolean;
   id: number;
+  roles: any;
   role: {
     name: string;
     id: number;
@@ -14,14 +15,14 @@ export type UserMeta = {
 };
 @Injectable()
 export class MemberService {
-  role: 'Owner' | 'Editor' | string;
+  role: any[];
   constructor() {
     console.log('MemberService');
   }
   async addMember(items) {}
   searchUser: (search: string) => UserMeta[];
-  changeRole: (item) => void;
+  changeRole: (item) => boolean;
   removeMember: (item) => void;
-  queryMember: () => UserMeta[];
+  queryMember: (item) => UserMeta[];
   quitMember: (members: UserMeta[]) => void;
 }

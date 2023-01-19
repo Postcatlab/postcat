@@ -64,6 +64,9 @@ export class ApiEditService {
   async editApi(apiData): Promise<[ApiData, any]> {
     const busEvent = apiData.apiUuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
+      apiData.updateApiAttr = 1;
+      apiData.updateRequestParams = 1;
+      apiData.updateResponseList = 1;
       return await this.projectApi.edit(apiData);
     } else {
       const [result, err] = await this.projectApi.add(apiData);

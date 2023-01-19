@@ -93,7 +93,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model?.firstChange) {
+    const resetPage =
+      changes.model && ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0);
+    const isFirst = changes.model?.firstChange;
+    if (resetPage || isFirst) {
       this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();

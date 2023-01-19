@@ -19,10 +19,9 @@ export class ProjectMemberService {
       userIds: ids
     });
   }
-  async queryMember() {
-    let result = [];
+  async queryMember(search = '') {
     if (this.store.isLocal) {
-      result = [
+      return [
         {
           role: {
             id: 1
@@ -30,26 +29,21 @@ export class ProjectMemberService {
           ...this.store.getUserProfile
         }
       ];
-    } else {
-      const [data, err]: any = await this.api.api_projectMemberList({
-        username: ''
-      });
-      if (err) {
-        return;
-      }
-      result = data || [];
     }
-    result.forEach(member => {
-      member.roleTitle = this.store.getProjectRoleList.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-      // * Workspace owner can't edit
-      if (member.role.id === 1) {
-        member.disabledEdit = true;
-      }
+    const [data, err]: any = await this.api.api_projectMemberList({
+      username: search.trim()
     });
-    return result;
+    if (err) {
+      return;
+    }
+    return data.map(({ roles, id, ...items }) => ({
+      id,
+      roles,
+      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my project
+      isOwner: roles.find(it => it.name === 'Project Owner'),
+      isEditor: roles.find(it => it.name === 'Project Editor'),
+      ...items
+    }));
   }
   async removeMember(item) {
     return await this.api.api_projectDelMember({
@@ -67,17 +61,11 @@ export class ProjectMemberService {
     return [data, err];
   }
   async changeRole(item) {
-    const roleID = item.role.id === 3 ? 4 : 3;
-    const [data, err]: any = await this.api.api_projectSetRole({
-      userRole: roleID
+    const [, err]: any = await this.api.api_projectSetRole({
+      userRole: [item]
     });
-    if (err) {
-      return;
-    }
-    item.role.id = roleID;
-    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
-    item.roleTitle = this.store.getProjectRoleList.find(val => val.id === roleID).title;
-    return [data, err];
+    // * return isOK
+    return !err;
   }
   async searchUser(search) {
     const [data, err] = await this.api.api_workspaceSearchMember({

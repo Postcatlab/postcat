@@ -56,7 +56,7 @@ const http = {
       data: [
         { 'readInfo @post': '/usercenter/common/user/info' }, // 查看个人信息
         { 'updateInfo @post': '/usercenter/common/user/update-userinfo' }, // 更新个人资料
-        { 'updatePassword @post': '/usercenter/common/user/change-password', json: 'password, ...' }, // 更改个人密码
+        { 'updatePassword @put': '/api/user/password', json: 'password' }, // 更改个人密码
         { 'login @post': '/api/user/login', json: 'username, password' },
         { 'refreshToken @post': '/usercenter/common/sso/refresh' }, // 刷新token
         { 'logout @post': '/usercenter/common/sso/logout' }, // 退出登录

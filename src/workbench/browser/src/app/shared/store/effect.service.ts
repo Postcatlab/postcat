@@ -330,7 +330,7 @@ export class EffectService {
     // * get api list data
     const [apiListRes, aErr] = await (this.store.isShare
       ? this.api.api_apiDataList({ ...params, statuses: 0 })
-      : this.api.api_apiDataList({ ...params, statuses: 0 }));
+      : this.api.api_apiDataList({ ...params, statuses: 0, order: 'order_num', sort: 'DESC' }));
     if (aErr) {
       return;
     }

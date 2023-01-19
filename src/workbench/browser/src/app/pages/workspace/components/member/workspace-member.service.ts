@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun } from 'mobx';
+import { autorun, toJS } from 'mobx';
 
 @Injectable()
 export class WorkspaceMemberService {
@@ -11,13 +11,12 @@ export class WorkspaceMemberService {
   role: any[];
   isOwner = false;
   constructor(
-    private api: ApiService,
     private store: StoreService,
     private effect: EffectService,
-    private message: EoNgFeedbackMessageService
+    private message: EoNgFeedbackMessageService,
+    private api: ApiService
   ) {
     autorun(() => {
-      console.log('getProjectRoleList', this.store.getWorkspaceRole);
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
       this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
@@ -25,13 +24,12 @@ export class WorkspaceMemberService {
   }
   async addMember(ids) {
     return await this.api.api_workspaceAddMember({
-      userIds: ids
+      userIds: [ids]
     });
   }
   async queryMember(search) {
-    let result = [];
     if (this.store.isLocal) {
-      result = [
+      return [
         {
           role: {
             id: 1
@@ -39,17 +37,19 @@ export class WorkspaceMemberService {
           ...this.store.getUserProfile
         }
       ];
-    } else {
-      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 0, pageSize: 1 });
-      result = data || [];
     }
-    result.forEach(member => {
-      member.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-    });
-    return result;
+    const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
+    if (err) {
+      return;
+    }
+    return data.map(({ roles, id, ...items }) => ({
+      id,
+      roles,
+      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my workspace
+      isOwner: roles.find(it => it.name === 'Workspace Owner'),
+      isEditor: roles.find(it => it.name === 'Workspace Editor'),
+      ...items
+    }));
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
@@ -64,7 +64,7 @@ export class WorkspaceMemberService {
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.api.api_workspaceMemberQuit({});
+    const [data, err]: any = await this.api.api_workspaceMemberQuit(members);
     if (err) {
       return;
     }
@@ -75,23 +75,18 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async changeRole(item) {
-    const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.api.api_workspaceSetRole({
-      userRole: [{ userId: item.id, roleIds: [roleID] }]
+    const [, err]: any = await this.api.api_workspaceSetRole({
+      userRole: [item]
     });
-    if (err) {
-      return;
-    }
-    item.role.id = roleID;
-    item.role.name = item.role.name === 'Workspace Owner' ? 'Workspace Editor' : 'Workspace Owner';
-    item.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === roleID).title;
-    return [data, err];
+    // * return isOK
+    return !err;
   }
   async searchUser(search) {
-    const [data, err] = await this.api.api_userSearch({ username: search.trim() });
+    const [data, err] = await this.api.api_workspaceSearchMember(search);
     if (err) {
       return;
     }
+    console.log('searchUser', data);
     return data;
   }
 }
