@@ -55,12 +55,15 @@ export const migrationToV4 = async (trans: Transaction) => {
     return trans
       .table(tableName)
       .toCollection()
-      .modify((item, ctx) => {
+      .modify(async (item, ctx) => {
         item.createTime = item.createdAt;
         item.updateTime = item.updatedAt;
-        item.id ??= item.uuid;
         item.workSpaceUuid = workspace.uuid;
-        callback?.(item, ctx);
+        if (item.uuid) {
+          item.id ??= item.uuid;
+          item.uuid = item.uuid ? String(item.uuid) : item.uuid;
+        }
+        await callback?.(item, ctx);
       });
   };
 
@@ -72,7 +75,7 @@ export const migrationToV4 = async (trans: Transaction) => {
         type: 0,
         name: 'Root directory',
         depth: 0,
-        projectUuid: item.uuid,
+        projectUuid: String(item.uuid),
         workSpaceUuid: workspace.uuid
       })
     );
@@ -83,47 +86,49 @@ export const migrationToV4 = async (trans: Transaction) => {
 
   await modify('apiData', async (item, ref) => {
     item.groupId = item.groupID;
-    item.projectUuid = item.projectID;
+    item.projectUuid ??= String(item.projectID);
+    ref.value = {
+      ...item,
+      ...convertApiData(item)
+    };
     if (item.groupID === 0) {
-      const rootGroup = await trans.table('group').where({ projectUuid: item.projectID, depth: 0 }).first();
+      const rootGroup = await trans.table('group').where({ projectUuid: item.projectUuid, depth: 0 }).first();
       // console.log('apiData rootGroup', rootGroup);
       if (rootGroup) {
         trans.table('apiData').update(item.id, { groupId: rootGroup.id });
       }
     }
-    console.log('convertApiData(item)', convertApiData(item));
-    ref.value = Object.assign(item, convertApiData(item));
   });
 
   await modify('group', async item => {
     item.parentId = item.parentID;
+    item.projectUuid ??= String(item.projectID);
+    item.sort = item.weight;
     // 给父分组为虚拟根目录的 group
     if (item.parentID === 0) {
-      const rootGroup = await trans.table('group').where({ projectUuid: item.projectID, depth: 0 }).first();
+      const rootGroup = await trans.table('group').where({ projectUuid: item.projectUuid, depth: 0 }).first();
       // console.log('group rootGroup', rootGroup);
       if (rootGroup) {
         trans.table('group').update(item.id, { parentId: rootGroup.id });
       }
     }
-    item.projectUuid = item.projectID;
-    item.sort = item.weight;
   });
 
   await modify('environment', item => {
-    item.projectUuid = item.projectID;
+    item.projectUuid ??= String(item.projectID);
   });
 
   await modify('mock', item => {
-    item.apiUuid = item.apiDataID;
-    item.projectUuid = item.projectID;
+    item.apiUuid = String(item.apiDataID);
+    item.projectUuid ??= String(item.projectID);
   });
 
-  await modify('apiTestHistory', item => {
-    item.apiUuid = item.apiDataID;
-    item.projectUuid = item.projectID;
+  await modify('apiTestHistory', (item, ref) => {
+    item.apiUuid = String(item.apiDataID);
+    item.projectUuid ??= String(item.projectID);
     item.sort = item.weight;
     item.request = {
-      ...item.request,
+      ...convertApiData(item.request),
       script: {
         beforeScript: item.beforeScript,
         afterScript: item.afterScript

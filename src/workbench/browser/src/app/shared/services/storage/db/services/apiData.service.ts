@@ -49,7 +49,6 @@ export class ApiDataService extends BaseService<ApiData> {
     if (groupIds?.length) {
       restParams['groupId'] = groupIds;
     }
-    console.log('restParams', restParams);
     return this.baseService.page(restParams);
   }
 
