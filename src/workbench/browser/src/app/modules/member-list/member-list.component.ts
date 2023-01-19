@@ -65,7 +65,7 @@ export class MemberListComponent implements OnInit {
   }
   async queryList(username = '') {
     this.loading = true;
-    const data = await this.member.queryMember();
+    const data = await this.member.queryMember(username);
     this.list = data.map(({ roles, id, ...it }) => ({
       ...it,
       id,

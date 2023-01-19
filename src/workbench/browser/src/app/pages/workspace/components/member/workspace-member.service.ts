@@ -12,21 +12,19 @@ export class WorkspaceMemberService {
   role: any[];
   isOwner = false;
   constructor(
-    private api: ApiService,
     private store: StoreService,
     private effect: EffectService,
     private member: MemberService,
     private message: EoNgFeedbackMessageService
   ) {
     autorun(() => {
-      console.log('getProjectRoleList', this.store.getWorkspaceRole);
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
       this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
     });
   }
   async addMember(ids) {
-    return await this.api.api_workspaceAddMember({
+    return await this.member.addMember({
       userIds: [ids]
     });
   }
@@ -42,7 +40,7 @@ export class WorkspaceMemberService {
         }
       ];
     } else {
-      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
+      const [data, err]: any = await this.member.queryMember({ username: search.trim(), page: 1, pageSize: 100 });
       result = data || [];
     }
     result.forEach(member => {
@@ -54,7 +52,7 @@ export class WorkspaceMemberService {
     return result;
   }
   async removeMember(item) {
-    return await this.api.api_workspaceRemoveMember({
+    return await this.member.removeMember({
       userIds: [item.id]
     });
   }
@@ -66,7 +64,7 @@ export class WorkspaceMemberService {
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.api.api_workspaceMemberQuit({});
+    const [data, err]: any = await this.member.quitMember(members);
     if (err) {
       return;
     }
@@ -78,7 +76,7 @@ export class WorkspaceMemberService {
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.api.api_workspaceSetRole({
+    const [data, err]: any = await this.member.changeRole({
       userRole: [{ userId: item.id, roleIds: [roleID] }]
     });
     if (err) {
@@ -90,7 +88,7 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async searchUser(search) {
-    const [data, err] = await this.api.api_userSearch({ username: search.trim() });
+    const [data, err] = await this.member.searchUser(search);
     if (err) {
       return;
     }

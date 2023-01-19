@@ -23,6 +23,6 @@ export class MemberService {
   searchUser: (search: string) => UserMeta[];
   changeRole: (item) => void;
   removeMember: (item) => void;
-  queryMember: () => UserMeta[];
+  queryMember: (item) => UserMeta[];
   quitMember: (members: UserMeta[]) => void;
 }

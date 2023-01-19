@@ -67,7 +67,7 @@ export class WorkspaceMemberComponent implements OnInit {
         const result = await this.member.searchUser(value.trim());
         // const memberList = this.memberListRef.list.map(it => it.username);
         console.log('hello');
-        const [data, err] = await this.api.api_workspaceSearchMember({ username: value.trim(), page: 1, pageSize: 100 });
+        const [data, err] = await this.member.queryMember({ username: value.trim(), page: 1, pageSize: 100 });
         if (err) {
           return;
         }
