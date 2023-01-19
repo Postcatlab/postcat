@@ -30,7 +30,7 @@ export class HistoryComponent implements OnInit {
     return this.requestMethodMap[node.origin?.request?.apiAttrInfo?.requestMethod];
   }
   renderRequestMethodText(node) {
-    if (node.origin?.request?.protocol === 'ws') return 'WS';
+    if (node.origin?.request?.protocol === Protocol.WEBSOCKET) return 'WS';
     const method = this.getRequestMethodText(node);
     if (!method) return 'HTTP';
     return method.length > 5 ? method.slice(0, 3) : method;
@@ -38,7 +38,7 @@ export class HistoryComponent implements OnInit {
   gotoTestHistory(e) {
     this.nzSelectedKeys = [];
     const origin = e.node.origin;
-    const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
+    const protocol = origin.request?.protocol === Protocol.WEBSOCKET ? 'ws' : 'http';
     this.router.navigate([`home/workspace/project/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${origin.id}`

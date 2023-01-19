@@ -15,13 +15,11 @@ import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
 import { ApiParamsNumPipe } from '../../../../../modules/api-shared/api-param-num.pipe';
-import { MessageService } from '../../../../../shared/services/message';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {
   requestTabIndex: number;
-  protocol: string;
   msg: string;
   request: any;
   response: any;
@@ -57,7 +55,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private testService: ApiTestService,
     private modal: ModalService,
-    private message: MessageService,
     private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
     private store: StoreService,
     public tabOperate: TabOperateService
@@ -141,18 +138,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
       base: 'query'
     }).url;
   }
   changeUri() {
-    this.model.request.requestParams.queryParams = transferUrlAndQuery(
-      this.model.request.uri,
-      this.model.request.requestParams.queryParams,
-      {
-        base: 'url'
-      }
-    ).query;
+    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+      base: 'url'
+    }).query;
   }
   emitChangeFun(where) {
     if (where === 'queryParams') {
@@ -195,7 +188,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (this.store.isShare) {
         return;
       }
-      await this.testService.addHistory({ protocol: Protocol.WEBSOCKET, ...data });
+      await this.testService.addHistory(data);
       return;
     }
     // * connecting
@@ -346,7 +339,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   private resetModel(): testViewModel {
     return {
       requestTabIndex: 2,
-      protocol: 'websocket',
       msg: '',
       request: {
         requestHeaders: [],
