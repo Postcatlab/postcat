@@ -76,13 +76,11 @@ export class ApiEditComponent implements OnDestroy, OnInit {
         id,
         groupId
       });
-
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model = result;
       }
     }
-    pcConsole.log('api-edit', this.model, this.initialModel);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
     //Storage origin api data
