@@ -9,7 +9,6 @@ export class ProjectMemberService {
   role: any[] = [];
   constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
     autorun(async () => {
-      console.log('this.store.getProjectRole', this.store.getProjectRole);
       this.role = this.store.getProjectRole;
     });
   }
@@ -54,7 +53,7 @@ export class ProjectMemberService {
   }
   async quitMember(members) {
     const [data, err]: any = await this.api.api_projectMemberQuit({
-      userId: ''
+      userId: members.id
     });
     if (!err) {
       const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
