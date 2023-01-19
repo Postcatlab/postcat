@@ -512,7 +512,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.group
-        .page({ projectUuid, workSpaceUuid })
+        .bulkRead({ projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');
