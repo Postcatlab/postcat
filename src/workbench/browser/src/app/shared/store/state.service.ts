@@ -5,7 +5,7 @@ import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
-import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
+import { action, computed, makeObservable, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
 import { JSONParse } from '../../utils/index.utils';
