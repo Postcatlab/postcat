@@ -43,29 +43,29 @@ export class ApiTestUtilService {
     ];
     return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);
   }
-  getTestDataFromHistory(inData: ApiTestHistory) {
-    //handle query and url
-    // const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
-    //   base: 'url',
-    //   replaceType: 'merge'
-    // });
-    // const result = {
-    //   testData: {
-    //     uuid: inData.apiUuid,
-    //     restParams: [],
-    //     uri: tmpResult.url,
-    //     queryParams: tmpResult.query,
-    //     requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.apiAttrInfo.requestBodyType as unknown as ApiBodyType)
-    //       ? inData.request.requestBody
-    //       : inData.request?.requestBody?.map(val => (val.required = true)),
-    //     requestHeaders: inData.response?.headers,
-    //     ...inData.request
-    //   },
-    //   response: eoDeepCopy(inData)
-    // };
-    // (result.testData.requestHeaders || []).map(val => (val.required = true));
-    return inData;
-  }
+  // getTestDataFromHistory(inData: ApiTestHistory) {
+  //   //handle query and url
+  //   // const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
+  //   //   base: 'url',
+  //   //   replaceType: 'merge'
+  //   // });
+  //   // const result = {
+  //   //   testData: {
+  //   //     uuid: inData.apiUuid,
+  //   //     restParams: [],
+  //   //     uri: tmpResult.url,
+  //   //     queryParams: tmpResult.query,
+  //   //     requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.apiAttrInfo.requestBodyType as unknown as ApiBodyType)
+  //   //       ? inData.request.requestBody
+  //   //       : inData.request?.requestBody?.map(val => (val.required = true)),
+  //   //     requestHeaders: inData.response?.headers,
+  //   //     ...inData.request
+  //   //   },
+  //   //   response: eoDeepCopy(inData)
+  //   // };
+  //   // (result.testData.requestHeaders || []).map(val => (val.required = true));
+  //   return inData;
+  // }
   /**
    * Handle api data for judge page has edit
    * Unlike the saved data, the api data being edited is not as strict
@@ -125,35 +125,36 @@ export class ApiTestUtilService {
     return result;
   }
 
-  getTestDataFromApi(inData: ApiData): ApiData {
-    inData = this.apiEditUtil.formatStorageApiDataToUI(inData);
+  getTestDataFromApi(inData: Partial<ApiData>): Partial<ApiData> {
+    const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
+
     //handle query and url
-    const tmpResult = transferUrlAndQuery(inData.uri, inData.requestParams.queryParams, {
+    const tmpResult = transferUrlAndQuery(result.uri, result.requestParams.queryParams, {
       base: 'url',
       replaceType: 'merge'
     });
-    inData.uri = tmpResult.url;
-    inData.requestParams.queryParams = tmpResult.query;
+    result.uri = tmpResult.url;
+    result.requestParams.queryParams = tmpResult.query;
 
     //parse body
-    const requestBodyType = inData.apiAttrInfo.contentType;
+    const requestBodyType = result.apiAttrInfo.contentType;
     let binaryRawData = '';
     switch (requestBodyType) {
       case ApiBodyType.JSONArray:
       case ApiBodyType.JSON: {
         binaryRawData = JSON.stringify(
-          table2json(inData.requestParams.bodyParams, {
+          table2json(result.requestParams.bodyParams, {
             rootType: requestBodyType === ApiBodyType.JSON ? JsonRootType.Object : JsonRootType.Array
           })
         );
         break;
       }
       case ApiBodyType.XML: {
-        binaryRawData = json2xml(table2json(inData.requestParams.bodyParams));
+        binaryRawData = json2xml(table2json(result.requestParams.bodyParams));
         break;
       }
       case ApiBodyType['FormData']: {
-        inData.requestParams.bodyParams.forEach(val => {
+        result.requestParams.bodyParams.forEach(val => {
           val.dataType = val.dataType === ApiParamsType.file ? ApiParamsType.file : ApiParamsType.string;
         });
         break;
@@ -164,20 +165,22 @@ export class ApiTestUtilService {
       }
     }
     if (requestBodyType !== ApiBodyType.FormData) {
-      inData.requestParams.bodyParams = [
+      result.requestParams.bodyParams = [
         {
           binaryRawData: binaryRawData
         }
       ];
     }
+    //Reset content-type
     if ([ApiBodyType.JSON, ApiBodyType.JSONArray, ApiBodyType.XML].includes(requestBodyType)) {
       //Add/Replace Content-type
       const contentType: ContentType = requestBodyType === ApiBodyType.XML ? 'application/xml' : 'application/json';
-      inData.requestParams.headerParams = this.addOrReplaceContentType(contentType, inData.requestParams.headerParams);
+      result.requestParams.headerParams = this.addOrReplaceContentType(contentType, result.requestParams.headerParams);
       //Xml、Json change content-type to raw in test page
-      inData.apiAttrInfo.contentType = ApiBodyType.Raw;
+      result.apiAttrInfo.contentType = ApiBodyType.Raw;
     }
-    return inData;
+
+    return result;
   }
   getContentType(headers = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');

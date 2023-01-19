@@ -7,6 +7,7 @@ import {
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BodyParam, RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
@@ -183,9 +184,7 @@ export const DEFAULT_UNIT_TEST_RESULT: ApiTestResData = {
 export const getGlobals = (): object => {
   let result = null;
   const global = localStorage.getItem(globalStorageKey);
-  try {
-    result = JSON.parse(global);
-  } catch (e) {}
+  result = JSONParse(global);
   return result || {};
 };
 export const setGlobals = globals => {

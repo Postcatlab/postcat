@@ -54,12 +54,12 @@ const contentTypeMap = {
 } as const;
 
 interface testViewModel {
-  request: ApiData;
   testStartTime?: number;
   contentType: ContentType;
   autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
+  request: Partial<ApiData>;
   testResult: ApiTestResData;
 }
 @Component({
@@ -151,17 +151,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Restore data from history
-   */
-  restoreResponseFromHistory(response) {
-    // this.model.request.script.beforeScript = response?.beforeScript || '';
-    // this.model.request.script.afterScript = response?.afterScript || '';
-    // this.model.responseTabIndex = 0;
-    // this.model.testResult = response;
-    // this.model.testResult.request ??= {};
-    // this.model.testResult.response ??= {};
-  }
   async init() {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
@@ -173,10 +162,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       let requestInfo = null;
       if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
-        const historyData: ApiTestHistory = await this.apiTest.getHistory(uuid);
-        // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
-        requestInfo = historyData.request;
-        // this.restoreResponseFromHistory(history.response);
+        const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
+        this.model.request = history.request;
+        this.model.testResult = history.response;
       } else {
         if (!uuid) {
           requestInfo = this.resetModel().request;
@@ -397,7 +385,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     //Add test history
     this.apiTest.addHistory({
-      apiUuid: this.model.request.apiUuid,
+      apiUuid: this.model.request.apiUuid || '-1',
       request: this.model.request,
       response: message.response
     });

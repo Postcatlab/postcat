@@ -314,6 +314,7 @@ export const decodeUnicode = (str: string) => {
 };
 
 export const JSONParse = (text, defaultVal = {}, reviver?) => {
+  if (typeof text === 'object') return text;
   try {
     return JSON.parse(text, reviver);
   } catch (ex) {

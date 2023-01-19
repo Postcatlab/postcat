@@ -125,7 +125,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   initChildBarShowStatus() {
-    this.showChildBar = this.route.snapshot.queryParams.uuid && !this.router.url.includes('home/workspace/project/api/env/edit');
+    const isTestHistoryPage = this.route.snapshot.queryParams.uuid.includes('history_');
+    const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
+    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage;
   }
   onGroupTabSelectChange($event) {
     StorageUtil.set('eo_group_tab_select', this.tabsIndex);

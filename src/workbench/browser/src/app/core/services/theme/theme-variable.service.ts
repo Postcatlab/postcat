@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as Color from 'color';
 import { capitalize, has, isNull } from 'lodash-es';
 
-import { eoDeepCopy } from '../../../utils/index.utils';
+import { eoDeepCopy, JSONParse } from '../../../utils/index.utils';
 import _allThemeColors from './theme-colors.json';
 import { DEFAULT_THEME_COLORS, SystemThemeItems } from './theme.constant';
 import { ThemeColorRule, ThemeColors, ThemeColorSingleRule } from './theme.model';
@@ -583,6 +583,6 @@ export class ThemeVariableService {
       }
       return result;
     });
-    return JSON.parse(rule);
+    return JSONParse(rule);
   }
 }

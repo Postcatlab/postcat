@@ -9,6 +9,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, toJS } from 'mobx';
 
+import { JSONParse } from '../../utils/index.utils';
 import { db } from '../services/storage/db';
 
 @Injectable({
@@ -302,6 +303,8 @@ export class EffectService {
     if (err) {
       return;
     }
+    res.request = JSONParse(res.request);
+    res.response = JSONParse(res.response);
     return res;
   }
 
