@@ -27,6 +27,7 @@ export class EffectService {
   ) {
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
+    if (this.store.isShare) return;
     this.init();
   }
   async init() {
