@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
@@ -107,10 +108,9 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue?.apiUuid) {
       this.mockList = await this.apiMock.getMocks(this.apiData.apiUuid);
-      console.log(this.mockList);
       this.mockList.forEach(item => {
         if (item.createWay === 'system') {
-          item.response = this.apiMock.getMockResponseByAPI(item.response);
+          item.response = this.apiMock.getMockResponseByAPI(this.apiData);
         }
       });
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
@@ -135,8 +135,12 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     } else {
       item.apiUuid = this.apiData.apiUuid;
       item.createWay = 'custom';
-      const result = await this.apiMock.createMock(item);
-      Object.assign(item, result.data);
+      const [data, err] = await this.apiMock.createMock(item);
+      if (err) {
+        this.message.error($localize`Failed to add`);
+        return;
+      }
+      Object.assign(item, data);
       this.message.success($localize`Added successfully`);
       this.mockList.push(item);
     }
