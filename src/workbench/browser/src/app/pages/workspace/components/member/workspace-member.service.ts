@@ -45,9 +45,9 @@ export class WorkspaceMemberService {
     return data.map(({ roles, id, ...items }) => ({
       id,
       roles,
-      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my workspace
-      isOwner: roles.find(it => it.name === 'Workspace Owner'),
-      isEditor: roles.find(it => it.name === 'Workspace Editor'),
+      isSelf: roles.some(item => item.createUserId === id), // * Is my workspace
+      isOwner: roles.some(it => it.name === 'Workspace Owner'),
+      isEditor: roles.some(it => it.name === 'Workspace Editor'),
       ...items
     }));
   }
@@ -57,8 +57,11 @@ export class WorkspaceMemberService {
     });
   }
   async quitMember(members) {
+    if (this.store.isLocal) {
+      return;
+    }
     let memberList = members.filter(val => val.role.id === 1);
-    if (memberList.length === 1 && memberList[0].myself) {
+    if (memberList.length === 1 && memberList.at(0).myself) {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );

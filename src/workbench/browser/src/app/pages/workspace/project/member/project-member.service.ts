@@ -9,7 +9,6 @@ export class ProjectMemberService {
   role: any[] = [];
   constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
     autorun(async () => {
-      console.log('this.store.getProjectRole', this.store.getProjectRole);
       this.role = this.store.getProjectRole;
     });
   }
@@ -39,9 +38,9 @@ export class ProjectMemberService {
     return data.map(({ roles, id, ...items }) => ({
       id,
       roles,
-      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my project
-      isOwner: roles.find(it => it.name === 'Project Owner'),
-      isEditor: roles.find(it => it.name === 'Project Editor'),
+      isSelf: roles.some(item => item.createUserId === id), // * Is my project
+      isOwner: roles.some(it => it.name === 'Project Owner'),
+      isEditor: roles.some(it => it.name === 'Project Editor'),
       ...items
     }));
   }
@@ -52,7 +51,7 @@ export class ProjectMemberService {
   }
   async quitMember(members) {
     const [data, err]: any = await this.api.api_projectMemberQuit({
-      userId: ''
+      userId: members.id
     });
     if (!err) {
       const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
