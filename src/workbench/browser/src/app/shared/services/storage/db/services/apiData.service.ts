@@ -7,24 +7,36 @@ import {
   ApiDataPageDto,
   ApiDataUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import type { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 
 export class ApiDataService extends BaseService<ApiData> {
   baseService = new BaseService(dataSource.apiData);
+  mockService = new BaseService(dataSource.mock);
 
   constructor() {
     super(dataSource.apiData);
   }
 
-  bulkCreate(params: ApiDataBulkCreateDto) {
+  async bulkCreate(params: ApiDataBulkCreateDto) {
     const { apiList, workSpaceUuid, projectUuid } = params;
     const items = apiList.map(item => ({
       ...item,
       workSpaceUuid,
       projectUuid
     }));
-    return this.baseService.bulkCreate(items);
+    const result = await this.baseService.bulkCreate(items);
+    const systemMocks = result.data?.map(n => ({
+      name: '默认 Mock',
+      description: '',
+      apiUuid: n.apiUuid,
+      createWay: 'system',
+      response: '',
+      projectUuid: n.projectUuid,
+      workSpaceUuid: n.workSpaceUuid
+    }));
+    await this.mockService.bulkCreate(systemMocks);
+    return result;
   }
 
   bulkReadDetail(params: ApiDataBulkReadDetailDto) {
