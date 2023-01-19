@@ -86,6 +86,7 @@ export const migrationToV4 = async (trans: Transaction) => {
 
   await modify('apiData', async (item, ref) => {
     item.groupId = item.groupID;
+    item.orderNum = item.weight;
     item.projectUuid ??= String(item.projectID);
     ref.value = {
       ...item,
