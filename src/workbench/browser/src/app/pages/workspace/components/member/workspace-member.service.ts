@@ -60,14 +60,13 @@ export class WorkspaceMemberService {
     if (this.store.isLocal) {
       return;
     }
-    let memberList = members.filter(val => val.role.id === 1);
-    if (memberList.length === 1 && memberList.at(0).myself) {
+    if (members.isSelf) {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.api.api_workspaceMemberQuit(members);
+    const [data, err]: any = await this.api.api_workspaceMemberQuit({});
     if (err) {
       return;
     }
