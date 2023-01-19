@@ -1149,7 +1149,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/api/user`, {
+        .get(`${prefix}/api/user`, {
           params: { username }
         })
         .subscribe({

@@ -60,7 +60,7 @@ const http = {
         { 'login @post': '/api/user/login', json: 'username, password' },
         { 'refreshToken @post': '/usercenter/common/sso/refresh' }, // 刷新token
         { 'logout @post': '/usercenter/common/sso/logout' }, // 退出登录
-        { 'search @post': '/api/user', query: 'username' } // 搜索用户
+        { 'search @get': '/api/user', query: 'username' } // 搜索用户
       ]
     },
     {
