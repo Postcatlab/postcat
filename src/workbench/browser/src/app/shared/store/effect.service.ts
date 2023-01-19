@@ -215,13 +215,13 @@ export class EffectService {
     }
     const projects = this.store.getProjectList;
     projects.some(val => {
-      if (val.uuid === project.uuid) {
+      if (val.projectUuid === project.projectUuid) {
         Object.assign(val, project);
         return true;
       }
     });
     this.store.setProjectList(projects);
-    this.store.setCurrentProjectID(project.uuid);
+    this.store.setCurrentProjectID(project.projectUuid);
   }
 
   async updateShareLink(): Promise<string> {

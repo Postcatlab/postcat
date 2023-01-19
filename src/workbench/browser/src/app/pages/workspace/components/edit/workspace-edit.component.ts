@@ -108,7 +108,6 @@ export class WorkspaceSettingComponent {
       return;
     }
     this.isSaveBtnLoading = true;
-    const id = this.store.getCurrentWorkspaceUuid;
     const { title } = this.validateForm.value;
     const [data, err]: any = await this.api.api_workspaceUpdate({
       title
@@ -118,7 +117,11 @@ export class WorkspaceSettingComponent {
       return;
     }
     this.message.success($localize`Edit workspace successfully !`);
-    this.effect.updateWorkspaceList();
+
+    //Rest Current Workspace
+    await this.effect.updateWorkspaceList();
+    this.store.setCurrentWorkspace(this.store.getCurrentWorkspace);
+
     this.isSaveBtnLoading = false;
   }
 }

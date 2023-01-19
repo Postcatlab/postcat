@@ -146,7 +146,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
-          uuid: result.apiUuid
+          uuid: result?.apiUuid
         }
       });
     }

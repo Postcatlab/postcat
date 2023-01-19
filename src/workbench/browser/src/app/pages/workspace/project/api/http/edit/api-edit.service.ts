@@ -61,7 +61,7 @@ export class ApiEditService {
     return this.apiEditUtil.formatStorageApiDataToUI(result);
   }
   async editApi(apiData): Promise<[ApiData, any]> {
-    const busEvent = apiData.uuid ? 'editApi' : 'addApi';
+    const busEvent = apiData.apiUuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
       return await this.projectApi.edit(apiData);
     } else {

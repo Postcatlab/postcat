@@ -285,7 +285,6 @@ export class StoreService {
   }
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
-    console.log('setWorkspaceList');
     this.workspaceList = [...data];
     if (this.localWorkspace) {
       this.workspaceList.unshift(this.localWorkspace);
@@ -299,8 +298,9 @@ export class StoreService {
     }
   }
   @action setCurrentWorkspace(workspace) {
+    workspace = this.workspaceList?.find(val => val?.workSpaceUuid === workspace?.workSpaceUuid);
     if (!workspace) {
-      console.error("workspace can't not be null");
+      pcConsole.error("setCurrentWorkspace: workspace can't not be null");
       return;
     }
     this.currentWorkspace = workspace;
