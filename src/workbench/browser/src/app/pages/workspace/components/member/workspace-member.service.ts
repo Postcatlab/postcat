@@ -42,14 +42,16 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
-    return data.map(({ roles, id, ...items }) => ({
-      id,
-      roles,
-      isSelf: roles.some(item => item.createUserId === id), // * Is my workspace
-      isOwner: roles.some(it => it.name === 'Workspace Owner'),
-      isEditor: roles.some(it => it.name === 'Workspace Editor'),
-      ...items
-    }));
+    return data
+      .map(({ roles, id, ...items }) => ({
+        id,
+        roles,
+        isSelf: roles.some(item => item.createUserId === id), // * Is my workspace
+        isOwner: roles.some(it => it.name === 'Workspace Owner'),
+        isEditor: roles.some(it => it.name === 'Workspace Editor'),
+        ...items
+      }))
+      .sort((a, b) => b.roles.length - a.roles.length);
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
