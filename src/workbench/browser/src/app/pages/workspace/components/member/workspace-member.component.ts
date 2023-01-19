@@ -83,7 +83,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
       return;
     }
-    const [data, err]: any = await this.member.addMember([items.id]);
+    const [data, err]: any = await this.member.addMember(items.id);
     if (err) {
       this.message.error($localize`Add member failed`);
       return;
