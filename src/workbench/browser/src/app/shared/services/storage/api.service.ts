@@ -62,7 +62,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_mockDelete<T>(params) : this.remote.api_mockDelete<T>(params);
   }
 
-  api_groupCreate<T = any>(params: { type: any; name: any; parentId: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+  api_groupCreate<T = any>(params: any) {
     return this.store.isLocal ? this.local.api_groupCreate<T>(params) : this.remote.api_groupCreate<T>(params);
   }
 
