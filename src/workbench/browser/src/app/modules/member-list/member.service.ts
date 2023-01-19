@@ -4,6 +4,7 @@ export type UserMeta = {
   roleTitle: string;
   myself: boolean;
   id: number;
+  roles: any;
   role: {
     name: string;
     id: number;
@@ -14,7 +15,7 @@ export type UserMeta = {
 };
 @Injectable()
 export class MemberService {
-  role: 'Owner' | 'Editor' | string;
+  role: any[];
   constructor() {
     console.log('MemberService');
   }

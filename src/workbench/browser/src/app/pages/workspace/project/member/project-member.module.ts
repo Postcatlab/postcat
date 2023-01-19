@@ -27,11 +27,10 @@ import { ProjectMemberService } from './project-member.service';
   exports: [],
   providers: [
     NzModalService,
-    ProjectMemberService
-    // {
-    //   provide: MemberService,
-    //   useClass: ProjectMemberService
-    // }
+    {
+      provide: MemberService,
+      useClass: ProjectMemberService
+    }
   ]
 })
 export class ProjectMemberModule {}
