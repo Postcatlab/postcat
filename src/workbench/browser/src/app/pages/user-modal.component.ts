@@ -183,7 +183,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public dataSource: DataSourceService,
     public modal: ModalService,
     public fb: UntypedFormBuilder,
-    private projectApi: ProjectApiService,
     private router: Router,
     private web: WebService,
     private remote: RemoteService,
@@ -602,15 +601,26 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   });
                 };
 
+                // 遍历本地项目
                 const arr = localProjects.map(async (localProject, index) => {
-                  const { apiList, groupList = [] } = await this.effect.exportLocalProjectData(localProject.uuid);
-                  this.projectApi.add(apiList);
+                  // 导出本地数据
+                  const { apiList, groupList = [], environmentList } = await this.effect.exportLocalProjectData(localProject.uuid);
 
                   console.log('remoteProjects', remoteProjects);
+                  console.log('environmentList', environmentList);
 
                   const remoteProject = remoteProjects[index];
 
                   console.log('remoteProject', remoteProject);
+
+                  environmentList.forEach(n => {
+                    const { id, ...rest } = n;
+                    this.remote.api_environmentCreate({
+                      ...rest,
+                      workSpaceUuid,
+                      projectUuid: remoteProject.projectUuid
+                    });
+                  });
 
                   // 远程分组
                   // @ts-ignore
