@@ -39,12 +39,12 @@ export class ProjectMemberService {
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        isCreator: roles.some(item => item.createUserId === id), // * Is my project
-        isOwner: roles.some(it => it.name === 'Project Owner'),
-        isEditor: roles.some(it => it.name === 'Project Editor'),
+        isSelf: this.store.getUserProfile?.id === id, // * Is my project
+        isOwner: roles.find(it => it.name === 'Project Owner'),
+        isEditor: roles.find(it => it.name === 'Project Editor'),
         ...items
       }))
-      .sort((a, b) => b.roles.length - a.roles.length);
+      .sort((a, b) => (a.isSelf ? 1 : -1));
   }
   async removeMember(item) {
     return await this.api.api_projectDelMember({
