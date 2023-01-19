@@ -101,7 +101,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiTestHistoryDetail<T>(params) : this.remote.api_apiTestHistoryDetail<T>(params);
   }
 
-  api_apiTestHistoryDelete<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiTestHistoryDelete<T = any>(params: { ids: any; projectUuid?: any; workSpaceUuid?: any }) {
     return this.store.isLocal ? this.local.api_apiTestHistoryDelete<T>(params) : this.remote.api_apiTestHistoryDelete<T>(params);
   }
 

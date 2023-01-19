@@ -37,7 +37,7 @@ const http = {
         { 'create @post @create': '/api/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
         { 'list @get @page': '/api/api/history/list', query: 'projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/api/api/history', query: 'id, projectUuid, workSpaceUuid' },
-        { 'delete @delete @bulkDelete': '/api/api/history', query: 'projectUuid, workSpaceUuid' }
+        { 'delete @post @bulkDelete': '/api/api/history/batch-delete', json: 'ids, projectUuid, workSpaceUuid' }
       ]
     },
     {

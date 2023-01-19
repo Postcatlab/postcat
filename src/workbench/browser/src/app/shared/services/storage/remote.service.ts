@@ -797,9 +797,13 @@ export class RemoteService {
   }
 
   api_apiTestHistoryDelete<T = any>(
-    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { ids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
     prefix = ''
   ) {
+    if (ids == null) {
+      console.log('%c Error: apiTestHistory - delete 接口 缺失参数 ids %c', ErrorStyle, '');
+      return;
+    }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -811,8 +815,10 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/api/api/history`, {
-          params: { projectUuid, workSpaceUuid }
+        .post(`${prefix}/api/api/history/batch-delete`, {
+          ids,
+          projectUuid,
+          workSpaceUuid
         })
         .subscribe({
           next: ({ code, data }: any) => {
