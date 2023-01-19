@@ -21,7 +21,7 @@ export class MemberService {
   }
   async addMember(items) {}
   searchUser: (search: string) => UserMeta[];
-  changeRole: (item) => void;
+  changeRole: (item) => boolean;
   removeMember: (item) => void;
   queryMember: (item) => UserMeta[];
   quitMember: (members: UserMeta[]) => void;

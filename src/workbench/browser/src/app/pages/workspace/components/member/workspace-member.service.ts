@@ -42,8 +42,10 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
-    return data.map(({ roles, ...items }) => ({
+    return data.map(({ roles, id, ...items }) => ({
+      id,
       roles,
+      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my workspace
       isOwner: roles.find(it => it.name === 'Workspace Owner'),
       isEditor: roles.find(it => it.name === 'Workspace Editor'),
       ...items
@@ -73,17 +75,11 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async changeRole(item) {
-    const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.api.api_workspaceSetRole({
-      userRole: [{ userId: item.id, roleIds: [roleID] }]
+    const [, err]: any = await this.api.api_workspaceSetRole({
+      userRole: [item]
     });
-    if (err) {
-      return;
-    }
-    item.role.id = roleID;
-    item.role.name = item.role.name === 'Workspace Owner' ? 'Workspace Editor' : 'Workspace Owner';
-    item.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === roleID).title;
-    return [data, err];
+    // * return isOK
+    return !err;
   }
   async searchUser(search) {
     const [data, err] = await this.api.api_workspaceSearchMember(search);

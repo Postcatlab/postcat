@@ -64,26 +64,17 @@ export class MemberListComponent implements OnInit {
   }
   async queryList(username = '') {
     this.loading = true;
-    const data = await this.member.queryMember(username);
-    this.list = data.map(({ roles, id, ...it }) => ({
-      ...it,
-      id,
-      roles,
-      isSelf: !!roles.filter(item => item.createUserId === id).length, // * 是否自己创建的项目
-      isOwner: !!roles.filter(item => item.name === 'Project Owner').length, // * 是否是管理员
-      isEditor: !!roles.filter(item => item.name === 'Project Editor'), // * 是否
-      rolesList: roles.map(item => item.name)
-    }));
+    this.list = await this.member.queryMember(username);
     this.loading = false;
   }
   async changeRole(item) {
-    const [data, err]: any = await this.member.changeRole(item);
-    if (err) {
-      this.message.error($localize`Change role Failed`);
+    const isOK: boolean = await this.member.changeRole(item);
+    if (isOK) {
+      this.message.success($localize`Change role successfully`);
+      this.queryList();
       return;
     }
-    this.message.success($localize`Change role successfully`);
-    this.queryList();
+    this.message.error($localize`Change role Failed`);
   }
   async removeMember(item) {
     const [data, err]: any = await this.member.removeMember(item);

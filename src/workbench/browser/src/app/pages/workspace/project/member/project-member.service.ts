@@ -36,8 +36,10 @@ export class ProjectMemberService {
     if (err) {
       return;
     }
-    return data.map(({ roles, ...items }) => ({
+    return data.map(({ roles, id, ...items }) => ({
+      id,
       roles,
+      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my project
       isOwner: roles.find(it => it.name === 'Project Owner'),
       isEditor: roles.find(it => it.name === 'Project Editor'),
       ...items
@@ -59,17 +61,11 @@ export class ProjectMemberService {
     return [data, err];
   }
   async changeRole(item) {
-    const roleID = item.role.id === 3 ? 4 : 3;
-    const [data, err]: any = await this.api.api_projectSetRole({
-      userRole: roleID
+    const [, err]: any = await this.api.api_projectSetRole({
+      userRole: [item]
     });
-    if (err) {
-      return;
-    }
-    item.role.id = roleID;
-    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
-    item.roleTitle = this.store.getProjectRoleList.find(val => val.id === roleID).title;
-    return [data, err];
+    // * return isOK
+    return !err;
   }
   async searchUser(search) {
     const [data, err] = await this.api.api_workspaceSearchMember({
