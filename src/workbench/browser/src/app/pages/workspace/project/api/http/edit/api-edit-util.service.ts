@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
-import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 @Injectable({ providedIn: 'root' })
@@ -17,7 +17,10 @@ export class ApiEditUtilService {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
-        filterFn: filterArrFun
+        filterFn: item => {
+          item.paramType = 0;
+          return filterArrFun(item);
+        }
       });
     });
 
@@ -30,7 +33,10 @@ export class ApiEditUtilService {
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
-        filterFn: filterArrFun
+        filterFn: item => {
+          item.paramType = 1;
+          return filterArrFun(item);
+        }
       });
     });
     return result;
