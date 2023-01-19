@@ -61,8 +61,9 @@ const transformContentType = (requestBodyType: OldApiData['responseBodyType'], r
 };
 
 const transformParams = (params: BasiApiEditParams[] = []): BodyParam[] => {
-  return params?.map(n => ({
+  return params?.map((n, i) => ({
     name: n.name,
+    orderNo: i,
     description: n.description,
     isRequired: Number(n.required),
     paramAttr: {
@@ -74,14 +75,16 @@ const transformParams = (params: BasiApiEditParams[] = []): BodyParam[] => {
 
 const transformRequestBody = (requestBody: OldApiData['requestBody'] = []): BodyParam[] => {
   if (typeof requestBody === 'string') {
-    return [
-      {
-        name: '',
-        isRequired: 1,
-        binaryRawData: requestBody,
-        paramAttr: {}
-      }
-    ];
+    return requestBody
+      ? [
+          {
+            name: '',
+            isRequired: 1,
+            binaryRawData: requestBody,
+            paramAttr: {}
+          }
+        ]
+      : [];
   } else {
     const bodyParams = transformParams(requestBody);
     bodyParams?.forEach((item, index) => {
