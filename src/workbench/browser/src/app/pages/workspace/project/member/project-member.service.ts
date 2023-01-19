@@ -44,7 +44,7 @@ export class ProjectMemberService {
         isEditor: roles.find(it => it.name === 'Project Editor'),
         ...items
       }))
-      .sort((a, b) => (a.isSelf ? 1 : -1));
+      .sort((a, b) => (a.isSelf ? -1 : 1));
   }
   async removeMember(item) {
     return await this.api.api_projectDelMember({

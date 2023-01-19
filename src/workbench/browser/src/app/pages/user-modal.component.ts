@@ -420,6 +420,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.store.setLoginInfo(data);
+      this.effect.updateWorkspaceList();
       // * 关闭弹窗
       this.isLoginModalVisible = false;
       {
