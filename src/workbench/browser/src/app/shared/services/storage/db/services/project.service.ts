@@ -1,5 +1,6 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
 import { ApiResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
+import { QueryAllDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/common.dto';
 import {
   ProjectBulkCreateDto,
   ProjectPageDto,
@@ -9,6 +10,7 @@ import {
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
+import { ApiTestHistoryService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiTestHistory.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 import { GroupService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/group.service';
 
@@ -16,6 +18,7 @@ export class ProjectService extends BaseService<Project> {
   baseService = new BaseService(dataSource.project);
   apiDataService = new ApiDataService();
   groupService = new GroupService();
+  apiTestHistoryService = new ApiTestHistoryService();
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
@@ -91,7 +94,17 @@ export class ProjectService extends BaseService<Project> {
 
   /** 导出整个项目 */
   @ApiResponse()
-  async exports(projectUuid: string) {
-    return {};
+  async exports(params: QueryAllDto) {
+    const projectInfo = await this.baseService.read({ uuid: params.projectUuid });
+    const { data: environmentList } = await this.apiTestHistoryService.bulkRead(params);
+    const { data: apiList } = await this.apiDataService.bulkRead(params);
+    const { data: groupList } = await this.groupService.bulkRead(params);
+
+    return {
+      ...projectInfo,
+      environmentList,
+      apiList,
+      groupList
+    };
   }
 }

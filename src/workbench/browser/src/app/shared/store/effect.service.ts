@@ -362,4 +362,14 @@ export class EffectService {
     this.getGroupList();
   }
   updateHistory() {}
+
+  projectImport() {}
+
+  async projectExport() {
+    const data = await db.project.exports({
+      projectUuid: this.store.getCurrentProjectID,
+      workSpaceUuid: this.store.getCurrentWorkspaceUuid
+    });
+    console.log('data', data);
+  }
 }
