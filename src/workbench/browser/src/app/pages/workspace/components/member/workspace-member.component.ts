@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { WorkspaceMemberService } from 'eo/workbench/browser/src/app/pages/workspace/components/member/workspace-member.service';
 import { makeObservable, observable, reaction } from 'mobx';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
-import { MemberService } from '../../../../modules/member-list/member.service';
 import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal">
-      <nz-list-header *ngIf="member.role === 'Owner'">
+      <nz-list-header *ngIf="member.isOwner">
         <eo-ng-select
           class="w-full"
           nzAllowClear
@@ -48,7 +48,7 @@ export class WorkspaceMemberComponent implements OnInit {
   @observable searchValue = '';
   userCache;
   userList = [];
-  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
+  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: WorkspaceMemberService) {}
 
   ngOnInit(): void {
     makeObservable(this);

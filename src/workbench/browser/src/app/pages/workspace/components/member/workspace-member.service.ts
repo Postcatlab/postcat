@@ -9,6 +9,7 @@ import { autorun } from 'mobx';
 export class WorkspaceMemberService {
   workSpaceUuid: string;
   role: any[];
+  isOwner = false;
   constructor(
     private api: ApiService,
     private store: StoreService,
@@ -19,6 +20,7 @@ export class WorkspaceMemberService {
       console.log('getProjectRoleList', this.store.getWorkspaceRole);
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+      this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
     });
   }
   async addMember(ids) {
@@ -26,7 +28,7 @@ export class WorkspaceMemberService {
       userIds: ids
     });
   }
-  async queryMember() {
+  async queryMember(search) {
     let result = [];
     if (this.store.isLocal) {
       result = [
@@ -38,7 +40,7 @@ export class WorkspaceMemberService {
         }
       ];
     } else {
-      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: '', page: 0, pageSize: 1 });
+      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 0, pageSize: 1 });
       result = data || [];
     }
     result.forEach(member => {

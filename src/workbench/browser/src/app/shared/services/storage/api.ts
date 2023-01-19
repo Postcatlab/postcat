@@ -16,7 +16,7 @@ const http = {
       data: [
         { 'create @post @create': '/api/mock', json: 'name, apiUuid, createWay, response, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/api/mock', json: 'id, projectUuid, workSpaceUuid, ...' },
-        { 'list @get @bulkRead': '/api/mock/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'list @get @page': '/api/mock/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
         { 'detail @get @read': '/api/mock', query: 'id, projectUuid, workSpaceUuid' },
         { 'delete @delete @delete': '/api/mock', query: 'id, projectUuid, workSpaceUuid' }
       ]
@@ -28,7 +28,7 @@ const http = {
         { 'update @put @update': '/api/group', json: 'id, projectUuid, workSpaceUuid, ...' },
         { 'delete @delete @delete': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/group/list', query: 'projectUuid, workSpaceUuid' }
+        { 'list @get @page': '/api/group/list', query: 'projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -83,7 +83,7 @@ const http = {
     {
       name: 'project',
       data: [
-        { 'exportProject @get': '/api/project/exports', query: 'projectUuid' },
+        { 'exportProject @get': '/api/projects/exports', query: 'projectUuid, workSpaceUuid' },
         { 'memberList @get': '/api/projects/users', query: 'username, projectUuid' },
         { 'addMember @post': '/api/projects/users', json: 'userIds, projectUuid' },
         { 'delMember @delete': '/api/projects/users', query: 'userIds, projectUuid' },
