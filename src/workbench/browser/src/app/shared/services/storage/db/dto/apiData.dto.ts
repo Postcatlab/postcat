@@ -15,6 +15,10 @@ export interface ApiDataPageDto {
   workSpaceUuid: string;
   groupIds?: number[];
   keyword?: string;
+  /** 排序正逆 ASC DESC(默认) */
+  sort?: string;
+  /** 排序字段 默认api_update_time */
+  order?: string;
   page?: number;
   pageSize?: number;
 }

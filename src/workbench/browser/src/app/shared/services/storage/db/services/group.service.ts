@@ -21,7 +21,8 @@ export class GroupService extends BaseService<Group> {
         .map(m => ({
           ...m,
           children: genGroupTree(groups, m.id)
-        }));
+        }))
+        .sort((a, b) => b.sort - a.sort);
     };
     const rootGroup = result.data?.find(n => n.depth === 0);
     rootGroup['children'] = genGroupTree(result.data, rootGroup?.id);
