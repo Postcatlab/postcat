@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { makeObservable, observable, reaction } from 'mobx';
@@ -21,10 +21,10 @@ import { StoreService } from '../../../../shared/store/state.service';
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"
         >
-          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
+          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userName" [nzValue]="option.userName">
             <div class="flex w-full justify-between option">
               <div class="flex flex-col justify-between">
-                <span class="font-bold">{{ option.username }}</span>
+                <span class="font-bold">{{ option.userName }}</span>
                 <span class="text-tips">{{ option.email }}</span>
               </div>
               <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
@@ -48,7 +48,12 @@ export class WorkspaceMemberComponent implements OnInit {
   @observable searchValue = '';
   userCache;
   userList = [];
-  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
+  constructor(
+    public store: StoreService,
+    private message: EoNgFeedbackMessageService,
+    public member: MemberService,
+    private cdk: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     makeObservable(this);
@@ -59,15 +64,13 @@ export class WorkspaceMemberComponent implements OnInit {
           return;
         }
         const result = await this.member.searchUser(value.trim());
-        // const memberList = this.memberListRef.list.map(it => it.username);
-        const [data, err] = await this.member.queryMember({ username: value.trim(), page: 1, pageSize: 100 });
-        if (err) {
-          return;
-        }
-        this.userList = result.filter(it => {
-          return !data.includes(it.username);
-          // return true;
-        });
+        const memberList = [];
+        // const memberList = this.memberListRef.list.map(it => it.userName);
+        setTimeout(() => {
+          this.userList = result.filter(it => {
+            return !memberList.includes(it.userName);
+          });
+        }, 0);
       },
       { delay: 300 }
     );

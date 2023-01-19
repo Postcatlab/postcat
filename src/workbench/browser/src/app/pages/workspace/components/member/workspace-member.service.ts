@@ -38,7 +38,7 @@ export class WorkspaceMemberService {
         }
       ];
     }
-    const [data, err]: any = await this.api.api_workspaceSearchMember(search);
+    const [data, err]: any = await this.api.api_workspaceSearchMember({ username: '', page: 1, pageSize: 100 });
     if (err) {
       return;
     }
