@@ -137,8 +137,7 @@ export class EffectService {
     this.store.setCurrentWorkspace(workspace);
 
     // * real set workspace
-    await this.router.navigate(['**']);
-
+    this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/overview']);
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
