@@ -1,6 +1,9 @@
-import type { Table } from 'dexie';
+import type { Collection, IndexableType, Table } from 'dexie';
 
 import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
+
+type PageCallback<T> = (collection: Collection<T, IndexableType>) => Collection | Promise<T[]>;
+
 export class BaseService<T> {
   constructor(readonly db: Table<T>) {}
 
@@ -71,10 +74,8 @@ export class BaseService<T> {
   }
 
   @ApiResponse()
-  async page(params) {
-    // sort: 排序正逆 ASC DESC(默认)
-    // order: 排序字段 默认 updateTime
-    let { page = 1, pageSize, sort = 'DESC', order = 'updateTime', ...restParams } = params;
+  async page(params, callback?: PageCallback<T>) {
+    let { page = 1, pageSize, ...restParams } = params;
     const filterRecords = this.filterData(restParams);
     const total = await filterRecords.count();
 
@@ -82,7 +83,7 @@ export class BaseService<T> {
 
     const collection = filterRecords.offset(Math.max(0, page - 1)).limit(pageSize);
 
-    const items = await (sort === 'DESC' ? collection.reverse() : collection).sortBy(order);
+    const items = await (callback ? callback(collection) : collection.toArray());
 
     const paginator = {
       page,

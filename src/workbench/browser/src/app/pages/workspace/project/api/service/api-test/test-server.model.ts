@@ -8,8 +8,13 @@ export interface TestServerRes {
   response: ApiTestResData;
   globals?: object;
 }
+export interface ApiTestResHeader {
+  name: string;
+  value: string;
+}
 export interface ApiTestResData {
   statusCode: number;
+  time: string;
   /**
    * Inject Code println
    */
@@ -17,8 +22,7 @@ export interface ApiTestResData {
   downloadRate: string;
   downloadSize: number;
   redirectTimes: number;
-  time: string;
-  contentType: string;
+  responseLength: number;
   timingSummary: Array<{
     dnsTiming: string;
     tcpTiming: string;
@@ -43,16 +47,18 @@ export interface ApiTestResData {
      */
     responseTiming: string;
   }>;
-  headers: object[];
-  body: string;
+
   responseType: 'text' | 'longText' | 'stream';
   blobFileName?: string;
-  responseLength: number;
-  testDeny: string;
+  //Response Content Type
+  contentType: string;
+  headers: ApiTestResHeader[];
+  body: string;
   request: {
-    body: '';
-    headers: [];
-    contentType: 'formdata' | 'raw';
+    uri: string;
+    body: string | object;
+    headers: ApiTestResHeader[];
+    contentType: 'formdata' | 'raw' | 'binary';
   };
 }
 

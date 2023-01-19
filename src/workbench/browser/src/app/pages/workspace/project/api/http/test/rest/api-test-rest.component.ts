@@ -11,7 +11,7 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./api-test-rest.component.scss']
 })
 export class ApiTestRestComponent implements OnInit, OnDestroy {
-  @Input() model: object[];
+  @Input() model: RestParam[];
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   listConf: ApiTableConf = {
     columns: [],

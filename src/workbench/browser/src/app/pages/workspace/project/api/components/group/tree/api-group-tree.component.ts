@@ -109,7 +109,7 @@ export class ApiGroupTreeComponent implements OnInit {
     return [...(this.expandKeys || []), ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
-    return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
+    return this.requestMethodMap[node.origin?.requestMethod];
   }
   renderRequestMethodText(node) {
     return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);
@@ -158,14 +158,13 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   deleteAPI(apiInfo) {
-    console.log(apiInfo);
     this.modalService.confirm({
       nzTitle: $localize`Deletion Confirmation?`,
       nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
         apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
       }</strong> ? You cannot restore it once deleted!`,
       nzOnOk: () => {
-        this.projectApi.delete(apiInfo.uuid);
+        this.projectApi.delete(apiInfo.apiUuid);
       }
     });
   }
@@ -262,8 +261,5 @@ export class ApiGroupTreeComponent implements OnInit {
         break;
       }
     }
-  }
-  onSearchFunc(data) {
-    return true;
   }
 }

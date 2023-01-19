@@ -109,7 +109,7 @@ export class ApiTestUtilService {
       responseBodyJsonType: 'object',
       responseBody: []
     };
-    delete result.uuid;
+    delete result.id;
     if (result.requestBodyType === ApiBodyType.Raw) {
       Object.assign(result, this.text2EditBody('requestBody', result.requestBody));
     }

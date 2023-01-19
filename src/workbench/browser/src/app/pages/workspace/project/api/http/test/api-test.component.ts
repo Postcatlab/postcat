@@ -22,7 +22,7 @@ import {
 import { ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
-import { TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiTestResData, TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
@@ -58,10 +58,7 @@ interface testViewModel {
   autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
-  testResult: {
-    request: any;
-    response: any;
-  };
+  testResult: ApiTestResData;
 }
 @Component({
   selector: 'eo-api-test',
@@ -76,7 +73,14 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @Input() initialModel: testViewModel;
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
-  @Output() readonly afterTested = new EventEmitter<any>();
+  @Output() readonly afterTested = new EventEmitter<{
+    id: string;
+    url: string;
+    model: {
+      testStartTime: number;
+      testResult: ApiTestResData;
+    };
+  }>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
   validateForm!: FormGroup;
@@ -149,12 +153,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
    * Restore data from history
    */
   restoreResponseFromHistory(response) {
-    this.model.request.script.beforeScript = response?.beforeScript || '';
-    this.model.request.script.afterScript = response?.afterScript || '';
-    this.model.responseTabIndex = 0;
-    this.model.testResult = response;
-    this.model.testResult.request ??= {};
-    this.model.testResult.response ??= {};
+    // this.model.request.script.beforeScript = response?.beforeScript || '';
+    // this.model.request.script.afterScript = response?.afterScript || '';
+    // this.model.responseTabIndex = 0;
+    // this.model.testResult = response;
+    // this.model.testResult.request ??= {};
+    // this.model.testResult.response ??= {};
   }
   async init() {
     this.initTimes++;
@@ -175,10 +179,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
           requestInfo = await this.projectApi.get(uuid);
         }
-        this.model.testResult = {
-          response: {},
-          request: {}
-        };
       }
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
@@ -209,7 +209,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
-    pcConsole.log('apitest', this.model);
     this.eoOnInit.emit(this.model);
     this.cdRef.detectChanges();
   }
@@ -363,28 +362,26 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message: TestServerRes) {
-    console.log('[api test componnet]receiveMessage', message);
-    // const tmpHistory = {
-    //   response: message.response || {}
-    // };
-    // let queryParams: { pageID: string; uuid?: string };
-    // try {
-    //   queryParams = JSON.parse(message.id);
-    // } catch (e) {}
-    // if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
-    //   //* Other tab test finish,support multiple tab test same time
-    //   this.afterTested.emit({
-    //     id: queryParams.pageID,
-    //     url: '/home/workspace/project/api/http/test',
-    //     model: {
-    //       testStartTime: 0,
-    //       testResult: tmpHistory
-    //     }
-    //   });
-    // } else {
-    //   this.model.testResult = message.response || {};
-    //   this.status$.next('tested');
-    // }
+    pcConsole.log('[api test componnet]receiveMessage', message);
+    let queryParams: { pageID: string; uuid?: string };
+    try {
+      queryParams = JSON.parse(message.id);
+    } catch (e) {}
+    if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
+      //* Other tab test finish,support multiple tab test same time
+      //* Update Test Result
+      this.afterTested.emit({
+        id: queryParams.pageID,
+        url: '/home/workspace/project/api/http/test',
+        model: {
+          testStartTime: 0,
+          testResult: message.response
+        }
+      });
+    } else {
+      this.model.testResult = message.response;
+      this.status$.next('tested');
+    }
     if (message.status === 'error') {
       return;
     }
@@ -487,10 +484,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           ]
         }
       },
-      testResult: {
-        response: {},
-        request: {}
-      }
+      testResult: {}
     } as testViewModel;
   }
   /**

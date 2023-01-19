@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { rest } from 'lodash-es';
 
 import { ApiService } from '../../../../shared/services/storage/api.service';
 import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
@@ -16,8 +14,7 @@ export class ProjectApiService {
     private message: EoNgFeedbackMessageService,
     private router: Router,
     private effect: EffectService,
-    private api: ApiService,
-    private storage: StorageService
+    private api: ApiService
   ) {}
   async get(uuid): Promise<ApiData> {
     const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid] });
@@ -25,9 +22,17 @@ export class ProjectApiService {
       this.message.error($localize`Can't find this Api`);
       return;
     }
-    // TODO
-    result[0].responseParams ??= result[0].responseParam;
-    return result[0];
+    const apiData = result[0];
+    apiData.apiAttrInfo ??= {};
+    apiData.responseList ??= [
+      {
+        responseParams: {
+          headerParams: [],
+          bodyParams: []
+        }
+      }
+    ];
+    return apiData;
   }
   async edit(apiData: ApiData) {
     return await this.api.api_apiDataUpdate({ api: apiData });
@@ -47,14 +52,14 @@ export class ProjectApiService {
       return;
     }
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
-      queryParams: { pageID: Date.now(), uuid: result[0].uuid }
+      queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
     });
     this.effect.getGroupList();
   }
-  async delete(uuid) {
+  async delete(apiUuid) {
     // * delete API
     const [result, err] = await this.api.api_apiDataDelete({
-      apiUuids: [uuid]
+      apiUuids: JSON.stringify([apiUuid])
     });
     if (err) return;
     this.effect.getGroupList();

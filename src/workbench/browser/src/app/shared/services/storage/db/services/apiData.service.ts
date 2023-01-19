@@ -45,11 +45,25 @@ export class ApiDataService extends BaseService<ApiData> {
   }
 
   page(params: ApiDataPageDto) {
-    const { groupIds, ...restParams } = params;
+    // sort: 排序正逆 ASC DESC(默认)
+    // order: 排序字段 默认 updateTime
+    const { groupIds, sort = 'DESC', order = 'updateTime', ...restParams } = params;
+
     if (groupIds?.length) {
       restParams['groupId'] = groupIds;
     }
-    return this.baseService.page(restParams);
+
+    return this.baseService.page(restParams, async collection => {
+      const items = await (sort === 'DESC' ? collection.reverse() : collection).sortBy(order);
+      // TODO 由于 dexie 3.0 尚未支持 orderBy 方法，so...
+      // https://dexie.org/docs/Table/Table.orderBy()
+      return items
+        .sort((a, b) => b.orderNum - a.orderNum)
+        .map(n => ({
+          ...n,
+          ...n?.apiAttrInfo
+        }));
+    });
   }
 
   async update(params: ApiDataUpdateDto) {

@@ -36,46 +36,6 @@ object {
   vertical-align: unset;
 }
 
-.eo-link {
-  color: var(--text-link-color);
-}
-
-.method-text-GET {
-  color: var(--info-color);
-}
-
-.method-text-POST {
-  color: var(--success-color);
-}
-
-.method-text-DELETE {
-  color: var(--danger-color);
-}
-
-.method-text-HEAD {
-  color: var(--warning-color);
-}
-
-.method-text-WS {
-  color: #507ea4;
-}
-
-.method-text-WSS {
-  color: #165e83;
-}
-
-.method-text-PATCH {
-  color: var(--warning-color);
-}
-
-.method-text-PUT {
-  color: #82ae46;
-}
-
-.method-text-OPTIONS {
-  color: #507ea4;
-}
-
 ::-webkit-scrollbar {
   width: 16px;
   height: 16px;
@@ -90,7 +50,7 @@ object {
 }
 
 ::-webkit-scrollbar-track {
-  // background-color: var( --scrollbar-track-background-color);
+  background-color: var(--scrollbar-track-background-color);
   border-color: transparent;
   border-style: solid;
   border-left-width: 0 0 0 1px;
@@ -98,55 +58,6 @@ object {
 
 .electron-can-be-click {
   -webkit-app-region: no-drag;
-}
-
-nz-resize-handle.container-draggable {
-  display: block;
-  flex: none;
-  top: 0;
-  z-index: 10;
-  background-color: var(--system-border-color);
-
-  &:hover {
-    background-color: var(--primary-color);
-  }
-
-  &.vertical {
-    cursor: col-resize;
-    width: 1px;
-
-    &:hover {
-      width: 3px;
-    }
-  }
-
-  &.nz-resizable-handle-left {
-    left: 0;
-  }
-
-  &.nz-resizable-handle-right {
-    right: 0;
-  }
-
-  &.horizontal {
-    width: 100%;
-    cursor: row-resize;
-    height: 1px;
-
-    &:hover {
-      height: 3px;
-    }
-  }
-}
-
-.table-border-all {
-  .eo-ng-table {
-    border: 1px solid var(--table-border-color);
-  }
-}
-
-.border-all {
-  border: 1px solid var(--system-border-color);
 }
 
 .top-save-bar {
@@ -213,5 +124,19 @@ nz-resize-handle.container-draggable {
     // prevent operate shrink
     position: relative;
     width: 0 !important;
+  }
+}
+
+.env-selector-dropdown {
+  width: 224px;
+}
+
+.background-popover {
+  .ant-popover-arrow-content::before {
+    display: none;
+  }
+
+  .ant-popover-inner-content {
+    padding: 0;
   }
 }

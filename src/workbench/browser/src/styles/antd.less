@@ -191,3 +191,42 @@ h6 {
 .ant-typography {
   color: var(--text-color);
 }
+
+nz-resize-handle.container-draggable {
+  display: block;
+  flex: none;
+  top: 0;
+  z-index: 10;
+  background-color: var(--system-border-color);
+
+  &:hover {
+    background-color: var(--primary-color);
+  }
+
+  &.vertical {
+    cursor: col-resize;
+    width: 1px;
+
+    &:hover {
+      width: 3px;
+    }
+  }
+
+  &.nz-resizable-handle-left {
+    left: 0;
+  }
+
+  &.nz-resizable-handle-right {
+    right: 0;
+  }
+
+  &.horizontal {
+    width: 100%;
+    cursor: row-resize;
+    height: 1px;
+
+    &:hover {
+      height: 3px;
+    }
+  }
+}
