@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import {
@@ -19,7 +19,7 @@ import { takeUntil, debounceTime, pairwise } from 'rxjs/operators';
   templateUrl: './api-edit-body.component.html',
   styleUrls: ['./api-edit-body.component.scss']
 })
-export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
+export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * Table ID
    */
@@ -92,11 +92,15 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  init() {
+    this.beforeChangeBodyByType(this.bodyType);
+    this.setModel();
+    this.initListConf();
+  }
   ngOnChanges(changes) {
-    const resetPage =
-      changes.model && ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0);
+    console.log(changes);
     const isFirst = changes.model?.firstChange;
-    if (resetPage || isFirst) {
+    if (isFirst) {
       this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();

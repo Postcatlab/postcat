@@ -71,6 +71,7 @@
               ></nz-badge>
             </ng-template>
             <eo-api-edit-body
+              #editBody
               tid="requestBody"
               [(bodyType)]="model.apiAttrInfo.contentType"
               [jsonRootType]="model.apiAttrInfo.contentType"
@@ -135,6 +136,7 @@
             </ng-template>
             <eo-api-edit-body
               tid="responseBody"
+              #resEditBody
               [(bodyType)]="model.responseList[0].contentType"
               [(model)]="model.responseList[0].responseParams.bodyParams"
               (modelChange)="emitChangeFun()"
