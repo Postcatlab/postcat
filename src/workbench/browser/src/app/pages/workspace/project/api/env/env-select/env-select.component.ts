@@ -19,7 +19,7 @@ import { autorun, makeObservable, observable, reaction } from 'mobx';
         [nzTooltipMouseLeaveDelay]="0"
         nzTooltipTitle="Environment Quick Look"
         nz-popover
-        nzPopoverOverlayClassName="background-popover"
+        nzPopoverOverlayClassName="background-popover preview-env"
         [nzPopoverContent]="envParams"
         nzTooltipPlacement="left"
         nzPopoverPlacement="bottomRight"

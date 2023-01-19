@@ -12,7 +12,6 @@ export class RedirectSharedID implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const urlTree = this.router.parseUrl(state.url);
-    console.log('heir');
     if (!urlTree.queryParams.shareId && this.store.getShareID) {
       urlTree.queryParams.shareId = this.store.getShareID;
       return urlTree;

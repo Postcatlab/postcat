@@ -153,7 +153,7 @@ export class StoreService {
   }
   // ? share
   @computed get isShare() {
-    return this.url.includes('/home/share');
+    return window.location.href.includes('/home/share');
   }
   @computed get getShareID() {
     return this.shareId;

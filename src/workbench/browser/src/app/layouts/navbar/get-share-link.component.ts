@@ -16,6 +16,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       *ngIf="!store.isShare && store.getUrl.includes('/home/workspace/project/api/http/test')"
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
+      nzPopoverOverlayClassName="background-popover"
       nzPopoverTrigger="click"
       (click)="handleGetShareLink()"
       i18n
