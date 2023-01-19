@@ -4,6 +4,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -36,10 +37,12 @@ export class WebService {
     }
   ];
   constructor(private modalService: ModalService, private settingService: SettingService, private electronService: ElectronService) {
+    this.isWeb = !this.electronService.isElectron;
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
+    } else {
+      this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://54.255.141.14:8080' });
     }
-    this.isWeb = !this.electronService.isElectron;
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {

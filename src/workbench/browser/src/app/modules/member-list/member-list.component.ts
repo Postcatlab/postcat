@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
 import { StoreService } from '../../shared/store/state.service';
