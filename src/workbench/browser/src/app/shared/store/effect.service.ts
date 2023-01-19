@@ -107,16 +107,20 @@ export class EffectService {
     const envList = this.store.getEnvList.filter(it => it.id !== id);
     this.store.setEnvList(envList);
   }
-  async exportLocalProjectData(projectID = 1) {
-    return new Promise(resolve => {
-      this.indexedDBStorage.projectExport(projectID).subscribe((result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          resolve(false);
-        }
-      });
+  async exportLocalProjectData(projectUuid = this.store.getCurrentProjectID) {
+    const { data } = await db.project.exports({
+      projectUuid
     });
+    return data;
+    // return new Promise(resolve => {
+    //   this.indexedDBStorage.projectExport(projectID).subscribe((result: StorageRes) => {
+    //     if (result.status === StorageResStatus.success) {
+    //       resolve(result.data);
+    //     } else {
+    //       resolve(false);
+    //     }
+    //   });
+    // });
   }
 
   exportCollects(apiGroup: any[], apiData: any[], parentID = 0) {
@@ -202,13 +206,14 @@ export class EffectService {
       return [null, data];
     }
   }
-  async createProject(msg) {
-    const [, err] = await this.api.api_projectCreate({
-      projectMsgs: [msg]
+  async createProject(msg: any[] = []) {
+    const [data, err] = await this.api.api_projectCreate({
+      projectMsgs: [].concat(msg)
     });
     if (err) {
-      return;
+      return [];
     }
+    return data;
   }
   async updateProject(data) {
     const [project, err] = await this.api.api_projectUpdate({ ...data, description: 'description' });
@@ -364,12 +369,4 @@ export class EffectService {
   updateHistory() {}
 
   projectImport() {}
-
-  async projectExport() {
-    const data = await db.project.exports({
-      projectUuid: this.store.getCurrentProjectID,
-      workSpaceUuid: this.store.getCurrentWorkspaceUuid
-    });
-    console.log('data', data);
-  }
 }

@@ -1,5 +1,5 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
-import { ApiResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
+import { ApiResponse, ApiResponsePromise } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
 import { QueryAllDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/common.dto';
 import {
   ProjectBulkCreateDto,
@@ -95,7 +95,7 @@ export class ProjectService extends BaseService<Project> {
   /** 导出整个项目 */
   @ApiResponse()
   async exports(params: QueryAllDto) {
-    const projectInfo = await this.baseService.read({ uuid: params.projectUuid });
+    const { data: projectInfo } = await this.baseService.read({ uuid: params.projectUuid });
     const { data: environmentList } = await this.apiTestHistoryService.bulkRead(params);
     const { data: apiList } = await this.apiDataService.bulkRead(params);
     const { data: groupList } = await this.groupService.bulkRead(params);
@@ -105,6 +105,11 @@ export class ProjectService extends BaseService<Project> {
       environmentList,
       apiList,
       groupList
-    };
+    } as unknown as ApiResponsePromise<{
+      environmentList: any[];
+      apiList: any[];
+      groupList: any[];
+      name: string;
+    }>;
   }
 }

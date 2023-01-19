@@ -3,9 +3,11 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { LocalService } from 'eo/workbench/browser/src/app/shared/services/storage/local.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -181,10 +183,11 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public dataSource: DataSourceService,
     public modal: ModalService,
     public fb: UntypedFormBuilder,
-    private storage: StorageService,
+    private projectApi: ProjectApiService,
     private router: Router,
     private web: WebService,
-    private remote: RemoteService
+    private remote: RemoteService,
+    private localService: LocalService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -509,49 +512,124 @@ export class UserModalComponent implements OnInit, OnDestroy {
             {
               label: $localize`Upload`,
               type: 'primary',
-              onClick: () => {
-                return new Promise(resolve => {
-                  const importProject = (project, index) => {
-                    this.storage.run(
-                      'projectCreate',
-                      [
-                        this.store.getCurrentWorkspace.workSpaceUuid,
-                        {
-                          name: project.name
-                        }
-                      ],
-                      (result: StorageRes) => {
-                        if (result.status === StorageResStatus.success) {
-                          this.effect.exportLocalProjectData(project.uuid).then(data => {
-                            console.log(data, project.uuid);
-                            this.storage.run('projectImport', [result.data?.uuid, data], (result: StorageRes) => {
-                              if (result.status === StorageResStatus.success) {
-                                if (index === localProjects.length - 1) {
-                                  this.router.navigate(['**']).then(() => {
-                                    this.router.navigate(['/home/workspace/overview']);
-                                  });
-                                  resolve(true);
-                                }
-                                modal.destroy();
-                              } else {
-                                if (index === localProjects.length - 1) {
-                                  resolve(false);
-                                }
-                              }
-                            });
-                          });
-                        } else {
-                          if (index === localProjects.length - 1) {
-                            resolve(false);
-                          }
-                        }
-                      }
-                    );
-                  };
-                  localProjects.forEach((project, index) => {
-                    importProject(project, index);
-                  });
+              onClick: async () => {
+                // const importProject = (project, index) => {
+                //   this.storage.run(
+                //     'projectCreate',
+                //     [
+                //       this.store.getCurrentWorkspace.workSpaceUuid,
+                //       {
+                //         name: project.name
+                //       }
+                //     ],
+                //     (result: StorageRes) => {
+                //       if (result.status === StorageResStatus.success) {
+                //         this.effect.exportLocalProjectData(project.uuid).then(data => {
+                //           console.log(data, project.uuid);
+                //           this.storage.run('projectImport', [result.data?.uuid, data], (result: StorageRes) => {
+                //             if (result.status === StorageResStatus.success) {
+                //               if (index === localProjects.length - 1) {
+
+                //                 resolve(true);
+                //               }
+                //               modal.destroy();
+                //             } else {
+                //               if (index === localProjects.length - 1) {
+                //                 resolve(false);
+                //               }
+                //             }
+                //           });
+                //         });
+                //       } else {
+                //         if (index === localProjects.length - 1) {
+                //           resolve(false);
+                //         }
+                //       }
+                //     }
+                //   );
+                // };
+                // 创建远程项目
+                const [remoteProjects] = await this.remote.api_projectCreate({
+                  projectMsgs: localProjects.map(n => ({
+                    name: n.name
+                  }))
                 });
+
+                const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+
+                // 递归创建分组
+                const deepCreateGroup = async (groupList = [], apiList = [], remoteProject, rootGroup) => {
+                  const projectUuid = remoteProject.projectUuid;
+                  const groupFilters = groupList
+                    .filter(n => n.depth !== 0)
+                    .map(n => {
+                      const { id, children, ...rest } = n;
+                      return rest;
+                    });
+                  const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
+                  console.log('remoteGroups', remoteGroups);
+                  groupList.forEach((localGroup, index) => {
+                    const apiFilters = apiList
+                      .filter(n => n.groupId === localGroup.id)
+                      .map(n => {
+                        const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
+                        return {
+                          ...rest,
+                          // 远程分组 id 替换本地分组 id
+                          groupId: remoteGroups[index]?.id
+                        };
+                      });
+
+                    if (apiFilters.length) {
+                      this.remote.api_apiDataCreate({
+                        apiList: apiFilters,
+                        projectUuid
+                      });
+                    }
+
+                    // 如果本地分组还有子分组
+                    if (localGroup.children?.length) {
+                      localGroup.children.forEach(m => {
+                        m.type = 1;
+                        // 远程分组 id 替换本地分组 id
+                        m.parentId = remoteGroups[index]?.id;
+                        m.projectUuid = projectUuid;
+                        m.workSpaceUuid = workSpaceUuid;
+                      });
+                      deepCreateGroup(localGroup.children, apiList, remoteProject, rootGroup);
+                    }
+                  });
+                };
+
+                const arr = localProjects.map(async (localProject, index) => {
+                  const { apiList, groupList = [] } = await this.effect.exportLocalProjectData(localProject.uuid);
+                  this.projectApi.add(apiList);
+
+                  console.log('remoteProjects', remoteProjects);
+
+                  const remoteProject = remoteProjects[index];
+
+                  console.log('remoteProject', remoteProject);
+
+                  // 远程分组
+                  // @ts-ignore
+                  const [groups] = await this.remote.api_groupList({ projectUuid: remoteProject.projectUuid, withItem: true });
+                  // 远程根分组
+                  const rootGroup = groups.find(n => n.depth === 0);
+                  console.log('rootGroup', rootGroup);
+
+                  deepCreateGroup(groupList, apiList, remoteProject, rootGroup);
+                });
+
+                await Promise.all(arr);
+
+                await this.router.navigate(['**']);
+
+                this.router.navigate(['/home/workspace/overview']);
+
+                // localProjects.forEach((project, index) => {
+                //   importProject(project, index);
+                // });
               }
             }
           ]

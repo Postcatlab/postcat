@@ -25,7 +25,7 @@ export interface ApiDataPageDto {
 
 export interface ApiDataBulkReadDto {
   projectUuid: string;
-  workSpaceUuid: string;
+  workSpaceUuid?: string;
 }
 
 export interface ApiDataBulkReadDetailDto {

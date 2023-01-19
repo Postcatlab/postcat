@@ -4,7 +4,7 @@ export interface CommonDto {
 
 export interface QueryAllDto {
   projectUuid: string;
-  workSpaceUuid: string;
+  workSpaceUuid?: string;
 }
 
 export interface PageDto extends CommonDto {

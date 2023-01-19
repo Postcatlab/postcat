@@ -43,8 +43,8 @@ export class ProjectApiService {
   async edit(apiData: ApiData) {
     return await this.api.api_apiDataUpdate({ api: apiData });
   }
-  async add(apiData: ApiData) {
-    return await this.api.api_apiDataCreate({ apiList: [apiData] });
+  async add(apiData: ApiData[] = []) {
+    return await this.api.api_apiDataCreate({ apiList: [].concat(apiData) });
   }
   async copy(apiID: string) {
     const apiData = await this.get(apiID);

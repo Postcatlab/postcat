@@ -102,7 +102,7 @@ export class ProjectListComponent implements OnInit {
           return;
         }
 
-        await this.effect.createProject(model);
+        await this.effect.createProject([model]);
         // * update project list
         this.getProjectList();
         modal.destroy();
