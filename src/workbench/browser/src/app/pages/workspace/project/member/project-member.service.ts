@@ -36,14 +36,16 @@ export class ProjectMemberService {
     if (err) {
       return;
     }
-    return data.map(({ roles, id, ...items }) => ({
-      id,
-      roles,
-      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my project
-      isOwner: roles.find(it => it.name === 'Project Owner'),
-      isEditor: roles.find(it => it.name === 'Project Editor'),
-      ...items
-    }));
+    return data
+      .map(({ roles, id, ...items }) => ({
+        id,
+        roles,
+        isSelf: this.store.getUserProfile?.id === id, // * Is my project
+        isOwner: roles.find(it => it.name === 'Project Owner'),
+        isEditor: roles.find(it => it.name === 'Project Editor'),
+        ...items
+      }))
+      .sort((a, b) => (a.isSelf ? 1 : -1));
   }
   async removeMember(item) {
     return await this.api.api_projectDelMember({
