@@ -36,7 +36,7 @@ export class ApiEditUtilService {
       return result;
     }
     ['bodyParams', 'headerParams'].forEach(tableName => {
-      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(result.responseList[0].contentType)) {
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
