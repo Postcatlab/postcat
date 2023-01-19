@@ -623,6 +623,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 });
 
                 await Promise.all(arr);
+                modal.destroy();
 
                 await this.router.navigate(['**']);
 
