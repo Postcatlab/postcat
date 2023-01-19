@@ -59,7 +59,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   async create() {
-    await this.effect.createGroup(this.group);
+    await this.effect.createGroup([this.group]);
     this.modalRef.destroy();
   }
 

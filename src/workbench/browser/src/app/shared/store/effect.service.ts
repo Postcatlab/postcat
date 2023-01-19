@@ -342,9 +342,9 @@ export class EffectService {
   updateMock() {
     // * update mock
   }
-  async createGroup(group) {
+  async createGroup(groups: any[]) {
     // * update group
-    await this.api.api_groupCreate(group);
+    await this.api.api_groupCreate(groups);
     this.getGroupList();
   }
   async updateGroup(group) {
