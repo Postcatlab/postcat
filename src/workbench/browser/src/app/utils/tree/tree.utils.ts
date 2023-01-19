@@ -92,8 +92,6 @@ export const filterTableData = (
   //     }
   //   })
   // );
-  console.log('result', result);
-
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
       pcConsole.error('filterTableData need primaryKey');
