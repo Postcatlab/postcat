@@ -73,7 +73,7 @@ export class WorkspaceMemberComponent implements OnInit {
         }
         console.log('memberList', data);
         this.userList = result.filter(it => {
-          return !data.includes(it.username);
+          // return !data.includes(it.username);
         });
       },
       { delay: 300 }
