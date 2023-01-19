@@ -16,7 +16,9 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
     responseBody,
     method,
     requestBodyType,
-    requestBodyJsonType
+    requestBodyJsonType,
+    responseBodyType,
+    responseBodyJsonType
   } = apiData;
   return {
     name,
@@ -34,6 +36,7 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
     },
     responseList: [
       {
+        contentType: transformContentType(responseBodyType, responseBodyJsonType),
         responseParams: {
           headerParams: transformParams(responseHeaders),
           bodyParams: transformRequestBody(responseBody)
@@ -44,7 +47,7 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
 };
 
 const transformContentType = (requestBodyType: OldApiData['responseBodyType'], requestBodyJsonType: OldApiData['requestBodyJsonType']) => {
-  const type = requestBodyType.toLocaleUpperCase();
+  const type = requestBodyType?.toLocaleUpperCase();
   if (type === 'FORMDATA') {
     return ContentType.FROM_DATA;
   } else if (['RAW', 'XML', 'BINARY'].includes(type)) {
@@ -56,8 +59,8 @@ const transformContentType = (requestBodyType: OldApiData['responseBodyType'], r
   }
 };
 
-const transformParams = (params: BasiApiEditParams[]): BodyParam[] => {
-  return params.map(n => ({
+const transformParams = (params: BasiApiEditParams[] = []): BodyParam[] => {
+  return params?.map(n => ({
     name: n.name,
     description: n.description,
     isRequired: Number(n.required),
@@ -68,7 +71,7 @@ const transformParams = (params: BasiApiEditParams[]): BodyParam[] => {
   }));
 };
 
-const transformRequestBody = (requestBody: OldApiData['requestBody']): BodyParam[] => {
+const transformRequestBody = (requestBody: OldApiData['requestBody'] = []): BodyParam[] => {
   if (typeof requestBody === 'string') {
     return [
       {
@@ -80,7 +83,7 @@ const transformRequestBody = (requestBody: OldApiData['requestBody']): BodyParam
     ];
   } else {
     const bodyParams = transformParams(requestBody);
-    bodyParams.forEach((item, index) => {
+    bodyParams?.forEach((item, index) => {
       item.paramAttr.minLength = requestBody[index].minLength;
       item.paramAttr.maxLength = requestBody[index].maxLength;
       item.paramAttr.maxValue = requestBody[index].maximum;
@@ -90,5 +93,6 @@ const transformRequestBody = (requestBody: OldApiData['requestBody']): BodyParam
         item.childList = transformRequestBody(requestBody[index]?.children);
       }
     });
+    return bodyParams;
   }
 };

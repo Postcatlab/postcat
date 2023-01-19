@@ -161,7 +161,6 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        // @ts-ignore
         .page({ projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
@@ -682,7 +681,15 @@ export class LocalService {
     });
   }
 
-  api_apiTestHistoryDelete<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+  api_apiTestHistoryDelete<T = any>({
+    ids,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
+    if (ids == null) {
+      console.log('%c Error: apiTestHistory - delete 接口 缺失参数 ids %c', ErrorStyle, '');
+      return;
+    }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -694,7 +701,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiTestHistory
-        .bulkDelete({ projectUuid, workSpaceUuid })
+        .bulkDelete({ ids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiTestHistory - delete 接口调用成功 %c', SuccessStyle, '');

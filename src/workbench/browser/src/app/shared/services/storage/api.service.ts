@@ -101,7 +101,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiTestHistoryDetail<T>(params) : this.remote.api_apiTestHistoryDetail<T>(params);
   }
 
-  api_apiTestHistoryDelete<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiTestHistoryDelete<T = any>(params: { ids: any; projectUuid?: any; workSpaceUuid?: any }) {
     return this.store.isLocal ? this.local.api_apiTestHistoryDelete<T>(params) : this.remote.api_apiTestHistoryDelete<T>(params);
   }
 
@@ -253,27 +253,23 @@ export class ApiService {
     return this.remote.api_roleList<T>(params);
   }
 
-  api_shareCreateShare<T = any>(params: any) {
+  api_shareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
     return this.remote.api_shareCreateShare<T>(params);
   }
 
-  api_shareGetShareList<T = any>(params: any) {
+  api_shareGetShareList<T = any>(params: { sharedUuid: any }) {
     return this.remote.api_shareGetShareList<T>(params);
   }
 
-  api_shareDeleteShare<T = any>(params: any) {
+  api_shareDeleteShare<T = any>(params: { sharedUuid: any }) {
     return this.remote.api_shareDeleteShare<T>(params);
   }
 
-  api_shareDocGetAllApi<T = any>(params: { uniqueID: any }) {
+  api_shareDocGetAllApi<T = any>(params: { sharedUuid: any; apiUuid: any }) {
     return this.remote.api_shareDocGetAllApi<T>(params);
   }
 
-  api_shareDocGetApiDetail<T = any>(params: { uniqueID: any; apiDataUUID: any }) {
-    return this.remote.api_shareDocGetApiDetail<T>(params);
-  }
-
-  api_shareDocGetEnv<T = any>(params: { uniqueID: any }) {
+  api_shareDocGetEnv<T = any>(params: { sharedUuid: any }) {
     return this.remote.api_shareDocGetEnv<T>(params);
   }
 }
