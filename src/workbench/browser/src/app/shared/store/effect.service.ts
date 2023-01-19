@@ -327,7 +327,6 @@ export class EffectService {
     // console.log('Group 数据', structuredClone(groupList));
     // * get api list data
     const [apiListRes, aErr] = await this.api.api_apiDataList(params);
-    console.log('apiListRes', apiListRes);
     if (aErr) {
       return;
     }
