@@ -241,18 +241,14 @@ export class EffectService {
 
   async updateEnvList() {
     if (this.store.isShare) {
-      this.api
-        .api_shareDocGetEnv({
-          uniqueID: this.store.getShareID
-        })
-        .then(([data, err]) => {
-          if (err) {
-            return [];
-          }
-          this.store.setEnvList(data);
-          return data || [];
-        });
-      return;
+      const [data, err] = await this.api.api_shareDocGetEnv({
+        sharedUuid: this.store.getShareID
+      });
+      if (err) {
+        return [];
+      }
+      this.store.setEnvList(data || []);
+      return data || [];
     }
     const [envList, err] = await this.api.api_environmentList({});
     if (err) {
@@ -265,7 +261,9 @@ export class EffectService {
   // *** Data engine
 
   async deleteHistory() {
-    const [, err] = await this.api.api_apiTestHistoryDelete({});
+    const [, err] = await this.api.api_apiTestHistoryDelete({
+      ids: this.store.getTestHistory.map(it => it.id)
+    });
     if (err) {
       return;
     }
