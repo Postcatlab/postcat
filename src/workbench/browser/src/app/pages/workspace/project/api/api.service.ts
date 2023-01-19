@@ -51,7 +51,7 @@ export class ProjectApiService {
     apiData.name += ' Copy';
     delete apiData.apiUuid;
     delete apiData.id;
-    const [result, err] = await this.add(apiData);
+    const [result, err] = await this.add([apiData]);
     if (err) {
       console.log(err);
       this.message.error($localize`Copy API failed`);
