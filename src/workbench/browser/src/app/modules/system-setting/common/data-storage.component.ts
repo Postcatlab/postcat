@@ -15,7 +15,7 @@ import { SettingService } from '../settings.service';
         <div class="text-[12px] mt-[8px] text-tips">
           <p>
             <span i18n> Cloud Storage: Store data on the cloud for team collaboration and product use across devices.</span>
-            <a i18n href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link"> Learn more..</a>
+            <a i18n href="https://docs.postcat.com/docs/storage.html" target="_blank"> Learn more..</a>
           </p>
         </div>
       </nz-form-item>

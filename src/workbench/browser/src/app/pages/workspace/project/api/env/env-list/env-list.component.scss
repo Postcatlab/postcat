@@ -6,27 +6,3 @@
   height: calc(100% - var(--tree-item-height));
   overflow: auto;
 }
-
-// .env-item:hover,
-// .env-item-active {
-//   background-color: rgb(0 0 0 / 10%);
-// }
-
-// .env-item {
-//   cursor: pointer;
-//   height: var(--tree-item-height);
-
-//   .env-operate {
-//     display: none;
-//   }
-
-//   &:hover {
-//     .env-operate {
-//       display: inherit;
-//     }
-
-//     a {
-//       opacity: 1;
-//     }
-//   }
-// }

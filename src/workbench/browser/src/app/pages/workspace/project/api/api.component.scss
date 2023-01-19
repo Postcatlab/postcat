@@ -1,31 +1,3 @@
-:lang(zh) {
-  .ant-select {
-    width: 132px;
-  }
-}
-
-:lang(en) {
-  .ant-select {
-    width: 162px;
-  }
-}
-
-.env-select {
-  --select-background-color: --background-color;
-
-  border-bottom: 1px solid var(--border-color);
-
-  ::ng-deep {
-    eo-ng-select eo-ng-select-top-control {
-      border: none !important;
-    }
-  }
-}
-
-nz-divider {
-  margin: 0.1em 0;
-}
-
 .tabs-bar {
   background-color: var(--tabs-card-bar-background-color);
   box-sizing: border-box;
