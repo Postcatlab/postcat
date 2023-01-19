@@ -56,9 +56,9 @@
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Body</span>
             <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.apiAttrInfo.contentType] }}</nz-tag>
-            <nz-tag *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.apiAttrInfo.contentType)" nzColor="default" i18n>{{
+            <!-- <nz-tag *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.apiAttrInfo.contentType)" nzColor="default" i18n>{{
               model.apiAttrInfo.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object'
-            }}</nz-tag>
+            }}</nz-tag> -->
           </div>
         </ng-template>
         <eo-api-detail-body
@@ -75,12 +75,12 @@
           <div nz-row nzAlign="middle">
             <span class="mr-[10px]" i18n>Response</span>
             <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseList?.[0]?.contentType] }}</nz-tag>
-            <nz-tag
+            <!-- <nz-tag
               *ngIf="[TYPE_API_BODY.JSONArray, TYPE_API_BODY.JSON].includes(model.responseList?.[0]?.contentType)"
               nzColor="default"
               i18n
               >{{ model.responseList?.[0]?.contentType === TYPE_API_BODY.JSONArray ? 'Array' : 'Object' }}</nz-tag
-            >
+            > -->
           </div>
         </ng-template>
         <eo-api-detail-body
