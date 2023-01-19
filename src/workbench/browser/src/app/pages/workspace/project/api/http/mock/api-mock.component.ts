@@ -40,7 +40,7 @@ export class ApiMockComponent implements OnInit {
     private modal: ModalService,
     private api: ProjectApiService
   ) {
-    this.apiUuid = Number(this.route.snapshot.queryParams.uuid);
+    this.apiUuid = this.route.snapshot.queryParams.uuid;
   }
 
   async ngOnInit() {

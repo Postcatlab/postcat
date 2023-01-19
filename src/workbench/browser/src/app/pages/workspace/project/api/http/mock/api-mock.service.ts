@@ -27,8 +27,9 @@ export class ApiMockService {
     const [data, err] = await this.api.api_mockList({
       apiUuid,
       page: 1,
-      pageSize: 1
+      pageSize: 200
     });
+    console.log(data);
     return data;
   }
   /**

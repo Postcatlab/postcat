@@ -113,7 +113,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     switch (type) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        this.cache[type] = this.model || [{ binaryRawData: '' }];
+        this.cache[type] = this.model?.length ? this.model : [{ binaryRawData: '' }];
         break;
       }
       default: {

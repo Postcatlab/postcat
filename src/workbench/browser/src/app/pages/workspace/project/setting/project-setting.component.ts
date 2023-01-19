@@ -12,6 +12,7 @@ import { ExportApiComponent } from '../../../../modules/extension-select/export-
 import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
 import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiService } from '../../../../shared/services/storage/api.service';
 
 const actionComponent = {
   push: SyncApiComponent,
@@ -30,7 +31,7 @@ export class ProjectSettingComponent implements OnInit {
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
     private store: StoreService,
-    private storage: StorageService,
+    private api: ApiService,
     private router: Router,
     private effect: EffectService
   ) {
@@ -86,14 +87,14 @@ export class ProjectSettingComponent implements OnInit {
       nzTitle: $localize`Are you sure delete this project?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
-      nzOnOk: () => {
-        this.storage.run('projectRemove', [this.store.getCurrentWorkspaceUuid, this.store.getCurrentProjectID], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.router.navigate(['/home/workspace/overview']);
-            this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
-            modal.destroy();
-          }
-        });
+      nzOnOk: async () => {
+        const [, err] = await this.api.api_projectDelete({ projectUuids: [this.store.getCurrentProjectID] });
+        if (err) {
+          return;
+        }
+        this.router.navigate(['/home/workspace/overview']);
+        this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
+        modal.destroy();
       }
     });
   }
