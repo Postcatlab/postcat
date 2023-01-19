@@ -75,8 +75,13 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async changeRole(item) {
+    const { userId, roleIds } = item;
+    const hash = {
+      owner: 1,
+      editor: 6
+    };
     const [, err]: any = await this.api.api_workspaceSetRole({
-      userRole: [item]
+      userRole: [{ userId, roleIds: [hash[roleIds]] }]
     });
     // * return isOK
     return !err;

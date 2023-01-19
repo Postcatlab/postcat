@@ -61,8 +61,13 @@ export class ProjectMemberService {
     return [data, err];
   }
   async changeRole(item) {
+    const { userId, roleIds } = item;
+    const hash = {
+      owner: 7,
+      editor: 8
+    };
     const [, err]: any = await this.api.api_projectSetRole({
-      userRole: [item]
+      userRole: [{ userId, roleIds: hash[roleIds] }]
     });
     // * return isOK
     return !err;

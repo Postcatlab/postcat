@@ -28,8 +28,8 @@ import { MemberService } from './member.service';
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: [8] })"> Set Editor </li>
-                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: [7] })"> Set Owner </li>
+                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'editor' })"> Set Editor </li>
+                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'owner' })"> Set Owner </li>
                   <li *ngIf="!item.isSelf && item.isOwner" nz-menu-item i18n (click)="removeMember(item)"> Remove </li>
                   <li *ngIf="item.isSelf" nz-menu-item i18n (click)="member.quitMember(item)">Quit</li>
                 </ul>
