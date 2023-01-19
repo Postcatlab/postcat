@@ -28,10 +28,11 @@ import { WorkspaceOverviewComponent } from './workspace-overview.component';
     ])
   ],
   providers: [
-    {
-      provide: MemberService,
-      useClass: WorkspaceMemberService
-    }
+    WorkspaceMemberService
+    // {
+    //   provide: MemberService,
+    //   useClass: WorkspaceMemberService
+    // }
   ]
 })
 export class WorkspaceOverviewModule {}
