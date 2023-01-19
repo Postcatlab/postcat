@@ -18,7 +18,6 @@ export class ProjectApiService {
   ) {}
   async get(uuid): Promise<ApiData> {
     const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 });
-    console.log(result);
     if (err) {
       this.message.error($localize`Can't find this Api`);
       return;
@@ -33,6 +32,12 @@ export class ProjectApiService {
         }
       }
     ];
+    apiData.responseList[0].responseParams ??= {
+      responseParams: {
+        headerParams: [],
+        bodyParams: []
+      }
+    };
     return apiData;
   }
   async edit(apiData: ApiData) {
