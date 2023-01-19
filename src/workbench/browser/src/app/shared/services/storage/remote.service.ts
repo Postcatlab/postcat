@@ -101,8 +101,10 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .delete(`${prefix}/api/api/remove`, {
-          params: { apiUuids, projectUuid, workSpaceUuid }
+        .post(`${prefix}/api/api/remove`, {
+          apiUuids,
+          projectUuid,
+          workSpaceUuid
         })
         .subscribe({
           next: ({ code, data }: any) => {
