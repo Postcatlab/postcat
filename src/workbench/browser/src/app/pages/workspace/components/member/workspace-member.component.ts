@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
-import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { makeObservable, observable, reaction } from 'mobx';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
@@ -49,12 +48,7 @@ export class WorkspaceMemberComponent implements OnInit {
   @observable searchValue = '';
   userCache;
   userList = [];
-  constructor(
-    public store: StoreService,
-    private api: ApiService,
-    private message: EoNgFeedbackMessageService,
-    public member: MemberService
-  ) {}
+  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
 
   ngOnInit(): void {
     makeObservable(this);
@@ -73,7 +67,9 @@ export class WorkspaceMemberComponent implements OnInit {
         }
         console.log('memberList', data);
         this.userList = result.filter(it => {
-          return !data.includes(it.username);
+          // return !data.includes(it.username);
+          console.log('userList filter', it);
+          return true;
         });
       },
       { delay: 300 }

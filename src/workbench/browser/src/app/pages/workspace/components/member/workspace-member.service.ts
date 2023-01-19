@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun } from 'mobx';
+import { autorun, toJS } from 'mobx';
 
 @Injectable()
 export class WorkspaceMemberService {
@@ -13,7 +13,8 @@ export class WorkspaceMemberService {
   constructor(
     private store: StoreService,
     private effect: EffectService,
-    private message: EoNgFeedbackMessageService
+    private message: EoNgFeedbackMessageService,
+    private api: ApiService
   ) {
     autorun(() => {
       this.role = this.store.getWorkspaceRole;
@@ -22,7 +23,7 @@ export class WorkspaceMemberService {
     });
   }
   async addMember(ids) {
-    return await this.member.addMember({
+    return await this.api.api_workspaceAddMember({
       userIds: [ids]
     });
   }
@@ -38,10 +39,11 @@ export class WorkspaceMemberService {
         }
       ];
     } else {
-      const [data, err]: any = await this.member.queryMember({ username: search.trim(), page: 1, pageSize: 100 });
+      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
       result = data || [];
     }
     result.forEach(member => {
+      console.log('jjj', member, toJS(this.store.getWorkspaceRoleList));
       member.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === member.role.id).title;
       if (member.id === this.store.getUserProfile.id) {
         member.myself = true;
@@ -50,7 +52,7 @@ export class WorkspaceMemberService {
     return result;
   }
   async removeMember(item) {
-    return await this.member.removeMember({
+    return await this.api.api_workspaceRemoveMember({
       userIds: [item.id]
     });
   }
@@ -62,7 +64,7 @@ export class WorkspaceMemberService {
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.member.quitMember(members);
+    const [data, err]: any = await this.api.api_workspaceMemberQuit(members);
     if (err) {
       return;
     }
@@ -74,7 +76,7 @@ export class WorkspaceMemberService {
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.member.changeRole({
+    const [data, err]: any = await this.api.api_workspaceSetRole({
       userRole: [{ userId: item.id, roleIds: [roleID] }]
     });
     if (err) {
@@ -86,7 +88,7 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async searchUser(search) {
-    const [data, err] = await this.member.searchUser(search);
+    const [data, err] = await this.api.api_workspaceSearchMember(search);
     if (err) {
       return;
     }

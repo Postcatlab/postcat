@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -8,7 +9,6 @@ import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
-import { ProjectMemberService } from './project-member.service';
 
 @Component({
   selector: 'eo-project-member',
@@ -96,7 +96,7 @@ export class ProjectMemberComponent implements OnInit {
     public api: ApiService,
     public eMessage: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
-    private member: ProjectMemberService
+    private member: MemberService
   ) {
     this.isInvateModalVisible = false;
     this.isSelectBtnLoading = false;
