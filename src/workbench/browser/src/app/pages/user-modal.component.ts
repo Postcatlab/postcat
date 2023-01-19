@@ -625,10 +625,11 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 await Promise.all(arr);
                 modal.destroy();
 
+                this.effect.updateProjects(workSpaceUuid);
+
                 await this.router.navigate(['**']);
 
                 this.router.navigate(['/home/workspace/overview']);
-
                 // localProjects.forEach((project, index) => {
                 //   importProject(project, index);
                 // });
