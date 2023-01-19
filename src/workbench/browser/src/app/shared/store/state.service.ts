@@ -302,7 +302,7 @@ export class StoreService {
     }
   }
   @action setCurrentWorkspace(workspace) {
-    workspace = this.workspaceList?.find(val => val?.workSpaceUuid === workspace?.workSpaceUuid);
+    workspace = this.workspaceList?.find(val => val?.workSpaceUuid === workspace?.workSpaceUuid) || this.getLocalWorkspace;
     if (!workspace) {
       pcConsole.error("setCurrentWorkspace: workspace can't not be null");
       return;

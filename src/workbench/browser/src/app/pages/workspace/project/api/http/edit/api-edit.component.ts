@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit, ViewChildren, TemplateRef, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -17,6 +17,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
+import { ApiEditBodyComponent } from './body/api-edit-body.component';
 
 @Component({
   selector: 'eo-api-edit-edit',
@@ -24,6 +25,8 @@ import { ApiEditUtilService } from './api-edit-util.service';
   styleUrls: ['./api-edit.component.scss']
 })
 export class ApiEditComponent implements OnDestroy {
+  @ViewChild('editBody') editBody: ApiEditBodyComponent;
+  @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
   /**
    * Intial model from outside,check form is change
@@ -93,8 +96,13 @@ export class ApiEditComponent implements OnDestroy {
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
-    console.log(this.model);
     this.eoOnInit.emit(this.model);
+    setTimeout(() => {
+      //TODO optimize
+      console.log(this.editBody);
+      this.editBody.init();
+      this.resEditBody.init();
+    }, 0);
   }
 
   initShortcutKey() {
