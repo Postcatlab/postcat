@@ -18,7 +18,7 @@ export class ProjectApiService {
   ) {}
   async get(uuid): Promise<ApiData> {
     const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 });
-    if (err) {
+    if (err || !result?.[0]) {
       this.message.error($localize`Can't find this Api`);
       return;
     }
@@ -51,8 +51,9 @@ export class ProjectApiService {
     apiData.name += ' Copy';
     delete apiData.apiUuid;
     delete apiData.id;
-    const [result, err] = await await this.api.api_apiDataCreate({ apiList: [apiData] });
+    const [result, err] = await this.add(apiData);
     if (err) {
+      console.log(err);
       this.message.error($localize`Copy API failed`);
       return;
     }

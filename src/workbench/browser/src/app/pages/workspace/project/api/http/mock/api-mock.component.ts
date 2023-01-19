@@ -58,7 +58,7 @@ export class ApiMockComponent implements OnInit {
       nzComponentParams: {
         model: {
           name: '',
-          response: this.apiMock.getMockResponseByAPI(this.apiData.responseList[0].responseParams.bodyParams)
+          response: this.apiMock.getMockResponseByAPI(this.apiData)
         }
       },
       nzOnOk: async () => {

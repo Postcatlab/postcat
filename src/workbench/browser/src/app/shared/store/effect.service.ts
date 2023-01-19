@@ -45,6 +45,9 @@ export class EffectService {
         //* Get workspace list
         await this.updateWorkspaceList();
         this.fixedID();
+        const { roles, permissions } = await this.getWorkspacePermission();
+        this.store.setPermission(permissions, 'workspace');
+        this.store.setRole(roles, 'workspace');
         return;
       }
       if (this.store.isLocal) {
@@ -139,7 +142,6 @@ export class EffectService {
 
     // * real set workspace
     await this.router.navigate(['**']);
-
     this.router.navigate(['/home/workspace/overview']);
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';

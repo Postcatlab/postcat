@@ -42,14 +42,16 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
-    return data.map(({ roles, id, ...items }) => ({
-      id,
-      roles,
-      isSelf: !!roles.filter(item => item.createUserId === id).length, // * Is my workspace
-      isOwner: roles.find(it => it.name === 'Workspace Owner'),
-      isEditor: roles.find(it => it.name === 'Workspace Editor'),
-      ...items
-    }));
+    return data
+      .map(({ roles, id, ...items }) => ({
+        id,
+        roles,
+        isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
+        isOwner: roles.find(it => it.name === 'Workspace Owner'),
+        isEditor: roles.find(it => it.name === 'Workspace Editor'),
+        ...items
+      }))
+      .sort((a, b) => (a.isSelf ? -1 : 1));
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
@@ -57,14 +59,16 @@ export class WorkspaceMemberService {
     });
   }
   async quitMember(members) {
-    let memberList = members.filter(val => val.role.id === 1);
-    if (memberList.length === 1 && memberList[0].myself) {
+    if (this.store.isLocal) {
+      return;
+    }
+    if (members.isCreator) {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.api.api_workspaceMemberQuit(members);
+    const [data, err]: any = await this.api.api_workspaceMemberQuit({});
     if (err) {
       return;
     }
@@ -75,8 +79,13 @@ export class WorkspaceMemberService {
     return [data, err];
   }
   async changeRole(item) {
+    const { userId, roleIds } = item;
+    const hash = {
+      owner: 1,
+      editor: 6
+    };
     const [, err]: any = await this.api.api_workspaceSetRole({
-      userRole: [item]
+      userRole: [{ userId, roleIds: [hash[roleIds]] }]
     });
     // * return isOK
     return !err;

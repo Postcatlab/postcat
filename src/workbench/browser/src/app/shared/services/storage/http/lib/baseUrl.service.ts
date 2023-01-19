@@ -19,7 +19,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const serverUrl = this.store.remoteUrl;
+    const serverUrl = this.store.remoteUrl || '';
     req = req.clone({
       url: this.protocolReg.test(req.url) ? req.url : `${serverUrl}${req.url}`,
       headers: new HttpHeaders({

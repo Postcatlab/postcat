@@ -86,7 +86,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                   model: eoDeepCopy(item.data)
                 },
                 nzOnOk: async () => {
-                  await this.addOrEditModal(item.data, index);
+                  await this.addOrEditModal(modal.componentInstance.model, index);
                   modal.destroy();
                 }
               });
@@ -107,10 +107,9 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue?.apiUuid) {
       this.mockList = await this.apiMock.getMocks(this.apiData.apiUuid);
-      console.log(this.mockList);
       this.mockList.forEach(item => {
         if (item.createWay === 'system') {
-          item.response = this.apiMock.getMockResponseByAPI(item.response);
+          item.response = this.apiMock.getMockResponseByAPI(this.apiData);
         }
       });
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
@@ -135,8 +134,12 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     } else {
       item.apiUuid = this.apiData.apiUuid;
       item.createWay = 'custom';
-      const result = await this.apiMock.createMock(item);
-      Object.assign(item, result.data);
+      const [data, err] = await this.apiMock.createMock(item);
+      if (err) {
+        this.message.error($localize`Failed to add`);
+        return;
+      }
+      Object.assign(item, data);
       this.message.success($localize`Added successfully`);
       this.mockList.push(item);
     }

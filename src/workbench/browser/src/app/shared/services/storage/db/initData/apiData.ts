@@ -53,7 +53,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         },
         requestParams: {
           headerParams: [],
-          bodyParams: '',
+          bodyParams: [],
           queryParams: [],
           restParams: [
             {

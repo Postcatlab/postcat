@@ -23,7 +23,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy, OnInit {
+export class ApiEditComponent implements OnDestroy {
   @Input() model: ApiData;
   /**
    * Intial model from outside,check form is change
@@ -57,9 +57,6 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     this.initShortcutKey();
     this.initBasicForm();
   }
-  ngOnInit(): void {
-    this.getApiGroup();
-  }
   /**
    * Init Api Data
    *
@@ -92,9 +89,11 @@ export class ApiEditComponent implements OnDestroy, OnInit {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
+    this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
+    console.log(this.model);
     this.eoOnInit.emit(this.model);
   }
 
@@ -162,17 +161,17 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    // console.log(
-    //   'api edit origin:',
-    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    // );
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);
     if (originText !== afterText) {
-      console.log('api edit formChange true!', originText.split(afterText)[0]);
+      // console.log('api edit formChange true!', originText.split(afterText)[0]);
       return true;
     }
     return false;

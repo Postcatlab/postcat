@@ -12,7 +12,7 @@ import { MemberService } from './member.service';
       <nz-list-item-meta>
         <nz-list-item-meta-title>
           <div class="flex items-center">
-            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ item.username[0] }}" class="mr-[10px]"></nz-avatar>
+            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ item.username?.at(0) }}" class="mr-[10px]"></nz-avatar>
             <div class="flex flex-col">
               <span class="font-bold link">{{ item.username }}</span>
               <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
@@ -24,13 +24,15 @@ import { MemberService } from './member.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="!store.isLocal">
+            <div class="operate-btn-list" *ngIf="!store.isLocal && ((!item.isSelf && item.isOwner) || item.isSelf)">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: [8] })"> Set Editor </li>
-                  <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: [7] })"> Set Owner </li>
-                  <li *ngIf="!item.isSelf && item.isOwner" nz-menu-item i18n (click)="removeMember(item)"> Remove </li>
+                  <ng-container *ngIf="!item.isSelf && item.isOwner">
+                    <li nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'editor' })"> Set Editor </li>
+                    <li nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'owner' })"> Set Owner </li>
+                    <li nz-menu-item i18n (click)="removeMember(item)"> Remove </li>
+                  </ng-container>
                   <li *ngIf="item.isSelf" nz-menu-item i18n (click)="member.quitMember(item)">Quit</li>
                 </ul>
               </eo-ng-dropdown-menu>
