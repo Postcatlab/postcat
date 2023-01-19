@@ -70,12 +70,13 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId);
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = this.apiEdit.getPureApi({ groupId });
+      this.model = {} as ApiData;
       const initTimes = this.initTimes;
       const result = await this.apiEdit.getApi({
         id,
         groupId
       });
+
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model = result;

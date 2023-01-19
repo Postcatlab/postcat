@@ -99,7 +99,7 @@ export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env
   return result;
 };
 export const eoFormatResponseData = ({ globals, report, history, id }): TestServerRes => {
-  pcConsole.log('eoFormatResponseData', globals, report, history, id);
+  // pcConsole.log('eoFormatResponseData', globals, report, history, id);
   let result: TestServerRes;
   const reportList = report.reportList || [];
   //preScript code tips

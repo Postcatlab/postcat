@@ -288,7 +288,6 @@ export class EffectService {
   }
 
   async createApiTestHistory(params) {
-    // TODO add history
     const [data] = await this.api.api_apiTestHistoryCreate(params);
     this.store.setHistory([...this.store.getTestHistory, data]);
     return data;

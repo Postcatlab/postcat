@@ -12,7 +12,7 @@ import {
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { enumsToArr, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
-import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-api-edit-body',
@@ -90,10 +90,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (
-      changes.model &&
-      ((!changes.model.previousValue?.length && changes.model.currentValue) || changes.model.currentValue?.length === 0)
-    ) {
+    if (changes.model?.firstChange) {
       this.setModel();
       this.initListConf();
     }

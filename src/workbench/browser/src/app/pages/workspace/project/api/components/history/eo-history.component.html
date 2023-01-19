@@ -5,14 +5,14 @@
       class="flex items-center justify-center cursor-pointer shrink-0"
       eo-ng-button
       nzType="text"
-      [disabled]="!store.getTestHistory.length"
+      [disabled]="!getTestHistory.length"
       i18n-nzTooltipTitle
       nzTooltipTitle="Clear All"
       eoNgFeedbackTooltip
       nz-popconfirm
       i18n-nzPopconfirmTitle
       [nzTooltipMouseEnterDelay]="0.4"
-      [nzPopconfirmTrigger]="store.getTestHistory.length ? 'click' : null"
+      [nzPopconfirmTrigger]="getTestHistory.length ? 'click' : null"
       nzPopconfirmTitle="Are you sure delete all history?"
       (nzOnConfirm)="clearAllHistory()"
       nzPopconfirmPlacement="leftTop"
@@ -23,9 +23,9 @@
       <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
     </button>
   </div>
-  <nz-empty *ngIf="!store.getTestHistory.length" nzNotFoundImage="simple"> </nz-empty>
+  <nz-empty *ngIf="!getTestHistory.length" nzNotFoundImage="simple"> </nz-empty>
   <eo-ng-tree-default
-    [nzData]="store.getTestHistory"
+    [nzData]="getTestHistory"
     [nzSelectedKeys]="nzSelectedKeys"
     nzBlockNode
     (nzClick)="gotoTestHistory($event)"
@@ -34,11 +34,7 @@
   ></eo-ng-tree-default>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
     <div class="flex items-center w-full cursor-pointer px-[6px]">
-      <b
-        class="block w-12 method_type"
-        [ngClass]="'method-text-' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
-        >{{ origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</b
-      >
+      <b class="block w-12 method-text" [ngClass]="'method-text-' + renderRequestMethodText(node)">{{ renderRequestMethodText(node) }}</b>
       <span class="flex-1 overflow-hidden text-[12px] truncate">{{ origin.request?.uri }}</span>
     </div>
   </ng-template>

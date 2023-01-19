@@ -195,7 +195,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (this.store.isShare) {
         return;
       }
-      await this.testService.addHistory({ protocol: Protocol.WEBSOCKET, ...data }, 0);
+      await this.testService.addHistory({ protocol: Protocol.WEBSOCKET, ...data });
       return;
     }
     // * connecting

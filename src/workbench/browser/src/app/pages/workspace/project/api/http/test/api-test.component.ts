@@ -40,6 +40,8 @@ import { ProjectApiService } from '../../api.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 
+import { cpSync } from 'fs';
+
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
 
@@ -163,7 +165,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   async init() {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = this.resetModel();
+      this.model = {
+        requestTabIndex: 1
+      } as testViewModel;
       let uuid = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
       let requestInfo = null;
@@ -355,9 +359,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.status$.next('tested');
   }
-  private async addHistory(history: ApiTestHistory, apiUuid: string) {
-    await this.apiTest.addHistory(history, apiUuid);
-  }
   /**
    * Receive Test Server Message
    */
@@ -394,7 +395,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!message.response.statusCode || this.store.isShare) {
       return;
     }
-    // this.addHistory(message.history, queryParams.uuid);
+    //Add test history
+    this.apiTest.addHistory({
+      apiUuid: this.model.request.apiUuid,
+      request: this.model.request,
+      response: message.response
+    });
   }
   setTestSecondsTimmer() {
     if (this.timer$) {

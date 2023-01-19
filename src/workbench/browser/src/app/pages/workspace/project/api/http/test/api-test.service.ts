@@ -8,10 +8,12 @@ export class ApiTestService {
   getHistory(id): Promise<ApiTestHistory> {
     return this.effectService.getHistory(id);
   }
-  addHistory(history: ApiTestHistory, apiUuid): Promise<any> {
+  addHistory(history: ApiTestHistory): Promise<any> {
     return this.effectService.createApiTestHistory({
-      ...history,
-      apiUuid
+      apiUuid: history.apiUuid,
+      general: '{}',
+      request: JSON.stringify(history.request),
+      response: JSON.stringify(history.response)
     });
   }
 }
