@@ -94,6 +94,6 @@ const transformRequestBody = (requestBody: OldApiData['requestBody'] = []): Body
         item.childList = transformRequestBody(requestBody[index]?.children);
       }
     });
-    return bodyParams;
+    return bodyParams || [];
   }
 };
