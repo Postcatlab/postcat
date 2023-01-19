@@ -28,9 +28,8 @@ export class WorkspaceMemberService {
     });
   }
   async queryMember(search) {
-    let result = [];
     if (this.store.isLocal) {
-      result = [
+      return [
         {
           role: {
             id: 1
@@ -38,18 +37,17 @@ export class WorkspaceMemberService {
           ...this.store.getUserProfile
         }
       ];
-    } else {
-      const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
-      result = data || [];
     }
-    result.forEach(member => {
-      console.log('jjj', member, toJS(this.store.getWorkspaceRoleList));
-      member.roleTitle = this.store.getWorkspaceRoleList.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-    });
-    return result;
+    const [data, err]: any = await this.api.api_workspaceSearchMember({ username: search.trim(), page: 1, pageSize: 100 });
+    if (err) {
+      return;
+    }
+    return data.map(({ roles, ...items }) => ({
+      roles,
+      isOwner: roles.find(it => it.name === 'Workspace Owner'),
+      isEditor: roles.find(it => it.name === 'Workspace Editor'),
+      ...items
+    }));
   }
   async removeMember(item) {
     return await this.api.api_workspaceRemoveMember({
