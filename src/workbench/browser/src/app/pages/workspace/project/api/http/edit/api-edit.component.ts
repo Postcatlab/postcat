@@ -23,7 +23,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy, OnInit {
+export class ApiEditComponent implements OnDestroy {
   @Input() model: ApiData;
   /**
    * Intial model from outside,check form is change
@@ -57,9 +57,6 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     this.initShortcutKey();
     this.initBasicForm();
   }
-  ngOnInit(): void {
-    this.getApiGroup();
-  }
   /**
    * Init Api Data
    *
@@ -92,6 +89,7 @@ export class ApiEditComponent implements OnDestroy, OnInit {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
+    this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
