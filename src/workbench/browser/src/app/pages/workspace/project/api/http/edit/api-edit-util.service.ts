@@ -22,7 +22,7 @@ export class ApiEditUtilService {
     });
 
     //Parse response body
-    if (!result.responseList) {
+    if (!result.responseList?.[0]?.responseParams) {
       return result;
     }
     ['bodyParams', 'headerParams'].forEach(tableName => {

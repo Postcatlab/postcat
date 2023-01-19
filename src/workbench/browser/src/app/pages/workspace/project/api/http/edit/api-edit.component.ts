@@ -164,12 +164,12 @@ export class ApiEditComponent implements OnDestroy, OnInit {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    // console.log(
-    //   'api edit origin:',
-    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    // );
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);

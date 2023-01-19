@@ -76,12 +76,24 @@ export const filterTableData = (
     filterFn?: (item: any) => boolean;
   } = {}
 ) => {
+  if (whatType(inData) !== 'array') return inData;
   //TODO add pickBy support
   //Set default Options
   opts.childKey = opts.childKey || 'childList';
   opts.omitBy = opts.omitBy || ['eoKey'];
-  //Omit useless fieild
   const result = inData.map(val => omitDeep(val, opts.omitBy));
+  //Omit useless fieild
+  // const result = JSON.parse(
+  //   JSON.stringify(inData, (key, value) => {
+  //     if (typeof key === 'string' && opts.omitBy.includes(key)) {
+  //       return undefined;
+  //     } else {
+  //       return value;
+  //     }
+  //   })
+  // );
+  console.log('result', result);
+
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
       pcConsole.error('filterTableData need primaryKey');
