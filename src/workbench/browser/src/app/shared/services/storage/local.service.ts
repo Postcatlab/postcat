@@ -161,7 +161,6 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiData
-        // @ts-ignore
         .page({ projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
