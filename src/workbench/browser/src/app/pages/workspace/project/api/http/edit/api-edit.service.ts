@@ -26,7 +26,7 @@ export class ApiEditService {
       },
       responseList: [
         {
-          name: $localize`default`,
+          name: $localize`Default`,
           httpCode: '200',
           contentType: ApiBodyType.JSON,
           responseParams: {

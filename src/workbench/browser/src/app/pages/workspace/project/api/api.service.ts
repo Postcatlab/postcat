@@ -47,7 +47,6 @@ export class ProjectApiService {
     delete apiData.id;
     const [result, err] = await await this.api.api_apiDataCreate({ apiList: [apiData] });
     if (err) {
-      console.error(err);
       this.message.error($localize`Copy API failed`);
       return;
     }
@@ -59,9 +58,13 @@ export class ProjectApiService {
   async delete(apiUuid) {
     // * delete API
     const [result, err] = await this.api.api_apiDataDelete({
-      apiUuids: JSON.stringify([apiUuid])
+      apiUuids: [apiUuid]
     });
-    if (err) return;
+    if (err) {
+      this.message.error($localize`Delete API failed`);
+      return;
+    }
+    this.message.success($localize`Deleted API Successfully`);
     this.effect.getGroupList();
   }
 }
