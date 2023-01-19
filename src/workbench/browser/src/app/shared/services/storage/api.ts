@@ -103,14 +103,17 @@ const http = {
     },
     {
       name: 'share',
-      data: [{ 'createShare @post': '/api/shared' }, { 'getShareList @get': '/api/shared' }, { 'deleteShare @delete': '/shared' }]
+      data: [
+        { 'createShare @post': '/api/project-shared', json: 'projectUuid, workSpaceUuid' },
+        { 'getShareList @get': '/api/project-shared', query: 'sharedUuid' },
+        { 'deleteShare @delete': '/api/project-shared', query: 'sharedUuid' }
+      ]
     },
     {
       name: 'shareDoc',
       data: [
-        { 'getAllAPI @get': '/api/shared-docs/{uniqueID}/collections' },
-        { 'getApiDetail @get': '/api/shared-docs/{uniqueID}/api/{apiDataUUID}' },
-        { 'getEnv @get': '/api/shared-docs/{uniqueID}/environments' }
+        { 'getAllAPI @get': '/api/project-shared/api', query: 'sharedUuid, apiUuid' },
+        { 'getEnv @get': '/api/project-shared/env', query: 'sharedUuid' }
       ]
     }
   ]
