@@ -156,7 +156,9 @@ export class GlobalProvider {
       rest.collections.map(n => ({
         type: 1,
         name: n.name,
-        parentId: groupID
+        parentId: groupID,
+        projectUuid: this.getCurrentProjectID(),
+        workSpaceUuid: this.state.getCurrentWorkspaceUuid
       }))
     );
     console.log('groups', groups);
