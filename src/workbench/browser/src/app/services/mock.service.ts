@@ -74,7 +74,7 @@ export class MockService {
             } else {
               const result = await this.matchApiData(apiData, req);
               if (result.statusCode === 404) {
-                return result;
+                return sender.send('getMockApiList', result);
               }
               mock.response ??= this.generateResponse(apiData.responseList?.[0].responseParams.bodyParams);
             }
@@ -119,18 +119,18 @@ export class MockService {
     const { pathname } = new URL(req.url, 'http://localhost:3040');
     let uri = apiData.uri.trim();
     let isQueryMatch = true;
-    if (Array.isArray(restParams) && restParams.length > 0) {
-      const restMap = restParams.reduce((p, c) => ((p[c.name] = c.paramAttr.example), p), {});
-      uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
-      console.log('restMap', restMap);
-    }
+    // if (Array.isArray(restParams) && restParams.length > 0) {
+    //   const restMap = restParams.reduce((p, c) => ((p[c.name] = c.paramAttr.example), p), {});
+    //   uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+    //   console.log('restMap', restMap);
+    // }
     if (Array.isArray(queryParams) && queryParams.length > 0) {
       const query = req.query;
       isQueryMatch = queryParams.every(n => n.paramAttr.example === query[n.name]);
     }
     const uriReg = new RegExp(`^/?${uri}/?$`);
     // @ts-ignore
-    const isMatch = requestMethod === RequestMethod[req.method] && uriReg.test(pathname) && isQueryMatch;
+    const isMatch = requestMethod === RequestMethod[req.method] && uriReg.test(decodeURIComponent(pathname)) && isQueryMatch;
     return isMatch ? { response: this.generateResponse(bodyParams) } : { statusCode: 404 };
   }
 
@@ -166,7 +166,6 @@ export class MockService {
    */
   async getApiData(apiUuid: string, isRemoteMock = false): Promise<ApiData> {
     const [apiList] = await this.apiServiece.api_apiDataDetail({ apiUuids: [apiUuid] });
-
     return apiList?.[0];
     // return new Promise((resolve, reject) => {
     //   this.indexedDBStorage.apiDataLoad().subscribe(
