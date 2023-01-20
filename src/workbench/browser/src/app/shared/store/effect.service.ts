@@ -345,7 +345,7 @@ export class EffectService {
       return;
     }
     const { items, paginator } = apiListRes;
-    console.log('API 数据', items, JSON.stringify(items));
+    // console.log('API 数据', items);
     // * set api & group list
     this.store.setGroupList(rootGroup.children);
     Reflect.deleteProperty(rootGroup, 'children');

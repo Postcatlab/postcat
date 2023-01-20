@@ -7,6 +7,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { MessageService } from './message';
+import { ApiService } from './storage/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
@@ -17,6 +18,7 @@ export class GlobalProvider {
     private storage: StorageService,
     private state: StoreService,
     private setting: SettingService,
+    private api: ApiService,
     private message: MessageService
   ) {
     //TODO compatible with old version
@@ -108,26 +110,38 @@ export class GlobalProvider {
     return data.filter(n => n.parentID === parentID).map(({ uuid, name }) => ({ id: uuid, name, children: this.list2tree(data, uuid) }));
   };
 
-  getGroup = (projectID = this.getCurrentProjectID()) => {
-    return new Promise(resolve => {
-      this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
-        console.log('result', result);
-        if (result.status === StorageResStatus.success) {
-          const res = {
-            status: 0,
-            data: this.list2tree(result.data, 0)
-          };
-          resolve(res);
-        } else {
-          const res = {
-            status: -1,
-            data: null,
-            error: result
-          };
-          resolve(res);
-        }
-      });
-    });
+  getGroup = async (projectID = this.getCurrentProjectID()) => {
+    const [data, err] = await this.api.api_groupList({});
+    const deep = inData => {
+      inData.uuid = inData.id;
+      if (inData.children?.length) {
+        inData.childList = deep(inData.children);
+        delete inData.children;
+      }
+      return data;
+    };
+    const result = {
+      status: 0,
+      data: deep(data)
+    };
+    return result;
+    // this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
+    //   console.log('result', result);
+    //   if (result.status === StorageResStatus.success) {
+    //     const res = {
+    //       status: 0,
+    //       data: this.list2tree(result.data, 0)
+    //     };
+    //     resolve(res);
+    //   } else {
+    //     const res = {
+    //       status: -1,
+    //       data: null,
+    //       error: result
+    //     };
+    //     resolve(res);
+    //   }
+    // });
   };
   importProject = (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
