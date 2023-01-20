@@ -50,7 +50,11 @@
       </nz-collapse-panel>
     </nz-collapse>
     <!-- Body -->
-    <nz-collapse *ngIf="model.requestParams?.bodyParams?.length" class="w-full mt-[20px]">
+    <nz-collapse
+      *ngIf="[TYPE_API_BODY.Binary,TYPE_API_BODY.Raw].includes(model.apiAttrInfo.contentType)?
+    model.requestParams?.bodyParams?.[0]?.binaryRawData:model.requestParams?.bodyParams?.length"
+      class="w-full mt-[20px]"
+    >
       <nz-collapse-panel [nzActive]="true" [nzHeader]="bodyParamsHeader">
         <ng-template #bodyParamsHeader>
           <div nz-row nzAlign="middle">

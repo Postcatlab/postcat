@@ -5,6 +5,7 @@ import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
+
 @Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
   constructor() {}
@@ -22,6 +23,8 @@ export class ApiEditUtilService {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
         if (result.requestParams.bodyParams?.[0]) {
           result.requestParams.bodyParams[0].orderNo = 0;
+          result.requestParams.bodyParams[0].paramType = 0;
+          result.requestParams.bodyParams[0].partType = mui['bodyParams'];
         }
         return;
       }
@@ -40,7 +43,11 @@ export class ApiEditUtilService {
     }
     ['bodyParams', 'headerParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(result.responseList[0].contentType)) {
-        result.responseList[0].bodyParams[0].orderNo = 0;
+        if (result.responseList[0].bodyParams?.[0]) {
+          result.responseList[0].bodyParams[0].orderNo = 0;
+          result.responseList[0].bodyParams[0].paramType = 1;
+          result.responseList[0].bodyParams[0].partType = mui['bodyParams'];
+        }
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
