@@ -314,13 +314,12 @@ export class StoreService {
   // ? project
   @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;
-    const uuid = this.projectList.find(val => val.projectUuid === this.currentProjectID)?.uuid || projects[0]?.projectUuid;
+    const uuid = this.projectList.find(val => val.projectUuid === this.currentProjectID)?.projectUuid || projects[0]?.projectUuid;
     uuid && this.setCurrentProjectID(uuid);
   }
   @action setCurrentProjectID(projectUuid: string) {
     this.currentProjectID = projectUuid;
     this.currentProject = this.projectList?.find(val => val?.projectUuid === projectUuid);
-    console.log('setCurrentProjectID', projectUuid);
     StorageUtil.set('currentProjectID', projectUuid);
   }
   // ? user && auth
