@@ -15,6 +15,7 @@ export class GlobalProvider {
     private modalService: ModalService,
     private router: Router,
     private state: StoreService,
+    private store: StoreService,
     private setting: SettingService,
     private api: ApiService,
     private message: MessageService
@@ -22,6 +23,7 @@ export class GlobalProvider {
     //TODO compatible with old version
     window.__POWERED_BY_EOAPI__ = true;
     window.__POWERED_BY_POSTCAT__ = true;
+    this.getGroup();
   }
 
   injectGlobalData() {
@@ -111,16 +113,18 @@ export class GlobalProvider {
   getGroup = async (projectID = this.getCurrentProjectID()) => {
     const [data, err] = await this.api.api_groupList({});
     const deep = inData => {
-      inData.uuid = inData.id;
-      if (inData.children?.length) {
-        inData.childList = deep(inData.children);
-        delete inData.children;
-      }
-      return data;
+      inData.forEach(val => {
+        val.uuid = val.id;
+        if (inData.children?.length) {
+          inData.childList = deep(inData.children);
+          delete inData.children;
+        }
+      });
+      return inData;
     };
     const result = {
       status: 0,
-      data: deep(data)
+      data: deep(data.at(0).children)
     };
     return result;
     // this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
@@ -143,15 +147,17 @@ export class GlobalProvider {
   };
   importProject = async (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
-    const { projectID, groupID, ...rest } = {
+    let { projectID, groupID, ...rest } = {
       projectID: currentProjectID, //没有传 projectID 默认获取当前项目
       groupID: 0, //没传 groupID 默认加入根分组
       collections: [], //分组、API 数据
       environments: [], //环境数据
       ...params
     };
-    console.log('projectID, rest, groupID', projectID, rest, groupID);
-
+    // console.log('projectID, rest, groupID', projectID, rest, groupID);
+    if (groupID === 0) {
+      groupID = this.store.getRootGroup.id;
+    }
     const [groups] = await this.api.api_groupCreate(
       rest.collections.map(n => ({
         type: 1,
@@ -172,10 +178,14 @@ export class GlobalProvider {
     const [[data]] = await Promise.all(apiCreatePromises);
 
     const result = this.serializationData({
-      status: 0,
-      data
+      status: 200,
+      data: {
+        successes: {
+          apiData: data
+        }
+      }
     });
-    console.log('importProject result', result);
+    // console.log('importProject result', result);
     return result;
 
     // return new Promise(resolve => {
