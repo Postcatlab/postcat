@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import omitDeep from 'omit-deep-lodash';
 
 import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResData } from '../../pages/workspace/project/api/service/api-test/test-server.model';
-import { ApiData, ApiTestHistory } from '../../shared/services/storage/db/models';
+import { ApiData } from '../../shared/services/storage/db/models';
 import { BodyParam, HeaderParam } from '../../shared/services/storage/db/models/apiData';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';

@@ -270,12 +270,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel?.request || !this.model.request) {
       return false;
     }
-    // console.log(
-    //   'api test origin:',
-    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-    //   'after:',
-    //   this.apiTestUtil.formatEditingApiData(this.model.request)
-    // );
+    console.log(
+      'api test origin:',
+      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+      'after:',
+      this.apiTestUtil.formatEditingApiData(this.model.request)
+    );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {

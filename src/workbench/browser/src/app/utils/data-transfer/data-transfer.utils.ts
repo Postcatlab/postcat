@@ -285,8 +285,8 @@ export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAt
       }
       inputObject[tmpKey] = val.example;
       if (val.childList && val.childList.length > 0) {
-        switch (val.type) {
-          case 'array': {
+        switch (val.dataType) {
+          case ApiParamsType.array: {
             if (inputOptions.checkXmlAttr) {
               inputObject['@eo_attr'][tmpKey] = [inputObject['@eo_attr'][tmpKey]];
             }
@@ -302,24 +302,24 @@ export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAt
         }
       } else {
         const tmpDefaultTypeValueObj = {
-          boolean: 'false',
-          array: '[]',
-          object: '{}',
-          number: '0',
-          int: '0'
+          [ApiParamsType.boolean]: 'false',
+          [ApiParamsType.array]: '[]',
+          [ApiParamsType.object]: '{}',
+          [ApiParamsType.number]: '0',
+          [ApiParamsType.int]: '0'
         };
-        switch (val.type) {
-          case 'string': {
+        switch (val.dataType) {
+          case ApiParamsType.string: {
             inputObject[tmpKey] = inputObject[tmpKey] || '';
             break;
           }
-          case 'null': {
+          case ApiParamsType.null: {
             inputObject[tmpKey] = null;
             break;
           }
           default: {
             try {
-              inputObject[tmpKey] = JSON.parse(inputObject[tmpKey] || tmpDefaultTypeValueObj[val.type]);
+              inputObject[tmpKey] = JSON.parse(inputObject[tmpKey] || tmpDefaultTypeValueObj[val.dataType]);
             } catch (JSON_PARSE_ERROR) {
               inputObject[tmpKey] = inputObject[tmpKey] || '';
             }
