@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -22,8 +23,9 @@ export class EffectService {
     private router: Router,
     private lang: LanguageService,
     private web: WebService,
-    private route: ActivatedRoute,
-    private remote: RemoteService
+    private remote: RemoteService,
+    private eMessage: EoNgFeedbackMessageService,
+    private route: ActivatedRoute
   ) {
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
@@ -219,6 +221,7 @@ export class EffectService {
       projectMsgs: [].concat(msg)
     });
     if (err) {
+      this.eMessage.error($localize`Create Project Failed !`);
       return [];
     }
     return data;

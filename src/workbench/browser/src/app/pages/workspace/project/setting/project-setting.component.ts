@@ -12,6 +12,8 @@ import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 
+import { debug } from 'console';
+
 const actionComponent = {
   push: SyncApiComponent,
   import: ImportApiComponent,

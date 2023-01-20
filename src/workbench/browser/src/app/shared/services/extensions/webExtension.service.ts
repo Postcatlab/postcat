@@ -32,7 +32,7 @@ export class WebExtensionService {
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService) {
     this.debugExtensionNames =
-      !APP_CONFIG.production || this.web.isVercel
+      !APP_CONFIG.production || this.web.isVercel || APP_CONFIG.serverUrl?.includes(window.location.host)
         ? ['vscode-postcat-abyss', 'vscode-postcat-dracula', 'vscode-postcat-purple', 'vscode-postcat-red']
         : [];
   }

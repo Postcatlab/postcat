@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { OperateProjectFormComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/components/operate-project-form.compoent';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { SettingService } from '../../../../modules/system-setting/settings.service';
@@ -101,8 +100,8 @@ export class ProjectListComponent implements OnInit {
         if (!model.name) {
           return;
         }
-
         await this.effect.createProject([model]);
+
         // * update project list
         this.getProjectList();
         modal.destroy();

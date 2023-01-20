@@ -51,7 +51,7 @@ export class StoreService {
   // ? project
   @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
-  @observable private currentProject: Project;
+  @observable private currentProject: Project = null;
   @observable private roleList = {
     workspace: [],
     project: []
@@ -314,7 +314,7 @@ export class StoreService {
   // ? project
   @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;
-    const uuid = this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0]?.uuid;
+    const uuid = this.projectList.find(val => val.projectUuid === this.currentProjectID)?.projectUuid || projects[0]?.projectUuid;
     uuid && this.setCurrentProjectID(uuid);
   }
   @action setCurrentProjectID(projectUuid: string) {
