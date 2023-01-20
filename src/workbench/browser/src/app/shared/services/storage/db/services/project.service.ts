@@ -130,6 +130,7 @@ export class ProjectService extends BaseService<Project> {
       .filter(n => n.depth !== 0)
       .map(n => {
         const { id, children, ...rest } = n;
+        rest.parentId ??= rootGroup[0].id;
         return rest;
       });
     let remoteGroups = rootGroup;

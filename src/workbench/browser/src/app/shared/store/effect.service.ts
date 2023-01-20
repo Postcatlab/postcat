@@ -400,6 +400,7 @@ export class EffectService {
       .filter(n => n.depth !== 0)
       .map(n => {
         const { id, children, ...rest } = n;
+        rest.parentId ??= rootGroup.id;
         return rest;
       });
     const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
