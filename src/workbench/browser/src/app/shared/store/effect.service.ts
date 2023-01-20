@@ -449,10 +449,12 @@ export class EffectService {
   // TODO 等后端接口
   async projectImport(target: 'local' | 'remote', params: ImportProjectDto) {
     const { projectUuid = this.store.getCurrentProjectID, ...restParams } = params;
+    console.log('this.store.getCurrentWorkspaceUuid', this.store.getCurrentWorkspaceUuid);
     if (target === 'local') {
       const _params = {
-        workSpaceUuid: this.store.getCurrentWorkspaceUuid,
-        ...restParams
+        ...restParams,
+        projectUuid: this.store.getCurrentProjectID,
+        workSpaceUuid: this.store.getCurrentWorkspaceUuid
       } as ImportProjectDto;
       await db.project.imports(_params);
       console.log('local projectImport', params);

@@ -198,9 +198,13 @@ export class ApiGroupTreeComponent implements OnInit {
           modal.componentInstance.submit(status => {
             if (status) {
               this.message.success($localize`${title} successfully`);
+              // TODO
               setTimeout(() => {
                 this.effect.getGroupList();
-              }, 5000);
+              }, 1000);
+              setTimeout(() => {
+                this.effect.getGroupList();
+              }, 6000);
               modal.destroy();
             } else {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
