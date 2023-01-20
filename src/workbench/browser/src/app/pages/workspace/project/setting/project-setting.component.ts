@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, toJS } from 'mobx';
@@ -30,7 +28,7 @@ export class ProjectSettingComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
-    private store: StoreService,
+    public store: StoreService,
     private api: ApiService,
     private router: Router,
     private effect: EffectService
@@ -66,7 +64,7 @@ export class ProjectSettingComponent implements OnInit {
 
   ngOnInit(): void {
     autorun(() => {
-      this.projectName = this.store.getCurrentProject?.name;
+      this.projectName = this.store.getCurrentProject.name;
     });
   }
 

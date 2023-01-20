@@ -7,13 +7,12 @@ import { autorun } from 'mobx';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
-import { eoDeepCopy } from '../../../../utils/index.utils';
 
 @Component({
   selector: 'eo-workspace-setting',
   template: `<form *ngIf="validateForm" auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label i18n nzFor="title">Workspace Name</nz-form-label>
+        <nz-form-label i18n nzRequired nzFor="title">Workspace Name</nz-form-label>
         <nz-form-control nzErrorTip="Please input your new work name">
           <input type="text" eo-ng-input id="title" formControlName="title" placeholder="Workspace Name" i18n-placeholder />
         </nz-form-control>
