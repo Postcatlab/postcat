@@ -9,7 +9,7 @@ import {
   ImportProjectDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
-import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 import { EnvironmentService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/environment.service';
@@ -112,13 +112,65 @@ export class ProjectService extends BaseService<Project> {
   async imports(params: ImportProjectDto) {
     const { apiList, groupList, environmentList, workSpaceUuid, projectUuid } = params;
 
-    // this.apiDataService.bulkCreate({
-    //   apiList,
-    //   workSpaceUuid,
-    //   projectUuid
-    // });
-    // this.groupService.
+    this.environmentService.bulkCreate(
+      environmentList.map(e => ({
+        ...e,
+        workSpaceUuid,
+        projectUuid
+      }))
+    );
 
-    console.log('导入项目', params);
+    const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });
+
+    await this.deepCreateGroup(groupList, apiList, workSpaceUuid, projectUuid, [rootGroup]);
   }
+
+  private deepCreateGroup = async (groupList = [], apiList = [], workSpaceUuid, projectUuid, rootGroup: Group[]) => {
+    const groupFilters = groupList
+      .filter(n => n.depth !== 0)
+      .map(n => {
+        const { id, children, ...rest } = n;
+        return rest;
+      });
+    let remoteGroups = rootGroup;
+
+    if (groupFilters.length) {
+      const groupIds = await this.apiGroupTable.bulkAdd(groupFilters, { allKeys: true });
+      remoteGroups = await this.apiGroupTable.bulkGet(groupIds);
+    }
+
+    console.log('remoteGroups', remoteGroups);
+    groupList.forEach((localGroup, index) => {
+      const apiFilters = apiList
+        .filter(n => n.groupId === localGroup.id)
+        .map(n => {
+          const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
+          return {
+            ...rest,
+            // 远程分组 id 替换本地分组 id
+            groupId: remoteGroups[index]?.id
+          };
+        });
+
+      if (apiFilters.length) {
+        this.apiDataService.bulkCreate({
+          apiList: apiFilters,
+          projectUuid,
+          workSpaceUuid
+        });
+      }
+
+      // 如果本地分组还有子分组
+      if (localGroup.children?.length) {
+        localGroup.children.forEach(m => {
+          m.type = 1;
+          // 远程分组 id 替换本地分组 id
+          m.parentId = remoteGroups[index]?.id;
+          m.projectUuid = projectUuid;
+          m.workSpaceUuid = workSpaceUuid;
+        });
+        this.deepCreateGroup(localGroup.children, apiList, workSpaceUuid, projectUuid, rootGroup);
+      }
+    });
+  };
 }

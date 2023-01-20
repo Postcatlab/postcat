@@ -95,47 +95,63 @@ export class ImportApiComponent implements OnInit {
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     const { name, content } = this.uploadData;
     try {
-      this.effectService.projectImport('local', content);
       const [data, err] = module[action](content);
-      console.log('import data', window.structuredClone?.(data));
+      // console.log('import data', window.structuredClone?.(data));
       if (err) {
         console.error(err.msg);
         callback(false);
         return;
       }
       // The datastructure may has circular reference,decycle by reset object;
-      const decycle = (obj, parent?) => {
-        const parentArr = parent || [obj];
-        for (const i in obj) {
-          if (typeof obj[i] === 'object') {
-            parentArr.forEach(pObj => {
-              if (pObj === obj[i]) {
-                obj[i] = {
-                  description: $localize`Same as the parent's field ${obj[i].name}`,
-                  example: '',
-                  name: obj[i].name,
-                  required: true,
-                  type: obj[i].type
-                };
-              }
-            });
-            decycle(obj[i], [...parentArr, obj[i]]);
-          }
-        }
-        return obj;
-      };
-      const params = [this.store.getCurrentProjectID, decycle(data)];
-      this.storage.run('projectImport', params, (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          callback(true);
-          this.router.navigate(['home/workspace/project/api']);
+      // const decycle = (obj, parent?) => {
+      //   const parentArr = parent || [obj];
+      //   for (const i in obj) {
+      //     if (typeof obj[i] === 'object') {
+      //       parentArr.forEach(pObj => {
+      //         if (pObj === obj[i]) {
+      //           obj[i] = {
+      //             description: $localize`Same as the parent's field ${obj[i].name}`,
+      //             example: '',
+      //             name: obj[i].name,
+      //             required: true,
+      //             type: obj[i].type
+      //           };
+      //         }
+      //       });
+      //       decycle(obj[i], [...parentArr, obj[i]]);
+      //     }
+      //   }
+      //   return obj;
+      // };
+      try {
+        if (this.store.isLocal) {
+          await this.effectService.projectImport('local', content);
         } else {
-          callback(false);
-          pcConsole.error('Import Error', result.error);
-          return;
+          await this.effectService.projectImport('remote', {
+            ...content,
+            projectUuid: this.store.getCurrentProjectID,
+            workSpaceUuid: this.store.getCurrentWorkspaceUuid
+          });
         }
+        callback(true);
         this.router.navigate(['home/workspace/project/api']);
-      });
+      } catch (error) {
+        callback(false);
+        pcConsole.error('Import Error', error);
+      }
+
+      // const params = [this.store.getCurrentProjectID, decycle(data)];
+      // this.storage.run('projectImport', params, (result: StorageRes) => {
+      //   if (result.status === StorageResStatus.success) {
+      //     callback(true);
+      //     this.router.navigate(['home/workspace/project/api']);
+      //   } else {
+      //     callback(false);
+      //     pcConsole.error('Import Error', result.error);
+      //     return;
+      //   }
+      //   this.router.navigate(['home/workspace/project/api']);
+      // });
     } catch (e) {
       console.error(e);
       callback(false);

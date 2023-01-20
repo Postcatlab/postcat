@@ -448,15 +448,17 @@ export class EffectService {
 
   // TODO 等后端接口
   async projectImport(target: 'local' | 'remote', params: ImportProjectDto) {
+    const { projectUuid = this.store.getCurrentProjectID, ...restParams } = params;
     if (target === 'local') {
       const _params = {
-        projectUuid: this.store.getCurrentProjectID,
         workSpaceUuid: this.store.getCurrentWorkspaceUuid,
-        ...params
+        ...restParams
       } as ImportProjectDto;
-      db.project.imports(_params);
+      await db.project.imports(_params);
+      console.log('local projectImport', params);
     } else if (target === 'remote') {
-      this.uploadToRemote(params.projectUuid, params);
+      console.log('remote projectImport', params);
+      await this.uploadToRemote(projectUuid, params);
     }
   }
 }
