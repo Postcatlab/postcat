@@ -27,6 +27,8 @@ export class TabOperateService {
      * Force cache in production environment
      */
     disabledCache: APP_CONFIG.production ? false : false,
+    //* intial url followQueryParams
+    followQueryParams: true,
     //* Allow development mode debug not exist router at init
     allowNotExistRouter: !APP_CONFIG.production,
     //* Allow open new tab by url at init
@@ -100,6 +102,9 @@ export class TabOperateService {
     }
     //Tab from last choose
     const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+    if (this.setting.followQueryParams) {
+      targetTab.params = { ...validTabItem.params, ...targetTab.params };
+    }
     this.selectedIndex = tabCache.selectedIndex;
     this.navigateTabRoute(targetTab);
   }
