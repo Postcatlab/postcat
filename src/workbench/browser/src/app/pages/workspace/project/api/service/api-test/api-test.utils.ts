@@ -146,7 +146,7 @@ export const eoFormatResponseData = ({ globals, report, history, id }): TestServ
     blobFileName: report.blobFileName,
     request: {
       uri: history.requestInfo.URL,
-      headers: history.requestInfo.headers,
+      headers: (report.request.headers || []).map(val => ({ name: val.key, value: val.value })),
       body: history.requestInfo.params,
       contentType: ['formData', 'raw', 'json', 'xml', 'binary'][history.requestInfo.requestType] || 'raw'
     }

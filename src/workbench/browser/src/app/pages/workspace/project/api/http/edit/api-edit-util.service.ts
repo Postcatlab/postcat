@@ -20,6 +20,9 @@ export class ApiEditUtilService {
     //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
+        if (result.requestParams.bodyParams?.[0]) {
+          result.requestParams.bodyParams[0].orderNo = 0;
+        }
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
@@ -37,6 +40,7 @@ export class ApiEditUtilService {
     }
     ['bodyParams', 'headerParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(result.responseList[0].contentType)) {
+        result.responseList[0].bodyParams[0].orderNo = 0;
         return;
       }
       result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
@@ -67,8 +71,9 @@ export class ApiEditUtilService {
    */
   formatUIApiDataToStorage(formData): ApiData {
     const result = this.parseApiUI2Storage(formData, val => {
-      val.paramAttr.example = val['paramAttr.example'];
       val.orderNo = 0;
+      val.paramAttr ??= {};
+      val.paramAttr.example = val['paramAttr.example'];
       delete val['paramAttr.example'];
       return val?.name;
     });

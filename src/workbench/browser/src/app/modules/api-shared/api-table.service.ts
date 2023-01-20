@@ -129,12 +129,12 @@ export class ApiTableService {
           {
             icon: 'more',
             showFn: ({ data }: { data: BodyParam }) =>
-              data.paramAttr.paramValueList?.length ||
-              data.paramAttr.minValue ||
-              data.paramAttr.maxValue ||
-              data.paramAttr.maxLength ||
-              data.paramAttr.minLength ||
-              data.paramAttr.example,
+              data?.paramAttr?.paramValueList?.length ||
+              data?.paramAttr?.minValue ||
+              data?.paramAttr?.maxValue ||
+              data?.paramAttr?.maxLength ||
+              data?.paramAttr?.minLength ||
+              data?.paramAttr?.example,
             title: $localize`More Settings`,
             click: item => {
               this.showMore(item.data, {

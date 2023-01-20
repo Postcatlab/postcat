@@ -83,9 +83,7 @@ export class ApiTabService {
         //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter(
-            (val: TabItem) => val.pathname.includes('home/workspace/project/api/http') && inArg.data.uuids.includes(Number(val.params.uuid))
-          )
+          .filter((val: TabItem) => val.pathname.includes('home/workspace/project/api/http') && inArg.data.uuids.includes(val.params.uuid))
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
