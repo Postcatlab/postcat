@@ -557,7 +557,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
 
                 const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
 
-                // 递归创建分组
+                // 递归创建分组和API
                 const deepCreateGroup = async (groupList = [], apiList = [], remoteProject, rootGroup) => {
                   const projectUuid = remoteProject.projectUuid;
                   const groupFilters = groupList
@@ -633,9 +633,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 });
 
                 await Promise.all(arr);
-                modal.destroy();
 
                 this.effect.updateProjects(workSpaceUuid);
+
+                modal.destroy();
 
                 await this.router.navigate(['**']);
 

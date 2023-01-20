@@ -20,11 +20,14 @@ export class ApiDataService extends BaseService<ApiData> {
 
   async bulkCreate(params: ApiDataBulkCreateDto) {
     const { apiList, workSpaceUuid, projectUuid } = params;
-    const items = apiList.map(item => ({
-      ...item,
-      workSpaceUuid,
-      projectUuid
-    }));
+    const items = apiList.map(item => {
+      Reflect.deleteProperty(item, 'uuid');
+      return {
+        ...item,
+        workSpaceUuid,
+        projectUuid
+      };
+    });
     const result = await this.baseService.bulkCreate(items);
     const systemMocks = result.data?.map(n => ({
       name: '默认 Mock',
