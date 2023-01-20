@@ -44,14 +44,15 @@ export class EffectService {
 
     //TODO perf
     const initWorkspaceInfo = async () => {
-      console.log('rest login', this.store.isLogin);
       if (!this.store.isLogin) {
+        this.store.setWorkspaceList([]);
         if (this.store.isLocal) {
           return;
         }
         this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
         return;
       }
+
       //* Get workspace list
       await this.updateWorkspaceList();
       this.fixedID();
@@ -71,14 +72,6 @@ export class EffectService {
         initWorkspaceInfo();
       }
     );
-    //Init workspace
-    autorun(async () => {
-      // console.log('autorun', 'switch to local');
-      if (this.store.isLogin || !this.store.isLocal) return;
-      this.store.setWorkspaceList([]);
-      this.fixedID();
-      return;
-    });
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(async () => {
       // Use first user postcat,auto into Default project
