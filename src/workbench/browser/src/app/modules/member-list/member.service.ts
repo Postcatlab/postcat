@@ -23,7 +23,7 @@ export class MemberService {
     console.log('MemberService');
   }
   async addMember(items) {}
-  searchUser: (search: string) => UserMeta[];
+  searchUser: (search: string) => Promise<UserMeta[]>;
   changeRole: (item) => boolean;
   removeMember: (item) => void;
   queryMember: (item) => UserMeta[];

@@ -27,6 +27,7 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           auto-focus-form
           nzShowSearch
           i18n-nzPlaceholder
+          nzServerSearch
           nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"
@@ -149,9 +150,10 @@ export class ProjectMemberComponent implements OnInit {
 
       const [aData, aErr]: any = await this.member.addMember(userIds);
       if (aErr) {
+        this.eMessage.error($localize`Add member failed`);
         return;
       }
-      this.eMessage.success($localize`Add new member success`);
+      this.eMessage.success($localize`Add member successfully`);
 
       // * 关闭弹窗
       this.isInvateModalVisible = false;
