@@ -99,7 +99,6 @@ export class ApiEditComponent implements OnDestroy {
     this.eoOnInit.emit(this.model);
     setTimeout(() => {
       //TODO optimize
-      console.log(this.editBody);
       this.editBody.init();
       this.resEditBody.init();
     }, 0);
