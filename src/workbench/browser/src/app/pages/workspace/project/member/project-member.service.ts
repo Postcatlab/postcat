@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -8,7 +9,12 @@ import { autorun } from 'mobx';
 export class ProjectMemberService {
   role: any[] = [];
   isOwner = false;
-  constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
+  constructor(
+    private api: ApiService,
+    private store: StoreService,
+    private effect: EffectService,
+    private message: EoNgFeedbackMessageService
+  ) {
     autorun(async () => {
       this.role = this.store.getProjectRole;
       this.isOwner =
@@ -62,10 +68,13 @@ export class ProjectMemberService {
     const [data, err]: any = await this.api.api_projectMemberQuit({
       userId: members.id
     });
-    if (!err) {
-      const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
-      this.effect.switchProject(project.uuid);
+    if (err) {
+      this.message.error($localize`Quit Failed`);
+      return [null, err];
     }
+    this.message.success($localize`Quit successfully`);
+    const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
+    this.effect.switchProject(project.uuid);
     return [data, err];
   }
   async changeRole(item) {
@@ -75,7 +84,7 @@ export class ProjectMemberService {
       editor: 8
     };
     const [, err]: any = await this.api.api_projectSetRole({
-      userRole: [{ userId, roleIds: hash[roleIds] }]
+      userRole: [{ userId, roleIds: [hash[roleIds]] }]
     });
     // * return isOK
     return !err;

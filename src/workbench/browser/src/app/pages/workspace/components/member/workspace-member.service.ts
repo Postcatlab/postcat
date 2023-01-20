@@ -65,16 +65,18 @@ export class WorkspaceMemberService {
     if (this.store.isLocal) {
       return;
     }
-    if (members.isCreator) {
-      this.message.warning(
-        $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
-      );
-      return [null, 'warning'];
-    }
+    // if (members.length === 1 && members[0].myself) {
+    //   this.message.warning(
+    //     $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
+    //   );
+    //   return [null, 'warning'];
+    // }
     const [data, err]: any = await this.api.api_workspaceMemberQuit({});
     if (err) {
-      return;
+      this.message.error($localize`Quit Failed`);
+      return [null, err];
     }
+    this.message.success($localize`Quit successfully`);
     if (this.store.getCurrentWorkspaceUuid === this.workSpaceUuid) {
       await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }

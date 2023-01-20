@@ -24,7 +24,6 @@ import { MemberService } from './member.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            {{ member.isOwner }}
             <div class="operate-btn-list" *ngIf="!store.isLocal && ((!item.isSelf && member.isOwner) || item.isSelf)">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
@@ -88,18 +87,6 @@ export class MemberListComponent implements OnInit {
       return;
     }
     this.message.success($localize`Remove Member successfully`);
-    this.queryList();
-  }
-  async quitMember() {
-    const [data, err]: any = await this.member.quitMember(this.list);
-    if (err === 'warning') {
-      return;
-    }
-    if (err) {
-      this.message.error($localize`Quit Failed`);
-      return;
-    }
-    this.message.success($localize`Quit successfully`);
     this.queryList();
   }
 }
