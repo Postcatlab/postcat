@@ -41,7 +41,6 @@ export class EffectService {
     if (isUserFirstUse) {
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }
-
     //TODO perf
     const initWorkspaceInfo = async () => {
       if (!this.store.isLogin) {
@@ -63,9 +62,7 @@ export class EffectService {
         this.store.setRole(roles, 'workspace');
       }
     };
-    if (this.store.isLogin) {
-      initWorkspaceInfo();
-    }
+    initWorkspaceInfo();
     reaction(
       () => this.store.isLogin,
       async () => {
