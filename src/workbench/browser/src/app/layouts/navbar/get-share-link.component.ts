@@ -8,7 +8,8 @@ import { interval } from 'rxjs';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
 @Component({
   selector: 'eo-get-share-link',
-  template: `<button
+  template: `
+    <button
       eo-ng-button
       nzType="default"
       class="mx-2 btn_scondary"
@@ -16,6 +17,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       *ngIf="!store.isShare && store.getUrl.includes('/home/workspace/project/api/http/test')"
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
+      nzPopoverOverlayClassName="background-popover"
       nzPopoverTrigger="click"
       (click)="handleGetShareLink()"
       i18n
@@ -35,7 +37,8 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
           <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
         </div>
       </div>
-    </ng-template> `
+    </ng-template>
+  `
 })
 export class GetShareLinkComponent {
   link;

@@ -1,65 +1,76 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
-import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
-import { ApiBodyType, ApiEditViewData, JsonRootType, RequestMethod, RequestProtocol } from '../../../../../../modules/api-shared/api.model';
 import { ApiEditUtilService } from './api-edit-util.service';
+
 @Injectable()
 export class ApiEditService {
-  constructor(private storage: StorageService, private apiEditUtil: ApiEditUtilService, private apiService: ProjectApiService) {}
-  getPureApi({ groupID }) {
+  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService) {}
+  getPureApi({ groupId }): ApiData {
     return {
       name: '',
-      projectID: -1,
       uri: '/',
-      groupID,
-      protocol: RequestProtocol.HTTP,
-      method: RequestMethod.POST,
-      requestBodyType: ApiBodyType.JSON,
-      requestBodyJsonType: JsonRootType.Object,
-      requestBody: [],
-      queryParams: [],
-      restParams: [],
-      requestHeaders: [],
-      responseHeaders: [],
-      responseBodyType: ApiBodyType.JSON,
-      responseBodyJsonType: JsonRootType.Object,
-      responseBody: []
+      groupId,
+      protocol: Protocol.HTTP,
+      apiAttrInfo: {
+        requestMethod: RequestMethod.POST,
+        contentType: ApiBodyType.JSON
+      },
+      requestParams: {
+        headerParams: [],
+        bodyParams: [],
+        queryParams: [],
+        restParams: []
+      },
+      responseList: [
+        {
+          name: $localize`Default`,
+          isDefault: 1,
+          httpCode: '200',
+          contentType: ApiBodyType.JSON,
+          responseParams: {
+            headerParams: [],
+            bodyParams: []
+          }
+        }
+      ]
     };
   }
-  async getApi({ id, groupID }): Promise<ApiEditViewData> {
-    let result = {} as ApiData;
+  async getApi({ id, groupId }): Promise<ApiData> {
+    let result = this.getPureApi({ groupId }) as ApiData;
     if (!id) {
       // From test page/copy api data;
-      let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
-      const pureApi = this.getPureApi({ groupID });
+      let tmpApiData = StorageUtil.get('apiDataWillbeSave');
+      const pureApi = this.getPureApi({ groupId });
       if (tmpApiData) {
         //Add From Test
-        window.sessionStorage.removeItem('apiDataWillbeSave');
-        tmpApiData = JSON.parse(tmpApiData);
+        StorageUtil.remove('apiDataWillbeSave');
         Object.keys(pureApi).forEach(keyName => {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];
         });
-        result.projectID = pureApi.projectID;
       } else {
         //Add directly
         result = pureApi;
       }
     } else {
-      result = await this.apiService.get(id);
+      result = await this.projectApi.get(id);
     }
-    return this.apiEditUtil.parseApiStorage2UI(result);
+    return this.apiEditUtil.formatStorageApiDataToUI(result);
   }
-  editApi(apiData): Promise<StorageRes> {
-    const busEvent = apiData.uuid ? 'editApi' : 'addApi';
+  async editApi(apiData): Promise<[ApiData, any]> {
+    const busEvent = apiData.apiUuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
-      return new Promise(resolve => {
-        this.storage.run('apiDataUpdate', [apiData, apiData.uuid], resolve);
-      });
+      apiData.updateApiAttr = 1;
+      apiData.updateRequestParams = 1;
+      apiData.updateResponseList = 1;
+      return await this.projectApi.edit(apiData);
     } else {
-      return this.apiService.add(apiData);
+      const [result, err] = await this.projectApi.add(apiData);
+      return [result[0], err];
     }
   }
 }

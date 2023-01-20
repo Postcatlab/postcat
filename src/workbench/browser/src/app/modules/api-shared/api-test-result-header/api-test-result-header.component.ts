@@ -1,13 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { ApiTestResHeader } from '../../../pages/workspace/project/api/service/api-test/test-server.model';
 
 @Component({
   selector: 'eo-api-test-result-header',
   templateUrl: './api-test-result-header.component.html',
-  styleUrls: ['./api-test-result-header.component.scss'],
+  styleUrls: ['./api-test-result-header.component.scss']
 })
-export class ApiTestResultHeaderComponent implements OnInit {
-  @Input() model: Array<{ name: string; value: string }>;
+export class ApiTestResultHeaderComponent {
+  @Input() model: ApiTestResHeader[];
   constructor() {}
-
-  ngOnInit(): void {}
 }

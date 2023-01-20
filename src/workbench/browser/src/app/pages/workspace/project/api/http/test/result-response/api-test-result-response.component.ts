@@ -5,7 +5,7 @@ import { b64DecodeUnicode, decodeUnicode, getBlobUrl } from 'eo/workbench/browse
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 import { ApiTestUtilService } from '../../../../../../../modules/api-shared/api-test-util.service';
-import { ApiTestHistoryResponse } from '../api-test.model';
+import { ApiTestResData } from '../../../service/api-test/test-server.model';
 
 @Component({
   selector: 'eo-api-test-result-response',
@@ -13,7 +13,7 @@ import { ApiTestHistoryResponse } from '../api-test.model';
   styleUrls: ['./api-test-result-response.component.scss']
 })
 export class ApiTestResultResponseComponent implements OnChanges {
-  @Input() model: ApiTestHistoryResponse;
+  @Input() model: ApiTestResData;
   @Input() uri: string;
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   codeStatus: { status: string; cap: number; class: string };

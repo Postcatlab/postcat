@@ -2,11 +2,11 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 import { WebService } from '../../../core/services/web/web.service';
+import { ExtensionService } from '../../../shared/services/extensions/extension.service';
 import { EoExtensionInfo } from '../extension.model';
-import { ExtensionService } from '../extension.service';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -14,7 +14,7 @@ import { ExtensionService } from '../extension.service';
   styleUrls: ['./extension-detail.component.scss']
 })
 export class ExtensionDetailComponent implements OnInit {
-  @Input() extensionData: ModuleInfo | null = null;
+  @Input() extensionData: ExtensionInfo | null = null;
   @Output() readonly goBack: EventEmitter<any> = new EventEmitter();
   isOperating = false;
   introLoading = false;
@@ -56,8 +56,7 @@ export class ExtensionDetailComponent implements OnInit {
         this.isOperating = false;
       });
     }
-    this.extensionDetail = await this.extensionService.getDetail(this.extensionData?.name, this.extensionData?.name);
-
+    this.extensionDetail = await this.extensionService.getDetail(this.extensionData?.name);
     if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
     }

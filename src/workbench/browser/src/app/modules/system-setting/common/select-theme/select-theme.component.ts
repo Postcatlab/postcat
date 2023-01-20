@@ -1,35 +1,46 @@
 import { Component } from '@angular/core';
 
-import { ThemeService } from '../../../../core/services/theme.service';
-import { APPEARANCE, THEMES } from './theme.model';
+import { ThemeService } from '../../../../core/services/theme/theme.service';
 
 @Component({
   selector: 'eo-select-theme',
   template: `<div class="grid grid-cols-4 gap-2.5	rounded">
     <div
       class="cursor-pointer theme-container"
-      [ngClass]="{ 'theme-container-active': (theme.appearance === 'dark' ? 'dark-' : '') + theme.mainColor === option.value }"
-      (click)="theme.changeTheme(option.value)"
-      *ngFor="let option of THEMES"
+      [ngClass]="{ 'theme-container-active': theme.currentThemeID === option.id }"
+      (click)="theme.changeTheme(option)"
+      *ngFor="let option of theme.themes"
     >
       <div class="border-all theme-block">
-        <header class="navbar h-[15px]" [style.background]="option.navBackgroud"></header>
+        <header
+          class="navbar h-[15px]"
+          [style.background]="option.colors.layoutHeaderBackground"
+          [style.borderColor]="option.colors.border"
+        ></header>
         <section class="flex h-[35px]">
-          <div class="sidebar w-[35px]" [style.background]="option.sidebarBackground" [style.borderColor]="option.borderColor"></div>
-          <div class="content flex-1 flex items-center justify-center" [style.background]="option.contentBackground">
-            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.primaryColor"></div>
+          <div
+            class="sidebar w-[15px]"
+            [style.background]="option.colors.layoutSidebarBackground"
+            [style.borderColor]="option.colors.border"
+          ></div>
+          <div class="tree w-[30px]" [style.background]="option.colors.treeBackground" [style.borderColor]="option.colors.border"></div>
+          <div class="content flex-1 flex items-center justify-center" [style.background]="option.colors.background">
+            <div class="text-primary w-[30px]  h-[15px]" [style.background]="option.colors.primary"></div>
           </div>
         </section>
+        <div
+          class="footer h-[10px]"
+          [style.borderColor]="option.colors.border"
+          [style.background]="option.colors.layoutFooterBackground"
+        ></div>
       </div>
       <div class="flex items-center justify-center mt-[10px]">
-        <p class="">{{ option.title }}</p>
+        <p class="truncate">{{ option.label }}</p>
       </div>
     </div>
   </div>`,
   styleUrls: ['./select-theme.component.scss']
 })
 export class SelectThemeComponent {
-  THEMES = THEMES;
-  APPEARANCE = APPEARANCE;
   constructor(public theme: ThemeService) {}
 }

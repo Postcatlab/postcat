@@ -23,5 +23,9 @@ module.exports = {
     // schema: "./output/entities"
     // typeorm: "./output/typeorm"
   ],
-  remoteBase: ''
+  remoteBase: '',
+  paramsFill: {
+    projectUuid: 'this.store.getCurrentProjectID',
+    workSpaceUuid: 'this.store.getCurrentWorkspaceUuid'
+  }
 };

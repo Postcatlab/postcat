@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
-import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
+import { action, computed, makeObservable, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
-import { eoDeepCopy } from '../../utils/index.utils';
-const LOCAL_WORKSPACE = {
-  title: $localize`Persional Workspace`,
-  id: -1
-} as API.Workspace;
+import { JSONParse } from '../../utils/index.utils';
+
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
@@ -20,7 +17,15 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
   providedIn: 'root'
 })
 export class StoreService {
+  private localWorkspace: API.Workspace;
   // * observable data
+  // ? api & group(includes api) & mock
+  @observable.shallow private currentAPI = {};
+  @observable.shallow private currentMock = {};
+  @observable private apiList = [];
+
+  // ? history
+  @observable private testHistory = [];
 
   // ? router
   @observable private url = '';
@@ -32,16 +37,25 @@ export class StoreService {
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
 
+  // ? group
+  @observable private rootGroup: Group;
+  @observable private groupList: Group[] = [];
+
   // ? workspace
-  @observable private currentWorkspaceID = StorageUtil.get('currentWorkspaceID') || -1;
-  @observable private currentWorkspace: API.Workspace = eoDeepCopy(LOCAL_WORKSPACE);
+  @observable private currentWorkspace: Partial<API.Workspace> = StorageUtil.get('currentWorkspace') || {
+    isLocal: true
+  };
   //  Local workspace always keep in last
-  @observable private workspaceList: API.Workspace[] = [eoDeepCopy(LOCAL_WORKSPACE)];
+  @observable private workspaceList: API.Workspace[] = [];
 
   // ? project
   @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
-  @observable private currentProject: Project = { name: '' };
+  @observable private currentProject: Project = null;
+  @observable private roleList = {
+    workspace: [],
+    project: []
+  };
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
@@ -77,12 +91,25 @@ export class StoreService {
 
   // ? UI
   @observable private rightBarStatus = false;
-  @observable private role = {
-    workspace: 'Owner',
-    project: 'Owner'
+  @observable.shallow private role = {
+    workspace: [],
+    project: []
   };
 
   // * computed data
+  // ? api & group(includes api) & mock
+  @computed get getCurrentAPI() {
+    return this.currentAPI;
+  }
+  @computed get getCurrentMock() {
+    return this.currentMock;
+  }
+  @computed get getTestHistory() {
+    return toJS(this.testHistory).sort((a, b) => b.createTime - a.createTime);
+  }
+  @computed get getGroupTree() {
+    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
+  }
 
   // ? router
   @computed get getUrl() {
@@ -91,15 +118,24 @@ export class StoreService {
 
   // ? env
   @computed get getCurrentEnv() {
-    const [data] = this.envList.filter(it => it.uuid === this.envUuid);
+    const [data] = this.envList.filter(it => it.id === this.envUuid);
     return (
       data || {
         hostUri: '',
         parameters: [],
         frontURI: '',
-        uuid: null
+        id: null
       }
     );
+  }
+  @computed get getRootGroup() {
+    return this.rootGroup;
+  }
+  @computed get getApiGroupTree() {
+    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
+  }
+  @computed get getApiList() {
+    return this.apiList;
   }
   @computed get getEnvList() {
     return this.envList;
@@ -109,7 +145,7 @@ export class StoreService {
   }
   // ? data source
   @computed get isLocal() {
-    return !this.isShare && this.currentWorkspaceID === -1;
+    return !this.isShare && this.currentWorkspace?.isLocal;
   }
   @computed get mockUrl() {
     const mockUrl = window.electron?.getMockUrl?.();
@@ -120,7 +156,7 @@ export class StoreService {
   }
   // ? share
   @computed get isShare() {
-    return this.url.includes('/home/share');
+    return window.location.href.includes('/home/share');
   }
   @computed get getShareID() {
     return this.shareId;
@@ -130,17 +166,19 @@ export class StoreService {
   @computed get getWorkspaceList() {
     return this.workspaceList;
   }
-  @computed get getCurrentWorkspaceID() {
-    return this.currentWorkspaceID;
+  @computed get getCurrentWorkspaceUuid() {
+    return this.currentWorkspace?.workSpaceUuid;
   }
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
   }
-
-  get getLocalWorkspace() {
-    return eoDeepCopy(LOCAL_WORKSPACE);
+  @computed get getWorkspaceRoleList() {
+    return this.roleList.workspace;
   }
 
+  get getLocalWorkspace() {
+    return this.localWorkspace;
+  }
   // ? project
   @computed get getProjectList() {
     return this.projectList;
@@ -151,10 +189,13 @@ export class StoreService {
   @computed get getCurrentProject() {
     return this.currentProject;
   }
+  @computed get getProjectRoleList() {
+    return this.roleList.project;
+  }
 
   // ? user && auth
   @computed get isLogin() {
-    return !!this.userProfile?.username;
+    return this.userProfile?.id;
   }
   @computed get getUserProfile() {
     return this.userProfile;
@@ -189,12 +230,23 @@ export class StoreService {
     return this.rightBarStatus;
   }
 
-  constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
+  constructor(private setting: SettingService, private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
   }
-
   // * actions
+  // ? history
+  @action setHistory(data = []) {
+    data.forEach(history => {
+      history.request = JSONParse(history.request, {});
+      history.response = JSONParse(history.response, {});
+    });
+    this.testHistory = data;
+  }
+
+  @action setLocalWorkspace(data) {
+    this.localWorkspace = data;
+  }
   // ? router
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
@@ -208,13 +260,29 @@ export class StoreService {
   }
 
   @action setEnvList(data = []) {
-    this.envList = data;
-    const isHere = data.find(it => it.uuid === this.envUuid);
+    this.envList = data.map(val => {
+      val.parameters = JSONParse(val.parameters, []);
+      return val;
+    });
+    const isHere = data.find(it => it.id === this.envUuid);
     if (!isHere) {
       this.envUuid = null;
       //  for delete env
       StorageUtil.set('env:selected', null);
     }
+  }
+
+  // ? group
+  @action setRootGroup(group: Group) {
+    this.rootGroup = group;
+  }
+
+  @action setApiList(list = []) {
+    this.apiList = list;
+  }
+
+  @action setGroupList(list = []) {
+    this.groupList = list;
   }
 
   // ? share
@@ -224,33 +292,38 @@ export class StoreService {
   }
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
-    const local = eoDeepCopy(LOCAL_WORKSPACE);
-    this.workspaceList = [local, ...data.filter(it => it.id !== -1)];
-    const workspace = this.workspaceList.find(val => val.id === this.currentWorkspaceID) || this.getLocalWorkspace;
-    this.setCurrentWorkspaceID(workspace.id);
-  }
-  @action updateWorkspace(workspace) {
-    const index = this.workspaceList.findIndex(val => val.id === workspace.id);
-    this.workspaceList[index] = workspace;
-    if (this.currentWorkspaceID === workspace.id) {
-      this.currentWorkspace = workspace;
+    this.workspaceList = [...data];
+    if (this.localWorkspace) {
+      this.workspaceList.unshift(this.localWorkspace);
     }
   }
-  @action setCurrentWorkspaceID(id: number) {
-    this.currentWorkspaceID = id;
-    this.currentWorkspace = this.workspaceList?.find(val => val.id === id);
-    StorageUtil.set('currentWorkspaceID', this.currentWorkspaceID);
+  @action updateWorkspace(workspace: API.Workspace) {
+    const index = this.workspaceList.findIndex(val => val.workSpaceUuid === workspace.workSpaceUuid);
+    this.workspaceList[index] = workspace;
+    if (this.getCurrentWorkspaceUuid === workspace.workSpaceUuid) {
+      this.setCurrentWorkspace(workspace);
+    }
   }
+  @action setCurrentWorkspace(workspace) {
+    workspace = this.workspaceList?.find(val => val?.workSpaceUuid === workspace?.workSpaceUuid) || this.getLocalWorkspace;
+    if (!workspace) {
+      pcConsole.error("setCurrentWorkspace: workspace can't not be null");
+      return;
+    }
+    this.currentWorkspace = workspace;
+    StorageUtil.set('currentWorkspace', workspace);
+  }
+
   // ? project
   @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;
-    const uuid = projects.length ? this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0].uuid : -1;
-    this.setCurrentProjectID(uuid);
+    const uuid = this.projectList.find(val => val.projectUuid === this.currentProjectID)?.projectUuid || projects[0]?.projectUuid;
+    uuid && this.setCurrentProjectID(uuid);
   }
-  @action setCurrentProjectID(projectID: number) {
-    this.currentProjectID = projectID;
-    this.currentProject = this.projectList?.find(val => val.uuid === projectID);
-    StorageUtil.set('currentProjectID', projectID);
+  @action setCurrentProjectID(projectUuid: string) {
+    this.currentProjectID = projectUuid;
+    this.currentProject = this.projectList?.find(val => val?.projectUuid === projectUuid);
+    StorageUtil.set('currentProjectID', projectUuid);
   }
   // ? user && auth
   @action setUserProfile(data: API.User = null) {
@@ -259,21 +332,30 @@ export class StoreService {
   }
 
   @action setLoginInfo(data = null) {
-    this.loginInfo = data;
-    StorageUtil.set('accessToken', data.accessToken);
-    StorageUtil.set('refreshToken', data.refreshToken);
+    this.loginInfo = { accessToken: data.jwt, refreshToken: data.rjwt };
+    StorageUtil.set('accessToken', data.jwt);
+    StorageUtil.set('refreshToken', data.rjwt);
   }
 
   @action clearAuth() {
-    this.setUserProfile(null);
+    this.setUserProfile({
+      id: 0,
+      password: '',
+      userName: '',
+      userNickName: ''
+    });
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 
+  @action setRoleList(data, type) {
+    this.roleList[type] = data;
+  }
+
   @action setRole(role, type) {
-    if (this.isLocal) {
-      this.role[type] = 'Owner';
-      return;
-    }
+    // if (this.isLocal) {
+    //   this.role[type] = { name: 'Workspace Owner' };
+    //   return;
+    // }
     this.role[type] = role;
   }
 
@@ -292,7 +374,7 @@ export class StoreService {
     });
     // console.log('check permission', { ...this.permissions[type] }, permissionsList);
     // * set some true
-    permissionsList.forEach(it => {
+    permissionsList?.forEach(it => {
       const name = _.upperCase(it).split(' ').join('_');
       // console.log('name', name);
       this.permissions[type][name] = true;

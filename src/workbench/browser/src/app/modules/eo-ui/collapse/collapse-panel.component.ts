@@ -18,7 +18,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { collapseMotion } from 'ng-zorro-antd/core/animation';
 import { NzConfigKey, NzConfigService, WithConfig } from 'ng-zorro-antd/core/config';
@@ -43,8 +43,8 @@ const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel';
     <div #collapseHeader role="button" [attr.aria-expanded]="nzActive" class="ant-collapse-header ">
       <div *ngIf="nzShowArrow" class="flex items-center">
         <ng-container *nzStringTemplateOutlet="nzExpandedIcon; let expandedIcon">
-          <svg class="iconpark-icon w-[18px] h-[18px] mr-icofn" *ngIf="!nzActive"><use href="#down"></use></svg>
-          <svg class="iconpark-icon  w-[18px] h-[18px] mr-icofn" *ngIf="nzActive"><use href="#up"></use></svg>
+          <svg class="iconpark-icon w-[18px] h-[18px] mr-[10px]" *ngIf="!nzActive"><use href="#down"></use></svg>
+          <svg class="iconpark-icon  w-[18px] h-[18px] mr-[10px]" *ngIf="nzActive"><use href="#up"></use></svg>
         </ng-container>
       </div>
       <ng-container *nzStringTemplateOutlet="nzHeader">{{ nzHeader }}</ng-container>
@@ -68,9 +68,9 @@ const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel';
     class: 'ant-collapse-item',
     '[class.ant-collapse-no-arrow]': '!nzShowArrow',
     '[class.ant-collapse-item-active]': 'nzActive',
-    '[class.ant-collapse-item-disabled]': 'nzDisabled',
+    '[class.ant-collapse-item-disabled]': 'nzDisabled'
   },
-  providers: [NzDestroyService],
+  providers: [NzDestroyService]
 })
 export class EoNgCollapsePanelComponent implements OnInit, OnDestroy {
   readonly _nzModuleName: NzConfigKey = NZ_CONFIG_MODULE_NAME;

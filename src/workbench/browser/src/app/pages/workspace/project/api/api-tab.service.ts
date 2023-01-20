@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -65,7 +66,6 @@ export class ApiTabService {
     { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'preview', title: 'Mock' }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
-  tabStorageKey: string;
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
@@ -75,7 +75,6 @@ export class ApiTabService {
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
-      this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.id}_TabCache`;
     });
   }
   watchApiChange(inArg: Message) {
@@ -84,9 +83,7 @@ export class ApiTabService {
         //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter(
-            (val: TabItem) => val.pathname.includes('home/workspace/project/api/http') && inArg.data.uuids.includes(Number(val.params.uuid))
-          )
+          .filter((val: TabItem) => val.pathname.includes('home/workspace/project/api/http') && inArg.data.uuids.includes(val.params.uuid))
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
@@ -195,7 +192,6 @@ export class ApiTabService {
   updateTab(currentTab, inData) {
     const model = inData.model;
     const contentID = currentTab.id;
-
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
@@ -205,12 +201,12 @@ export class ApiTabService {
     if (model && !isEmptyObj(model)) {
       //Set title/method
       replaceTab.title = model.name;
-      replaceTab.extends.method = model.method;
+      replaceTab.extends.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
       if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
-          replaceTab.extends.method = model.request.protocol?.toUpperCase();
+          replaceTab.extends.method = 'WS';
         } else {
-          replaceTab.extends.method = model.request.method;
+          replaceTab.extends.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
         }
         //Only Untitle request need set url to tab title
         const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;
@@ -306,7 +302,7 @@ export class ApiTabService {
     const tab = tabsInfo.tabsByID[tabsInfo.tabOrder[0]];
     if (!tab) return null;
     const { wid, pid } = tab.params;
-    if (Number(wid) !== this.store.getCurrentWorkspaceID || Number(pid) !== this.store.getCurrentProjectID) return null;
+    if (wid !== this.store.getCurrentWorkspaceUuid || pid !== this.store.getCurrentProjectID) return null;
     return tabsInfo;
   };
   handleDataBeforeCache = tabStorage => {

@@ -22,10 +22,13 @@ export class TabOperateService {
    */
   BASIC_TABS: Array<Partial<TabItem>>;
   setting = {
+    /**
+     * Cache pagedata in tab
+     * Force cache in production environment
+     */
+    disabledCache: APP_CONFIG.production ? false : false,
     //* intial url followQueryParams
     followQueryParams: true,
-    //* Cache pagedata in tab
-    disabledCache: false,
     //* Allow development mode debug not exist router at init
     allowNotExistRouter: !APP_CONFIG.production,
     //* Allow open new tab by url at init
@@ -48,6 +51,7 @@ export class TabOperateService {
         });
     //parse result for router change
     const tabCache = this.filterValidTab(tabStorage);
+    // debugger;
     const validTabItem = this.generateTabFromUrl(this.router.url);
     const executeWhenNoTab = () => {
       if (!validTabItem) {
@@ -189,7 +193,7 @@ export class TabOperateService {
    * @param url
    * @returns tabInfo
    */
-  getBasicInfoFromUrl(url): { uuid: number; pathname: string; params: any } {
+  getBasicInfoFromUrl(url): { uuid: string | number; pathname: string; params: any } {
     const urlArr = url.split('?');
     const params: any = {};
     const basicTab = this.BASIC_TABS.find(val => urlArr[0].includes(val.pathname));

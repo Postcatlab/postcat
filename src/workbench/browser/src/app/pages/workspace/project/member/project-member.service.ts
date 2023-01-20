@@ -1,106 +1,107 @@
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 
-import { MEMBER_MUI } from '../../../../shared/models/member.model';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
-import { EffectService } from '../../../../shared/store/effect.service';
-import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
 export class ProjectMemberService {
-  projectID: number;
-  role: 'Owner' | 'Editor' | string;
-  roleMUI = MEMBER_MUI;
+  role: any[] = [];
+  isOwner = false;
   constructor(
-    private remote: RemoteService,
+    private api: ApiService,
     private store: StoreService,
-    private message: EoNgFeedbackMessageService,
-    private effect: EffectService
+    private effect: EffectService,
+    private message: EoNgFeedbackMessageService
   ) {
-    autorun(() => {
+    autorun(async () => {
       this.role = this.store.getProjectRole;
-      this.projectID = this.store.getCurrentProjectID;
+      this.isOwner =
+        this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner') ||
+        this.store.getProjectRole.some(it => it.name === 'Project Owner');
     });
   }
+
   async addMember(ids) {
-    return await this.remote.api_projectAddMember({
-      projectID: this.projectID,
-      userIDs: ids
+    return await this.api.api_projectAddMember({
+      userIds: ids
     });
   }
-  async queryMember() {
-    let result = [];
+  async queryMember(search = '') {
     if (this.store.isLocal) {
-      result = [
+      return [
         {
           role: {
             id: 1
           },
-          ...this.store.getUserProfile
+          roleTitle: $localize`Project Owner`,
+          ...this.store.getUserProfile,
+          username: this.store.getUserProfile?.userName
         }
       ];
-    } else {
-      const [data, error]: any = await this.remote.api_projectMember({
-        projectID: this.projectID
-      });
-      result = data || [];
     }
-    result.forEach(member => {
-      member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-      //Workspace owner can't edit
-      if (member.role.id === 1) {
-        member.disabledEdit = true;
-      }
+    const [data, err]: any = await this.api.api_projectMemberList({
+      username: search.trim()
     });
-    return result;
+    if (err) {
+      return [];
+    }
+    const titleHash = {
+      'Project Owner': $localize`Project Owner`,
+      'Project Editor': $localize`Project Editor`
+    };
+    return data
+      .map(({ roles, id, ...items }) => ({
+        id,
+        roles,
+        roleTitle: titleHash[roles.at(0)?.name],
+        isSelf: this.store.getUserProfile?.id === id, // * Is my project
+        isOwner: roles.some(it => it.name === 'Project Owner'),
+        isEditor: roles.some(it => it.name === 'Project Editor'),
+        ...items
+      }))
+      .sort((a, b) => (a.isSelf ? -1 : 1));
   }
   async removeMember(item) {
-    return await this.remote.api_projectDelMember({
-      projectID: this.projectID,
-      userIDs: [item.id]
+    return await this.api.api_projectDelMember({
+      userIds: [item.id]
     });
   }
   async quitMember(members) {
-    const [data, err]: any = await this.remote.api_projectMemberQuit({
-      projectID: this.projectID
+    const [data, err]: any = await this.api.api_projectMemberQuit({
+      userId: members.id
     });
-    if (!err) {
-      const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
-      this.effect.changeProject(project.uuid);
+    if (err) {
+      this.message.error($localize`Quit Failed`);
+      return [null, err];
     }
+    this.message.success($localize`Quit successfully`);
+    const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
+    this.effect.switchProject(project.uuid);
     return [data, err];
   }
   async changeRole(item) {
-    const roleID = item.role.id === 3 ? 4 : 3;
-    const [data, err]: any = await this.remote.api_projectSetRole({
-      projectID: this.projectID,
-      roleID: roleID,
-      memberID: item.id
+    const { userId, roleIds } = item;
+    const hash = {
+      owner: 7,
+      editor: 8
+    };
+    const [, err]: any = await this.api.api_projectSetRole({
+      userRole: [{ userId, roleIds: [hash[roleIds]] }]
     });
-    if (!err) {
-      item.role.id = roleID;
-      item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
-      item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
-    }
-    return [data, err];
+    // * return isOK
+    return !err;
   }
-  searchUser(search) {
-    return new Promise(resolve => {
-      this.remote
-        .api_workspaceSearchMember({
-          workspaceID: this.store.getCurrentWorkspaceID,
-          username: search.trim()
-        })
-        .then(([data, err]: any) => {
-          if (err) {
-            resolve([]);
-            return;
-          }
-          resolve(data);
-        });
+  async searchUser(search) {
+    const [data, err] = await this.api.api_workspaceSearchMember({
+      username: search.trim(),
+      page: 1,
+      pageSize: 20
     });
+    if (err) {
+      return;
+    }
+    return data;
   }
 }

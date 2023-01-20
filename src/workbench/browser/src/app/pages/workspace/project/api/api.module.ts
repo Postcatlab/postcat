@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { EoNgLayoutModule } from 'eo-ng-layout';
 import { EoNgTabsModule } from 'eo-ng-tabs';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
@@ -9,7 +10,6 @@ import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/worksp
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 
 import { EoTabModule } from '../../../../modules/eo-ui/tab/tab.module';
@@ -35,7 +35,7 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     NzResizableModule,
     NzEmptyModule,
     NzBadgeModule,
-    NzLayoutModule,
+    EoNgLayoutModule,
     EoNgTabsModule,
     EoNgTreeModule
   ],

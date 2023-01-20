@@ -4,7 +4,7 @@ test('test', async ({ page }) => {
   await page.goto('http://www.postcat.com');
   await page.locator('body').click();
   //Add group
-  await page.locator('eo-api-group-tree:has-text("GET获取城市今日天气GET新冠全国疫情") path').nth(1).hover();
+  await page.locator('pc-api-group-tree:has-text("GET获取城市今日天气GET新冠全国疫情") path').nth(1).hover();
   await page.getByText('新建分组').click();
   await page.getByLabel('分组名称').click();
   await page.getByLabel('分组名称').fill('test');

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -24,8 +24,6 @@ const DEFAULT_RIGHT_SIDER_WIDTH = 250;
   styleUrls: ['./api.component.scss']
 })
 export class ApiComponent implements OnInit, OnDestroy {
-  @observable envUuid = '';
-  renderEnvList = [];
   isFirstTime = true;
   private localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
   siderWidth = Math.max(120, Number.isNaN(this.localSiderWidth) ? 250 : this.localSiderWidth);
@@ -44,10 +42,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.apiTab.onAllComponentInit();
     }
   }
-
-  // @computed get renderEnvList() {
-  //   return this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
-  // }
 
   tabsetIndex: number;
   /**
@@ -82,7 +76,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
   ];
   originModel: ApiData | any;
-  isOpen = false;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
   tabsIndex = StorageUtil.get('eo_group_tab_select') || 0;
@@ -132,27 +125,17 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   initChildBarShowStatus() {
-    this.showChildBar = Number(this.route.snapshot.queryParams.uuid) && !this.router.url.includes('home/workspace/project/api/env/edit');
+    const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
+    const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');
+    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage;
   }
   onGroupTabSelectChange($event) {
     StorageUtil.set('eo_group_tab_select', this.tabsIndex);
   }
   ngOnInit(): void {
-    makeObservable(this);
     this.initChildBarShowStatus();
-    this.effect.updateEnvList();
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter(it => it.isShare) : this.TABS;
-    this.envUuid = this.store.getEnvUuid;
-    autorun(() => {
-      this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.uuid }));
-    });
-    reaction(
-      () => this.envUuid,
-      data => {
-        this.store.setEnvUuid(data);
-      }
-    );
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -190,13 +173,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   onResizeEnd() {
     this.isDragging = false;
   }
-  gotoEnvManager() {
-    // * switch to env
-    this.tabsIndex = 2;
-    // * close select
-    this.isOpen = false;
-    this.sidebar.setModule('@eo-core-env');
-  }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {
       let dyWitdth = this.getLocalRightSiderWidth();
@@ -214,5 +190,4 @@ export class ApiComponent implements OnInit, OnDestroy {
       ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY))
       : this.RIGHT_SIDER_SHRINK_WIDTH;
   }
-  handleEnvSelectStatus(event: boolean) {}
 }

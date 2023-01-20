@@ -1,0 +1,29 @@
+/* UI component */
+:root {
+  --icon-size: 14px;
+  --border-radius: 4px;
+
+  --layout-header-height: 50px;
+  --layout-footer-height: 30px;
+
+  --btn-icon-margin: 5px;
+  --button-height: 32px;
+  --tabs-height: 43px;
+  --tree-item-height: 30px;
+  --collapse-header-height: 46px;
+
+  --table-font-size: 14px;
+  --table-row-height: 40px;
+  --table-item-padding: 4px;
+
+  --padding-x: 20px;
+  --padding-y: 15px;
+  --padding: var(--padding-y) var(--padding-x);
+  --margin: 20px;
+}
+/* System customer */
+:root {
+  --layout-sidebar-width: 90px;
+  --layout-sidebar-item-height: auto;
+  --edit-inside-bar-height: 53px;
+}

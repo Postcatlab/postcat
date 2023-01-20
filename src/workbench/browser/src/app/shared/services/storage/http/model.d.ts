@@ -43,13 +43,14 @@ declare namespace API {
     /**
      * 空间创建者ID
      */
-    creatorID: number;
-    id: number;
+    createUserId: number;
+    workSpaceUuid: string;
     /**
      * 空间名称
      */
     title: string;
-    users: User[];
+    /** 是否为本地空间，只有本地创建的空间才有这个字段 */
+    isLocal?: boolean;
   }
 
   /**
@@ -68,8 +69,8 @@ declare namespace API {
     /**
      * 用户名
      */
-    username: string;
-    workspaces: Workspace[];
+    userName: string;
+    userNickName: string;
   }
 
   /**

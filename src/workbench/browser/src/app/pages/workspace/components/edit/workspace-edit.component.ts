@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
 import { ModalService } from '../../../../shared/services/modal.service';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
-import { eoDeepCopy } from '../../../../utils/index.utils';
 
 @Component({
   selector: 'eo-workspace-setting',
-  template: `<form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
+  template: `<form *ngIf="validateForm" auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label i18n nzFor="title">Workspace Name</nz-form-label>
+        <nz-form-label i18n nzRequired nzFor="title">Workspace Name</nz-form-label>
         <nz-form-control nzErrorTip="Please input your new work name">
           <input type="text" eo-ng-input id="title" formControlName="title" placeholder="Workspace Name" i18n-placeholder />
         </nz-form-control>
@@ -28,7 +27,7 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
       <nz-list nzItemLayout="horizontal">
         <nz-list-item *ngFor="let item of overviewList">
           <div class="flex items-center justify-between w-full px-base">
-            <b class="w-1/4">{{ item.title }}</b>
+            <b class="w-2/4">{{ item.title }}</b>
             <!-- <span class="w-6/12 text-tips">{{ item.desc }}</span> -->
             <button eo-ng-button nzType="default" [nzDanger]="item.type === 'delete'" (click)="clickItem($event, item)">{{
               item.title
@@ -53,7 +52,7 @@ export class WorkspaceSettingComponent {
   constructor(
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
-    private api: RemoteService,
+    private api: ApiService,
     private store: StoreService,
     private modal: ModalService,
     private effect: EffectService
@@ -83,33 +82,33 @@ export class WorkspaceSettingComponent {
   }
 
   delete() {
-    const wid = this.store.getCurrentWorkspaceID;
+    const wid = this.store.getCurrentWorkspaceUuid;
     this.modal.confirm({
       nzTitle: $localize`Are you sure delete this workspace?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {
         const [data, err]: any = await this.api.api_workspaceDelete({
-          workspaceID: wid
+          workSpaceUuids: [wid]
         });
         if (err) {
           this.message.error($localize`Delete failed !`);
           return;
         }
         this.message.success($localize`Delete success !`);
-        await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
-        this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== wid));
+        await this.effect.updateWorkspaceList();
+        await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }
     });
   }
   async save($event) {
     $event.stopPropagation();
-    if (!this.validateForm.valid) return;
+    if (!this.validateForm.valid) {
+      return;
+    }
     this.isSaveBtnLoading = true;
-    const id = this.store.getCurrentWorkspaceID;
     const { title } = this.validateForm.value;
-    const [data, err]: any = await this.api.api_workspaceEdit({
-      workspaceID: id,
+    const [data, err]: any = await this.api.api_workspaceUpdate({
       title
     });
     if (err) {
@@ -117,7 +116,11 @@ export class WorkspaceSettingComponent {
       return;
     }
     this.message.success($localize`Edit workspace successfully !`);
-    this.store.updateWorkspace(eoDeepCopy(data));
+
+    //Rest Current Workspace
+    await this.effect.updateWorkspaceList();
+    this.store.setCurrentWorkspace(this.store.getCurrentWorkspace);
+
     this.isSaveBtnLoading = false;
   }
 }

@@ -5,14 +5,8 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   templateUrl: './api-test-result-request-body.component.html',
   styleUrls: ['./api-test-result-request-body.component.scss']
 })
-export class ApiTestResultRequestBodyComponent implements OnChanges {
+export class ApiTestResultRequestBodyComponent {
   @Input() model: Array<{ name: string; type: string; value: string }> | string | any;
-  modelType: string;
+  @Input() contentType: string;
   constructor() {}
-
-  ngOnChanges(changes) {
-    if (changes?.model) {
-      this.modelType = typeof changes.model.currentValue;
-    }
-  }
 }

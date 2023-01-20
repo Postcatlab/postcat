@@ -1,5 +1,6 @@
 <!-- <span class="color-[#999]">nzData:</span>
-<div class="mx-2">{{ nzData | json }}</div> -->
+<div class="mx-2">{{ nzData| json }}</div> -->
+
 <!-- <span class="color-[#999]">nzDataItem:</span>
 <div class="mx-2">{{ nzDataItem | json }}</div> -->
 <!-- {{ setting | json }} -->
@@ -43,7 +44,6 @@
       [nzCondition]="!btnItem.confirm"
       (nzOnConfirm)="btnClick(btnItem, index, item, apis)"
       eoNgFeedbackTooltip
-      i18n-nzTooltipTitle
       nzTooltipTitle="{{ btnItem.title }}"
       class="mr-btnbase eo-list-btn"
     >

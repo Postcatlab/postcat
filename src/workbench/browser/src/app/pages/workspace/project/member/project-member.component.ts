@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
-import { MemberService } from '../../../../modules/member-list/member.service';
-import { MEMBER_MUI } from '../../../../shared/models/member.model';
 
 @Component({
   selector: 'eo-project-member',
@@ -28,13 +27,15 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
           auto-focus-form
           nzShowSearch
           i18n-nzPlaceholder
+          nzServerSearch
+          nzDropdownClassName="eo-member-select"
           nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
           <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
-            <div class="flex w-full justify-between">
+            <div class="flex w-full justify-between items-center">
               <span class="font-bold">{{ option.username }}</span>
               <span class="text-tips">{{ option.email }}</span>
             </div>
@@ -78,7 +79,7 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
             >and invite members to collaborate.</p
           ></ng-template
         >
-        <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> ,
+        <eo-member-list class="block mt-[10px]" #memberList></eo-member-list>
       </section>
     </section>`
 })
@@ -90,12 +91,11 @@ export class ProjectMemberComponent implements OnInit {
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
   userList = [];
-  roleMUI = MEMBER_MUI;
   constructor(
     public modal: NzModalService,
     public store: StoreService,
     public message: MessageService,
-    public api: RemoteService,
+    public api: ApiService,
     public eMessage: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
     private member: MemberService
@@ -116,8 +116,9 @@ export class ProjectMemberComponent implements OnInit {
         const result = await this.member.searchUser(value);
         const memberList = this.memberListRef.list.map(it => it.username);
         this.userList = result.filter(it => {
-          return !memberList.includes(it.username);
+          return !memberList.includes(it.userName);
         });
+        console.log('this.userList', this.userList);
       },
       { delay: 300 }
     );
@@ -150,9 +151,10 @@ export class ProjectMemberComponent implements OnInit {
 
       const [aData, aErr]: any = await this.member.addMember(userIds);
       if (aErr) {
+        this.eMessage.error($localize`Add member failed`);
         return;
       }
-      this.eMessage.success($localize`Add new member success`);
+      this.eMessage.success($localize`Add member successfully`);
 
       // * 关闭弹窗
       this.isInvateModalVisible = false;

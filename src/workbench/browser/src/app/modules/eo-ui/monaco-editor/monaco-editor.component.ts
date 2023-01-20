@@ -4,7 +4,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services/elec
 import type { editor, IDisposable } from 'monaco-editor';
 import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 
-import { ThemeService } from '../../../core/services/theme.service';
+import { ThemeService } from '../../../core/services/theme/theme.service';
 import { debounce, whatTextType } from '../../../utils/index.utils';
 import { getDefaultCompletions } from './defaultCompletions';
 

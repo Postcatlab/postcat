@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { formatUri } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
-import { MockService } from 'eo/workbench/browser/src/app/services/mock.service';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { table2json } from 'eo/workbench/browser/src/app/utils/data-transfer/data-transfer.utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Injectable()
 export class ApiMockService {
-  constructor(private storageService: StorageService, private store: StoreService) {
+  constructor(private api: ApiService, private store: StoreService) {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
@@ -22,19 +23,16 @@ export class ApiMockService {
   /**
    * get mock list
    *
-   * @param apiDataID
+   * @param apiUuid
    * @returns
    */
-  getMocks(apiDataID: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('apiMockLoadAllByApiDataID', [apiDataID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          reject(result);
-        }
-      });
+  async getMocks(apiUuid: string) {
+    const [data, err] = await this.api.api_mockList({
+      apiUuid,
+      page: 1,
+      pageSize: 200
     });
+    return data?.items || [];
   }
   /**
    * create mock
@@ -42,16 +40,8 @@ export class ApiMockService {
    * @param mock
    * @returns
    */
-  createMock(mock): Promise<StorageRes> {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('mockCreate', [mock], (res: StorageRes) => {
-        if (res.status === StorageResStatus.success) {
-          resolve(res);
-        } else {
-          reject(res);
-        }
-      });
-    });
+  async createMock(mock) {
+    return await this.api.api_mockCreate(mock);
   }
   /**
    * update mock
@@ -59,29 +49,19 @@ export class ApiMockService {
    * @param mock
    * @returns
    */
-  updateMock(mock, uuid: number) {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('mockUpdate', [mock, uuid], (res: StorageRes) => {
-        if (res.status === StorageResStatus.success) {
-          resolve(res);
-        } else {
-          reject(res);
-        }
-      });
-    });
+  async updateMock(mockData) {
+    const [data, err] = await this.api.api_mockUpdate(mockData);
+    return data;
   }
-  deleteMock(uuid: number) {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('mockRemove', [uuid], (res: StorageRes) => {
-        if (res.status === StorageResStatus.success) {
-          resolve(res);
-        } else {
-          reject(res);
-        }
-      });
-    });
+  async deleteMock(id: number) {
+    console.log(id);
+    const [data, err] = await this.api.api_mockDelete({ id });
+    return data;
   }
-  getMockResponseByAPI(responseBody) {
-    return JSON.stringify(tree2obj(responseBody));
+  getMockResponseByAPI(apiData: ApiData) {
+    const body = [ApiBodyType.Raw, ApiBodyType.Binary].includes(apiData.responseList?.[0].contentType)
+      ? apiData.responseList?.[0]?.responseParams?.bodyParams?.[0].binaryRawData
+      : apiData.responseList?.[0]?.responseParams?.bodyParams;
+    return typeof body === 'string' ? body : JSON.stringify(table2json(body));
   }
 }

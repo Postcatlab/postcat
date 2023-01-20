@@ -17,6 +17,7 @@ declare global {
     pcConsole: {
       warn: (...args) => void;
       error: (...args) => void;
+      success: (...args) => void;
       log: (...args) => void;
     };
     BlobBuilder: any;

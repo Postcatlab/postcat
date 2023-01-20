@@ -21,7 +21,7 @@
         <span class="text-[14px]">{{ node.title }}</span>
       </ng-template>
       <ng-template [ngIf]="node.isLeaf">
-        <div>
+        <div class="flex items-center h-full">
           <span class="text-xs text-blue-400">{{ node.title }}</span>
           <ng-container *ngIf="node.origin.note">
             <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400" eoNgFeedbackTooltip>
