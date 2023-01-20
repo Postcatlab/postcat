@@ -555,52 +555,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   }))
                 });
 
-                const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-
-                // 递归创建分组和API
-                const deepCreateGroup = async (groupList = [], apiList = [], remoteProject, rootGroup) => {
-                  const projectUuid = remoteProject.projectUuid;
-                  const groupFilters = groupList
-                    .filter(n => n.depth !== 0)
-                    .map(n => {
-                      const { id, children, ...rest } = n;
-                      return rest;
-                    });
-                  const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
-                  console.log('remoteGroups', remoteGroups);
-                  groupList.forEach((localGroup, index) => {
-                    const apiFilters = apiList
-                      .filter(n => n.groupId === localGroup.id)
-                      .map(n => {
-                        const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
-                        return {
-                          ...rest,
-                          // 远程分组 id 替换本地分组 id
-                          groupId: remoteGroups[index]?.id
-                        };
-                      });
-
-                    if (apiFilters.length) {
-                      this.remote.api_apiDataCreate({
-                        apiList: apiFilters,
-                        projectUuid
-                      });
-                    }
-
-                    // 如果本地分组还有子分组
-                    if (localGroup.children?.length) {
-                      localGroup.children.forEach(m => {
-                        m.type = 1;
-                        // 远程分组 id 替换本地分组 id
-                        m.parentId = remoteGroups[index]?.id;
-                        m.projectUuid = projectUuid;
-                        m.workSpaceUuid = workSpaceUuid;
-                      });
-                      deepCreateGroup(localGroup.children, apiList, remoteProject, rootGroup);
-                    }
-                  });
-                };
-
                 // 遍历本地项目
                 const arr = localProjects.map(async (localProject, index) => {
                   // 导出本地数据
@@ -612,24 +566,13 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   const remoteProject = remoteProjects[index];
 
                   console.log('remoteProject', remoteProject);
+                  // 导出本地数据
+                  const exportResult = await this.effect.exportLocalProjectData(localProject.uuid);
 
-                  environmentList.forEach(n => {
-                    const { id, ...rest } = n;
-                    this.remote.api_environmentCreate({
-                      ...rest,
-                      workSpaceUuid,
-                      projectUuid: remoteProject.projectUuid
-                    });
+                  await this.effect.projectImport('remote', {
+                    ...exportResult,
+                    projectUuid: remoteProject.projectUuid
                   });
-
-                  // 远程分组
-                  // @ts-ignore
-                  const [groups] = await this.remote.api_groupList({ projectUuid: remoteProject.projectUuid, withItem: true });
-                  // 远程根分组
-                  const rootGroup = groups.find(n => n.depth === 0);
-                  console.log('rootGroup', rootGroup);
-
-                  deepCreateGroup(groupList, apiList, remoteProject, rootGroup);
                 });
 
                 await Promise.all(arr);

@@ -5,6 +5,7 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import StorageUtil from '../../../utils/storage/Storage';
@@ -59,7 +60,8 @@ export class ImportApiComponent implements OnInit {
     private storage: StorageService,
     private eoMessage: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
-    private store: StoreService
+    private store: StoreService,
+    private effectService: EffectService
   ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
   }
@@ -93,8 +95,9 @@ export class ImportApiComponent implements OnInit {
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     const { name, content } = this.uploadData;
     try {
+      this.effectService.projectImport('local', content);
       const [data, err] = module[action](content);
-      // console.log('import data', structuredClone?.(data));
+      console.log('import data', window.structuredClone?.(data));
       if (err) {
         console.error(err.msg);
         callback(false);

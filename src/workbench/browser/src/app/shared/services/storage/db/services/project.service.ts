@@ -5,7 +5,8 @@ import {
   ProjectBulkCreateDto,
   ProjectPageDto,
   ProjectDeleteDto,
-  ProjectUpdateDto
+  ProjectUpdateDto,
+  ImportProjectDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -105,11 +106,19 @@ export class ProjectService extends BaseService<Project> {
       environmentList,
       apiList,
       groupList
-    } as unknown as ApiResponsePromise<{
-      environmentList: any[];
-      apiList: any[];
-      groupList: any[];
-      name: string;
-    }>;
+    } as unknown as ApiResponsePromise<ImportProjectDto>;
+  }
+
+  async imports(params: ImportProjectDto) {
+    const { apiList, groupList, environmentList, workSpaceUuid, projectUuid } = params;
+
+    // this.apiDataService.bulkCreate({
+    //   apiList,
+    //   workSpaceUuid,
+    //   projectUuid
+    // });
+    // this.groupService.
+
+    console.log('导入项目', params);
   }
 }

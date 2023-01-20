@@ -72,7 +72,7 @@ export class ExportApiComponent implements OnInit {
       if (data) {
         console.log('projectExport result', data);
         try {
-          let output = module[action](data || {});
+          let output = module[action]({ data: data || {} });
           //Change format
           if (has(output, 'status') && output.status === 0) {
             output = output.data;
