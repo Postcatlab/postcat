@@ -35,13 +35,18 @@ export class ProjectMemberService {
     if (err) {
       return;
     }
+    const titleHash = {
+      'Project Owner': $localize`Owner`,
+      'Project Editor': $localize`Editor`
+    };
     return data
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
+        roleTitle: titleHash[roles.at(0)?.name],
         isSelf: this.store.getUserProfile?.id === id, // * Is my project
-        isOwner: roles.find(it => it.name === 'Project Owner'),
-        isEditor: roles.find(it => it.name === 'Project Editor'),
+        isOwner: roles.some(it => it.name === 'Project Owner'),
+        isEditor: roles.some(it => it.name === 'Project Editor'),
         ...items
       }))
       .sort((a, b) => (a.isSelf ? -1 : 1));

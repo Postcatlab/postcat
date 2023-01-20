@@ -42,14 +42,18 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
+    const titleHash = {
+      'Workspace Owner': $localize`Owner`,
+      'Workspace Editor': $localize`Editor`
+    };
     return data
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        roleTitle: roles.at(0)?.name,
+        roleTitle: titleHash[roles.at(0)?.name],
         isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
-        isOwner: roles.find(it => it.name === 'Workspace Owner'),
-        isEditor: roles.find(it => it.name === 'Workspace Editor'),
+        isOwner: roles.some(it => it.name === 'Workspace Owner'),
+        isEditor: roles.some(it => it.name === 'Workspace Editor'),
         ...items
       }))
       .sort((a, b) => (a.isSelf ? -1 : 1));
