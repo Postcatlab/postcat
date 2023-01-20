@@ -4,6 +4,8 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, toJS } from 'mobx';
@@ -21,6 +23,7 @@ export class EffectService {
     private router: Router,
     private lang: LanguageService,
     private web: WebService,
+    private remote: RemoteService,
     private eMessage: EoNgFeedbackMessageService,
     private route: ActivatedRoute
   ) {
@@ -376,5 +379,84 @@ export class EffectService {
   }
   updateHistory() {}
 
-  projectImport() {}
+  deepCreateGroup = async (groupList = [], apiList = [], projectUuid, rootGroup) => {
+    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+    const groupFilters = groupList
+      .filter(n => n.depth !== 0)
+      .map(n => {
+        const { id, children, ...rest } = n;
+        return rest;
+      });
+    const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
+    console.log('remoteGroups', remoteGroups);
+    groupList.forEach((localGroup, index) => {
+      const apiFilters = apiList
+        .filter(n => n.groupId === localGroup.id)
+        .map(n => {
+          const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
+          return {
+            ...rest,
+            // 远程分组 id 替换本地分组 id
+            groupId: remoteGroups[index]?.id
+          };
+        });
+
+      if (apiFilters.length) {
+        this.remote.api_apiDataCreate({
+          apiList: apiFilters,
+          projectUuid
+        });
+      }
+
+      // 如果本地分组还有子分组
+      if (localGroup.children?.length) {
+        localGroup.children.forEach(m => {
+          m.type = 1;
+          // 远程分组 id 替换本地分组 id
+          m.parentId = remoteGroups[index]?.id;
+          m.projectUuid = projectUuid;
+          m.workSpaceUuid = workSpaceUuid;
+        });
+        this.deepCreateGroup(localGroup.children, apiList, projectUuid, rootGroup);
+      }
+    });
+  };
+
+  // 上传本地数据到远程
+  async uploadToRemote(projectUuid, params: ImportProjectDto) {
+    const { groupList, apiList, environmentList } = params;
+    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+
+    environmentList.forEach(n => {
+      const { id, ...rest } = n;
+      this.remote.api_environmentCreate({
+        ...rest,
+        workSpaceUuid,
+        projectUuid
+      });
+    });
+
+    // 远程分组
+    // @ts-ignore
+    const [groups] = await this.remote.api_groupList({ projectUuid, withItem: true });
+    // 远程根分组
+    const rootGroup = groups.find(n => n.depth === 0);
+    console.log('rootGroup', rootGroup);
+
+    this.deepCreateGroup(groupList, apiList, projectUuid, rootGroup);
+  }
+
+  // TODO 等后端接口
+  async projectImport(target: 'local' | 'remote', params: ImportProjectDto) {
+    if (target === 'local') {
+      const _params = {
+        projectUuid: this.store.getCurrentProjectID,
+        workSpaceUuid: this.store.getCurrentWorkspaceUuid,
+        ...params
+      } as ImportProjectDto;
+      db.project.imports(_params);
+    } else if (target === 'remote') {
+      this.uploadToRemote(params.projectUuid, params);
+    }
+  }
 }
