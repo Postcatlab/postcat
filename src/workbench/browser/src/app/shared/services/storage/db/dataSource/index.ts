@@ -1,7 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
 import { setupVersions } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource/versions';
-import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import {
   Workspace,
   Project,
@@ -35,15 +33,11 @@ class DataSource extends Dexie {
     const workspaceService = new WorkspaceService();
     const projectService = new ProjectService();
 
-    const { data: workspace } = await workspaceService.create({ title: 'Persional Workspace' });
+    const {
+      data: { uuid: workSpaceUuid }
+    } = await workspaceService.create({ title: 'Persional Workspace' });
 
-    const { data: project } = await projectService.bulkCreate({ projectMsgs: [{ name: 'Default' }], workSpaceUuid: workspace.uuid });
-
-    const params = { workSpaceUuid: workspace.uuid, projectUuid: project.at(0).uuid };
-
-    const sampleApiData = genSimpleApiData(params);
-    // @ts-ignore
-    await db.apiData.bulkCreate(sampleApiData);
+    await projectService.bulkCreate({ projectMsgs: [{ name: 'Default' }], workSpaceUuid });
   }
 
   initHooks() {

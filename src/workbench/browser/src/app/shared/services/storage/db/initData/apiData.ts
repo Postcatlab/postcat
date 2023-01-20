@@ -1,12 +1,11 @@
 import { ContentType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) => {
+export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
   return {
     apiList: [
       {
         groupId,
         groupName: '',
-        projectId: 1,
         lifecycle: 0,
         name: $localize`Get City Weather Today`,
         uri: 'http://www.weather.com.cn/data/cityinfo/{cityCode}.html',
@@ -27,29 +26,16 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         createTime: new Date(),
         updateTime: new Date(),
         introduction: {
-          apiUuid: '',
           noteType: 0,
           noteRaw: '',
-          note: '',
-          createTime: '',
-          updateTime: ''
-        },
-        relation: {
-          apiUuid: '',
-          bindAmtApiId: '',
-          swaggerId: '',
-          fileName: '',
-          fileUrl: '',
-          fileId: ''
+          note: ''
         },
         apiAttrInfo: {
           beforeInject: '',
           afterInject: '',
           authInfo: '',
           requestMethod: RequestMethod.GET,
-          contentType: ContentType.RAW,
-          createTime: '',
-          updateTime: ''
+          contentType: ContentType.RAW
         },
         requestParams: {
           headerParams: [],
@@ -57,39 +43,28 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
           queryParams: [],
           restParams: [
             {
-              responseUuid: '',
               name: 'cityCode',
               paramType: 0,
               partType: 0,
               dataType: 0,
-              dataTypeValue: '',
-              structureId: '',
-              structureParamId: '',
-              contentType: '',
+
               isRequired: 0,
-              binaryRawData: '',
+
               description: $localize`City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html`,
               orderNo: 0,
-              createTime: '',
-              updateTime: '',
+
               paramAttr: {
-                minLength: '',
-                maxLength: '',
                 minValue: {},
                 maxValue: {},
-                paramLimit: '',
+
                 paramValueList: JSON.stringify([
                   { value: '110000', description: 'Beijing' },
                   { value: '440000', description: 'Guangdong' }
                 ]),
                 paramMock: '',
                 attr: '',
-                structureIsHide: 0,
-                example: '101010100',
-                createTime: '',
-                updateTime: '',
-                dbArr: '',
-                paramNote: ''
+
+                example: '101010100'
               },
               childList: []
             }
@@ -97,319 +72,158 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         },
         responseList: [
           {
-            responseUuid: '',
-            apiUuid: '',
             name: '',
             httpCode: '',
             contentType: 2,
             isDefault: 0,
-            createTime: '',
-            updateTime: '',
+
             responseParams: {
               headerParams: [],
               bodyParams: [
                 {
-                  responseUuid: '',
                   name: 'weatherinfo',
                   paramType: 0,
                   partType: 0,
                   dataType: 13,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: ''
                   },
                   childList: [
                     {
-                      responseUuid: '',
                       name: 'city',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '北京',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '北京'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'cityid',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '101010100',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '101010100'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'temp1',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: $localize`minimum temperature`,
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '18℃',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '18℃'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'temp2',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: $localize`maximun temperature`,
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '31℃',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '31℃'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'weather',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '多云转阴',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '多云转阴'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'img1',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: 'n1.gif',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: 'n1.gif'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'img2',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: 'd2.gif',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: 'd2.gif'
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'ptime',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '18:00',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '18:00'
                       },
                       childList: []
                     }
@@ -421,30 +235,13 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
             }
           }
         ],
-        resultList: [
-          {
-            id: '',
-            name: '',
-            httpCode: '',
-            httpContentType: '',
-            type: 0,
-            content: '',
-            createTime: '',
-            updateTime: ''
-          }
-        ],
+        resultList: [],
         writeHistory: 0,
-        historyInfo: {
-          oldId: '',
-          updateDesc: '',
-          versionId: 0,
-          projectVersionId: 0
-        }
+        historyInfo: {}
       },
       {
         groupId,
         groupName: '',
-        projectId: 1,
         lifecycle: 0,
         name: $localize`COVID-19 national epidemic`,
         uri: 'https://view.inews.qq.com/g2/getOnsInfo',
@@ -455,116 +252,42 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         isShared: 0,
         tag: '',
         orderNum: 0,
-        hashkey: '',
-        managerId: 0,
-        managerName: '',
-        updateUserId: '',
-        updateUserName: '',
-        createUserId: '',
-        createUserName: '',
-        createTime: '',
-        updateTime: '',
         introduction: {
-          apiUuid: '',
           noteType: 0,
           noteRaw: '',
-          note: '',
-          createTime: '',
-          updateTime: ''
-        },
-        relation: {
-          apiUuid: '',
-          bindAmtApiId: '',
-          swaggerId: '',
-          fileName: '',
-          fileUrl: '',
-          fileId: ''
+          note: ''
         },
         apiAttrInfo: {
           beforeInject: '',
           afterInject: '',
           authInfo: '',
           requestMethod: 1,
-          contentType: 0,
-          createTime: '',
-          updateTime: ''
-        },
-        dubboApiAttrInfo: {
-          serverHost: '',
-          interfaceName: '',
-          methodName: '',
-          appName: '',
-          group: '',
-          version: '',
-          apiNumber: '',
-          createTime: '',
-          updateTime: ''
-        },
-        soapApiAttrInfo: {
-          beforeInject: '',
-          afterInject: '',
-          authInfo: '',
-          requestMethod: 0,
-          contentType: 0,
-          wsdlContent: '',
-          testData: '',
-          soapOperation: '',
-          soapAction: '',
-          soapBinding: '',
-          soapService: '',
-          createTime: '',
-          updateTime: ''
-        },
-        grpcApiAttrInfo: {
-          authInfo: '',
-          serverHost: '',
-          interfaceName: '',
-          methodName: '',
-          appName: '',
-          group: '',
-          version: '',
-          proto: '',
-          apiRequestMetadata: '',
-          responseMetadata: '',
-          responseTrailingMetadata: '',
-          createTime: '',
-          updateTime: ''
+          contentType: 0
         },
         requestParams: {
           headerParams: [],
           bodyParams: [],
           queryParams: [
             {
-              responseUuid: '',
               name: 'name',
               paramType: 0,
               partType: 0,
               dataType: 0,
-              dataTypeValue: '',
-              structureId: '',
-              structureParamId: '',
-              contentType: '',
+
               isRequired: 1,
-              binaryRawData: '',
+
               description: '',
               orderNo: 0,
-              createTime: '',
-              updateTime: '',
+
               paramAttr: {
-                minLength: '',
-                maxLength: '',
                 minValue: {},
                 maxValue: {},
-                paramLimit: '',
+
                 paramValueList: '',
                 paramMock: '',
                 attr: '',
-                structureIsHide: 0,
-                example: 'disease_h5',
-                createTime: '',
-                updateTime: '',
-                dbArr: '',
-                paramNote: ''
+
+                example: 'disease_h5'
               },
               childList: []
             }
@@ -573,831 +296,436 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
         },
         responseList: [
           {
-            responseUuid: '',
-            apiUuid: '',
             name: '',
             httpCode: '',
             contentType: 0,
             isDefault: 0,
-            createTime: '',
-            updateTime: '',
+
             responseParams: {
               headerParams: [
                 {
-                  responseUuid: '',
                   name: 'date',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: 'Sat, 05 Feb 2022 04:30:44 GMT',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: 'Sat, 05 Feb 2022 04:30:44 GMT'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'content-type',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: 'application/json',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: 'application/json'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'transfer-encoding',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: 'chunked',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: 'chunked'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'connection',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: 'close',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: 'close'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'server',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: 'openresty',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: 'openresty'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'tracecode',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '8QMewH9c6JodvyHb5wE=',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: '8QMewH9c6JodvyHb5wE='
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'x-client-ip',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '120.26.198.150',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: '120.26.198.150'
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'x-server-ip',
                   paramType: 0,
                   partType: 0,
                   dataType: 0,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 1,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '58.250.137.40',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: '58.250.137.40'
                   },
                   childList: []
                 }
               ],
               bodyParams: [
                 {
-                  responseUuid: '',
                   name: 'ret',
                   paramType: 0,
                   partType: 0,
                   dataType: 13,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 0,
-                  binaryRawData: '',
+
                   description: '',
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: ''
                   },
                   childList: []
                 },
                 {
-                  responseUuid: '',
                   name: 'data',
                   paramType: 0,
                   partType: 0,
                   dataType: 13,
-                  dataTypeValue: '',
-                  structureId: '',
-                  structureParamId: '',
-                  contentType: '',
+
                   isRequired: 0,
-                  binaryRawData: '',
+
                   description: $localize`The actual parameter is string, in order to show the document expansion display`,
                   orderNo: 0,
-                  createTime: '',
-                  updateTime: '',
                   paramAttr: {
-                    minLength: '',
-                    maxLength: '',
                     minValue: {},
                     maxValue: {},
-                    paramLimit: '',
+
                     paramValueList: '',
-                    paramMock: '',
-                    attr: '',
-                    structureIsHide: 0,
-                    example: '',
-                    createTime: '',
-                    updateTime: '',
-                    dbArr: '',
-                    paramNote: ''
+
+                    example: ''
                   },
                   childList: [
                     {
-                      responseUuid: '',
                       name: 'areaTree',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: ''
                       },
                       childList: [
                         {
-                          responseUuid: '',
                           name: 'name',
                           paramType: 0,
                           partType: 0,
                           dataType: 0,
-                          dataTypeValue: '',
-                          structureId: '',
-                          structureParamId: '',
-                          contentType: '',
+
                           isRequired: 0,
-                          binaryRawData: '',
+
                           description: '',
                           orderNo: 0,
-                          createTime: '',
-                          updateTime: '',
+
                           paramAttr: {
-                            minLength: '',
-                            maxLength: '',
-                            minValue: {},
-                            maxValue: {},
-                            paramLimit: '',
-                            paramValueList: '',
-                            paramMock: '',
-                            attr: '',
-                            structureIsHide: 0,
-                            example: '中国',
-                            createTime: '',
-                            updateTime: '',
-                            dbArr: '',
-                            paramNote: ''
+                            example: '中国'
                           },
                           childList: []
                         },
                         {
-                          responseUuid: '',
                           name: 'today',
                           paramType: 0,
                           partType: 0,
                           dataType: 0,
-                          dataTypeValue: '',
-                          structureId: '',
-                          structureParamId: '',
-                          contentType: '',
+
                           isRequired: 0,
-                          binaryRawData: '',
+
                           description: '',
                           orderNo: 0,
-                          createTime: '',
-                          updateTime: '',
+
                           paramAttr: {
-                            minLength: '',
-                            maxLength: '',
-                            minValue: {},
-                            maxValue: {},
-                            paramLimit: '',
-                            paramValueList: '',
-                            paramMock: '',
-                            attr: '',
-                            structureIsHide: 0,
-                            example: '中国',
-                            createTime: '',
-                            updateTime: '',
-                            dbArr: '',
-                            paramNote: ''
+                            example: '中国'
                           },
                           childList: [
                             {
-                              responseUuid: '',
                               name: 'confirm',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '321',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '321'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'isUpdated',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: 'true',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: 'true'
                               },
                               childList: []
                             }
                           ]
                         },
                         {
-                          responseUuid: '',
                           name: 'total',
                           paramType: 0,
                           partType: 0,
                           dataType: 0,
-                          dataTypeValue: '',
-                          structureId: '',
-                          structureParamId: '',
-                          contentType: '',
+
                           isRequired: 0,
-                          binaryRawData: '',
+
                           description: '',
                           orderNo: 0,
-                          createTime: '',
-                          updateTime: '',
+
                           paramAttr: {
-                            minLength: '',
-                            maxLength: '',
-                            minValue: {},
-                            maxValue: {},
-                            paramLimit: '',
-                            paramValueList: '',
-                            paramMock: '',
-                            attr: '',
-                            structureIsHide: 0,
-                            example: 'true',
-                            createTime: '',
-                            updateTime: '',
-                            dbArr: '',
-                            paramNote: ''
+                            example: 'true'
                           },
                           childList: [
                             {
-                              responseUuid: '',
                               name: 'nowConfirm',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '7114',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '7114'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'confirm',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '139641',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '139641'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'dead',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '5700',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '5700'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'showRate',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '5700',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '5700'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'heal',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '126827',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: '126827'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'showHeal',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: 'true',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: 'true'
                               },
                               childList: []
                             },
                             {
-                              responseUuid: '',
                               name: 'wzz',
                               paramType: 0,
                               partType: 0,
                               dataType: 0,
-                              dataTypeValue: '',
-                              structureId: '',
-                              structureParamId: '',
-                              contentType: '',
+
                               isRequired: 0,
-                              binaryRawData: '',
+
                               description: '',
                               orderNo: 0,
-                              createTime: '',
-                              updateTime: '',
+
                               paramAttr: {
-                                minLength: '',
-                                maxLength: '',
-                                minValue: {},
-                                maxValue: {},
-                                paramLimit: '',
-                                paramValueList: '',
-                                paramMock: '',
-                                attr: '',
-                                structureIsHide: 0,
-                                example: '',
-                                createTime: '',
-                                updateTime: '',
-                                dbArr: '',
-                                paramNote: ''
+                                example: ''
                               },
                               childList: []
                             }
                           ]
                         },
                         {
-                          responseUuid: '',
                           name: 'children',
                           paramType: 0,
                           partType: 0,
                           dataType: 0,
-                          dataTypeValue: '',
-                          structureId: '',
-                          structureParamId: '',
-                          contentType: '',
+
                           isRequired: 0,
-                          binaryRawData: '',
+
                           description: '',
                           orderNo: 0,
-                          createTime: '',
-                          updateTime: '',
+
                           paramAttr: {
-                            minLength: '',
-                            maxLength: '',
-                            minValue: {},
-                            maxValue: {},
-                            paramLimit: '',
-                            paramValueList: '',
-                            paramMock: '',
-                            attr: '',
-                            structureIsHide: 0,
-                            example: '',
-                            createTime: '',
-                            updateTime: '',
-                            dbArr: '',
-                            paramNote: ''
+                            example: ''
                           },
                           childList: []
                         }
@@ -1405,138 +733,66 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
                     },
 
                     {
-                      responseUuid: '',
                       name: 'chinaTotal',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: ''
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'chinaAdd',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: ''
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'showAddSwitch',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: ''
                       },
                       childList: []
                     },
                     {
-                      responseUuid: '',
                       name: 'lastUpdateTime',
                       paramType: 0,
                       partType: 0,
                       dataType: 0,
-                      dataTypeValue: '',
-                      structureId: '',
-                      structureParamId: '',
-                      contentType: '',
+
                       isRequired: 0,
-                      binaryRawData: '',
+
                       description: '',
                       orderNo: 0,
-                      createTime: '',
-                      updateTime: '',
+
                       paramAttr: {
-                        minLength: '',
-                        maxLength: '',
-                        minValue: {},
-                        maxValue: {},
-                        paramLimit: '',
-                        paramValueList: '',
-                        paramMock: '',
-                        attr: '',
-                        structureIsHide: 0,
-                        example: '2022-02-05 11:52:51',
-                        createTime: '',
-                        updateTime: '',
-                        dbArr: '',
-                        paramNote: ''
+                        example: '2022-02-05 11:52:51'
                       },
                       childList: []
                     }
@@ -1548,25 +804,9 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId = 0 }) =>
             }
           }
         ],
-        resultList: [
-          {
-            id: '',
-            name: '',
-            httpCode: '',
-            httpContentType: '',
-            type: 0,
-            content: '',
-            createTime: '',
-            updateTime: ''
-          }
-        ],
+        resultList: [],
         writeHistory: 0,
-        historyInfo: {
-          oldId: '',
-          updateDesc: '',
-          versionId: 0,
-          projectVersionId: 0
-        }
+        historyInfo: {}
       }
     ],
     projectUuid,
