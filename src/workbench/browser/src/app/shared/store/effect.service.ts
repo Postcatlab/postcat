@@ -8,7 +8,7 @@ import { ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/s
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun, toJS } from 'mobx';
+import { autorun, reaction, toJS } from 'mobx';
 
 import { JSONParse } from '../../utils/index.utils';
 import { db } from '../services/storage/db';
@@ -41,23 +41,40 @@ export class EffectService {
     if (isUserFirstUse) {
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }
-    //Init workspace
-    autorun(async () => {
-      if (this.store.isLogin) {
-        //* Get workspace list
-        await this.updateWorkspaceList();
-        this.fixedID();
+
+    //TODO perf
+    const initWorkspaceInfo = async () => {
+      // console.log('rest login', this.store.isLogin);
+      if (!this.store.isLogin) {
+        this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+        return;
+      }
+      //* Get workspace list
+      await this.updateWorkspaceList();
+      this.fixedID();
+
+      if (!this.store.isLocal) {
         const { roles, permissions } = await this.getWorkspacePermission();
         this.store.setPermission(permissions, 'workspace');
         this.store.setRole(roles, 'workspace');
-        return;
       }
-      if (this.store.isLocal) {
-        this.store.setWorkspaceList([]);
-        this.fixedID();
-        return;
+    };
+    if (this.store.isLogin) {
+      initWorkspaceInfo();
+    }
+    reaction(
+      () => this.store.isLogin,
+      async () => {
+        initWorkspaceInfo();
       }
-      this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+    );
+    //Init workspace
+    autorun(async () => {
+      // console.log('autorun', 'switch to local');
+      if (this.store.isLogin || !this.store.isLocal) return;
+      this.store.setWorkspaceList([]);
+      this.fixedID();
+      return;
     });
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(async () => {
@@ -77,10 +94,12 @@ export class EffectService {
         return;
       }
 
-      // * update project role
-      const { permissions, roles } = await this.getProjectPermission();
-      this.store.setPermission(permissions, 'project');
-      this.store.setRole(roles, 'project');
+      if (!this.store.isLocal) {
+        // * update project role
+        const { permissions, roles } = await this.getProjectPermission();
+        this.store.setPermission(permissions, 'project');
+        this.store.setRole(roles, 'project');
+      }
     });
 
     // * Fetch role list
@@ -155,9 +174,11 @@ export class EffectService {
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
     // * update workspace role
-    const { roles, permissions } = await this.getWorkspacePermission();
-    this.store.setPermission(permissions, 'workspace');
-    this.store.setRole(roles, 'workspace');
+    if (!this.store.isLocal) {
+      const { roles, permissions } = await this.getWorkspacePermission();
+      this.store.setPermission(permissions, 'workspace');
+      this.store.setRole(roles, 'workspace');
+    }
   }
   async getWorkspacePermission() {
     // * local workspace no need to set permission

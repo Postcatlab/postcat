@@ -30,7 +30,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
               isRequired: 1,
               description: '',
               orderNo: 0,
-              paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', paramMock: '', attr: '', example: 'disease_h5' },
+              paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', paramMock: '', attr: '', example: 'disease_h5' },
               childList: []
             }
           ],
@@ -52,7 +52,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: 'Sat, 05 Feb 2022 04:30:44 GMT' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: 'Sat, 05 Feb 2022 04:30:44 GMT' },
                   childList: []
                 },
                 {
@@ -63,7 +63,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: 'application/json' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: 'application/json' },
                   childList: []
                 },
                 {
@@ -74,7 +74,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: 'chunked' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: 'chunked' },
                   childList: []
                 },
                 {
@@ -85,7 +85,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: 'close' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: 'close' },
                   childList: []
                 },
                 {
@@ -96,7 +96,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: 'openresty' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: 'openresty' },
                   childList: []
                 },
                 {
@@ -107,7 +107,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '8QMewH9c6JodvyHb5wE=' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '8QMewH9c6JodvyHb5wE=' },
                   childList: []
                 },
                 {
@@ -118,7 +118,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '120.26.198.150' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '120.26.198.150' },
                   childList: []
                 },
                 {
@@ -129,7 +129,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '58.250.137.40' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '58.250.137.40' },
                   childList: []
                 }
               ],
@@ -142,7 +142,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 0,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '' },
                   childList: []
                 },
                 {
@@ -153,7 +153,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 0,
                   description: 'The actual parameter is string, in order to show the document expansion display',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '' },
                   childList: [
                     {
                       name: 'areaTree',
@@ -421,8 +421,8 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
               description: 'City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html',
               orderNo: 0,
               paramAttr: {
-                minValue: {},
-                maxValue: {},
+                minValue: 0,
+                maxValue: 0,
                 paramValueList: '[{"value":"110000","description":"Beijing"},{"value":"440000","description":"Guangdong"}]',
                 paramMock: '',
                 attr: '',
@@ -449,7 +449,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
                   isRequired: 1,
                   description: '',
                   orderNo: 0,
-                  paramAttr: { minValue: {}, maxValue: {}, paramValueList: '', example: '' },
+                  paramAttr: { minValue: 0, maxValue: 0, paramValueList: '', example: '' },
                   childList: [
                     {
                       name: 'city',

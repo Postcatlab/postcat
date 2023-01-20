@@ -33,7 +33,7 @@ export class WebExtensionService {
   constructor(private web: WebService, private language: LanguageService) {
     this.debugExtensionNames =
       !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname)
-        ? ['vscode-postcat-abyss', 'vscode-postcat-dracula', 'vscode-postcat-purple', 'vscode-postcat-red']
+        ? ['vscode-postcat-abyss', 'vscode-postcat-dracula', 'vscode-postcat-purple']
         : [];
   }
   async installExtension(extName: string, version = 'latest', entry = '') {

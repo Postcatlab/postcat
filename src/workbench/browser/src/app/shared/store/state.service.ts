@@ -192,7 +192,7 @@ export class StoreService {
 
   // ? user && auth
   @computed get isLogin() {
-    return !!this.userProfile?.userName;
+    return this.userProfile?.id;
   }
   @computed get getUserProfile() {
     return this.userProfile;
@@ -335,7 +335,12 @@ export class StoreService {
   }
 
   @action clearAuth() {
-    this.setUserProfile(null);
+    this.setUserProfile({
+      id: 0,
+      password: '',
+      userName: '',
+      userNickName: ''
+    });
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 

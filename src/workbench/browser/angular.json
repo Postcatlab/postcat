@@ -86,7 +86,7 @@
         },
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
-          "options": { "browserTarget": "eoapi:build", "proxyConfig": "proxy.conf.json" },
+          "options": { "browserTarget": "postcat:build", "proxyConfig": "proxy.conf.json" },
           "configurations": {
             "dev": { "browserTarget": "postcat:build:dev" },
             "devCn": { "browserTarget": "postcat:build:devCn" },
@@ -119,7 +119,7 @@
   },
   "defaultProject": "postcat",
   "schematics": {
-    "@schematics/angular:component": { "prefix": "eo", "style": "scss", "inlineStyle": true, "inlineTemplate": true },
-    "@schematics/angular:directive": { "prefix": "eo" }
+    "@schematics/angular:component": { "prefix": "pc", "style": "scss", "inlineStyle": true, "inlineTemplate": true },
+    "@schematics/angular:directive": { "prefix": "pc" }
   }
 }

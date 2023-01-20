@@ -87,7 +87,7 @@
       <ul nz-menu>
         <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in/Up</li>
         <ng-container *ngIf="store.isLogin">
-          <li nz-menu-item class="px-[12px] py-[5px] text-neutral-400 font-bold">
+          <li class="px-[12px] py-[5px] font-bold">
             {{ store.getUserProfile?.userNickName }}
           </li>
           <li nz-menu-item (click)="openSettingModal()" i18n>Account Setting</li>
@@ -96,24 +96,7 @@
       </ul>
     </eo-ng-dropdown-menu>
     <!-- Web download client -->
-    <button
-      eo-ng-button
-      nzType="primary"
-      class="ml-[10px]"
-      *ngIf="!electron.isElectron && !store.isShare"
-      eo-ng-dropdown
-      [nzDropdownMenu]="download"
-    >
-      <eo-iconpark-icon class="mr-[5px]" name="download" size="14px"></eo-iconpark-icon>
-      <span i18n>Download</span>
-    </button>
-    <eo-ng-dropdown-menu #download="nzDropdownMenu">
-      <ul nz-menu>
-        <ng-container *ngFor="let item of resourceInfo; let index = index">
-          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
-        </ng-container>
-      </ul>
-    </eo-ng-dropdown-menu>
+    <pc-download-client *ngIf="!store.isShare"></pc-download-client>
     <!--  PC system operate -->
     <eo-nav-operate></eo-nav-operate>
   </div>

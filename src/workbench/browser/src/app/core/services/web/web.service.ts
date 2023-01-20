@@ -12,6 +12,7 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 export class WebService {
   isWeb: boolean;
   isVercel = window.location.href.includes('vercel');
+  isClientInstalled: boolean;
   resourceInfo = [
     {
       id: 'win',

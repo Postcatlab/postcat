@@ -21,7 +21,6 @@ import { ModalService } from '../../shared/services/modal.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  resourceInfo;
   helpMenus = [
     {
       title: $localize`Document`,
@@ -49,9 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public store: StoreService,
     public dataSourceService: DataSourceService,
     public feature: FeatureControlService
-  ) {
-    this.resourceInfo = this.web.resourceInfo;
-  }
+  ) {}
   async ngOnInit(): Promise<void> {
     this.message
       .get()
@@ -85,14 +82,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.dataSourceService.checkRemoteCanOperate();
   }
   async loginOut() {
-    this.store.setUserProfile({
-      id: -1,
-      password: '',
-      userName: '',
-      userNickName: ''
-    });
-    this.eMessage.success($localize`Successfully logged out !`);
     this.store.clearAuth();
+    this.eMessage.success($localize`Successfully logged out !`);
     const [, err]: any = await this.api.api_userLogout({});
     if (err) {
       return;

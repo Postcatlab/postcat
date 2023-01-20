@@ -180,8 +180,8 @@ export interface HeaderParam {
 export interface ParamAttr {
   minLength: number;
   maxLength: number;
-  minValue: MinValue;
-  maxValue: MaxValue;
+  minValue: number;
+  maxValue: number;
   paramLimit: string;
   /**
    * Params value list (JSON format)
@@ -221,10 +221,6 @@ export interface BodyParam {
   childList: any[];
 }
 
-export interface MinValue2 {}
-
-export interface MaxValue2 {}
-
 export interface QueryParam {
   responseUuid: string;
   name: string;
@@ -248,8 +244,8 @@ export interface QueryParam {
 export interface ParamAttr3 {
   minLength: number;
   maxLength: number;
-  minValue: MinValue3;
-  maxValue: MaxValue3;
+  minValue: number;
+  maxValue: number;
   paramLimit: string;
   paramValueList: string;
   paramMock: string;
@@ -289,8 +285,8 @@ export interface RestParam {
 export interface ParamAttr4 {
   minLength: number;
   maxLength: number;
-  minValue: MinValue4;
-  maxValue: MaxValue4;
+  minValue: number;
+  maxValue: number;
   paramLimit: string;
   paramValueList: string;
   paramMock: string;
@@ -302,10 +298,6 @@ export interface ParamAttr4 {
   dbArr: string;
   paramNote: string;
 }
-
-export interface MinValue4 {}
-
-export interface MaxValue4 {}
 
 export interface ResponseList {
   responseUuid: string;
@@ -320,134 +312,11 @@ export interface ResponseList {
 }
 
 export interface ResponseParams {
-  headerParams: HeaderParam2[];
-  bodyParams: BodyParam2[];
-  queryParams: QueryParam2[];
-  restParams: RestParam2[];
+  headerParams: HeaderParam[];
+  bodyParams: BodyParam[];
+  queryParams: QueryParam[];
+  restParams: RestParam[];
 }
-
-export interface HeaderParam2 {
-  responseUuid: string;
-  name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr5;
-  childList: any[];
-}
-
-export interface ParamAttr5 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue5;
-  maxValue: MaxValue5;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
-}
-
-export interface MinValue5 {}
-
-export interface MaxValue5 {}
-
-export interface BodyParam2 {
-  responseUuid: string;
-  name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr6;
-  childList: any[];
-}
-
-export interface ParamAttr6 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue6;
-  maxValue: MaxValue6;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
-}
-
-export interface MinValue6 {}
-
-export interface MaxValue6 {}
-
-export interface QueryParam2 {
-  responseUuid: string;
-  name: string;
-  paramType: number;
-  partType: number;
-  dataType: number;
-  dataTypeValue: string;
-  structureId: number;
-  structureParamId: string;
-  contentType: string;
-  isRequired: number;
-  binaryRawData: string;
-  description: string;
-  orderNo: number;
-  createTime: number;
-  updateTime: number;
-  paramAttr: ParamAttr7;
-  childList: any[];
-}
-
-export interface ParamAttr7 {
-  minLength: number;
-  maxLength: number;
-  minValue: MinValue7;
-  maxValue: MaxValue7;
-  paramLimit: string;
-  paramValueList: string;
-  paramMock: string;
-  attr: string;
-  structureIsHide: number;
-  example: string;
-  createTime: number;
-  updateTime: number;
-  dbArr: string;
-  paramNote: string;
-}
-
-export interface MinValue7 {}
-
-export interface MaxValue7 {}
 
 export interface RestParam2 {
   responseUuid: string;
@@ -472,8 +341,8 @@ export interface RestParam2 {
 export interface ParamAttr8 {
   minLength: number;
   maxLength: number;
-  minValue: MinValue8;
-  maxValue: MaxValue8;
+  minValue: number;
+  maxValue: number;
   paramLimit: string;
   paramValueList: string;
   paramMock: string;
@@ -485,10 +354,6 @@ export interface ParamAttr8 {
   dbArr: string;
   paramNote: string;
 }
-
-export interface MinValue8 {}
-
-export interface MaxValue8 {}
 
 export interface ResultList {
   id: number;

@@ -230,7 +230,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         if (type === 'clear-user') {
           this.store.clearAuth();
           this.store.setUserProfile({
-            id: -1,
+            id: 0,
             password: '',
             userName: '',
             userNickName: ''
@@ -418,6 +418,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
       formData.username = formData.username?.trim();
       const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
+        if (err.code === 131000001) {
+          this.eMessage.error($localize`Username must a email`);
+          return;
+        }
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
