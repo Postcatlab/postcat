@@ -171,10 +171,12 @@ export class GlobalProvider {
 
     const [[data]] = await Promise.all(apiCreatePromises);
 
-    return this.serializationData({
+    const result = this.serializationData({
       status: 0,
       data
     });
+    console.log('importProject result', result);
+    return result;
 
     // return new Promise(resolve => {
     //   // 只能导入到当前 项目 所以 currentProjectID写死。。。

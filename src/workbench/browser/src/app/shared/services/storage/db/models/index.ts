@@ -44,7 +44,9 @@ export interface Environment extends Base {
 }
 export interface Mock extends Base {
   name: string;
+  apiUuid: string;
   description: string;
+  createWay: 'system' | 'custom';
   response: string;
   projectUuid: string;
   workSpaceUuid: string;
