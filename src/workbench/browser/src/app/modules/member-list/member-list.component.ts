@@ -24,7 +24,7 @@ import { MemberService } from './member.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            {{ member.isOwner }}
+            <!-- {{ member.isOwner }} -->
             <div class="operate-btn-list" *ngIf="!store.isLocal && ((!item.isSelf && member.isOwner) || item.isSelf)">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
