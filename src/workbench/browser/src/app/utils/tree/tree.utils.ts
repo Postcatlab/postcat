@@ -169,7 +169,9 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
   return list?.reduce?.((prev, curr) => {
     try {
       curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
-      prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
+      const namePath = valueKey.split('.');
+      const lastKey = namePath.pop();
+      prev[curr[key]] = namePath.reduce((p, v) => p?.[v], curr)?.[lastKey] || fieldTypeMap.get(curr.type);
       if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
       } else if (curr?.example) {

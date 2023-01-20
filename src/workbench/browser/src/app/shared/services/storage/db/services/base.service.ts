@@ -52,6 +52,11 @@ export class BaseService<T> {
   }
 
   @ApiResponse()
+  private async __bulkRead(params: Record<string, any>) {
+    return this.filterData(params).toArray() as ApiResponsePromise<T[]>;
+  }
+
+  @ApiResponse()
   async bulkUpdate(params: any[]) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
     const promiseArr = params.map(item => {
@@ -59,7 +64,7 @@ export class BaseService<T> {
       return this.db.update(id, rest);
     });
     await Promise.all(promiseArr);
-    return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
+    return this.__bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 
   @ApiResponse()
@@ -70,7 +75,7 @@ export class BaseService<T> {
   @ApiResponse()
   async bulkCreate(params) {
     const keys = await this.db.bulkAdd(params, { allKeys: true });
-    return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
+    return this.__bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 
   @ApiResponse()

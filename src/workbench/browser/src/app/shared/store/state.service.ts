@@ -134,6 +134,9 @@ export class StoreService {
   @computed get getApiGroupTree() {
     return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
   }
+  @computed get getApiList() {
+    return this.apiList;
+  }
   @computed get getEnvList() {
     return this.envList;
   }
