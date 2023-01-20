@@ -933,6 +933,33 @@ export class LocalService {
     });
   }
 
+  api_projectExportProject<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - exportProject 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - exportProject 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .exports({ projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - exportProject 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - exportProject 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
   api_projectCreate<T = any>({ projectMsgs, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectMsgs == null) {
       console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
