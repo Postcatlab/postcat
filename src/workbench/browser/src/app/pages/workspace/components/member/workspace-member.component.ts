@@ -10,10 +10,6 @@ import { StoreService } from '../../../../shared/store/state.service';
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal">
       <nz-list-header *ngIf="member.isOwner">
-        <!-- {{ userList | json }}
-        <select name="pets" id="pet-select">
-          <option *ngFor="let option of userList" [value]="option.userNickName">{{ option.userNickName }}</option>
-        </select> -->
         <eo-ng-select
           class="w-full"
           nzAllowClear
@@ -73,6 +69,13 @@ export class WorkspaceMemberComponent implements OnInit {
   }
   handleChange(event) {
     this.searchValue = event;
+    // if (this.searchValue.includes('t')) {
+    //   this.userList = [
+    //     {
+    //       userNickName: 'test'
+    //     }
+    //   ];
+    // }
   }
   async addMember(items) {
     if (this.store.isLocal) {
