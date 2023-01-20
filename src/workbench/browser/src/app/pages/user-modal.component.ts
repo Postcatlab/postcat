@@ -415,7 +415,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       // * get login form values
       const formData = this.validateLoginForm.value;
-
+      formData.username = formData.username?.trim();
       const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
         this.eMessage.error($localize`Please check you username or password`);
@@ -635,7 +635,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 await Promise.all(arr);
                 modal.destroy();
 
-                this.effect.updateProjects(workSpaceUuid);
+                // this.effect.updateProjects(workSpaceUuid);
 
                 await this.router.navigate(['**']);
 
