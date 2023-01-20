@@ -118,7 +118,6 @@ export class ExtensionService {
       }),
       ...debugExtensions
     ];
-
     //Handle featue data
     result.data = result.data.map(module => {
       let result = this.webExtensionService.translateModule(module);
@@ -149,7 +148,7 @@ export class ExtensionService {
    * @param id
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
+  async installExtension({ name, version = 'latest', main = '', i18n = [] }): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'install',
@@ -160,7 +159,9 @@ export class ExtensionService {
       }
     };
     if (this.electron.isElectron) {
-      const { code, data, modules } = await window.electron.installExtension(name);
+      const { code, data, modules } = await window.electron.installExtension(name, {
+        i18n
+      });
       if (code === 0) {
         successCallback();
         return true;
@@ -169,7 +170,11 @@ export class ExtensionService {
         return false;
       }
     } else {
-      const isSuccess = await this.webExtensionService.installExtension(name, version, main);
+      const isSuccess = await this.webExtensionService.installExtension(name, {
+        version,
+        entry: main,
+        i18n
+      });
       if (isSuccess) {
         successCallback();
       }
