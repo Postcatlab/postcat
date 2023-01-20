@@ -3,6 +3,13 @@ import { ApiData, BodyParam } from 'eo/workbench/browser/src/app/shared/services
 
 import { ApiData as OldApiData, Environment as OldEnvironment, BasiApiEditParams } from './oldApiData';
 
+const mui = {
+  headerParams: 0,
+  bodyParams: 1,
+  queryParams: 2,
+  restParams: 3
+};
+
 export const convertApiData = (apiData: OldApiData): ApiData => {
   const {
     name,
@@ -29,9 +36,9 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
       contentType: transformContentType(requestBodyType, requestBodyJsonType)
     },
     requestParams: {
-      headerParams: transformParams(requestHeaders),
-      queryParams: transformParams(queryParams),
-      restParams: transformParams(restParams),
+      headerParams: transformParams(requestHeaders, 'headerParams'),
+      queryParams: transformParams(queryParams, 'queryParams'),
+      restParams: transformParams(restParams, 'restParams'),
       bodyParams: transformRequestBody(requestBody)
     },
     responseList: [
@@ -39,7 +46,7 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
         isDefault: 1,
         contentType: transformContentType(responseBodyType, responseBodyJsonType),
         responseParams: {
-          headerParams: transformParams(responseHeaders),
+          headerParams: transformParams(responseHeaders, 'headerParams'),
           bodyParams: transformRequestBody(responseBody)
         }
       }
@@ -60,9 +67,10 @@ const transformContentType = (requestBodyType: OldApiData['responseBodyType'], r
   }
 };
 
-const transformParams = (params: BasiApiEditParams[] = []): BodyParam[] => {
+const transformParams = (params: BasiApiEditParams[] = [], partType): BodyParam[] => {
   return params?.map((n, i) => ({
     name: n.name,
+    partType: mui[partType],
     orderNo: i,
     description: n.description,
     isRequired: Number(n.required),
@@ -86,7 +94,7 @@ const transformRequestBody = (requestBody: OldApiData['requestBody'] = []): Body
         ]
       : [];
   } else {
-    const bodyParams = transformParams(requestBody);
+    const bodyParams = transformParams(requestBody, 'bodyParams');
     bodyParams?.forEach((item, index) => {
       item.paramAttr.minLength = requestBody[index].minLength;
       item.paramAttr.maxLength = requestBody[index].maxLength;
