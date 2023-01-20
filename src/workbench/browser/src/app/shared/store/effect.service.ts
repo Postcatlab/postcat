@@ -354,6 +354,7 @@ export class EffectService {
       return;
     }
     const rootGroup = groupList.at(0);
+    rootGroup.name = $localize`Root Group`;
     this.store.setRootGroup(rootGroup);
 
     // console.log('Group 数据', structuredClone(groupList));
