@@ -98,7 +98,6 @@ export class WorkspaceMemberService {
     return !err;
   }
   async searchUser(search) {
-    console.log('search', search);
     const [data, err] = await this.api.api_userSearch({ username: search.trim() });
     if (err) {
       return;

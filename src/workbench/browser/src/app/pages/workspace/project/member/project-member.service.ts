@@ -29,7 +29,7 @@ export class ProjectMemberService {
           role: {
             id: 1
           },
-          roleTitle: $localize`Workspace Owner`,
+          roleTitle: $localize`Project Owner`,
           ...this.store.getUserProfile,
           username: this.store.getUserProfile?.userName
         }
