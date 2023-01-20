@@ -2,12 +2,12 @@
   <div class="w-[50%] min-w-[600px] flex flex-col">
     <form nz-form nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label class="font-bold" [nzSpan]="24" i18n>Project Name</nz-form-label>
+        <nz-form-label class="font-bold" nzRequired [nzSpan]="24" i18n>Project Name</nz-form-label>
         <nz-form-control nzErrorTip="Please input your projectName">
           <input eo-ng-input placeholder="Project Name" name="projectName" required [(ngModel)]="projectName" />
         </nz-form-control>
       </nz-form-item>
-      <button eo-ng-button nzType="primary" i18n (click)="handleChangeProjectName(projectName)" [nzLoading]="isLoading" i18n>Save</button>
+      <button eo-ng-button nzType="primary" i18n (click)="changeProjectName(projectName)" [nzLoading]="isLoading" i18n>Save</button>
     </form>
     <div class="my-2">
       <nz-divider></nz-divider>

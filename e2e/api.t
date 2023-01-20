@@ -2,52 +2,56 @@
 
 --- API test
 
-goto 'http://localhost:4200'
+goto "http://localhost:4200"
 
 find: 
-    [select 'POST'] = method  [input] = input [button 'Send'] = sendBtn 
-    [label 'Headers'] = header
+    [img { width: 16px }] [img { width: 16px }] = history [label "New Request"]
+    [select "POST"] = method  [input] = input [button "Send"] = sendBtn 
+    [label "Headers"] = header
 
-method -> 'GET'
-input -> 'https://weibo.com/ajax/side/cards/sideInterested?count=60'
+method -> "GET"
+input -> "https://weibo.com/ajax/side/cards/sideInterested?count=60"
 sendBtn -> click
-wait 5000
+wait 3000
 
 find:
-    [label 'Response']=res
+    [label "Response"]=res
 
 res -> click
-
-# TODO 查看测试历史
-
 capture
 
+history -> click
+
+find:
+    [label "https://weibo.com/ajax/side/cards/sideInterested?count=60"] = target
+
+wait
 
 --- add New
 
-goto 'http://localhost:4200'
+goto "http://localhost:4200"
 
 find:
-    [input 'Search'] [button 'xpath:body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-sider > div > nz-content > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > eo-api-group-tree > header > div']=addBtn
+    [input 'Search'] [button 'xpath:body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-sider > div > nz-content > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > pc-api-group-tree > header > div']=addBtn
 
 addBtn -> hover
 
 find:
-    [label 'New API']=newApi
-    [label 'New Group']
+    [label "New API"]=newApi
+    [label "New Group"]
 
 newApi -> click
 
 find: 
-    [button 'Save']=save
-    [select 'POST']=method [input '/']=path
-    [select 'Root directory'] [input]=name
+    [button "Save"]=save
+    [select "POST"]=method [input "/"]=path
+    [select "Root directory"] [input]=name
     # [input]=paramName [input]=desc [input]=example
 
-method -> 'GET'
+method -> "GET"
 # TODO path => '/api/data'
-path -> 'api/data'
-name -> 'yoo'
+path -> "api/data"
+name -> "yoo"
 # paramName -> 'a'
 # desc -> 'adesc'
 # example -> 'a Example'

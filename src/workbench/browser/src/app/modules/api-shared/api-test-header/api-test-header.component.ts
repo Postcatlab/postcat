@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestHeaders } from '../../../pages/workspace/project/api/http/test/api-test.model';
+import { HeaderParam } from '../../../shared/services/storage/db/models/apiData';
 import { ApiTableService } from '../api-table.service';
 import { ApiTableConf } from '../api.model';
 @Component({
@@ -12,7 +12,7 @@ import { ApiTableConf } from '../api.model';
 })
 export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
-  @Input() model: ApiTestHeaders[];
+  @Input() model: HeaderParam[];
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: ApiTableConf = {
@@ -21,10 +21,12 @@ export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   };
   private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
-  itemStructure: ApiTestHeaders = {
-    required: true,
+  itemStructure: HeaderParam = {
+    isRequired: 1,
     name: '',
-    value: ''
+    paramAttr: {
+      example: ''
+    }
   };
   constructor(private apiTable: ApiTableService) {
     this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
@@ -38,14 +40,6 @@ export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  private loopSetChecked(data, checked: boolean) {
-    data.paramNotNull = checked ? '0' : '1';
-    if (data.childList) {
-      data.childList.forEach((item: any) => {
-        this.loopSetChecked(item, checked);
-      });
-    }
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({

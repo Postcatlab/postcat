@@ -2,7 +2,7 @@
   <ng-container *ngFor="let item of this.modules">
     <a
       (click)="clickModule(item)"
-      class="sidebar-item"
+      class="flex flex-col items-center justify-center sidebar-item"
       eoNgFeedbackTooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="sidebar.collapsed ? item.title : ''"

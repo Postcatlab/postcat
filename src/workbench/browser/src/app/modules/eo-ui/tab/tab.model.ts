@@ -16,7 +16,7 @@ export type TabItem = {
   /**
    * Tab id,timestamp
    */
-  uuid: number;
+  uuid: number | string;
   /**
    * Unique id,used for identify content
    */

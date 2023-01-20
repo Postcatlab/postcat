@@ -2,10 +2,10 @@
   <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
     <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
   </eo-ng-radio-group>
-  <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
+  <nz-divider *ngIf="[TYPE_API_BODY['FormData'], TYPE_API_BODY.Raw].includes(bodyType)" nzType="vertical"></nz-divider>
   <!--Select content-type-->
 
-  <div *ngIf="['raw'].includes(bodyType)">
+  <div *ngIf="[TYPE_API_BODY.Raw].includes(bodyType)">
     <span class="text-[12px]">Content-Type：</span>
     <eo-ng-select
       class="text-[12px]"
@@ -19,13 +19,13 @@
   </div>
 
   <!-- Import -->
-  <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center">
-    <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)"> </params-import>
+  <div *ngIf="[TYPE_API_BODY['FormData']].includes(bodyType)" class="inline-flex items-center">
+    <params-import [baseData]="model" [contentType]="IMPORT_MUI[bodyType]" (baseDataChange)="handleParamsImport($event)"> </params-import>
   </div>
 </div>
 <!-- FormData -->
 <eo-ng-table-pro
-  *ngIf="['formData'].includes(bodyType)"
+  *ngIf="[TYPE_API_BODY['FormData']].includes(bodyType)"
   [columns]="listConf.columns"
   [nzDataItem]="itemStructure"
   [setting]="listConf.setting"
@@ -33,10 +33,10 @@
   (nzDataChange)="emitModelChange()"
 ></eo-ng-table-pro>
 <ng-template #formValue let-item="item" let-index="index">
-  <div [ngSwitch]="item.type">
-    <input *ngSwitchDefault eo-ng-input [(ngModel)]="item.value" (ngModelChange)="emitModelChange()" />
-    <div *ngSwitchCase="'file'">
-      <label class="ant-btn ant-btn-sm" for="file_{{ index }}" i18n>Choose Files</label>
+  <div [ngSwitch]="item.dataType">
+    <input *ngSwitchDefault eo-ng-input [(ngModel)]="item.paramAttr.example" (ngModelChange)="emitModelChange()" />
+    <div *ngSwitchCase="API_PARAMS_TYPE.file">
+      <label class="cursor-pointer px-[5px] py-[3px] border-all rounded" for="file_{{ index }}" i18n>Choose Files</label>
       <span class="ml-[10px]" i18n>{{ item.files?.length ? item.files?.length + ' files selected' : 'No file chosen' }}</span>
       <input id="file_{{ index }}" multiple type="file" class="invisible" (change)="formdataSelectFiles($event.target, item)" />
     </div>
@@ -46,16 +46,16 @@
 <!-- XML -->
 <!-- Raw -->
 <eo-monaco-editor
-  [(code)]="model"
   (codeChange)="rawDataChange($event)"
-  *ngIf="bodyType === 'raw'"
+  *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
+  [(code)]="model[0].binaryRawData"
   [editorType]="editorType"
   [config]="editorConfig"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<div class="px-5 min-h-[60%]" *ngIf="bodyType === 'binary'">
+<div class="px-5 min-h-[60%]" *ngIf="bodyType === TYPE_API_BODY.Binary && model[0]">
   <nz-upload
     nzType="drag"
     [nzBeforeUpload]="uploadBinary"

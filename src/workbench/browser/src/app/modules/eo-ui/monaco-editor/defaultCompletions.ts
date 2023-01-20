@@ -12,11 +12,11 @@ import type { languages } from 'monaco-editor';
 // }).filter(n => n.label)
 
 export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>> = [
-  {
-    label: 'pc.info(data)',
-    insertText: 'pc.info(data);',
-    detail: '输出信息'
-  },
+  // {
+  //   label: 'pc.info(data)',
+  //   insertText: 'pc.info(data);',
+  //   detail: '输出信息'
+  // },
   // {
   //   label: 'pc.stop(data)',
   //   insertText: 'pc.stop(data);',
@@ -42,106 +42,106 @@ export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>
   //   insertText: 'pc.file(file Type);',
   //   detail: '插入一个内置的文件',
   // },
-  {
-    label: 'pc.img(file Type)',
-    insertText: 'pc.img(file Type);',
-    detail: '插入一个内置的图片文件'
-  },
-  {
-    label: 'pc.http.url.get()',
-    insertText: 'pc.http.url.get();',
-    detail: '获取原始的http协议url，不包含环境的base url，比如/user/login/{user_type}?user_name={{name}}'
-  },
-  {
-    label: 'pc.http.url.parse()',
-    insertText: 'pc.http.url.parse();',
-    detail: '获取经过解析处理后的http协议url，包含环境的base url，比如www.eolinker.com/user/login/admin?user_name=jackliu'
-  },
-  {
-    label: 'pc.http.url.set("new_url")',
-    insertText: 'pc.http.url.set("new_url");',
-    detail: '设置http协议url，比如/user/login/admin?user_name={{name}}'
-  },
-  {
-    label: 'pc.http.header.get("param_key")',
-    insertText: 'pc.http.header.get("param_key");',
-    detail: '获取http协议请求头部参数值'
-  },
-  {
-    label: 'pc.http.header.set("param_key","param_value")',
-    insertText: 'pc.http.header.set("param_key","param_value");',
-    detail: '设置http协议请求头部参数值'
-  },
-  {
-    label: 'pc.http.header.unset("param_key")',
-    insertText: 'pc.http.header.unset("param_key");',
-    detail: '删除http协议header参数'
-  },
-  {
-    label: 'pc.http.header.clear',
-    insertText: 'pc.http.header.clear;',
-    detail: '清空http协议header参数'
-  },
-  {
-    label: 'pc.http.query.get("param_key")',
-    insertText: 'pc.http.query.get("param_key");',
-    detail: '获取http协议query参数'
-  },
-  {
-    label: 'pc.http.query.set("param_key","param_value")',
-    insertText: 'pc.http.query.set("param_key","param_value");',
-    detail: '设置http协议query参数'
-  },
-  {
-    label: 'pc.http.query.unset("param_key")',
-    insertText: 'pc.http.query.unset("param_key");',
-    detail: '删除http协议query参数（删除后不会出现在地址栏中）'
-  },
-  {
-    label: 'pc.http.query.clear',
-    insertText: 'pc.http.query.clear;',
-    detail: '清空http协议query参数'
-  },
-  {
-    label: 'pc.http.rest.get("param_key")',
-    insertText: 'pc.http.rest.get("param_key");',
-    detail: '获取http协议rest参数'
-  },
-  {
-    label: 'pc.http.rest.set("param_key","param_value")',
-    insertText: 'pc.http.rest.set("param_key","param_value");',
-    detail: '设置http协议rest参数'
-  },
-  {
-    label: 'pc.http.rest.unset("param_key")',
-    insertText: 'pc.http.rest.unset("param_key");',
-    detail: '删除http协议rest参数'
-  },
-  {
-    label: 'pc.http.rest.clear',
-    insertText: 'pc.http.rest.clear;',
-    detail: '清空http协议rest参数'
-  },
-  {
-    label: 'pc.http.response.get()',
-    insertText: 'pc.http.response.get();',
-    detail: '获取http协议返回结果'
-  },
-  {
-    label: 'pc.http.response.set("response_value")',
-    insertText: 'pc.http.response.set("response_value");',
-    detail: '设置http协议返回结果'
-  },
-  {
-    label: 'responseHeaders',
-    insertText: 'responseHeaders;',
-    detail: '获取返回头部内容'
-  },
-  {
-    label: 'responseHeaders["param_key"]',
-    insertText: 'responseHeaders["param_key"];',
-    detail: '获取返回头部中的某个参数'
-  }
+  // {
+  //   label: 'pc.img(file Type)',
+  //   insertText: 'pc.img(file Type);',
+  //   detail: '插入一个内置的图片文件'
+  // },
+  // {
+  //   label: 'pc.http.url.get()',
+  //   insertText: 'pc.http.url.get();',
+  //   detail: '获取原始的http协议url，不包含环境的base url，比如/user/login/{user_type}?user_name={{name}}'
+  // },
+  // {
+  //   label: 'pc.http.url.parse()',
+  //   insertText: 'pc.http.url.parse();',
+  //   detail: '获取经过解析处理后的http协议url，包含环境的base url，比如www.eolinker.com/user/login/admin?user_name=jackliu'
+  // },
+  // {
+  //   label: 'pc.http.url.set("new_url")',
+  //   insertText: 'pc.http.url.set("new_url");',
+  //   detail: '设置http协议url，比如/user/login/admin?user_name={{name}}'
+  // },
+  // {
+  //   label: 'pc.http.header.get("param_key")',
+  //   insertText: 'pc.http.header.get("param_key");',
+  //   detail: '获取http协议请求头部参数值'
+  // },
+  // {
+  //   label: 'pc.http.header.set("param_key","param_value")',
+  //   insertText: 'pc.http.header.set("param_key","param_value");',
+  //   detail: '设置http协议请求头部参数值'
+  // },
+  // {
+  //   label: 'pc.http.header.unset("param_key")',
+  //   insertText: 'pc.http.header.unset("param_key");',
+  //   detail: '删除http协议header参数'
+  // },
+  // {
+  //   label: 'pc.http.header.clear',
+  //   insertText: 'pc.http.header.clear;',
+  //   detail: '清空http协议header参数'
+  // },
+  // {
+  //   label: 'pc.http.query.get("param_key")',
+  //   insertText: 'pc.http.query.get("param_key");',
+  //   detail: '获取http协议query参数'
+  // },
+  // {
+  //   label: 'pc.http.query.set("param_key","param_value")',
+  //   insertText: 'pc.http.query.set("param_key","param_value");',
+  //   detail: '设置http协议query参数'
+  // },
+  // {
+  //   label: 'pc.http.query.unset("param_key")',
+  //   insertText: 'pc.http.query.unset("param_key");',
+  //   detail: '删除http协议query参数（删除后不会出现在地址栏中）'
+  // },
+  // {
+  //   label: 'pc.http.query.clear',
+  //   insertText: 'pc.http.query.clear;',
+  //   detail: '清空http协议query参数'
+  // },
+  // {
+  //   label: 'pc.http.rest.get("param_key")',
+  //   insertText: 'pc.http.rest.get("param_key");',
+  //   detail: '获取http协议rest参数'
+  // },
+  // {
+  //   label: 'pc.http.rest.set("param_key","param_value")',
+  //   insertText: 'pc.http.rest.set("param_key","param_value");',
+  //   detail: '设置http协议rest参数'
+  // },
+  // {
+  //   label: 'pc.http.rest.unset("param_key")',
+  //   insertText: 'pc.http.rest.unset("param_key");',
+  //   detail: '删除http协议rest参数'
+  // },
+  // {
+  //   label: 'pc.http.rest.clear',
+  //   insertText: 'pc.http.rest.clear;',
+  //   detail: '清空http协议rest参数'
+  // },
+  // {
+  //   label: 'pc.http.response.get()',
+  //   insertText: 'pc.http.response.get();',
+  //   detail: '获取http协议返回结果'
+  // },
+  // {
+  //   label: 'pc.http.response.set("response_value")',
+  //   insertText: 'pc.http.response.set("response_value");',
+  //   detail: '设置http协议返回结果'
+  // },
+  // {
+  //   label: 'responseHeaders',
+  //   insertText: 'responseHeaders;',
+  //   detail: '获取返回头部内容'
+  // },
+  // {
+  //   label: 'responseHeaders["param_key"]',
+  //   insertText: 'responseHeaders["param_key"];',
+  //   detail: '获取返回头部中的某个参数'
+  // }
 ];
 
 export const getDefaultCompletions = (): Array<Omit<languages.CompletionItem, 'range'>> =>

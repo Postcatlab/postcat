@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { EoNgTabsModule } from 'eo-ng-tabs';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { MemberListModule } from '../../../modules/member-list/member-list.module';
 import { MemberService } from '../../../modules/member-list/member.service';
@@ -20,6 +21,7 @@ import { WorkspaceOverviewComponent } from './workspace-overview.component';
     MemberListModule,
     SharedModule,
     EoNgTabsModule,
+    NzSelectModule,
     RouterModule.forChild([
       {
         path: '',

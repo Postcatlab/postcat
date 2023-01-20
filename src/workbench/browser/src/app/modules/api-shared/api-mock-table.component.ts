@@ -5,7 +5,8 @@ import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspa
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { copyText, eoDeepCopy, copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.model';
+import { ApiData } from '../../shared/services/storage/db/models/apiData';
+import { ApiMockEntity } from '../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -36,7 +37,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     this.initTable();
   }
   async handleDeleteMockItem(item, index) {
-    await this.apiMock.deleteMock(item.uuid);
+    await this.apiMock.deleteMock(item.id);
     this.mockList.splice(index, 1)[0];
     this.mockList = [...this.mockList];
     this.message.success($localize`Delete Succeeded`);
@@ -85,7 +86,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                   model: eoDeepCopy(item.data)
                 },
                 nzOnOk: async () => {
-                  await this.addOrEditModal(item.data, index);
+                  await this.addOrEditModal(modal.componentInstance.model, index);
                   modal.destroy();
                 }
               });
@@ -104,11 +105,11 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     ];
   }
   async ngOnChanges(changes) {
-    if (changes?.apiData?.currentValue?.uuid) {
-      this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
+    if (changes?.apiData?.currentValue?.apiUuid) {
+      this.mockList = await this.apiMock.getMocks(this.apiData.apiUuid);
       this.mockList.forEach(item => {
         if (item.createWay === 'system') {
-          item.response = this.apiMock.getMockResponseByAPI(item.response);
+          item.response = this.apiMock.getMockResponseByAPI(this.apiData);
         }
       });
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
@@ -126,16 +127,19 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     this.message.success($localize`Copied`);
   }
   async addOrEditModal(item, index?) {
-    if (item.uuid) {
-      await this.apiMock.updateMock(item, Number(item.uuid));
+    if (item.id) {
+      await this.apiMock.updateMock(item);
       this.message.success($localize`Edited successfully`);
       this.mockList[index] = item;
     } else {
-      item.apiDataID = this.apiData.uuid;
-      const result = await this.apiMock.createMock(item);
-      Object.assign(item, result.data, {
-        createWay: 'custom'
-      });
+      item.apiUuid = this.apiData.apiUuid;
+      item.createWay = 'custom';
+      const [data, err] = await this.apiMock.createMock(item);
+      if (err) {
+        this.message.error($localize`Failed to add`);
+        return;
+      }
+      Object.assign(item, data);
       this.message.success($localize`Added successfully`);
       this.mockList.push(item);
     }
@@ -154,8 +158,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         .replace(/:{3}/g, '://'),
       'https://github.com/'
     );
-    if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', `${mock.uuid}`);
+    if (mock?.createWay === 'custom' && mock.id) {
+      url.searchParams.set('mockID', `${mock.id}`);
     }
     return decodeURIComponent(url.toString());
   }

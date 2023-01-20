@@ -11,7 +11,7 @@ import { storageTab, TabItem } from './tab.model';
 export class TabStorageService {
   tabOrder: number[] = [];
   tabStorageKey: string;
-  tabsByID = new Map<number, TabItem>();
+  tabsByID = new Map<number | string, TabItem>();
   constructor() {}
   init(inArg: { tabStorageKey: string }) {
     this.tabOrder = [];

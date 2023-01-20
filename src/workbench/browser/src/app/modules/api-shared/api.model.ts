@@ -1,47 +1,75 @@
-import { StorageModel } from '../../shared/services/storage/index.model';
+import { enumsToArr, enumsToObject } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-
 /**
  * API body FormData param type
  */
-export enum ApiParamsTypeFormData {
-  string = 'string',
-  file = 'file',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  byte = 'byte',
-  short = 'short',
-  long = 'long',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  null = 'null'
+export enum ApiParamsType {
+  string = 0,
+  file = 1,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  byte = 9,
+  short = 10,
+  long = 11,
+  array = 12,
+  object = 13,
+  number = 14,
+  null = 15
 }
 
+export enum ContentType {
+  FROM_DATA = 0,
+  RAW = 1,
+  JSON_OBJECT = 2,
+  XML = 3,
+  BINARY = 4,
+  OTHER = 5,
+  JSON_ARRAY = 6
+}
+export enum Protocol {
+  HTTP = 0,
+  HTTPS = 1,
+  WS = 2,
+  WSS = 3,
+  TCP = 4,
+  UDP = 5,
+  SOCKET = 6,
+  WEBSOCKET = 7,
+  SOAP = 8,
+  HSF = 9,
+  DUBBO = 10,
+  GRPC = 11
+}
+
+export const protocalMap = enumsToObject(Protocol);
+
+export const ApiParamsTypeByNumber = enumsToArr(ApiParamsType).map(val => ({
+  title: val.key,
+  value: val.value
+}));
 /**
  * API body Json or xml param type
  */
 export enum ApiParamsTypeJsonOrXml {
-  string = 'string',
-  array = 'array',
-  object = 'object',
-  number = 'number',
-  json = 'json',
-  int = 'int',
-  float = 'float',
-  double = 'double',
-  date = 'date',
-  datetime = 'datetime',
-  boolean = 'boolean',
-  short = 'short',
-  long = 'long',
-  char = 'char',
-  null = 'null'
+  string = ApiParamsType.string,
+  array = 12,
+  object = 13,
+  number = 14,
+  json = 2,
+  int = 3,
+  float = 4,
+  double = 5,
+  date = 6,
+  datetime = 7,
+  boolean = 8,
+  short = 10,
+  long = 11,
+  null = 15
 }
 export interface ParamsEnum {
   /**
@@ -53,195 +81,18 @@ export interface ParamsEnum {
    */
   description: string;
 }
-export interface BasiApiEditParams {
-  /**
-   * 参数名
-   */
-  name: string;
-  /**
-   * is response/request must contain param
-   */
-  required: boolean;
-  /**
-   * param example
-   */
-  example: string;
-  /**
-   * 说明
-   */
-  description: string;
-  /**
-   * 值可能性
-   */
-  enum?: ParamsEnum[];
-}
-export type ApiEditHeaders = BasiApiEditParams;
-export type ApiEditQuery = BasiApiEditParams;
-export type ApiEditRest = BasiApiEditParams;
-export interface ApiEditBody extends BasiApiEditParams {
-  /**
-   * 参数类型
-   */
-  type: ApiParamsTypeFormData | ApiParamsTypeJsonOrXml | string;
-  /**
-   * 最小值
-   */
-  minimum?: number;
-  /**
-   * 最大值
-   */
-  maximum?: number;
-  /**
-   * 最小长度
-   */
-  minLength?: number;
-  /**
-   * 最大长度
-   */
-  maxLength?: number;
-  /**
-   * XML attribute
-   */
-  attribute?: string;
-  /**
-   * 子参数
-   */
-  children?: ApiEditBody[];
-}
-export enum ApiBodyType {
-  'Form-data' = 'formData',
-  JSON = 'json',
-  XML = 'xml',
-  Raw = 'raw',
-  Binary = 'binary'
-}
-/**
- * Json Root Type
- *
- * @description body type is json,set root type of object/array
- */
-export enum JsonRootType {
-  Object = 'object',
-  Array = 'array'
-}
 
 export enum RequestMethod {
-  POST = 'POST',
-  GET = 'GET',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-  HEAD = 'HEAD',
-  OPTIONS = 'OPTIONS',
-  PATCH = 'PATCH'
-}
-/**
- * @deprecated auto judge from url
- */
-export enum RequestProtocol {
-  HTTP = 'http',
-  HTTPS = 'https'
+  POST = 0,
+  GET = 1,
+  PUT = 2,
+  DELETE = 3,
+  HEAD = 4,
+  OPTIONS = 5,
+  PATCH = 6
 }
 
-/**
- * API Data
- */
-export interface BasicApiData extends StorageModel {
-  /**
-   * name
-   *
-   * @type {string}
-   */
-  name: string;
-
-  /**
-   * Request url,Usually value is path
-   *
-   */
-  uri: string;
-
-  /**
-   * API protocol [http, https, ...]
-   *
-   */
-  protocol: RequestProtocol;
-
-  /**
-   * Request method [POST, GET, PUT, ...]
-   *
-   */
-  method: RequestMethod;
-
-  /**
-   * api show order
-   *
-   * @type {number}
-   */
-  weight?: number;
-
-  /**
-   * 请求的参数类型
-   *
-   */
-  requestBodyType?: ApiBodyType;
-
-  /**
-   * 请求头数据，数据用json存储
-   *
-   */
-  requestHeaders?: ApiEditHeaders[];
-
-  /**
-   * 请求的 JSON 参数根类型
-   *
-   */
-  requestBodyJsonType?: JsonRootType;
-
-  /**
-   * 请求参数(多层结构)，数据用json存储
-   */
-  requestBody?: ApiEditBody[] | string;
-
-  /**
-   * get请求参数，数据用json存储
-   *
-   * @type {object[]}
-   */
-  queryParams?: ApiEditQuery[];
-
-  /**
-   * rest请求参数，数据用json存储
-   *
-   * @type {object[]}
-   */
-  restParams?: ApiEditRest[];
-
-  /**
-   * 返回头数据，数据用json存储
-   *
-   */
-  responseHeaders?: ApiEditHeaders[];
-
-  /**
-   * Response(多层结构)，数据用json存储
-   */
-  responseBody?: ApiEditBody[] | string;
-
-  /**
-   * 返回的参数类型
-   */
-  responseBodyType?: ApiBodyType;
-
-  /**
-   * Responsejson根类型
-   */
-  responseBodyJsonType?: JsonRootType;
-}
-/**
- * API data view model
- */
-export interface ApiEditViewData extends BasicApiData {
-  groupID: string;
-}
+export const requestMethodMap = enumsToObject(RequestMethod);
 
 export interface ApiTableConf {
   columns?: ColumnItem[];
@@ -290,3 +141,54 @@ export const DEFAULT_HEADER = [
   { title: 'x-api-key', restricted: false },
   { title: 'Connection', restricted: true }
 ];
+
+export enum ApiBodyType {
+  FormData = 0,
+  JSON = 2,
+  JSONArray = 6,
+  XML = 3,
+  Raw = 1,
+  Binary = 4
+}
+export const API_BODY_TYPE = [
+  {
+    key: 'Form-Data',
+    value: ApiBodyType.FormData
+  },
+  {
+    key: 'JSON',
+    value: ApiBodyType.JSON
+  },
+  {
+    key: 'XML',
+    value: ApiBodyType.XML
+  },
+  {
+    key: 'Raw',
+    value: ApiBodyType.Raw
+  },
+  {
+    key: 'Binary',
+    value: ApiBodyType.Binary
+  }
+];
+/**
+ * Json Root Type
+ *
+ * @description body type is json,set root type of object/array
+ */
+export enum JsonRootType {
+  Object = 2,
+  Array = 6
+}
+/**
+ * Import string by api body type
+ */
+export const IMPORT_MUI = {
+  2: 'json',
+  3: 'xml',
+  4: 'binary',
+  1: 'raw',
+  0: 'formData',
+  6: 'json'
+};

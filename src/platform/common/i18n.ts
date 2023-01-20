@@ -1,11 +1,11 @@
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 /**
  * Single extension i18 service,chain call
  */
 export class TranslateService {
   // Default key in package.json translate replace directly
   defaultKeys = ['title', 'description', 'author', 'logo'];
-  constructor(private module: ModuleInfo, private locale) {}
+  constructor(private module: ExtensionInfo, private locale) {}
   translate() {
     return this.translateDefaultKey().translateVariableKey().get();
   }

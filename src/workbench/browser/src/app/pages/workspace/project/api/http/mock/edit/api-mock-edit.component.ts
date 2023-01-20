@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'eo-api-mock-edit',
   template: ` <div class="w-full main-content">
-    <form nz-form nzLayout="vertical">
+    <form nz-form auto-focus-form nzLayout="vertical">
       <nz-form-item>
         <nz-form-label i18n nzFor="name">Mock Name</nz-form-label>
         <nz-form-control>

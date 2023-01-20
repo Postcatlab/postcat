@@ -12,7 +12,7 @@ import { MemberService } from './member.service';
       <nz-list-item-meta>
         <nz-list-item-meta-title>
           <div class="flex items-center">
-            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ item.username[0] }}" class="mr-[10px]"></nz-avatar>
+            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ (item.username || item.email)?.at(0) }}" class="mr-[10px]"></nz-avatar>
             <div class="flex flex-col">
               <span class="font-bold link">{{ item.username }}</span>
               <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
@@ -23,27 +23,19 @@ import { MemberService } from './member.service';
       <ul nz-list-item-actions>
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
-            <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="!store.isLocal && !item.disabledEdit && (item.myself || member.role === 'Owner')">
+            <span class="text-tips">{{ item.roleTitle }}</span>
+            <div class="operate-btn-list" *ngIf="!store.isLocal && ((!item.isSelf && member.isOwner) || item.isSelf)">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li
-                    *ngIf="!item.myself && member.role === 'Owner' && item.role?.name === 'Owner'"
-                    nz-menu-item
-                    i18n
-                    (click)="changeRole(item)"
-                    >Set Editor
-                  </li>
-                  <li
-                    *ngIf="!item.myself && member.role === 'Owner' && item.role?.name !== 'Owner'"
-                    nz-menu-item
-                    i18n
-                    (click)="changeRole(item)"
-                    >Set Owner
-                  </li>
-                  <li *ngIf="!item.myself && member.role === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
-                  <li *ngIf="item.myself" nz-menu-item i18n (click)="quitMember()">Quit</li>
+                  <ng-container *ngIf="!item.isSelf && member.isOwner">
+                    <li *ngIf="item.isOwner" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'editor' })">
+                      Set Editor
+                    </li>
+                    <li *ngIf="item.isEditor" nz-menu-item i18n (click)="changeRole({ userId: item.id, roleIds: 'owner' })"> Set Owner </li>
+                    <li nz-menu-item i18n (click)="removeMember(item)"> Remove </li>
+                  </ng-container>
+                  <li *ngIf="item.isSelf" nz-menu-item i18n (click)="member.quitMember(item)">Quit</li>
                 </ul>
               </eo-ng-dropdown-menu>
             </div>
@@ -57,11 +49,12 @@ import { MemberService } from './member.service';
 })
 export class MemberListComponent implements OnInit {
   list = [];
+  roleList = [];
   loading = false;
   constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
 
   ngOnInit(): void {
-    autorun(() => {
+    autorun(async () => {
       if (this.store.isLogin) {
         this.queryList();
       } else {
@@ -73,18 +66,19 @@ export class MemberListComponent implements OnInit {
       }
     });
   }
-  async queryList() {
+  async queryList(username = '') {
     this.loading = true;
-    this.list = await this.member.queryMember();
+    this.list = await this.member.queryMember(username);
     this.loading = false;
   }
   async changeRole(item) {
-    const [data, err]: any = await this.member.changeRole(item);
-    if (err) {
-      this.message.error($localize`Change role Failed`);
+    const isOK: boolean = await this.member.changeRole(item);
+    if (isOK) {
+      this.message.success($localize`Change role successfully`);
+      this.queryList();
       return;
     }
-    this.message.success($localize`Change role successfully`);
+    this.message.error($localize`Change role Failed`);
   }
   async removeMember(item) {
     const [data, err]: any = await this.member.removeMember(item);
@@ -94,16 +88,5 @@ export class MemberListComponent implements OnInit {
     }
     this.message.success($localize`Remove Member successfully`);
     this.queryList();
-  }
-  async quitMember() {
-    const [data, err]: any = await this.member.quitMember(this.list);
-    if (err === 'warning') {
-      return;
-    }
-    if (err) {
-      this.message.error($localize`Quit Failed`);
-      return;
-    }
-    this.message.success($localize`Quit successfully`);
   }
 }

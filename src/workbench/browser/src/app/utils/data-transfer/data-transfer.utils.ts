@@ -1,21 +1,22 @@
 import isXml from 'is-xml';
 
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
-import { whatType, whatTextType } from '../index.utils';
+import { ApiBodyType, ApiParamsType, JsonRootType } from '../../modules/api-shared/api.model';
+import { BodyParam } from '../../shared/services/storage/db/models/apiData';
+import { whatType, whatTextType, JSONParse } from '../index.utils';
 
 export const isXML = data => isXml(data);
 /**
  * Parse item to eoTableComponent need
  */
-const parseTree = (key, value) => {
+const parseTree = (key, value): BodyParam | unknown => {
   if (whatType(value) === 'object') {
     return {
       name: key,
-      required: true,
-      example: '',
-      type: 'object',
+      isRequired: 1,
+      'paramAttr.example': '',
+      dataType: ApiParamsType.string,
       description: '',
-      children: Object.keys(value).map(it => parseTree(it, value[it]))
+      childList: Object.keys(value).map(it => parseTree(it, value[it]))
     };
   }
   if (whatType(value) === 'array') {
@@ -25,32 +26,32 @@ const parseTree = (key, value) => {
     if (whatType(data) === 'string') {
       return {
         name: key,
-        required: true,
+        isRequired: 1,
         //TODO only test page has value
         value: JSON.stringify(value),
         //TODO only edit page has example
-        example: JSON.stringify(value),
-        type: 'array',
+        'paramAttr.example': JSON.stringify(value),
+        dataType: ApiParamsType.array,
         description: ''
       };
     }
     return {
       name: key,
-      required: true,
-      example: '',
-      type: 'array',
+      isRequired: 1,
+      'paramAttr.example': '',
+      dataType: ApiParamsType.array,
       description: '',
-      children: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
+      childList: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
     };
   }
   // * value is string & number & null
   return {
     name: key,
+    isRequired: 1,
     value: value == null ? '' : value.toString(),
     description: '',
-    type: whatType(value),
-    required: true,
-    example: value == null ? '' : value.toString()
+    'paramAttr.example': value == null ? '' : value.toString(),
+    dataType: ApiParamsType[whatType(value)]
   };
 };
 /**
@@ -66,7 +67,7 @@ export const form2json = tmpl =>
       return { key: key?.trim(), value: value?.trim() };
     });
 
-const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: string; attr: string }> => {
+const xml2jsonArr = (tmpl): Array<{ tagName: string; childList: any[]; content: string; attr: string }> => {
   // * delete <?xml ... ?>
   let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
   if (xml === '') {
@@ -91,7 +92,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
         result.push(last);
       } else {
         const parent = stack.pop();
-        parent.children.push(last);
+        parent.childList.push(last);
         stack.push(parent);
       }
       index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
@@ -105,11 +106,11 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
       if (str.slice(-2) === '/>') {
         // * single tag
         const parent = stack.pop();
-        parent.children.push({
+        parent.childList.push({
           tagName: label.trim(),
           attr: attr.trim(),
           content: '',
-          children: []
+          childList: []
         });
         stack.push(parent);
         xml = xml.trim().substring(str.length);
@@ -119,7 +120,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
         tagName: label.trim(),
         attr: attr.trim(),
         content: '',
-        children: []
+        childList: []
       });
       index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
       xml = xml.substring(index + str.length);
@@ -147,18 +148,17 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
 };
 
 type uiData = {
-  textType: ApiBodyType;
-  rootType: JsonRootType;
-  data: ApiEditBody | any;
+  contentType: ApiBodyType;
+  data: BodyParam | any;
 };
 
 export const xml2json = text => {
   const data: any[] = xml2jsonArr(text);
   const deep = (list = []) =>
     list.reduce(
-      (total, { tagName, content, attr, children }) => ({
+      (total, { tagName, content, attr, childList }) => ({
         ...total,
-        [tagName]: children?.length > 0 ? deep(children || []) : content
+        [tagName]: childList?.length > 0 ? deep(childList || []) : content
         // attribute: attr,  // * not support the key for now cause ui has not show it
       }),
       {}
@@ -223,18 +223,24 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
  */
 export const text2table: (text: string) => uiData = text => {
   const result: uiData = {
-    textType: ApiBodyType.Raw,
-    rootType: JsonRootType.Object,
+    contentType: ApiBodyType.Raw,
     data: text
   };
   const textType = whatTextType(text);
-  result.textType = ['xml', 'json'].includes(textType) ? (textType as ApiBodyType) : ApiBodyType.Raw;
-  switch (result.textType) {
-    case 'xml': {
+  result.contentType =
+    textType === 'xml'
+      ? ApiBodyType.XML
+      : textType === 'json'
+      ? whatType(JSONParse(text)) === 'array'
+        ? ApiBodyType.JSONArray
+        : ApiBodyType.JSON
+      : ApiBodyType.Raw;
+  switch (result.contentType) {
+    case ApiBodyType.XML: {
       result.data = json2Table(xml2json(text));
       break;
     }
-    case 'json': {
+    case ApiBodyType.JSON: {
       result.data = json2Table(JSON.parse(result.data));
       break;
     }
@@ -253,8 +259,7 @@ export const text2table: (text: string) => uiData = text => {
  * @param inputOptions
  * @returns
  */
-export const table2json = function (arr: ApiEditBody[], inputOptions) {
-  inputOptions = inputOptions || {};
+export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAttr?: boolean; rootType?: JsonRootType } = {}) {
   let result = {};
   const loopFun = (inputArr, inputObject) => {
     if (inputOptions.checkXmlAttr) {
@@ -279,42 +284,42 @@ export const table2json = function (arr: ApiEditBody[], inputOptions) {
         }
       }
       inputObject[tmpKey] = val.example;
-      if (val.children && val.children.length > 0) {
-        switch (val.type) {
-          case 'array': {
+      if (val.childList && val.childList.length > 0) {
+        switch (val.dataType) {
+          case ApiParamsType.array: {
             if (inputOptions.checkXmlAttr) {
               inputObject['@eo_attr'][tmpKey] = [inputObject['@eo_attr'][tmpKey]];
             }
             inputObject[tmpKey] = [{}];
-            loopFun(val.children, inputObject[tmpKey][0]);
+            loopFun(val.childList, inputObject[tmpKey][0]);
             break;
           }
           default: {
             inputObject[tmpKey] = {};
-            loopFun(val.children, inputObject[tmpKey]);
+            loopFun(val.childList, inputObject[tmpKey]);
             break;
           }
         }
       } else {
         const tmpDefaultTypeValueObj = {
-          boolean: 'false',
-          array: '[]',
-          object: '{}',
-          number: '0',
-          int: '0'
+          [ApiParamsType.boolean]: 'false',
+          [ApiParamsType.array]: '[]',
+          [ApiParamsType.object]: '{}',
+          [ApiParamsType.number]: '0',
+          [ApiParamsType.int]: '0'
         };
-        switch (val.type) {
-          case 'string': {
+        switch (val.dataType) {
+          case ApiParamsType.string: {
             inputObject[tmpKey] = inputObject[tmpKey] || '';
             break;
           }
-          case 'null': {
+          case ApiParamsType.null: {
             inputObject[tmpKey] = null;
             break;
           }
           default: {
             try {
-              inputObject[tmpKey] = JSON.parse(inputObject[tmpKey] || tmpDefaultTypeValueObj[val.type]);
+              inputObject[tmpKey] = JSON.parse(inputObject[tmpKey] || tmpDefaultTypeValueObj[val.dataType]);
             } catch (JSON_PARSE_ERROR) {
               inputObject[tmpKey] = inputObject[tmpKey] || '';
             }

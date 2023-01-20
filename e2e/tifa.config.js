@@ -18,6 +18,6 @@ module.exports = {
   // 用于指定是否生成失败的操作文档，会包括描述和截图
   failDoc: false,
   elements: {
-    img: ['iconpark-icon']
+    img: ['eo-iconpark-icon']
   }
 };

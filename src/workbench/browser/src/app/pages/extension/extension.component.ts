@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
+import { ExtensionService } from '../../shared/services/extensions/extension.service';
 import { ExtensionGroupType } from './extension.model';
-import { ExtensionService } from './extension.service';
 
 @Component({
   selector: 'eo-extension',
@@ -13,7 +13,7 @@ import { ExtensionService } from './extension.service';
   styleUrls: ['./extension.component.scss']
 })
 export class ExtensionComponent implements OnInit {
-  @observable currentExtension: ModuleInfo | null = null;
+  @observable currentExtension: ExtensionInfo | null = null;
   @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
   keyword = '';
   nzSelectedKeys: Array<number | string> = ['all'];

@@ -9,12 +9,22 @@
   }
 }
 
+.message-item {
+  @apply inline-flex items-center px-2 py-3 hover:cursor-pointer;
+
+  color: var(--text-secondary-color);
+
+  &:hover {
+    background-color: var(--item-hover-background-color);
+  }
+}
+
 .top-line {
-  border-top: 1px solid var(--BORDER);
+  border-top: 1px solid var(--border-color);
 }
 
 .bottom-line {
-  border-bottom: 1px solid var(--BORDER);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .left-1 {
@@ -25,19 +35,19 @@
   border-radius: 5px;
 
   &.status_Connected {
-    color: #158565;
+    color: var(--success-color);
     background-color: rgb(21 133 101 / 20%);
     box-shadow: 0 0 10px rgb(21 133 101 / 20%);
   }
 
   &.status_Disconnect {
-    color: #640125;
+    color: var(--danger-color);
     background-color: rgb(100 1 37 / 10%);
     box-shadow: 0 0 10px rgb(100 1 37 / 10%);
   }
 
   &.status_Connecting {
-    color: #158565;
+    color: var(--success-hover-color);
     background-color: rgb(21 133 101 / 10%);
     box-shadow: 0 0 10px rgb(21 133 101 / 10%);
   }
@@ -52,23 +62,23 @@
 }
 
 .start_icon {
-  color: #158565;
-  border: 1px solid #158565;
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
 }
 
 .end_icon {
-  color: #8f2e14;
-  border: 1px solid #8f2e14;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
 }
 
 :host ::ng-deep {
   .main-bg {
-    background-color: var(--BTN_SEC_BG_HOVER) !important;
+    background-color: var(--bar-background-color) !important;
 
     &:focus,
     &:active,
     &:target {
-      background-color: var(--MAIN_BG) !important;
+      background-color: var(--background-color) !important;
     }
   }
 
