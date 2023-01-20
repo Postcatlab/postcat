@@ -4,18 +4,20 @@
   left: 0;
   top: 0;
   height: 100%;
-  background: var(--MAIN_BG);
+  background: var(--background-color);
   z-index: 11;
 }
 
 :host {
   display: block;
 }
+
 :host ::ng-deep {
   .show-btn-when-hover-row {
     .eo-ng-table-btns {
       visibility: hidden;
     }
+
     .ant-table-row:hover .eo-ng-table-btns {
       visibility: visible;
     }

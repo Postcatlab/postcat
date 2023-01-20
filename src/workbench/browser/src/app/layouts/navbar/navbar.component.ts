@@ -3,16 +3,16 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
 import { ElectronService, WebService } from '../../core/services';
+import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
 import { LanguageService } from '../../core/services/language/language.service';
-import { ThemeService } from '../../core/services/theme.service';
+import { ThemeService } from '../../core/services/theme/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 @Component({
@@ -21,7 +21,6 @@ import { ModalService } from '../../shared/services/modal.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  resourceInfo;
   helpMenus = [
     {
       title: $localize`Document`,
@@ -44,14 +43,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private eMessage: EoNgFeedbackMessageService,
     public theme: ThemeService,
     private message: MessageService,
-    private api: RemoteService,
+    private api: ApiService,
     public lang: LanguageService,
     public store: StoreService,
     public dataSourceService: DataSourceService,
-    private effect: EffectService
-  ) {
-    this.resourceInfo = this.web.resourceInfo;
-  }
+    public feature: FeatureControlService
+  ) {}
   async ngOnInit(): Promise<void> {
     this.message
       .get()
@@ -85,29 +82,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.dataSourceService.checkRemoteCanOperate();
   }
   async loginOut() {
-    this.store.setUserProfile({
-      id: -1,
-      password: '',
-      username: '',
-      workspaces: []
-    });
-    this.eMessage.success($localize`Successfully logged out !`);
-    const refreshToken = this.store.getLoginInfo.refreshToken;
     this.store.clearAuth();
-    {
-      const [data, err]: any = await this.api.api_authLogout({
-        refreshToken
-      });
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
+    this.eMessage.success($localize`Successfully logged out !`);
+    const [, err]: any = await this.api.api_userLogout({});
+    if (err) {
+      return;
     }
   }
 

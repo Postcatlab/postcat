@@ -2,7 +2,7 @@
   transition: border 0.2s;
 
   &:hover {
-    border-color: var(--BTN_PRIMARY_BG);
+    border-color: var(--button-primary-background-color);
 
     .operate-btn-list {
       display: flex;

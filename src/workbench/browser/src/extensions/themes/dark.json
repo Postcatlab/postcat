@@ -1,0 +1,22 @@
+{
+  "colors": {
+    "primary": "#7371fc",
+    "text": "#fff",
+    "inputIcon": "#fff",
+    "textSecondary": "#ccc",
+    "border": "rgba(255, 255, 255, 0.05)",
+    "background": "#212121",
+    "barBackground": "#212121",
+    "disabledText": "#666",
+    "disabledBackground": "#282828",
+    "textLink": "#1890ff",
+    "textLinkHover": "#40a9ff",
+    "textLinkActive": "#096dd9",
+    "divider": "rgba(255, 255, 255, 0.05)",
+    "alertDefaultBackground": "rgba(149,149,149,.1)",
+    "scrollbarTrackBackground": "#212121",
+    "scrollbarThumbBackground": "rgba(255, 255, 255, 0.2)",
+    "popoverBackground": "#fff",
+    "popoverText": "#333"
+  }
+}

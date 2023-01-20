@@ -29,7 +29,7 @@ export class RedirectWorkspace implements CanActivate {
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const urlTree = this.router.parseUrl(state.url);
     if (!urlTree.queryParams.wid) {
-      urlTree.queryParams.wid = this.store.getCurrentWorkspaceID;
+      urlTree.queryParams.wid = this.store.getCurrentWorkspaceUuid;
       return urlTree;
     }
     return true;

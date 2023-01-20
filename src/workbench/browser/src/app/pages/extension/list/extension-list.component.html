@@ -1,6 +1,6 @@
 <div class="px-6 overflow-auto extension-list">
   <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
-  <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList.length"></nz-empty>
+  <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList?.length"></nz-empty>
   <div class="grid gap-6 py-5 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-1">
     <div
       class="flex flex-col flex-wrap w-full transition-shadow duration-300 rounded border-all plugin-block hover:shadow-lg"
@@ -12,14 +12,11 @@
           <div class="flex flex-col w-full">
             <div class="flex flex-col w-full">
               <div class="flex items-center justify-between">
-                <div
-                  class="shrink-0 block w-[30px] h-[30px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
-                  [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
-                ></div>
+                <nz-avatar [nzSrc]="it.logo" nzShape="square"></nz-avatar>
                 <div *ngIf="type !== 'installed'">
                   <span
-                    *ngIf="extensionService.installedMap.has(it.name)"
-                    class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
+                    *ngIf="extensionService.installedMap?.has(it.name)"
+                    class="p-1 text-xs rounded-sm text-success border-all whitespace-nowrap"
                     i18n
                     >Installed</span
                   >
@@ -35,7 +32,7 @@
                   ></eo-ng-switch>
                 </div>
               </div>
-              <span class="text-xs text-gray-400">{{ it.author?.name || it.author }}</span>
+              <span class="text-xs text-tips">{{ it.author }}</span>
               <div class="flex mt-[15px] text-[12px] desc leading-[1.65]">{{ it.description }}</div>
             </div>
             <div class="btn-group" *ngIf="type === 'installed'">

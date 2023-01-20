@@ -12,31 +12,20 @@ module.exports = {
     'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoClasses: ['global'],
-      },
+        ignorePseudoClasses: ['global']
+      }
     ],
     'selector-pseudo-element-no-unknown': [
       true,
       {
-        ignorePseudoElements: ['ng-deep'],
-      },
+        ignorePseudoElements: ['ng-deep']
+      }
     ],
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: [
-          'tailwind',
-          'apply',
-          'variants',
-          'responsive',
-          'screen',
-          'function',
-          'if',
-          'each',
-          'include',
-          'mixin',
-        ],
-      },
+        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen', 'function', 'if', 'each', 'include', 'mixin']
+      }
     ],
     'no-empty-source': null,
     'string-quotes': null,
@@ -50,9 +39,10 @@ module.exports = {
     'rule-empty-line-before': [
       'always',
       {
-        ignore: ['after-comment', 'first-nested'],
-      },
+        ignore: ['after-comment', 'first-nested']
+      }
     ],
+    'max-line-length': null,
     'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],
     'order/order': [
       [
@@ -62,16 +52,16 @@ module.exports = {
         'declarations',
         {
           type: 'at-rule',
-          name: 'supports',
+          name: 'supports'
         },
         {
           type: 'at-rule',
-          name: 'media',
+          name: 'media'
         },
-        'rules',
+        'rules'
       ],
-      { severity: 'warning' },
-    ],
+      { severity: 'warning' }
+    ]
   },
   ignoreFiles: ['**/*.js', '**/*.ts'],
   overrides: [
@@ -83,24 +73,24 @@ module.exports = {
         'selector-pseudo-class-no-unknown': [
           true,
           {
-            ignorePseudoClasses: ['deep', 'global'],
-          },
+            ignorePseudoClasses: ['deep', 'global']
+          }
         ],
         'selector-pseudo-element-no-unknown': [
           true,
           {
-            ignorePseudoElements: ['ng-deep'],
-          },
-        ],
-      },
+            ignorePseudoElements: ['ng-deep']
+          }
+        ]
+      }
     },
     {
       files: ['*.scss', '**/*.scss'],
       customSyntax: 'postcss-scss',
       extends: ['stylelint-config-standard', 'stylelint-config-standard-scss'],
       rules: {
-        'scss/operator-no-newline-after': null,
-      },
-    },
-  ],
+        'scss/operator-no-newline-after': null
+      }
+    }
+  ]
 };

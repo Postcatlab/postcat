@@ -2,7 +2,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
@@ -62,7 +62,7 @@ export class AccountComponent implements OnInit {
     public fb: UntypedFormBuilder,
     public store: StoreService,
     public message: MessageService,
-    public api: RemoteService,
+    public api: ApiService,
     public eMessage: EoNgFeedbackMessageService
   ) {
     this.isSaveUsernameBtnLoading = false;
@@ -87,9 +87,9 @@ export class AccountComponent implements OnInit {
     // * click event callback
     this.isResetBtnBtnLoading = true;
     const btnResetBtnRunning = async () => {
-      const { newPassword: newPassword } = this.validatePasswordForm.value;
-      const [data, err]: any = await this.api.api_userUpdatePsd({
-        newPassword
+      const { newPassword: password } = this.validatePasswordForm.value;
+      const [data, err]: any = await this.api.api_userUpdatePassword({
+        password
       });
       if (err) {
         this.eMessage.error($localize`Validation failed`);

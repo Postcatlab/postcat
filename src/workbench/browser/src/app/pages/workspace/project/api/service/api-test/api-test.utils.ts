@@ -1,12 +1,15 @@
 import { formatDate } from '@angular/common';
-import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  TestServerRes,
+  requestDataOpts,
+  ApiTestResData
+} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { BodyParam, RestParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ApiBodyType } from '../../../../../../modules/api-shared/api.model';
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
-const PROTOCOL = ['http', 'https'];
-const REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
 
 /**
@@ -16,16 +19,16 @@ const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
  * @param rest
  * @returns
  */
-export const formatUri = (uri, rest = []) => {
+export const formatUri = (uri, rest: RestParam[] = []) => {
   if (!Array.isArray(rest)) {
     return uri;
   }
   let result = uri;
   const restByName = rest.reduce((acc, val) => {
-    if (!val.required || !val.name) {
+    if (!(val.isRequired && val.name)) {
       return acc;
     }
-    return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
+    return { ...acc, [val.name]: val.paramAttr?.example || '' };
   }, {});
   Object.keys(restByName).forEach(restName => {
     try {
@@ -35,48 +38,36 @@ export const formatUri = (uri, rest = []) => {
   return result;
 };
 
-export const eoFormatRequestData = (
-  data: ApiData,
-  opts: requestDataOpts = { env: {}, beforeScript: '', afterScript: '', lang: 'en', globals: {} },
-  locale
-) => {
-  const formatList = inArr => {
+export const eoFormatRequestData = (data: ApiData, opts: requestDataOpts = { env: {}, lang: 'en', globals: {} }, locale) => {
+  const formatHeaders = inArr => {
     if (!Array.isArray(inArr)) {
       return [];
     }
     return inArr
       .filter(val => val.name)
-      .map(val => ({
-        checkbox: val.required,
+      .map((val: BodyParam) => ({
+        checkbox: !!val.isRequired,
         headerName: val.name,
-        headerValue: val.value
+        headerValue: val.paramAttr.example
       }));
   };
-  const formatBody = inData => {
-    switch (inData.requestBodyType) {
+  const formatBody = (inData: ApiData) => {
+    switch (inData.apiAttrInfo.contentType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        return inData.requestBody;
+        return inData.requestParams.bodyParams[0].binaryRawData;
       }
-      case ApiBodyType['Form-data']: {
-        const typeMUI = {
-          string: '0',
-          file: '1',
-          boolean: '8',
-          array: '12',
-          object: '13',
-          number: '14',
-          null: '15'
-        };
-        return inData.requestBody
+      case ApiBodyType['FormData']: {
+        return inData.requestParams.bodyParams
           .filter(val => val.name)
           .map(val => ({
-            checkbox: val.required,
+            checkbox: !!val.isRequired,
             listDepth: 0,
             paramKey: val.name,
+            //@ts-ignore
             files: val.files?.map(file => file.content),
-            paramType: typeMUI[val.type],
-            paramInfo: val.value === undefined ? val.example : val.value
+            paramType: val.dataType === ApiParamsType.file ? '1' : '0',
+            paramInfo: val.paramAttr?.example
           }));
       }
     }
@@ -84,28 +75,33 @@ export const eoFormatRequestData = (
   const result: TestLocalNodeData = {
     lang: opts.lang,
     globals: opts.globals,
-    URL: formatUri(data.uri, data.restParams),
-    method: data.method,
-    methodType: METHOD.indexOf(data.method).toString(),
-    httpHeader: PROTOCOL.indexOf(data.protocol),
-    headers: formatList(data.requestHeaders),
-    requestType: REQUEST_BODY_TYPE.indexOf(data.requestBodyType).toString(),
-    apiRequestParamJsonType: ['object', 'array'].indexOf(data.requestBodyJsonType).toString(),
+    URL: formatUri(data.uri, data.requestParams.restParams),
+    method: requestMethodMap[data.apiAttrInfo.requestMethod],
+    methodType: data.apiAttrInfo.requestMethod.toString(),
+    httpHeader: data.protocol,
+    headers: formatHeaders(data.requestParams.headerParams),
+    requestType: data.apiAttrInfo.contentType.toString(),
     params: formatBody(data),
     auth: { status: '0' },
+    apiRequestParamJsonType: '0',
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
     env: {
       paramList: (opts.env.parameters || []).map(val => ({ paramKey: val.name, paramValue: val.value })),
       frontURI: opts.env.hostUri
     },
-    beforeInject: opts.beforeScript,
-    afterInject: opts.afterScript,
+    beforeInject: data.apiAttrInfo.beforeInject || '',
+    afterInject: data.apiAttrInfo.afterInject || '',
     testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale)
   };
+  const rootType = [JsonRootType.Object, JsonRootType.Array].indexOf(data.apiAttrInfo.contentType);
+  if (rootType !== -1) {
+    result.apiRequestParamJsonType = rootType.toString();
+  }
   return result;
 };
-export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestRes => {
-  let result: ApiTestRes;
+export const eoFormatResponseData = ({ globals, report, history, id }): TestServerRes => {
+  // pcConsole.log('eoFormatResponseData', globals, report, history, id);
+  let result: TestServerRes;
   const reportList = report.reportList || [];
   //preScript code tips
   if (report.errorReason) {
@@ -121,94 +117,74 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       content: report.response?.errorReason
     });
   }
+
+  //Test error
   if (['error'].includes(report.status)) {
     result = {
       status: 'error',
       globals,
       id,
       response: {
-        reportList
+        reportList,
+        ...report.general
       }
     };
     return result;
   }
-  let { httpCode, ...response } = history.resultInfo;
-  response = {
-    statusCode: httpCode,
-    ...response,
+
+  //Test success
+  const response: ApiTestResData = {
+    statusCode: history.resultInfo.httpCode,
+    ...history.general,
+    time: history.resultInfo.testDeny,
+    responseLength: history.resultInfo.responseLength,
+    responseType: history.resultInfo.responseType,
+    body: history.resultInfo.body,
+    contentType: history.resultInfo.contentType,
     reportList,
-    body: response.body || '',
-    headers: response.headers.map(val => ({ name: val.key, value: val.value }))
+    headers: (history.resultInfo.headers || []).map(val => ({ name: val.key, value: val.value })),
+    blobFileName: report.blobFileName,
+    request: {
+      uri: history.requestInfo.URL,
+      headers: (report.request.headers || []).map(val => ({ name: val.key, value: val.value })),
+      body: history.requestInfo.params,
+      contentType: ['formData', 'raw', 'json', 'xml', 'binary'][history.requestInfo.requestType] || 'raw'
+    }
   };
-  (response = { blobFileName: report.blobFileName, ...response }),
-    (result = {
-      status: 'finish',
-      id,
-      globals,
-      general: report.general,
-      response,
-      //For add test history
-      history: {
-        general: report.general,
-        response,
-        beforeScript: history.beforeInject,
-        afterScript: history.afterInject,
-        request: {
-          uri: history.requestInfo.URL,
-          method: history.requestInfo.method,
-          protocol: PROTOCOL[history.requestInfo.apiProtocol],
-          requestHeaders: history.requestInfo.headers,
-          requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
-          requestBody: history.requestInfo.params
-        }
-      }
-    });
-  if (result.history.request.requestBodyType === 'formData') {
-    result.history.request.requestBody = result.history.request.requestBody.map(val => ({
-      name: val.key,
-      type: 'string',
-      value: val.value
-    }));
-  }
+
+  result = {
+    status: 'finish',
+    id,
+    globals,
+    response
+  };
   return result;
 };
-export const DEFAULT_UNIT_TEST_RESULT = {
-  general: { redirectTimes: 0, downloadSize: 0, downloadRate: 0, time: '0.00ms' },
-  response: {
-    statusCode: 0,
-    headers: [],
-    testDeny: '0.00',
-    responseLength: 0,
-    responseType: 'text',
-    reportList: [],
-    body: $localize`The test service connection failed, please submit an Issue to contact the community`
-  },
-  report: {
-    request: {
-      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-      requestBodyType: 'raw',
-      requestBody: '{}'
-    }
-  },
-  history: {
-    request: {
-      uri: 'http:///',
-      method: 'POST',
-      protocol: 'http',
-      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-      requestBodyJsonType: 'object',
-      requestBodyType: 'raw',
-      requestBody: '{}'
-    }
+export const DEFAULT_UNIT_TEST_RESULT: ApiTestResData = {
+  redirectTimes: 0,
+  downloadSize: 0,
+  downloadRate: '0',
+  time: '0',
+  statusCode: 0,
+  timingSummary: [],
+  headers: [],
+  responseLength: 0,
+  responseType: 'text',
+  contentType: 'text/html',
+  body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+  reportList: [],
+  request: {
+    uri: 'http:///',
+    headers: [{ name: 'Content-Type', value: 'application/json' }],
+    body: '{}',
+    contentType: 'raw'
   }
 };
 
 export const getGlobals = (): object => {
   let result = null;
   const global = localStorage.getItem(globalStorageKey);
-  try {
-    result = JSON.parse(global);
-  } catch (e) {}
+  result = JSONParse(global);
   return result || {};
 };
 export const setGlobals = globals => {

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 export type UserMeta = {
-  username: string;
+  userName: string;
+  username?: string;
+  userNickName: string;
   roleTitle: string;
   myself: boolean;
   id: number;
+  roles: any;
   role: {
     name: string;
     id: number;
@@ -14,14 +17,15 @@ export type UserMeta = {
 };
 @Injectable()
 export class MemberService {
-  role: 'Owner' | 'Editor' | string;
+  role: any[];
+  isOwner: boolean;
   constructor() {
     console.log('MemberService');
   }
   async addMember(items) {}
-  searchUser: (search: string) => UserMeta[];
-  changeRole: (item) => void;
+  searchUser: (search: string) => Promise<UserMeta[]>;
+  changeRole: (item) => boolean;
   removeMember: (item) => void;
-  queryMember: () => UserMeta[];
+  queryMember: (item) => UserMeta[];
   quitMember: (members: UserMeta[]) => void;
 }

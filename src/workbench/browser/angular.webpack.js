@@ -22,22 +22,26 @@ module.exports = (config, options) => {
   config.plugins = [
     ...config.plugins,
     new NodePolyfillPlugin({
-      excludeAliases: ['console'],
+      excludeAliases: ['console']
     })
   ];
   config.module.rules = [
     {
       test: /\.css$/,
       use: ['style-loader', 'css-loader'],
-      resourceQuery: { not: [/\?ngResource/] },
+      resourceQuery: { not: [/\?ngResource/] }
     },
     {
       test: /\.ttf$/,
       type: 'asset/resource',
-      resourceQuery: { not: [/\?ngResource/] },
+      resourceQuery: { not: [/\?ngResource/] }
     },
-    ...config.module.rules,
+    ...config.module.rules
   ];
+
+  config.experiments = {
+    topLevelAwait: true
+  };
 
   // console.log('config', config.module.rules);
 

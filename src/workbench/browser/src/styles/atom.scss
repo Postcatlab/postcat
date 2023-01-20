@@ -1,33 +1,83 @@
 .p-base {
-  padding: var(--PADDING_Y) var(--PADDING_X);
+  padding: var(--padding-y) var(--padding-x);
 }
 
 .px-base {
-  padding-left: var(--PADDING_X);
-  padding-right: var(--PADDING_X);
+  padding-left: var(--padding-x);
+  padding-right: var(--padding-x);
 }
 
 .border {
-  border: 1px solid var(--BORDER);
+  border: 1px solid var(--border-color);
+}
+
+.table-border-all {
+  .eo-ng-table {
+    border: 1px solid var(--table-border-color);
+  }
+}
+
+.border-all {
+  border: 1px solid var(--system-border-color);
+}
+
+.method-text-GET {
+  color: var(--info-color);
+}
+
+.method-text-POST {
+  color: var(--success-color);
+}
+
+.method-text-DELETE {
+  color: var(--danger-color);
+}
+
+.method-text-HEAD {
+  color: var(--warning-color);
+}
+
+.method-text-WS {
+  color: #507ea4;
+}
+
+.method-text-WSS {
+  color: #165e83;
+}
+
+.method-text-PATCH {
+  color: var(--warning-color);
+}
+
+.method-text-PUT {
+  color: #82ae46;
+}
+
+.method-text-OPTIONS {
+  color: #507ea4;
 }
 
 .debug-border {
   // * use it only for debug, not prod
-  border: 1px solid red;
+  border: 1px solid var(--danger-color);
 }
 
 .rounded-r {
-  border-radius: 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS) 0 !important;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
 }
 
 .rounded-l {
-  border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS) !important;
+  border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
 }
 
 .text-tips {
-  color: var(--TIPS_TEXT_COLOR);
+  color: var(--text-secondary-color);
 }
 
-.text-main-color {
-  color: var(--MAIN_THEME_COLOR);
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-success {
+  color: var(--success-color);
 }

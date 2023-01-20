@@ -1,76 +1,80 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { MessageService } from '../../../../shared/services/message';
-import { ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
+import { ApiService } from '../../../../shared/services/storage/api.service';
+import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
+import { EffectService } from '../../../../shared/store/effect.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectApiService {
   constructor(
-    private messageService: MessageService,
     private message: EoNgFeedbackMessageService,
+    private messageService: MessageService,
     private router: Router,
-    private storage: StorageService,
-    private http: RemoteService,
-    private store: StoreService
+    private effect: EffectService,
+    private api: ApiService
   ) {}
-  get(uuid): Promise<ApiData> {
-    return new Promise(async resolve => {
-      if (this.store.isShare) {
-        const [data, err]: any = await this.http.api_shareDocGetApiDetail({
-          uniqueID: this.store.getShareID,
-          apiDataUUID: uuid
-        });
-        if (err) {
-          return;
+  async get(uuid): Promise<ApiData> {
+    const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 });
+    if (err || !result?.[0]) {
+      this.message.error($localize`Can't find this Api`);
+      return;
+    }
+    const apiData = result[0];
+    apiData.apiAttrInfo ??= {};
+    apiData.responseList ??= [
+      {
+        responseParams: {
+          headerParams: [],
+          bodyParams: []
         }
-        return resolve(data);
       }
-      this.storage.run('apiDataLoad', [uuid], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          this.message.error($localize`Can't find this Api`);
-        }
-      });
-    });
+    ];
+    apiData.responseList[0].responseParams ??= {
+      responseParams: {
+        headerParams: [],
+        bodyParams: []
+      }
+    };
+    return apiData;
   }
-  getAll(projectID): Promise<StorageRes> {
-    return new Promise(resolve => {
-      this.storage.run('apiDataLoadAllByProjectID', [projectID], resolve);
-    });
+  async edit(apiData: ApiData) {
+    return await this.api.api_apiDataUpdate({ api: apiData });
   }
-  add(apiData: ApiData): Promise<StorageRes> {
-    return new Promise(resolve => {
-      this.storage.run('apiDataCreate', [apiData], resolve);
-    });
+  async add(apiData: ApiData[] = []) {
+    return await this.api.api_apiDataCreate({ apiList: [].concat(apiData) });
   }
-  async copy({ uuid, createdAt, ...apiData }: ApiData) {
+  async copy(apiID: string) {
+    const apiData = await this.get(apiID);
     apiData.name += ' Copy';
-    const result = await this.add(apiData);
+    delete apiData.apiUuid;
+    delete apiData.id;
+    const [result, err] = await this.add([apiData]);
+    if (err) {
+      console.log(err);
+      this.message.error($localize`Copy API failed`);
+      return;
+    }
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
-      queryParams: { pageID: Date.now(), uuid: result.data.uuid }
+      queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
     });
-    this.messageService.send({ type: 'copyApiSuccess', data: { uuids: [uuid] } });
+    this.effect.getGroupList();
   }
-  delete(uuid): void {
-    this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: [uuid] } });
-      }
+  async delete(apiUuid) {
+    // * delete API
+    const [result, err] = await this.api.api_apiDataDelete({
+      apiUuids: [apiUuid]
     });
-  }
-  bulkDelete(apis) {
-    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: apis } });
-      }
-    });
+    if (err) {
+      this.message.error($localize`Delete API failed`);
+      return;
+    }
+    this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: [apiUuid] } });
+    this.message.success($localize`Deleted API Successfully`);
+    this.effect.getGroupList();
   }
 }

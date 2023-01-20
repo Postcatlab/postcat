@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { OperateProjectFormComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/components/operate-project-form.compoent';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { SettingService } from '../../../../modules/system-setting/settings.service';
@@ -20,11 +20,11 @@ export class ProjectListComponent implements OnInit {
   projectList: any[] = [];
 
   get WorkspaceID() {
-    return this.store.getCurrentWorkspaceID;
+    return this.store.getCurrentWorkspaceUuid;
   }
 
   constructor(
-    private storage: StorageService,
+    private apiService: ApiService,
     private setting: SettingService,
     private effect: EffectService,
     private store: StoreService,
@@ -45,6 +45,7 @@ export class ProjectListComponent implements OnInit {
 
   editProject(item: any): void {
     const model = {
+      ...item,
       name: item.name
     };
     const modal = this.modalService.create({
@@ -54,17 +55,14 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
-        this.storage.run('projectUpdate', [this.WorkspaceID, model, item.uuid], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+        await this.effect.updateProject(model);
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }
   changeProject(item) {
-    this.effect.changeProject(item.uuid);
+    this.effect.switchProject(item.projectUuid);
   }
   delProject(item: any): void {
     const modal = this.modalService.confirm({
@@ -72,12 +70,13 @@ export class ProjectListComponent implements OnInit {
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {
-        this.storage.run('projectRemove', [this.WorkspaceID, item.uuid], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+        const [, err] = await this.apiService.api_projectDelete({ projectUuids: [item.projectUuid] });
+        if (err) {
+          return;
+        }
+        // * update project list
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }
@@ -98,13 +97,14 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
-        if (!model.name) return;
-        this.storage.run('projectCreate', [this.store.getCurrentWorkspace.id, model], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.getProjectList();
-            modal.destroy();
-          }
-        });
+        if (!model.name) {
+          return;
+        }
+        await this.effect.createProject([model]);
+
+        // * update project list
+        this.getProjectList();
+        modal.destroy();
       }
     });
   }

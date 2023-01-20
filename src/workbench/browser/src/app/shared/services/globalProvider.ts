@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { MessageService } from './message';
+import { ApiService } from './storage/api.service';
+import { convertApiData } from './storage/db/dataSource/convert';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
@@ -14,9 +14,9 @@ export class GlobalProvider {
   constructor(
     private modalService: ModalService,
     private router: Router,
-    private storage: StorageService,
     private state: StoreService,
     private setting: SettingService,
+    private api: ApiService,
     private message: MessageService
   ) {
     //TODO compatible with old version
@@ -108,28 +108,40 @@ export class GlobalProvider {
     return data.filter(n => n.parentID === parentID).map(({ uuid, name }) => ({ id: uuid, name, children: this.list2tree(data, uuid) }));
   };
 
-  getGroup = (projectID = this.getCurrentProjectID()) => {
-    return new Promise(resolve => {
-      this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
-        console.log('result', result);
-        if (result.status === StorageResStatus.success) {
-          const res = {
-            status: 0,
-            data: this.list2tree(result.data, 0)
-          };
-          resolve(res);
-        } else {
-          const res = {
-            status: -1,
-            data: null,
-            error: result
-          };
-          resolve(res);
-        }
-      });
-    });
+  getGroup = async (projectID = this.getCurrentProjectID()) => {
+    const [data, err] = await this.api.api_groupList({});
+    const deep = inData => {
+      inData.uuid = inData.id;
+      if (inData.children?.length) {
+        inData.childList = deep(inData.children);
+        delete inData.children;
+      }
+      return data;
+    };
+    const result = {
+      status: 0,
+      data: deep(data)
+    };
+    return result;
+    // this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
+    //   console.log('result', result);
+    //   if (result.status === StorageResStatus.success) {
+    //     const res = {
+    //       status: 0,
+    //       data: this.list2tree(result.data, 0)
+    //     };
+    //     resolve(res);
+    //   } else {
+    //     const res = {
+    //       status: -1,
+    //       data: null,
+    //       error: result
+    //     };
+    //     resolve(res);
+    //   }
+    // });
   };
-  importProject = (params = {}) => {
+  importProject = async (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
     const { projectID, groupID, ...rest } = {
       projectID: currentProjectID, //没有传 projectID 默认获取当前项目
@@ -139,28 +151,55 @@ export class GlobalProvider {
       ...params
     };
     console.log('projectID, rest, groupID', projectID, rest, groupID);
-    return new Promise(resolve => {
-      // 只能导入到当前 项目 所以 currentProjectID写死。。。
-      this.storage.run('projectImport', [currentProjectID, rest, groupID], (result: StorageRes) => {
-        console.log('result', result);
-        if (result.status === StorageResStatus.success) {
-          resolve(
-            this.serializationData({
-              status: 0,
-              ...result
-            })
-          );
-        } else {
-          resolve(
-            this.serializationData({
-              status: -1,
-              data: null,
-              error: result
-            })
-          );
-        }
-        console.log('projectImport result', result);
-      });
+
+    const [groups] = await this.api.api_groupCreate(
+      rest.collections.map(n => ({
+        type: 1,
+        name: n.name,
+        parentId: groupID,
+        projectUuid: this.getCurrentProjectID(),
+        workSpaceUuid: this.state.getCurrentWorkspaceUuid
+      }))
+    );
+    console.log('groups', groups);
+
+    const apiCreatePromises = rest.collections.map(async (item, index) => {
+      const group = groups[index];
+      const apiList = item.children.map(n => ({ ...convertApiData(n), groupId: group.id }));
+      return await this.api.api_apiDataCreate({ apiList });
     });
+
+    const [[data]] = await Promise.all(apiCreatePromises);
+
+    const result = this.serializationData({
+      status: 0,
+      data
+    });
+    console.log('importProject result', result);
+    return result;
+
+    // return new Promise(resolve => {
+    //   // 只能导入到当前 项目 所以 currentProjectID写死。。。
+    //   this.storage.run('projectImport', [currentProjectID, rest, groupID], (result: StorageRes) => {
+    //     console.log('result', result);
+    //     if (result.status === StorageResStatus.success) {
+    //       resolve(
+    //         this.serializationData({
+    //           status: 0,
+    //           ...result
+    //         })
+    //       );
+    //     } else {
+    //       resolve(
+    //         this.serializationData({
+    //           status: -1,
+    //           data: null,
+    //           error: result
+    //         })
+    //       );
+    //     }
+    //     console.log('projectImport result', result);
+    //   });
+    // });
   };
 }

@@ -18,7 +18,7 @@ import {
 import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
-import { filterTableData, getTreeTotalCount } from '../../../utils/tree/tree.utils';
+import { filterTableData, generateQuoteKeyValue, getTreeTotalCount } from '../../../utils/tree/tree.utils';
 import { ColumnItem, IconBtn, TableProSetting } from './table-pro.model';
 import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './table-pro.token';
 @Component({
@@ -39,6 +39,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   @Input() columnVisibleStatus = {};
 
   @Input() nzCheckAddRow;
+  @Input() nzCheckAddChild;
   @Input() nzDragCheck;
 
   @Input() nzTrClick: (...rest: any[]) => void;
@@ -47,7 +48,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
 
   @ViewChild('enumsTmp', { read: TemplateRef }) enumsTmp: TemplateRef<HTMLDivElement>;
 
-  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
+  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit', 'addChild'];
   //Default buttom template match action
   private TABLE_DEFAULT_BTN: { [key: string]: Partial<IconBtn> };
   iconBtns: IconBtn[] = [];
@@ -68,6 +69,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
   private COLUMN_VISIBLE_KEY: string;
+
   //Default Table unique ID
   private DEFAULT_ID: string;
   private showItems = [];
@@ -83,7 +85,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       addChild: {
         icon: this.tableConfig.btnAddChildRowIcon,
         title: this.tableConfig.btnAddChildRowTitle,
-        fnName: 'addChild'
+        fnName: 'addChildRow'
       },
       insert: {
         icon: this.tableConfig.btnInsertRowIcon,
@@ -125,6 +127,23 @@ export class EoTableProComponent implements OnInit, OnChanges {
           this.nzData.push(eoDeepCopy(this.nzDataItem));
         }
       }
+      const hasQuoteKey = this.columns.some(col => col.key?.includes('.'));
+      if (hasQuoteKey && !this.setting.isEdit) {
+        const chains = this.columns
+          .filter(col => col.key?.includes('.'))
+          .map(val => {
+            const arr = val.key.split('.');
+            const valResult = {
+              arr,
+              str: val.key,
+              name: arr.at(-1)
+            };
+            return valResult;
+          });
+        this.nzData = generateQuoteKeyValue(chains, this.nzData, {
+          childKey: this.tableConfig.childKey
+        });
+      }
     }
   }
   getPureNzData() {
@@ -163,7 +182,12 @@ export class EoTableProComponent implements OnInit, OnChanges {
       }
       switch (btnItem.fnName) {
         case 'insertRow': {
-          apis[btnItem.fnName](index, 'down', false);
+          apis.insertRow(index, 'down', false);
+          break;
+        }
+        case 'addChildRow': {
+          this.nzCheckAddChild?.(item, index);
+          apis[btnItem.fnName](index);
           break;
         }
         default: {
@@ -209,6 +233,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       this.initConfig();
     });
   }
+
   private initConfig() {
     const theaderConf = [];
     const tbodyConf = [];
@@ -274,6 +299,12 @@ export class EoTableProComponent implements OnInit, OnChanges {
         case 'checkbox': {
           header.type = 'checkbox';
           body.type = 'checkbox';
+          if (col.enums?.length) {
+            body.valueRef = {
+              true: col.enums[0].value,
+              false: col.enums[1].value
+            };
+          }
           break;
         }
         case 'inputNumber': {
@@ -419,7 +450,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    // pcConsole.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

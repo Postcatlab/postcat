@@ -19,11 +19,11 @@ export interface TableProConfig {
   btnDeleteRowConfirmTitle: string;
 }
 export const TABLE_PRO_DEFUALT_CONFIG: TableProConfig = {
-  childKey: 'children',
+  childKey: 'childList',
   fullScreenIcon: 'full-screen',
   fullScreenTitle: $localize`Full Screen`,
   columnVisibleTitle: $localize`Column Visible`,
-  columnVisibleIcon: 'view-list-781pg17c',
+  columnVisibleIcon: 'view-list',
   btnAddRowIcon: 'add',
   btnAddRowTitle: $localize`Add Row`,
   btnAddChildRowIcon: 'add',

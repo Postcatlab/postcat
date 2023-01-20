@@ -1,4 +1,4 @@
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 /**
  * 模块管理器配置

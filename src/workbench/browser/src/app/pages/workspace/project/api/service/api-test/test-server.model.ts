@@ -1,31 +1,77 @@
 import { Environment } from '../../../../../../shared/services/storage/index.model';
-import { ApiTestHistoryFrame, ApiTestHistoryResponse, ApiTestResGeneral } from '../../http/test/api-test.model';
 /**
  * Test response from  test server to ui
  */
-export interface ApiTestRes {
+export interface TestServerRes {
   status: 'finish' | 'error';
   id: string;
-  response: ApiTestHistoryResponse | any;
+  response: ApiTestResData;
   globals?: object;
-  general?: ApiTestResGeneral;
-  /**
-   * Test history
-   */
-  history?: ApiTestHistoryFrame;
 }
+export interface ApiTestResHeader {
+  name: string;
+  value: string;
+}
+export interface ApiTestResData {
+  statusCode: number;
+  time: string;
+  /**
+   * Inject Code println
+   */
+  reportList: Array<{ type: 'throw' | 'interrupt'; content: string }>;
+  downloadRate: string;
+  downloadSize: number;
+  redirectTimes: number;
+  responseLength: number;
+  timingSummary: Array<{
+    dnsTiming: string;
+    tcpTiming: string;
+    /**
+     * SSL/TSL
+     */
+    tlsTiming: string;
+    /**
+     * The request is being sent until recieve firstByte
+     */
+    requestSentTiming: string;
+    /**
+     * Content download
+     */
+    contentDeliveryTiming: string;
+    /**
+     * Waiting (TTFB) - Time To First Byte
+     */
+    firstByteTiming: string;
+    /**
+     * Total Time
+     */
+    responseTiming: string;
+  }>;
+
+  responseType: 'text' | 'longText' | 'stream';
+  blobFileName?: string;
+  //Response Content Type
+  contentType: string;
+  headers: ApiTestResHeader[];
+  body: string;
+  request: {
+    uri: string;
+    body: string | object;
+    headers: ApiTestResHeader[];
+    contentType: 'formdata' | 'raw' | 'binary';
+  };
+}
+
 export interface TestServer {
   init: (receiveMessage: (message: any) => void) => void;
   send: (action: string, message: any) => void;
   formatRequestData: (apiData, opts: requestDataOpts) => any;
-  formatResponseData: (res) => ApiTestRes;
+  formatResponseData: (res) => TestServerRes;
   close: () => void;
 }
 
 export interface requestDataOpts {
   env: Environment | any;
   globals: object;
-  beforeScript: string;
-  afterScript: string;
   lang: string;
 }

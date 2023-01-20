@@ -6,11 +6,17 @@
   left: 0;
   top: 0;
   padding: 0 8px;
-  background-color: var(--NAVBAR_BG);
-  border-bottom: 1px solid var(--BORDER);
-  height: var(--NAVBAR_HEIGHT);
+  color: var(--layout-header-text-color);
+  background-color: var(--layout-header-background-color);
+  border-bottom: 1px solid var(--border-color);
+  height: var(--layout-header-height);
 
   .logo {
     width: 30px;
   }
+}
+
+:host ::ng-deep {
+  --button-text-text-color: var(--layout-header-text-color);
+  --button-text-hover-text-color: var(--layout-header-text-color);
 }

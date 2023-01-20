@@ -5,9 +5,9 @@ import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
+import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-mock',
@@ -15,7 +15,7 @@ import { ApiData } from '../../../../../../shared/services/storage/index.model';
   styles: [
     `
       :host {
-        padding: var(--PADDING);
+        padding: var(--padding);
       }
     `
   ]
@@ -30,10 +30,11 @@ export class ApiMockComponent implements OnInit {
   @ViewChild('mockTable')
   mockTable: ApiMockTableComponent;
 
-  apiDataID: number;
+  apiUuid: number;
   apiData: ApiData;
   titleTips = $localize`Postcat Client is required to use local mock.`;
-
+  btnTitle = $localize`Use Client`;
+  isInstalledClient: boolean = true;
   constructor(
     private route: ActivatedRoute,
     public web: WebService,
@@ -41,15 +42,22 @@ export class ApiMockComponent implements OnInit {
     private modal: ModalService,
     private api: ProjectApiService
   ) {
-    this.apiDataID = Number(this.route.snapshot.queryParams.uuid);
+    this.apiUuid = this.route.snapshot.queryParams.uuid;
   }
 
   async ngOnInit() {
-    this.apiData = await this.api.get(this.apiDataID);
+    this.apiData = await this.api.get(this.apiUuid);
     this.eoOnInit.emit(this.apiData);
   }
-  jumpToClient() {
-    this.web.jumpToClient(this.titleTips);
+  async jumpToClient() {
+    // const isInstalled = await this.web.protocolCheck();
+    const isInstalled = false;
+    if (!isInstalled) {
+      this.isInstalledClient = false;
+    } else {
+      this.isInstalledClient = true;
+      window.location.href = PROTOCOL;
+    }
   }
   addMock() {
     const modal = this.modal.create({
@@ -59,7 +67,7 @@ export class ApiMockComponent implements OnInit {
       nzComponentParams: {
         model: {
           name: '',
-          response: this.apiMock.getMockResponseByAPI(this.apiData.responseBody)
+          response: this.apiMock.getMockResponseByAPI(this.apiData)
         }
       },
       nzOnOk: async () => {

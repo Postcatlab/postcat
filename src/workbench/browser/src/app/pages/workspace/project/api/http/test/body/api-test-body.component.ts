@@ -1,15 +1,21 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  ApiTableConf,
+  API_BODY_TYPE,
+  IMPORT_MUI
+} from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { transferFileToDataUrl, whatTextType, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { Observable, Observer, Subject } from 'rxjs';
-import { pairwise, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
-import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 const whatTextTypeMap = {
   xml: 'application/xml',
@@ -23,12 +29,12 @@ const whatTextTypeMap = {
   styleUrls: ['./api-test-body.component.scss']
 })
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: string | object[] | any;
-  @Input() supportType: string[];
+  @Input() model: string | BodyParam[] | any;
+  @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() autoSetContentType = true;
   @Input() contentType: ContentType;
-  @Input() bodyType: ApiTestBodyType | string;
-  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
+  @Input() bodyType: ApiBodyType | number;
+  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | number> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @Output() readonly autoSetContentTypeChange: EventEmitter<boolean> = new EventEmitter();
@@ -45,17 +51,26 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
     API_BODY_TYPE: []
   };
+  IMPORT_MUI = IMPORT_MUI;
+  get TYPE_API_BODY(): typeof ApiBodyType {
+    return ApiBodyType;
+  }
+  get API_PARAMS_TYPE(): typeof ApiParamsType {
+    return ApiParamsType;
+  }
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json'
   };
-  itemStructure: ApiTestBody = {
-    required: true,
+  itemStructure: BodyParam = {
+    isRequired: 1,
     name: '',
-    type: 'string',
-    value: ''
+    dataType: ApiParamsType.string,
+    paramAttr: {
+      example: ''
+    }
   };
-  private bodyType$: Subject<string> = new Subject<string>();
+  private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
@@ -67,19 +82,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.initListConf();
   }
 
-  beforeChangeBodyByType(type) {
-    switch (type) {
-      case ApiTestBodyType.Binary:
-      case ApiTestBodyType.Raw: {
-        this.cache[type] = this.model;
-        break;
-      }
-      default: {
-        this.cache[type] = [...this.model];
-        break;
-      }
-    }
-  }
   changeContentType(contentType) {
     this.contentTypeChange.emit(contentType);
     this.autoSetContentTypeChange.emit(false);
@@ -96,16 +98,27 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiTestBodyType)
-      .filter(val => this.supportType.includes(ApiTestBodyType[val]))
-      .map(val => ({ key: val, value: ApiTestBodyType[val] }));
+    this.CONST.API_BODY_TYPE = API_BODY_TYPE.filter(val => this.supportType.includes(val.value));
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  private beforeChangeBodyByType(type) {
+    switch (type) {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        this.cache[type] = this.model || [{ binaryRawData: '' }];
+        break;
+      }
+      default: {
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
+        break;
+      }
+    }
+  }
   ngOnChanges(changes) {
-    if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
+    if (changes.model?.firstChange) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
@@ -144,7 +157,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   rawDataChange(code: string) {
-    this.modelChange.emit(code);
+    this.model[0].binaryRawData = code;
+    this.modelChange.emit(this.model);
     const contentType = whatTextTypeMap[whatTextType(code)];
     if (contentType && this.autoSetContentType !== false) {
       this.contentType = contentType;
@@ -158,22 +172,24 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   private setModel() {
     switch (this.bodyType) {
-      case ApiTestBodyType.Binary:
-      case ApiTestBodyType.Raw: {
-        this.model = this.cache[this.bodyType] || '';
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        this.model = this.cache[this.bodyType] || [
+          {
+            binaryRawData: this.model?.[0]?.binaryRawData || ''
+          }
+        ];
         break;
       }
       default: {
         this.model = this.cache[this.bodyType] || [];
+        this.model.forEach(row => {
+          if (row.dataType === ApiParamsType.file) {
+            row.files = [];
+          }
+        });
         break;
       }
-    }
-    if (typeof this.model === 'object') {
-      this.model.forEach(row => {
-        if (row.type === 'file') {
-          row.files = [];
-        }
-      });
     }
   }
   formdataSelectFiles(target, item) {
@@ -204,15 +220,15 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.listConf.setting = config.setting;
     this.listConf.columns.forEach(col => {
       switch (col.key) {
-        case 'value': {
+        case 'paramAttr.example': {
           col.slot = this.formValue;
           break;
         }
-        case 'type': {
-          col.change = item => {
-            if (item.type === 'file') {
+        case 'dataType': {
+          col.change = (item: BodyParam | any) => {
+            if (item.dataType === ApiParamsType.file) {
               item.files = [];
-              item.value = '';
+              item.paramAttr.example = '';
             } else {
               delete item.files;
             }

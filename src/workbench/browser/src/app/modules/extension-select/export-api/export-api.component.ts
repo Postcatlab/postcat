@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
@@ -16,7 +17,12 @@ export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(private storage: StorageService, private store: StoreService, private extensionService: ExtensionService) {
+  constructor(
+    private storage: StorageService,
+    private store: StoreService,
+    private extensionService: ExtensionService,
+    private apiService: ApiService
+  ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
   }
   ngOnInit(): void {
@@ -62,29 +68,26 @@ export class ExportApiComponent implements OnInit {
     const filename = feature.filename || 'export.json';
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     if (action && module?.[action] && typeof module[action] === 'function') {
-      const params = [this.store.getCurrentProjectID];
-      this.storage.run('projectExport', params, (result: StorageRes) => {
-        console.log(result);
-        if (result.status === StorageResStatus.success) {
-          console.log('projectExport result', result.data);
-          try {
-            let output = module[action](result || {});
-            //Change format
-            if (has(output, 'status') && output.status === 0) {
-              output = output.data;
-            }
-            if (filename) {
-              this.transferTextToFile(filename, output);
-            }
-            callback(true);
-          } catch (e) {
-            console.error(e);
-            callback(false);
+      const [data] = await this.apiService.api_projectExportProject({});
+      if (data) {
+        console.log('projectExport result', data);
+        try {
+          let output = module[action]({ data: data || {} });
+          //Change format
+          if (has(output, 'status') && output.status === 0) {
+            output = output.data;
           }
-        } else {
+          if (filename) {
+            this.transferTextToFile(filename, output);
+          }
+          callback(true);
+        } catch (e) {
+          console.error(e);
           callback(false);
         }
-      });
+      } else {
+        callback(false);
+      }
     } else {
       callback(false);
     }
