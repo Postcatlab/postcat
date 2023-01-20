@@ -10,13 +10,13 @@
   }
 
   .ant-tabs-content {
-    height: calc(var(--body-height) - 121px);
+    height: calc(var(--body-height) - 127px);
     overflow: auto;
   }
 }
 
 .list-type-switcher {
   .active {
-    color: var(--BTN_PRIMARY_BG);
+    color: var(--button-primary-background-color);
   }
 }

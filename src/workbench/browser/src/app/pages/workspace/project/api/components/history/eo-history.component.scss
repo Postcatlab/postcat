@@ -8,8 +8,6 @@ eo-ng-tree-default {
   height: calc(100% - 40px);
 }
 
-:host {
-  ::ng-deep nz-tree-node-title {
-    width: 0 !important;
-  }
+.method-text-WS {
+  color: var(--info-color);
 }

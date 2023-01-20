@@ -5,31 +5,37 @@ import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/ap
 import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
-import { eoDeepCopy } from '../../utils/index.utils';
+import { BodyParam } from '../../shared/services/storage/db/models/apiData';
+import { enumsToArr, eoDeepCopy, JSONParse } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
+import { ApiBodyType, ApiParamsType, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
   showMore(item, opts: { in: string; isEdit: boolean }) {
     return new Promise(resolve => {
+      item = eoDeepCopy(omit(item, ['childList']));
+      item.paramAttr = item.paramAttr || {};
+      item.paramAttr.paramValueList = JSONParse(item.paramAttr.paramValueList, []);
       const modalConf: ModalOptions = {
         nzTitle: $localize`More Settings`,
         nzContent: ApiParamsExtraSettingComponent,
         nzWidth: '60%',
         nzComponentParams: {
           in: opts.in,
-          model: [omit(item, ['children'])],
+          model: item,
           isEdit: opts.isEdit
         }
       };
       if (opts.isEdit) {
         modalConf.nzOnOk = () => {
-          const model = eoDeepCopy(modal.componentInstance.model[0]);
-          model.enum = filterTableData(model.enum, {
-            primaryKey: 'value'
-          });
+          const model = eoDeepCopy(modal.componentInstance.model);
+          model.paramAttr.paramValueList = JSON.stringify(
+            filterTableData(model.paramAttr.paramValueList, {
+              primaryKey: 'value'
+            })
+          );
           resolve(model);
           modal.destroy();
         };
@@ -65,17 +71,17 @@ export class ApiTableService {
         columnVisible: 'fixed',
         key: 'name'
       },
-      type: {
+      dataType: {
         title: $localize`Type`,
         type: 'select',
-        key: 'type',
+        key: 'dataType',
         filterable: inArg.isEdit ? false : true,
         disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined
       },
-      required: {
+      isRequired: {
         title: $localize`Required`,
         type: 'checkbox',
-        key: 'required',
+        key: 'isRequired',
         filterable: inArg.isEdit ? false : true,
         enums: REQURIED_ENUMS,
         width: 120
@@ -88,7 +94,7 @@ export class ApiTableService {
       example: {
         title: $localize`Example`,
         type: 'input',
-        key: 'example'
+        key: 'paramAttr.example'
       },
       editOperate: {
         type: 'btnList',
@@ -122,7 +128,13 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            showFn: ({ data }) => data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
+            showFn: ({ data }: { data: BodyParam }) =>
+              data?.paramAttr?.paramValueList?.length ||
+              data?.paramAttr?.minValue ||
+              data?.paramAttr?.maxValue ||
+              data?.paramAttr?.maxLength ||
+              data?.paramAttr?.minLength ||
+              data?.paramAttr?.example,
             title: $localize`More Settings`,
             click: item => {
               this.showMore(item.data, {
@@ -142,7 +154,7 @@ export class ApiTableService {
         manualAdd: opts.manualAdd,
         showBtnWhenHoverRow: inArg.isEdit ? false : true,
         rowSortable: inArg.isEdit ? true : false,
-        isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
+        isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['FormData'] ? false : true,
         toolButton: {
           columnVisible: true
         }
@@ -151,16 +163,15 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['name', 'type', 'required', 'description', 'example'];
+        columnsArr = ['name', 'dataType', 'isRequired', 'description', 'example'];
         break;
       }
       default: {
-        columnsArr = ['name', 'required', 'description', 'example'];
+        columnsArr = ['name', 'isRequired', 'description', 'example'];
         break;
       }
     }
     columnsArr.push(inArg.module === 'preview' ? 'previewOperate' : 'editOperate');
-    const types = inArg.format === ApiBodyType['Form-data'] ? ApiParamsTypeFormData : ApiParamsTypeJsonOrXml;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -174,10 +185,11 @@ export class ApiTableService {
           }
           break;
         }
-        case 'type': {
-          column.enums = Object.keys(types).map(val => ({
-            title: val,
-            value: types[val]
+        case 'dataType': {
+          const types = inArg.format === ApiBodyType.FormData ? ApiParamsType : ApiParamsTypeJsonOrXml;
+          column.enums = enumsToArr(types).map(val => ({
+            title: val.key,
+            value: val.value
           }));
           break;
         }
@@ -186,7 +198,7 @@ export class ApiTableService {
             const insert: any = {
               action: 'insert'
             };
-            if (inArg.format === 'xml') {
+            if (inArg.format === ApiBodyType.XML) {
               insert.showFn = item => item.level !== 0;
             }
             column.btns.unshift({ action: 'addChild' }, insert);
@@ -211,7 +223,7 @@ export class ApiTableService {
   initTestTable(
     inArg: {
       in: 'body' | 'header' | 'query' | 'rest';
-      format?: 'Form-data';
+      format?: 'FormData';
     },
     opts: any = {}
   ): { columns: ColumnItem[]; setting: TableProSetting } {
@@ -224,22 +236,22 @@ export class ApiTableService {
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name'
       },
-      type: {
+      dataType: {
         title: $localize`Type`,
         type: 'select',
-        key: 'type',
+        key: 'dataType',
         width: 150
       },
-      required: {
+      isRequired: {
         type: 'checkbox',
         left: true,
-        key: 'required',
+        key: 'isRequired',
         enums: REQURIED_ENUMS
       },
       value: {
         title: $localize`Value`,
         type: 'input',
-        key: 'value'
+        key: 'paramAttr.example'
       },
       editOperate: {
         type: 'btnList',
@@ -264,15 +276,14 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['required', 'name', 'type', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'dataType', 'value', 'editOperate'];
         break;
       }
       default: {
-        columnsArr = ['required', 'name', 'value', 'editOperate'];
+        columnsArr = ['isRequired', 'name', 'value', 'editOperate'];
         break;
       }
     }
-    const types = ApiTestParamsTypeFormData;
     result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
@@ -286,11 +297,17 @@ export class ApiTableService {
           }
           break;
         }
-        case 'type': {
-          column.enums = Object.keys(types).map(val => ({
-            title: val,
-            value: types[val]
-          }));
+        case 'dataType': {
+          column.enums = [
+            {
+              title: 'string',
+              value: ApiParamsType.string
+            },
+            {
+              title: 'file',
+              value: ApiParamsType.file
+            }
+          ];
           break;
         }
         case 'editOperate': {

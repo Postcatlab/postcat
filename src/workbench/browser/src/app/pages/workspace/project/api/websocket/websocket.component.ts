@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
-import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -15,25 +15,14 @@ import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
 import { ApiParamsNumPipe } from '../../../../../modules/api-shared/api-param-num.pipe';
-import { MessageService } from '../../../../../shared/services/message';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {
   requestTabIndex: number;
-  protocol: string;
   msg: string;
-  request: {
-    requestHeaders: ApiTestHeaders[];
-    uri: string;
-    protocol: 'ws' | string;
-    queryParams: ApiTestQuery[];
-  };
-  response: {
-    requestHeaders: ApiTestHeaders[];
-    responseHeaders: ApiTestHeaders[];
-    responseBody: any;
-  };
+  request: any;
+  response: any;
 }
 @Component({
   selector: 'websocket-content',
@@ -66,7 +55,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private testService: ApiTestService,
     private modal: ModalService,
-    private message: MessageService,
     private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
     private store: StoreService,
     public tabOperate: TabOperateService
@@ -200,10 +188,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (this.store.isShare) {
         return;
       }
-      const res = await this.testService.addHistory({ protocol: 'websocket', ...data }, 0);
-      if (res) {
-        this.message.send({ type: 'updateHistory', data: {} });
-      }
+      await this.testService.addHistory(data);
       return;
     }
     // * connecting
@@ -354,12 +339,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   private resetModel(): testViewModel {
     return {
       requestTabIndex: 2,
-      protocol: 'websocket',
       msg: '',
       request: {
         requestHeaders: [],
         uri: '',
-        protocol: 'ws',
+        protocol: Protocol.WEBSOCKET,
         queryParams: []
       },
       response: {

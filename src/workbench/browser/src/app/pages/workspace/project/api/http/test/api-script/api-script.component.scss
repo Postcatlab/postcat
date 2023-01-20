@@ -5,6 +5,10 @@
 }
 
 :host ::ng-deep {
+  nz-tree-node-title {
+    height: 100%;
+  }
+
   .eo-api-script {
     .ant-tree-switcher {
       width: 0;

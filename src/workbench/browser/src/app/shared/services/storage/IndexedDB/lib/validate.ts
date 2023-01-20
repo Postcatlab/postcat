@@ -3,8 +3,8 @@ import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData, Environment, Group } from '../../index.model';
-import apiDataSchema from '../schema/apiData.json';
-import envSchema from '../schema/env.json';
+import apiDataSchema from '../schema/apiData.schema.json';
+import envSchema from '../schema/env.schema.json';
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
   const ajv = new Ajv({
     useDefaults: true,
@@ -14,7 +14,7 @@ export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiDa
   if (validate(apiData)) {
     ['requestBody', 'responseBody'].forEach(keyName => {
       if (
-        [ApiBodyType['Form-data'], ApiBodyType.JSON, ApiBodyType.XML].includes(apiData[`${keyName}Type`]) &&
+        [ApiBodyType['FormData'], ApiBodyType.JSON, ApiBodyType.XML].includes(apiData[`${keyName}Type`]) &&
         whatType(apiData[keyName]) !== 'array'
       ) {
         //Handle xml\formdata\json  data
@@ -55,7 +55,7 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
     return {
       validate: true,
       data: {
-        projectID: env.projectID,
+        projectUuid: env.projectUuid,
         name: env.name,
         hostUri: env.hostUri,
         parameters: env.parameters

@@ -1,12 +1,12 @@
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 export enum ExtensionGroupType {
   all = 'all',
   official = 'official',
-  installed = 'installed',
+  installed = 'installed'
 }
 
-export interface EoExtensionInfo extends ModuleInfo {
+export interface EoExtensionInfo extends ExtensionInfo {
   installed?: boolean;
   changeLog?: string;
   bugs: {

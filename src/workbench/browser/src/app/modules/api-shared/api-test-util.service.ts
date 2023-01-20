@@ -1,76 +1,71 @@
 import { Injectable } from '@angular/core';
+import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
-import omitDeep from 'omit-deep-lodash';
 
-import { ApiTestData, ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
-import { ApiData, ApiTestHistory } from '../../shared/services/storage/index.model';
+import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
+import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
+import { ApiTestResData } from '../../pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiData } from '../../shared/services/storage/db/models';
+import { BodyParam, HeaderParam } from '../../shared/services/storage/db/models/apiData';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
-import { filterTableData } from '../../utils/tree/tree.utils';
-import { ApiBodyType } from './api.model';
 
 @Injectable()
 export class ApiTestUtilService {
-  constructor() {}
+  constructor(private apiEditUtil: ApiEditUtilService) {}
   getHTTPStatus(statusCode) {
     const HTTP_CODE_STATUS = [
       {
         status: 'info',
         cap: 199,
-        class: 'code_blue',
-        fontClass: 'cb'
+        class: 'test-default'
       },
       {
         status: 'success',
         cap: 299,
-        class: 'code_green',
-        fontClass: 'cg'
+        class: 'test-success'
       },
       {
         status: 'redirect',
         cap: 399,
-        class: 'code_yellow',
-        fontClass: 'cy'
+        class: 'test-warning'
       },
       {
         status: 'clientError',
         cap: 499,
-        class: 'code_red',
-        fontClass: 'cr'
+        class: 'test-error'
       },
       {
         status: 'serverError',
         cap: 599,
-        class: 'code_red',
-        fontClass: 'cr'
+        class: 'test-error'
       }
     ];
     return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);
   }
-  getTestDataFromHistory(inData: ApiTestHistory) {
-    //handle query and url
-    const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
-      base: 'url',
-      replaceType: 'merge'
-    });
-    const result = {
-      testData: {
-        uuid: inData.apiDataID,
-        restParams: [],
-        uri: tmpResult.url,
-        queryParams: tmpResult.query,
-        requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
-          ? inData.request.requestBody
-          : inData.request?.requestBody?.map(val => (val.required = true)),
-        requestHeaders: inData.response?.headers,
-        ...inData.request
-      },
-      response: eoDeepCopy(inData)
-    };
-    (result.testData.requestHeaders || []).map(val => (val.required = true));
-    return result;
-  }
+  // getTestDataFromHistory(inData: ApiTestHistory) {
+  //   //handle query and url
+  //   // const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
+  //   //   base: 'url',
+  //   //   replaceType: 'merge'
+  //   // });
+  //   // const result = {
+  //   //   testData: {
+  //   //     uuid: inData.apiUuid,
+  //   //     restParams: [],
+  //   //     uri: tmpResult.url,
+  //   //     queryParams: tmpResult.query,
+  //   //     requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.apiAttrInfo.requestBodyType as unknown as ApiBodyType)
+  //   //       ? inData.request.requestBody
+  //   //       : inData.request?.requestBody?.map(val => (val.required = true)),
+  //   //     requestHeaders: inData.response?.headers,
+  //   //     ...inData.request
+  //   //   },
+  //   //   response: eoDeepCopy(inData)
+  //   // };
+  //   // (result.testData.requestHeaders || []).map(val => (val.required = true));
+  //   return inData;
+  // }
   /**
    * Handle api data for judge page has edit
    * Unlike the saved data, the api data being edited is not as strict
@@ -78,34 +73,10 @@ export class ApiTestUtilService {
    * @param formData
    * @returns apiData
    */
-  formatEditingApiData(formData): ApiTestData {
-    const result = eoDeepCopy(formData) as ApiTestData;
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach(tableName => {
-      if (whatType(result[tableName]) !== 'array') {
-        return;
-      }
-      result[tableName] = filterTableData(result[tableName], {
-        filterFn: val => val.name || val.value
-      });
-    });
-    return result;
+  formatEditingApiData(formData): ApiData {
+    return this.apiEditUtil.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val.paramAttr?.example);
   }
 
-  /**
-   * Transfer Test requstBody[type==='raw'] to API edit table data
-   */
-  private text2EditBody(keyName, text: string = '') {
-    const result = {};
-    const bodyInfo = text2table(text);
-    if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = bodyInfo.data.map(val => omitDeep(val, ['value']));
-    } else {
-      result[`${keyName}`] = bodyInfo.data;
-    }
-    result[`${keyName}Type`] = bodyInfo.textType;
-    result[`${keyName}JsonType`] = bodyInfo.rootType;
-    return result;
-  }
   /**
    * Transfer test/history data to  api ui data
    * Test Page: Save as API
@@ -114,113 +85,130 @@ export class ApiTestUtilService {
    * @param inData.testData - test request info
    * @returns
    */
-  formatSavingApiData(inData): ApiData {
-    // console.log('formatSavingApiData', eoDeepCopy(inData));
+  formatUIApiDataToStorage(inData: { request: Partial<ApiData>; response: ApiTestResData }): ApiData {
+    inData = eoDeepCopy(inData);
+    pcConsole.log('formatUIApiDataToStorage', inData);
     const result = {
-      ...inData.testData,
-      responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],
-      responseBodyType: 'json',
-      responseBodyJsonType: 'object',
-      responseBody: []
+      ...inData.request,
+      protocol: Protocol.HTTP,
+      responseList: [
+        {
+          isDefault: 1,
+          contentType: ApiBodyType.Raw,
+          responseParams: {
+            headerParams: [],
+            bodyParams: []
+          }
+        }
+      ]
     };
-    delete result.uuid;
-    if (result.requestBodyType === ApiBodyType.Raw) {
-      Object.assign(result, this.text2EditBody('requestBody', result.requestBody));
-    }
-    ['requestHeaders', 'requestBody', 'responseHeaders', 'restParams', 'queryParams'].forEach(keyName => {
-      if (!result[keyName] || typeof result[keyName] !== 'object') {
-        return;
+    delete result.apiUuid;
+
+    //Transfer Raw request info
+    if (result.apiAttrInfo.contentType === ApiBodyType.Raw) {
+      const rawData = result.requestParams.bodyParams[0].binaryRawData;
+      const tableData = text2table(rawData);
+      if (tableData.contentType === ApiBodyType.Raw) {
+        result.requestParams.bodyParams = [
+          {
+            binaryRawData: rawData
+          }
+        ];
+      } else {
+        result.requestParams.bodyParams = tableData.data;
       }
-      result[keyName] = this.testTable2body(result[keyName]);
-    });
-    if (inData.history.response.responseType === 'text') {
-      Object.assign(result, this.text2EditBody('responseBody', inData.history.response.body));
+      result.apiAttrInfo.contentType = tableData.contentType;
     }
-    return result;
+
+    //Transfer Raw response info
+    if (inData?.response?.responseType === 'text') {
+      const tableData = text2table(inData.response.body);
+      result.responseList[0].contentType = tableData.contentType;
+      result.responseList[0].responseParams.bodyParams = tableData.data;
+    }
+    console.log(result);
+    return result as ApiData;
   }
 
-  getTestDataFromApi(inData): ApiTestData {
-    inData ||= {};
-    const editToTestParams = arr => {
-      arr = arr || [];
-      arr.forEach(val => {
-        val.value = val.example;
-        delete val.example;
-      });
-    };
-    ['queryParams', 'restParams', 'requestHeaders'].forEach(keyName => {
-      editToTestParams(inData?.[keyName]);
-    });
+  getTestDataFromApi(inData: Partial<ApiData>): Partial<ApiData> {
+    const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
+
     //handle query and url
-    const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {
+    const tmpResult = transferUrlAndQuery(result.uri, result.requestParams.queryParams, {
       base: 'url',
       replaceType: 'merge'
     });
-    inData.uri = tmpResult.url;
-    inData.queryParams = tmpResult.query;
+    result.uri = tmpResult.url;
+    result.requestParams.queryParams = tmpResult.query;
+
     //parse body
-    switch (inData.requestBodyType) {
+    const requestBodyType = result.apiAttrInfo.contentType;
+    let binaryRawData = '';
+    switch (requestBodyType) {
+      case ApiBodyType.JSONArray:
       case ApiBodyType.JSON: {
-        inData.requestBody = JSON.stringify(
-          table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType
+        binaryRawData = JSON.stringify(
+          table2json(result.requestParams.bodyParams, {
+            rootType: requestBodyType === ApiBodyType.JSON ? JsonRootType.Object : JsonRootType.Array
           })
         );
         break;
       }
       case ApiBodyType.XML: {
-        inData.requestBody = json2xml(
-          table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType
-          })
-        );
+        binaryRawData = json2xml(table2json(result.requestParams.bodyParams));
         break;
       }
-      case ApiBodyType['Form-data']: {
-        inData.requestBody.forEach(val => {
-          val.value = val.example;
-          val.type = val.type === 'file' ? 'file' : 'string';
-          delete val.example;
+      case ApiBodyType['FormData']: {
+        result.requestParams.bodyParams.forEach(val => {
+          val.dataType = val.dataType === ApiParamsType.file ? ApiParamsType.file : ApiParamsType.string;
         });
         break;
       }
       case ApiBodyType.Binary: {
-        inData.requestBody = '';
+        binaryRawData = '';
         break;
       }
     }
-    if (['json', 'xml'].includes(inData.requestBodyType)) {
-      //Add/Replace Content-type
-      const contentType: ContentType = inData.requestBodyType === 'xml' ? 'application/xml' : 'application/json';
-      inData.requestHeaders = this.addOrReplaceContentType(contentType, inData.requestHeaders);
-      //Xml、Json change content-type to raw in test page
-      inData.requestBodyType = 'raw';
+    if (requestBodyType !== ApiBodyType.FormData) {
+      result.requestParams.bodyParams = [
+        {
+          binaryRawData: binaryRawData
+        }
+      ];
     }
-    return inData;
+    //Reset content-type
+    if ([ApiBodyType.JSON, ApiBodyType.JSONArray, ApiBodyType.XML].includes(requestBodyType)) {
+      //Add/Replace Content-type
+      const contentType: ContentType = requestBodyType === ApiBodyType.XML ? 'application/xml' : 'application/json';
+      result.requestParams.headerParams = this.addOrReplaceContentType(contentType, result.requestParams.headerParams);
+      //Xml、Json change content-type to raw in test page
+      result.apiAttrInfo.contentType = ApiBodyType.Raw;
+    }
+
+    return result;
   }
-  getContentType(headers) {
+  getContentType(headers = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (!existHeader) {
       return;
     }
-    return existHeader.value;
+    return existHeader.paramAttr?.example;
   }
   /**
    * @param type content-type be added/replaced
    * @param headers
    */
-  addOrReplaceContentType(contentType: ContentType, headers: any[] = []) {
+  addOrReplaceContentType(contentType: ContentType, headers: HeaderParam[] | any = []) {
     const result = headers;
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
-      existHeader.value = contentType;
+      existHeader.paramAttr.example = contentType;
       return result;
     }
     headers.unshift({
-      required: true,
+      isRequired: 1,
       name: 'content-type',
-      value: contentType
-      // editable:false
+      'paramAttr.example': contentType
     });
     return result;
   }
@@ -249,18 +237,6 @@ export class ApiTestUtilService {
       'referrer-policy'
     ];
     const result = headers.filter(val => !commonHeader.includes(val.name));
-    return result;
-  }
-  private testTable2body(arr): ApiData[] {
-    const result = [];
-    arr.forEach(val => {
-      if (!val.name) {
-        return;
-      }
-      const item = { ...val, required: val.hasOwnProperty('required') ? val.required : true, example: val.value };
-      delete item.value;
-      result.push(item);
-    });
     return result;
   }
 }

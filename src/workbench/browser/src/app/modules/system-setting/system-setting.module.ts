@@ -10,6 +10,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
 import { EoSettingModule } from '../eo-ui/setting/setting.module';
+import { LogoModule } from '../logo/logo.module';
 import { AboutComponent, DataStorageComponent, LanguageSwticherComponent } from './common';
 import { AccountComponent } from './common/account.component';
 import { SelectThemeComponent } from './common/select-theme/select-theme.component';
@@ -25,7 +26,7 @@ const ANTDMODULES = [NzDividerModule, NzInputNumberModule, NzEmptyModule, NzDesc
     LanguageSwticherComponent,
     AboutComponent
   ],
-  imports: [EoSettingModule, FormsModule, EoNgTabsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
+  imports: [EoSettingModule, LogoModule, FormsModule, EoNgTabsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SystemSettingComponent]
 })
 export class SystemSettingModule {}

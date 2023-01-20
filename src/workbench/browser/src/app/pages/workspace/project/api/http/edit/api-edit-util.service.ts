@@ -1,31 +1,61 @@
-import { Injectable, ɵɵsetComponentScope } from '@angular/core';
-import { RequestProtocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { omit } from 'lodash-es';
+import { Injectable } from '@angular/core';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ModalService } from '../../../../../../shared/services/modal.service';
-import { ApiData } from '../../../../../../shared/services/storage/index.model';
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
-@Injectable()
+
+@Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
-  constructor(private modalService: ModalService) {}
+  constructor() {}
 
-  parseApiStorage2UI(apiData) {
-    const result = apiData;
-    result.protocol = RequestProtocol.HTTP;
-    result.groupID = (result.groupID === 0 ? -1 : result.groupID || -1).toString();
-    return result;
-  }
-
-  private parseApiUI2Storage(formData, filterArrFun): ApiData {
+  parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(tableName => {
-      if (whatType(result[tableName]) !== 'array') {
+    const mui = {
+      headerParams: 0,
+      bodyParams: 1,
+      queryParams: 2,
+      restParams: 3
+    };
+    //Parse Request body
+    ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
+        if (result.requestParams.bodyParams?.[0]) {
+          result.requestParams.bodyParams[0].orderNo = 0;
+          result.requestParams.bodyParams[0].paramType = 0;
+          result.requestParams.bodyParams[0].partType = mui['bodyParams'];
+        }
         return;
       }
-      result[tableName] = filterTableData(result[tableName], {
-        filterFn: filterArrFun
+      result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
+        filterFn: item => {
+          item.partType = mui[tableName];
+          item.paramType = 0;
+          return filterArrFun(item);
+        }
+      });
+    });
+
+    //Parse response body
+    if (!result.responseList?.[0]?.responseParams) {
+      return result;
+    }
+    ['bodyParams', 'headerParams'].forEach(tableName => {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(result.responseList[0].contentType)) {
+        if (result.responseList[0].bodyParams?.[0]) {
+          result.responseList[0].bodyParams[0].orderNo = 0;
+          result.responseList[0].bodyParams[0].paramType = 1;
+          result.responseList[0].bodyParams[0].partType = mui['bodyParams'];
+        }
+        return;
+      }
+      result.responseList[0].responseParams[tableName] = filterTableData(result.responseList[0].responseParams[tableName], {
+        filterFn: item => {
+          item.partType = mui[tableName];
+          item.paramType = 1;
+          return filterArrFun(item);
+        }
       });
     });
     return result;
@@ -37,8 +67,8 @@ export class ApiEditUtilService {
    * @param formData
    * @returns apiData
    */
-  formatEditingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, val => val?.name || val?.description || val?.example);
+  formatEditingApiData(formData: ApiData): ApiData {
+    return this.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val?.description || val.paramAttr?.example);
   }
   /**
    * Handle api data to be saved
@@ -46,7 +76,26 @@ export class ApiEditUtilService {
    * @param formData
    * @returns apiData
    */
-  formatSavingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, val => val?.name);
+  formatUIApiDataToStorage(formData): ApiData {
+    const result = this.parseApiUI2Storage(formData, val => {
+      val.orderNo = 0;
+      val.paramAttr ??= {};
+      val.paramAttr.example = val['paramAttr.example'];
+      delete val['paramAttr.example'];
+      return val?.name;
+    });
+    return result;
+  }
+  /**
+   * Handle storage api data to ui
+   *
+   * @param apiData
+   * @returns formData
+   */
+  formatStorageApiDataToUI(apiData) {
+    return this.parseApiUI2Storage(apiData, val => {
+      val['paramAttr.example'] = val.paramAttr?.example || '';
+      return true;
+    });
   }
 }

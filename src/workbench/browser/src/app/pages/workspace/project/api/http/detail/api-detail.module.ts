@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgCollapseModule } from 'eo/workbench/browser/src/app/modules/eo-ui/collapse/collapse.module';
 import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -17,7 +17,7 @@ import { ApiDetailBodyComponent } from './body/api-detail-body.component';
 import { PcApiMethodsTagComponent } from './eo-api-methods-tag/eo-api-methods-tag.component';
 import { ApiDetailFormComponent } from './form/api-detail-form.component';
 
-const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule, NzCollapseModule];
+const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule, EoNgCollapseModule];
 const COMPONENTS = [ApiDetailComponent, ApiDetailFormComponent, ApiDetailBodyComponent, PcApiMethodsTagComponent];
 @NgModule({
   declarations: [...COMPONENTS],

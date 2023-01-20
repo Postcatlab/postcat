@@ -6,7 +6,7 @@
 }
 
 .page-body {
-  height: var(--body-height);
+  // height: var(--body-height);
 }
 
 .home-container {
@@ -14,20 +14,22 @@
 }
 
 .home {
-  background-color: var(--MAIN_BG);
-  color: var(--MAIN_TEXT);
-  overflow: hidden;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  overflow-x: hidden;
 }
 
 :host ::ng-deep {
   .home-container {
-    --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0));
+    --body-height: calc(100vh - var(--layout-header-height) - var(--layout-footer-height) - var(--remote-notification-height, 0));
+
+    height: var(--body-height);
 
     router-outlet + * {
       display: block;
-      height: var(--body-height);
+      height: 100%;
 
-      // overflow: hidden auto;
+      // height: var(--body-height);
     }
   }
 }

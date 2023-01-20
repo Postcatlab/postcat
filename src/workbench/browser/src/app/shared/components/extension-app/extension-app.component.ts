@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 @Component({
   selector: 'extension-app',
   template: `
@@ -126,17 +126,6 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   onAfterMount(e): void {
     console.log('child-vite 已经渲染完成', e);
-    // this.storage.run('groupLoadAllByProjectID', [1], (result) => {
-    //   if (result.status === 200) {
-    //     this.microAppData = result.data;
-    //     // 发送数据给子应用 my-app，setData第二个参数只接受对象类型
-    //     microApp.setData(this.name, { data: this.microAppData });
-    //     console.log('this.microAppData', this.microAppData);
-    //   }
-    // });
-    // setTimeout(() => {
-    //   this.microAppData = { msg: '来自基座的新数据' };
-    // }, 2000);
   }
 
   onBeforeUnmount(e): void {

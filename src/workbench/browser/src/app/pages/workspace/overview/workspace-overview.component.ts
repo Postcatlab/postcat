@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { autorun } from 'mobx';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { autorun, reaction } from 'mobx';
 
-import { SettingService } from '../../../modules/system-setting/settings.service';
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
+import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
 import { MessageService } from '../../../shared/services/message';
 import { StoreService } from '../../../shared/store/state.service';
 import { ProjectListComponent } from '../components/project-list/project-list.component';
@@ -16,18 +16,26 @@ export class WorkspaceOverviewComponent implements OnInit {
   @ViewChild('eoProjectList') eoProjectList: ProjectListComponent;
   title = 'Workspaces';
   nzSelectedIndex = 0;
-  constructor(private dataSourceService: DataSourceService, private message: MessageService, public store: StoreService) {}
+  isOwner = false;
+  constructor(
+    private nzMessage: EoNgFeedbackMessageService,
+    private message: MessageService,
+    public store: StoreService,
+    public feature: FeatureControlService
+  ) {}
   invite() {
+    if (this.nzSelectedIndex) {
+      this.nzMessage.warning($localize`You has already selected members tab, you can operate now.`);
+    }
     this.nzSelectedIndex = 1;
   }
   ngOnInit(): void {
     autorun(() => {
       this.title = this.store.getCurrentWorkspace?.title;
+      this.isOwner = this.store.getWorkspaceRole.find(it => ['Workspace Owner'].includes(it.name));
     });
   }
   createWorkspace() {
-    this.dataSourceService.checkRemoteCanOperate(() => {
-      this.message.send({ type: 'addWorkspace', data: {} });
-    });
+    this.message.send({ type: 'addWorkspace', data: {} });
   }
 }

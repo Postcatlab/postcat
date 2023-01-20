@@ -1,392 +1,275 @@
 import { Injectable } from '@angular/core';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { MessageService } from '../../../shared/services/message';
-import LocalService from './local.service';
-import RemoteService from './remote.service';
-
-export type DataSourceType = 'local' | 'http';
+import { LocalService } from './local.service';
+import { RemoteService } from './remote.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  dataSourceType: DataSourceType = getSettings()['eoapi-common.dataStorage'] || 'local';
+  constructor(private store: StoreService, private local: LocalService, private remote: RemoteService) {}
 
-  constructor(private messageService: MessageService, private local: LocalService, private remote: RemoteService) {}
-  toggleDataSource = (options: any = {}) => {
-    const { dataSourceType } = options;
-    this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
-  };
-
-  api_projectCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectCreate(params);
-    }
-    return this.remote.api_projectCreate(params);
+  api_apiDataCreate<T = any>(params: { apiList: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiDataCreate<T>(params) : this.remote.api_apiDataCreate<T>(params);
   }
 
-  api_projectUpdate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectUpdate(params);
-    }
-    return this.remote.api_projectUpdate(params);
+  api_apiDataUpdate<T = any>(params: { api: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiDataUpdate<T>(params) : this.remote.api_apiDataUpdate<T>(params);
   }
 
-  api_projectDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectDelete(params);
-    }
-    return this.remote.api_projectDelete(params);
+  api_apiDataDelete<T = any>(params: { apiUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiDataDelete<T>(params) : this.remote.api_apiDataDelete<T>(params);
   }
 
-  api_projectExport(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectExport(params);
-    }
-    return this.remote.api_projectExport(params);
+  api_apiDataDetail<T = any>(params: { apiUuids: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_apiDataDetail<T>(params) : this.remote.api_apiDataDetail<T>(params);
   }
 
-  api_projectAddMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectAddMember(params);
-    }
-    return this.remote.api_projectAddMember(params);
+  api_apiDataList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_apiDataList<T>(params) : this.remote.api_apiDataList<T>(params);
   }
 
-  api_projectDelMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectDelMember(params);
-    }
-    return this.remote.api_projectDelMember(params);
+  api_apiDataGetGroup<T = any>(params: { projectUuid?: any }) {
+    return this.remote.api_apiDataGetGroup<T>(params);
   }
 
-  api_projectMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectMember(params);
-    }
-    return this.remote.api_projectMember(params);
+  api_mockCreate<T = any>(params: {
+    name: any;
+    apiUuid: any;
+    createWay: any;
+    response: any;
+    projectUuid?: any;
+    workSpaceUuid?: any;
+    [key: string]: any;
+  }) {
+    return this.store.isLocal ? this.local.api_mockCreate<T>(params) : this.remote.api_mockCreate<T>(params);
   }
 
-  api_projectMemberQuit(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectMemberQuit(params);
-    }
-    return this.remote.api_projectMemberQuit(params);
+  api_mockUpdate<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_mockUpdate<T>(params) : this.remote.api_mockUpdate<T>(params);
   }
 
-  api_projectSetRole(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectSetRole(params);
-    }
-    return this.remote.api_projectSetRole(params);
+  api_mockList<T = any>(params: { apiUuid: any; projectUuid?: any; workSpaceUuid?: any; page: any; pageSize: any }) {
+    return this.store.isLocal ? this.local.api_mockList<T>(params) : this.remote.api_mockList<T>(params);
   }
 
-  api_projectRoleList(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectRoleList(params);
-    }
-    return this.remote.api_projectRoleList(params);
+  api_mockDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_mockDetail<T>(params) : this.remote.api_mockDetail<T>(params);
   }
 
-  api_projectPermission(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_projectPermission(params);
-    }
-    return this.remote.api_projectPermission(params);
+  api_mockDelete<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_mockDelete<T>(params) : this.remote.api_mockDelete<T>(params);
   }
 
-  api_workspaceCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceCreate(params);
-    }
-    return this.remote.api_workspaceCreate(params);
+  api_groupCreate<T = any>(params: any) {
+    return this.store.isLocal ? this.local.api_groupCreate<T>(params) : this.remote.api_groupCreate<T>(params);
   }
 
-  api_workspaceList(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceList(params);
-    }
-    return this.remote.api_workspaceList(params);
+  api_groupUpdate<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_groupUpdate<T>(params) : this.remote.api_groupUpdate<T>(params);
   }
 
-  api_workspaceUpload(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceUpload(params);
-    }
-    return this.remote.api_workspaceUpload(params);
+  api_groupDelete<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_groupDelete<T>(params) : this.remote.api_groupDelete<T>(params);
   }
 
-  api_workspaceEdit(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceEdit(params);
-    }
-    return this.remote.api_workspaceEdit(params);
+  api_groupDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_groupDetail<T>(params) : this.remote.api_groupDetail<T>(params);
   }
 
-  api_workspaceDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceDelete(params);
-    }
-    return this.remote.api_workspaceDelete(params);
+  api_groupList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_groupList<T>(params) : this.remote.api_groupList<T>(params);
   }
 
-  api_workspaceGetInfo(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceGetInfo(params);
-    }
-    return this.remote.api_workspaceGetInfo(params);
+  api_apiTestHistoryCreate<T = any>(params: {
+    apiUuid: any;
+    general: any;
+    request: any;
+    response: any;
+    projectUuid?: any;
+    workSpaceUuid?: any;
+  }) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryCreate<T>(params) : this.remote.api_apiTestHistoryCreate<T>(params);
   }
 
-  api_workspaceMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceMember(params);
-    }
-    return this.remote.api_workspaceMember(params);
+  api_apiTestHistoryList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; page: any; pageSize: any }) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryList<T>(params) : this.remote.api_apiTestHistoryList<T>(params);
   }
 
-  api_workspaceSearchMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceSearchMember(params);
-    }
-    return this.remote.api_workspaceSearchMember(params);
+  api_apiTestHistoryDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryDetail<T>(params) : this.remote.api_apiTestHistoryDetail<T>(params);
   }
 
-  api_workspaceAddMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceAddMember(params);
-    }
-    return this.remote.api_workspaceAddMember(params);
+  api_apiTestHistoryDelete<T = any>(params: { ids: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiTestHistoryDelete<T>(params) : this.remote.api_apiTestHistoryDelete<T>(params);
   }
 
-  api_workspaceRemoveMember(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceRemoveMember(params);
-    }
-    return this.remote.api_workspaceRemoveMember(params);
+  api_environmentCreate<T = any>(params: { name: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_environmentCreate<T>(params) : this.remote.api_environmentCreate<T>(params);
   }
 
-  api_workspaceMemberQuit(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceMemberQuit(params);
-    }
-    return this.remote.api_workspaceMemberQuit(params);
+  api_environmentUpdate<T = any>(params: { id: any; name: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_environmentUpdate<T>(params) : this.remote.api_environmentUpdate<T>(params);
   }
 
-  api_workspaceSetRole(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceSetRole(params);
-    }
-    return this.remote.api_workspaceSetRole(params);
+  api_environmentDelete<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_environmentDelete<T>(params) : this.remote.api_environmentDelete<T>(params);
   }
 
-  api_workspaceRoleList(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspaceRoleList(params);
-    }
-    return this.remote.api_workspaceRoleList(params);
+  api_environmentDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_environmentDetail<T>(params) : this.remote.api_environmentDetail<T>(params);
   }
 
-  api_workspacePermission(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_workspacePermission(params);
-    }
-    return this.remote.api_workspacePermission(params);
+  api_environmentList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_environmentList<T>(params) : this.remote.api_environmentList<T>(params);
   }
 
-  api_shareCreateShare(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareCreateShare(params);
-    }
-    return this.remote.api_shareCreateShare(params);
+  api_userReadInfo<T = any>(params: any) {
+    return this.remote.api_userReadInfo<T>(params);
   }
 
-  api_shareGetShareList(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareGetShareList(params);
-    }
-    return this.remote.api_shareGetShareList(params);
+  api_userUpdateInfo<T = any>(params: any) {
+    return this.remote.api_userUpdateInfo<T>(params);
   }
 
-  api_shareDeleteShare(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareDeleteShare(params);
-    }
-    return this.remote.api_shareDeleteShare(params);
+  api_userUpdatePassword<T = any>(params: { password: any }) {
+    return this.remote.api_userUpdatePassword<T>(params);
   }
 
-  api_shareDocGetAllApi(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareDocGetAllApi(params);
-    }
-    return this.remote.api_shareDocGetAllApi(params);
+  api_userLogin<T = any>(params: { username: any; password: any }) {
+    return this.remote.api_userLogin<T>(params);
   }
 
-  api_shareDocGetApiDetail(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareDocGetApiDetail(params);
-    }
-    return this.remote.api_shareDocGetApiDetail(params);
+  api_userRefreshToken<T = any>(params: any) {
+    return this.remote.api_userRefreshToken<T>(params);
   }
 
-  api_shareDocGetEnv(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_shareDocGetEnv(params);
-    }
-    return this.remote.api_shareDocGetEnv(params);
+  api_userLogout<T = any>(params: any) {
+    return this.remote.api_userLogout<T>(params);
   }
 
-  api_userReadProfile(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_userReadProfile(params);
-    }
-    return this.remote.api_userReadProfile(params);
+  api_userSearch<T = any>(params: { username: any }) {
+    return this.remote.api_userSearch<T>(params);
   }
 
-  api_userUpdatePsd(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_userUpdatePsd(params);
-    }
-    return this.remote.api_userUpdatePsd(params);
+  api_workspaceCreate<T = any>(params: { titles: any }) {
+    return this.store.isLocal ? this.local.api_workspaceCreate<T>(params) : this.remote.api_workspaceCreate<T>(params);
   }
 
-  api_userSearch(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_userSearch(params);
-    }
-    return this.remote.api_userSearch(params);
+  api_workspaceUpdate<T = any>(params: { title: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_workspaceUpdate<T>(params) : this.remote.api_workspaceUpdate<T>(params);
   }
 
-  api_authLogin(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_authLogin(params);
-    }
-    return this.remote.api_authLogin(params);
+  api_workspaceDelete<T = any>(params: { workSpaceUuids: any }) {
+    return this.store.isLocal ? this.local.api_workspaceDelete<T>(params) : this.remote.api_workspaceDelete<T>(params);
   }
 
-  api_authLogout(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_authLogout(params);
-    }
-    return this.remote.api_authLogout(params);
+  api_workspaceSearchMember<T = any>(params: { username: any; page: any; pageSize: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceSearchMember<T>(params);
   }
 
-  api_envCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_envCreate(params);
-    }
-    return this.remote.api_envCreate(params);
+  api_workspaceAddMember<T = any>(params: { userIds: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceAddMember<T>(params);
   }
 
-  api_envUpdate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_envUpdate(params);
-    }
-    return this.remote.api_envUpdate(params);
+  api_workspaceRemoveMember<T = any>(params: { userIds: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceRemoveMember<T>(params);
   }
 
-  api_envDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_envDelete(params);
-    }
-    return this.remote.api_envDelete(params);
+  api_workspaceMemberQuit<T = any>(params: { workSpaceUuid?: any }) {
+    return this.remote.api_workspaceMemberQuit<T>(params);
   }
 
-  api_groupCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_groupCreate(params);
-    }
-    return this.remote.api_groupCreate(params);
+  api_workspaceAddMemberRole<T = any>(params: { userRole: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceAddMemberRole<T>(params);
   }
 
-  api_groupUpdate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_groupUpdate(params);
-    }
-    return this.remote.api_groupUpdate(params);
+  api_workspaceGetMemberPermiss<T = any>(params: { workSpaceUuid?: any }) {
+    return this.remote.api_workspaceGetMemberPermiss<T>(params);
   }
 
-  api_groupDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_groupDelete(params);
-    }
-    return this.remote.api_groupDelete(params);
+  api_workspaceList<T = any>(params: any) {
+    return this.remote.api_workspaceList<T>(params);
   }
 
-  api_apiCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_apiCreate(params);
-    }
-    return this.remote.api_apiCreate(params);
+  api_workspaceRoles<T = any>(params: { workSpaceUuid?: any }) {
+    return this.remote.api_workspaceRoles<T>(params);
   }
 
-  api_apiUpdate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_apiUpdate(params);
-    }
-    return this.remote.api_apiUpdate(params);
+  api_workspaceSetRole<T = any>(params: { userRole: any; workSpaceUuid?: any }) {
+    return this.remote.api_workspaceSetRole<T>(params);
   }
 
-  api_apiDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_apiDelete(params);
-    }
-    return this.remote.api_apiDelete(params);
+  api_projectExportProject<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectExportProject<T>(params) : this.remote.api_projectExportProject<T>(params);
   }
 
-  api_apiLoadApi(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_apiLoadApi(params);
-    }
-    return this.remote.api_apiLoadApi(params);
+  api_projectMemberList<T = any>(params: { username: any; projectUuid?: any }) {
+    return this.remote.api_projectMemberList<T>(params);
   }
 
-  api_testCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_testCreate(params);
-    }
-    return this.remote.api_testCreate(params);
+  api_projectAddMember<T = any>(params: { userIds: any; projectUuid?: any }) {
+    return this.remote.api_projectAddMember<T>(params);
   }
 
-  api_testDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_testDelete(params);
-    }
-    return this.remote.api_testDelete(params);
+  api_projectDelMember<T = any>(params: { userIds: any; projectUuid?: any }) {
+    return this.remote.api_projectDelMember<T>(params);
   }
 
-  api_mockCreate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_mockCreate(params);
-    }
-    return this.remote.api_mockCreate(params);
+  api_projectMemberQuit<T = any>(params: { userId: any; projectUuid?: any }) {
+    return this.remote.api_projectMemberQuit<T>(params);
   }
 
-  api_mockLoad(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_mockLoad(params);
-    }
-    return this.remote.api_mockLoad(params);
+  api_projectSetRole<T = any>(params: { projectUuid?: any; userRole: any }) {
+    return this.remote.api_projectSetRole<T>(params);
   }
 
-  api_mockDelete(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_mockDelete(params);
-    }
-    return this.remote.api_mockDelete(params);
+  api_projectGetRole<T = any>(params: { projectUuid?: any }) {
+    return this.remote.api_projectGetRole<T>(params);
   }
 
-  api_mockUpdate(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_mockUpdate(params);
-    }
-    return this.remote.api_mockUpdate(params);
+  api_projectUserPermission<T = any>(params: { projectUuid?: any }) {
+    return this.remote.api_projectUserPermission<T>(params);
   }
 
-  api_systemStatus(params) {
-    if (this.dataSourceType === 'local') {
-      return this.local.api_systemStatus(params);
-    }
-    return this.remote.api_systemStatus(params);
+  api_projectCreate<T = any>(params: { projectMsgs: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectCreate<T>(params) : this.remote.api_projectCreate<T>(params);
+  }
+
+  api_projectDetail<T = any>(params: { projectUuids: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectDetail<T>(params) : this.remote.api_projectDetail<T>(params);
+  }
+
+  api_projectUpdate<T = any>(params: { projectUuid?: any; name: any; description: any }) {
+    return this.store.isLocal ? this.local.api_projectUpdate<T>(params) : this.remote.api_projectUpdate<T>(params);
+  }
+
+  api_projectDelete<T = any>(params: { projectUuids: any }) {
+    return this.store.isLocal ? this.local.api_projectDelete<T>(params) : this.remote.api_projectDelete<T>(params);
+  }
+
+  api_roleList<T = any>(params: { roleModule: any }) {
+    return this.remote.api_roleList<T>(params);
+  }
+
+  api_shareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_shareCreateShare<T>(params);
+  }
+
+  api_shareGetShareList<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_shareGetShareList<T>(params);
+  }
+
+  api_shareDeleteShare<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_shareDeleteShare<T>(params);
+  }
+
+  api_shareDocGetAllApi<T = any>(params: { sharedUuid: any; apiUuid: any }) {
+    return this.remote.api_shareDocGetAllApi<T>(params);
+  }
+
+  api_shareDocGetEnv<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_shareDocGetEnv<T>(params);
   }
 }

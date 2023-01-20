@@ -12,6 +12,9 @@ import { Component, Input } from '@angular/core';
         display: inline-flex;
         vertical-align: middle;
       }
+      .ant-btn eo-iconpark-icon {
+        color: var(--icon-color);
+      }
     `
   ]
 })

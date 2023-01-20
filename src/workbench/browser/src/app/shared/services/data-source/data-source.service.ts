@@ -41,27 +41,27 @@ export class DataSourceService {
    * Test if cloud service address is available
    */
   async pingCloudServerUrl(inputUrl?): Promise<boolean> {
-    const remoteUrl = inputUrl || this.remoteServerUrl;
-    if (!remoteUrl) {
-      return false;
-    }
-    const [data, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
-    if (err) {
-      return false;
-    } else {
-      StorageUtil.set('server_version', data);
-      if (!this.lowLevelTipsHasShow && compareVersion(data, minFontendVersion) < 0) {
-        if (this.store.isLocal) return true;
-        this.lowLevelTipsHasShow = true;
-        this.modal.warning({
-          nzTitle: $localize`The version of the cloud service is too low`,
-          nzContent:
-            $localize`Requires cloud service at least version ${minFontendVersion}.<br>` +
-            $localize`Please update the local version to the latest version <a href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
-        });
-        return true;
-      }
-    }
+    // const remoteUrl = inputUrl || this.remoteServerUrl;
+    // if (!remoteUrl) {
+    //   return false;
+    // }
+    // const [data, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
+    // if (err) {
+    //   return false;
+    // } else {
+    //   StorageUtil.set('server_version', data);
+    //   if (!this.lowLevelTipsHasShow && compareVersion(data, minFontendVersion) < 0) {
+    //     if (this.store.isLocal) return true;
+    //     this.lowLevelTipsHasShow = true;
+    //     this.modal.warning({
+    //       nzTitle: $localize`The version of the cloud service is too low`,
+    //       nzContent:
+    //         $localize`Requires cloud service at least version ${minFontendVersion}.<br>` +
+    //         $localize`Please update the local version to the latest version <a href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
+    //     });
+    //     return true;
+    //   }
+    // }
     return true;
   }
 
@@ -75,10 +75,10 @@ export class DataSourceService {
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
-    if (this.web.isVercel) {
-      pcConsole.error(`Vercel can't operate remote data`);
-      return;
-    }
+    // if (this.web.isVercel) {
+    //   pcConsole.error(`Vercel can't operate remote data`);
+    //   return;
+    // }
     if (this.web.isWeb) {
       if (!this.store.isLogin) {
         this.messageService.send({ type: 'login', data: {} });

@@ -41,5 +41,6 @@ export class LanguageService {
       const url = window.location.href;
       window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${this.langHashMap.get(localeID)}/home/`));
     }
+    this.setting.set('system.language', localeID);
   }
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, toJS } from 'mobx';
@@ -12,6 +10,9 @@ import { ExportApiComponent } from '../../../../modules/extension-select/export-
 import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
 import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiService } from '../../../../shared/services/storage/api.service';
+
+import { debug } from 'console';
 
 const actionComponent = {
   push: SyncApiComponent,
@@ -29,8 +30,8 @@ export class ProjectSettingComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
-    private store: StoreService,
-    private storage: StorageService,
+    public store: StoreService,
+    private api: ApiService,
     private router: Router,
     private effect: EffectService
   ) {
@@ -86,18 +87,18 @@ export class ProjectSettingComponent implements OnInit {
       nzTitle: $localize`Are you sure delete this project?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
-      nzOnOk: () => {
-        this.storage.run('projectRemove', [this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID], (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.router.navigate(['/home/workspace/overview']);
-            this.effect.updateProjects(this.store.getCurrentWorkspaceID);
-            modal.destroy();
-          }
-        });
+      nzOnOk: async () => {
+        const [, err] = await this.api.api_projectDelete({ projectUuids: [this.store.getCurrentProjectID] });
+        if (err) {
+          return;
+        }
+        this.router.navigate(['/home/workspace/overview']);
+        this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
+        modal.destroy();
       }
     });
   }
-  async handleChangeProjectName(name) {
+  async changeProjectName(name) {
     if (!name) return;
     this.isLoading = true;
     const project = this.store.getCurrentProject;
