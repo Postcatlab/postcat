@@ -33,20 +33,7 @@ export class WebExtensionService {
   constructor(private web: WebService, private language: LanguageService) {
     this.debugExtensionNames =
       !APP_CONFIG.production || this.web.isVercel
-        ? [
-            'github-postcat-theme',
-            'vscode-postcat-abyss',
-            'vscode-postcat-brown',
-            'vscode-postcat-dracula',
-            'vscode-postcat-hc',
-            'vscode-postcat-one-dark',
-            'vscode-postcat-purple',
-            'vscode-postcat-red',
-            'vscode-postcat-solarized',
-            'vscode-postcat-theme',
-            'vscode-postcat-tomorrow',
-            'vscode-postcat-vue'
-          ]
+        ? ['vscode-postcat-abyss', 'vscode-postcat-dracula', 'vscode-postcat-purple', 'vscode-postcat-red']
         : [];
   }
   async installExtension(extName: string, version = 'latest', entry = '') {

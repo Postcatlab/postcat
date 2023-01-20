@@ -8,7 +8,7 @@ import { autorun, toJS } from 'mobx';
 @Injectable()
 export class WorkspaceMemberService {
   workSpaceUuid: string;
-  role: any[];
+  role: {};
   isOwner = false;
   constructor(
     private store: StoreService,
@@ -19,7 +19,7 @@ export class WorkspaceMemberService {
     autorun(() => {
       this.role = this.store.getWorkspaceRole;
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-      this.isOwner = this.store.getWorkspaceRole.find(it => it.name === 'Workspace Owner');
+      this.isOwner = this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner');
     });
   }
   async addMember(ids) {
@@ -34,7 +34,9 @@ export class WorkspaceMemberService {
           role: {
             id: 1
           },
-          ...this.store.getUserProfile
+          roleTitle: $localize`Workspace Owner`,
+          ...this.store.getUserProfile,
+          username: this.store.getUserProfile?.userName
         }
       ];
     }
@@ -46,10 +48,10 @@ export class WorkspaceMemberService {
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        roleTitle: roles.at(0)?.name,
+        roleTitle: roles.at(0)?.name === 'Workspace Owner' ? $localize`Workspace Owner` : $localize`Workspace Editor`,
         isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
-        isOwner: roles.find(it => it.name === 'Workspace Owner'),
-        isEditor: roles.find(it => it.name === 'Workspace Editor'),
+        isOwner: roles.some(it => it.name === 'Workspace Owner'),
+        isEditor: roles.some(it => it.name === 'Workspace Editor'),
         ...items
       }))
       .sort((a, b) => (a.isSelf ? -1 : 1));

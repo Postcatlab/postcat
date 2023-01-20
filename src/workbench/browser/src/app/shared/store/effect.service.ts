@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -16,7 +15,6 @@ import { db } from '../services/storage/db';
 })
 export class EffectService {
   constructor(
-    private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
     private api: ApiService,
     private router: Router,
@@ -57,7 +55,7 @@ export class EffectService {
       this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     });
     // * Init project
-    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(() => {
+    this.updateProjects(this.store.getCurrentWorkspaceUuid).then(async () => {
       // Use first user postcat,auto into Default project
       if (isUserFirstUse) {
         this.switchProject(this.store.getProjectList[0].projectUuid);
@@ -68,10 +66,16 @@ export class EffectService {
       }
       // * Fixed projectID
       const { pid } = this.route.snapshot.queryParams;
-      if (this.store.getCurrentProjectID !== pid && pid) {
+      if (!pid) return;
+      if (this.store.getCurrentProjectID !== pid) {
         this.switchProject(pid);
         return;
       }
+
+      // * update project role
+      const { permissions, roles } = await this.getProjectPermission();
+      this.store.setPermission(permissions, 'project');
+      this.store.setRole(roles, 'project');
     });
 
     // * Fetch role list
