@@ -44,11 +44,15 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
+    const titleHash = {
+      'Workspace Owner': $localize`Workspace Owner`,
+      'Workspace Editor': $localize`Workspace Editor`
+    };
     return data
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        roleTitle: roles.at(0)?.name === 'Workspace Owner' ? $localize`Workspace Owner` : $localize`Workspace Editor`,
+        roleTitle: titleHash[roles.at(0)?.name],
         isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
         isOwner: roles.some(it => it.name === 'Workspace Owner'),
         isEditor: roles.some(it => it.name === 'Workspace Editor'),
@@ -96,7 +100,6 @@ export class WorkspaceMemberService {
     return !err;
   }
   async searchUser(search) {
-    console.log('search', search);
     const [data, err] = await this.api.api_userSearch({ username: search.trim() });
     if (err) {
       return;
