@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { old2new } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/old2new';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
@@ -93,7 +94,7 @@ export class ImportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
-    const { name, content } = this.uploadData;
+    let { name, content } = this.uploadData;
     try {
       const [data, err] = module[action](content);
       // console.log('import data', window.structuredClone?.(data));
@@ -124,6 +125,14 @@ export class ImportApiComponent implements OnInit {
       //   return obj;
       // };
       try {
+        const projectUuid = this.store.getCurrentProjectID;
+        const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+        console.log('content', content);
+        // TODO 兼容旧数据
+        if (Reflect.has(data, 'collections') && Reflect.has(data, 'environments')) {
+          content = old2new(data, projectUuid, workSpaceUuid);
+          console.log('new content', content);
+        }
         if (this.store.isLocal) {
           await this.effectService.projectImport('local', content);
         } else {
