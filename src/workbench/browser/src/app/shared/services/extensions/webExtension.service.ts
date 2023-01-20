@@ -32,11 +32,9 @@ export class WebExtensionService {
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService) {
     this.debugExtensionNames =
-      !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname)
-        ? ['vscode-postcat-abyss', 'vscode-postcat-dracula', 'vscode-postcat-purple']
-        : [];
+      !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname) ? [] : [];
   }
-  async installExtension(extName: string, version = 'latest', entry = '') {
+  async installExtension(extName: string, { version = 'latest', entry = '', i18n = [] }) {
     const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
     const fullPath = new URL(url, this.resourceUrl);
     const install = async pkgJson => {
@@ -80,6 +78,7 @@ export class WebExtensionService {
         }
       }
       const oldIndex = this.installedList.findIndex(n => n.name === extName);
+      pkgJson.i18n = i18n;
       pkgObj = this.translateModule(pkgObj);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
         name: extName,
