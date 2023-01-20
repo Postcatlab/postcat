@@ -83,7 +83,7 @@ const http = {
     {
       name: 'project',
       data: [
-        { 'exportProject @get': '/api/projects/exports', query: 'projectUuid, workSpaceUuid' },
+        { 'exportProject @get @exports': '/api/projects/exports', query: 'projectUuid, workSpaceUuid' },
         { 'memberList @get': '/api/projects/users', query: 'username, projectUuid' },
         { 'addMember @post': '/api/projects/users', json: 'userIds, projectUuid' },
         { 'delMember @delete': '/api/projects/users', query: 'userIds, projectUuid' },

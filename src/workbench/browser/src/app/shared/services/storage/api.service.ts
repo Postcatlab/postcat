@@ -202,7 +202,7 @@ export class ApiService {
   }
 
   api_projectExportProject<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_projectExportProject<T>(params);
+    return this.store.isLocal ? this.local.api_projectExportProject<T>(params) : this.remote.api_projectExportProject<T>(params);
   }
 
   api_projectMemberList<T = any>(params: { username: any; projectUuid?: any }) {
