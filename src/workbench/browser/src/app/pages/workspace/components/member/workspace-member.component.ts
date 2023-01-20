@@ -59,6 +59,9 @@ export class WorkspaceMemberComponent implements OnInit {
     reaction(
       () => this.searchValue,
       async value => {
+        if (value.trim() === '') {
+          return;
+        }
         const result = await this.member.searchUser(value.trim());
         const memberList = this.memberListRef.list.map(it => it.username);
         console.log('result', result);
