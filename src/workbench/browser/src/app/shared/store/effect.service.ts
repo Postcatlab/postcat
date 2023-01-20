@@ -44,8 +44,11 @@ export class EffectService {
 
     //TODO perf
     const initWorkspaceInfo = async () => {
-      // console.log('rest login', this.store.isLogin);
+      console.log('rest login', this.store.isLogin);
       if (!this.store.isLogin) {
+        if (this.store.isLocal) {
+          return;
+        }
         this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
         return;
       }

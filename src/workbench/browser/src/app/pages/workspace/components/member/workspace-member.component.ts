@@ -18,13 +18,14 @@ import { StoreService } from '../../../../shared/store/state.service';
           nzServerSearch
           nzAutoFocus="true"
           i18n-nzPlaceHolder
+          nzDropdownClassName="eo-member-select"
           nzPlaceHolder="Search"
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"
         >
           <!-- <ng-container > -->
           <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userNickName" [nzValue]="option.id">
-            <div class="flex w-full justify-between option">
+            <div class="flex w-full justify-between items-center option">
               <div class="flex flex-col justify-between">
                 <span class="font-bold">{{ option.userNickName }}</span>
                 <span class="text-tips">{{ option.email }}</span>

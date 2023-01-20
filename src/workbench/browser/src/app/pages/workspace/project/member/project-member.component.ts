@@ -28,13 +28,14 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           nzShowSearch
           i18n-nzPlaceholder
           nzServerSearch
+          nzDropdownClassName="eo-member-select"
           nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
           <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
-            <div class="flex w-full justify-between">
+            <div class="flex w-full justify-between items-center">
               <span class="font-bold">{{ option.username }}</span>
               <span class="text-tips">{{ option.email }}</span>
             </div>
