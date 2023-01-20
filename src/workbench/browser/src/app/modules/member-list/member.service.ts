@@ -18,6 +18,7 @@ export type UserMeta = {
 @Injectable()
 export class MemberService {
   role: any[];
+  isOwner: boolean;
   constructor() {
     console.log('MemberService');
   }

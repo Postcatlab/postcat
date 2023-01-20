@@ -9,7 +9,7 @@ import { StoreService } from '../../../../shared/store/state.service';
 @Component({
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal">
-      <nz-list-header>
+      <nz-list-header *ngIf="member.isOwner">
         <!-- {{ userList | json }}
         <select name="pets" id="pet-select">
           <option *ngFor="let option of userList" [value]="option.userNickName">{{ option.userNickName }}</option>

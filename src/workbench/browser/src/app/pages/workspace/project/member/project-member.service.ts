@@ -7,9 +7,13 @@ import { autorun } from 'mobx';
 @Injectable()
 export class ProjectMemberService {
   role: any[] = [];
+  isOwner = false;
   constructor(private api: ApiService, private store: StoreService, private effect: EffectService) {
     autorun(async () => {
       this.role = this.store.getProjectRole;
+      this.isOwner =
+        this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner') ||
+        this.store.getProjectRole.some(it => it.name === 'Project Owner');
     });
   }
 
@@ -25,7 +29,9 @@ export class ProjectMemberService {
           role: {
             id: 1
           },
-          ...this.store.getUserProfile
+          roleTitle: $localize`Workspace Owner`,
+          ...this.store.getUserProfile,
+          username: this.store.getUserProfile?.userName
         }
       ];
     }
@@ -33,11 +39,11 @@ export class ProjectMemberService {
       username: search.trim()
     });
     if (err) {
-      return;
+      return [];
     }
     const titleHash = {
-      'Project Owner': $localize`Owner`,
-      'Project Editor': $localize`Editor`
+      'Project Owner': $localize`Project Owner`,
+      'Project Editor': $localize`Project Editor`
     };
     return data
       .map(({ roles, id, ...items }) => ({
