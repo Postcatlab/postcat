@@ -549,11 +549,15 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 //   );
                 // };
                 // 创建远程项目
-                const [remoteProjects] = await this.remote.api_projectCreate({
+                const [remoteProjects, err] = await this.remote.api_projectCreate({
                   projectMsgs: localProjects.map(n => ({
                     name: n.name
                   }))
                 });
+                if (err) {
+                  this.eMessage.error($localize`Create Project Failed !`);
+                  return;
+                }
 
                 const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
 
