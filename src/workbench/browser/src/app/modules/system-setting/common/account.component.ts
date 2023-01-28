@@ -102,7 +102,6 @@ export class AccountComponent implements OnInit {
         }
         return;
       }
-      this.store.setLoginInfo(data);
       this.eMessage.success($localize`Password reset success !`);
 
       // * Clear password form
