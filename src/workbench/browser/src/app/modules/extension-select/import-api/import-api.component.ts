@@ -9,7 +9,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import StorageUtil from '../../../utils/storage/Storage';
+import StorageUtil from '../../../utils/storage/storage.utils';
 
 // const optionList = [
 //   {

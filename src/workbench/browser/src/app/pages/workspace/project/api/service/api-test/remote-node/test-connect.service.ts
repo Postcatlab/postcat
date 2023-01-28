@@ -1,7 +1,7 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
-import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
+import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../../../utils/api-test.utils';
 import { requestDataOpts, TestServer } from '../test-server.model';
 
 @Injectable()

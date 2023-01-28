@@ -11,7 +11,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
-import StorageUtil from '../../../../utils/storage/Storage';
+import StorageUtil from '../../../../utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';

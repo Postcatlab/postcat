@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services';

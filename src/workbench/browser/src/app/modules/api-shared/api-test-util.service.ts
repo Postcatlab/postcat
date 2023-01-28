@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 
 import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
@@ -43,29 +43,6 @@ export class ApiTestUtilService {
     ];
     return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);
   }
-  // getTestDataFromHistory(inData: ApiTestHistory) {
-  //   //handle query and url
-  //   // const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
-  //   //   base: 'url',
-  //   //   replaceType: 'merge'
-  //   // });
-  //   // const result = {
-  //   //   testData: {
-  //   //     uuid: inData.apiUuid,
-  //   //     restParams: [],
-  //   //     uri: tmpResult.url,
-  //   //     queryParams: tmpResult.query,
-  //   //     requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.apiAttrInfo.requestBodyType as unknown as ApiBodyType)
-  //   //       ? inData.request.requestBody
-  //   //       : inData.request?.requestBody?.map(val => (val.required = true)),
-  //   //     requestHeaders: inData.response?.headers,
-  //   //     ...inData.request
-  //   //   },
-  //   //   response: eoDeepCopy(inData)
-  //   // };
-  //   // (result.testData.requestHeaders || []).map(val => (val.required = true));
-  //   return inData;
-  // }
   /**
    * Handle api data for judge page has edit
    * Unlike the saved data, the api data being edited is not as strict

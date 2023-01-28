@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { uniqueSlash } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import type { ApiData, Mock } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { toJS } from 'mobx';
 
 import { ElectronService } from '../../core/services';

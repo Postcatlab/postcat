@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sidebar.service';
-import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
+import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api-test.utils';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';

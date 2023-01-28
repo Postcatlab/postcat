@@ -6,7 +6,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 
-import { StorageUtil } from '../../utils/storage/Storage';
+import { StorageUtil } from '../../utils/storage/storage.utils';
 
 @Component({
   selector: 'eo-local-workspace-tip',

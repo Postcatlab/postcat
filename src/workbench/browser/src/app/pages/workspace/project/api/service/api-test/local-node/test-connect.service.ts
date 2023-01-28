@@ -1,7 +1,7 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
 import { ElectronService } from '../../../../../../../core/services';
-import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
+import { eoFormatRequestData, eoFormatResponseData } from '../../../utils/api-test.utils';
 import { requestDataOpts, TestServer } from '../test-server.model';
 @Injectable()
 export class TestServerLocalNodeService implements TestServer {

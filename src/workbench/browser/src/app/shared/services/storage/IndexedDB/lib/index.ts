@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
+import { uniqueSlash } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 

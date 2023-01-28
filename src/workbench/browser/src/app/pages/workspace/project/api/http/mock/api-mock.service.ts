@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { formatUri } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
+import { formatUri } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api-test.utils';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { table2json } from 'eo/workbench/browser/src/app/utils/data-transfer/data-transfer.utils';
+import { json2xml, table2json } from 'eo/workbench/browser/src/app/utils/data-transfer/data-transfer.utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Injectable()
@@ -62,7 +62,7 @@ export class ApiMockService {
     switch (apiData.responseList?.[0].contentType) {
       case ApiBodyType.Raw:
       case ApiBodyType.Binary: {
-        return apiData.responseList?.[0]?.responseParams?.bodyParams?.[0].binaryRawData;
+        return apiData.responseList?.[0]?.responseParams?.bodyParams?.[0]?.binaryRawData || '';
       }
       case ApiBodyType.JSON:
       case ApiBodyType.JSONArray: {
@@ -71,7 +71,7 @@ export class ApiMockService {
       }
       case ApiBodyType.XML: {
         const body = apiData.responseList?.[0]?.responseParams?.bodyParams;
-        return JSON.stringify(table2json(body));
+        return json2xml(table2json(body));
       }
     }
   }

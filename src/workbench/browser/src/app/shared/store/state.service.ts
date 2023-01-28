@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
 import { action, computed, makeObservable, observable, toJS } from 'mobx';

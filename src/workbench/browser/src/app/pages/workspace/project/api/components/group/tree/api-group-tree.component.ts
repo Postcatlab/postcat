@@ -197,6 +197,10 @@ export class ApiGroupTreeComponent implements OnInit {
         new Promise(resolve => {
           modal.componentInstance.submit(status => {
             if (status) {
+              if (status === 'stayModal') {
+                resolve(true);
+                return;
+              }
               this.message.success($localize`${title} successfully`);
               // TODO
               setTimeout(() => {
@@ -209,6 +213,7 @@ export class ApiGroupTreeComponent implements OnInit {
             } else {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
             }
+            resolve(true);
           });
         })
     });

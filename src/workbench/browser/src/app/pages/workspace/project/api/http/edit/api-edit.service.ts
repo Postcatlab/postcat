@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 

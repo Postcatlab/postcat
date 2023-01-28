@@ -16,6 +16,7 @@ import { Component, Input, Output } from '@angular/core';
           <eo-monaco-editor
             [(code)]="model.response"
             id="response"
+            [autoType]="true"
             [maxLine]="15"
             class="h-[200px] border-all"
             [config]="{ readOnly: !isEdit }"

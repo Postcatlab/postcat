@@ -7,7 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
-import StorageUtil from '../../../utils/storage/Storage';
+import StorageUtil from '../../../utils/storage/storage.utils';
 
 /**
  * Client need min fontend version

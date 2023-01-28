@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 
 import { SettingService } from '../settings.service';
 
