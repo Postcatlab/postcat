@@ -126,7 +126,6 @@ export interface RequestParams {
 export interface HeaderParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
   partType?: number;
   structureId?: number;
   structureParamId?: string;
