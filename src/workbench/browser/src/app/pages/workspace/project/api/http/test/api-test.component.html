@@ -47,11 +47,11 @@
           <span i18n="@@RequestHeaders">Headers</span>
           <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-header
-          class="eo_theme_iblock"
+        <pc-api-test-form
+          module="header"
           [(model)]="model.request.requestParams.headerParams"
           (modelChange)="emitChangeFun('requestHeaders')"
-        ></eo-api-test-header>
+        ></pc-api-test-form>
       </eo-ng-tab>
       <!--Request Info -->
       <eo-ng-tab [nzTitle]="bodyTitleTmp">
@@ -85,22 +85,24 @@
           <span i18n>Query</span>
           <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-query
+        <pc-api-test-form
+          module="query"
           class="eo_theme_iblock"
           [(model)]="model.request.requestParams.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
-        ></eo-api-test-query>
+        ></pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="restTitleTmp">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
           <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-rest
+        <pc-api-test-form
+          module="rest"
           class="eo_theme_iblock"
           [(model)]="model.request.requestParams.restParams"
           (modelChange)="emitChangeFun('restParams')"
-        ></eo-api-test-rest>
+        ></pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>

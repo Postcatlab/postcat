@@ -66,13 +66,15 @@
           >
           <nz-badge *ngIf="bindGetApiParamNum(model.request.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-header
+        <pc-api-test-form
+          module="header"
           [disabled]="isConnecting"
           class="eo_theme_iblock"
           [(model)]="model.request.requestHeaders"
           (modelChange)="emitChangeFun('requestHeaders')"
+          [nzTrClick]="handleTestQueryTableClick"
         >
-        </eo-api-test-header>
+        </pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
@@ -81,13 +83,14 @@
           >
           <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-query
+        <pc-api-test-form
+          module="query"
           class="eo_theme_iblock"
           [disabled]="isConnecting"
           [model]="model.request.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
           [nzTrClick]="handleTestQueryTableClick"
-        ></eo-api-test-query>
+        ></pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="messageTmp">
         <ng-template #messageTmp i18n>Message</ng-template>

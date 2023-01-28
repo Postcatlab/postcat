@@ -24,7 +24,6 @@ import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestService } from './api-test.service';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
-import { ApiTestRestComponent } from './rest/api-test-rest.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ByteToStringPipe } from './result-response/get-size.pipe';
@@ -42,7 +41,6 @@ const UI_COMPONETS = [
 const COMPONENTS = [
   ApiTestComponent,
   ApiTestBodyComponent,
-  ApiTestRestComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
   ApiScriptComponent
