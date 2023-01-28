@@ -3,11 +3,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { LocalService } from 'eo/workbench/browser/src/app/shared/services/storage/local.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -15,8 +13,6 @@ import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
 import { ModalService } from '../shared/services/modal.service';
-import { StorageRes, StorageResStatus } from '../shared/services/storage/index.model';
-import { StorageService } from '../shared/services/storage/storage.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -185,8 +181,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public fb: UntypedFormBuilder,
     private router: Router,
     private web: WebService,
-    private remote: RemoteService,
-    private localService: LocalService
+    private remote: RemoteService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -251,12 +246,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
           // * 唤起弹窗
           this.isAddWorkspaceModalVisible = true;
           {
-            {
-              // * auto focus
-              setTimeout(() => {
-                this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
-              }, 300);
-            }
+            // * auto focus
+            setTimeout(() => {
+              this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
+            }, 300);
           }
 
           return;
