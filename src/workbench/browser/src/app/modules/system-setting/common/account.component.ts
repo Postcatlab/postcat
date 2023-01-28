@@ -88,7 +88,7 @@ export class AccountComponent implements OnInit {
     this.isResetBtnBtnLoading = true;
     const btnResetBtnRunning = async () => {
       const { newPassword: password } = this.validatePasswordForm.value;
-      const [data, err]: any = await this.api.api_userUpdatePassword({
+      const [, err]: any = await this.api.api_userUpdatePassword({
         password
       });
       if (err) {
