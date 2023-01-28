@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 
-import { ApiEditUtilService } from '../../pages/workspace/project/api/http/edit/api-edit-util.service';
-import { ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
-import { ApiTestResData } from '../../pages/workspace/project/api/service/api-test/test-server.model';
-import { ApiData } from '../../shared/services/storage/db/models';
-import { BodyParam, HeaderParam } from '../../shared/services/storage/db/models/apiData';
-import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
-import { eoDeepCopy } from '../../utils/index.utils';
+import { ApiData } from '../../../../../shared/services/storage/db/models';
+import { BodyParam, HeaderParam, RestParam } from '../../../../../shared/services/storage/db/models/apiData';
+import { table2json, text2table, json2xml } from '../../../../../utils/data-transfer/data-transfer.utils';
+import { eoDeepCopy, JSONParse } from '../../../../../utils/index.utils';
+import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
+import { ContentType } from '../http/test/api-test.model';
+import { ApiTestResData } from './api-test/test-server.model';
 
 @Injectable()
 export class ApiTestUtilService {
+  globalStorageKey = 'EO_TEST_VAR_GLOBALS';
   constructor(private apiEditUtil: ApiEditUtilService) {}
   getHTTPStatus(statusCode) {
     const HTTP_CODE_STATUS = [
@@ -106,7 +107,43 @@ export class ApiTestUtilService {
     console.log(result);
     return result as ApiData;
   }
-
+  /**
+   * Handle Test url,such as replace rest
+   *
+   * @param uri
+   * @param rest
+   * @returns
+   */
+  formatUri = (uri, rest: RestParam[] = []) => {
+    if (!Array.isArray(rest)) {
+      return uri;
+    }
+    let result = uri;
+    const restByName = rest.reduce((acc, val) => {
+      if (!(val.isRequired && val.name)) {
+        return acc;
+      }
+      return { ...acc, [val.name]: val.paramAttr?.example || '' };
+    }, {});
+    Object.keys(restByName).forEach(restName => {
+      try {
+        result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
+      } catch (e) {}
+    });
+    return result;
+  };
+  getGlobals = (): object => {
+    let result = null;
+    const global = localStorage.getItem(this.globalStorageKey);
+    result = JSONParse(global);
+    return result || {};
+  };
+  setGlobals = globals => {
+    if (!globals) {
+      return;
+    }
+    localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
+  };
   getTestDataFromApi(inData: Partial<ApiData>): Partial<ApiData> {
     const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
 

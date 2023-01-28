@@ -10,26 +10,19 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { ApiTestService } from '../../pages/workspace/project/api/http/test/api-test.service';
 import { SharedModule } from '../../shared/shared.module';
 import { EoTableProModule } from '../eo-ui/table-pro/table-pro.module';
-import { ApiParamsNumPipe } from './api-param-num.pipe';
 import { ApiTableService } from './api-table.service';
-import { ApiTestHeaderComponent } from './api-test-header/api-test-header.component';
-import { ApiTestQueryComponent } from './api-test-query/api-test-query.component';
+import { ApiTestFormComponent } from './api-test-form/api-test-form.component';
 import { ApiTestResultHeaderComponent } from './api-test-result-header/api-test-result-header.component';
-import { ApiTestUtilService } from './api-test-util.service';
+import { ApiFormaterPipe } from './pipe/api-formater.pipe';
+import { ApiParamsNumPipe } from './pipe/api-param-num.pipe';
 
-const COMPONENTS = [
-  ApiTestHeaderComponent,
-  ParamsImportComponent,
-  ApiTestQueryComponent,
-  ApiTestResultHeaderComponent,
-  ApiMockTableComponent
-];
+const COMPONENTS = [ApiTestFormComponent, ParamsImportComponent, ApiTestResultHeaderComponent, ApiMockTableComponent];
 const SHARE_UI = [EoTableProModule, EoNgTabsModule];
-
+const SHARE_PIPE = [ApiFormaterPipe, ApiParamsNumPipe];
 @NgModule({
   imports: [SharedModule, EoMonacoEditorModule, EoNgTreeModule, NzEmptyModule, ...SHARE_UI],
-  declarations: [...COMPONENTS, ApiParamsNumPipe],
-  providers: [ApiTestUtilService, ApiTableService, ApiTestService, ApiMockService],
-  exports: [...COMPONENTS, ApiParamsNumPipe, ...SHARE_UI]
+  declarations: [...COMPONENTS, ...SHARE_PIPE],
+  providers: [ApiTableService, ApiTestService, ApiMockService],
+  exports: [...COMPONENTS, ...SHARE_PIPE, ...SHARE_UI]
 })
 export class ApiSharedModule {}

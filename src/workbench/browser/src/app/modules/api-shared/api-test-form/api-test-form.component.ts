@@ -2,17 +2,31 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { HeaderParam } from '../../../shared/services/storage/db/models/apiData';
+import { BodyParam } from '../../../shared/services/storage/db/models/apiData';
 import { ApiTableService } from '../api-table.service';
 import { ApiTableConf } from '../api.model';
 @Component({
-  selector: 'eo-api-test-header',
-  templateUrl: './api-test-header.component.html',
-  styleUrls: ['./api-test-header.component.scss']
+  selector: 'pc-api-test-form',
+  template: `<fieldset [disabled]="disabled" *ngIf="module !== 'rest'">
+      <div class="flex items-center h-10 param-box-header">
+        <params-import [disabled]="disabled" [(baseData)]="model" [contentType]="module"></params-import>
+      </div>
+    </fieldset>
+    <!-- {{ model | json }} -->
+    <eo-ng-table-pro
+      [columns]="listConf.columns"
+      [nzDataItem]="itemStructure"
+      [setting]="listConf.setting"
+      [nzTrClick]="nzTrClick"
+      [(nzData)]="model"
+      (nzDataChange)="modelChange.emit($event)"
+    ></eo-ng-table-pro> `
 })
-export class ApiTestHeaderComponent implements OnInit, OnDestroy {
+export class ApiTestFormComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
-  @Input() model: HeaderParam[];
+  @Input() model: BodyParam[];
+  @Input() nzTrClick: (...rest: any[]) => any;
+  @Input() module: 'rest' | 'header' | 'query';
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: ApiTableConf = {
@@ -21,7 +35,7 @@ export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   };
   private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
-  itemStructure: HeaderParam = {
+  itemStructure: BodyParam = {
     isRequired: 1,
     name: '',
     paramAttr: {
@@ -43,7 +57,7 @@ export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'header'
+      in: this.module
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

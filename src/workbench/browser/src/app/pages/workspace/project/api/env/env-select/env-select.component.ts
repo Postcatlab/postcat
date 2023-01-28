@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sidebar.service';
-import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api-test.utils';
+import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -92,7 +92,12 @@ export class EnvSelectComponent implements OnInit {
     parameters: []
   };
   renderEnvList = [];
-  constructor(private store: StoreService, private sidebar: SidebarService, private effect: EffectService) {}
+  constructor(
+    private store: StoreService,
+    private sidebar: SidebarService,
+    private effect: EffectService,
+    private testUtils: ApiTestUtilService
+  ) {}
   ngOnInit() {
     makeObservable(this);
     autorun(() => {
@@ -123,7 +128,7 @@ export class EnvSelectComponent implements OnInit {
     this.sidebar.setModule('@eo-core-env');
   }
   getGlobalParams() {
-    return Object.entries(getGlobals() || {}).map(it => {
+    return Object.entries(this.testUtils.getGlobals() || {}).map(it => {
       const [key, value] = it;
       return { name: key, value };
     });

@@ -1,15 +1,15 @@
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { DEFAULT_UNIT_TEST_RESULT } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../../../utils/api-test.utils';
-import { requestDataOpts, TestServer } from '../test-server.model';
+import { TestServerService } from '../test-server.service';
 @Injectable()
 /**
  * Vercel serverless api
  */
-export class TestServerServerlessService implements TestServer {
+export class TestServerServerlessService extends TestServerService {
   receiveMessage: (message) => void;
   xhrByTabID = {};
-  constructor(@Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
     this.receiveMessage = receiveMessage;
   }
@@ -35,7 +35,7 @@ export class TestServerServerlessService implements TestServer {
     xhr.onreadystatechange = e => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
-          this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));
+          this.receiveMessage(this.formatResponseData(JSONParse(xhr.responseText).data));
         } else {
           this.receiveMessage({ id: message.id, ...DEFAULT_UNIT_TEST_RESULT });
         }
@@ -45,21 +45,4 @@ export class TestServerServerlessService implements TestServer {
     return xhr;
   }
   close() {}
-  /**
-   * Format UI Request Data To Server Request Data
-   *
-   * @param input
-   */
-  formatRequestData(data, opts: requestDataOpts) {
-    return eoFormatRequestData(data, opts, this.locale);
-  }
-  /**
-   * Format TestResult to TestData
-   *
-   * @param report test result after test finish
-   * @param history storage test history
-   */
-  formatResponseData(data) {
-    return eoFormatResponseData(data);
-  }
 }

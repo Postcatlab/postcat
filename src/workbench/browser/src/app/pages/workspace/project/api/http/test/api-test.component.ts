@@ -22,7 +22,6 @@ import {
 import { ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
-import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api-test.utils';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -33,11 +32,11 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
-import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
 import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
+import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 
@@ -331,7 +330,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.store.getCurrentEnv,
-        globals: getGlobals(),
+        globals: this.apiTestUtil.getGlobals(),
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en'
       })
     };
@@ -374,7 +373,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     //set globals
-    setGlobals(message.globals);
+    this.apiTestUtil.setGlobals(message.globals);
 
     //If test sucess,addHistory
     //Only has statusCode need save report

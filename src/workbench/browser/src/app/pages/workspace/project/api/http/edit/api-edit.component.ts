@@ -14,7 +14,7 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
-import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditBodyComponent } from './body/api-edit-body.component';

@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { formatUri } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api-test.utils';
+import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { json2xml, table2json } from 'eo/workbench/browser/src/app/utils/data-transfer/data-transfer.utils';
-import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Injectable()
 export class ApiMockService {
-  constructor(private api: ApiService, private store: StoreService) {
+  constructor(private api: ApiService, private store: StoreService, private testUtils: ApiTestUtilService) {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
-    const uri = transferUrlAndQuery(formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
+    const uri = transferUrlAndQuery(this.testUtils.formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
       base: 'query'
     }).url;
     return `${this.store.mockUrl}/${uri}`;

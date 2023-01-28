@@ -49,12 +49,13 @@
                 <span i18n>Request Headers</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-header
+              <eo-api-edit-form
+                module="header"
                 tid="requestParams.headerParams"
                 (modelChange)="emitChangeFun()"
                 [(model)]="model.requestParams.headerParams"
               >
-              </eo-api-edit-header>
+              </eo-api-edit-form>
             </eo-ng-tab>
             <!-- Request Body -->
             <eo-ng-tab [nzTitle]="bodyTitleTmp">
@@ -87,16 +88,21 @@
                 <span i18n>Query</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [(model)]="model.requestParams.queryParams">
-              </eo-api-edit-query>
+              <eo-api-edit-form
+                module="query"
+                tid="queryParams"
+                (modelChange)="emitChangeFun()"
+                [(model)]="model.requestParams.queryParams"
+              >
+              </eo-api-edit-form>
             </eo-ng-tab>
             <eo-ng-tab [nzTitle]="restTitleTmp">
               <ng-template #restTitleTmp>
                 <span i18n>REST</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-rest tid="restParams" [(model)]="model.requestParams.restParams" (modelChange)="emitChangeFun()">
-              </eo-api-edit-rest>
+              <eo-api-edit-form module="rest" tid="restParams" [(model)]="model.requestParams.restParams" (modelChange)="emitChangeFun()">
+              </eo-api-edit-form>
             </eo-ng-tab>
           </eo-ng-tabset>
         </nz-collapse-panel>
@@ -114,12 +120,13 @@
                   nzStatus="success"
                 ></nz-badge>
               </ng-template>
-              <eo-api-edit-header
+              <eo-api-edit-form
+                module="header"
                 tid="responseHeaders"
                 [(model)]="model.responseList[0].responseParams.headerParams"
                 (modelChange)="emitChangeFun()"
               >
-              </eo-api-edit-header>
+              </eo-api-edit-form>
             </eo-ng-tab>
             <eo-ng-tab [nzTitle]="responseTitleTmp">
               <ng-template #responseTitleTmp>

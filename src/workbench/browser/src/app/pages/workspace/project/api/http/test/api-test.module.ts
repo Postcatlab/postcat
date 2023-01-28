@@ -19,11 +19,11 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { SharedModule } from '../../../../../../shared/shared.module';
+import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestService } from './api-test.service';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
-import { ApiTestRestComponent } from './rest/api-test-rest.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ByteToStringPipe } from './result-response/get-size.pipe';
@@ -41,7 +41,6 @@ const UI_COMPONETS = [
 const COMPONENTS = [
   ApiTestComponent,
   ApiTestBodyComponent,
-  ApiTestRestComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
   ApiScriptComponent
@@ -69,16 +68,16 @@ const COMPONENTS = [
     NzResizableService,
     {
       provide: TestServerService,
-      useFactory: (electron: ElectronService, web: WebService, locale) => {
+      useFactory: (electron: ElectronService, web: WebService, locale, test: ApiTestUtilService) => {
         if (electron.isElectron) {
-          return new TestServerLocalNodeService(electron, locale);
+          return new TestServerLocalNodeService(electron, locale, test);
         } else if (!web.isVercel) {
-          return new TestServerRemoteService(locale);
+          return new TestServerRemoteService(locale, test);
         } else {
-          return new TestServerServerlessService(locale);
+          return new TestServerServerlessService(locale, test);
         }
       },
-      deps: [ElectronService, WebService, LOCALE_ID]
+      deps: [ElectronService, WebService, LOCALE_ID, ApiTestUtilService]
     }
   ]
 })
