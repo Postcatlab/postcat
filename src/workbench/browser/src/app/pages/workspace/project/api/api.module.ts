@@ -20,6 +20,7 @@ import { ApiGroupEditComponent } from './components/group/edit/api-group-edit.co
 import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
+import { ApiTestUtilService } from './service/api-test-util.service';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -41,6 +42,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],
-  providers: [NzResizableService, ApiTabService]
+  providers: [ApiTestUtilService, NzResizableService, ApiTabService]
 })
 export class ApiModule {}

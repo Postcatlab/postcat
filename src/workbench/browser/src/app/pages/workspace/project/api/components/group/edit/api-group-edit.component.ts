@@ -5,8 +5,6 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/models';
-
 @Component({
   selector: 'pc-api-group-edit',
   templateUrl: './api-group-edit.component.html',
@@ -67,25 +65,6 @@ export class ApiGroupEditComponent implements OnInit {
     this.modalRef.destroy();
   }
 
-  /**
-   * Get all child items belong to parentID
-   *
-   * @param list
-   * @param tree
-   * @param parentID
-   */
-  getChildrenFromTree(list: GroupTreeItem[], tree: GroupApiDataModel, parentID: string): void {
-    list.forEach(item => {
-      if (item.parentID === parentID) {
-        if (!item.isLeaf) {
-          tree.group.push(Number(item.key.replace('group-', '')));
-          this.getChildrenFromTree(list, tree, item.key);
-        } else {
-          tree.api.push(Number(item.key));
-        }
-      }
-    });
-  }
   /**
    * Delete all tree items
    */

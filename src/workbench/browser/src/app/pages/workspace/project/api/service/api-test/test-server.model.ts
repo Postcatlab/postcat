@@ -65,7 +65,18 @@ export interface ApiTestResData {
 export interface TestServer {
   init: (receiveMessage: (message: any) => void) => void;
   send: (action: string, message: any) => void;
+  /**
+   * Format UI Request Data To Server Request Data
+   *
+   * @param input
+   */
   formatRequestData: (apiData, opts: requestDataOpts) => any;
+  /**
+   * Format TestResult to TestData
+   *
+   * @param report test result after test finish
+   * @param history storage test history
+   */
   formatResponseData: (res) => TestServerRes;
   close: () => void;
 }

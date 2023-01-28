@@ -1,3 +1,4 @@
+import { ApiTestResData } from '../../pages/workspace/project/api/service/api-test/test-server.model';
 import { enumsToArr, enumsToObject } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 /**
@@ -22,6 +23,26 @@ export enum ApiParamsType {
   null = 15
 }
 
+export const DEFAULT_UNIT_TEST_RESULT: ApiTestResData = {
+  redirectTimes: 0,
+  downloadSize: 0,
+  downloadRate: '0',
+  time: '0',
+  statusCode: 0,
+  timingSummary: [],
+  headers: [],
+  responseLength: 0,
+  responseType: 'text',
+  contentType: 'text/html',
+  body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+  reportList: [],
+  request: {
+    uri: 'http:///',
+    headers: [{ name: 'Content-Type', value: 'application/json' }],
+    body: '{}',
+    contentType: 'raw'
+  }
+};
 export enum ContentType {
   FROM_DATA = 0,
   RAW = 1,

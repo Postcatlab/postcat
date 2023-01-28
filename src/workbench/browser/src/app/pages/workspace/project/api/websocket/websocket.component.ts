@@ -14,7 +14,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
-import { ApiParamsNumPipe } from '../../../../../modules/api-shared/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { ApiTestService } from '../http/test/api-test.service';
 

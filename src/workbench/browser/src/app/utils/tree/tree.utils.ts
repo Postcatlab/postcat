@@ -4,7 +4,6 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 
-import { GroupTreeItem } from '../../shared/models';
 import { eoDeepCopy, whatType } from '../index.utils';
 
 export type TreeToObjOpts = {
@@ -101,31 +100,6 @@ export const filterTableData = (
   }
   return filterTree(result, opts.filterFn, {
     childKey: opts.childKey
-  });
-};
-
-/**
- * Convert array items which has parent id to tree nodes.
- *
- * @param list Array<GroupTreeItem>
- * @param tree Array<GroupTreeItem>
- * @param parentID number|string
- */
-export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentID: number | string): void => {
-  list.forEach(data => {
-    if (data.parentID === parentID) {
-      const child = {
-        ...data,
-        childList: []
-      };
-      if (!data.isLeaf) {
-        listToTree(list, child.childList, data.key);
-      }
-      if (child.childList.length <= 0) {
-        delete child.childList;
-      }
-      tree.push(child);
-    }
   });
 };
 export const flatData = data => {

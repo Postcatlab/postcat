@@ -1,14 +1,13 @@
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { DEFAULT_UNIT_TEST_RESULT } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
-import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../../../utils/api-test.utils';
-import { requestDataOpts, TestServer } from '../test-server.model';
+import { TestServerService } from '../test-server.service';
 
 @Injectable()
-export class TestServerRemoteService implements TestServer {
+export class TestServerRemoteService extends TestServerService {
   receiveMessage: (message) => void;
   xhrByTabID = {};
-  constructor(@Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
     this.receiveMessage = receiveMessage;
   }
@@ -44,21 +43,4 @@ export class TestServerRemoteService implements TestServer {
     return xhr;
   }
   close() {}
-  /**
-   * Format UI Request Data To Server Request Data
-   *
-   * @param input
-   */
-  formatRequestData(data, opts: requestDataOpts) {
-    return eoFormatRequestData(data, opts, this.locale);
-  }
-  /**
-   * Format TestResult to TestData
-   *
-   * @param report test result after test finish
-   * @param history storage test history
-   */
-  formatResponseData(data) {
-    return eoFormatResponseData(data);
-  }
 }
