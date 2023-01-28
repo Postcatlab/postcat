@@ -21,7 +21,10 @@ import {
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
 import { ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
-import { ApiTestResData, TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import {
+  ApiTestResData,
+  TestServerRes
+} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -37,7 +40,7 @@ import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
-import { TestServerService } from '../../service/api-test/test-server.service';
+import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiTestService } from './api-test.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
@@ -269,12 +272,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel?.request || !this.model.request) {
       return false;
     }
-    console.log(
-      'api test origin:',
-      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-      'after:',
-      this.apiTestUtil.formatEditingApiData(this.model.request)
-    );
+    // console.log(
+    //   'api test origin:',
+    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+    //   'after:',
+    //   this.apiTestUtil.formatEditingApiData(this.model.request)
+    // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {

@@ -1,4 +1,4 @@
-import { ApiTestResData } from '../../pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiTestResData } from '../../pages/workspace/project/api/service/test-server/test-server.model';
 import { enumsToArr, enumsToObject } from '../../utils/index.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 /**

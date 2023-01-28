@@ -77,9 +77,16 @@ export class WebExtensionService {
           }
         }
       }
-      const oldIndex = this.installedList.findIndex(n => n.name === extName);
-      pkgJson.i18n = i18n;
+
+      //Translate module
+      pkgJson.i18n ??= i18n;
+      if (!pkgJson.i18n?.length && pkgJson.features.i18n) {
+        pkgJson.i18n = await this.getExtI18n(pkgJson.name);
+      }
       pkgObj = this.translateModule(pkgObj);
+
+      //Add to installed list
+      const oldIndex = this.installedList.findIndex(n => n.name === extName);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
         name: extName,
         disable: false,
@@ -140,25 +147,33 @@ export class WebExtensionService {
   }
   async getDebugExtensionsPkgInfo(extName, version = 'latest') {
     let result = await this.getPkgInfo(extName, version);
+    if (!result) return result;
     //Transalte debug module
     try {
-      const lang = this.language.systemLanguage;
-      const path = new URL(`${this.resourceUrl}/${result.name}/i18n/${lang}.json`);
-      let localePackage = await fetch(path)
-        .then(res => res.json())
-        .catch(e => {});
-      if (!result) return result;
-      result.i18n = [
-        {
-          locale: lang,
-          package: localePackage
-        }
-      ];
+      result.i18n = await this.getExtI18n(result.name);
       result.isDebug = true;
     } catch (e) {
       console.error(e);
     }
     return result;
+  }
+  private async getExtI18n(name) {
+    try {
+      const lang = this.language.systemLanguage;
+      const path = new URL(`${this.resourceUrl}/${name}/i18n/${lang}.json`);
+      let localePackage = await fetch(path)
+        .then(res => res.json())
+        .catch(e => {});
+      return [
+        {
+          locale: lang,
+          package: localePackage
+        }
+      ];
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
   unInstallExtension(extName: string): boolean {
     this.installedList = this.installedList.filter(n => n.name !== extName);

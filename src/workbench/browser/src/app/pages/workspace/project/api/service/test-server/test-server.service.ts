@@ -7,7 +7,7 @@ import {
   requestDataOpts,
   TestServer,
   TestServerRes
-} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiData, BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';

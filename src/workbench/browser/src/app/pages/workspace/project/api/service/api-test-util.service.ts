@@ -8,7 +8,7 @@ import { table2json, text2table, json2xml } from '../../../../../utils/data-tran
 import { eoDeepCopy, JSONParse } from '../../../../../utils/index.utils';
 import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { ContentType } from '../http/test/api-test.model';
-import { ApiTestResData } from './api-test/test-server.model';
+import { ApiTestResData } from './test-server/test-server.model';
 
 @Injectable()
 export class ApiTestUtilService {
@@ -65,7 +65,7 @@ export class ApiTestUtilService {
    */
   formatUIApiDataToStorage(inData: { request: Partial<ApiData>; response: ApiTestResData }): ApiData {
     inData = eoDeepCopy(inData);
-    pcConsole.log('formatUIApiDataToStorage', inData);
+    // pcConsole.log('formatUIApiDataToStorage', inData);
     const result = {
       ...inData.request,
       protocol: Protocol.HTTP,
@@ -74,7 +74,13 @@ export class ApiTestUtilService {
           isDefault: 1,
           contentType: ApiBodyType.Raw,
           responseParams: {
-            headerParams: [],
+            headerParams: this.filterCommonHeader(inData.response?.headers).map(val => ({
+              name: val.name,
+              isRequired: 1,
+              paramAttr: {
+                example: val.value
+              }
+            })),
             bodyParams: []
           }
         }
@@ -102,9 +108,13 @@ export class ApiTestUtilService {
     if (inData?.response?.responseType === 'text') {
       const tableData = text2table(inData.response.body);
       result.responseList[0].contentType = tableData.contentType;
-      result.responseList[0].responseParams.bodyParams = tableData.data;
+      result.responseList[0].responseParams.bodyParams = [
+        {
+          binaryRawData: tableData.data
+        }
+      ];
     }
-    console.log(result);
+    // pcConsole.log('formatUIApiDataToStorage', result);
     return result as ApiData;
   }
   /**
@@ -230,6 +240,10 @@ export class ApiTestUtilService {
     const commonHeader = [
       'content-type',
       'accept',
+      'age',
+      'via',
+      'accept-ranges',
+      'nginx-hit',
       'content-length',
       'accept-encoding',
       'accept-language',

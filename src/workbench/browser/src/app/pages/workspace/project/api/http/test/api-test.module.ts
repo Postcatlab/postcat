@@ -7,9 +7,9 @@ import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/s
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
 import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
 import { ApiScriptComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-script/api-script.component';
-import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/local-node/test-connect.service';
-import { TestServerRemoteService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/remote-node/test-connect.service';
-import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/serverless-node/test-connect.service';
+import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/local-node/test-connect.service';
+import { TestServerRemoteService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/remote-node/test-connect.service';
+import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/serverless-node/test-connect.service';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
@@ -20,7 +20,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
-import { TestServerService } from '../../service/api-test/test-server.service';
+import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestService } from './api-test.service';
 import { ApiTestBodyComponent } from './body/api-test-body.component';

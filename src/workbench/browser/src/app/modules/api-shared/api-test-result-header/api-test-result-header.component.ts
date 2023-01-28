@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { ApiTestResHeader } from '../../../pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiTestResHeader } from '../../../pages/workspace/project/api/service/test-server/test-server.model';
 
 @Component({
   selector: 'eo-api-test-result-header',
