@@ -231,7 +231,7 @@ export class StoreService {
     StorageUtil.set('userProfile', data);
   }
 
-  @action setLoginInfo(data = null) {
+  @action setLoginInfo(data = { jwt: '', rjwt: '' }) {
     this.loginInfo = { accessToken: data.jwt, refreshToken: data.rjwt };
     StorageUtil.set('accessToken', data.jwt);
     StorageUtil.set('refreshToken', data.rjwt);
@@ -244,7 +244,7 @@ export class StoreService {
       userName: '',
       userNickName: ''
     });
-    this.setLoginInfo({ accessToken: '', refreshToken: '' });
+    this.setLoginInfo();
   }
 
   @action setRoleList(data, type) {

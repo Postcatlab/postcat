@@ -93,13 +93,6 @@ export class AccountComponent implements OnInit {
       });
       if (err) {
         this.eMessage.error($localize`Validation failed`);
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
         return;
       }
       this.eMessage.success($localize`Password reset success !`);

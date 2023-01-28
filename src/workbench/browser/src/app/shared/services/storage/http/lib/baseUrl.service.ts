@@ -6,6 +6,11 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 // implements StorageInterface
+
+enum CODE {
+  Unlogin = 132000006
+}
+
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   protocolReg = new RegExp('^(http|https)://');
@@ -30,15 +35,16 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return next.handle(req).pipe(
       filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),
       map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data, code: event.body.code } })),
-      tap((event: any) => {}),
+      tap((event: any) => {
+        const { code } = event.body;
+        const isLocal = this.store.isLocal;
+        if (!isLocal && code == CODE.Unlogin) {
+          this.store.setLoginInfo();
+          this.messageService.send({ type: 'login', data: {} });
+        }
+      }),
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            this.store.clearAuth();
-            if (this.store.remoteUrl && !this.store.isLocal) {
-              this.messageService.send({ type: 'login', data: {} });
-            }
-          }
           if ([500, 502, 503, 504].includes(err.status)) {
             this.messageService.send({ type: 'server-fail', data: {} });
           }
