@@ -19,27 +19,12 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class StoreService {
   private localWorkspace: API.Workspace;
   // * observable data
-  // ? api & group(includes api) & mock
-  @observable.shallow private currentAPI = {};
-  @observable.shallow private currentMock = {};
-  @observable private apiList = [];
-
-  // ? history
-  @observable private testHistory = [];
 
   // ? router
   @observable private url = '';
 
-  // ? env
-  @observable private envList = [];
-  @observable private envUuid = StorageUtil.get('env:selected') || null;
-
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
-
-  // ? group
-  @observable private rootGroup: Group;
-  @observable private groupList: Group[] = [];
 
   // ? workspace
   @observable private currentWorkspace: Partial<API.Workspace> = StorageUtil.get('currentWorkspace') || {
@@ -96,53 +81,11 @@ export class StoreService {
     project: []
   };
 
-  // * computed data
-  // ? api & group(includes api) & mock
-  @computed get getCurrentAPI() {
-    return this.currentAPI;
-  }
-  @computed get getCurrentMock() {
-    return this.currentMock;
-  }
-  @computed get getTestHistory() {
-    return toJS(this.testHistory).sort((a, b) => b.createTime - a.createTime);
-  }
-  @computed get getGroupTree() {
-    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
-  }
-
   // ? router
   @computed get getUrl() {
     return this.url;
   }
 
-  // ? env
-  @computed get getCurrentEnv() {
-    const [data] = this.envList.filter(it => it.id === this.envUuid);
-    return (
-      data || {
-        hostUri: '',
-        parameters: [],
-        frontURI: '',
-        id: null
-      }
-    );
-  }
-  @computed get getRootGroup() {
-    return this.rootGroup;
-  }
-  @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
-  }
-  @computed get getApiList() {
-    return this.apiList;
-  }
-  @computed get getEnvList() {
-    return this.envList;
-  }
-  @computed get getEnvUuid() {
-    return this.envUuid;
-  }
   // ? data source
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspace?.isLocal;
@@ -234,15 +177,6 @@ export class StoreService {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
   }
-  // * actions
-  // ? history
-  @action setHistory(data = []) {
-    data.forEach(history => {
-      history.request = JSONParse(history.request, {});
-      history.response = JSONParse(history.response, {});
-    });
-    this.testHistory = data;
-  }
 
   @action setLocalWorkspace(data) {
     this.localWorkspace = data;
@@ -251,40 +185,6 @@ export class StoreService {
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
   };
-
-  // ? env
-
-  @action setEnvUuid(data) {
-    this.envUuid = data;
-    StorageUtil.set('env:selected', data);
-  }
-
-  @action setEnvList(data = []) {
-    this.envList = data.map(val => {
-      val.parameters = JSONParse(val.parameters, []);
-      return val;
-    });
-    const isHere = data.find(it => it.id === this.envUuid);
-    if (!isHere) {
-      this.envUuid = null;
-      //  for delete env
-      StorageUtil.set('env:selected', null);
-    }
-  }
-
-  // ? group
-  @action setRootGroup(group: Group) {
-    this.rootGroup = group;
-  }
-
-  @action setApiList(list = []) {
-    this.apiList = list;
-  }
-
-  @action setGroupList(list = []) {
-    this.groupList = list;
-  }
-
   // ? share
   @action setShareId(data = '') {
     this.shareId = data;

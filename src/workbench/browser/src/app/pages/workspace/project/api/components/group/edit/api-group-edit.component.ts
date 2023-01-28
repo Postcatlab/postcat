@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+
+import { ApiEffectService } from '../../../service/store/api-effect.service';
 
 @Component({
   selector: 'pc-api-group-edit',
@@ -18,7 +19,7 @@ export class ApiGroupEditComponent implements OnInit {
   validateForm!: FormGroup;
   isDelete: boolean;
 
-  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private storage: StorageService, private effect: EffectService) {}
+  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private effect: ApiEffectService) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
@@ -28,7 +29,7 @@ export class ApiGroupEditComponent implements OnInit {
     }
   }
 
-  submit(): void {
+  submit(): Promise<void> {
     if (!this.isDelete) {
       for (const i in this.validateForm.controls) {
         if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -40,17 +41,17 @@ export class ApiGroupEditComponent implements OnInit {
         return;
       }
     }
-    this.save();
+    return this.save();
   }
 
-  save(): void {
+  save() {
     if (this.isDelete) {
-      this.delete();
+      return this.delete();
     } else {
       if (this.group.id) {
-        this.update();
+        return this.update();
       } else {
-        this.create();
+        return this.create();
       }
     }
   }
@@ -68,8 +69,8 @@ export class ApiGroupEditComponent implements OnInit {
   /**
    * Delete all tree items
    */
-  delete(): void {
-    this.effect.deleteGroup(this.group);
+  async delete() {
+    await this.effect.deleteGroup(this.group);
     this.modalRef.destroy();
   }
 }

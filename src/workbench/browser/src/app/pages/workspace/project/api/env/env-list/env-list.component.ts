@@ -6,6 +6,8 @@ import { autorun, values } from 'mobx';
 import { filter, Subject } from 'rxjs';
 
 import { MessageService } from '../../../../../../shared/services/message';
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 @Component({
   selector: 'eo-env-list',
   templateUrl: './env-list.component.html',
@@ -18,10 +20,10 @@ export class EnvListComponent implements OnDestroy {
   envList = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    public store: StoreService,
+    public store: ApiStoreService,
     private router: Router,
     private route: ActivatedRoute,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private message: MessageService
   ) {
     autorun(() => {

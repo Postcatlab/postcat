@@ -16,6 +16,8 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditBodyComponent } from './body/api-edit-body.component';
 
@@ -53,9 +55,9 @@ export class ApiEditComponent implements OnDestroy {
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private apiEdit: ApiEditService,
-    private store: StoreService
+    private store: ApiStoreService
   ) {
     this.initShortcutKey();
     this.initBasicForm();

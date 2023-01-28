@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sidebar.service';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, makeObservable, observable, reaction } from 'mobx';
+
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 
 @Component({
   selector: 'eo-env-select',
@@ -93,9 +95,10 @@ export class EnvSelectComponent implements OnInit {
   };
   renderEnvList = [];
   constructor(
-    private store: StoreService,
+    private store: ApiStoreService,
+    private globalStore: StoreService,
     private sidebar: SidebarService,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private testUtils: ApiTestUtilService
   ) {}
   ngOnInit() {
@@ -110,7 +113,7 @@ export class EnvSelectComponent implements OnInit {
         .find((it: any) => it.id === this.store.getCurrentEnv?.id);
     });
     autorun(() => {
-      this.isShare = this.store.isShare;
+      this.isShare = this.globalStore.isShare;
     });
     reaction(
       () => this.envUuid,

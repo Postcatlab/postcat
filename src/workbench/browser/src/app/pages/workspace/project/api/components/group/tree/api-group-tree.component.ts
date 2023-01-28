@@ -6,7 +6,6 @@ import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extensi
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -16,6 +15,8 @@ import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
+import { ApiEffectService } from '../../../service/store/api-effect.service';
+import { ApiStoreService } from '../../../service/store/api-state.service';
 
 @Component({
   selector: 'pc-api-group-tree',
@@ -69,8 +70,9 @@ export class ApiGroupTreeComponent implements OnInit {
 
   constructor(
     public electron: ElectronService,
-    public store: StoreService,
-    private effect: EffectService,
+    public globalStore: StoreService,
+    private store: ApiStoreService,
+    private effect: ApiEffectService,
     private projectApi: ProjectApiService,
     private modalService: ModalService,
     private router: Router,
@@ -79,7 +81,7 @@ export class ApiGroupTreeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEdit = !this.store.isShare;
+    this.isEdit = !this.globalStore.isShare;
     // * get group data from store
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
@@ -132,7 +134,7 @@ export class ApiGroupTreeComponent implements OnInit {
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
       nzOnOk() {
-        modal.componentInstance.submit();
+        return modal.componentInstance.submit();
       }
     });
   }
@@ -152,7 +154,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   addAPI(group?) {
-    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { groupId: group?.key }
     });
@@ -172,7 +174,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.projectApi.copy(api.key);
   }
   editAPI(api) {
-    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { uuid: api.key }
     });
@@ -273,7 +275,7 @@ export class ApiGroupTreeComponent implements OnInit {
       }
       case 'clickItem': {
         // * jump to api detail page
-        const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+        const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
           queryParams: { uuid: event.node.key }
         });

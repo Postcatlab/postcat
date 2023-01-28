@@ -40,6 +40,7 @@ import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiTestService } from './api-test.service';
 
@@ -107,7 +108,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   get isEmptyTestPage(): boolean {
     const { uuid } = this.route.snapshot.queryParams;
-    return !this.store.isShare && (!uuid || uuid.includes('history_'));
+    return !this.globalStore.isShare && (!uuid || uuid.includes('history_'));
   }
   get contentType(): ContentType {
     return contentTypeMap[this.model.request.apiAttrInfo.contentType];
@@ -122,7 +123,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
-    public store: StoreService,
+    private globalStore: StoreService,
+    public store: ApiStoreService,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
@@ -380,7 +382,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
 
     //If test sucess,addHistory
     //Only has statusCode need save report
-    if (!message.response.statusCode || this.store.isShare) {
+    if (!message.response.statusCode || this.globalStore.isShare) {
       return;
     }
     //Add test history

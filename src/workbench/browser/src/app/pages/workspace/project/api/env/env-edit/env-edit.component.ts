@@ -7,8 +7,8 @@ import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
 import { Environment } from '../../../../../../shared/services/storage/index.model';
-import { EffectService } from '../../../../../../shared/store/effect.service';
 import { eoDeepCopy, JSONParse } from '../../../../../../utils/index.utils';
+import { ApiEffectService } from '../../service/store/api-effect.service';
 
 export type EnvironmentView = Partial<Environment>;
 @Component({
@@ -46,7 +46,7 @@ export class EnvEditComponent implements OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private api: ApiService,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,

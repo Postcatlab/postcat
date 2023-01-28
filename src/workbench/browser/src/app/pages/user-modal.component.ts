@@ -3,7 +3,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';

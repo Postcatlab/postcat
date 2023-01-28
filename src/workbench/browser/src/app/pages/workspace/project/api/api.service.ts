@@ -5,17 +5,15 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from '../../../../shared/services/message';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
-import { EffectService } from '../../../../shared/store/effect.service';
+import { ApiEffectService } from './service/store/api-effect.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProjectApiService {
   constructor(
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private router: Router,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private api: ApiService
   ) {}
   async get(uuid): Promise<ApiData> {
