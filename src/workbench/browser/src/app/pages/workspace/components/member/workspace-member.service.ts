@@ -104,7 +104,6 @@ export class WorkspaceMemberService {
     if (err) {
       return [];
     }
-    console.log('searchUser', data);
     return data;
   }
 }

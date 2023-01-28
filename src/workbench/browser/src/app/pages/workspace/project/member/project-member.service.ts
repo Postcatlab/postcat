@@ -100,7 +100,7 @@ export class ProjectMemberService {
       pageSize: 20
     });
     if (err) {
-      return;
+      return [];
     }
     return data;
   }
