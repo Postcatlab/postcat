@@ -6,7 +6,6 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/models';
-import { StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'pc-api-group-edit',

@@ -17,8 +17,8 @@ import { StoreService } from '../../../../shared/store/state.service';
           auto-focus-form
           nzServerSearch
           nzAutoFocus="true"
+          [nzOptionHeightPx]="54"
           i18n-nzPlaceHolder
-          nzDropdownClassName="eo-member-select"
           nzPlaceHolder="Search"
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"

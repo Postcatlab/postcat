@@ -26,7 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
-import { MockService } from './services/mock.service';
+import { MockService } from './shared/services/mock.service';
 registerLocaleData(en);
 registerLocaleData(zh);
 

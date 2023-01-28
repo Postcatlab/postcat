@@ -28,7 +28,6 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           nzShowSearch
           i18n-nzPlaceholder
           nzServerSearch
-          nzDropdownClassName="eo-member-select"
           nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"

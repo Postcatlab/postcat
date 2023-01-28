@@ -143,9 +143,3 @@ object {
     background-color: var(--background-color);
   }
 }
-
-.eo-member-select {
-  .cdk-virtual-scroll-viewport {
-    min-height: 54px !important;
-  }
-}

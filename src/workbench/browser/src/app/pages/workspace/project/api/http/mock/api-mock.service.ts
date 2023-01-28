@@ -59,9 +59,20 @@ export class ApiMockService {
     return data;
   }
   getMockResponseByAPI(apiData: ApiData) {
-    const body = [ApiBodyType.Raw, ApiBodyType.Binary].includes(apiData.responseList?.[0].contentType)
-      ? apiData.responseList?.[0]?.responseParams?.bodyParams?.[0].binaryRawData
-      : apiData.responseList?.[0]?.responseParams?.bodyParams;
-    return typeof body === 'string' ? body : JSON.stringify(table2json(body));
+    switch (apiData.responseList?.[0].contentType) {
+      case ApiBodyType.Raw:
+      case ApiBodyType.Binary: {
+        return apiData.responseList?.[0]?.responseParams?.bodyParams?.[0].binaryRawData;
+      }
+      case ApiBodyType.JSON:
+      case ApiBodyType.JSONArray: {
+        const body = apiData.responseList?.[0]?.responseParams?.bodyParams;
+        return JSON.stringify(table2json(body));
+      }
+      case ApiBodyType.XML: {
+        const body = apiData.responseList?.[0]?.responseParams?.bodyParams;
+        return JSON.stringify(table2json(body));
+      }
+    }
   }
 }

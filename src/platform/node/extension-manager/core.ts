@@ -2,7 +2,9 @@ import { LanguageService } from 'eo/app/electron-main/language.service';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { getLocaleData } from 'eo/platform/node/i18n';
 import { fileExists, readFile, readJson } from 'eo/shared/node/file';
-import { ModuleHandlerOptions, ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+
+import { ModuleHandlerOptions } from './handler.model';
 
 import * as path from 'path';
 /**

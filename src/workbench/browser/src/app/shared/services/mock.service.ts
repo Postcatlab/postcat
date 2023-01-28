@@ -9,8 +9,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { toJS } from 'mobx';
 
-import { ElectronService } from '../core/services';
-import { tree2obj } from '../utils/tree/tree.utils';
+import { ElectronService } from '../../core/services';
+import { tree2obj } from '../../utils/tree/tree.utils';
 
 const mockReg = /\/mock-(\d+)/;
 

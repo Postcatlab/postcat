@@ -1,7 +1,7 @@
 import { fileExists, writeJson } from 'eo/shared/node/file';
-import { ModuleHandlerOptions, ModuleHandlerResult } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 import { CoreHandler } from './core';
+import { ModuleHandlerOptions, ModuleHandlerResult } from './handler.model';
 
 import { spawn } from 'child_process';
 import * as fs from 'fs';

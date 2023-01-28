@@ -1,4 +1,12 @@
 /**
+ * Group & Api Data
+ */
+export interface GroupApiDataModel {
+  group: any[];
+  api: any[];
+}
+
+/**
  * Group tree item.
  */
 export interface GroupTreeItem {
@@ -66,12 +74,4 @@ export interface GroupTreeItem {
    * @type {GroupTreeItem}
    */
   children?: GroupTreeItem[];
-}
-
-/**
- * Group & Api Data
- */
-export interface GroupApiDataModel {
-  group: any[];
-  api: any[];
 }

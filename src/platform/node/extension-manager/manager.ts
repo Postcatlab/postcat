@@ -1,18 +1,13 @@
 import http from 'axios';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { HOME_DIR } from 'eo/shared/electron-main/constant';
-import {
-  ModuleHandlerResult,
-  ExtensionInfo,
-  ModuleManagerInfo,
-  SidebarView,
-  FeatureInfo
-} from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { createServer } from 'http-server/lib/http-server';
 import portfinder from 'portfinder';
 
-import { ELETRON_APP_CONFIG } from '../../../../environment';
+import { ELETRON_APP_CONFIG } from '../../../environment';
 import { ModuleHandler } from './handler';
+import { ModuleHandlerResult, ModuleManagerInfo } from './handler.model';
 
 import { promises, readFileSync } from 'fs';
 import { lstat } from 'fs/promises';

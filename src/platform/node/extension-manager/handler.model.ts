@@ -1,5 +1,3 @@
-import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-
 /**
  * 模块管理器配置
  * baseDir 模块安装目录

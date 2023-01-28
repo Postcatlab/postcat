@@ -8,6 +8,9 @@ import { MessageService } from './message';
 import { ApiService } from './storage/api.service';
 import { convertApiData } from './storage/db/dataSource/convert';
 
+/**
+ * Provide global methods for the extension
+ */
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
   modalMaskEl: HTMLDivElement;

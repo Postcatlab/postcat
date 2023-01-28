@@ -6,7 +6,7 @@ import { MockServer } from 'eo/platform/node/mock-server';
 import portfinder from 'portfinder';
 
 import { processEnv } from '../../platform/node/constant';
-import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
+import { ModuleManager } from '../../platform/node/extension-manager/manager';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import socket from '../../workbench/node/server/socketio';
