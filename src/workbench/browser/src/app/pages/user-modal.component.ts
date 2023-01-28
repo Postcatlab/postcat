@@ -227,38 +227,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
           return;
         }
 
-        if (type === 'clear-user') {
-          this.store.clearAuth();
-          this.store.setUserProfile({
-            id: 0,
-            password: '',
-            userName: '',
-            userNickName: ''
-          });
-          return;
-        }
-
-        if (type === 'http-401') {
-          if (this.store.isLocal) {
-            return;
-          }
-
-          // * 唤起弹窗
-          this.isLoginModalVisible = true;
-          {
-            {
-              {
-                // * auto focus
-                setTimeout(() => {
-                  this.usernameLoginRef?.nativeElement.focus();
-                }, 300);
-              }
-            }
-          }
-
-          return;
-        }
-
         if (type === 'ping-fail') {
           this.eMessage.error($localize`Connect failed`);
           // * 唤起弹窗
