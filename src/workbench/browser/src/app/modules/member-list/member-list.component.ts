@@ -43,7 +43,7 @@ import { MemberService } from './member.service';
         </nz-list-item-action>
       </ul>
     </nz-list-item>
-    <nz-list-empty *ngIf="!loading && list.length === 0"></nz-list-empty>
+    <nz-list-empty *ngIf="!loading && list?.length === 0"></nz-list-empty>
   </nz-list>`,
   styleUrls: ['./member-list.component.scss']
 })

@@ -33,12 +33,19 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
-          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
-            <div class="flex w-full justify-between items-center">
-              <span class="font-bold">{{ option.username }}</span>
-              <span class="text-tips">{{ option.email }}</span>
+          <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
+            <div class="h-10 flex justify-center items-center">
+              <nz-spin nzSimple></nz-spin>
             </div>
           </eo-ng-option>
+          <ng-container>
+            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
+              <div class="flex w-full justify-between items-center">
+                <span class="font-bold">{{ option.username }}</span>
+                <span class="text-tips">{{ option.email }}</span>
+              </div>
+            </eo-ng-option>
+          </ng-container>
         </eo-ng-select>
         <section class="h-4"></section>
         <button
@@ -90,6 +97,7 @@ export class ProjectMemberComponent implements OnInit {
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
   userList = [];
+  isLoading = false;
   constructor(
     public modal: NzModalService,
     public store: StoreService,
@@ -112,12 +120,11 @@ export class ProjectMemberComponent implements OnInit {
         if (value.trim() === '') {
           return;
         }
+        this.isLoading = true;
         const result = await this.member.searchUser(value);
         const memberList = this.memberListRef.list.map(it => it.username);
-        this.userList = result.filter(it => {
-          return !memberList.includes(it.userName);
-        });
-        console.log('this.userList', this.userList);
+        this.userList = result.filter(it => !memberList.includes(it.userName));
+        this.isLoading = false;
       },
       { delay: 300 }
     );
