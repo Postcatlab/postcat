@@ -251,11 +251,12 @@ export class ApiGroupTreeComponent implements OnInit {
       sort = childs.length - index;
     }
     if (dragNode.isLeaf) {
-      this.projectApi.edit({
-        apiUuid: node.apiUuid,
+      // * It will be update group list automatic
+      this.effect.updateGroup({
+        id: node._group.id,
         //@ts-ignore
-        groupId: parentNode?.key || this.store.getRootGroup.id,
-        orderNum: sort
+        parentId: parentNode?.key || this.store.getRootGroup.id,
+        sort
       });
     } else {
       // * Update group

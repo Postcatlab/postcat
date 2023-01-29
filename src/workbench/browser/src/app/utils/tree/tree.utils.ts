@@ -185,3 +185,22 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
     ...apiDataFilters
   ];
 };
+
+export const hangGroupToApi = list => {
+  return list.map(it => {
+    if (it.type === 2) {
+      return {
+        ...it.relationInfo,
+        _group: {
+          id: it.id,
+          parentId: it.parentId,
+          sort: it.sort
+        }
+      };
+    }
+    return {
+      ...it,
+      children: hangGroupToApi(it.children)
+    };
+  });
+};
