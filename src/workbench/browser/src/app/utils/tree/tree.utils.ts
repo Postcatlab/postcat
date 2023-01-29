@@ -229,3 +229,24 @@ export class PCTree {
   }
   sort() {}
 }
+export const hangGroupToApi = list => {
+  return list.map(it => {
+    if (it.type === 2) {
+      return {
+        ...it.relationInfo,
+        isLeaf: true,
+        parentId: it.parentId,
+        _group: {
+          id: it.id,
+          type: it.type,
+          parentId: it.parentId,
+          sort: it.sort
+        }
+      };
+    }
+    return {
+      ...it,
+      children: hangGroupToApi(it.children)
+    };
+  });
+};

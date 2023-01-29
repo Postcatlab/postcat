@@ -78,11 +78,12 @@ export class ApiEffectService {
     if (aErr) {
       return;
     }
-    const { items, paginator } = apiListRes;
+    const { items } = apiListRes;
     // console.log('API 数据', items);
     // * set api & group list
     this.store.setGroupList(rootGroup.children);
     Reflect.deleteProperty(rootGroup, 'children');
+    // * for mock service
     this.store.setApiList(items);
   }
   async createGroup(groups: Group[] = []) {
