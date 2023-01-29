@@ -115,10 +115,7 @@ export class ExtensionService {
     ];
     //Handle featue data
     result.data = result.data.map(module => {
-      let result = this.webExtensionService.translateModule(module);
-      if (typeof result.author === 'object') {
-        result.author = result.author['name'] || '';
-      }
+      let result = this.parseExtensionInfo(module);
       return result;
     });
 
@@ -136,7 +133,7 @@ export class ExtensionService {
       Object.assign(result, this.installedMap.get(name), { installed: true });
       result.enable = this.isEnable(result.name);
     }
-    result = this.webExtensionService.translateModule(result);
+    result = this.parseExtensionInfo(result);
     return result;
   }
   /**
@@ -287,5 +284,19 @@ export class ExtensionService {
     return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
+  }
+  /**
+   * Parse extension info for ui show
+   * such as: author, translate ...
+   *
+   * @param pkg
+   * @returns
+   */
+  private parseExtensionInfo(pkg): ExtensionInfo {
+    pkg = this.webExtensionService.translateModule(pkg);
+    if (typeof pkg.author === 'object') {
+      pkg.author = pkg.author['name'] || '';
+    }
+    return pkg;
   }
 }
