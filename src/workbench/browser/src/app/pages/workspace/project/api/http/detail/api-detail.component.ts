@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
@@ -16,7 +15,7 @@ import { ProjectApiService } from '../../api.service';
   templateUrl: './api-detail.component.html',
   styleUrls: ['./api-detail.component.scss']
 })
-export class ApiDetailComponent implements OnInit {
+export class ApiDetailComponent {
   @Input() model: ApiData | any;
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
@@ -33,9 +32,6 @@ export class ApiDetailComponent implements OnInit {
     public store: StoreService,
     private message: EoNgFeedbackMessageService
   ) {}
-  ngOnInit(): void {
-    this.init();
-  }
   handleCopy(link) {
     if (!link) {
       return;

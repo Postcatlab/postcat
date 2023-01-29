@@ -9,7 +9,7 @@ import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/sha
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun, makeObservable, reaction } from 'mobx';
+import { autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
@@ -18,6 +18,7 @@ import { ProjectApiService } from '../../../api.service';
 import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
 
+export type GroupAction = 'new' | 'edit' | 'delete';
 @Component({
   selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -86,24 +87,17 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
-    autorun(
-      () => {
-        this.apiGroupTree = this.store.getApiGroupTree;
-        setTimeout(() => {
-          this.expandKeys = this.getExpandKeys();
-          this.nzSelectedKeys = this.getSelectKeys();
-        }, 0);
-      },
-      {
-        delay: 300
-      }
-    );
+    autorun(() => {
+      this.apiGroupTree = this.store.getApiGroupTree;
+      setTimeout(() => {
+        this.nzSelectedKeys = this.getSelectKeys();
+        this.expandKeys = this.getExpandKeys();
+      }, 0);
+    });
   }
   getSelectKeys() {
-    if (
-      this.route.snapshot.queryParams.uuid &&
-      ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path))
-    ) {
+    const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
+    if (this.route.snapshot.queryParams.uuid && isApiPage) {
       return [this.route.snapshot.queryParams.uuid];
     } else {
       return [];
@@ -111,9 +105,9 @@ export class ApiGroupTreeComponent implements OnInit {
   }
   getExpandKeys() {
     if (!this.route.snapshot.queryParams.uuid) {
-      return;
+      return this.expandKeys;
     }
-    return [...(this.expandKeys || []), ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
+    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
     return this.requestMethodMap[node.origin?.requestMethod];
@@ -131,17 +125,18 @@ export class ApiGroupTreeComponent implements OnInit {
     title: string,
     params: {
       group: GroupCreateDto | GroupUpdateDto;
-      action: 'new' | 'edit' | 'delete';
+      action: GroupAction;
     }
   ) {
     const modal: NzModalRef = this.modalService.create({
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
-      nzOnOk() {
+      nzOnOk: () => {
         const promise = modal.componentInstance.submit();
-        promise.then(() => {
-          pcConsole.log('success', params);
+        promise.then(data => {
+          if (params.action !== 'new') return;
+          this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
         });
         return promise;
       }

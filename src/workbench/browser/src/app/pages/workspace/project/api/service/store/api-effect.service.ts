@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { toJS } from 'mobx';
 
 import { ApiStoreService } from './api-state.service';
 
@@ -82,28 +85,60 @@ export class ApiEffectService {
     Reflect.deleteProperty(rootGroup, 'children');
     this.store.setApiList(items);
   }
-  async createGroup(groups: any[] = []) {
-    // * update group
-    await this.api.api_groupCreate(
+  async createGroup(groups: Group[] = []) {
+    // * create group
+    const [data, err] = await this.api.api_groupCreate(
       groups.map(n => ({
         ...n,
         projectUuid: this.globalStore.getCurrentProjectID,
         workSpaceUuid: this.globalStore.getCurrentWorkspaceUuid
       }))
     );
-    this.getGroupList();
+    if (err) {
+      return [null, err];
+    }
+    const group = data[0];
+
+    //* Transfer array proxy to real object
+    const tree = new PCTree(this.store.getGroupList, {
+      rootGroupID: this.store.getRootGroup.id
+    });
+    tree.add(group);
+    this.store.setGroupList(tree.getList());
+    return [group, err];
   }
   async updateGroup(group) {
     // * update group
-    // * update api list
-    await this.api.api_groupUpdate(group);
-    this.getGroupList();
+    const [data, err] = await this.api.api_groupUpdate(group);
+    if (err) {
+      return [null, err];
+    }
+
+    // * update group list
+    const tree = new PCTree(this.store.getGroupList, {
+      rootGroupID: this.store.getRootGroup.id
+    });
+    tree.update(group);
+    this.store.setGroupList(tree.getList());
+
+    return [data, err];
   }
   // * delete group and api
   async deleteGroup(group) {
     // * delete group
-    await this.api.api_groupDelete(group);
-    this.getGroupList();
+    const [data, err] = await this.api.api_groupDelete(group);
+    if (err) {
+      return [null, err];
+    }
+
+    // * update group list
+    const tree = new PCTree(this.store.getGroupList, {
+      rootGroupID: this.store.getRootGroup.id
+    });
+    tree.delete(group);
+    this.store.setGroupList(tree.getList());
+
+    return [data, err];
   }
 
   //? Env

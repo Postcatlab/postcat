@@ -226,7 +226,7 @@ export class ApiTestUtilService {
     const result = headers;
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
-      existHeader.paramAttr.example = contentType;
+      existHeader['paramAttr.example'] = contentType;
       return result;
     }
     headers.unshift({
