@@ -145,8 +145,7 @@ ${log}
         this.extensionDetail.installed = await this.extensionService.installExtension({
           name,
           version,
-          main,
-          i18n
+          main
         });
         this.extensionDetail['enabled'] = true;
         break;

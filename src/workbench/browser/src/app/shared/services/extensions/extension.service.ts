@@ -8,6 +8,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom } from 'rxjs';
 
+import { ExtensionStoreService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
@@ -24,32 +25,26 @@ export class ExtensionService {
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
+    private store: ExtensionStoreService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
   ) {}
   async init() {
+    await this.requestList('init');
     if (!this.electron.isElectron) {
-      //Install newest extensions
-      const { data } = await this.requestList('init');
       const installedName = [];
 
-      //ReInstall Newest extension
-      this.webExtensionService.installedList.forEach(val => {
-        const target = data.find(m => m.name === val.name);
-        if (!target) return;
-        installedName.push(target.name);
+      //Get extensions
+      [...this.webExtensionService.installedList, ...defaultExtensions.map(name => ({ name }))].forEach(val => {
+        if (this.installedList.some(m => m.name === val.name)) return;
+        installedName.push(val.name);
       });
 
-      //Install default extensions
-      defaultExtensions.forEach(name => {
-        const target = data.find(m => m.name === name);
-        if (!target || this.installedList.some(m => m.name === target.name)) return;
-        installedName.push(target.name);
-      });
-
-      for (let i = 0; i < installedName.length; i++) {
-        const name = installedName[i];
+      //* Install Extension by foreach because of async
+      const uniqueNames = Array.from(new Set(installedName));
+      for (let i = 0; i < uniqueNames.length; i++) {
+        const name = uniqueNames[i];
         await this.installExtension({
           name
         });
@@ -129,6 +124,8 @@ export class ExtensionService {
 
     //Get debug extensions
     this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
+
+    this.store.setExtensionList(result.data);
     return result;
   }
   async getDetail(name): Promise<any> {
@@ -148,7 +145,7 @@ export class ExtensionService {
    * @param id
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest', main = '', i18n = [] }): Promise<boolean> {
+  async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'install',
@@ -159,9 +156,7 @@ export class ExtensionService {
       }
     };
     if (this.electron.isElectron) {
-      const { code, data, modules } = await window.electron.installExtension(name, {
-        i18n
-      });
+      const { code, data, modules } = await window.electron.installExtension(name);
       if (code === 0) {
         successCallback();
         return true;
@@ -172,8 +167,7 @@ export class ExtensionService {
     } else {
       const isSuccess = await this.webExtensionService.installExtension(name, {
         version,
-        entry: main,
-        i18n
+        entry: main
       });
       if (isSuccess) {
         successCallback();
