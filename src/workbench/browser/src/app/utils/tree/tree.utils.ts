@@ -193,6 +193,7 @@ export const hangGroupToApi = list => {
         ...it.relationInfo,
         _group: {
           id: it.id,
+          type: it.type,
           parentId: it.parentId,
           sort: it.sort
         }

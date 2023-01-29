@@ -254,6 +254,7 @@ export class ApiGroupTreeComponent implements OnInit {
       // * It will be update group list automatic
       this.effect.updateGroup({
         id: node._group.id,
+        type: node._group.type,
         //@ts-ignore
         parentId: parentNode?.key || this.store.getRootGroup.id,
         sort
