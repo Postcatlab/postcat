@@ -4,8 +4,9 @@ import { cloneDeep, toArray, merge } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
 
+import { BodyParam } from '../../../shared/services/storage/db/models/apiData';
 import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-transfer/data-transfer.utils';
-import { whatType } from '../../../utils/index.utils';
+import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 import { ApiParamsTypeJsonOrXml } from '../api.model';
 
 const titleHash = new Map()
@@ -31,6 +32,10 @@ export class ParamsImportComponent implements OnInit {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
+  /**
+   * Table item structure
+   */
+  @Input() itemStruecture?: BodyParam;
   @Output() readonly baseDataChange = new EventEmitter<any>();
   @Output() readonly beforeHandleImport = new EventEmitter<any>();
 
@@ -157,6 +162,7 @@ export class ParamsImportComponent implements OnInit {
       if (['xml'].includes(type)) {
         const rootItem = data.at(0);
         rootItem.dataType = ApiParamsTypeJsonOrXml.object;
+        rootItem.childList.push({ ...this.itemStruecture });
         return [rootItem];
       }
       return data;
