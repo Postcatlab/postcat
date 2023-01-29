@@ -18,6 +18,8 @@ export interface ApiData {
   isShared?: number;
   tag?: string;
   orderNum?: number;
+  /** 这个仅用于分组排序 */
+  sort?: number;
   hashkey?: string;
   managerId?: number;
   managerName?: string;

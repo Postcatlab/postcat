@@ -84,6 +84,7 @@ export class BaseService<T> {
     const filterRecords = this.filterData(restParams);
     const total = await filterRecords.count();
 
+    // 外面不传分页大小的话，默认获取所有数据，有需要可以在上面自行给 pageSize 设置一个默认值。
     pageSize ??= total;
 
     const collection = filterRecords.offset(Math.max(0, page - 1)).limit(pageSize);
