@@ -163,9 +163,10 @@ export class ParamsImportComponent implements OnInit {
     };
 
     const { data } = res;
-    // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
     const emptyRow = this.baseData.slice(-1);
-    const resultData = cloneDeep(['xml'].includes(this.contentType) ? this.baseData : this.baseData.reverse().slice(1).reverse());
+
+    // * this.baseData.slice(0,-1) for filter the last empty row
+    const resultData = cloneDeep(['xml'].includes(this.contentType) ? this.baseData : this.baseData.slice(0, -1));
     const result = combineFunc[type](json2Table(data), resultData);
     // * 后处理
     const finalData = endParse([...result, ...emptyRow], this.contentType);
