@@ -41,10 +41,6 @@ export class ApiGroupEditComponent implements OnInit {
         return;
       }
     }
-    return this.save();
-  }
-
-  save() {
     if (this.isDelete) {
       return this.delete();
     } else {

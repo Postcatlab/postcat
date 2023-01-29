@@ -8,37 +8,20 @@ import { action, computed, makeObservable, observable, toJS } from 'mobx';
 
 @Injectable({ providedIn: 'root' })
 export class ApiStoreService {
-  // * observable data
-
   // ? group
   @observable private rootGroup: Group;
   @observable private groupList: Group[] = [];
-  @computed get getGroupTree() {
-    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
-  }
-
-  @computed get getRootGroup() {
-    return this.rootGroup;
-  }
 
   //? api
   @observable private apiList = [];
-  @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
-  }
-  @computed get getApiList() {
-    return this.apiList;
-  }
 
   // ? history
   @observable private testHistory = [];
-  @computed get getTestHistory() {
-    return toJS(this.testHistory).sort((a, b) => b.createTime - a.createTime);
-  }
 
   // ? env
   @observable private envList = [];
   @observable private envUuid = StorageUtil.get('env:selected') || null;
+
   @computed get getCurrentEnv() {
     const [data] = this.envList.filter(it => it.id === this.envUuid);
     return (
@@ -55,6 +38,22 @@ export class ApiStoreService {
   }
   @computed get getEnvUuid() {
     return this.envUuid;
+  }
+  @computed get getRootGroup() {
+    return this.rootGroup;
+  }
+  @computed get getApiList() {
+    return this.apiList;
+  }
+  @computed get getGroupTree() {
+    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
+  }
+  @computed get getApiGroupTree() {
+    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
+  }
+
+  @computed get getTestHistory() {
+    return toJS(this.testHistory).sort((a, b) => b.createTime - a.createTime);
   }
 
   constructor() {

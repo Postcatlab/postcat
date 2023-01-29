@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
-import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
-import { action, computed, makeObservable, observable, toJS } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
-
-import { JSONParse } from '../../utils/index.utils';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -75,7 +72,6 @@ export class StoreService {
   };
 
   // ? UI
-  @observable private rightBarStatus = false;
   @observable.shallow private role = {
     workspace: [],
     project: []
@@ -166,11 +162,6 @@ export class StoreService {
   // ? setting
   @computed get remoteUrl() {
     return this.setting.getConfiguration('backend.url');
-  }
-
-  // ? UI
-  @computed get isOpenRightBar() {
-    return this.rightBarStatus;
   }
 
   constructor(private setting: SettingService, private router: Router) {
@@ -280,11 +271,6 @@ export class StoreService {
       this.permissions[type][name] = true;
     });
     // console.log(this.permissions[type]);
-  }
-
-  // ? UI
-  @action toggleRightBar(data = false) {
-    this.rightBarStatus = data;
   }
 
   @action setDataSource() {

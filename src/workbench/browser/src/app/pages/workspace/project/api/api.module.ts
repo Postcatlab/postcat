@@ -22,8 +22,6 @@ import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.co
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
 import { ApiTestUtilService } from './service/api-test-util.service';
-import { ApiEffectService } from './service/store/api-effect.service';
-import { ApiStoreService } from './service/store/api-state.service';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -45,6 +43,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],
-  providers: [ProjectApiService, ApiTestUtilService, ApiEffectService, ApiStoreService, NzResizableService, ApiTabService]
+  providers: [ProjectApiService, ApiTestUtilService, NzResizableService, ApiTabService]
 })
 export class ApiModule {}

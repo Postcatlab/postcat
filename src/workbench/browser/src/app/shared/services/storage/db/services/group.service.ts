@@ -44,7 +44,7 @@ export class GroupService extends BaseService<Group> {
       const groupChildren = await this.apiGroupTable.where({ parentId: groupId });
       (await groupChildren.toArray()).forEach(group => this.afterDelete(group, result));
       const delResult = await groupChildren.delete();
-      console.log('afterBulkDelete 删除分组', delResult);
+      // console.log('afterBulkDelete 删除分组', delResult);
     }
   }
 }

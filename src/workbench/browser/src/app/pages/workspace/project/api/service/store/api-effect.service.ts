@@ -5,7 +5,9 @@ import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiStoreService } from './api-state.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiEffectService {
   constructor(private store: ApiStoreService, private globalStore: StoreService, private api: ApiService) {}
   async deleteMock(id) {
@@ -84,7 +86,9 @@ export class ApiEffectService {
     // * update group
     await this.api.api_groupCreate(
       groups.map(n => ({
-        ...n
+        ...n,
+        projectUuid: this.globalStore.getCurrentProjectID,
+        workSpaceUuid: this.globalStore.getCurrentWorkspaceUuid
       }))
     );
     this.getGroupList();
@@ -100,7 +104,6 @@ export class ApiEffectService {
     // * delete group
     await this.api.api_groupDelete(group);
     this.getGroupList();
-    // * call deleteAPI()
   }
 
   //? Env

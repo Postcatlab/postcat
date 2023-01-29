@@ -9,7 +9,7 @@ import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/sha
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun } from 'mobx';
+import { autorun, makeObservable, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
@@ -86,13 +86,18 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
-    autorun(() => {
-      this.apiGroupTree = this.store.getApiGroupTree;
-      setTimeout(() => {
-        this.expandKeys = this.getExpandKeys();
-        this.nzSelectedKeys = this.getSelectKeys();
-      }, 0);
-    });
+    autorun(
+      () => {
+        this.apiGroupTree = this.store.getApiGroupTree;
+        setTimeout(() => {
+          this.expandKeys = this.getExpandKeys();
+          this.nzSelectedKeys = this.getSelectKeys();
+        }, 0);
+      },
+      {
+        delay: 300
+      }
+    );
   }
   getSelectKeys() {
     if (
@@ -134,7 +139,11 @@ export class ApiGroupTreeComponent implements OnInit {
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
       nzOnOk() {
-        return modal.componentInstance.submit();
+        const promise = modal.componentInstance.submit();
+        promise.then(() => {
+          pcConsole.log('success', params);
+        });
+        return promise;
       }
     });
   }

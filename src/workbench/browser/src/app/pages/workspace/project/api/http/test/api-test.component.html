@@ -1,3 +1,5 @@
+<nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
+</nz-skeleton>
 <div class="test_wrap" *ngIf="model?.request?.apiAttrInfo">
   <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
