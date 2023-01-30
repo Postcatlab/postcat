@@ -100,9 +100,7 @@
               </button>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click(node)">
-                    {{ item.title }}
-                  </li>
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click(node)"> {{ item.title }} </li>
                 </ul>
               </eo-ng-dropdown-menu>
             </ng-container>

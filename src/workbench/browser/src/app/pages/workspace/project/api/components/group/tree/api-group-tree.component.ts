@@ -268,7 +268,7 @@ export class ApiGroupTreeComponent implements OnInit {
         // * jump to api detail page
         const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.key }
+          queryParams: { uuid: event.node.origin.apiUuid }
         });
         break;
       }
