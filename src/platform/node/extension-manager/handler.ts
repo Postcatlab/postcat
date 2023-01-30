@@ -1,4 +1,5 @@
 import { fileExists, writeJson } from 'eo/shared/node/file';
+import fixPath from 'fix-path';
 
 import { CoreHandler } from './core';
 import { ModuleHandlerOptions, ModuleHandlerResult } from './handler.model';
@@ -7,14 +8,16 @@ import { spawn } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-let fixPath = require('fix-path');
 type Action = 'uninstall' | 'install' | 'update';
-// import npmCli from 'npm';
-const npmCli = require('npm');
 /**
- * 本地模块管理器
- *
- * @class ModuleHandler
+ * Install npm packages in case of missing Node Environment
+ * ! npm version should be 6.14.8, otherwise npm function can't be used
+ * */
+const npmCli = require('npm');
+
+/**
+ * Fix the $PATH on macOS and Linux when run from a GUI app
+ *  https://github.com/sindresorhus/fix-path
  */
 fixPath();
 export class ModuleHandler extends CoreHandler {
