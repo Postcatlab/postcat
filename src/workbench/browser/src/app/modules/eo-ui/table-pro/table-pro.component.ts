@@ -211,9 +211,10 @@ export class EoTableProComponent implements OnInit, OnChanges {
       domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
     }
   }
-  toggleColumnVisible(item: { key: string }, $event?: Event) {
+  toggleColumnVisible(item: { key: string; checked: boolean }, $event?: Event) {
     $event?.stopPropagation();
-    this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
+    item.checked = this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
+
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
     window.localStorage.setItem(this.COLUMN_VISIBLE_KEY, JSON.stringify(this.columnVisibleStatus));
   }
