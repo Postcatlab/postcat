@@ -121,7 +121,6 @@ export class ApiEffectService {
     });
     tree.update(group);
     this.store.setGroupList(tree.getList());
-
     return [data, err];
   }
   // * delete group and api

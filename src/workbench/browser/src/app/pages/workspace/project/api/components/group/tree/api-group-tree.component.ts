@@ -222,15 +222,19 @@ export class ApiGroupTreeComponent implements OnInit {
     const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
-    // * It will be update group list automatic
     console.log('TODO: sort 可能不是按顺序的');
-    this.effect.updateGroup({
-      id: node._group.id,
-      type: node._group.type,
-      sort,
-      //@ts-ignore
-      parentId: parentNode?.key || this.store.getRootGroup.id
-    });
+    // * It will be update group list automatic
+    this.effect.updateGroup(
+      dragNode.isLeaf
+        ? {
+            id: node._group.id,
+            type: node._group.type,
+            sort,
+            //@ts-ignore
+            parentId: parentNode?.key || this.store.getRootGroup.id
+          }
+        : { ...node, sort, parentId: dragNode.parentNode?.key || this.store.getRootGroup.id }
+    );
     console.log(dragNode, node, dragNode.parentNode?.key);
   };
 

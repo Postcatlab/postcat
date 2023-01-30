@@ -99,11 +99,17 @@ export class ApiEditComponent implements OnDestroy {
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
-    Promise.resolve().then(() => {
-      //TODO optimize
+    // Promise.resolve().then(() => {
+    //   // TODO optimize
+    //   this.editBody.init();
+    //   this.resEditBody.init();
+    // });
+
+    setTimeout(() => {
+      // TODO optimize
       this.editBody.init();
       this.resEditBody.init();
-    });
+    }, 0);
   }
 
   initShortcutKey() {
