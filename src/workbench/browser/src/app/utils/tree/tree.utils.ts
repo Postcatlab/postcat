@@ -247,7 +247,7 @@ export const hangGroupToApi = list => {
     }
     return {
       ...it,
-      children: hangGroupToApi(it.children)
+      children: hangGroupToApi(it.children || [])
     };
   });
 };
