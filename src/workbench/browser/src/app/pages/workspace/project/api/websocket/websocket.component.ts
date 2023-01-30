@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { Protocol, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -87,13 +87,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
-      let url = '';
-      if (!APP_CONFIG.production || this.electron.isElectron) {
-        const port = this.electron.isElectron ? await window.electron?.getWebsocketPort?.() : 13928;
-        url = `ws://localhost:${port}`;
-      } else {
-        url = APP_CONFIG.REMOTE_SOCKET_URL;
-      }
+      const port = this.electron.isElectron ? await window.electron?.getWebsocketPort?.() : 13928;
+      const url = !APP_CONFIG.production || this.electron.isElectron ? `ws://localhost:${port}` : APP_CONFIG.REMOTE_SOCKET_URL;
       this.socket = io(url, { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 });
       this.socket.on('connect_error', error => {
         // * conncet socketIO is failed
@@ -134,14 +129,18 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
       base: 'query'
     }).url;
   }
   changeUri() {
-    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url'
-    }).query;
+    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.requestParams.queryParams,
+      {
+        base: 'url'
+      }
+    ).query;
   }
   emitChangeFun(where) {
     if (where === 'queryParams') {
@@ -337,10 +336,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       requestTabIndex: 2,
       msg: '',
       request: {
-        requestHeaders: [],
+        name: '',
         uri: '',
         protocol: Protocol.WEBSOCKET,
-        queryParams: []
+        apiAttrInfo: {
+          contentType: ApiBodyType.Raw
+        },
+        requestParams: { headerParams: [], bodyParams: [], queryParams: [], restParams: [] },
+        responseList: []
       },
       response: {
         requestHeaders: [],
@@ -373,12 +376,17 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     //Prevent init error
     if (!this.model) {
       this.model = this.resetModel();
+      console.log('modell', this.model);
     }
-    const controls = {};
-    ['uri'].forEach(name => {
-      controls[name] = [this.model.request[name], [Validators.required]];
-    });
-    this.validateForm = this.fb.group(controls);
+    this.validateForm = this.fb.group(
+      ['uri'].reduce(
+        (total, it) => ({
+          ...total,
+          [it]: [this.model.request[it], [Validators.required]]
+        }),
+        {}
+      )
+    );
   }
   private switchEditStatus() {
     const bool = this.wsStatus !== 'disconnect';

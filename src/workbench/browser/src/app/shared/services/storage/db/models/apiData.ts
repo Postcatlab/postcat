@@ -65,8 +65,8 @@ export interface Relation {
 }
 
 export interface ApiAttrInfo {
-  requestMethod: RequestMethod;
   contentType: ApiBodyType | number;
+  requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
   authInfo?: string;

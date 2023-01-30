@@ -64,13 +64,13 @@
             [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Headers</span
           >
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams?.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <pc-api-test-form
           module="header"
           [disabled]="isConnecting"
           class="eo_theme_iblock"
-          [(model)]="model.request.requestHeaders"
+          [(model)]="model.request.requestParams.headerParams"
           (modelChange)="emitChangeFun('requestHeaders')"
           [nzTrClick]="handleTestQueryTableClick"
         >
@@ -81,13 +81,13 @@
           <span i18n eoNgFeedbackTooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Query Params</span
           >
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <pc-api-test-form
           module="query"
           class="eo_theme_iblock"
           [disabled]="isConnecting"
-          [model]="model.request.queryParams"
+          [model]="model.request.requestParams.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
           [nzTrClick]="handleTestQueryTableClick"
         ></pc-api-test-form>
