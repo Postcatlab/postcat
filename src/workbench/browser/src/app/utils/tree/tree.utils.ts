@@ -234,6 +234,7 @@ export const hangGroupToApi = list => {
     if (it.type === 2) {
       return {
         ...it.relationInfo,
+        id: it.relationInfo.apiUuid,
         isLeaf: true,
         parentId: it.parentId,
         _group: {
