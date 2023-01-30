@@ -44,7 +44,7 @@ export class ApiDetailComponent {
   async init() {
     if (!this.model) {
       this.model = {} as ApiData;
-      const uuid = this.route.snapshot.queryParams.uuid;
+      const { uuid } = this.route.snapshot.queryParams;
       if (uuid) {
         this.model = await this.projectApi.get(uuid);
         this.originModel = cloneDeep(this.model);
