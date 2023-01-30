@@ -65,6 +65,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async init() {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
+      const id = this.route.snapshot.queryParams.uuid;
+      if (id && id.includes('history_')) {
+        const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
+        this.model = historyData as testViewModel;
+      }
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
@@ -359,10 +364,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         this.validateForm.controls[i].updateValueAndValidity();
       }
     }
-    if (this.validateForm.status === 'INVALID') {
-      return false;
-    }
-    return true;
+    return this.validateForm.status !== 'INVALID';
   }
   private watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
@@ -376,7 +378,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     //Prevent init error
     if (!this.model) {
       this.model = this.resetModel();
-      console.log('modell', this.model);
     }
     this.validateForm = this.fb.group(
       ['uri'].reduce(
@@ -391,12 +392,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   private switchEditStatus() {
     const bool = this.wsStatus !== 'disconnect';
     ['uri'].forEach(name => {
-      if (bool) {
-        // wsStatus !== 'disconnect'
-        this.validateForm.controls[name].disable();
-      } else {
-        this.validateForm.controls[name].enable();
-      }
+      bool ? this.validateForm.controls[name].disable() : this.validateForm.controls[name].enable();
     });
   }
 }

@@ -110,7 +110,7 @@ export class ApiGroupTreeComponent implements OnInit {
     return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
-    return this.requestMethodMap[node.origin?.requestMethod];
+    return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
   }
   renderRequestMethodText(node) {
     return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);
