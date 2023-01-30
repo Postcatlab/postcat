@@ -45,7 +45,6 @@ export class GroupService extends BaseService<Group> {
 
   @ApiResponse()
   async update(params?: Record<string, any>) {
-    console.log('更新分组参数', params);
     const { id, parentId, name, sort, type } = params;
     const hasSort = Number.isInteger(sort);
 
@@ -53,11 +52,11 @@ export class GroupService extends BaseService<Group> {
       // @ts-ignore
       // 对数据进行分组
       const { mostThan = [], lessThan = [] } = formatSort([...groupList, ...apiDataList]).group(item => {
-        return item.sort > sort ? 'mostThan' : 'lessThan';
+        return item.sort >= sort ? 'mostThan' : 'lessThan';
       });
       const sorteLessThan = formatSort(lessThan);
       const sorteMostdThan = formatSort(mostThan);
-      console.log(sorteLessThan, sorteMostdThan);
+
       const arr = [...sorteLessThan, target, ...sorteMostdThan].map((n, i) => {
         n.sort = i;
         return n;
@@ -77,12 +76,16 @@ export class GroupService extends BaseService<Group> {
         sort
       });
       const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
-      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldApiData.groupId });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldApiData.groupId, type: 1 });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
 
       // 如果指定了 sort，则需要重新排序
       if (hasSort) {
-        await sortData(groupList, apiDataList, { ...oldApiData, groupId: parentId });
+        await sortData(
+          groupList,
+          apiDataList.filter(n => n.id !== oldApiData.id),
+          { ...oldApiData, groupId: parentId }
+        );
         const { data: newApiData } = await this.apiDataService.read({ uuid: id });
         return genGroupType2(newApiData);
       }
@@ -97,12 +100,16 @@ export class GroupService extends BaseService<Group> {
     // 修改分组
     else {
       const { data: oldGroup } = await this.baseService.read({ id });
-      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: 1 });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
 
       // 如果指定了 sort，则需要重新排序
       if (hasSort) {
-        await sortData(groupList, apiDataList, { ...oldGroup, parentId });
+        await sortData(
+          groupList.filter(n => n.id !== oldGroup.id),
+          apiDataList,
+          { ...oldGroup, parentId }
+        );
         return this.baseService.read({ id });
       }
       // 如果 parentId 变了，则需要将其 sort = parent.children.length
