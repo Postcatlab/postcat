@@ -108,6 +108,14 @@ export class ApiEffectService {
     this.store.setGroupList(tree.getList());
     return [group, err];
   }
+  async sortGroup(group) {
+    // * update group
+    const [data, err] = await this.api.api_groupUpdate(group);
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+  }
   async updateGroup(group) {
     // * update group
     const [data, err] = await this.api.api_groupUpdate(group);

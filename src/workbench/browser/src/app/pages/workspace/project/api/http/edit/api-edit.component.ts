@@ -8,7 +8,7 @@ import { generateRestFromUrl } from 'eo/workbench/browser/src/app/pages/workspac
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun, toJS } from 'mobx';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
@@ -78,38 +78,30 @@ export class ApiEditComponent implements OnDestroy {
         id,
         groupId
       });
-      //!Prevent await async ,replace current  api data
+      // ! Prevent await async, replace current api data
       if (initTimes >= this.initTimes) {
         this.model = result;
+        console.log('model.groupId', this.model.groupId);
       }
     }
+    console.log('model.groupIdqqq', this.model.groupId);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
-    //Storage origin api data
+    // Storage origin api data
     if (!this.initialModel) {
-      if (!id) {
-        // New API/New API from other page such as test page
-        this.initialModel = this.apiEdit.getPureApi({ groupId });
-      } else {
-        this.initialModel = eoDeepCopy(this.model);
-      }
+      // New API/New API from other page such as test page
+      this.initialModel = !id ? this.apiEdit.getPureApi({ groupId }) : eoDeepCopy(this.model);
     }
     this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
-    // Promise.resolve().then(() => {
-    //   // TODO optimize
-    //   this.editBody.init();
-    //   this.resEditBody.init();
-    // });
-
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       // TODO optimize
       this.editBody.init();
       this.resEditBody.init();
-    }, 0);
+    });
   }
 
   initShortcutKey() {
@@ -208,14 +200,12 @@ export class ApiEditComponent implements OnDestroy {
           this.initialModel.groupId = this.model.groupId;
         }
       }
-      Promise.resolve().then(() => {
-        //@ts-ignore
-        const existGroup = this.apiGroup?.getTreeNodeByKey(this.model.groupId);
-        this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
-        if (!existGroup) {
-          this.model.groupId = this.store.getRootGroup.id;
-        }
-      });
+      const groupObj = new PCTree(this.groups);
+      const existGroup = groupObj.findGroupByID(this.model.groupId);
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
+      if (!existGroup) {
+        this.model.groupId = this.store.getRootGroup.id;
+      }
     });
   }
   /**

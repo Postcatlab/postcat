@@ -189,19 +189,21 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
 export class PCTree {
   private list: Group[];
   private rootGroupID: number;
-  constructor(list, opts) {
+  constructor(list, opts?) {
     this.list = eoDeepCopy(list);
     this.rootGroupID = opts.rootGroupID;
   }
   getList() {
     return this.list;
   }
-
-  findGroupByID(list, id): Group {
+  findGroupByID(id): Group {
+    return this.loopFindGroupByID(this.list, id);
+  }
+  private loopFindGroupByID(list, id): Group {
     return list.find(group => {
       if (group.id === id) return true;
       if (group.children) {
-        return this.findGroupByID(group.children, id);
+        return this.loopFindGroupByID(group.children, id);
       }
     });
   }
@@ -212,16 +214,16 @@ export class PCTree {
       return;
     }
 
-    const parent = this.findGroupByID(this.list, group.parentId);
+    const parent = this.findGroupByID(group.parentId);
     parent.children.push(group);
   }
   update(group: Group) {
-    const origin = this.findGroupByID(this.list, group.id);
+    const origin = this.findGroupByID(group.id);
     Object.assign(origin, group);
   }
   delete(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;
-    const list = isRootDir ? this.list : this.findGroupByID(this.list, group.parentId).children;
+    const list = isRootDir ? this.list : this.findGroupByID(group.parentId).children;
     list.splice(
       list.findIndex(val => val.id === group.id),
       1

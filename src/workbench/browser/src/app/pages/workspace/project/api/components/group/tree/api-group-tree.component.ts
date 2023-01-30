@@ -224,7 +224,7 @@ export class ApiGroupTreeComponent implements OnInit {
     const sort = children.findIndex(val => val.key === node.key);
     console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
-    this.effect.updateGroup(
+    this.effect.sortGroup(
       dragNode.isLeaf
         ? {
             id: node._group.id,
@@ -258,7 +258,7 @@ export class ApiGroupTreeComponent implements OnInit {
         // * jump to api detail page
         const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.key }
+          queryParams: { uuid: event.node.key, groupId: event.node.origin.groupId }
         });
         break;
       }
