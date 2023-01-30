@@ -99,11 +99,11 @@ export class ApiEditComponent implements OnDestroy {
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       //TODO optimize
       this.editBody.init();
       this.resEditBody.init();
-    }, 0);
+    });
   }
 
   initShortcutKey() {
@@ -202,14 +202,14 @@ export class ApiEditComponent implements OnDestroy {
           this.initialModel.groupId = this.model.groupId;
         }
       }
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         //@ts-ignore
         const existGroup = this.apiGroup?.getTreeNodeByKey(this.model.groupId);
         this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
         if (!existGroup) {
           this.model.groupId = this.store.getRootGroup.id;
         }
-      }, 0);
+      });
     });
   }
   /**
@@ -243,9 +243,9 @@ export class ApiEditComponent implements OnDestroy {
   private watchBasicForm() {
     this.validateForm.valueChanges.subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.emitChangeFun();
-      }, 0);
+      });
     });
     //watch uri
     this.validateForm
