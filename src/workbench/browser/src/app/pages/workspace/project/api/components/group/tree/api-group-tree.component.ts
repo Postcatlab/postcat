@@ -89,19 +89,16 @@ export class ApiGroupTreeComponent implements OnInit {
     });
     autorun(() => {
       this.apiGroupTree = this.store.getApiGroupTree;
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.nzSelectedKeys = this.getSelectKeys();
         this.expandKeys = this.getExpandKeys();
-      }, 0);
+      });
     });
   }
   getSelectKeys() {
     const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
-    if (this.route.snapshot.queryParams.uuid && isApiPage) {
-      return [this.route.snapshot.queryParams.uuid];
-    } else {
-      return [];
-    }
+    const { uuid } = this.route.snapshot.queryParams;
+    return uuid && isApiPage ? [uuid] : [];
   }
   getExpandKeys() {
     if (!this.route.snapshot.queryParams.uuid) {
@@ -132,14 +129,11 @@ export class ApiGroupTreeComponent implements OnInit {
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
-      nzOnOk: () => {
-        const promise = modal.componentInstance.submit();
-        promise.then(data => {
+      nzOnOk: () =>
+        modal.componentInstance.submit().then(data => {
           if (params.action !== 'new') return;
           this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
-        });
-        return promise;
-      }
+        })
     });
   }
   editGroup(group) {
@@ -202,24 +196,16 @@ export class ApiGroupTreeComponent implements OnInit {
       nzOnOk: () =>
         new Promise(resolve => {
           modal.componentInstance.submit(status => {
-            if (status) {
-              if (status === 'stayModal') {
-                resolve(true);
-                return;
-              }
-              this.message.success($localize`${title} successfully`);
-              // TODO
-              setTimeout(() => {
-                this.effect.getGroupList();
-              }, 1000);
-              setTimeout(() => {
-                this.effect.getGroupList();
-              }, 6000);
-              modal.destroy();
-            } else {
+            if (!status) {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+              return resolve(true);
             }
-            resolve(true);
+            if (status === 'stayModal') {
+              return resolve(true);
+            }
+            this.message.success($localize`${title} successfully`);
+            modal.destroy();
+            return resolve(true);
           });
         })
     });
@@ -236,15 +222,19 @@ export class ApiGroupTreeComponent implements OnInit {
     const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
+    console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
-    console.log('TODO: sort 可能不是按顺序的');
-    this.effect.updateGroup({
-      id: node._group.id,
-      type: node._group.type,
-      sort,
-      //@ts-ignore
-      parentId: parentNode?.key || this.store.getRootGroup.id
-    });
+    this.effect.sortGroup(
+      dragNode.isLeaf
+        ? {
+            id: node._group.id,
+            type: node._group.type,
+            sort,
+            //@ts-ignore
+            parentId: parentNode?.key || this.store.getRootGroup.id
+          }
+        : { ...node, sort, parentId: dragNode.parentNode?.key || this.store.getRootGroup.id }
+    );
     console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
@@ -268,7 +258,7 @@ export class ApiGroupTreeComponent implements OnInit {
         // * jump to api detail page
         const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.origin.apiUuid }
+          queryParams: { uuid: event.node.key, groupId: event.node.origin.groupId }
         });
         break;
       }

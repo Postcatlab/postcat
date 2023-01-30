@@ -5969,10 +5969,10 @@ detective@^5.2.1:
     defined "^1.0.0"
     minimist "^1.2.6"
 
-dexie@3.2.3:
-  version "3.2.3"
-  resolved "https://registry.npmmirror.com/dexie/-/dexie-3.2.3.tgz#f35c91ca797599df8e771b998e9ae9669c877f8c"
-  integrity sha512-iHayBd4UYryDCVUNa3PMsJMEnd8yjyh5p7a+RFeC8i8n476BC9wMhVvqiImq5zJZJf5Tuer+s4SSj+AA3x+ZbQ==
+dexie@^4.0.1-alpha.7:
+  version "4.0.1-alpha.7"
+  resolved "https://registry.npmmirror.com/dexie/-/dexie-4.0.1-alpha.7.tgz#7a1c64069bb79bcac308aad6607502fad9473a21"
+  integrity sha512-IX16W4vWBFyCVBDvzMrfvYgVckXGffNwTKXwIr6DNutEZ6mtvuk79uSXX6w/b6lzWykprrOAYuCHrOUjqAQ/tQ==
 
 dezalgo@^1.0.0, dezalgo@^1.0.4, dezalgo@~1.0.3:
   version "1.0.4"
@@ -6603,10 +6603,10 @@ eo-ng-switch@0.1.0:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.1.0.tgz#d7e09bfcbde931c04dbb10f40be14b39dd91bb19"
-  integrity sha512-G7q4waDTmf0P3oMY/a0FoMBVjIhqPmZCZ2I5LecOyyFILRuuNSUFNqEPGwzfjmieDy8tIGUrii7C2hX7kibxQw==
+eo-ng-table@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.1.1.tgz#a633fb646f473e64b4a912208340f972673ee7ba"
+  integrity sha512-Xjv0yXwFeUaUacoM32V/gl7ew9kbNyhiGRqGY/GcGykzTwsDd2tSG10MhXXqoyjfhAxFgf9enYPYIILbOV8AxQ==
   dependencies:
     tslib "^2.3.0"
 

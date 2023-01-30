@@ -50,10 +50,10 @@ export class ExportApiComponent implements OnInit {
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       document.body.removeChild(element);
       window.URL.revokeObjectURL(url);
-    }, 0);
+    });
   }
   /**
    * Module export

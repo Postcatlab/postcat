@@ -369,9 +369,9 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   private watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.modelChange.emit(this.model);
-      }, 0);
+      });
     });
   }
   private initBasicForm() {

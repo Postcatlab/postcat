@@ -47,7 +47,7 @@ const socket = (port = _post) => {
             ? request.uri.trim()
             : request.protocol + '://' + request.uri.trim().replace('//', '');
           ws = new WebSocket(link, {
-            headers: request?.requestHeaders
+            headers: request?.requestParams.headerParams
               ?.filter(it => it.name && it.value)
               .reduce(
                 (total, { name, value }) => ({
@@ -73,8 +73,7 @@ const socket = (port = _post) => {
         ws.on('open', () => {
           // console.log(`[CLIENT] open()`);
         });
-        ws.on('upgrade', res => {
-          const { headers: resHeader } = res;
+        ws.on('upgrade', ({ headers: resHeader }) => {
           socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
         });
 

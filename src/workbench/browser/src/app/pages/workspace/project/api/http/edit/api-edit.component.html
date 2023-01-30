@@ -4,7 +4,7 @@
   </div>
   <div class="p-base">
     <nz-skeleton [nzLoading]="!model?.apiAttrInfo" [nzActive]="true"> </nz-skeleton>
-    <div class="save-container" *ngIf="model.apiAttrInfo">
+    <div class="save-container" *ngIf="model?.apiAttrInfo">
       <eo-ng-input-group nzCompact>
         <eo-ng-select class="!w-[15%] !min-w-[100px] !max-w-[200px]" formControlName="requestMethod">
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>

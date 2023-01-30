@@ -14,6 +14,7 @@
   [nzIsLevel]="setting.isLevel"
   [nzDraggable]="setting.rowSortable"
   [nzTbody]="tbodyConf"
+  (nzResizeEnd)="nzResizeColumn($event)"
   [nzExpand]="nzExpand"
   [nzPrimaryKey]="setting.primaryKey"
   [nzChildKey]="tableConfig.childKey"

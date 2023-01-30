@@ -93,7 +93,7 @@
     "@typescript-eslint/parser": "5.49.0",
     "autoprefixer": "10.4.13",
     "conventional-changelog-cli": "2.2.2",
-    "dexie": "3.2.3",
+    "dexie": "^4.0.1-alpha.7",
     "jasmine-core": "4.5.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.1",
