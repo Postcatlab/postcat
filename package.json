@@ -95,7 +95,7 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.5.0",
     "stylelint-order": "5.0.0",
     "ts-node": "10.8.1",
-    "typescript": "~4.7.4",
+    "typescript": "~4.9.4",
     "wait-on": "6.0.1"
   },
   "__npminstall_done": false,

@@ -1,17 +1,17 @@
-import type { Collection, IndexableType, Table } from 'dexie';
+import type { Collection, IndexableType, Table, UpdateSpec } from 'dexie';
 
 import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 
 type PageCallback<T> = (collection: Collection<T, IndexableType>) => Collection | Promise<T[]>;
 
-export class BaseService<T> {
+export class BaseService<T extends object> {
   constructor(readonly db: Table<T>) {}
 
   private filterData(params: Record<string, any> = {}) {
     const entries = Object.entries(params);
     return this.db.filter(obj => {
       return entries.every(([key, value]) => {
-        if (!Reflect.has(obj as unknown as object, key)) {
+        if (!Reflect.has(obj, key)) {
           return true;
         }
         if (Array.isArray(value)) {
@@ -21,6 +21,10 @@ export class BaseService<T> {
         }
       });
     });
+  }
+
+  count(params?) {
+    return this.filterData(params).count();
   }
 
   @ApiResponse()
@@ -36,8 +40,13 @@ export class BaseService<T> {
 
   @ApiResponse()
   async update(params: Record<string, any> = {}) {
-    const { id, ...rest } = params;
-    await this.db.update(id, rest);
+    const { id, uuid, ...rest } = params;
+    if (id) {
+      await this.db.update(id, rest as UpdateSpec<T>);
+    } else {
+      const result: any = await this.read({ uuid });
+      await this.db.update(result.data.id, rest as UpdateSpec<T>);
+    }
     return this.read({ id }) as ApiResponsePromise<T>;
   }
 

@@ -93,7 +93,7 @@
     "@typescript-eslint/parser": "5.29.0",
     "autoprefixer": "10.4.7",
     "conventional-changelog-cli": "2.2.2",
-    "dexie": "3.2.2",
+    "dexie": "^4.0.1-alpha.7",
     "jasmine-core": "4.2.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.0",
@@ -104,7 +104,7 @@
     "npm-run-all": "4.1.5",
     "tailwindcss": "3.1.4",
     "ts-node": "10.8.1",
-    "typescript": "~4.7.4",
+    "typescript": "~4.9.4",
     "webpack": "5.73.0",
     "webpack-bundle-analyzer": "4.7.0"
   },

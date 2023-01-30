@@ -222,7 +222,7 @@ export class ApiGroupTreeComponent implements OnInit {
     const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
-    console.log('TODO: sort 可能不是按顺序的');
+    console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
     this.effect.updateGroup(
       dragNode.isLeaf

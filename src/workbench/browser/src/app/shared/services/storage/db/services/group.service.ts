@@ -1,7 +1,36 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
+import {
+  ApiResponse,
+  ApiResponseOptions,
+  ApiResponsePromise
+} from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
 import { GroupDeleteDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
+import { serializeObj } from 'eo/workbench/browser/src/app/shared/services/storage/db/utils';
+
+// 对数据重新进行升序编排
+const formatSort = (arr: any[] = []) => {
+  return arr
+    .sort((a, b) => a.sort - b.sort)
+    .map((item, index) => {
+      item.sort = index;
+      return item;
+    });
+};
+
+const genGroupType2 = apiData => {
+  // 不能直接返回 apiData, 要返回符合分组的格式
+  return {
+    ...apiData,
+    // 0默认分组 1普通分组 2外部数据参与排序分组
+    type: 2,
+    id: apiData.apiUuid,
+    uuid: apiData.apiUuid,
+    parentId: apiData.groupId,
+    relationInfo: apiData
+  };
+};
 
 export class GroupService extends BaseService<Group> {
   baseService = new BaseService(dataSource.group);
@@ -14,8 +43,86 @@ export class GroupService extends BaseService<Group> {
     super(dataSource.group);
   }
 
-  async bulkRead(params) {
+  @ApiResponse()
+  async update(params?: Record<string, any>) {
+    const { id, parentId, name, sort, type } = params;
+    const hasSort = Number.isInteger(sort);
+
+    const sortData = async (groupList, apiDataList, target) => {
+      // @ts-ignore
+      // 对数据进行分组
+      const { mostThan = [], lessThan = [] } = formatSort([...groupList, ...apiDataList]).group(item => {
+        return item.sort >= sort ? 'mostThan' : 'lessThan';
+      });
+      const sorteLessThan = formatSort(lessThan);
+      const sorteMostdThan = formatSort(mostThan);
+
+      const arr = [...sorteLessThan, target, ...sorteMostdThan].map((n, i) => {
+        n.sort = i;
+        return n;
+      });
+      // @ts-ignore
+      const { groups, apis } = arr.group(item => (item.uri ? 'apis' : 'groups'));
+      groups && (await this.baseService.bulkUpdate(groups));
+      apis && (await this.apiDataService.bulkUpdate(apis));
+    };
+
     // 0默认分组 1普通分组 2外部数据参与排序分组
+    // 拖动的是 API
+    if (type === 2) {
+      const apiParams = serializeObj({
+        uuid: id,
+        groupId: parentId,
+        sort
+      });
+      const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldApiData.groupId, type: 1 });
+      const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
+
+      // 如果指定了 sort，则需要重新排序
+      if (hasSort) {
+        await sortData(
+          groupList,
+          apiDataList.filter(n => n.id !== oldApiData.id),
+          { ...oldApiData, groupId: parentId }
+        );
+        const { data: newApiData } = await this.apiDataService.read({ uuid: id });
+        return genGroupType2(newApiData);
+      }
+      // 如果 parentId 变了，则需要将其 sort = parent.children.length
+      if (parentId && oldApiData.groupId !== parentId) {
+        // 没有指定 sort，则默认排在最后
+        apiParams.sort = groupList.length + apiDataList.length + 1;
+        const { data: newApiData } = await this.apiDataService.update(apiParams);
+        return genGroupType2(newApiData);
+      }
+    }
+    // 修改分组
+    else {
+      const { data: oldGroup } = await this.baseService.read({ id });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: 1 });
+      const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
+
+      // 如果指定了 sort，则需要重新排序
+      if (hasSort) {
+        await sortData(
+          groupList.filter(n => n.id !== oldGroup.id),
+          apiDataList,
+          { ...oldGroup, parentId }
+        );
+        return this.baseService.read({ id });
+      }
+      // 如果 parentId 变了，则需要将其 sort = parent.children.length
+      if (parentId && oldGroup.parentId !== parentId) {
+        // 没有指定 sort，则默认排在最后
+        params.sort = groupList.length + apiDataList.length + 1;
+      }
+
+      return this.baseService.update(params);
+    }
+  }
+
+  async bulkRead(params) {
     const result = await this.baseService.bulkRead(params);
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
 
@@ -26,14 +133,7 @@ export class GroupService extends BaseService<Group> {
         .map(m => {
           // API
           if ('uri' in m) {
-            return {
-              ...m,
-              type: 2,
-              id: m.apiUuid,
-              uuid: m.apiUuid,
-              parentId: m.groupId,
-              relationInfo: m
-            };
+            return genGroupType2(m);
           }
           // group
           else {
