@@ -223,7 +223,7 @@ export class ApiGroupTreeComponent implements OnInit {
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
     // * It will be update group list automatic
-    console.log('TODO: sort 可能不是按顺序的');
+    console.log('TODO: sort 可能不是按顺序的', [...children]);
     this.effect.updateGroup({
       id: node._group.id,
       type: node._group.type,
