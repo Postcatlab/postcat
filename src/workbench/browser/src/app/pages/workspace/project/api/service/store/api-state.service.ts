@@ -45,6 +45,9 @@ export class ApiStoreService {
   @computed get getApiList() {
     return this.apiList;
   }
+  @computed get getGroupList() {
+    return this.groupList;
+  }
   @computed get getGroupTree() {
     return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
   }

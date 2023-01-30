@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ApiEffectService } from '../../../service/store/api-effect.service';
+import { GroupAction } from '../tree/api-group-tree.component';
 
 @Component({
   selector: 'pc-api-group-edit',
@@ -13,8 +13,7 @@ import { ApiEffectService } from '../../../service/store/api-effect.service';
 })
 export class ApiGroupEditComponent implements OnInit {
   @Input() group: Group;
-  @Input() action?: string;
-  @Input() treeItems?: any;
+  @Input() action?: GroupAction;
 
   validateForm!: FormGroup;
   isDelete: boolean;
@@ -29,7 +28,7 @@ export class ApiGroupEditComponent implements OnInit {
     }
   }
 
-  submit(): Promise<void> {
+  async submit(): Promise<[any, any]> {
     if (!this.isDelete) {
       for (const i in this.validateForm.controls) {
         if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -41,32 +40,22 @@ export class ApiGroupEditComponent implements OnInit {
         return;
       }
     }
-    if (this.isDelete) {
-      return this.delete();
-    } else {
-      if (this.group.id) {
-        return this.update();
-      } else {
-        return this.create();
+    let result;
+    switch (this.action) {
+      case 'delete': {
+        result = await this.effect.deleteGroup(this.group);
+        break;
+      }
+      case 'edit': {
+        result = await this.effect.updateGroup(this.group);
+        break;
+      }
+      case 'new': {
+        result = await this.effect.createGroup([this.group]);
+        break;
       }
     }
-  }
-
-  async create() {
-    await this.effect.createGroup([this.group]);
     this.modalRef.destroy();
-  }
-
-  async update() {
-    await this.effect.updateGroup(this.group);
-    this.modalRef.destroy();
-  }
-
-  /**
-   * Delete all tree items
-   */
-  async delete() {
-    await this.effect.deleteGroup(this.group);
-    this.modalRef.destroy();
+    return result;
   }
 }

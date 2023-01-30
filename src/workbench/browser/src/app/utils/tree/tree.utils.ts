@@ -186,11 +186,56 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
   ];
 };
 
+export class PCTree {
+  private list: Group[];
+  private rootGroupID: number;
+  constructor(list, opts) {
+    this.list = eoDeepCopy(list);
+    this.rootGroupID = opts.rootGroupID;
+  }
+  getList() {
+    return this.list;
+  }
+
+  findGroupByID(list, id): Group {
+    return list.find(group => {
+      if (group.id === id) return true;
+      if (group.children) {
+        return this.findGroupByID(group.children, id);
+      }
+    });
+  }
+  add(group: Group) {
+    const isRootDir = group.parentId === this.rootGroupID;
+    if (isRootDir) {
+      this.list.push(group);
+      return;
+    }
+
+    const parent = this.findGroupByID(this.list, group.parentId);
+    parent.children.push(group);
+  }
+  update(group: Group) {
+    const origin = this.findGroupByID(this.list, group.id);
+    Object.assign(origin, group);
+  }
+  delete(group: Group) {
+    const isRootDir = group.parentId === this.rootGroupID;
+    const list = isRootDir ? this.list : this.findGroupByID(this.list, group.parentId).children;
+    list.splice(
+      list.findIndex(val => val.id === group.id),
+      1
+    );
+  }
+  sort() {}
+}
 export const hangGroupToApi = list => {
   return list.map(it => {
     if (it.type === 2) {
       return {
         ...it.relationInfo,
+        isLeaf: true,
+        parentId: it.parentId,
         _group: {
           id: it.id,
           type: it.type,

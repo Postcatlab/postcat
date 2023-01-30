@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services';
 import { LanguageService } from '../../../core/services/language/language.service';
 import { ExtensionInfo } from '../../models/extension-manager';
+import { ExtensionStoreService } from './extension-store.service';
 
 type ExtensionItem = {
   name: string;
   version: string;
-  url: string;
   disable: boolean;
   pkgInfo: Record<string, any>;
 };
@@ -30,93 +30,50 @@ export class WebExtensionService {
   debugExtensions = [];
   debugExtensionNames;
   resourceUrl = 'https://unpkg.com';
-  constructor(private web: WebService, private language: LanguageService) {
+  constructor(private web: WebService, private language: LanguageService, private store: ExtensionStoreService) {
     this.debugExtensionNames =
       !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname) ? [] : [];
   }
-  async installExtension(extName: string, { version = 'latest', entry = '', i18n = [] }) {
-    const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
-    const fullPath = new URL(url, this.resourceUrl);
-    const install = async pkgJson => {
-      let pkgObj: ExtensionInfo = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
-      if (pkgObj.features instanceof Object) {
-        for (let featureKey in pkgObj.features) {
-          const featureVal = pkgObj.features[featureKey];
-          switch (featureKey) {
-            case 'theme': {
-              if (!(featureVal instanceof Array)) {
-                return;
-              }
-              try {
-                for (var i = 0; i < featureVal.length; i++) {
-                  const theme = featureVal[i];
-                  const path = new URL(theme.path, `${this.resourceUrl}/${pkgObj.name}/package.json`).href.replace(
-                    `${window.location.origin}/`,
-                    ''
-                  );
-                  let colors = await fetch(path)
-                    .then(res => res.json())
-                    .catch(e => {
-                      colors = {};
-                    });
-                  if (!colors) {
-                    pcConsole.error('theme load error', theme.label);
-                    return;
-                  }
-                  Object.assign(theme, colors);
-                }
-                pkgObj.features[featureKey] = featureVal;
-              } catch (e) {
-                console.error(e);
-              }
-              break;
-            }
-            default: {
-              break;
-            }
-          }
-        }
-      }
-
-      //Translate module
-      pkgJson.i18n ??= i18n;
-      if (!pkgJson.i18n?.length && pkgJson.features.i18n) {
-        pkgJson.i18n = await this.getExtI18n(pkgJson.name);
-      }
-      pkgObj = this.translateModule(pkgObj);
-
-      //Add to installed list
-      const oldIndex = this.installedList.findIndex(n => n.name === extName);
-      this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
-        name: extName,
-        disable: false,
-        version: pkgObj.version,
-        url: res.url,
-        pkgInfo: pkgObj
-      });
-      StorageUtil.set(extKey, this.installedList);
-    };
-
-    const res = await fetch(fullPath);
+  async installExtension(extName: string, { version = 'latest', entry = '' }) {
+    //Get package.json
     let pkgJson;
     if (!this.debugExtensionNames.includes(extName)) {
       pkgJson = await this.getPkgInfo(extName, version);
     } else {
       pkgJson = await this.getDebugExtensionsPkgInfo(extName, version);
     }
+    if (!pkgJson) {
+      pcConsole.error(`[Install package] ${extName} error`);
+      // this.message.info(data);
+      return false;
+    }
+
+    //Add to installed list
+    const oldIndex = this.installedList.findIndex(n => n.name === extName);
+    this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
+      name: extName,
+      disable: false,
+      version: pkgJson.version,
+      pkgInfo: pkgJson
+    });
+    StorageUtil.set(extKey, this.installedList);
+
+    //Inject script
+    //TODO Inject when use
+    entry ||= pkgJson?.main;
+    version = version === 'latest' ? pkgJson?.version : version;
+    this.injectScriptByPath(extName, entry, version);
+
+    return true;
+  }
+  private async injectScriptByPath(name, entry, version) {
+    if (!entry) return;
+    const url = `${name}@${version}${entry ? `/${entry}` : ''}`;
+    const fullPath = new URL(url, this.resourceUrl);
+    const res = await fetch(fullPath);
     if (res.status === 200) {
       const data = await res.text();
       this.insertScript(data);
-      await install(pkgJson);
-      return true;
-    } else {
-      if (!pkgJson) {
-        pcConsole.error(`[Install package] ${extName} error`);
-        // this.message.info(data);
-        return false;
-      }
-      await install(pkgJson);
-      return true;
     }
   }
   getExtensionsByFeature(featureKey, installedList) {
@@ -148,13 +105,7 @@ export class WebExtensionService {
   async getDebugExtensionsPkgInfo(extName, version = 'latest') {
     let result = await this.getPkgInfo(extName, version);
     if (!result) return result;
-    //Transalte debug module
-    try {
-      result.i18n = await this.getExtI18n(result.name);
-      result.isDebug = true;
-    } catch (e) {
-      console.error(e);
-    }
+    result.isDebug = true;
     return result;
   }
   private async getExtI18n(name) {
@@ -210,8 +161,65 @@ export class WebExtensionService {
   }
 
   async getPkgInfo(extName: string, version = 'latest') {
-    const res = await fetch(`${this.resourceUrl}/${extName}@${version}/package.json`);
-    return res.status === 200 ? res.json() : '';
+    const newestExt = this.store.getExtensionList.find(val => val.name === extName);
+    version = version === 'latest' ? newestExt?.version : version;
+
+    let pkgInfo;
+    if (version === newestExt.version) {
+      pkgInfo = newestExt;
+    } else {
+      const res = await fetch(`${this.resourceUrl}/${extName}@${version}/package.json`);
+      pkgInfo = res.status === 200 ? JSONParse(res.json()) : null;
+    }
+    if (!pkgInfo) return null;
+
+    //Get Features
+    if (pkgInfo.features instanceof Object) {
+      for (let featureKey in pkgInfo.features) {
+        const featureVal = pkgInfo.features[featureKey];
+        switch (featureKey) {
+          case 'theme': {
+            if (!(featureVal instanceof Array)) {
+              return;
+            }
+            try {
+              for (var i = 0; i < featureVal.length; i++) {
+                const theme = featureVal[i];
+                const path = new URL(theme.path, `${this.resourceUrl}/${pkgInfo.name}@${version}/package.json`).href.replace(
+                  `${window.location.origin}/`,
+                  ''
+                );
+                let colors = await fetch(path)
+                  .then(res => res.json())
+                  .catch(e => {
+                    colors = {};
+                  });
+                if (!colors) {
+                  pcConsole.error('theme load error', theme.label);
+                  return;
+                }
+                Object.assign(theme, colors);
+              }
+              pkgInfo.features[featureKey] = featureVal;
+            } catch (e) {
+              console.error(e);
+            }
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      }
+    }
+
+    // Get i18n by http request, if not exist in package.json
+    if (!pkgInfo.i18n?.length && pkgInfo.features.i18n) {
+      pkgInfo.i18n = await this.getExtI18n(pkgInfo.name);
+    }
+    pkgInfo = this.translateModule(pkgInfo);
+
+    return pkgInfo;
   }
   translateModule(module: ExtensionInfo) {
     const lang = this.language.systemLanguage;

@@ -5,6 +5,7 @@ import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storag
 
 export class GroupService extends BaseService<Group> {
   baseService = new BaseService(dataSource.group);
+  apiDataService = new BaseService(dataSource.apiData);
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
@@ -14,19 +15,40 @@ export class GroupService extends BaseService<Group> {
   }
 
   async bulkRead(params) {
+    // 0默认分组 1普通分组 2外部数据参与排序分组
     const result = await this.baseService.bulkRead(params);
+    const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
+
     const genGroupTree = (groups: Group[], paranId) => {
-      return groups
-        .filter(n => n.parentId === paranId)
-        .map(m => ({
-          ...m,
-          children: genGroupTree(groups, m.id)
-        }))
-        .sort((a, b) => b.sort - a.sort);
+      const apiFilters = apiDataList.filter(n => n.groupId === paranId);
+      const groupFilters = groups.filter(n => n.parentId === paranId);
+      return [...apiFilters, ...groupFilters]
+        .map(m => {
+          // API
+          if ('uri' in m) {
+            return {
+              ...m,
+              type: 2,
+              id: m.apiUuid,
+              uuid: m.apiUuid,
+              parentId: m.groupId,
+              relationInfo: m
+            };
+          }
+          // group
+          else {
+            return {
+              ...m,
+              children: genGroupTree(groups, m.id)
+            };
+          }
+        })
+        .sort((a, b) => a.sort - b.sort);
     };
     const rootGroup = result.data?.find(n => n.depth === 0);
     rootGroup['children'] = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
+    // console.log('result', result);
     return result;
   }
 
