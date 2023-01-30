@@ -6,6 +6,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -21,7 +22,7 @@ import { ApiTestService } from '../http/test/api-test.service';
 interface testViewModel {
   requestTabIndex: number;
   msg: string;
-  request: any;
+  request: ApiData;
   response: any;
 }
 @Component({
@@ -64,11 +65,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async init() {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
-      const id = this.route.snapshot.queryParams.uuid;
-      if (id && id.includes('history_')) {
-        const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
-        this.model = historyData as testViewModel;
-      }
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);

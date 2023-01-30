@@ -235,36 +235,21 @@ export class ApiGroupTreeComponent implements OnInit {
    *
    * @param event
    */
-  treeItemDrop = (event: NzFormatEmitEvent) => {
-    const dragNode = event.dragNode;
+  treeItemDrop = ({ dragNode }: NzFormatEmitEvent) => {
     const node = eoDeepCopy(dragNode.origin);
-    // Get group sort index
-    let sort;
-    let parentNode = dragNode.parentNode;
-    if (dragNode.parentNode) {
-      const childs = dragNode.parentNode.getChildren();
-      const index = childs.findIndex(val => val.key === node.key);
-      sort = childs.length - index;
-    } else {
-      const childs = this.apiGroup.getTreeNodes().filter(n => n.level === 0);
-      const index = childs.findIndex(val => val.key === node.key);
-      sort = childs.length - index;
-    }
-    if (dragNode.isLeaf) {
-      // * It will be update group list automatic
-      this.effect.updateGroup({
-        id: node._group.id,
-        type: node._group.type,
-        //@ts-ignore
-        parentId: parentNode?.key || this.store.getRootGroup.id,
-        sort
-      });
-    } else {
-      // * Update group
-      node.parentId = dragNode.parentNode?.key || this.store.getRootGroup.id;
-      node.sort = sort;
-      this.effect.updateGroup(node);
-    }
+    const parentNode = dragNode.parentNode;
+    const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
+    // * Get group sort index
+    const sort = children.findIndex(val => val.key === node.key);
+    // * It will be update group list automatic
+    console.log('TODO: sort 可能不是按顺序的');
+    this.effect.updateGroup({
+      id: node._group.id,
+      type: node._group.type,
+      sort,
+      //@ts-ignore
+      parentId: parentNode?.key || this.store.getRootGroup.id
+    });
     console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
