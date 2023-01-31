@@ -129,20 +129,24 @@ export class ProjectService extends BaseService<Project> {
     return result as unknown as ApiResponsePromise<ImportProjectDto>;
   }
 
+  @ApiResponse()
   async import(params: ImportProjectDto) {
-    const { collections, environmentList, workSpaceUuid, projectUuid } = params;
+    const { collections, environmentList = [], workSpaceUuid, projectUuid } = params;
 
-    this.environmentService.bulkCreate(
-      environmentList.map(e => ({
-        ...e,
-        workSpaceUuid,
-        projectUuid
-      }))
-    );
+    if (environmentList.length) {
+      this.environmentService.bulkCreate(
+        environmentList.map(e => ({
+          ...e,
+          workSpaceUuid,
+          projectUuid
+        }))
+      );
+    }
 
     const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });
 
     await this.deepCreateGroup(collections, rootGroup);
+    return true;
   }
 
   private bulkCreateApiData(apiList, parentGroup) {
@@ -192,12 +196,18 @@ export class ProjectService extends BaseService<Project> {
   /** 递归创建分组及 API */
   private deepCreateGroup = async (collections = [], parentGroup: Group) => {
     // 将集合筛选为 groupList 和 apiDataList 两组
-    const { groupList, apiDataList } = collections
+    const { groupList = [], apiDataList = [] } = collections
       .filter(n => n.depth !== 0)
       .group((item, index) => {
         // 排序号根据原始数组索引来
         item.sort = index;
-        return item.collectionType === CollectionTypeEnum.GROUP ? 'groupList' : 'apiDataList';
+        if (item.collectionType === CollectionTypeEnum.GROUP) {
+          return 'groupList';
+        } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
+          return 'apiDataList';
+        } else {
+          return '垃圾数据分类';
+        }
       });
 
     await this.bulkCreateApiData(apiDataList, parentGroup);

@@ -18,6 +18,7 @@ export const old2new = (params, projectUuid, workSpaceUuid): ImportProjectDto =>
       if (item.uri) {
         const newApiData = convertApiData(item);
         Object.assign(item, newApiData);
+        item.collectionType = CollectionTypeEnum.API_DATA;
       }
       // 分组
       else {
