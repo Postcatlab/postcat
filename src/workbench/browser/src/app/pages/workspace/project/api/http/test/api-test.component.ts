@@ -32,6 +32,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
+import { collectStoredAnnotations } from 'mobx/dist/internal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
@@ -158,6 +159,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   async init() {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
+      console.log('restTest');
       this.model = {
         requestTabIndex: 1
       } as testViewModel;

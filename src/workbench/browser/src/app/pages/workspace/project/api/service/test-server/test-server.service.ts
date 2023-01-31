@@ -18,6 +18,7 @@ export abstract class TestServerService implements TestServer {
   abstract init(receiveMessage: (message: any) => void): void;
   abstract send(action: string, message: any): void;
   formatRequestData(data: Partial<ApiData>, opts: requestDataOpts = { env: {}, lang: 'en', globals: {} }) {
+    console.log(data);
     const formatHeaders = inArr => {
       if (!Array.isArray(inArr)) {
         return [];
