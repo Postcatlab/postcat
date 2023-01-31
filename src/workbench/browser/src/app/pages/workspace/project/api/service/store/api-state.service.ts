@@ -83,8 +83,6 @@ export class ApiStoreService {
   }
 
   @action setGroupList(list = []) {
-    console.log('list', list);
-    console.log('hangGroupToApi list', hangGroupToApi(list));
     this.groupList = hangGroupToApi(list);
   }
 

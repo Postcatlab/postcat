@@ -181,9 +181,9 @@
         >
         </eo-monaco-editor> -->
         <ng-container *ngIf="item.isExpand && item.type === 'start'">
-          <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">
-            <div class="font-bold bbd pb-[10px] pt-[8px]">{{ k }}</div>
-            <eo-api-test-result-header [model]="item.msg?.[k] || []"></eo-api-test-result-header>
+          <div *ngFor="let key of Object.keys(item.msg)" class="headers">
+            <div class="font-bold bbd pb-[10px] pt-[8px]">{{ item.msg[key]?.label }}</div>
+            <eo-api-test-result-header [model]="item.msg[key]?.content || []"></eo-api-test-result-header>
           </div>
         </ng-container>
       </li>

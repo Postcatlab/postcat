@@ -126,8 +126,9 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
   }
 
   expandMessage(index) {
-    const status = this.model.response.responseBody[index].isExpand;
-    this.model.response.responseBody[index].isExpand = status == null ? true : !status;
+    console.log('this.model.response.responseBody', this.model.response.responseBody);
+    const status = this.model.response.responseBody[index].isExpand || false;
+    this.model.response.responseBody[index].isExpand = !status;
   }
 
   rawDataChange(e) {
@@ -220,7 +221,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.model.response.responseBody.unshift({ type: 'send', msg: this.model.msg, isExpand: false });
   }
   unListen() {
-    this.socket.off('ws-client');
+    this.socket.removeAllListeners('ws-client');
   }
   listen() {
     // * 无论是否连接成功，都清空发送历史
@@ -240,14 +241,20 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {
-              'Request Headers': Object.entries<string>(reqHeader).map(([key, value]) => ({
-                name: key,
-                value
-              })),
-              'Response Headers': Object.entries<string>(resHeader).map(([key, value]) => ({
-                name: key,
-                value
-              }))
+              reqHeader: {
+                label: 'Request Headers',
+                content: Object.entries<string>(reqHeader).map(([key, value]) => ({
+                  name: key,
+                  value
+                }))
+              },
+              resHeader: {
+                label: 'Response Headers',
+                content: Object.entries<string>(resHeader).map(([key, value]) => ({
+                  name: key,
+                  value
+                }))
+              }
             },
             title: `Connected to ${this.getLink()}`,
             isExpand: false
