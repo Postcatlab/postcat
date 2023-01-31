@@ -94,7 +94,8 @@ const http = {
         { 'create @post @bulkCreate': '/api/projects', json: 'projectMsgs, workSpaceUuid' },
         { 'detail @get @page': '/api/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/api/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' }
+        { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' },
+        { 'import @post @import': '/api/projects/import', json: '...' }
       ]
     },
     {

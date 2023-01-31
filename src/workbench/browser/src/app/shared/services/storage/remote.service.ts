@@ -1881,6 +1881,25 @@ export class RemoteService {
     });
   }
 
+  api_projectImport<T = any>({ ...items }, prefix = '') {
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.post(`${prefix}/api/projects/import`, { ...items }).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project:import - api_projectImport 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          console.log('Error: ', JSON.stringify(data, null, 2));
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c project:import - api_projectImport 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
   api_roleList<T = any>({ roleModule }, prefix = '') {
     if (roleModule == null) {
       console.log('%c Error: role - list 接口 缺失参数 roleModule %c', ErrorStyle, '');
