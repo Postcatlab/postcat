@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@a
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
@@ -16,7 +17,7 @@ export type EnvironmentView = Partial<Environment>;
   templateUrl: './env-edit.component.html',
   styleUrls: ['./env-edit.component.scss']
 })
-export class EnvEditComponent implements OnDestroy {
+export class EnvEditComponent implements OnDestroy, TabViewComponent {
   @Input() model: EnvironmentView;
   @Input() initialModel: EnvironmentView;
   @Output() readonly modelChange = new EventEmitter<EnvironmentView>();
@@ -133,7 +134,6 @@ export class EnvEditComponent implements OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    console.log(this.model);
     this.initForm();
     this.eoOnInit.emit(this.model);
   }

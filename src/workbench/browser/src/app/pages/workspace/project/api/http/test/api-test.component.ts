@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -69,7 +70,7 @@ interface testViewModel {
   templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss']
 })
-export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabViewComponent {
   @Input() model: testViewModel = this.resetModel();
   /**
    * Intial model from outside,check form is change

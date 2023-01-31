@@ -5,6 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Protocol, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -30,7 +31,7 @@ interface testViewModel {
   templateUrl: './websocket.component.html',
   styleUrls: ['./websocket.component.scss']
 })
-export class WebsocketComponent implements OnInit, OnDestroy {
+export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
   @Input() bodyType = 'json';
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
