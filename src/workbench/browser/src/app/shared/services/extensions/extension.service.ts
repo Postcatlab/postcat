@@ -55,6 +55,9 @@ export class ExtensionService {
       });
     }
   }
+  getExtension(name: string) {
+    return this.installedList.find(val => val.name === name);
+  }
   getExtensions() {
     let result: any = new Map();
     if (this.electron.isElectron) {
@@ -142,7 +145,7 @@ export class ExtensionService {
    * @param id
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
+  async installExtension({ name, version = 'latest' }): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'install',
@@ -163,8 +166,7 @@ export class ExtensionService {
       }
     } else {
       const isSuccess = await this.webExtensionService.installExtension(name, {
-        version,
-        entry: main
+        version
       });
       if (isSuccess) {
         successCallback();
@@ -228,7 +230,7 @@ export class ExtensionService {
       return window.electron.getExtensionPackage(name);
     } else {
       if (!window[name]) {
-        await this.installExtension({ name });
+        await this.webExtensionService.getExtensionPackage(name);
       }
       return window[name];
     }

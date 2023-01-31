@@ -34,7 +34,7 @@ export class WebExtensionService {
     this.debugExtensionNames =
       !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname) ? [] : [];
   }
-  async installExtension(extName: string, { version = 'latest', entry = '' }) {
+  async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json
     let pkgJson;
     if (!this.debugExtensionNames.includes(extName)) {
@@ -60,9 +60,7 @@ export class WebExtensionService {
 
     //Inject script
     //TODO Inject when use
-    entry ||= pkgJson?.main;
-    version = version === 'latest' ? pkgJson?.version : version;
-    this.injectScriptByPath(extName, entry, version);
+    this.getExtensionPackage(extName, version);
 
     return true;
   }
@@ -98,6 +96,12 @@ export class WebExtensionService {
       }
     });
     return extensions;
+  }
+  async getExtensionPackage(extName, version = '') {
+    const pkgJson = this.installedList.find(n => n.name === extName)?.pkgInfo;
+    const entry = pkgJson?.main;
+    version ??= pkgJson?.version || 'latest';
+    await this.injectScriptByPath(extName, entry, version);
   }
   getExtensions() {
     return this.installedList.map(n => [n.name, n.pkgInfo]);

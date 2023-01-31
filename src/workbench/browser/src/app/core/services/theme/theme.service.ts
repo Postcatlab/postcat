@@ -36,6 +36,8 @@ export class ThemeService {
     await this.querySystemThemes();
     let currentTheme = StorageUtil.get('pc_theme') || this.themes.find(val => val.id === this.defaultTheme);
     this.changeTheme(currentTheme);
+
+    //Quick directly change theme color if debug color change
     if (currentTheme.id === 'pc-debug') {
       this.fixedThemeIfNotValid();
     }
@@ -56,6 +58,11 @@ export class ThemeService {
     this.injectVaribale(theme.colors);
     this.changeEditorTheme(theme);
   }
+
+  changeCurrentThemeColorForDebug(colors) {
+    this.injectVaribale(colors);
+  }
+
   queryExtensionThemes() {
     const extensions = this.themeExtension.getExtensionThemes(this.coreThemes);
     this.themes.push(...extensions);

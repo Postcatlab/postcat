@@ -141,11 +141,10 @@ ${log}
     this.isOperating = true;
     switch (operate) {
       case 'install': {
-        const { name, version, main, i18n } = this.extensionDetail;
+        const { name, version, i18n } = this.extensionDetail;
         this.extensionDetail.installed = await this.extensionService.installExtension({
           name,
-          version,
-          main
+          version
         });
         this.extensionDetail['enabled'] = true;
         break;

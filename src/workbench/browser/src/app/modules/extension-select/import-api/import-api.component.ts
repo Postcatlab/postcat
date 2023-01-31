@@ -65,6 +65,7 @@ export class ImportApiComponent implements OnInit {
     private apiService: ApiService
   ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+    console.log(this.featureMap);
   }
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {

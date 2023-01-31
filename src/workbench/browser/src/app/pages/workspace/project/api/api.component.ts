@@ -4,13 +4,13 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable, observable, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
+import { ExtensionInfo } from '../../../../shared/models/extension-manager';
+import { Message, MessageService } from '../../../../shared/services/message';
 import StorageUtil from '../../../../utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
@@ -87,15 +87,27 @@ export class ApiComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private router: Router,
     public web: WebService,
+    private messageService: MessageService,
     private extensionService: ExtensionService,
-    public store: StoreService,
-    private effect: EffectService
+    public store: StoreService
   ) {
     this.initExtensionExtra();
+    this.watchInstalledExtensionsChange();
+  }
+  watchInstalledExtensionsChange() {
+    this.messageService.get().subscribe((inArg: Message) => {
+      if (inArg.type === 'installedExtensionsChange') {
+        const name = inArg.data.name;
+        const extension: ExtensionInfo = inArg.data.installedMap.get(name);
+        if (!extension?.features?.apiPreviewTab) return;
+        this.initExtensionExtra();
+      }
+    });
   }
   async initExtensionExtra() {
+    this.rightExtras = [];
     const apiPreviewTab = this.extensionService.getValidExtensionsByFature('apiPreviewTab');
-    await apiPreviewTab?.forEach(async (value, key) => {
+    apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);
       const rightExtra = value.rightExtra?.reduce((prev, curr) => {
         const eventObj = curr.events?.reduce((event, currEvent) => {
@@ -112,7 +124,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       }, []);
       this.rightExtras.push(...rightExtra);
     });
-    // console.log('this.rightExtras', this.rightExtras);
   }
   /**
    * Router-outlet child componnet change

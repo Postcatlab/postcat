@@ -175,10 +175,10 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
     return apiData.groupId === groupId;
   });
   const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId) || [];
-  console.log(
-    'apiGroupFilters == ',
-    apiGroupFilters?.map(it => it)
-  );
+  // console.log(
+  //   'apiGroupFilters == ',
+  //   apiGroupFilters?.map(it => it)
+  // );
   return [
     ...apiGroupFilters.map(group => ({
       ...group,
