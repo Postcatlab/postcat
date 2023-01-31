@@ -7,7 +7,7 @@ import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/worksp
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -89,7 +89,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
     autorun(() => {
       this.apiGroupTree = this.store.getApiGroupTree;
-      Promise.resolve().then(() => {
+      waitNextTick().then(() => {
         this.nzSelectedKeys = this.getSelectKeys();
         this.expandKeys = this.getExpandKeys();
       });
