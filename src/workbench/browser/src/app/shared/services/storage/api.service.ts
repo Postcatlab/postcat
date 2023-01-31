@@ -78,7 +78,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_groupDetail<T>(params) : this.remote.api_groupDetail<T>(params);
   }
 
-  api_groupList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_groupList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; withItem?: any }) {
     return this.store.isLocal ? this.local.api_groupList<T>(params) : this.remote.api_groupList<T>(params);
   }
 

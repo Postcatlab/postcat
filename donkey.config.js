@@ -26,6 +26,7 @@ module.exports = {
   remoteBase: '',
   paramsFill: {
     projectUuid: 'this.store.getCurrentProjectID',
-    workSpaceUuid: 'this.store.getCurrentWorkspaceUuid'
+    workSpaceUuid: 'this.store.getCurrentWorkspaceUuid',
+    withItem: true
   }
 };

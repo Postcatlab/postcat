@@ -70,6 +70,9 @@ export class ApiEditService {
       return await this.projectApi.edit(apiData);
     } else {
       const [result, err] = await this.projectApi.add(apiData);
+      if (err) {
+        return [result, err];
+      }
       return [result[0], err];
     }
   }

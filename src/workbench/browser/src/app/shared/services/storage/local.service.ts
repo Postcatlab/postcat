@@ -500,7 +500,11 @@ export class LocalService {
     });
   }
 
-  api_groupList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+  api_groupList<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    withItem = true
+  }) {
     if (projectUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -509,10 +513,14 @@ export class LocalService {
       console.log('%c Error: group - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
+    if (withItem == null) {
+      console.log('%c Error: group - list 接口 缺失参数 withItem %c', ErrorStyle, '');
+      return;
+    }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.group
-        .bulkRead({ projectUuid, workSpaceUuid })
+        .bulkRead({ projectUuid, workSpaceUuid, withItem })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');
