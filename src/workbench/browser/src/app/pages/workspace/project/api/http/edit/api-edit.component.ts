@@ -5,10 +5,11 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
-import { generateRestFromUrl } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun, toJS } from 'mobx';
+import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -21,7 +22,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditBodyComponent } from './body/api-edit-body.component';
 
 @Component({
-  selector: 'eo-api-edit-edit',
+  selector: 'pc-api-http-edit',
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
@@ -39,7 +40,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
-  groups: any[];
+  groups: NzTreeNode[];
   initTimes = 0;
   expandKeys: string[] = [];
   REQUEST_METHOD = enumsToArr(RequestMethod);
@@ -108,9 +109,10 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('Ctrl + s');
-          // 或者 return false;
           event.preventDefault();
+
+          //Manualy call funciton in case on blur event not trigger
+          this.updateParamsbyUri();
           this.saveApi();
         }
       });
@@ -119,6 +121,17 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
+  updateParamsbyUri() {
+    const url = this.validateForm.controls['uri'].value;
+
+    this.model.requestParams.queryParams = syncUrlAndQuery(url, this.model.requestParams.queryParams, {
+      nowOperate: 'url',
+      method: 'keepBoth'
+    }).query;
+
+    this.resetRestFromUrl(url);
+  }
+
   openGroup() {}
   async saveApi() {
     //manual set dirty in case user submit directly without edit
@@ -131,7 +144,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
-    let formData: any = this.getFormdata();
+    let formData: ApiData = this.getFormdata();
     const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
@@ -244,12 +257,5 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
         this.emitChangeFun();
       });
     });
-    //watch uri
-    this.validateForm
-      .get('uri')
-      ?.valueChanges.pipe(debounceTime(800), takeUntil(this.destroy$))
-      .subscribe(url => {
-        this.resetRestFromUrl(url);
-      });
   }
 }

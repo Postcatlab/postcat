@@ -1,3 +1,5 @@
+import { method } from 'lodash-es';
+
 import { QueryParam, RestParam } from '../../../../../shared/services/storage/db/models/apiData';
 
 /**
@@ -19,59 +21,59 @@ const jointQuery = (url = '', query: QueryParam[]) => {
     if (!(val.name && val.isRequired)) {
       return;
     }
-    search += `${val.name}=${val.paramAttr?.example || ''}&`;
+    search += `${val.name}=${val['paramAttr.example'] || ''}&`;
   });
   search = search ? `?${search.slice(0, -1)}` : '';
   return `${url.split('?')[0]}${search}`;
 };
 
 /**
- * URL and Query transfer each other
+ * Sync URL and Query
  *
  * @description Add query to URL and read query form url
  * @param url - whole url include query
  * @param query - ui query param
- * @param opts.base - based on which,url or query,delete no exist and replace same
- * @param opts.replaceType 'replace'|'merge' replace means only keep replace array,merge means union
+ * @param opts.method - sync method
  * @returns - {url:"",query:[]}
  */
-export const transferUrlAndQuery = (
+export const syncUrlAndQuery = (
   url = '',
   query = [],
-  opts: { base: string; replaceType?: string } = {
-    base: 'url',
-    replaceType: 'replace'
+  opts: {
+    nowOperate?: 'url' | 'query';
+    method: 'replace' | 'keepBoth';
+  } = {
+    method: 'replace',
+    nowOperate: 'url'
   }
 ) => {
   const urlQuery = [];
   const uiQuery = query;
   //Get url query
   new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
-    const item: QueryParam = {
+    const item: QueryParam | any = {
       isRequired: 1,
       name,
-      paramAttr: {
-        example: val
-      }
+      'paramAttr.example': val
     };
     urlQuery.push(item);
   });
-  let result = [];
-  if (opts.replaceType === 'merge') {
-    result = [...urlQuery, ...uiQuery];
-    url = jointQuery(url, result);
-  } else {
-    if (opts.base === 'url') {
-      result = [...urlQuery, ...uiQuery.filter((val: QueryParam) => !val.isRequired)];
-    } else {
-      result = uiQuery;
-      url = jointQuery(url, result);
-    }
-  }
-  return {
+  const pre = opts.nowOperate === 'url' ? uiQuery : urlQuery;
+  const next = opts.nowOperate === 'url' ? urlQuery : uiQuery;
+  const result = {
     url,
-    query: result
+    query
   };
+  if (opts.method === 'replace') {
+    result.query = [...next, ...pre.filter(val => !val.isRequired)];
+  } else {
+    result.query = [
+      ...next.map(val => Object.assign(pre.find(val1 => val1.name === val.name) || {}, val)),
+      ...pre.filter((val: QueryParam) => urlQuery.every(val1 => val1.name !== val.name))
+    ];
+  }
+  result.url = jointQuery(url, result.query);
+  return result;
 };
 
 /**
@@ -96,5 +98,5 @@ export const generateRestFromUrl = (url, rest): RestParam[] => {
     };
     result.splice(result.length - 1, 0, restItem);
   });
-  return result;
+  return [...result, ...rest.filter((val: QueryParam) => result.every(val1 => val1.name !== val.name))];
 };

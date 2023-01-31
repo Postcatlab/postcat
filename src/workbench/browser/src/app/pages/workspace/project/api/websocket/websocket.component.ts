@@ -6,7 +6,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Protocol, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -135,17 +135,12 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
-      base: 'query'
-    }).url;
+    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams).url;
   }
   changeUri() {
-    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+    this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
-      this.model.request.requestParams.queryParams,
-      {
-        base: 'url'
-      }
+      this.model.request.requestParams.queryParams
     ).query;
   }
   emitChangeFun(where) {

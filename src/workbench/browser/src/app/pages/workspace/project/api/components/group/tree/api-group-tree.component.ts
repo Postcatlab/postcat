@@ -196,6 +196,7 @@ export class ApiGroupTreeComponent implements OnInit {
       nzOnOk: () =>
         new Promise(resolve => {
           modal.componentInstance.submit(status => {
+            this.effect.getGroupList();
             if (!status) {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
               return resolve(true);

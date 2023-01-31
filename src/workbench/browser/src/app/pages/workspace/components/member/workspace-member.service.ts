@@ -5,10 +5,12 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, toJS } from 'mobx';
 
+import { Role, ROLE_TITLE_BY_ID } from '../../../../shared/models/member.model';
+
 @Injectable()
 export class WorkspaceMemberService {
   workSpaceUuid: string;
-  role: {};
+  role: Role[] = [];
   isOwner = false;
   constructor(
     private store: StoreService,
@@ -18,6 +20,7 @@ export class WorkspaceMemberService {
   ) {
     autorun(() => {
       this.role = this.store.getWorkspaceRole;
+      console.log(this.role);
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
       this.isOwner = this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner');
     });
@@ -44,15 +47,11 @@ export class WorkspaceMemberService {
     if (err) {
       return;
     }
-    const titleHash = {
-      'Workspace Owner': $localize`Workspace Owner`,
-      'Workspace Editor': $localize`Workspace Editor`
-    };
     return data
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        roleTitle: titleHash[roles.at(0)?.name],
+        roleTitle: ROLE_TITLE_BY_ID[roles.at(0)?.name],
         isSelf: this.store.getUserProfile?.id === id, // * Is my workspace
         isOwner: roles.some(it => it.name === 'Workspace Owner'),
         isEditor: roles.some(it => it.name === 'Workspace Editor'),

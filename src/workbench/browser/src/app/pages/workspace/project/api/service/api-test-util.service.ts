@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 
 import { ApiData } from '../../../../../shared/services/storage/db/models';
 import { BodyParam, HeaderParam, RestParam } from '../../../../../shared/services/storage/db/models/apiData';
@@ -158,10 +158,7 @@ export class ApiTestUtilService {
     const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
 
     //handle query and url
-    const tmpResult = transferUrlAndQuery(result.uri, result.requestParams.queryParams, {
-      base: 'url',
-      replaceType: 'merge'
-    });
+    const tmpResult = syncUrlAndQuery(result.uri, result.requestParams.queryParams);
     result.uri = tmpResult.url;
     result.requestParams.queryParams = tmpResult.query;
 

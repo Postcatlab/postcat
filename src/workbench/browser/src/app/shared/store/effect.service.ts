@@ -120,23 +120,6 @@ export class EffectService {
     }
     return data;
   }
-
-  async exportLocalProjectData(projectUuid = this.store.getCurrentProjectID) {
-    const { data } = await db.project.exports({
-      projectUuid
-    });
-    return data;
-    // return new Promise(resolve => {
-    //   this.indexedDBStorage.projectExport(projectID).subscribe((result: StorageRes) => {
-    //     if (result.status === StorageResStatus.success) {
-    //       resolve(result.data);
-    //     } else {
-    //       resolve(false);
-    //     }
-    //   });
-    // });
-  }
-
   exportCollects(apiGroup: any[], apiData: any[], parentID = 0) {
     const apiGroupFilters = apiGroup.filter(child => child.parentID === parentID);
     const apiDataFilters = apiData.filter(child => child.groupID === parentID);
@@ -260,88 +243,5 @@ export class EffectService {
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
     return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${data.sharedUuid}`;
-  }
-
-  deepCreateGroup = async (groupList = [], apiList = [], projectUuid, rootGroup) => {
-    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-    const groupFilters = groupList
-      .filter(n => n.depth !== 0)
-      .map(n => {
-        const { id, children, ...rest } = n;
-        rest.parentId ??= rootGroup.id;
-        return rest;
-      });
-    const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
-    console.log('remoteGroups', remoteGroups);
-    groupList.forEach((localGroup, index) => {
-      const apiFilters = apiList
-        .filter(n => n.groupId === localGroup.id)
-        .map(n => {
-          const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
-          return {
-            ...rest,
-            // 远程分组 id 替换本地分组 id
-            groupId: remoteGroups[index]?.id
-          };
-        });
-
-      if (apiFilters.length) {
-        this.remote.api_apiDataCreate({
-          apiList: apiFilters,
-          projectUuid
-        });
-      }
-
-      // 如果本地分组还有子分组
-      if (localGroup.children?.length) {
-        localGroup.children.forEach(m => {
-          m.type = 1;
-          // 远程分组 id 替换本地分组 id
-          m.parentId = remoteGroups[index]?.id;
-          m.projectUuid = projectUuid;
-          m.workSpaceUuid = workSpaceUuid;
-        });
-        this.deepCreateGroup(localGroup.children, apiList, projectUuid, rootGroup);
-      }
-    });
-  };
-
-  // 上传本地数据到远程
-  async uploadToRemote(projectUuid, params: ImportProjectDto) {
-    // const { groupList, apiList, environmentList } = params;
-    // const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-    // environmentList.forEach(n => {
-    //   const { id, ...rest } = n;
-    //   this.remote.api_environmentCreate({
-    //     ...rest,
-    //     workSpaceUuid,
-    //     projectUuid
-    //   });
-    // });
-    // // 远程分组
-    // // @ts-ignore
-    // const [groups] = await this.remote.api_groupList({ projectUuid, withItem: true });
-    // // 远程根分组
-    // const rootGroup = groups.find(n => n.depth === 0);
-    // console.log('rootGroup', rootGroup);
-    // this.deepCreateGroup(groupList, apiList, projectUuid, rootGroup);
-  }
-
-  // TODO 等后端接口
-  async projectImport(target: 'local' | 'remote', params: ImportProjectDto) {
-    const { projectUuid = this.store.getCurrentProjectID, ...restParams } = params;
-    console.log('this.store.getCurrentWorkspaceUuid', this.store.getCurrentWorkspaceUuid);
-    if (target === 'local') {
-      const _params = {
-        ...restParams,
-        projectUuid: this.store.getCurrentProjectID,
-        workSpaceUuid: this.store.getCurrentWorkspaceUuid
-      } as ImportProjectDto;
-      await db.project.import(_params);
-      console.log('local projectImport', params);
-    } else if (target === 'remote') {
-      console.log('remote projectImport', params);
-      await this.uploadToRemote(projectUuid, params);
-    }
   }
 }
