@@ -78,7 +78,7 @@ export class WebService {
         this.resourceInfo.forEach(item => {
           switch (item.id) {
             case 'win': {
-              item.link = `https://gitee.com/eolink_admin/postcat/releases/download/v${packageJson.version}/Postcat-${packageJson.version}.dmg`;
+              item.link = `https://gitee.com/eolink_admin/postcat/releases/download/v${packageJson.version}/Postcat-Setup-${packageJson.version}.exe`;
               break;
             }
             case 'mac-intel': {
