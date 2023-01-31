@@ -5,9 +5,11 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 
+import { Role, ROLE_TITLE_BY_ID } from '../../../../shared/models/member.model';
+
 @Injectable()
 export class ProjectMemberService {
-  role: any[] = [];
+  role: Role[] = [];
   isOwner = false;
   constructor(
     private api: ApiService,
@@ -47,16 +49,13 @@ export class ProjectMemberService {
     if (err) {
       return [];
     }
-    const titleHash = {
-      'Project Owner': $localize`Project Owner`,
-      'Project Editor': $localize`Project Editor`
-    };
     return data
       .map(({ roles, id, ...items }) => ({
         id,
         roles,
-        roleTitle: titleHash[roles.at(0)?.name],
+        roleTitle: ROLE_TITLE_BY_ID[roles.at(-1)?.name],
         isSelf: this.store.getUserProfile?.id === id, // * Is my project
+        readonly: roles.length > 1 ? true : false, //* Is workspace owner,can't edit in project
         isOwner: roles.some(it => it.name === 'Project Owner'),
         isEditor: roles.some(it => it.name === 'Project Editor'),
         ...items

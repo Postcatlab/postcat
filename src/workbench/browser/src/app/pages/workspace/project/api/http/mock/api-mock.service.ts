@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -13,9 +13,7 @@ export class ApiMockService {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
-    const uri = transferUrlAndQuery(this.testUtils.formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
-      base: 'query'
-    }).url;
+    const uri = syncUrlAndQuery(this.testUtils.formatUri(apiData.uri, apiData.restParams), apiData.queryParams).url;
     return `${this.store.mockUrl}/${uri}`;
   }
 

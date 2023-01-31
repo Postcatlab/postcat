@@ -26,13 +26,12 @@ import {
   ApiTestResData,
   TestServerRes
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
-import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
-import { collectStoredAnnotations } from 'mobx/dist/internal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
@@ -67,7 +66,7 @@ interface testViewModel {
   testResult: ApiTestResData;
 }
 @Component({
-  selector: 'eo-api-test',
+  selector: 'eo-api-http-test',
   templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss']
 })
@@ -240,8 +239,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     });
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
-      base: 'query'
+    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
+      nowOperate: 'query',
+      method: 'replace'
     }).url;
   }
   watchBasicForm() {
@@ -251,12 +251,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     });
   }
   updateParamsbyUri(url) {
-    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+    this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
-      this.model.request.requestParams.queryParams,
-      {
-        base: 'url'
-      }
+      this.model.request.requestParams.queryParams
     ).query;
     this.model.request.requestParams.restParams = [
       ...generateRestFromUrl(this.model.request.uri, this.model.request.requestParams.restParams)
