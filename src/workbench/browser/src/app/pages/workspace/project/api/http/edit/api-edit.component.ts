@@ -156,7 +156,8 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     }
     // Add success
     this.message.success(title);
-    this.initialModel = this.apiEditUtil.formatEditingApiData(this.getFormdata());
+    const data = this.getFormdata();
+    this.initialModel = this.apiEditUtil.formatEditingApiData(data);
     if (busEvent === 'addApi') {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
@@ -241,11 +242,12 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     // pcConsole.log('initBasicForm', controls);
   }
   private getFormdata(): ApiData {
+    const { name, uri, groupId } = this.validateForm.value;
     const result = {
       ...this.model,
-      name: this.validateForm.value.name,
-      uri: this.validateForm.value.uri,
-      groupId: this.validateForm.value.groupId
+      name,
+      uri,
+      groupId
     };
     result.apiAttrInfo.requestMethod = this.validateForm.value.requestMethod;
     return result;

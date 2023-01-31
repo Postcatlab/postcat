@@ -44,13 +44,13 @@ export class ProjectApiService {
   async edit(apiData: ApiData) {
     return await this.api.api_apiDataUpdate({ api: apiData });
   }
-  async add(apiData: ApiData[] = []) {
-    return await this.api.api_apiDataCreate({ apiList: [].concat(apiData) });
+  async add(apiData: ApiData) {
+    return await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
   }
   async copy(apiID: string) {
     const { apiUuid, id, ...apiData } = await this.get(apiID);
     apiData.name += ' Copy';
-    const [result, err] = await this.add([apiData]);
+    const [result, err] = await this.add(apiData);
     if (err) {
       console.log(err);
       this.message.error($localize`Copy API failed`);

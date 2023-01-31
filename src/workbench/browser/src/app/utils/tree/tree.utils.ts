@@ -174,13 +174,17 @@ export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [
     apiData['isLeaf'] = true;
     return apiData.groupId === groupId;
   });
-  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId);
+  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId) || [];
+  console.log(
+    'apiGroupFilters == ',
+    apiGroupFilters?.map(it => it)
+  );
   return [
     ...apiGroupFilters.map(group => ({
       ...group,
-      title: group.name,
+      title: group.name || '',
       key: group.id,
-      children: genApiGroupTree([...(group.children || [])], apiDatas, group.id)
+      children: genApiGroupTree([...(group?.children || [])], apiDatas, group.id)
     })),
     ...apiDataFilters
   ];

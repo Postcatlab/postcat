@@ -591,7 +591,7 @@ export class RemoteService {
   }
 
   api_groupList<T = any>(
-    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, withItem = true },
     prefix = ''
   ) {
     if (projectUuid == null) {
@@ -602,11 +602,15 @@ export class RemoteService {
       console.log('%c Error: group - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
+    if (withItem == null) {
+      console.log('%c Error: group - list 接口 缺失参数 withItem %c', ErrorStyle, '');
+      return;
+    }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/group/list`, {
-          params: { projectUuid, workSpaceUuid }
+          params: { projectUuid, workSpaceUuid, withItem }
         })
         .subscribe({
           next: ({ code, data }: any) => {
