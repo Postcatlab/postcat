@@ -527,21 +527,17 @@ export class UserModalComponent implements OnInit, OnDestroy {
                 // 遍历本地项目
                 const arr = localProjects.map(async (localProject, index) => {
                   // 导出本地数据
-                  const { apiList, groupList = [], environmentList } = await this.effect.exportLocalProjectData(localProject.uuid);
-
-                  console.log('remoteProjects', remoteProjects);
-                  console.log('environmentList', environmentList);
-
-                  const remoteProject = remoteProjects[index];
-
-                  console.log('remoteProject', remoteProject);
-                  // 导出本地数据
-                  const exportResult = await this.effect.exportLocalProjectData(localProject.uuid);
-
-                  await this.effect.projectImport('remote', {
-                    ...exportResult,
-                    projectUuid: remoteProject.projectUuid
-                  });
+                  // const { apiList, groupList = [], environmentList } = await this.effect.exportLocalProjectData(localProject.uuid);
+                  // console.log('remoteProjects', remoteProjects);
+                  // console.log('environmentList', environmentList);
+                  // const remoteProject = remoteProjects[index];
+                  // console.log('remoteProject', remoteProject);
+                  // // 导出本地数据
+                  // const exportResult = await this.effect.exportLocalProjectData(localProject.uuid);
+                  // await this.effect.projectImport('remote', {
+                  //   ...exportResult,
+                  //   projectUuid: remoteProject.projectUuid
+                  // });
                 });
 
                 await Promise.all(arr);
