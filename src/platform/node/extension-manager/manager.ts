@@ -1,4 +1,3 @@
-import http from 'axios';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { HOME_DIR } from 'eo/shared/electron-main/constant';
 import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -11,6 +10,7 @@ import { ModuleHandlerResult, ModuleManagerInfo } from './handler.model';
 
 import { promises, readFileSync } from 'fs';
 import { lstat } from 'fs/promises';
+import https from 'https';
 import path from 'node:path';
 
 const extServerMap = new Map<string, SidebarView>();
@@ -51,9 +51,23 @@ export class ModuleManager {
     this.updateAll();
   }
 
-  async getRemoteExtension() {
-    const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
-    return data.data.map(({ name, version }) => ({ name, version }));
+  async getRemoteExtension(): Promise<ModuleManagerInfo[]> {
+    return new Promise(resolve => {
+      let data = '';
+      https.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`, res => {
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          let exts = [];
+          try {
+            exts = JSON.parse(data).data;
+          } catch (e) {}
+          exts = exts.map(({ name, version }) => ({ name, version }));
+          resolve(exts);
+        });
+      });
+    });
   }
 
   async installExt({ name }) {

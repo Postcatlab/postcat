@@ -35,7 +35,7 @@ class DataSource extends Dexie {
 
     const {
       data: { uuid: workSpaceUuid }
-    } = await workspaceService.create({ title: 'Persional Workspace' });
+    } = await workspaceService.create({ title: $localize`Personal Workspace` });
 
     await projectService.bulkCreate({ projectMsgs: [{ name: 'Default' }], workSpaceUuid });
   }

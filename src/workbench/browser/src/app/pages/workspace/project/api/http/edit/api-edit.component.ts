@@ -3,11 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun, toJS } from 'mobx';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
@@ -26,7 +25,7 @@ import { ApiEditBodyComponent } from './body/api-edit-body.component';
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy {
+export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @ViewChild('editBody') editBody: ApiEditBodyComponent;
   @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
@@ -198,6 +197,10 @@ export class ApiEditComponent implements OnDestroy {
           this.initialModel.groupId = this.model.groupId;
         }
       }
+
+      /**
+       * If group has be deleted,reset to root group
+       */
       const groupObj = new PCTree(this.groups);
       const existGroup = groupObj.findGroupByID(this.model.groupId);
       this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);

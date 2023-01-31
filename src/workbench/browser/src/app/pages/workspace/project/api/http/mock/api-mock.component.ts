@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { ActivatedRoute } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-shared/api-mock-table.component';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
@@ -20,7 +21,7 @@ import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db
     `
   ]
 })
-export class ApiMockComponent implements OnInit {
+export class ApiMockComponent implements OnInit, TabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   @Input() canEdit = true;
 
