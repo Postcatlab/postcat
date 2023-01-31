@@ -4,7 +4,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
   return {
     apiList: [
       {
-        groupId: 1,
+        groupId,
         groupName: '',
         lifecycle: 0,
         name: 'COVID-19 national epidemic',
@@ -340,7 +340,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
         contentType: 0
       },
       {
-        groupId: 1,
+        groupId,
         groupName: '',
         lifecycle: 0,
         name: 'Get City Weather Today',

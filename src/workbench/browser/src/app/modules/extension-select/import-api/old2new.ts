@@ -1,4 +1,4 @@
-import type { ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
+import { CollectionTypeEnum, ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 
 import { convertApiData } from './../../../shared/services/storage/db/dataSource/convert';
 
@@ -12,53 +12,28 @@ export const old2new = (params, projectUuid, workSpaceUuid): ImportProjectDto =>
     projectUuid,
     workSpaceUuid
   }));
-
-  const genId = () => crypto.getRandomValues(new Uint32Array(1))[0];
-
-  const genGroup = (name, parentId?) => {
-    return {
-      name,
-      parentId,
-      id: genId(),
-      type: 1,
-      projectUuid,
-      workSpaceUuid,
-      children: []
-    };
-  };
-
-  const rootGroup = genGroup(collections[0].name);
-
-  const apiList = [];
-  const groupList = [rootGroup];
-
-  const formatData = (collections = [], parentGroup) => {
+  const formatData = (collections = []) => {
     collections.forEach(item => {
       // API
       if (item.uri) {
         const newApiData = convertApiData(item);
-        newApiData.groupId = parentGroup.id;
-        apiList.push(newApiData);
+        Object.assign(item, newApiData);
       }
       // 分组
       else {
-        const group = genGroup(item.name, parentGroup.id);
-
-        parentGroup.children.push(group);
+        item.collectionType = CollectionTypeEnum.GROUP;
 
         if (item.children?.length) {
-          formatData(item.children, group);
+          formatData(item.children);
         }
       }
     });
   };
 
-  collections[0].id = genId();
-  formatData(collections[0]?.children, groupList[0]);
+  formatData(collections);
 
   return {
-    name: 'Default',
-    environmentList: [],
-    collections: []
+    collections,
+    environmentList
   };
 };

@@ -123,7 +123,7 @@ export class ProjectService extends BaseService<Project> {
     const result: ImportProjectDto = {
       ...projectInfo,
       environmentList,
-      collections: formatTree(apiGroupTree) as Collection[]
+      collections: formatTree(apiGroupTree[0].children) as Collection[]
     };
 
     return result as unknown as ApiResponsePromise<ImportProjectDto>;

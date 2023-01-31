@@ -6,6 +6,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { LocalService } from 'eo/workbench/browser/src/app/shared/services/storage/local.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -181,7 +182,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public fb: UntypedFormBuilder,
     private router: Router,
     private web: WebService,
-    private remote: RemoteService
+    private remote: RemoteService,
+    private localService: LocalService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -524,20 +526,15 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   return;
                 }
 
-                // 遍历本地项目
+                // 遍历本地项目, 挨个导出并导入的远程
                 const arr = localProjects.map(async (localProject, index) => {
+                  const remoteProject = remoteProjects[index];
                   // 导出本地数据
-                  // const { apiList, groupList = [], environmentList } = await this.effect.exportLocalProjectData(localProject.uuid);
-                  // console.log('remoteProjects', remoteProjects);
-                  // console.log('environmentList', environmentList);
-                  // const remoteProject = remoteProjects[index];
-                  // console.log('remoteProject', remoteProject);
-                  // // 导出本地数据
-                  // const exportResult = await this.effect.exportLocalProjectData(localProject.uuid);
-                  // await this.effect.projectImport('remote', {
-                  //   ...exportResult,
-                  //   projectUuid: remoteProject.projectUuid
-                  // });
+                  const [exportResult] = await this.localService.api_projectExportProject({ projectUuid: localProject.uuid });
+
+                  exportResult.projectUuid = remoteProject.projectUuid;
+
+                  await this.api.api_projectImport(exportResult);
                 });
 
                 await Promise.all(arr);
