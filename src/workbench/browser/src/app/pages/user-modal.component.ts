@@ -526,7 +526,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   return;
                 }
 
-                // 遍历本地项目
+                // 遍历本地项目, 挨个导出并导入的远程
                 const arr = localProjects.map(async (localProject, index) => {
                   const remoteProject = remoteProjects[index];
                   // 导出本地数据
