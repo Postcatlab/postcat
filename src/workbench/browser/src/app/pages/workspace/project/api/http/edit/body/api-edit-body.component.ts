@@ -158,7 +158,8 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
       if (!this.model.length) {
         const rootItem: BodyParam = Object.assign(eoDeepCopy(this.itemStructure), {
           dataType: ApiParamsType.object,
-          name: 'root'
+          name: 'root',
+          childList: [eoDeepCopy(this.itemStructure)]
         });
         this.model.push(rootItem);
       }
@@ -189,7 +190,6 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
     this.listConf.setting = config.setting;
     if (this.bodyType === ApiBodyType.XML) {
       this.checkAddRow = item => {
-        console.log(item);
         //@ts-ignore
         return item.eoKey !== this.model[0].eoKey;
       };

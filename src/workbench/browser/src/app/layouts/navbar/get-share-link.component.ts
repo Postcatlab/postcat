@@ -12,7 +12,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
     <button
       eo-ng-button
       nzType="default"
-      class="mx-2 btn_scondary"
+      class="mx-2"
       nz-popover
       *ngIf="!store.isShare && store.getUrl.includes('/home/workspace/project/api/http/test')"
       [nzPopoverContent]="contentTemplate"
@@ -27,7 +27,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
     <ng-template #contentTemplate>
       <div class="w-[360px] pb-4">
         <p i18n class="font-bold">Share via link</p>
-        <p i18n class="pb-2 text-xs text-[#999]">
+        <p i18n class="pb-2 text-xs text-tips">
           This link will be updated with the API content. Everyone can access it without logging in
         </p>
         <div class="flex items-center">

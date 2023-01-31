@@ -6533,10 +6533,10 @@ eo-ng-auto-complete@0.1.0:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-button@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.1.0.tgz#2bde192a544d52a3eef96c9138e1408f12515c6c"
-  integrity sha512-nN7yz4/rYt+dY81dJYqSt6f4r6BdcFCct1fPzu1HJseh3OS4+tCFJIqB9SJpC86BqLsCQFAWPeLrlQzftIsn/A==
+eo-ng-button@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.1.1.tgz#a3dd8503a1fcbd79cbd5e470a038e0bd4e569a76"
+  integrity sha512-Q1hArfwgv+hu56K9br0FhkUy7z2Rw2f6RS29KQWQl9k1xeHMPv8zblvMW3Te/IHOo5S0qY7nZgcL4FTr3wG27g==
   dependencies:
     tslib "^2.3.0"
 
@@ -6554,10 +6554,10 @@ eo-ng-dropdown@0.1.0:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-feedback@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.1.0.tgz#dc10f08c9a0b045e8941eb28c730a72795177541"
-  integrity sha512-Cd2rImHiWHP2PGy0f4+lmGYui9Gn6ox6YGwlVm9gUDzaB8wRfZa1L1eNXYK3OkoPEBx1rOIl4QGZUMdMjAB1vQ==
+eo-ng-feedback@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.1.1.tgz#462e0cc0bc3515c6c4f247680a96cd0454d03759"
+  integrity sha512-Y6o/vxnfnvzWyK+Fs8Nh9+aKsl2G4mnm0kvxFD+fSIwfe3tHChdTzBYv8hBcLbvSy90xGrIvL/CXwt3LACYQFg==
   dependencies:
     tslib "^2.3.0"
 
@@ -11046,10 +11046,10 @@ module-details-from-path@^1.0.3:
   resolved "https://registry.npmmirror.com/module-details-from-path/-/module-details-from-path-1.0.3.tgz#114c949673e2a8a35e9d35788527aa37b679da2b"
   integrity sha512-ySViT69/76t8VhE1xXHK6Ch4NcDd26gx0MzKXLO+F7NOtnqH68d9zF94nT8ZWSxXh8ELOERsnJO/sWt1xZYw5A==
 
-monaco-editor@0.34.1:
-  version "0.34.1"
-  resolved "https://registry.npmmirror.com/monaco-editor/-/monaco-editor-0.34.1.tgz#1b75c4ad6bc4c1f9da656d740d98e0b850a22f87"
-  integrity sha512-FKc80TyiMaruhJKKPz5SpJPIjL+dflGvz4CpuThaPMc94AyN7SeC9HQ8hrvaxX7EyHdJcUY5i4D0gNyJj1vSZQ==
+monaco-editor@0.33.0:
+  version "0.33.0"
+  resolved "https://registry.npmmirror.com/monaco-editor/-/monaco-editor-0.33.0.tgz#842e244f3750a2482f8a29c676b5684e75ff34af"
+  integrity sha512-VcRWPSLIUEgQJQIE0pVT8FcGBIgFoxz7jtqctE+IiCxWugD0DwgyQBcZBhdSrdMC84eumoqMZsGl2GTreOzwqw==
 
 move-concurrently@^1.0.1:
   version "1.0.1"

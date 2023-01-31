@@ -139,7 +139,7 @@ object {
 
   .ant-popover-inner,
   .ant-popover-inner-content {
-    color: rgb(0 0 0 / 85%);
+    color: var(--text-color);
     background-color: var(--background-color);
   }
 }

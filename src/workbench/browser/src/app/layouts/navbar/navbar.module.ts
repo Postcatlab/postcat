@@ -7,12 +7,22 @@ import { SharedModule } from '../../shared/shared.module';
 import { NavBreadcrumbComponent } from './breadcrumb/nav-breadcrumb.component';
 import { SelectWorkspaceComponent } from './breadcrumb/select-workspace/select-workspace.component';
 import { GetShareLinkComponent } from './get-share-link.component';
+import { HelpDropdownComponent } from './help-dropdown/help-dropdown.component';
 import { NavOperateComponent } from './nav-operate.component';
 import { NavbarComponent } from './navbar.component';
+import { ShareNavbarComponent } from './share-navbar/share-navbar.component';
 
 @NgModule({
   imports: [SharedModule, DownloadClientModule, LogoModule, NzBreadCrumbModule],
-  declarations: [NavbarComponent, GetShareLinkComponent, NavOperateComponent, SelectWorkspaceComponent, NavBreadcrumbComponent],
+  declarations: [
+    NavbarComponent,
+    GetShareLinkComponent,
+    NavOperateComponent,
+    SelectWorkspaceComponent,
+    NavBreadcrumbComponent,
+    ShareNavbarComponent,
+    HelpDropdownComponent
+  ],
   exports: [NavbarComponent]
 })
 export class NavbarModule {}
