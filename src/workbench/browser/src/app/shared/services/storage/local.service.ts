@@ -1068,10 +1068,10 @@ export class LocalService {
     });
   }
 
-  api_projectImport<T = any>({ ...items }) {
+  api_projectImport<T = any>(params) {
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.project
-        .import({ ...items })
+        .import(params)
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project - import 接口调用成功 %c', SuccessStyle, '');

@@ -1881,9 +1881,9 @@ export class RemoteService {
     });
   }
 
-  api_projectImport<T = any>({ ...items }, prefix = '') {
+  api_projectImport<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http.post(`${prefix}/api/projects/import`, { ...items }).subscribe({
+      this.http.post(`${prefix}/api/projects/import`, params).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
             console.log('%c project:import - api_projectImport 接口请求成功 %c', SuccessStyle, '');

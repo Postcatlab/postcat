@@ -249,7 +249,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectDelete<T>(params) : this.remote.api_projectDelete<T>(params);
   }
 
-  api_projectImport<T = any>(params: { [key: string]: any }) {
+  api_projectImport<T = any>(params: any) {
     return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
   }
 
