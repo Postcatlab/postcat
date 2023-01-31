@@ -27,8 +27,6 @@ export interface ProjectPageDto extends PageDto {
 }
 
 export interface ImportProjectDto {
-  name: string;
-  description?: string;
   environmentList: Environment[];
   collections: Collection[];
   projectUuid?: string;
