@@ -23,6 +23,6 @@ import { ShareNavbarComponent } from './share-navbar/share-navbar.component';
     ShareNavbarComponent,
     HelpDropdownComponent
   ],
-  exports: [NavbarComponent]
+  exports: [NavbarComponent, ShareNavbarComponent]
 })
 export class NavbarModule {}

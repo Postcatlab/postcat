@@ -158,7 +158,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   async init() {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
-      console.log('restTest');
       this.model = {
         requestTabIndex: 1
       } as testViewModel;

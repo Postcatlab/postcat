@@ -242,6 +242,6 @@ export class EffectService {
       .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${data.sharedUuid}`;
+    return `${host}/${lang ? `${lang}/` : ''}share/http/test?shareId=${data.sharedUuid}`;
   }
 }

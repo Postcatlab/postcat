@@ -31,10 +31,13 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
           This link will be updated with the API content. Everyone can access it without logging in
         </p>
         <div class="flex items-center">
-          <span class="truncate flex-1">
-            {{ link }}
-          </span>
-          <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+          <nz-spin *ngIf="!link" class="flex-1 mt-[10px]"></nz-spin>
+          <ng-container *ngIf="link">
+            <span class="truncate flex-1">
+              {{ link }}
+            </span>
+            <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+          </ng-container>
         </div>
       </div>
     </ng-template>
@@ -48,9 +51,7 @@ export class GetShareLinkComponent {
     public store: StoreService,
     public dataSourceService: DataSourceService,
     private message: EoNgFeedbackMessageService
-  ) {
-    this.link = 'Please wait ...';
-  }
+  ) {}
   handleCopy() {
     if (this.isCopy) {
       return;

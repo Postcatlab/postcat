@@ -152,7 +152,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   addAPI(group?) {
-    const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { groupId: group?.key }
     });
@@ -172,7 +172,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.projectApi.copy(api.key);
   }
   editAPI(api) {
-    const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { uuid: api.key }
     });
@@ -257,7 +257,7 @@ export class ApiGroupTreeComponent implements OnInit {
       }
       case 'clickItem': {
         // * jump to api detail page
-        const prefix = this.globalStore.isShare ? 'home/share' : '/home/workspace/project/api';
+        const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
           queryParams: { uuid: event.node.key, groupId: event.node.origin.groupId }
         });

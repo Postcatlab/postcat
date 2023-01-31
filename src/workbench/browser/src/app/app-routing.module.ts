@@ -1,8 +1,9 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { PageNotFindModule } from 'eo/workbench/browser/src/app/layouts/page-not-found/page-not-find.module';
 import { PageNotFoundComponent } from 'eo/workbench/browser/src/app/layouts/page-not-found/page-not-found.component';
+
+import { RedirectSharedID } from './pages/services/redirect.services';
 
 const routes: Routes = [
   {
@@ -13,6 +14,12 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
+  },
+  {
+    path: 'share',
+    canActivate: [RedirectSharedID],
+    runGuardsAndResolvers: 'always',
+    loadChildren: () => import('./pages/share-project/share-project.module').then(m => m.ShareProjectModule)
   },
   {
     path: '**',
@@ -28,6 +35,7 @@ const routes: Routes = [
     }),
     PageNotFindModule
   ],
+  providers: [RedirectSharedID],
   exports: [RouterModule],
   // 👇 设置基础路由
   // providers: [

@@ -143,3 +143,21 @@ object {
     background-color: var(--background-color);
   }
 }
+
+.eo-navbar {
+  -webkit-app-region: drag;
+  position: sticky;
+  width: 100%;
+  z-index: 11;
+  left: 0;
+  top: 0;
+  padding: 0 8px;
+  color: var(--layout-header-text-color);
+  background-color: var(--layout-header-background-color);
+  border-bottom: 1px solid var(--border-color);
+  height: var(--layout-header-height);
+
+  .logo {
+    width: 30px;
+  }
+}

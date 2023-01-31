@@ -4,7 +4,7 @@ import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/compo
 
 import { PageBlankComponent } from '../layouts/page-blank/page-blank.component';
 import { PagesComponent } from './pages.component';
-import { RedirectSharedID, RedirectWorkspace } from './services/redirect.services';
+import { RedirectWorkspace } from './services/redirect.services';
 
 const routes: Routes = [
   {
@@ -27,12 +27,6 @@ const routes: Routes = [
         loadChildren: () => import('./workspace/workspace.module').then(m => m.WorkspaceModule)
       },
       {
-        path: 'share',
-        canActivate: [RedirectSharedID],
-        runGuardsAndResolvers: 'always',
-        loadChildren: () => import('./share-project/share-project.module').then(m => m.ShareProjectModule)
-      },
-      {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
       },
@@ -46,7 +40,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  providers: [RedirectSharedID, RedirectWorkspace],
+  providers: [RedirectWorkspace],
   exports: [RouterModule]
 })
 export class PagesRoutingModule {}

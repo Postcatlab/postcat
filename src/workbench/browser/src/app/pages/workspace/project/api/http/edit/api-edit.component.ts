@@ -238,7 +238,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       controls[name] = [this.model[name] || '', [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
-    pcConsole.log('initBasicForm', controls);
+    // pcConsole.log('initBasicForm', controls);
   }
   private getFormdata(): ApiData {
     const result = {

@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  .home-container {
+    --body-height: calc(100vh - var(--layout-header-height));
+
+    height: var(--body-height);
+
+    eo-api {
+      display: block;
+      height: 100%;
+    }
+  }
+}

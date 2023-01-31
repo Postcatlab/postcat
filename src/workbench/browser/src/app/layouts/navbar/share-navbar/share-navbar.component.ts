@@ -11,10 +11,12 @@ import { Component, OnInit } from '@angular/core';
           <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/postcat?style=social" alt="" />
         </a>
       </div>
-      <!-- Help -->
-      <pc-help-dropdown></pc-help-dropdown>
-      <!-- Web download client -->
-      <pc-download-client></pc-download-client>
+      <div>
+        <!-- Help -->
+        <pc-help-dropdown></pc-help-dropdown>
+        <!-- Web download client -->
+        <pc-download-client></pc-download-client>
+      </div>
     </div>
   `,
   styles: []
