@@ -26,6 +26,8 @@ interface testViewModel {
   request: ApiData;
   response: any;
 }
+
+const UIHash = new Map().set('requestHeaders', 'Request Headers').set('responseHeaders', 'Response Headers');
 @Component({
   selector: 'websocket-content',
   templateUrl: './websocket.component.html',
@@ -127,10 +129,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     const status = this.model.response.responseBody[index].isExpand;
     this.model.response.responseBody[index].isExpand = status == null ? true : !status;
   }
-  renderStatus(status) {
-    const hash = new Map().set('connected', 'Connected').set('disconnect', 'Disconnect').set('connecting', 'Connecting');
-    return hash.get(status);
-  }
+
   rawDataChange(e) {
     this.modelChange.emit(this.model);
   }

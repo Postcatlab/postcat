@@ -58,8 +58,7 @@ export const old2new = (params, projectUuid, workSpaceUuid): ImportProjectDto =>
 
   return {
     name: 'Default',
-    apiList,
-    groupList,
-    environmentList
+    environmentList: [],
+    collections: []
   };
 };

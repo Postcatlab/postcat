@@ -1067,4 +1067,22 @@ export class LocalService {
         });
     });
   }
+
+  api_projectImport<T = any>(params) {
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .import(params)
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - import 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - import 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
 }

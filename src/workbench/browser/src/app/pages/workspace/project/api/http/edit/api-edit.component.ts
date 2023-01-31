@@ -14,7 +14,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
-import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
+import { eoDeepCopy, isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../utils/index.utils';
 import { ApiEffectService } from '../../service/store/api-effect.service';
 import { ApiStoreService } from '../../service/store/api-state.service';
 import { ApiEditUtilService } from './api-edit-util.service';
@@ -41,7 +41,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   validateForm: FormGroup;
   groups: any[];
   initTimes = 0;
-  expandKeys: string[];
+  expandKeys: string[] = [];
   REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
@@ -80,10 +80,8 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       // ! Prevent await async, replace current api data
       if (initTimes >= this.initTimes) {
         this.model = result;
-        console.log('model.groupId', this.model.groupId);
       }
     }
-    console.log('model.groupIdqqq', this.model.groupId);
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
     // Storage origin api data
@@ -96,10 +94,10 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
-    Promise.resolve().then(() => {
-      // TODO optimize
+    waitNextTick().then(() => {
       this.editBody.init();
       this.resEditBody.init();
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
   }
 

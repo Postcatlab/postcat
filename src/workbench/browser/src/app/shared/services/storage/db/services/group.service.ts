@@ -48,8 +48,8 @@ export class GroupService extends BaseService<Group> {
     const { id, parentId, name, sort, type } = params;
     const hasSort = Number.isInteger(sort);
 
+    // 对分组下的数据进行重排
     const sortData = async (groupList, apiDataList, target) => {
-      // @ts-ignore
       // 对数据进行分组
       const { mostThan = [], lessThan = [] } = formatSort([...groupList, ...apiDataList]).group(item => {
         return item.sort >= sort ? 'mostThan' : 'lessThan';
@@ -61,7 +61,7 @@ export class GroupService extends BaseService<Group> {
         n.sort = i;
         return n;
       });
-      // @ts-ignore
+
       const { groups, apis } = arr.group(item => (item.uri ? 'apis' : 'groups'));
       groups && (await this.baseService.bulkUpdate(groups));
       apis && (await this.apiDataService.bulkUpdate(apis));

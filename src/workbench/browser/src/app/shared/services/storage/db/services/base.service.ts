@@ -23,10 +23,6 @@ export class BaseService<T extends object> {
     });
   }
 
-  count(params?) {
-    return this.filterData(params).count();
-  }
-
   @ApiResponse()
   read(params: Record<string, any> = {}) {
     return this.filterData(params).first() as ApiResponsePromise<T>;

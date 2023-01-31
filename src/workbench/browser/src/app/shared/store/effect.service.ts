@@ -308,26 +308,23 @@ export class EffectService {
 
   // 上传本地数据到远程
   async uploadToRemote(projectUuid, params: ImportProjectDto) {
-    const { groupList, apiList, environmentList } = params;
-    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-
-    environmentList.forEach(n => {
-      const { id, ...rest } = n;
-      this.remote.api_environmentCreate({
-        ...rest,
-        workSpaceUuid,
-        projectUuid
-      });
-    });
-
-    // 远程分组
-    // @ts-ignore
-    const [groups] = await this.remote.api_groupList({ projectUuid, withItem: true });
-    // 远程根分组
-    const rootGroup = groups.find(n => n.depth === 0);
-    console.log('rootGroup', rootGroup);
-
-    this.deepCreateGroup(groupList, apiList, projectUuid, rootGroup);
+    // const { groupList, apiList, environmentList } = params;
+    // const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+    // environmentList.forEach(n => {
+    //   const { id, ...rest } = n;
+    //   this.remote.api_environmentCreate({
+    //     ...rest,
+    //     workSpaceUuid,
+    //     projectUuid
+    //   });
+    // });
+    // // 远程分组
+    // // @ts-ignore
+    // const [groups] = await this.remote.api_groupList({ projectUuid, withItem: true });
+    // // 远程根分组
+    // const rootGroup = groups.find(n => n.depth === 0);
+    // console.log('rootGroup', rootGroup);
+    // this.deepCreateGroup(groupList, apiList, projectUuid, rootGroup);
   }
 
   // TODO 等后端接口
@@ -340,7 +337,7 @@ export class EffectService {
         projectUuid: this.store.getCurrentProjectID,
         workSpaceUuid: this.store.getCurrentWorkspaceUuid
       } as ImportProjectDto;
-      await db.project.imports(_params);
+      await db.project.import(_params);
       console.log('local projectImport', params);
     } else if (target === 'remote') {
       console.log('remote projectImport', params);
