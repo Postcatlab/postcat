@@ -9,9 +9,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
-import { ElectronService, WebService } from '../../core/services';
+import { ElectronService } from '../../core/services';
 import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
-import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
@@ -21,30 +20,15 @@ import { ModalService } from '../../shared/services/modal.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  helpMenus = [
-    {
-      title: $localize`Document`,
-      href: 'https://docs.postcat.com',
-      itemClick: $event => {}
-    },
-    {
-      title: $localize`Report Issue`,
-      href: `https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
-      itemClick: $event => {}
-    }
-  ];
-  issueEnvironment = this.getEnvironment();
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
-    private web: WebService,
     private modal: ModalService,
     private modalService: NzModalService,
     private eMessage: EoNgFeedbackMessageService,
     public theme: ThemeService,
     private message: MessageService,
     private api: ApiService,
-    public lang: LanguageService,
     public store: StoreService,
     public dataSourceService: DataSourceService,
     public feature: FeatureControlService
@@ -90,10 +74,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleSwitchLang(event) {
-    this.lang.changeLanguage(event);
-  }
-
   /**
    * 打开系统设置
    */
@@ -115,16 +95,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
           ref.close();
         }
       });
-  }
-  private getEnvironment(): string {
-    let result = '';
-    const systemInfo = this.electron?.getSystemInfo();
-    systemInfo?.forEach(val => {
-      if (['homeDir'].includes(val.id)) {
-        return;
-      }
-      result += `- ${val.label}: ${val.value}\r\n`;
-    });
-    return encodeURIComponent(result);
   }
 }

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ExtensionInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { has } from 'lodash-es';
 
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+// shit angular-cli 配不明白
+// import { version as postcatVersion } from '../../../../../../../../package.json' assert { type: 'json' };
+import pkgInfo from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-export-api',
@@ -17,12 +17,7 @@ export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(
-    private storage: StorageService,
-    private store: StoreService,
-    private extensionService: ExtensionService,
-    private apiService: ApiService
-  ) {
+  constructor(private extensionService: ExtensionService, private apiService: ApiService) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
   }
   ngOnInit(): void {
@@ -72,6 +67,7 @@ export class ExportApiComponent implements OnInit {
       if (data) {
         console.log('projectExport result', data);
         try {
+          data.postcatVersion = pkgInfo.version;
           let output = module[action]({ data: data || {} });
           //Change format
           if (has(output, 'status') && output.status === 0) {

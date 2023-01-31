@@ -1,18 +1,17 @@
 <div class="flex items-center justify-between eo-navbar">
   <div class="flex items-center">
     <eo-logo class="logo"></eo-logo>
-    <!-- <img loading="lazy" class="logo" src="assets/images/logo.svg" /> -->
     <!-- Star -->
     <a href="https://github.com/eolinker/postcat" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
       <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/postcat?style=social" alt="" />
     </a>
-    <eo-nav-breadcrumb *ngIf="!store.isShare" class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
+    <eo-nav-breadcrumb class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
   </div>
   <div class="flex items-center electron-can-be-click">
     <!-- share -->
-    <!-- <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link> -->
+    <eo-get-share-link *ngIf="!store.isLocal"></eo-get-share-link>
     <!-- Extension -->
-    <ng-container *ngIf="!store.isShare">
+    <ng-container>
       <button
         eo-ng-button
         nzType="default"
@@ -29,54 +28,28 @@
       </button>
       <nz-divider nzType="vertical"></nz-divider>
     </ng-container>
-    <!-- Change Language -->
-    <ng-container *ngIf="store.isShare">
-      <eo-ng-select [(ngModel)]="lang.systemLanguage" nzBorderless (ngModelChange)="handleSwitchLang($event)">
-        <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
-        <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
-      </eo-ng-select>
-      <nz-divider nzType="vertical"></nz-divider>
-    </ng-container>
     <!-- Help -->
-    <button eo-ng-button nzType="text" class="flex items-center justify-center mr-[10px]" eo-ng-dropdown [nzDropdownMenu]="helpMenu">
-      <eo-iconpark-icon name="help"> </eo-iconpark-icon>
+    <pc-help-dropdown></pc-help-dropdown>
+    <!-- setting -->
+    <button
+      eo-ng-button
+      nzType="text"
+      class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      [nzTooltipMouseEnterDelay]="0.4"
+      nzTooltipPlacement="bottom"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
+    >
+      <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
-    <eo-ng-dropdown-menu #helpMenu="nzDropdownMenu">
-      <ul nz-menu>
-        <a href="https://docs.postcat.com" target="_blank" nz-menu-item i18n>Document</a>
-        <a
-          href="https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
-            issueEnvironment
-          }}"
-          target="_blank"
-          nz-menu-item
-          i18n
-          >Report Issue</a
-        >
-      </ul>
-    </eo-ng-dropdown-menu>
-    <ng-container *ngIf="!store.isShare">
-      <!-- setting -->
-      <button
-        eo-ng-button
-        nzType="text"
-        class="flex items-center justify-center icon"
-        i18n-nzTooltipTitle
-        eoNgFeedbackTooltip
-        [nzTooltipMouseEnterDelay]="0.4"
-        nzTooltipPlacement="bottom"
-        nzTooltipTitle="Open Settings"
-        (click)="openSettingModal()"
-      >
-        <eo-iconpark-icon name="setting"></eo-iconpark-icon>
-      </button>
-    </ng-container>
     <!-- User -->
     <button
       eo-ng-button
       nzType="text"
       eo-ng-dropdown
-      *ngIf="!store.isShare && feature.config.cloudFeature"
+      *ngIf="feature.config.cloudFeature"
       class="flex items-center justify-center icon ml-[10px]"
       [nzDropdownMenu]="userMenu"
       nzPlacement="bottomRight"
@@ -96,7 +69,7 @@
       </ul>
     </eo-ng-dropdown-menu>
     <!-- Web download client -->
-    <pc-download-client *ngIf="!store.isShare"></pc-download-client>
+    <pc-download-client></pc-download-client>
     <!--  PC system operate -->
     <eo-nav-operate></eo-nav-operate>
   </div>
