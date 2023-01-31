@@ -11,7 +11,7 @@
         </eo-ng-select>
         <nz-form-item nz-col class="flex-1">
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-            <input type="text" class="rounded-r" name="uri" eo-ng-input formControlName="uri" />
+            <input type="text" class="rounded-r" name="uri" (blur)="updateParamsbyUri()" eo-ng-input formControlName="uri" />
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
@@ -39,7 +39,7 @@
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
-      <!-- 请求参数 -->
+      <!-- Request -->
       <nz-collapse class="eo_collapse mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
           <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
@@ -107,7 +107,8 @@
           </eo-ng-tabset>
         </nz-collapse-panel>
       </nz-collapse>
-      <!-- 响应内容 -->
+
+      <!-- Response -->
       <nz-collapse class="eo_collapse mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
           <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">

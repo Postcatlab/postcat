@@ -7,6 +7,8 @@ import _ from 'lodash-es';
 import { action, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
+import { Role } from '../models/member.model';
+
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
@@ -72,7 +74,10 @@ export class StoreService {
   };
 
   // ? UI
-  @observable.shallow private role = {
+  @observable.shallow private role: {
+    workspace: Role[];
+    project: Role[];
+  } = {
     workspace: [],
     project: []
   };

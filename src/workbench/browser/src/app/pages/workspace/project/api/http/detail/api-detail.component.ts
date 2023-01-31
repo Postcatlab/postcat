@@ -12,7 +12,7 @@ import { cloneDeep } from 'lodash-es';
 import { enumsToObject } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
 @Component({
-  selector: 'api-detail',
+  selector: 'pc-api-http-detail',
   templateUrl: './api-detail.component.html',
   styleUrls: ['./api-detail.component.scss']
 })

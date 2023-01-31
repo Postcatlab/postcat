@@ -1,22 +1,18 @@
-export const MEMBER_MUI = [
-  {
-    title: $localize`Workspace Owner`,
-    name: 'owner',
-    id: 1
-  },
-  {
-    title: $localize`Workspace Editor`,
-    name: 'editor',
-    id: 2
-  },
-  {
-    title: $localize`Project Owner`,
-    name: 'owner',
-    id: 3
-  },
-  {
-    title: $localize`Editor`,
-    name: 'editor',
-    id: 4
-  }
-];
+export const ROLE_TITLE_BY_ID = {
+  'Project Owner': $localize`Project Owner`,
+  'Project Editor': $localize`Project Editor`,
+  'Workspace Owner': $localize`Workspace Owner`,
+  'Workspace Editor': $localize`Workspace Editor`
+};
+export interface Role {
+  /**
+   * Role belongs module
+   * 1: workspace, 2: project
+   */
+  module: 1 | 2;
+  name: string;
+  /**
+   * Workspace Owner/Project Owner
+   */
+  uuid: string;
+}

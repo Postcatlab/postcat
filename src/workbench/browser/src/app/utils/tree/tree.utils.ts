@@ -191,7 +191,7 @@ export class PCTree {
   private rootGroupID: number;
   constructor(list, opts?) {
     this.list = eoDeepCopy(list);
-    this.rootGroupID = opts.rootGroupID;
+    this.rootGroupID = opts?.rootGroupID;
   }
   getList() {
     return this.list;
