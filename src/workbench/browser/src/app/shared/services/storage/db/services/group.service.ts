@@ -28,7 +28,10 @@ const genGroupType2 = apiData => {
     id: apiData.apiUuid,
     uuid: apiData.apiUuid,
     parentId: apiData.groupId,
-    relationInfo: apiData
+    relationInfo: {
+      ...apiData,
+      ...apiData?.apiAttrInfo
+    }
   };
 };
 
