@@ -167,18 +167,39 @@ export const fieldTypeMap = new Map<string, any>([
   ['string', 'default_value']
 ]);
 
-export const genApiGroupTree = (apiGroups: Group[] = [], groupId: number) => {
-  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId) || [];
+/**
+ * Generate Group for tree view
+ *
+ * @param apiGroups
+ * @param groupId
+ * @returns
+ */
+export const genApiGroupTree = (apiGroups: Group[] = []) => {
   return [
-    ...apiGroupFilters.map(group => ({
+    ...apiGroups.map(group => ({
       ...group,
       title: group.name || '',
       key: group.id,
-      children: genApiGroupTree([...(group?.children || [])], group.id)
+      children: genApiGroupTree([...(group?.children || [])])
     }))
   ];
 };
-
+/**
+ * Get group after shrink api data
+ */
+export const getPureGroup = groupList => {
+  return [
+    ...groupList.filter(group => {
+      if (group.type === 2) return false;
+      Object.assign(group, {
+        title: group.name || '',
+        key: group.id,
+        children: getPureGroup([...(group?.children || [])])
+      });
+      return true;
+    })
+  ];
+};
 export class PCTree {
   private list: Group[];
   private rootGroupID: number;

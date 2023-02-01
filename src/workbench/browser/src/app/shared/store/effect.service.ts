@@ -232,7 +232,7 @@ export class EffectService {
 
   async updateShareLink() {
     // * update share link
-    const [data, err]: any = await this.api.api_shareCreateShare({});
+    const [data, err]: any = await this.api.api_projectShareCreateShare({});
     if (err) {
       return 'Error ... ';
     }

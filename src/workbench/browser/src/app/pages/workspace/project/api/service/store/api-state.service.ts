@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
-import { genApiGroupTree, hangGroupToApi } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { genApiGroupTree, getPureGroup, hangGroupToApi } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import _ from 'lodash-es';
 import { action, computed, makeObservable, observable, toJS } from 'mobx';
 
@@ -49,10 +49,10 @@ export class ApiStoreService {
     return this.groupList;
   }
   @computed get getGroupTree() {
-    return genApiGroupTree([this.rootGroup, ...this.groupList], this.getRootGroup?.parentId);
+    return getPureGroup(eoDeepCopy([this.rootGroup, ...this.groupList]));
   }
   @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList, this.getRootGroup?.id);
+    return genApiGroupTree(this.groupList);
   }
 
   @computed get getTestHistory() {

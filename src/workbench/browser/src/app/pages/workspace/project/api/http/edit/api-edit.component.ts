@@ -205,6 +205,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   getApiGroup() {
     autorun(() => {
       this.groups = this.store.getGroupTree;
+      console.log(this.groups);
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
         if (this.initialModel) {
