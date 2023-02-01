@@ -102,14 +102,13 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     };
     const operateName = uuid ? 'edit' : 'add';
     const operate = operateMUI[operateName];
-    const [data, err] = await this.api[operateName === 'edit' ? 'api_environmentUpdate' : 'api_environmentCreate'](formdata);
+    const [data, err] = await this.effect[operateName === 'edit' ? 'updateEnv' : 'addEnv'](formdata);
     if (err) {
       this.message.error(operate.error);
       return;
     }
     if (data) {
       this.message.success(operate.success);
-      this.effect.updateEnvList();
       if (operateName === 'add') {
         this.router.navigate(['home/workspace/project/api/env/edit'], {
           queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }

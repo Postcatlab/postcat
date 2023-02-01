@@ -87,13 +87,18 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
-    autorun(() => {
-      this.apiGroupTree = this.store.getApiGroupTree;
-      waitNextTick().then(() => {
-        this.nzSelectedKeys = this.getSelectKeys();
-        this.expandKeys = this.getExpandKeys();
-      });
-    });
+    autorun(
+      () => {
+        this.apiGroupTree = this.store.getApiGroupTree;
+        waitNextTick().then(() => {
+          this.nzSelectedKeys = this.getSelectKeys();
+          this.expandKeys = this.getExpandKeys();
+        });
+      },
+      {
+        delay: 300
+      }
+    );
   }
   getSelectKeys() {
     const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
@@ -107,7 +112,7 @@ export class ApiGroupTreeComponent implements OnInit {
     return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
-    return this.requestMethodMap[node.origin?.apiAttrInfo?.requestMethod];
+    return this.requestMethodMap[node.origin?.requestMethod];
   }
   renderRequestMethodText(node) {
     return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);

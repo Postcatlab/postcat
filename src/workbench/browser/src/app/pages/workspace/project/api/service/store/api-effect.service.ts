@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { toJS } from 'mobx';
 
 import { ApiStoreService } from './api-state.service';
 
@@ -70,21 +69,11 @@ export class ApiEffectService {
     rootGroup.name = $localize`Root Group`;
     this.store.setRootGroup(rootGroup);
 
-    // console.log('Group 数据', structuredClone(groupList));
-    // * get api list data
-    const [apiListRes, aErr] = await (this.globalStore.isShare
-      ? this.api.api_apiDataList({ ...params, statuses: 0 })
-      : this.api.api_apiDataList({ ...params, statuses: 0, order: 'order_num', sort: 'DESC' }));
-    if (aErr) {
-      return;
-    }
-    const { items } = apiListRes;
-    // console.log('API 数据', items);
     // * set api & group list
     this.store.setGroupList(rootGroup.children);
     Reflect.deleteProperty(rootGroup, 'children');
     // * for mock service
-    this.store.setApiList(items);
+    // this.store.setApiList(items);
   }
   async createGroup(groups: Group[] = []) {
     // * create group
@@ -150,6 +139,23 @@ export class ApiEffectService {
   }
 
   //? Env
+  async addEnv(env) {
+    const [data, err] = await this.api.api_environmentCreate(env);
+    if (err) {
+      return [null, err];
+    }
+    this.updateEnvList();
+    return [data, err];
+  }
+  async updateEnv(env) {
+    const [data, err] = await this.api.api_environmentUpdate(env);
+    if (err) {
+      return [null, err];
+    }
+    this.updateEnvList();
+    return [data, err];
+  }
+
   async deleteEnv(id) {
     const [, err] = await this.api.api_environmentDelete({ id });
     if (err) {

@@ -167,26 +167,15 @@ export const fieldTypeMap = new Map<string, any>([
   ['string', 'default_value']
 ]);
 
-export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) => {
-  const apiDataFilters = apiDatas.filter(apiData => {
-    apiData['title'] = apiData.name;
-    apiData['key'] = apiData['apiUuid'];
-    apiData['isLeaf'] = true;
-    return apiData.groupId === groupId;
-  });
+export const genApiGroupTree = (apiGroups: Group[] = [], groupId: number) => {
   const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId) || [];
-  // console.log(
-  //   'apiGroupFilters == ',
-  //   apiGroupFilters?.map(it => it)
-  // );
   return [
     ...apiGroupFilters.map(group => ({
       ...group,
       title: group.name || '',
       key: group.id,
-      children: genApiGroupTree([...(group?.children || [])], apiDatas, group.id)
-    })),
-    ...apiDataFilters
+      children: genApiGroupTree([...(group?.children || [])], group.id)
+    }))
   ];
 };
 

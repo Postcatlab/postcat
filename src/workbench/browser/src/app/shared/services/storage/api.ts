@@ -103,7 +103,7 @@ const http = {
       data: [{ 'list @get': '/api/roles', query: 'roleModule' }]
     },
     {
-      name: 'share',
+      name: 'projectShare',
       data: [
         { 'createShare @post': '/api/project-shared', json: 'projectUuid, workSpaceUuid' },
         { 'getShareList @get': '/api/project-shared', query: 'sharedUuid' },
@@ -111,11 +111,20 @@ const http = {
       ]
     },
     {
-      name: 'shareDoc',
-      data: [
-        { 'getAllAPI @get': '/api/project-shared/api', query: 'sharedUuid, apiUuid' },
-        { 'getEnv @get': '/api/project-shared/env', query: 'sharedUuid' }
-      ]
+      name: 'shareProject',
+      data: [{ 'detail @get @page': '/api/project-shared/projects', query: 'sharedUuid' }]
+    },
+    {
+      name: 'shareGroup',
+      data: [{ 'list @get @bulkRead': '/api/project-shared/group/list', query: 'sharedUuid, withItem' }]
+    },
+    {
+      name: 'shareApiData',
+      data: [{ 'detail @get @bulkReadDetail': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' }]
+    },
+    {
+      name: 'shareEnvironment',
+      data: [{ 'list @get @bulkRead': '/api/project-shared/environment/list', query: 'projectUuid, workSpaceUuid' }]
     }
   ]
 };

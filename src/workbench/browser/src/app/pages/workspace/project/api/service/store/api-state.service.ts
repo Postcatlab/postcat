@@ -49,10 +49,10 @@ export class ApiStoreService {
     return this.groupList;
   }
   @computed get getGroupTree() {
-    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
+    return genApiGroupTree([this.rootGroup, ...this.groupList], this.getRootGroup?.parentId);
   }
   @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList, [], this.getRootGroup?.id);
+    return genApiGroupTree(this.groupList, this.getRootGroup?.id);
   }
 
   @computed get getTestHistory() {
