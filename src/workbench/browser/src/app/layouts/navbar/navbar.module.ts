@@ -6,6 +6,7 @@ import { LogoModule } from '../../modules/logo/logo.module';
 import { SharedModule } from '../../shared/shared.module';
 import { NavBreadcrumbComponent } from './breadcrumb/nav-breadcrumb.component';
 import { SelectWorkspaceComponent } from './breadcrumb/select-workspace/select-workspace.component';
+import { BtnUserComponent } from './btn-user/btn-user.component';
 import { GetShareLinkComponent } from './get-share-link.component';
 import { HelpDropdownComponent } from './help-dropdown/help-dropdown.component';
 import { NavOperateComponent } from './nav-operate.component';
@@ -21,7 +22,8 @@ import { ShareNavbarComponent } from './share-navbar/share-navbar.component';
     SelectWorkspaceComponent,
     NavBreadcrumbComponent,
     ShareNavbarComponent,
-    HelpDropdownComponent
+    HelpDropdownComponent,
+    BtnUserComponent
   ],
   exports: [NavbarComponent, ShareNavbarComponent]
 })

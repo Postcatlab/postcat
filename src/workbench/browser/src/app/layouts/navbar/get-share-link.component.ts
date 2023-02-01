@@ -14,7 +14,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       nzType="default"
       class="mx-2"
       nz-popover
-      *ngIf="!store.isShare && store.getUrl.includes('/home/workspace/project/api/http/test')"
+      *ngIf="store.getPageLevel === 'project'"
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
       nzPopoverOverlayClassName="background-popover"

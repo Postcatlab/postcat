@@ -190,6 +190,7 @@ export const genApiGroupTree = (apiGroups: Group[] = []) => {
 export const getPureGroup = groupList => {
   return [
     ...groupList.filter(group => {
+      if (!group) return;
       const isApi = group._group?.type === 2;
       if (isApi) return false;
       Object.assign(group, {

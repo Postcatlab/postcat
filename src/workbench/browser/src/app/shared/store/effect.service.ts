@@ -231,10 +231,18 @@ export class EffectService {
   }
 
   async updateShareLink() {
-    // * update share link
-    const [data, err]: any = await this.api.api_projectShareCreateShare({});
+    //* Query share link
+    const [data, err]: any = await this.api.api_projectShareGetShareLink({});
     if (err) {
       return 'Error ... ';
+    }
+    if (!data.sharedUuid) {
+      // * Create share link
+      const [createData, err]: any = await this.api.api_projectShareCreateShare({});
+      if (err) {
+        return 'Error ... ';
+      }
+      Object.assign(data, createData);
     }
     const host = (this.store.remoteUrl || window.location.host)
       .replace(/:\/{2,}/g, ':::')

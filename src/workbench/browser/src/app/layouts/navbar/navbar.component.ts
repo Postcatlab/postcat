@@ -1,16 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
 import { ElectronService } from '../../core/services';
-import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
 import { ThemeService } from '../../core/services/theme/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
@@ -25,13 +21,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public electron: ElectronService,
     private modal: ModalService,
     private modalService: NzModalService,
-    private eMessage: EoNgFeedbackMessageService,
     public theme: ThemeService,
     private message: MessageService,
-    private api: ApiService,
-    public store: StoreService,
-    public dataSourceService: DataSourceService,
-    public feature: FeatureControlService
+    public store: StoreService
   ) {}
   async ngOnInit(): Promise<void> {
     this.message
@@ -61,17 +53,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  loginOrSign() {
-    this.dataSourceService.checkRemoteCanOperate();
-  }
-  async loginOut() {
-    this.store.clearAuth();
-    this.eMessage.success($localize`Successfully logged out !`);
-    const [, err]: any = await this.api.api_userLogout({});
-    if (err) {
-      return;
-    }
   }
 
   /**

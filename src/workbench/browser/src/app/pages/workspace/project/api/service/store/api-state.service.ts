@@ -49,7 +49,14 @@ export class ApiStoreService {
     return this.groupList;
   }
   @computed get getGroupTree() {
-    return getPureGroup(eoDeepCopy([this.rootGroup, ...this.groupList]));
+    return getPureGroup(
+      eoDeepCopy([
+        {
+          ...this.rootGroup,
+          children: this.groupList
+        }
+      ])
+    );
   }
   @computed get getApiGroupTree() {
     return genApiGroupTree(this.groupList);

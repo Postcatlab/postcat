@@ -106,17 +106,17 @@ const http = {
       name: 'projectShare',
       data: [
         { 'createShare @post': '/api/project-shared', json: 'projectUuid, workSpaceUuid' },
-        { 'getShareList @get': '/api/project-shared', query: 'sharedUuid' },
+        { 'getShareLink @get': '/api//project-shared', query: 'projectUuid, workSpaceUuid' },
         { 'deleteShare @delete': '/api/project-shared', query: 'sharedUuid' }
       ]
     },
     {
       name: 'share',
       data: [
-        { 'projectDetail @get': '/api/project-shared/projects', query: 'sharedUuid' },
+        { 'projectDetail @get': '/api/project-shared/project', query: 'sharedUuid' },
         { 'groupList @get': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
         { 'apiDataDetail @get': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
-        { 'environmentList @get': '/api/project-shared/environment/list', query: 'sharedUuid' }
+        { 'environmentList @get': '/api/project-shared/env/list', query: 'sharedUuid' }
       ]
     }
   ]

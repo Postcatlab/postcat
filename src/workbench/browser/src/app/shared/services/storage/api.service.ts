@@ -261,8 +261,8 @@ export class ApiService {
     return this.remote.api_projectShareCreateShare<T>(params);
   }
 
-  api_projectShareGetShareList<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_projectShareGetShareList<T>(params);
+  api_projectShareGetShareLink<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectShareGetShareLink<T>(params);
   }
 
   api_projectShareDeleteShare<T = any>(params: { sharedUuid: any }) {

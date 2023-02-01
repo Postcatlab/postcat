@@ -1,7 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { autorun, toJS } from 'mobx';
-import { filter } from 'rxjs';
+import { Component } from '@angular/core';
+import { autorun } from 'mobx';
 
 import { StoreService } from '../../../shared/store/state.service';
 
@@ -10,15 +8,12 @@ import { StoreService } from '../../../shared/store/state.service';
   templateUrl: './nav-breadcrumb.component.html',
   styleUrls: ['./nav-breadcrumb.component.scss']
 })
-export class NavBreadcrumbComponent implements OnDestroy {
+export class NavBreadcrumbComponent {
   level: 'project' | 'workspace';
   projectName: string = 'Default';
   projectID;
   workspaceID;
-  private routerSubscribe;
-  constructor(private store: StoreService, private router: Router) {
-    this.initLevel();
-    this.watchRouterChange();
+  constructor(public store: StoreService) {
     autorun(() => {
       if (this.store.getCurrentProject?.name) {
         this.projectName = this.store.getCurrentProject.name;
@@ -26,20 +21,5 @@ export class NavBreadcrumbComponent implements OnDestroy {
       }
       this.workspaceID = this.store.getCurrentWorkspaceUuid;
     });
-  }
-  initLevel() {
-    if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
-      this.level = 'workspace';
-    } else {
-      this.level = 'project';
-    }
-  }
-  watchRouterChange() {
-    this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.initLevel();
-    });
-  }
-  ngOnDestroy() {
-    this.routerSubscribe?.unsubscribe();
   }
 }

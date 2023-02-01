@@ -4,13 +4,7 @@ import { ElectronService } from '../../../core/services';
 
 @Component({
   selector: 'pc-help-dropdown',
-  template: ` <button
-      eo-ng-button
-      nzType="text"
-      class="flex items-center justify-center mr-[10px]"
-      eo-ng-dropdown
-      [nzDropdownMenu]="helpMenu"
-    >
+  template: ` <button eo-ng-button nzType="text" class="flex items-center justify-center" eo-ng-dropdown [nzDropdownMenu]="helpMenu">
       <eo-iconpark-icon name="help"> </eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #helpMenu="nzDropdownMenu">

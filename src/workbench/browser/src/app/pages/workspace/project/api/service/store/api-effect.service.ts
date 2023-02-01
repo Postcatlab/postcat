@@ -61,7 +61,11 @@ export class ApiEffectService {
   //? Group
   async getGroupList(params = {}) {
     // * get group list data
-    const [groupList = [], gErr] = await (this.globalStore.isShare ? this.api.api_groupList({}) : this.api.api_groupList({}));
+    const [groupList = [], gErr] = await (this.globalStore.isShare
+      ? this.api.api_shareGroupList({
+          sharedUuid: this.globalStore.getShareID
+        })
+      : this.api.api_groupList({}));
     if (gErr) {
       return;
     }

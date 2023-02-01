@@ -4,7 +4,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import _ from 'lodash-es';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, autorun, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
 import { Role } from '../models/member.model';
@@ -21,7 +21,7 @@ export class StoreService {
 
   // ? router
   @observable private url = '';
-
+  @observable private pageLevel = 'project';
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
 
@@ -85,6 +85,10 @@ export class StoreService {
   // ? router
   @computed get getUrl() {
     return this.url;
+  }
+
+  @computed get getPageLevel() {
+    return this.pageLevel;
   }
 
   // ? data source
@@ -172,6 +176,11 @@ export class StoreService {
   constructor(private setting: SettingService, private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
+    autorun(() => {
+      if (this.url) {
+        this.setPageLevel();
+      }
+    });
   }
 
   @action setLocalWorkspace(data) {
@@ -283,6 +292,13 @@ export class StoreService {
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'false');
     } else {
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
+    }
+  }
+  @action setPageLevel() {
+    if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
+      this.pageLevel = 'workspace';
+    } else {
+      this.pageLevel = 'project';
     }
   }
 }

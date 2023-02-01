@@ -4,14 +4,7 @@ import { ElectronService, WebService } from '../../core/services';
 
 @Component({
   selector: 'pc-download-client',
-  template: ` <button
-      eo-ng-button
-      nzType="primary"
-      class="ml-[10px]"
-      *ngIf="!electron.isElectron"
-      eo-ng-dropdown
-      [nzDropdownMenu]="download"
-    >
+  template: ` <button eo-ng-button nzType="primary" *ngIf="!electron.isElectron" eo-ng-dropdown [nzDropdownMenu]="download">
       <eo-iconpark-icon class="mr-[5px]" name="download" size="14px"></eo-iconpark-icon>
       <span i18n>{{ title }}</span>
     </button>

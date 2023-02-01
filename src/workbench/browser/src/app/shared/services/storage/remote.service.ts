@@ -1963,28 +1963,35 @@ export class RemoteService {
     });
   }
 
-  api_projectShareGetShareList<T = any>({ sharedUuid }, prefix = '') {
-    if (sharedUuid == null) {
-      console.log('%c Error: projectShare - getShareList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+  api_projectShareGetShareLink<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: projectShare - getShareLink 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: projectShare - getShareLink 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project-shared`, {
-          params: { sharedUuid }
+        .get(`${prefix}/api//project-shared`, {
+          params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
             if (code === 0) {
-              console.log('%c projectShare:getShareList - api_projectShareGetShareList 接口请求成功 %c', SuccessStyle, '');
+              console.log('%c projectShare:getShareLink - api_projectShareGetShareLink 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
             console.log('Error: ', JSON.stringify(data, null, 2));
             resolve([null, { code, data }]);
           },
           error: error => {
-            console.log('%c projectShare:getShareList - api_projectShareGetShareList 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c projectShare:getShareLink - api_projectShareGetShareLink 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });
@@ -2027,7 +2034,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project-shared/projects`, {
+        .get(`${prefix}/api/project-shared/project`, {
           params: { sharedUuid }
         })
         .subscribe({
@@ -2119,7 +2126,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project-shared/environment/list`, {
+        .get(`${prefix}/api/project-shared/env/list`, {
           params: { sharedUuid }
         })
         .subscribe({

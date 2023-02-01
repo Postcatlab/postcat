@@ -132,7 +132,9 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     this.resetRestFromUrl(url);
   }
 
-  openGroup() {}
+  openGroup() {
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
+  }
   async saveApi() {
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
@@ -204,8 +206,8 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   }
   getApiGroup() {
     autorun(() => {
+      if (!this.store.getRootGroup) return;
       this.groups = this.store.getGroupTree;
-      console.log(this.groups);
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
         if (this.initialModel) {

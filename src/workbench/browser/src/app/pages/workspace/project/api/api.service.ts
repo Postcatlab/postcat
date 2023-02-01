@@ -5,6 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from '../../../../shared/services/message';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
+import { StoreService } from '../../../../shared/store/state.service';
 import { ApiEffectService } from './service/store/api-effect.service';
 
 @Injectable()
@@ -14,11 +15,13 @@ export class ProjectApiService {
     private messageService: MessageService,
     private router: Router,
     private effect: ApiEffectService,
-    private api: ApiService
+    private api: ApiService,
+    private globalStore: StoreService
   ) {}
   async get(uuid): Promise<ApiData> {
-    const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 });
-    console.log('result', result);
+    const [result, err] = await (this.globalStore.isShare
+      ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
+      : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
     if (err || !result?.[0]) {
       this.message.error($localize`Can't find this Api`);
       return;
