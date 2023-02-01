@@ -12,16 +12,9 @@ enum CODE {
 }
 
 @Injectable()
-export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
+export class BaseUrlInterceptor implements HttpInterceptor {
   protocolReg = new RegExp('^(http|https)://');
-  constructor(
-    private store: StoreService,
-    private messageService: MessageService,
-    private web: WebService,
-    private setting: SettingService
-  ) {
-    super();
-  }
+  constructor(private store: StoreService, private messageService: MessageService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const serverUrl = this.store.remoteUrl || '';

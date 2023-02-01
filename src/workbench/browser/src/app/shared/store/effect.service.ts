@@ -4,12 +4,11 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, reaction, toJS } from 'mobx';
 
+import { ApiStoreService } from '../../pages/workspace/project/api/service/store/api-state.service';
 import { db } from '../services/storage/db';
 
 @Injectable({
@@ -22,7 +21,7 @@ export class EffectService {
     private router: Router,
     private lang: LanguageService,
     private web: WebService,
-    private remote: RemoteService,
+    private apiStore: ApiStoreService,
     private eMessage: EoNgFeedbackMessageService,
     private route: ActivatedRoute
   ) {
@@ -178,8 +177,13 @@ export class EffectService {
       return;
     }
     this.store.setCurrentProjectID(pid);
+
+    //* update project info
+    this.apiStore.setGroupList([]);
+    //* jump to project
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
+
     // * update project role
     const { permissions, roles } = await this.getProjectPermission();
     this.store.setPermission(permissions, 'project');
@@ -236,13 +240,14 @@ export class EffectService {
     if (err) {
       return 'Error ... ';
     }
-    if (!data.sharedUuid) {
+    const shareData = data || {};
+    if (!shareData.sharedUuid) {
       // * Create share link
       const [createData, err]: any = await this.api.api_projectShareCreateShare({});
       if (err) {
         return 'Error ... ';
       }
-      Object.assign(data, createData);
+      Object.assign(shareData, createData);
     }
     const host = (this.store.remoteUrl || window.location.host)
       .replace(/:\/{2,}/g, ':::')
@@ -250,6 +255,6 @@ export class EffectService {
       .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}share/http/test?shareId=${data.sharedUuid}`;
+    return `${host}/${lang ? `${lang}/` : ''}share/http/test?shareId=${shareData.sharedUuid}`;
   }
 }

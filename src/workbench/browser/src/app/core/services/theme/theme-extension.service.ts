@@ -18,10 +18,7 @@ export class ThemeExtensionService {
           id: this.getExtensionID(extensionID, theme.id),
           isExtension: true,
           baseTheme: theme.baseTheme,
-          colors: this.themeVariable.getColors(
-            theme,
-            coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || coreThemes[0]
-          )
+          colors: this.themeVariable.getColors(theme, coreThemes.find(val => val.id === theme.baseTheme) || coreThemes[0])
         });
       });
     });

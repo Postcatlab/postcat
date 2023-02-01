@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+import { ModalService } from '../../shared/services/modal.service';
+import { SystemSettingComponent } from './system-setting.component';
+
 export const LOCAL_SETTINGS_KEY = 'LOCAL_SETTINGS_KEY';
 
 export const getSettings = () => {
@@ -14,6 +17,7 @@ export const getSettings = () => {
   providedIn: 'root'
 })
 export class SettingService {
+  constructor(private modal: ModalService) {}
   get settings() {
     return getSettings();
   }
@@ -70,4 +74,18 @@ export class SettingService {
     }
     return undefined;
   };
+  /**
+   * Open Setting
+   */
+  openSettingModal(inArg?) {
+    const ref = this.modal.create({
+      nzClassName: 'eo-system-setting-modal',
+      nzTitle: $localize`Settings`,
+      nzContent: SystemSettingComponent,
+      nzComponentParams: {
+        selectedModule: inArg?.module
+      },
+      withoutFooter: true
+    });
+  }
 }

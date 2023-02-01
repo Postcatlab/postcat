@@ -67,6 +67,7 @@ export class ApiStoreService {
   }
 
   constructor() {
+    pcConsole.log('init ApiStoreService');
     makeObservable(this); // don't forget to add this if the class has observable fields
   }
 

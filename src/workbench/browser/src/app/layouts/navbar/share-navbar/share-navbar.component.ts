@@ -19,10 +19,10 @@ import { StoreService } from '../../../shared/store/state.service';
       <div class=" right-group-btn">
         <!-- Help -->
         <pc-help-dropdown></pc-help-dropdown>
-        <!-- User -->
-        <pc-btn-user></pc-btn-user>
         <!-- Web download client -->
         <pc-download-client></pc-download-client>
+        <!-- User -->
+        <pc-btn-user></pc-btn-user>
       </div>
     </div>
   `,
