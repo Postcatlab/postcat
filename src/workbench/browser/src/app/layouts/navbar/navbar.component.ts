@@ -8,7 +8,7 @@ import { distinct } from 'rxjs/operators';
 
 import { ElectronService } from '../../core/services';
 import { ThemeService } from '../../core/services/theme/theme.service';
-import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
+import { SettingService } from '../../modules/system-setting/settings.service';
 import { ModalService } from '../../shared/services/modal.service';
 @Component({
   selector: 'eo-navbar',
@@ -19,11 +19,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
-    private modal: ModalService,
     private modalService: NzModalService,
     public theme: ThemeService,
     private message: MessageService,
-    public store: StoreService
+    public store: StoreService,
+    private setting: SettingService
   ) {}
   async ngOnInit(): Promise<void> {
     this.message
@@ -31,10 +31,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .pipe(distinct(({ type }) => type, interval(400)))
       .subscribe(async ({ type, data }) => {
-        if (type === 'open-setting') {
-          this.openSettingModal(data);
-          return;
-        }
         if (type === 'open-extension') {
           this.openExtension();
           return;
@@ -54,27 +50,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /**
-   * 打开系统设置
-   */
-  openSettingModal(inArg?) {
-    const ref = this.modal.create({
-      nzClassName: 'eo-system-setting-modal',
-      nzTitle: $localize`Settings`,
-      nzContent: SystemSettingComponent,
-      nzComponentParams: {
-        selectedModule: inArg?.module
-      },
-      withoutFooter: true
-    });
-    this.message
-      .get()
-      .pipe(distinct(({ type }) => type, interval(400)))
-      .subscribe(({ type }) => {
-        if (type === 'close-setting') {
-          ref.close();
-        }
-      });
+  openSettingModal() {
+    this.setting.openSettingModal();
   }
 }
