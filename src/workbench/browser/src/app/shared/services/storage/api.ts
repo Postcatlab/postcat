@@ -111,20 +111,13 @@ const http = {
       ]
     },
     {
-      name: 'shareProject',
-      data: [{ 'detail @get @page': '/api/project-shared/projects', query: 'sharedUuid' }]
-    },
-    {
-      name: 'shareGroup',
-      data: [{ 'list @get @bulkRead': '/api/project-shared/group/list', query: 'sharedUuid, withItem' }]
-    },
-    {
-      name: 'shareApiData',
-      data: [{ 'detail @get @bulkReadDetail': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' }]
-    },
-    {
-      name: 'shareEnvironment',
-      data: [{ 'list @get @bulkRead': '/api/project-shared/environment/list', query: 'projectUuid, workSpaceUuid' }]
+      name: 'share',
+      data: [
+        { 'projectDetail @get @page': '/api/project-shared/projects', query: 'sharedUuid' },
+        { 'groupList @get @bulkRead': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
+        { 'apiDataDetail @get @bulkReadDetail': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
+        { 'environmentList @get @bulkRead': '/api/project-shared/environment/list', query: 'projectUuid, workSpaceUuid' }
+      ]
     }
   ]
 };

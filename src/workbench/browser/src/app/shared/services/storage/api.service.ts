@@ -257,23 +257,31 @@ export class ApiService {
     return this.remote.api_roleList<T>(params);
   }
 
-  api_shareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_shareCreateShare<T>(params);
+  api_projectShareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectShareCreateShare<T>(params);
   }
 
-  api_shareGetShareList<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareGetShareList<T>(params);
+  api_projectShareGetShareList<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_projectShareGetShareList<T>(params);
   }
 
-  api_shareDeleteShare<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareDeleteShare<T>(params);
+  api_projectShareDeleteShare<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_projectShareDeleteShare<T>(params);
   }
 
-  api_shareDocGetAllApi<T = any>(params: { sharedUuid: any; apiUuid: any }) {
-    return this.remote.api_shareDocGetAllApi<T>(params);
+  api_shareProjectDetail<T = any>(params: { sharedUuid: any }) {
+    return this.store.isLocal ? this.local.api_shareProjectDetail<T>(params) : this.remote.api_shareProjectDetail<T>(params);
   }
 
-  api_shareDocGetEnv<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareDocGetEnv<T>(params);
+  api_shareGroupList<T = any>(params: { sharedUuid: any; withItem?: any }) {
+    return this.store.isLocal ? this.local.api_shareGroupList<T>(params) : this.remote.api_shareGroupList<T>(params);
+  }
+
+  api_shareApiDataDetail<T = any>(params: { apiUuids: any; sharedUuid: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_shareApiDataDetail<T>(params) : this.remote.api_shareApiDataDetail<T>(params);
+  }
+
+  api_shareEnvironmentList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_shareEnvironmentList<T>(params) : this.remote.api_shareEnvironmentList<T>(params);
   }
 }

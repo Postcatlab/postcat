@@ -1093,4 +1093,108 @@ export class LocalService {
         });
     });
   }
+
+  api_shareProjectDetail<T = any>({ sharedUuid }) {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - projectDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.share
+        .page({ sharedUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c share - projectDetail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c share - projectDetail 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_shareGroupList<T = any>({ sharedUuid, withItem = true }) {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - groupList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (withItem == null) {
+      console.log('%c Error: share - groupList 接口 缺失参数 withItem %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.share
+        .bulkRead({ sharedUuid, withItem })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c share - groupList 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c share - groupList 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_shareApiDataDetail<T = any>({ apiUuids, sharedUuid, ...items }) {
+    if (apiUuids == null) {
+      console.log('%c Error: share - apiDataDetail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
+      return;
+    }
+    if (sharedUuid == null) {
+      console.log('%c Error: share - apiDataDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.share
+        .bulkReadDetail({ apiUuids, sharedUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c share - apiDataDetail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c share - apiDataDetail 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_shareEnvironmentList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+    if (projectUuid == null) {
+      console.log('%c Error: share - environmentList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: share - environmentList 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.share
+        .bulkRead({ projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c share - environmentList 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c share - environmentList 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
 }

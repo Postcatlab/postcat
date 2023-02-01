@@ -1932,16 +1932,16 @@ export class RemoteService {
     });
   }
 
-  api_shareCreateShare<T = any>(
+  api_projectShareCreateShare<T = any>(
     { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
     prefix = ''
   ) {
     if (projectUuid == null) {
-      console.log('%c Error: share - createShare 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      console.log('%c Error: projectShare - createShare 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
     }
     if (workSpaceUuid == null) {
-      console.log('%c Error: share - createShare 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      console.log('%c Error: projectShare - createShare 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -1949,23 +1949,23 @@ export class RemoteService {
       this.http.post(`${prefix}/api/project-shared`, { projectUuid, workSpaceUuid }).subscribe({
         next: ({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c share:createShare - api_shareCreateShare 接口请求成功 %c', SuccessStyle, '');
+            console.log('%c projectShare:createShare - api_projectShareCreateShare 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           console.log('Error: ', JSON.stringify(data, null, 2));
           resolve([null, { code, data }]);
         },
         error: error => {
-          console.log('%c share:createShare - api_shareCreateShare 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c projectShare:createShare - api_projectShareCreateShare 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_shareGetShareList<T = any>({ sharedUuid }, prefix = '') {
+  api_projectShareGetShareList<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
-      console.log('%c Error: share - getShareList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      console.log('%c Error: projectShare - getShareList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -1977,23 +1977,23 @@ export class RemoteService {
         .subscribe({
           next: ({ code, data }: any) => {
             if (code === 0) {
-              console.log('%c share:getShareList - api_shareGetShareList 接口请求成功 %c', SuccessStyle, '');
+              console.log('%c projectShare:getShareList - api_projectShareGetShareList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
             console.log('Error: ', JSON.stringify(data, null, 2));
             resolve([null, { code, data }]);
           },
           error: error => {
-            console.log('%c share:getShareList - api_shareGetShareList 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c projectShare:getShareList - api_projectShareGetShareList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });
     });
   }
 
-  api_shareDeleteShare<T = any>({ sharedUuid }, prefix = '') {
+  api_projectShareDeleteShare<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
-      console.log('%c Error: share - deleteShare 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      console.log('%c Error: projectShare - deleteShare 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -2005,74 +2005,141 @@ export class RemoteService {
         .subscribe({
           next: ({ code, data }: any) => {
             if (code === 0) {
-              console.log('%c share:deleteShare - api_shareDeleteShare 接口请求成功 %c', SuccessStyle, '');
+              console.log('%c projectShare:deleteShare - api_projectShareDeleteShare 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
             console.log('Error: ', JSON.stringify(data, null, 2));
             resolve([null, { code, data }]);
           },
           error: error => {
-            console.log('%c share:deleteShare - api_shareDeleteShare 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c projectShare:deleteShare - api_projectShareDeleteShare 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });
     });
   }
 
-  api_shareDocGetAllApi<T = any>({ sharedUuid, apiUuid }, prefix = '') {
+  api_shareProjectDetail<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
-      console.log('%c Error: shareDoc - getAllAPI 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return;
-    }
-    if (apiUuid == null) {
-      console.log('%c Error: shareDoc - getAllAPI 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      console.log('%c Error: share - projectDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project-shared/api`, {
-          params: { sharedUuid, apiUuid }
-        })
-        .subscribe({
-          next: ({ code, data }: any) => {
-            if (code === 0) {
-              console.log('%c shareDoc:getAllAPI - api_shareDocGetAllApi 接口请求成功 %c', SuccessStyle, '');
-              return resolve([data, null]);
-            }
-            console.log('Error: ', JSON.stringify(data, null, 2));
-            resolve([null, { code, data }]);
-          },
-          error: error => {
-            console.log('%c shareDoc:getAllAPI - api_shareDocGetAllApi 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_shareDocGetEnv<T = any>({ sharedUuid }, prefix = '') {
-    if (sharedUuid == null) {
-      console.log('%c Error: shareDoc - getEnv 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http
-        .get(`${prefix}/api/project-shared/env`, {
+        .get(`${prefix}/api/project-shared/projects`, {
           params: { sharedUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
             if (code === 0) {
-              console.log('%c shareDoc:getEnv - api_shareDocGetEnv 接口请求成功 %c', SuccessStyle, '');
+              console.log('%c share:projectDetail - api_shareProjectDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
             console.log('Error: ', JSON.stringify(data, null, 2));
             resolve([null, { code, data }]);
           },
           error: error => {
-            console.log('%c shareDoc:getEnv - api_shareDocGetEnv 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c share:projectDetail - api_shareProjectDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareGroupList<T = any>({ sharedUuid, withItem = true }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - groupList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (withItem == null) {
+      console.log('%c Error: share - groupList 接口 缺失参数 withItem %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project-shared/group/list`, {
+          params: { sharedUuid, withItem }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c share:groupList - api_shareGroupList 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', JSON.stringify(data, null, 2));
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c share:groupList - api_shareGroupList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareApiDataDetail<T = any>({ apiUuids, sharedUuid, ...items }, prefix = '') {
+    if (apiUuids == null) {
+      console.log('%c Error: share - apiDataDetail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
+      return;
+    }
+    if (sharedUuid == null) {
+      console.log('%c Error: share - apiDataDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project-shared/api/list`, {
+          params: { apiUuids, sharedUuid, ...items }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c share:apiDataDetail - api_shareApiDataDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', JSON.stringify(data, null, 2));
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c share:apiDataDetail - api_shareApiDataDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareEnvironmentList<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: share - environmentList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: share - environmentList 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project-shared/environment/list`, {
+          params: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data }: any) => {
+            if (code === 0) {
+              console.log('%c share:environmentList - api_shareEnvironmentList 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', JSON.stringify(data, null, 2));
+            resolve([null, { code, data }]);
+          },
+          error: error => {
+            console.log('%c share:environmentList - api_shareEnvironmentList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });
