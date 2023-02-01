@@ -281,7 +281,7 @@ export class ApiService {
     return this.remote.api_shareApiDataDetail<T>(params);
   }
 
-  api_shareEnvironmentList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_shareEnvironmentList<T = any>(params: { sharedUuid: any }) {
     return this.remote.api_shareEnvironmentList<T>(params);
   }
 }

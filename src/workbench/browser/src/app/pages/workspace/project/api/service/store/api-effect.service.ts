@@ -166,14 +166,14 @@ export class ApiEffectService {
   }
   async updateEnvList() {
     if (this.globalStore.isShare) {
-      // const [data, err] = await this.api.api_shareEnvironmentList({
-      //   sharedUuid: this.globalStore.getShareID
-      // });
-      // if (err) {
-      //   return [];
-      // }
-      // this.store.setEnvList(data || []);
-      // return data || [];
+      const [data, err] = await this.api.api_shareEnvironmentList({
+        sharedUuid: this.globalStore.getShareID
+      });
+      if (err) {
+        return [];
+      }
+      this.store.setEnvList(data || []);
+      return data || [];
     }
     const [envList, err] = await this.api.api_environmentList({});
     if (err) {

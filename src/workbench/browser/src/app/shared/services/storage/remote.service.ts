@@ -2111,23 +2111,16 @@ export class RemoteService {
     });
   }
 
-  api_shareEnvironmentList<T = any>(
-    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
-    prefix = ''
-  ) {
-    if (projectUuid == null) {
-      console.log('%c Error: share - environmentList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return;
-    }
-    if (workSpaceUuid == null) {
-      console.log('%c Error: share - environmentList 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+  api_shareEnvironmentList<T = any>({ sharedUuid }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - environmentList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/project-shared/environment/list`, {
-          params: { projectUuid, workSpaceUuid }
+          params: { sharedUuid }
         })
         .subscribe({
           next: ({ code, data }: any) => {
