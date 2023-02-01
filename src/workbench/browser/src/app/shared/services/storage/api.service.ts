@@ -270,18 +270,18 @@ export class ApiService {
   }
 
   api_shareProjectDetail<T = any>(params: { sharedUuid: any }) {
-    return this.store.isLocal ? this.local.api_shareProjectDetail<T>(params) : this.remote.api_shareProjectDetail<T>(params);
+    return this.remote.api_shareProjectDetail<T>(params);
   }
 
   api_shareGroupList<T = any>(params: { sharedUuid: any; withItem?: any }) {
-    return this.store.isLocal ? this.local.api_shareGroupList<T>(params) : this.remote.api_shareGroupList<T>(params);
+    return this.remote.api_shareGroupList<T>(params);
   }
 
   api_shareApiDataDetail<T = any>(params: { apiUuids: any; sharedUuid: any; [key: string]: any }) {
-    return this.store.isLocal ? this.local.api_shareApiDataDetail<T>(params) : this.remote.api_shareApiDataDetail<T>(params);
+    return this.remote.api_shareApiDataDetail<T>(params);
   }
 
   api_shareEnvironmentList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
-    return this.store.isLocal ? this.local.api_shareEnvironmentList<T>(params) : this.remote.api_shareEnvironmentList<T>(params);
+    return this.remote.api_shareEnvironmentList<T>(params);
   }
 }

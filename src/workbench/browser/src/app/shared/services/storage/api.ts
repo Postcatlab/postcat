@@ -113,10 +113,10 @@ const http = {
     {
       name: 'share',
       data: [
-        { 'projectDetail @get @page': '/api/project-shared/projects', query: 'sharedUuid' },
-        { 'groupList @get @bulkRead': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
-        { 'apiDataDetail @get @bulkReadDetail': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
-        { 'environmentList @get @bulkRead': '/api/project-shared/environment/list', query: 'projectUuid, workSpaceUuid' }
+        { 'projectDetail @get': '/api/project-shared/projects', query: 'sharedUuid' },
+        { 'groupList @get': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
+        { 'apiDataDetail @get': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
+        { 'environmentList @get': '/api/project-shared/environment/list', query: 'projectUuid, workSpaceUuid' }
       ]
     }
   ]
