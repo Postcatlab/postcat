@@ -96,8 +96,9 @@ export class StoreService {
     return !this.isShare && this.currentWorkspace?.isLocal;
   }
   @computed get mockUrl() {
-    const mockUrl = window.electron?.getMockUrl?.();
-    return this.isLocal ? mockUrl : `${mockUrl}/mock-${this.getCurrentProjectID}`;
+    return window.electron?.getMockUrl?.();
+    // const mockUrl = window.electron?.getMockUrl?.();
+    // return this.isLocal ? mockUrl : `${mockUrl}/mock-${this.getCurrentProjectID}`;
   }
   @computed get isRemote() {
     return !this.isLocal;

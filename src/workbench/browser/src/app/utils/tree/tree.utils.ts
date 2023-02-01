@@ -1,3 +1,4 @@
+import { ApiParamsType, ApiParamsTypeByNumber } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -145,7 +146,7 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
       curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
       const namePath = valueKey.split('.');
       const lastKey = namePath.pop();
-      prev[curr[key]] = namePath.reduce((p, v) => p?.[v], curr)?.[lastKey] || fieldTypeMap.get(curr.type);
+      prev[curr[key]] = namePath.reduce((p, v) => p?.[v], curr)?.[lastKey] ?? fieldTypeMap.get(curr.dataType);
       if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
       } else if (curr?.example) {
@@ -158,13 +159,13 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
   }, initObj);
 };
 
-export const fieldTypeMap = new Map<string, any>([
-  ['boolean', false],
-  ['array', []],
-  ['object', {}],
-  ['number', 0],
-  ['null', null],
-  ['string', 'default_value']
+export const fieldTypeMap = new Map<number, any>([
+  [ApiParamsType.boolean, false],
+  [ApiParamsType.array, []],
+  [ApiParamsType.object, {}],
+  [ApiParamsType.number, 0],
+  [ApiParamsType.null, null],
+  [ApiParamsType.string, 'default_value']
 ]);
 
 /**

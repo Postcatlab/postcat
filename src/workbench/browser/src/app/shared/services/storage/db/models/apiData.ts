@@ -1,4 +1,4 @@
-import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, RequestMethod } from '../../../../../modules/api-shared/api.model';
 
 export interface ApiData {
   id?: number;

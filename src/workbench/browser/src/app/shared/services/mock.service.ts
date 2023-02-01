@@ -25,31 +25,31 @@ export class MockService {
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.on('getMockApiList', async (event, req: any = {}) => {
         const sender = event.sender;
-        const isRemoteMock = mockReg.test(req.url);
+        // this.isRemoteMock = mockReg.test(req.url);
         const { mockID } = req.query;
 
-        if (isRemoteMock) {
-          const [_, projectID] = req.url.match(mockReg);
-          const url = this.settingService.getConfiguration('backend.url') || '';
-          const response = await fetch(uniqueSlash(`${url}/mock/match`), {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-              projectID,
-              mockID,
-              req: {
-                ...req,
-                url: req.url.replace(/^\/mock-\d+/, '')
-              }
-            })
-          });
+        // if (isRemoteMock) {
+        //   const [_, projectID] = req.url.match(mockReg);
+        //   const url = this.settingService.getConfiguration('backend.url') || '';
+        //   const response = await fetch(uniqueSlash(`${url}/mock/match`), {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json'
+        //       // 'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        //     body: JSON.stringify({
+        //       projectID,
+        //       mockID,
+        //       req: {
+        //         ...req,
+        //         url: req.url.replace(/^\/mock-\d+/, '')
+        //       }
+        //     })
+        //   });
 
-          const { data } = await response.json();
-          return sender.send('getMockApiList', data);
-        }
+        //   const { data } = await response.json();
+        //   return sender.send('getMockApiList', data);
+        // }
 
         if (!Number.isNaN(Number(mockID))) {
           try {
@@ -74,7 +74,7 @@ export class MockService {
               if (result.statusCode === 404) {
                 return sender.send('getMockApiList', result);
               }
-              mock.response ??= this.generateResponse(apiData.responseList?.[0].responseParams.bodyParams);
+              mock.response ??= this.generateResponse(apiData.responseList?.[0]?.responseParams.bodyParams);
             }
             sender.send('getMockApiList', mock);
           } catch (error) {
@@ -109,7 +109,7 @@ export class MockService {
    * @param req
    * @returns
    */
-  async matchApiData(apiData: ApiData, req?) {
+  matchApiData(apiData: ApiData, req?) {
     const { requestParams, responseList, apiAttrInfo } = apiData;
     const { restParams, queryParams } = requestParams || {};
     const { requestMethod } = apiAttrInfo || {};
@@ -124,7 +124,7 @@ export class MockService {
     // }
     if (Array.isArray(queryParams) && queryParams.length > 0) {
       const query = req.query;
-      isQueryMatch = queryParams.every(n => n.paramAttr.example === query[n.name]);
+      isQueryMatch = queryParams.every(n => query[n.name]);
     }
     const uriReg = new RegExp(`^/?${uri}/?$`);
     // @ts-ignore
@@ -133,13 +133,11 @@ export class MockService {
   }
 
   async batchMatchApiData(projectID = 1, req) {
-    //TODO  @buqiyuan this module need getApiList by it self, not by store
-    const apiDatas = toJS(this.store.getApiList);
+    const [apiDatas] = await this.apiServiece.api_apiDataList({});
+    const [apiList] = await this.apiServiece.api_apiDataDetail({ withParams: 1, apiUuids: apiDatas.items.map(n => n.apiUuid) });
     let result;
-    console.log('req', req);
-    console.log('apiDatas', apiDatas);
-    for (const api of apiDatas) {
-      result = await this.matchApiData(api, req);
+    for (const api of apiList) {
+      result = this.matchApiData(api, req);
       if (result?.statusCode !== 404) {
         return result;
       }
