@@ -68,11 +68,15 @@ export class ThemeService {
     this.themes.push(...extensions);
   }
   changeEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
-    const baseTheme = currentTheme.baseTheme || currentTheme.id;
-    const editorTheme = baseTheme === 'pc-dark' ? 'vs-dark' : 'vs';
+    const editorTheme = this.getEditorTheme(currentTheme);
     if (window.monaco?.editor) {
       window.monaco?.editor.setTheme(editorTheme);
     }
+  }
+  getEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
+    const baseTheme = currentTheme.baseTheme || currentTheme.id;
+    const editorTheme = baseTheme === 'pc-dark' ? 'vs-dark' : 'vs';
+    return editorTheme;
   }
   private getCoreThemes() {
     const systemThemes = SYSTEM_THEME;
