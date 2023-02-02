@@ -98,7 +98,7 @@ export class ImportApiComponent implements OnInit {
     let { name, content } = this.uploadData;
     try {
       const [data, err] = module[action](content);
-      // console.log('import data', window.structuredClone?.(data));
+      console.log('import data', window.structuredClone?.(data));
       if (err) {
         console.error(err.msg);
         callback(false);
@@ -110,12 +110,12 @@ export class ImportApiComponent implements OnInit {
         const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
         console.log('content', content);
         // TODO 兼容旧数据
-        if (Reflect.has(data, 'collections') && Reflect.has(data, 'environments')) {
-          content = old2new(data, projectUuid, workSpaceUuid);
-          console.log('new content', content);
-        }
+        // if (Reflect.has(data, 'collections') && Reflect.has(data, 'environments')) {
+        //   content = old2new(data, projectUuid, workSpaceUuid);
+        //   console.log('new content', content);
+        // }
         await this.apiService.api_projectImport({
-          ...content,
+          ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });

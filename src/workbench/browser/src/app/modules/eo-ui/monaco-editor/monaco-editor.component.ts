@@ -227,12 +227,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    Promise.resolve().then(() => {
+    queueMicrotask(() => {
       this.codeChange.emit(this.$$code);
     });
   }
   handleChange() {
-    Promise.resolve().then(() => {
+    queueMicrotask(() => {
       this.codeChange.emit(this.$$code);
     });
   }
