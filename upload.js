@@ -82,14 +82,14 @@ const app = async () => {
   console.log('上传结果：', uploadResult);
   const deleteResult = await Promise.all(
     fileList.map(async it => {
-      const isOK = await removeFile(bucket, `/download/latest/${toLatest(onlyName(it))}`);
+      const isOK = await removeFile(bucket, `latest/${toLatest(onlyName(it))}`);
       Promise.resolve(isOK || false);
     })
   );
   console.log('删除结果：', deleteResult);
   const copyResult = await Promise.all(
     fileList.map(async it => {
-      const isOK = await cpFile(`${version}/${onlyName(it)}`, `/download/latest/${toLatest(onlyName(it))}`);
+      const isOK = await cpFile(`${version}/${onlyName(it)}`, `latest/${toLatest(onlyName(it))}`);
       Promise.resolve(isOK || false);
     })
   );
