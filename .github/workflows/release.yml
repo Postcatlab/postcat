@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [feat/v0.1.0]
+    branches: [feat/v0.1.1]
     # tags:
     #   - 'v*.*.*'
 jobs:
@@ -40,13 +40,6 @@ jobs:
           yarn install --frozen-lockfile
           echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
 
-      - name: Release for Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          yarn release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
       - name: Release for MacOS arm
         if: matrix.os == 'macos-latest'
         env:
@@ -82,46 +75,3 @@ jobs:
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
-
-      - name: Release for MacOS x86
-        if: matrix.os == 'macos-12'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          # BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          # PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          # echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-
-          # apply provisioning profile
-          # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
-          yarn release
-
-          # clean up keychain and provisioning profile
-          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
-
-      - name: Release for Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          yarn release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
