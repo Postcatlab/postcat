@@ -44,14 +44,14 @@ const cpFile = (fromFile, toFile) =>
 
 const version = package.version;
 const fileList = [
-  'release/eoapi Setup ?.exe',
-  'release/eoapi-?.dmg',
-  'release/eoapi-?-arm64.dmg',
-  'release/eoapi-?-mac.zip',
+  'release/postcat Setup ?.exe',
+  'release/postcat-?.dmg',
+  'release/postcat-?-arm64.dmg',
+  'release/postcat-?-mac.zip',
   'release/latest.yml',
   'release/latest-mac.yml'
 ].map(it => it.replace(/\?/, `${version}`));
-// const fileList = ['releass/eoapi-Setup-?.png', 'releass/eoapi-?.png', 'releass/eoapi-?-arm64.png'].map((it) =>
+// const fileList = ['releass/postcat-Setup-?.png', 'releass/postcat-?.png', 'releass/postcat-?-arm64.png'].map((it) =>
 //   it.replace(/\?/, `${version}`)
 // );
 
