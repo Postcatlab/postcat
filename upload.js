@@ -60,22 +60,22 @@ const app = async () => {
     fileList.map(async it => {
       let isOK;
       // * 生成上传 Token
-      // try {
-      //   if (it.endsWith('.yml')) {
-      //     const ymlObj = YAML.parse(fs.readFileSync(it, 'utf8'));
-      //     ymlObj.files.forEach(n => (n.url = `${ymlObj.version}/${n.url}`));
-      //     ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
-      //     fs.writeFileSync(it, YAML.stringify(ymlObj));
-      //     await removeFile(bucket, onlyName(it));
-      //     const token = uptoken(bucket, onlyName(it));
-      //     isOK = await uploadFile(token, onlyName(it), it);
-      //   } else {
-      const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
-      isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
-      // }
-      // } catch (error) {
-      //   console.log('error', error);
-      // }
+      try {
+        if (it.endsWith('.yml')) {
+          const ymlObj = YAML.parse(fs.readFileSync(it, 'utf8'));
+          ymlObj.files.forEach(n => (n.url = `${ymlObj.version}/${n.url}`));
+          ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
+          fs.writeFileSync(it, YAML.stringify(ymlObj));
+          await removeFile(bucket, onlyName(it));
+          const token = uptoken(bucket, `${version}/${onlyName(it)}`);
+          isOK = await uploadFile(token, `${version}/${onlyName(it)}`, it);
+        } else {
+          const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
+          isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
       return Promise.resolve(isOK || false);
     })
   );
