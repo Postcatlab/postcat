@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [feat/0.1.0]
+    branches: [feat/v0.1.0]
     # tags:
     #   - 'v*.*.*'
 jobs:
