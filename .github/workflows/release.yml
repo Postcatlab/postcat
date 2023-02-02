@@ -2,9 +2,9 @@ name: Release
 
 on:
   push:
-    # branches: [feat/ui-component]
-    tags:
-      - 'v*.*.*'
+    branches: [feat/0.1.0]
+    # tags:
+    #   - 'v*.*.*'
 jobs:
   release:
     name: build and release electron app
@@ -79,7 +79,6 @@ jobs:
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
           yarn release:m1
-          yarn release
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
@@ -115,7 +114,6 @@ jobs:
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
-          yarn release:m1
           yarn release
 
           # clean up keychain and provisioning profile

@@ -20,8 +20,8 @@
     "build:web": "yarn workspace postcat-web run build",
     "docker:build:web": "yarn workspace postcat-web run build:docker:web",
     "electron:static": "npm run electron:tsc && electron .",
-    "release": "npm-run-all -s build:web electron:tsc && electron-builder --publish=always",
-    "release:m1": "npm-run-all -s build:web electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft",
+    "release": "npm-run-all -s build:web electron:tsc && electron-builder --publish=always && node upload.js",
+    "release:m1": "npm-run-all -s build:web electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft && node upload.js",
     "test": "npm-run-all --serial test:*",
     "e2e": "yarn build:prod && npx playwright test -c e2e/playwright.config.ts e2e/",
     "clear:electron:tsc": "tsc --build --clean",
@@ -56,10 +56,12 @@
     "npm": "6.14.17",
     "pm2": "5.2.2",
     "portfinder": "1.0.32",
+    "qiniu": "7.8.0",
     "resolve": "^1.22.1",
     "socket.io": "4.5.4",
     "ws": "8.12.0",
-    "xml2js": "0.4.23"
+    "xml2js": "0.4.23",
+    "yaml": "2.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "~17.3.0",
