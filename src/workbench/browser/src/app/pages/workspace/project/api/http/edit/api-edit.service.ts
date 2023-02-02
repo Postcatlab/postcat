@@ -61,19 +61,17 @@ export class ApiEditService {
     }
     return this.apiEditUtil.formatStorageApiDataToUI(result);
   }
-  async editApi(apiData): Promise<[ApiData, any]> {
-    const busEvent = apiData.apiUuid ? 'editApi' : 'addApi';
-    if (busEvent === 'editApi') {
-      apiData.updateApiAttr = 1;
-      apiData.updateRequestParams = 1;
-      apiData.updateResponseList = 1;
-      return await this.projectApi.edit(apiData);
-    } else {
-      const [result, err] = await this.projectApi.add(apiData);
-      if (err) {
-        return [result, err];
-      }
-      return [result[0], err];
+  async addApi(apiData): Promise<[ApiData, any]> {
+    const [result, err] = await this.projectApi.add(apiData);
+    if (err) {
+      return [result, err];
     }
+    return [result[0], err];
+  }
+  async editApi(apiData): Promise<[ApiData, any]> {
+    apiData.updateApiAttr = 1;
+    apiData.updateRequestParams = 1;
+    apiData.updateResponseList = 1;
+    return await this.projectApi.edit(apiData);
   }
 }

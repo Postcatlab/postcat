@@ -211,7 +211,8 @@ export class ThemeVariableService {
               'activeBorder',
               'inputActiveBorder',
               'selectHoverBorder',
-              'selectActiveBorder'
+              'selectActiveBorder',
+              'spin'
             ]
           },
           {

@@ -3,7 +3,7 @@ import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sid
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable, observable, reaction } from 'mobx';
+import { autorun, makeObservable, observable, reaction, toJS } from 'mobx';
 
 import { ApiEffectService } from '../../service/store/api-effect.service';
 import { ApiStoreService } from '../../service/store/api-state.service';
@@ -74,10 +74,10 @@ import { ApiStoreService } from '../../service/store/api-state.service';
       >
       </eo-ng-select>
       <ng-template #renderTemplate>
-        <nz-divider *ngIf="!isShare"></nz-divider>
-        <a *ngIf="!isShare" class="!flex text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n
-          >Manage Environment</a
-        >
+        <ng-container *ngIf="!globalStore.isShare">
+          <nz-divider></nz-divider>
+          <a class="!flex text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n>Manage Environment</a>
+        </ng-container>
       </ng-template>
     </div>
   `,
@@ -87,7 +87,6 @@ export class EnvSelectComponent implements OnInit {
   @observable envUuid = '';
   isOpen = false;
   gloablParams: any = [];
-  isShare = false;
   renderEnv: Partial<Environment> = {
     name: '',
     hostUri: '',
@@ -96,25 +95,23 @@ export class EnvSelectComponent implements OnInit {
   renderEnvList = [];
   constructor(
     private store: ApiStoreService,
-    private globalStore: StoreService,
+    public globalStore: StoreService,
     private sidebar: SidebarService,
     private effect: ApiEffectService,
     private testUtils: ApiTestUtilService
   ) {}
   ngOnInit() {
     makeObservable(this);
+    this.effect.updateEnvList();
+    this.gloablParams = this.getGlobalParams();
+
     autorun(() => {
       this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.id }));
-      this.renderEnv = this.store.getEnvList
-        .map(it => ({
-          ...it,
-          parameters: it.parameters.filter(item => item.name || item.value)
-        }))
-        .find((it: any) => it.id === this.store.getCurrentEnv?.id);
+      this.setCurrentEnv();
     });
-    autorun(() => {
-      this.isShare = this.globalStore.isShare;
-    });
+    /**
+     * Change Select env id
+     */
     reaction(
       () => this.envUuid,
       data => {
@@ -122,8 +119,26 @@ export class EnvSelectComponent implements OnInit {
       }
     );
     this.envUuid = this.store.getEnvUuid;
-    this.effect.updateEnvList();
-    this.gloablParams = this.getGlobalParams();
+
+    /**
+     * Set current selected environment by id
+     */
+    reaction(
+      () => this.store.getEnvUuid,
+      data => {
+        /**
+         * From outside change env uuid
+         * Such as add enviroment
+         */
+        this.envUuid = this.store.getEnvUuid;
+        this.setCurrentEnv();
+      }
+    );
+  }
+  setCurrentEnv() {
+    this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
+    if (!this.renderEnv) return;
+    this.renderEnv.parameters = this.renderEnv.parameters.filter(item => item.name || item.value);
   }
   gotoEnvManager() {
     // * close select

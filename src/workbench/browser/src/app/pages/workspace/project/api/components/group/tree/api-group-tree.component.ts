@@ -9,7 +9,7 @@ import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/sha
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
@@ -91,7 +91,7 @@ export class ApiGroupTreeComponent implements OnInit {
       () => {
         this.apiGroupTree = this.store.getApiGroupTree;
         waitNextTick().then(() => {
-          this.nzSelectedKeys = this.getSelectKeys();
+          this.initSelectKeys();
           this.expandKeys = this.getExpandKeys();
         });
       },
@@ -99,11 +99,17 @@ export class ApiGroupTreeComponent implements OnInit {
         delay: 300
       }
     );
+    reaction(
+      () => this.globalStore.getUrl,
+      () => {
+        this.initSelectKeys();
+      }
+    );
   }
-  getSelectKeys() {
+  initSelectKeys() {
     const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
     const { uuid } = this.route.snapshot.queryParams;
-    return uuid && isApiPage ? [uuid] : [];
+    this.nzSelectedKeys = uuid && isApiPage ? [uuid] : [];
   }
   getExpandKeys() {
     if (!this.route.snapshot.queryParams.uuid) {

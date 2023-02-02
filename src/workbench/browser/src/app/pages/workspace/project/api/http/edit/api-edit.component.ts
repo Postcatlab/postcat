@@ -40,6 +40,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
+  isSaving = false;
   groups: NzTreeNode[];
   initTimes = 0;
   expandKeys: string[] = [];
@@ -146,12 +147,13 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
+    this.isSaving = true;
     let formData: ApiData = this.getFormdata();
     const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
-    pcConsole.log('saveAPI', formData);
-    const [result, err] = await this.apiEdit.editApi(formData);
+    const [result, err] = await (busEvent === 'editApi' ? this.apiEdit.editApi(formData) : this.apiEdit.addApi(formData));
+    this.isSaving = false;
     if (err) {
       this.message.error($localize`Failed Operation`);
       return;
@@ -181,12 +183,12 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    // console.log(
-    //   'api edit origin:',
-    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    // );
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);
