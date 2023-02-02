@@ -18,15 +18,15 @@ export class RemoteService {
   ) {
     if (apiList == null) {
       console.log('%c Error: apiData - create 接口 缺失参数 apiList %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiData - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiData - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -53,15 +53,15 @@ export class RemoteService {
   ) {
     if (api == null) {
       console.log('%c Error: apiData - update 接口 缺失参数 api %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiData - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiData - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -88,15 +88,15 @@ export class RemoteService {
   ) {
     if (apiUuids == null) {
       console.log('%c Error: apiData - delete 接口 缺失参数 apiUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiData - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiData - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -129,15 +129,15 @@ export class RemoteService {
   ) {
     if (apiUuids == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiData - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -168,11 +168,11 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiData - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -200,7 +200,7 @@ export class RemoteService {
   api_apiDataGetGroup<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: apiData - getGroup 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -235,27 +235,27 @@ export class RemoteService {
   ) {
     if (name == null) {
       console.log('%c Error: mock - create 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (apiUuid == null) {
       console.log('%c Error: mock - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (createWay == null) {
       console.log('%c Error: mock - create 接口 缺失参数 createWay %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (response == null) {
       console.log('%c Error: mock - create 接口 缺失参数 response %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: mock - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: mock - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -292,15 +292,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: mock - update 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: mock - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: mock - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -327,23 +327,23 @@ export class RemoteService {
   ) {
     if (apiUuid == null) {
       console.log('%c Error: mock - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: mock - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: mock - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (page == null) {
       console.log('%c Error: mock - list 接口 缺失参数 page %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (pageSize == null) {
       console.log('%c Error: mock - list 接口 缺失参数 pageSize %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -374,15 +374,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: mock - detail 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: mock - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: mock - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -413,15 +413,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: mock - delete 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: mock - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: mock - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -449,7 +449,7 @@ export class RemoteService {
   api_groupCreate<T = any>(params, prefix = '') {
     if (params == null) {
       console.log('%c Error: group - create 接口 缺失参数  %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -476,15 +476,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: group - update 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: group - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: group - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -518,15 +518,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: group - delete 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: group - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: group - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -557,15 +557,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: group - detail 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: group - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: group - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -596,15 +596,15 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (withItem == null) {
       console.log('%c Error: group - list 接口 缺失参数 withItem %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -642,27 +642,27 @@ export class RemoteService {
   ) {
     if (apiUuid == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (general == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 general %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (request == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 request %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (response == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 response %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiTestHistory - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -698,19 +698,19 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (page == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 page %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (pageSize == null) {
       console.log('%c Error: apiTestHistory - list 接口 缺失参数 pageSize %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -741,15 +741,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: apiTestHistory - detail 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiTestHistory - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -780,15 +780,15 @@ export class RemoteService {
   ) {
     if (ids == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 ids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: apiTestHistory - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -821,15 +821,15 @@ export class RemoteService {
   ) {
     if (name == null) {
       console.log('%c Error: environment - create 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: environment - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: environment - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -863,19 +863,19 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: environment - update 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (name == null) {
       console.log('%c Error: environment - update 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: environment - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: environment - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -910,15 +910,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: environment - delete 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: environment - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: environment - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -949,15 +949,15 @@ export class RemoteService {
   ) {
     if (id == null) {
       console.log('%c Error: environment - detail 接口 缺失参数 id %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: environment - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: environment - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -988,11 +988,11 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: environment - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: environment - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1058,7 +1058,7 @@ export class RemoteService {
   api_userUpdatePassword<T = any>({ password }, prefix = '') {
     if (password == null) {
       console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1082,11 +1082,11 @@ export class RemoteService {
   api_userLogin<T = any>({ username, password }, prefix = '') {
     if (username == null) {
       console.log('%c Error: user - login 接口 缺失参数 username %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (password == null) {
       console.log('%c Error: user - login 接口 缺失参数 password %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1148,7 +1148,7 @@ export class RemoteService {
   api_userSearch<T = any>({ username }, prefix = '') {
     if (username == null) {
       console.log('%c Error: user - search 接口 缺失参数 username %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1176,7 +1176,7 @@ export class RemoteService {
   api_workspaceCreate<T = any>({ titles }, prefix = '') {
     if (titles == null) {
       console.log('%c Error: workspace - create 接口 缺失参数 titles %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1200,11 +1200,11 @@ export class RemoteService {
   api_workspaceUpdate<T = any>({ title, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (title == null) {
       console.log('%c Error: workspace - update 接口 缺失参数 title %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1228,7 +1228,7 @@ export class RemoteService {
   api_workspaceDelete<T = any>({ workSpaceUuids }, prefix = '') {
     if (workSpaceUuids == null) {
       console.log('%c Error: workspace - delete 接口 缺失参数 workSpaceUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1256,19 +1256,19 @@ export class RemoteService {
   api_workspaceSearchMember<T = any>({ username, page, pageSize, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (username == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 username %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (page == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 page %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (pageSize == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 pageSize %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1296,11 +1296,11 @@ export class RemoteService {
   api_workspaceAddMember<T = any>({ userIds, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (userIds == null) {
       console.log('%c Error: workspace - addMember 接口 缺失参数 userIds %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - addMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1324,11 +1324,11 @@ export class RemoteService {
   api_workspaceRemoveMember<T = any>({ userIds, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (userIds == null) {
       console.log('%c Error: workspace - removeMember 接口 缺失参数 userIds %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - removeMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1356,7 +1356,7 @@ export class RemoteService {
   api_workspaceMemberQuit<T = any>({ workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - memberQuit 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1384,11 +1384,11 @@ export class RemoteService {
   api_workspaceAddMemberRole<T = any>({ userRole, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (userRole == null) {
       console.log('%c Error: workspace - addMemberRole 接口 缺失参数 userRole %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - addMemberRole 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1417,7 +1417,7 @@ export class RemoteService {
   api_workspaceGetMemberPermiss<T = any>({ workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - getMemberPermiss 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1464,7 +1464,7 @@ export class RemoteService {
   api_workspaceRoles<T = any>({ workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - roles 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1492,11 +1492,11 @@ export class RemoteService {
   api_workspaceSetRole<T = any>({ userRole, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (userRole == null) {
       console.log('%c Error: workspace - setRole 接口 缺失参数 userRole %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: workspace - setRole 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1528,11 +1528,11 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: project - exportProject 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: project - exportProject 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1560,11 +1560,11 @@ export class RemoteService {
   api_projectMemberList<T = any>({ username, projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (username == null) {
       console.log('%c Error: project - memberList 接口 缺失参数 username %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: project - memberList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1592,11 +1592,11 @@ export class RemoteService {
   api_projectAddMember<T = any>({ userIds, projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (userIds == null) {
       console.log('%c Error: project - addMember 接口 缺失参数 userIds %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: project - addMember 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1620,11 +1620,11 @@ export class RemoteService {
   api_projectDelMember<T = any>({ userIds, projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (userIds == null) {
       console.log('%c Error: project - delMember 接口 缺失参数 userIds %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: project - delMember 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1652,11 +1652,11 @@ export class RemoteService {
   api_projectMemberQuit<T = any>({ userId, projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (userId == null) {
       console.log('%c Error: project - memberQuit 接口 缺失参数 userId %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (projectUuid == null) {
       console.log('%c Error: project - memberQuit 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1684,11 +1684,11 @@ export class RemoteService {
   api_projectSetRole<T = any>({ projectUuid = this.store.getCurrentProjectID, userRole }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: project - setRole 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (userRole == null) {
       console.log('%c Error: project - setRole 接口 缺失参数 userRole %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1712,7 +1712,7 @@ export class RemoteService {
   api_projectGetRole<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: project - getRole 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1740,7 +1740,7 @@ export class RemoteService {
   api_projectUserPermission<T = any>({ projectUuid = this.store.getCurrentProjectID }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: project - userPermission 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1768,11 +1768,11 @@ export class RemoteService {
   api_projectCreate<T = any>({ projectMsgs, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (projectMsgs == null) {
       console.log('%c Error: project - create 接口 缺失参数 projectMsgs %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: project - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1796,11 +1796,11 @@ export class RemoteService {
   api_projectDetail<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (projectUuids == null) {
       console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1828,15 +1828,15 @@ export class RemoteService {
   api_projectUpdate<T = any>({ projectUuid = this.store.getCurrentProjectID, name, description }, prefix = '') {
     if (projectUuid == null) {
       console.log('%c Error: project - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (name == null) {
       console.log('%c Error: project - update 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (description == null) {
       console.log('%c Error: project - update 接口 缺失参数 description %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1860,7 +1860,7 @@ export class RemoteService {
   api_projectDelete<T = any>({ projectUuids }, prefix = '') {
     if (projectUuids == null) {
       console.log('%c Error: project - delete 接口 缺失参数 projectUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1929,11 +1929,11 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: projectShare - createShare 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: projectShare - createShare 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1960,11 +1960,11 @@ export class RemoteService {
   ) {
     if (projectUuid == null) {
       console.log('%c Error: projectShare - getShareLink 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (workSpaceUuid == null) {
       console.log('%c Error: projectShare - getShareLink 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -1992,7 +1992,7 @@ export class RemoteService {
   api_projectShareDeleteShare<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
       console.log('%c Error: projectShare - deleteShare 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -2020,7 +2020,7 @@ export class RemoteService {
   api_shareProjectDetail<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
       console.log('%c Error: share - projectDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -2048,11 +2048,11 @@ export class RemoteService {
   api_shareGroupList<T = any>({ sharedUuid, withItem = true }, prefix = '') {
     if (sharedUuid == null) {
       console.log('%c Error: share - groupList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (withItem == null) {
       console.log('%c Error: share - groupList 接口 缺失参数 withItem %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -2080,11 +2080,11 @@ export class RemoteService {
   api_shareApiDataDetail<T = any>({ apiUuids, sharedUuid, ...items }, prefix = '') {
     if (apiUuids == null) {
       console.log('%c Error: share - apiDataDetail 接口 缺失参数 apiUuids %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
     if (sharedUuid == null) {
       console.log('%c Error: share - apiDataDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
@@ -2112,7 +2112,7 @@ export class RemoteService {
   api_shareEnvironmentList<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
       console.log('%c Error: share - environmentList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
-      return [null, {}];
+      return;
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
