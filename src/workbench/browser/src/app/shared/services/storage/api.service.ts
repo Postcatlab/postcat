@@ -253,7 +253,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
   }
 
-  api_roleList<T = any>(params: { roleModule: any }) {
+  api_roleList<T = any>(params: any) {
     return this.remote.api_roleList<T>(params);
   }
 

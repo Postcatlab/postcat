@@ -100,7 +100,7 @@ const http = {
     },
     {
       name: 'role',
-      data: [{ 'list @get': '/api/roles', query: 'roleModule' }]
+      data: [{ 'list @get': '/api/roles' }]
     },
     {
       name: 'projectShare',
