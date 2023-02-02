@@ -46,8 +46,8 @@ const version = package.version;
 const fileList = [
   'release/postcat Setup ?.exe',
   'release/postcat-?.dmg',
-  'release/postcat-?-arm64.dmg',
-  'release/postcat-?-mac.zip',
+  'release/mac-arm64/postcat-?-arm64.dmg',
+  'release/mac-arm64/postcat-?-mac.zip',
   'release/latest.yml',
   'release/latest-mac.yml'
 ].map(it => it.replace(/\?/, `${version}`));
