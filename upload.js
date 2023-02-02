@@ -44,10 +44,10 @@ const cpFile = (fromFile, toFile) =>
 
 const version = package.version;
 const fileList = [
-  'release/postcat Setup ?.exe',
-  'release/postcat-?.dmg',
-  'release/mac-arm64/postcat-?-arm64.dmg',
-  'release/mac-arm64/postcat-?-mac.zip',
+  'release/Postcat-Setup-?.exe',
+  'release/Postcat-?.dmg',
+  'release/Postcat-?-arm64.dmg',
+  'release/Postcat-?-mac.zip',
   'release/latest.yml',
   'release/latest-mac.yml'
 ].map(it => it.replace(/\?/, `${version}`));
