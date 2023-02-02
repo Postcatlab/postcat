@@ -10,6 +10,7 @@
   <section class="pt-[10px] env-list">
     <nz-empty *ngIf="!envList.length" nzNotFoundImage="simple"> </nz-empty>
     <eo-ng-tree-default
+      [nzSelectedKeys]="nzTreeSelect"
       [nzData]="envList"
       nzBlockNode
       (nzClick)="editEnv($event)"
@@ -28,6 +29,8 @@
             nzType="text"
             (click)="$event.stopPropagation()"
             nz-popconfirm
+            i18n-nzOkText
+            nzOkText="Delete"
             i18n-nzPopconfirmTitle
             nzPopconfirmTitle="Are you sure you want to delete?"
             (nzOnConfirm)="handleDeleteEnv($event, node.key)"

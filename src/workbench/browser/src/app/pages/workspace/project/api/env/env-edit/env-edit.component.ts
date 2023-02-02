@@ -10,6 +10,7 @@ import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.
 import { Environment } from '../../../../../../shared/services/storage/index.model';
 import { eoDeepCopy, JSONParse } from '../../../../../../utils/index.utils';
 import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 
 export type EnvironmentView = Partial<Environment>;
 @Component({
@@ -41,6 +42,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
       ]
     }
   ];
+  isSaving = false;
   validateForm: FormGroup;
   @ViewChild('envParams')
   envParamsComponent: any;
@@ -48,6 +50,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
   constructor(
     private api: ApiService,
     private effect: ApiEffectService,
+    private store: ApiStoreService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
@@ -85,6 +88,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     if (!this.checkForm()) {
       return;
     }
+    this.isSaving = true;
     const formdata = this.formatEnvData(this.model);
     this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
@@ -103,6 +107,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     const operateName = uuid ? 'edit' : 'add';
     const operate = operateMUI[operateName];
     const [data, err] = await this.effect[operateName === 'edit' ? 'updateEnv' : 'addEnv'](formdata);
+    this.isSaving = false;
     if (err) {
       this.message.error(operate.error);
       return;
@@ -115,6 +120,9 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
         });
       }
       this.afterSaved.emit(this.initialModel);
+    }
+    if (!this.store.getEnvUuid) {
+      this.store.setEnvUuid(data.id || formdata.id);
     }
   }
   async init() {

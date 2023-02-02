@@ -59,6 +59,17 @@ export class EffectService {
         this.store.setPermission(permissions, 'workspace');
         this.store.setRole(roles, 'workspace');
       }
+
+      // * Fetch role list
+      const roleList = await this.getRoleList();
+      this.store.setRoleList(
+        roleList.filter(val => val.module === 1),
+        'workspace'
+      );
+      this.store.setRoleList(
+        roleList.filter(val => val.module === 2),
+        'project'
+      );
     };
     initWorkspaceInfo();
     reaction(
@@ -92,12 +103,6 @@ export class EffectService {
         this.store.setRole(roles, 'project');
       }
     });
-
-    // * Fetch role list
-    const workspaceRoleList = await this.getRoleList(1);
-    this.store.setRoleList(workspaceRoleList, 'workspace');
-    const projectRoleList = await this.getRoleList(2);
-    this.store.setRoleList(projectRoleList, 'project');
   }
   /**
    * Fixed workspaceID and projectID
@@ -112,8 +117,8 @@ export class EffectService {
     this.switchWorkspace(wid);
     this.store.setCurrentProjectID(pid);
   }
-  async getRoleList(type) {
-    const [data, err] = await this.api.api_roleList({ roleModule: type });
+  private async getRoleList() {
+    const [data, err] = await this.api.api_roleList({});
     if (err) {
       return;
     }

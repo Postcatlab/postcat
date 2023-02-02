@@ -1904,31 +1904,22 @@ export class RemoteService {
     });
   }
 
-  api_roleList<T = any>({ roleModule }, prefix = '') {
-    if (roleModule == null) {
-      console.log('%c Error: role - list 接口 缺失参数 roleModule %c', ErrorStyle, '');
-      return;
-    }
-
+  api_roleList<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
-      this.http
-        .get(`${prefix}/api/roles`, {
-          params: { roleModule }
-        })
-        .subscribe({
-          next: ({ code, data }: any) => {
-            if (code === 0) {
-              console.log('%c role:list - api_roleList 接口请求成功 %c', SuccessStyle, '');
-              return resolve([data, null]);
-            }
-            console.log('Error: ', JSON.stringify(data, null, 2));
-            resolve([null, { code, data }]);
-          },
-          error: error => {
-            console.log('%c role:list - api_roleList 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
+      this.http.get(`${prefix}/api/roles`, params).subscribe({
+        next: ({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c role:list - api_roleList 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
           }
-        });
+          console.log('Error: ', JSON.stringify(data, null, 2));
+          resolve([null, { code, data }]);
+        },
+        error: error => {
+          console.log('%c role:list - api_roleList 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
     });
   }
 

@@ -6,18 +6,20 @@ import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { filterTableData } from '../../../../../../utils/tree/tree.utils';
 
+export const mui = {
+  headerParams: 0,
+  bodyParams: 1,
+  queryParams: 2,
+  restParams: 3
+};
+
 @Injectable({ providedIn: 'root' })
 export class ApiEditUtilService {
   constructor() {}
 
   parseApiUI2Storage(formData, filterArrFun): ApiData {
     const result = eoDeepCopy(formData);
-    const mui = {
-      headerParams: 0,
-      bodyParams: 1,
-      queryParams: 2,
-      restParams: 3
-    };
+
     //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {

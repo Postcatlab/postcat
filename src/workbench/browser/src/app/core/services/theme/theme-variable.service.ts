@@ -211,7 +211,8 @@ export class ThemeVariableService {
               'activeBorder',
               'inputActiveBorder',
               'selectHoverBorder',
-              'selectActiveBorder'
+              'selectActiveBorder',
+              'spin'
             ]
           },
           {
@@ -307,7 +308,7 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBackground', 'menuInlineSubmenuBackground']
+            target: ['collapseHeaderBackground', 'tabsCardBackground', 'menuInlineSubmenuBackground']
           }
         ]
       },
@@ -451,12 +452,25 @@ export class ThemeVariableService {
         alpha: 0.03,
         target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
       });
+
+      barBackgroundRule.rule.push({
+        action: 'darken',
+        alpha: 0.02,
+        target: ['tableHeaderBackground']
+      });
     } else {
       const textRule = colorsDefaultRule.find(val => val.source === 'text');
       textRule.rule.push({
         action: 'filter',
         alpha: 0.2,
         target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
+      });
+
+      const barBackgroundRule = colorsDefaultRule.find(val => val.source === 'barBackground');
+      barBackgroundRule.rule.push({
+        action: 'darken',
+        alpha: 0.2,
+        target: ['tableHeaderBackground']
       });
     }
 

@@ -220,6 +220,8 @@ export type ThemeColors = {
   progressDefault?: string;
   progressSuccess?: string;
   progressException?: string;
+
+  spin?: string;
 };
 
 export type ThemeColorRule = {
