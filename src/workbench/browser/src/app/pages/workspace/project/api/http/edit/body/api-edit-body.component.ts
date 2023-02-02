@@ -27,11 +27,11 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
   @Input() model: BodyParam[];
   @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
   @Input() bodyType: ApiBodyType | number;
-  @Input() jsonRootType: number = JsonRootType.Object;
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
   nzDragCheck: (current, next) => boolean;
+  jsonRootType: number = JsonRootType.Object;
   listConf: ApiTableConf = {
     columns: [],
     setting: {}

@@ -1,6 +1,6 @@
 <form nz-form auto-focus-form [formGroup]="validateForm" [nzLayout]="'vertical'">
   <div class="top-save-bar">
-    <button type="button" eo-ng-button nzType="primary" (click)="saveApi()" i18n>Save</button>
+    <button type="button" eo-ng-button nzType="primary" [nzLoading]="isSaving" (click)="saveApi()" i18n>Save</button>
   </div>
   <div class="p-base">
     <nz-skeleton [nzLoading]="!model?.apiAttrInfo" [nzActive]="true"> </nz-skeleton>
@@ -67,7 +67,6 @@
                 #editBody
                 tid="requestBody"
                 [(bodyType)]="model.apiAttrInfo.contentType"
-                [jsonRootType]="model.apiAttrInfo.contentType"
                 [(model)]="model.requestParams.bodyParams"
                 (modelChange)="emitChangeFun()"
               >
@@ -134,7 +133,6 @@
                 [(bodyType)]="model.responseList[0].contentType"
                 [(model)]="model.responseList[0].responseParams.bodyParams"
                 (modelChange)="emitChangeFun()"
-                [jsonRootType]="model.responseList[0].contentType"
                 [supportType]="[TYPE_API_BODY.JSON, TYPE_API_BODY.XML, TYPE_API_BODY.Raw, TYPE_API_BODY.Binary]"
               >
               </eo-api-edit-body>
