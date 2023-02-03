@@ -51,8 +51,7 @@ export class ApiMockComponent implements OnInit, TabViewComponent {
     this.eoOnInit.emit(this.apiData);
   }
   async jumpToClient() {
-    const isInstalled = false;
-    // const isInstalled = await this.web.protocolCheck();
+    const isInstalled = await this.web.protocolCheck();
     if (!isInstalled) {
       this.isInstalledClient = false;
     } else {
