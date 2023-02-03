@@ -7,12 +7,13 @@ import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun, toJS } from 'mobx';
+import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../utils/index.utils';
@@ -55,6 +56,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
+    public globalStore: StoreService,
     private message: EoNgFeedbackMessageService,
     private effect: ApiEffectService,
     private apiEdit: ApiEditService,
