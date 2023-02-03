@@ -2,9 +2,9 @@ name: Release
 
 on:
   push:
-    branches: [feat/v0.1.0]
-    # tags:
-    #   - 'v*.*.*'
+    # branches: [feat/v0.1.0]
+    tags:
+      - 'v*.*.*'
 jobs:
   release:
     name: build and release electron app
