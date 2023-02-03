@@ -533,6 +533,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   const [exportResult] = await this.localService.api_projectExportProject({ projectUuid: localProject.uuid });
 
                   exportResult.projectUuid = remoteProject.projectUuid;
+                  exportResult.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
 
                   await this.api.api_projectImport(exportResult);
                 });
