@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -21,24 +22,27 @@ import {
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
 import { ContentType } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
-import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
-import { ApiTestResData, TestServerRes } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import {
+  ApiTestResData,
+  TestServerRes
+} from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
+import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
-import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiTestUtilService } from '../../../../../../modules/api-shared/api-test-util.service';
 import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
-import { TestServerService } from '../../service/api-test/test-server.service';
+import { ApiTestUtilService } from '../../service/api-test-util.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
+import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiTestService } from './api-test.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
@@ -62,11 +66,11 @@ interface testViewModel {
   testResult: ApiTestResData;
 }
 @Component({
-  selector: 'eo-api-test',
+  selector: 'eo-api-http-test',
   templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss']
 })
-export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabViewComponent {
   @Input() model: testViewModel = this.resetModel();
   /**
    * Intial model from outside,check form is change
@@ -105,7 +109,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   get isEmptyTestPage(): boolean {
     const { uuid } = this.route.snapshot.queryParams;
-    return !this.store.isShare && (!uuid || uuid.includes('history_'));
+    return !this.globalStore.isShare && (!uuid || uuid.includes('history_'));
   }
   get contentType(): ContentType {
     return contentTypeMap[this.model.request.apiAttrInfo.contentType];
@@ -120,7 +124,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
-    public store: StoreService,
+    private globalStore: StoreService,
+    public store: ApiStoreService,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
@@ -233,8 +238,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
-      base: 'query'
+    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
+      nowOperate: 'query',
+      method: 'replace'
     }).url;
   }
   watchBasicForm() {
@@ -244,12 +250,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   updateParamsbyUri(url) {
-    this.model.request.requestParams.queryParams = transferUrlAndQuery(
+    this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
-      this.model.request.requestParams.queryParams,
-      {
-        base: 'url'
-      }
+      this.model.request.requestParams.queryParams
     ).query;
     this.model.request.requestParams.restParams = [
       ...generateRestFromUrl(this.model.request.uri, this.model.request.requestParams.restParams)
@@ -270,12 +273,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.initialModel?.request || !this.model.request) {
       return false;
     }
-    console.log(
-      'api test origin:',
-      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-      'after:',
-      this.apiTestUtil.formatEditingApiData(this.model.request)
-    );
+    // console.log(
+    //   'api test origin:',
+    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+    //   'after:',
+    //   this.apiTestUtil.formatEditingApiData(this.model.request)
+    // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {
@@ -331,7 +334,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.store.getCurrentEnv,
-        globals: getGlobals(),
+        globals: this.apiTestUtil.getGlobals(),
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en'
       })
     };
@@ -374,11 +377,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     //set globals
-    setGlobals(message.globals);
+    this.apiTestUtil.setGlobals(message.globals);
 
     //If test sucess,addHistory
     //Only has statusCode need save report
-    if (!message.response.statusCode || this.store.isShare) {
+    if (!message.response.statusCode || this.globalStore.isShare) {
       return;
     }
     //Add test history

@@ -10,7 +10,7 @@
     <eo-ng-content class="api-container-tabs">
       <eo-env-list class="flex-auto block tree-sider" *ngIf="sidebar.currentID === '@eo-core-env'"></eo-env-list>
       <eo-ng-tabset
-        *ngIf="['@eo-core-share', '@eo-core-apimanger'].includes(sidebar.currentID)"
+        *ngIf="store.isShare || ['@eo-core-apimanger'].includes(sidebar.currentID)"
         class="group-tabset"
         [ngClass]="{ 'share-group-tabset': store.isShare }"
         nzCentered

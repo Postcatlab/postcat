@@ -30,7 +30,7 @@ export const migrationToV3 = async (trans: Transaction) => {
 /** indexedDB 升级到 v4  */
 export const migrationToV4 = async (trans: Transaction) => {
   const workspaceService = new WorkspaceService();
-  const { data: workspace } = await workspaceService.create({ title: 'Persional Workspace' });
+  const { data: workspace } = await workspaceService.create({ title: $localize`Personal Workspace` });
 
   const projects = await trans.table('projectTemp').toArray();
   await trans.table('project').bulkAdd(projects);

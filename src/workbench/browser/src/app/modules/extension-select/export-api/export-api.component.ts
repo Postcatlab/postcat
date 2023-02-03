@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ExtensionInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { has } from 'lodash-es';
 
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+// shit angular-cli 配不明白
+// import { version } from '../../../../../../../../package.json' assert { type: 'json' };
+import pkgInfo from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-export-api',
@@ -17,12 +17,7 @@ export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(
-    private storage: StorageService,
-    private store: StoreService,
-    private extensionService: ExtensionService,
-    private apiService: ApiService
-  ) {
+  constructor(private extensionService: ExtensionService, private apiService: ApiService) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
   }
   ngOnInit(): void {
@@ -32,11 +27,10 @@ export class ExportApiComponent implements OnInit {
         ...data
       });
     });
-    {
-      const { key } = this.supportList.at(0);
-      if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
-        this.currentExtension = key || '';
-      }
+    if (!this.supportList.length) return;
+    const { key } = this.supportList.at(0);
+    if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
+      this.currentExtension = key || '';
     }
   }
   submit(callback: () => boolean) {
@@ -50,10 +44,10 @@ export class ExportApiComponent implements OnInit {
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       document.body.removeChild(element);
       window.URL.revokeObjectURL(url);
-    }, 0);
+    });
   }
   /**
    * Module export
@@ -72,6 +66,7 @@ export class ExportApiComponent implements OnInit {
       if (data) {
         console.log('projectExport result', data);
         try {
+          data.postcatVersion = pkgInfo.version;
           let output = module[action]({ data: data || {} });
           //Change format
           if (has(output, 'status') && output.status === 0) {

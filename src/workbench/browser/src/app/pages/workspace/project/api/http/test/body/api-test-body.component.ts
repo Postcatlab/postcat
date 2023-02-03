@@ -160,7 +160,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.model[0].binaryRawData = code;
     this.modelChange.emit(this.model);
     const contentType = whatTextTypeMap[whatTextType(code)];
-    if (contentType && this.autoSetContentType !== false) {
+    if (contentType && contentType !== this.contentType && this.autoSetContentType !== false) {
       this.contentType = contentType;
       this.contentTypeChange.emit(contentType);
     }

@@ -64,30 +64,33 @@
             [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Headers</span
           >
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestHeaders)" class="ml-1" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams?.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-header
+        <pc-api-test-form
+          module="header"
           [disabled]="isConnecting"
           class="eo_theme_iblock"
-          [(model)]="model.request.requestHeaders"
+          [(model)]="model.request.requestParams.headerParams"
           (modelChange)="emitChangeFun('requestHeaders')"
+          [nzTrClick]="handleTestQueryTableClick"
         >
-        </eo-api-test-header>
+        </pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
           <span i18n eoNgFeedbackTooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
             >Query Params</span
           >
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
-        <eo-api-test-query
+        <pc-api-test-form
+          module="query"
           class="eo_theme_iblock"
           [disabled]="isConnecting"
-          [model]="model.request.queryParams"
+          [model]="model.request.requestParams.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
           [nzTrClick]="handleTestQueryTableClick"
-        ></eo-api-test-query>
+        ></pc-api-test-form>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="messageTmp">
         <ng-template #messageTmp i18n>Message</ng-template>
@@ -129,9 +132,6 @@
   <section style.height="calc(100% - {{ height }}px - 55px)">
     <div class="flex items-center justify-between p-3">
       <span class="font-bold" i18n>Messages</span>
-      <!-- <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(wsStatus)">{{
-          renderStatus(wsStatus)
-        }}</span> -->
     </div>
     <ul class="p-2 overflow-auto" style="height: calc(100% - 55px)">
       <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
@@ -181,9 +181,9 @@
         >
         </eo-monaco-editor> -->
         <ng-container *ngIf="item.isExpand && item.type === 'start'">
-          <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">
-            <div class="font-bold bbd pb-[10px] pt-[8px]">{{ k }}</div>
-            <eo-api-test-result-header [model]="item.msg?.[k] || []"></eo-api-test-result-header>
+          <div *ngFor="let key of Object.keys(item.msg)" class="headers">
+            <div class="font-bold bbd pb-[10px] pt-[8px]">{{ item.msg[key]?.label }}</div>
+            <eo-api-test-result-header [model]="item.msg[key]?.content || []"></eo-api-test-result-header>
           </div>
         </ng-container>
       </li>

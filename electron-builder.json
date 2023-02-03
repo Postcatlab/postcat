@@ -5,22 +5,12 @@
   "directories": {
     "output": "release/"
   },
-  "files": [
-    "out/app/**/*.js*",
-    "out/platform/**/*.js*",
-    "out/environment.js",
-    "out/shared/**/*.js*",
-    "src/workbench/browser/dist/**/*",
-    "out/workbench/browser/src/**/*.js*",
-    "out/workbench/node/**/*.js*",
-    "out/app/common/**/*",
-    "!**/*.ts"
-  ],
+  "files": ["out/**/*.js*", "out/environment.js", "src/workbench/browser/dist/**/*", "!**/*.ts"],
   "publish": [
     "github",
     {
       "provider": "generic",
-      "url": "https://packages.postcat.com"
+      "url": "https://data.postcat.com/download/"
     }
   ],
   "afterPack": "./scripts/afterPackHook.js",

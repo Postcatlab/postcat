@@ -1,6 +1,8 @@
 <div class="px-6 overflow-auto extension-list">
-  <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
-  <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList?.length"></nz-empty>
+  <ng-container *ngIf="!renderList?.length">
+    <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
+    <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading"></nz-empty>
+  </ng-container>
   <div class="grid gap-6 py-5 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-1">
     <div
       class="flex flex-col flex-wrap w-full transition-shadow duration-300 rounded border-all plugin-block hover:shadow-lg"

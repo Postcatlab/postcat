@@ -22,15 +22,15 @@ export class ApiTabService {
   private changeContent$: Subject<any> = new Subject();
   SHARE_TABS: Array<Partial<TabItem>> = [
     {
-      pathname: '/home/share/http/test',
+      pathname: '/share/http/test',
       id: 'share-api-test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
-    { pathname: '/home/share/http/detail', id: 'share-api-detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/share/http/detail', id: 'share-api-detail', type: 'preview', title: $localize`Preview` },
     {
-      pathname: '/home/share/ws/test',
+      pathname: '/share/ws/test',
       id: 'share-api-test',
       isFixed: true,
       type: 'preview',

@@ -32,7 +32,7 @@ export class WorkspaceOverviewComponent implements OnInit {
   ngOnInit(): void {
     autorun(() => {
       this.title = this.store.getCurrentWorkspace?.title;
-      this.isOwner = this.store.getWorkspaceRole.find(it => ['Workspace Owner'].includes(it.name));
+      this.isOwner = this.store.getWorkspaceRole.some(it => ['Workspace Owner'].includes(it.name));
     });
   }
   createWorkspace() {

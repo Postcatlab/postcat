@@ -1,3 +1,5 @@
+import type { EventEmitter } from '@angular/core';
+
 export enum TabOperate {
   closeOther = 'closeOther',
   closeAll = 'closeAll',
@@ -9,6 +11,43 @@ export type storageTab = {
   tabOrder: number[];
   tabsByID: { [key: number]: TabItem };
 };
+export declare interface TabViewComponent {
+  /**
+   * View Component model
+   * Usually restored model from tab cache
+   */
+  model?: any;
+
+  /**
+   * Intial model for check form is change
+   */
+  initialModel?: any;
+
+  /**
+   * Emit view component data has init event for intial tab title data/loading..
+   */
+  eoOnInit: EventEmitter<any>;
+
+  /**
+   * Emit view component data has been saved
+   */
+  afterSaved?: EventEmitter<any>;
+
+  /**
+   * Emit view component data has changed event
+   */
+  modelChange?: EventEmitter<any>;
+
+  /**
+   * A callback method that performs custom init tab-ui, invoked immediately after tab has initialized.
+   */
+  init?(): void;
+
+  /**
+   * Edit page tab judge model has changed
+   */
+  isFormChange?(): boolean;
+}
 /**
  * Tab item.
  */

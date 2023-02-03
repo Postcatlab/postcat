@@ -6,13 +6,11 @@ import { ElectronService } from '../../core/services';
 @Component({
   selector: 'eo-nav-operate',
   template: ` <div class="flex items-center" *ngIf="isElectron">
-    <nz-divider nzType="vertical"></nz-divider>
     <button eo-ng-button (click)="refresh()" nzType="default">
       <eo-iconpark-icon eoNgFeedbackTooltip i18n-nzTooltipTitle nzTooltipTitle="Refresh" nzType="" name="refresh"></eo-iconpark-icon>
     </button>
     <div *ngIf="!isMac">
       <button
-        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
@@ -24,7 +22,6 @@ import { ElectronService } from '../../core/services';
         <eo-iconpark-icon name="minus"></eo-iconpark-icon>
       </button>
       <button
-        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
@@ -36,7 +33,6 @@ import { ElectronService } from '../../core/services';
         <eo-iconpark-icon [name]="isMaximized ? 'off-screen' : 'full-screen'"></eo-iconpark-icon>
       </button>
       <button
-        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle

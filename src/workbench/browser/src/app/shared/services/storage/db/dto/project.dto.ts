@@ -28,9 +28,20 @@ export interface ProjectPageDto extends PageDto {
 
 export interface ImportProjectDto {
   environmentList: Environment[];
-  apiList: ApiList[];
-  groupList: Group[];
-  name: string;
+  collections: Collection[];
   projectUuid?: string;
   workSpaceUuid?: string;
+}
+
+export type Collection = (ApiList | Group) & {
+  /**
+   * 0：group
+   * 1: apiData
+   */
+  collectionType: CollectionTypeEnum;
+};
+
+export enum CollectionTypeEnum {
+  GROUP = 0,
+  API_DATA = 1
 }

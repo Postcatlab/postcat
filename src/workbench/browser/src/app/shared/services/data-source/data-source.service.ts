@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { NzModalService } from 'ng-zorro-antd/modal';
-
-import StorageUtil from '../../../utils/storage/Storage';
 
 /**
  * Client need min fontend version
@@ -30,8 +25,6 @@ export class DataSourceService {
     private messageService: MessageService,
     private settingService: SettingService,
     private store: StoreService,
-    private modal: NzModalService,
-    private http: RemoteService,
     private web: WebService
   ) {
     this.pingCloudServerUrl();

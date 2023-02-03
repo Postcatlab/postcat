@@ -1,12 +1,13 @@
 :host {
   display: flex;
+
+  /**
+   ! can't be delete,for pc-debug-component
+   */
+  flex: 1;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-}
-
-.page-body {
-  // height: var(--body-height);
 }
 
 .home-container {

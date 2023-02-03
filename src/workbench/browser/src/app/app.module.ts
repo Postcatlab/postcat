@@ -16,7 +16,6 @@ import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/glo
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -26,7 +25,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
-import { MockService } from './services/mock.service';
+import { PcConsoleModule } from './modules/pc-console/pc-console.module';
+import { MockService } from './shared/services/mock.service';
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -39,13 +39,13 @@ registerLocaleData(zh);
     AppRoutingModule,
     NzModalModule,
     EoNgFeedbackTooltipModule,
+    PcConsoleModule,
     EoNgFeedbackMessageModule,
     NzIconModule.forRoot([WarningFill])
   ],
   providers: [
     MockService,
     ExtensionService,
-    StorageService,
     IndexedDBStorage,
     HttpStorage,
     ThemeService,

@@ -16,7 +16,7 @@ type ListType = 'list' | 'card';
 })
 export class ProjectListComponent implements OnInit {
   listType: ListType;
-  initLoading = true; // bug
+  initLoading = true;
   projectList: any[] = [];
 
   get WorkspaceID() {

@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { Protocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { Protocol, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import { syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -14,22 +16,24 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
-import { ApiParamsNumPipe } from '../../../../../modules/api-shared/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../../../modules/api-shared/pipe/api-param-num.pipe';
 import { ModalService } from '../../../../../shared/services/modal.service';
 import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {
   requestTabIndex: number;
   msg: string;
-  request: any;
+  request: ApiData;
   response: any;
 }
+
+const UIHash = new Map().set('requestHeaders', 'Request Headers').set('responseHeaders', 'Response Headers');
 @Component({
   selector: 'websocket-content',
   templateUrl: './websocket.component.html',
   styleUrls: ['./websocket.component.scss']
 })
-export class WebsocketComponent implements OnInit, OnDestroy {
+export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
   @Input() bodyType = 'json';
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
@@ -68,6 +72,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (id && id.includes('history_')) {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
         this.model = historyData as testViewModel;
+        this.model.requestTabIndex = 2;
       }
     }
     this.watchBasicForm();
@@ -91,13 +96,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
-      let url = '';
-      if (!APP_CONFIG.production || this.electron.isElectron) {
-        const port = this.electron.isElectron ? await window.electron?.getWebsocketPort?.() : 13928;
-        url = `ws://localhost:${port}`;
-      } else {
-        url = APP_CONFIG.REMOTE_SOCKET_URL;
-      }
+      const port = this.electron.isElectron ? await window.electron?.getWebsocketPort?.() : 13928;
+      const url = !APP_CONFIG.production || this.electron.isElectron ? `ws://localhost:${port}` : APP_CONFIG.REMOTE_SOCKET_URL;
       this.socket = io(url, { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 });
       this.socket.on('connect_error', error => {
         // * conncet socketIO is failed
@@ -127,25 +127,26 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
 
   expandMessage(index) {
-    const status = this.model.response.responseBody[index].isExpand;
-    this.model.response.responseBody[index].isExpand = status == null ? true : !status;
+    console.log('this.model.response.responseBody', this.model.response.responseBody);
+    const status = this.model.response.responseBody[index].isExpand || false;
+    this.model.response.responseBody[index].isExpand = !status;
   }
-  renderStatus(status) {
-    const hash = new Map().set('connected', 'Connected').set('disconnect', 'Disconnect').set('connecting', 'Connecting');
-    return hash.get(status);
-  }
+
   rawDataChange(e) {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query'
+    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
+      nowOperate: 'query',
+      method: 'replace'
     }).url;
+    console.log(this.model.request.uri);
   }
   changeUri() {
-    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url'
-    }).query;
+    this.model.request.requestParams.queryParams = syncUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.requestParams.queryParams
+    ).query;
   }
   emitChangeFun(where) {
     if (where === 'queryParams') {
@@ -220,7 +221,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.model.response.responseBody.unshift({ type: 'send', msg: this.model.msg, isExpand: false });
   }
   unListen() {
-    this.socket.off('ws-client');
+    this.socket.removeAllListeners('ws-client');
   }
   listen() {
     // * 无论是否连接成功，都清空发送历史
@@ -240,14 +241,20 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {
-              'Request Headers': Object.entries<string>(reqHeader).map(([key, value]) => ({
-                name: key,
-                value
-              })),
-              'Response Headers': Object.entries<string>(resHeader).map(([key, value]) => ({
-                name: key,
-                value
-              }))
+              reqHeader: {
+                label: 'Request Headers',
+                content: Object.entries<string>(reqHeader).map(([key, value]) => ({
+                  name: key,
+                  value
+                }))
+              },
+              resHeader: {
+                label: 'Response Headers',
+                content: Object.entries<string>(resHeader).map(([key, value]) => ({
+                  name: key,
+                  value
+                }))
+              }
             },
             title: `Connected to ${this.getLink()}`,
             isExpand: false
@@ -256,7 +263,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
-            title: `Connect to ${this.getLink()} is failed`,
+            title: $localize`Connect to ${this.getLink()} is failed`,
             isExpand: false
           });
           this.wsStatus = 'disconnect';
@@ -341,10 +348,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       requestTabIndex: 2,
       msg: '',
       request: {
-        requestHeaders: [],
+        name: '',
         uri: '',
         protocol: Protocol.WEBSOCKET,
-        queryParams: []
+        apiAttrInfo: {
+          contentType: ApiBodyType.Raw
+        },
+        requestParams: { headerParams: [], bodyParams: [], queryParams: [], restParams: [] },
+        responseList: []
       },
       response: {
         requestHeaders: [],
@@ -360,17 +371,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         this.validateForm.controls[i].updateValueAndValidity();
       }
     }
-    if (this.validateForm.status === 'INVALID') {
-      return false;
-    }
-    return true;
+    return this.validateForm.status !== 'INVALID';
   }
   private watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.modelChange.emit(this.model);
-      }, 0);
+      });
     });
   }
   private initBasicForm() {
@@ -378,21 +386,20 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     if (!this.model) {
       this.model = this.resetModel();
     }
-    const controls = {};
-    ['uri'].forEach(name => {
-      controls[name] = [this.model.request[name], [Validators.required]];
-    });
-    this.validateForm = this.fb.group(controls);
+    this.validateForm = this.fb.group(
+      ['uri'].reduce(
+        (total, it) => ({
+          ...total,
+          [it]: [this.model.request[it], [Validators.required]]
+        }),
+        {}
+      )
+    );
   }
   private switchEditStatus() {
     const bool = this.wsStatus !== 'disconnect';
     ['uri'].forEach(name => {
-      if (bool) {
-        // wsStatus !== 'disconnect'
-        this.validateForm.controls[name].disable();
-      } else {
-        this.validateForm.controls[name].enable();
-      }
+      bool ? this.validateForm.controls[name].disable() : this.validateForm.controls[name].enable();
     });
   }
 }

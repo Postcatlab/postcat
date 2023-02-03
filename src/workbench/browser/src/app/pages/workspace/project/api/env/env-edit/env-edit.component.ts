@@ -2,13 +2,16 @@ import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@a
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
 import { Environment } from '../../../../../../shared/services/storage/index.model';
-import { EffectService } from '../../../../../../shared/store/effect.service';
 import { eoDeepCopy, JSONParse } from '../../../../../../utils/index.utils';
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 
 export type EnvironmentView = Partial<Environment>;
 @Component({
@@ -16,7 +19,7 @@ export type EnvironmentView = Partial<Environment>;
   templateUrl: './env-edit.component.html',
   styleUrls: ['./env-edit.component.scss']
 })
-export class EnvEditComponent implements OnDestroy {
+export class EnvEditComponent implements OnDestroy, TabViewComponent {
   @Input() model: EnvironmentView;
   @Input() initialModel: EnvironmentView;
   @Output() readonly modelChange = new EventEmitter<EnvironmentView>();
@@ -40,13 +43,16 @@ export class EnvEditComponent implements OnDestroy {
       ]
     }
   ];
+  isSaving = false;
   validateForm: FormGroup;
   @ViewChild('envParams')
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private api: ApiService,
-    private effect: EffectService,
+    private effect: ApiEffectService,
+    private store: ApiStoreService,
+    public globalStore: StoreService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
@@ -84,6 +90,7 @@ export class EnvEditComponent implements OnDestroy {
     if (!this.checkForm()) {
       return;
     }
+    this.isSaving = true;
     const formdata = this.formatEnvData(this.model);
     this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
@@ -101,20 +108,24 @@ export class EnvEditComponent implements OnDestroy {
     };
     const operateName = uuid ? 'edit' : 'add';
     const operate = operateMUI[operateName];
-    const [data, err] = await this.api[operateName === 'edit' ? 'api_environmentUpdate' : 'api_environmentCreate'](formdata);
+    const [data, err] = await this.effect[operateName === 'edit' ? 'updateEnv' : 'addEnv'](formdata);
+    this.isSaving = false;
     if (err) {
+      console.log(err);
       this.message.error(operate.error);
       return;
     }
     if (data) {
       this.message.success(operate.success);
-      this.effect.updateEnvList();
       if (operateName === 'add') {
         this.router.navigate(['home/workspace/project/api/env/edit'], {
           queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }
         });
       }
       this.afterSaved.emit(this.initialModel);
+    }
+    if (!this.store.getEnvUuid) {
+      this.store.setEnvUuid(data.id || formdata.id);
     }
   }
   async init() {
@@ -133,7 +144,6 @@ export class EnvEditComponent implements OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    console.log(this.model);
     this.initForm();
     this.eoOnInit.emit(this.model);
   }
