@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
@@ -51,6 +52,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     private api: ApiService,
     private effect: ApiEffectService,
     private store: ApiStoreService,
+    public globalStore: StoreService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
