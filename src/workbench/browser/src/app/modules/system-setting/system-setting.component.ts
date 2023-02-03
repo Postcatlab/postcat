@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { Component, Input } from '@angular/core';
 import { AccountComponent } from 'eo/workbench/browser/src/app/modules/system-setting/common/account.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { SettingItem } from '../eo-ui/setting/setting.component';
-import { AboutComponent, DataStorageComponent, LanguageSwticherComponent, SelectThemeComponent } from './common';
+import { AboutComponent, LanguageSwticherComponent, SelectThemeComponent } from './common';
 
 @Component({
   selector: 'eo-system-setting',
@@ -45,5 +44,5 @@ export class SystemSettingComponent {
     }
   ];
 
-  constructor(private store: StoreService, private webService: WebService) {}
+  constructor(private store: StoreService) {}
 }

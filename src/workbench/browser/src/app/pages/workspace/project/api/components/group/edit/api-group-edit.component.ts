@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-import { GroupApiDataModel, GroupTreeItem } from '../../../../../../../shared/models';
-import { StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
+import { ApiEffectService } from '../../../service/store/api-effect.service';
+import { GroupAction } from '../tree/api-group-tree.component';
 
 @Component({
   selector: 'pc-api-group-edit',
@@ -15,13 +13,12 @@ import { StorageRes, StorageResStatus } from '../../../../../../../shared/servic
 })
 export class ApiGroupEditComponent implements OnInit {
   @Input() group: Group;
-  @Input() action?: string;
-  @Input() treeItems?: any;
+  @Input() action?: GroupAction;
 
   validateForm!: FormGroup;
   isDelete: boolean;
 
-  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private storage: StorageService, private effect: EffectService) {}
+  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private effect: ApiEffectService) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
@@ -31,7 +28,7 @@ export class ApiGroupEditComponent implements OnInit {
     }
   }
 
-  submit(): void {
+  async submit(): Promise<[any, any]> {
     if (!this.isDelete) {
       for (const i in this.validateForm.controls) {
         if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -43,55 +40,22 @@ export class ApiGroupEditComponent implements OnInit {
         return;
       }
     }
-    this.save();
-  }
-
-  save(): void {
-    if (this.isDelete) {
-      this.delete();
-    } else {
-      if (this.group.id) {
-        this.update();
-      } else {
-        this.create();
+    let result;
+    switch (this.action) {
+      case 'delete': {
+        result = await this.effect.deleteGroup(this.group);
+        break;
+      }
+      case 'edit': {
+        result = await this.effect.updateGroup(this.group);
+        break;
+      }
+      case 'new': {
+        result = await this.effect.createGroup([this.group]);
+        break;
       }
     }
-  }
-
-  async create() {
-    await this.effect.createGroup([this.group]);
     this.modalRef.destroy();
-  }
-
-  async update() {
-    await this.effect.updateGroup(this.group);
-    this.modalRef.destroy();
-  }
-
-  /**
-   * Get all child items belong to parentID
-   *
-   * @param list
-   * @param tree
-   * @param parentID
-   */
-  getChildrenFromTree(list: GroupTreeItem[], tree: GroupApiDataModel, parentID: string): void {
-    list.forEach(item => {
-      if (item.parentID === parentID) {
-        if (!item.isLeaf) {
-          tree.group.push(Number(item.key.replace('group-', '')));
-          this.getChildrenFromTree(list, tree, item.key);
-        } else {
-          tree.api.push(Number(item.key));
-        }
-      }
-    });
-  }
-  /**
-   * Delete all tree items
-   */
-  delete(): void {
-    this.effect.deleteGroup(this.group);
-    this.modalRef.destroy();
+    return result;
   }
 }

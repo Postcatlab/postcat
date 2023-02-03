@@ -4,8 +4,9 @@ import { cloneDeep, toArray, merge } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
 
+import { BodyParam } from '../../../shared/services/storage/db/models/apiData';
 import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-transfer/data-transfer.utils';
-import { whatType } from '../../../utils/index.utils';
+import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 import { ApiParamsTypeJsonOrXml } from '../api.model';
 
 const titleHash = new Map()
@@ -31,6 +32,10 @@ export class ParamsImportComponent implements OnInit {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
+  /**
+   * Table item structure
+   */
+  @Input() itemStruecture?: BodyParam;
   @Output() readonly baseDataChange = new EventEmitter<any>();
   @Output() readonly beforeHandleImport = new EventEmitter<any>();
 
@@ -157,15 +162,17 @@ export class ParamsImportComponent implements OnInit {
       if (['xml'].includes(type)) {
         const rootItem = data.at(0);
         rootItem.dataType = ApiParamsTypeJsonOrXml.object;
+        rootItem.childList.push({ ...this.itemStruecture });
         return [rootItem];
       }
       return data;
     };
 
     const { data } = res;
-    // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
     const emptyRow = this.baseData.slice(-1);
-    const resultData = cloneDeep(['xml'].includes(this.contentType) ? this.baseData : this.baseData.reverse().slice(1).reverse());
+
+    // * this.baseData.slice(0,-1) for filter the last empty row
+    const resultData = cloneDeep(['xml'].includes(this.contentType) ? this.baseData : this.baseData.slice(0, -1));
     const result = combineFunc[type](json2Table(data), resultData);
     // * 后处理
     const finalData = endParse([...result, ...emptyRow], this.contentType);

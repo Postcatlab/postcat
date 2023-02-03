@@ -70,9 +70,13 @@
     }
   }
 
-  .share-group-tabset {
+  eo-ng-tabset.share-group-tabset {
     .ant-tabs-nav {
       display: none;
+    }
+
+    .tree-sider {
+      height: calc(var(--body-height));
     }
   }
 

@@ -78,7 +78,7 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_groupDetail<T>(params) : this.remote.api_groupDetail<T>(params);
   }
 
-  api_groupList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_groupList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; withItem?: any }) {
     return this.store.isLocal ? this.local.api_groupList<T>(params) : this.remote.api_groupList<T>(params);
   }
 
@@ -237,8 +237,8 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectCreate<T>(params) : this.remote.api_projectCreate<T>(params);
   }
 
-  api_projectDetail<T = any>(params: { projectUuids: any; workSpaceUuid?: any }) {
-    return this.store.isLocal ? this.local.api_projectDetail<T>(params) : this.remote.api_projectDetail<T>(params);
+  api_projectList<T = any>(params: { projectUuids: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectList<T>(params) : this.remote.api_projectList<T>(params);
   }
 
   api_projectUpdate<T = any>(params: { projectUuid?: any; name: any; description: any }) {
@@ -249,27 +249,39 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectDelete<T>(params) : this.remote.api_projectDelete<T>(params);
   }
 
-  api_roleList<T = any>(params: { roleModule: any }) {
+  api_projectImport<T = any>(params: any) {
+    return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
+  }
+
+  api_roleList<T = any>(params: any) {
     return this.remote.api_roleList<T>(params);
   }
 
-  api_shareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_shareCreateShare<T>(params);
+  api_projectShareCreateShare<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectShareCreateShare<T>(params);
   }
 
-  api_shareGetShareList<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareGetShareList<T>(params);
+  api_projectShareGetShareLink<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectShareGetShareLink<T>(params);
   }
 
-  api_shareDeleteShare<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareDeleteShare<T>(params);
+  api_projectShareDeleteShare<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_projectShareDeleteShare<T>(params);
   }
 
-  api_shareDocGetAllApi<T = any>(params: { sharedUuid: any; apiUuid: any }) {
-    return this.remote.api_shareDocGetAllApi<T>(params);
+  api_shareProjectDetail<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_shareProjectDetail<T>(params);
   }
 
-  api_shareDocGetEnv<T = any>(params: { sharedUuid: any }) {
-    return this.remote.api_shareDocGetEnv<T>(params);
+  api_shareGroupList<T = any>(params: { sharedUuid: any; withItem?: any }) {
+    return this.remote.api_shareGroupList<T>(params);
+  }
+
+  api_shareApiDataDetail<T = any>(params: { apiUuids: any; sharedUuid: any; [key: string]: any }) {
+    return this.remote.api_shareApiDataDetail<T>(params);
+  }
+
+  api_shareEnvironmentList<T = any>(params: { sharedUuid: any }) {
+    return this.remote.api_shareEnvironmentList<T>(params);
   }
 }

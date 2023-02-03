@@ -16,10 +16,12 @@ import { EoTabModule } from '../../../../modules/eo-ui/tab/tab.module';
 import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
+import { ProjectApiService } from './api.service';
 import { ApiGroupEditComponent } from './components/group/edit/api-group-edit.component';
 import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
+import { ApiTestUtilService } from './service/api-test-util.service';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -41,6 +43,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],
-  providers: [NzResizableService, ApiTabService]
+  providers: [ProjectApiService, ApiTestUtilService, NzResizableService, ApiTabService]
 })
 export class ApiModule {}

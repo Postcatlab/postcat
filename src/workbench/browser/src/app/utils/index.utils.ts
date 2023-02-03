@@ -322,3 +322,8 @@ export const JSONParse = (text, defaultVal = {}, reviver?) => {
     return defaultVal;
   }
 };
+
+export const waitNextTick = () =>
+  new Promise(resolve => {
+    setTimeout(() => resolve(true), 0);
+  });

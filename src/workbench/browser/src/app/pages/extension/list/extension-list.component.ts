@@ -33,18 +33,22 @@ export class ExtensionListComponent implements OnInit {
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
-      if (this.type === 'all') {
-        this.allList = [];
-        this.allList = await this.searchPlugin(this.type, this.keyword);
-        return;
+      switch (this.type) {
+        case 'all': {
+          this.allList = [];
+          this.allList = await this.searchPlugin(this.type, this.keyword);
+          break;
+        }
+        case 'official': {
+          this.officialList = [];
+          this.officialList = await this.searchPlugin(this.type, this.keyword);
+        }
+        default: {
+          this.installedList = [];
+          this.installedList = await this.searchPlugin(this.type, this.keyword);
+          break;
+        }
       }
-      if (this.type === 'official') {
-        this.officialList = [];
-        this.officialList = await this.searchPlugin(this.type, this.keyword);
-        return;
-      }
-      this.installedList = [];
-      this.installedList = await this.searchPlugin(this.type, this.keyword);
     });
   }
   clickExtension(event, item) {

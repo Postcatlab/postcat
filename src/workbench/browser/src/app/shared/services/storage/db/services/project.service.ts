@@ -6,7 +6,9 @@ import {
   ProjectPageDto,
   ProjectDeleteDto,
   ProjectUpdateDto,
-  ImportProjectDto
+  ImportProjectDto,
+  Collection,
+  CollectionTypeEnum
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
@@ -98,80 +100,117 @@ export class ProjectService extends BaseService<Project> {
   async exports(params: QueryAllDto) {
     const { data: projectInfo } = await this.baseService.read({ uuid: params.projectUuid });
     const { data: environmentList } = await this.environmentService.bulkRead(params);
-    const { data: apiList } = await this.apiDataService.bulkRead(params);
-    const { data: groupList } = await this.groupService.bulkRead(params);
+    const { data: apiGroupTree } = await this.groupService.bulkRead({ projectUuid: params.projectUuid });
 
-    return {
+    const formatTree = (arr = []) => {
+      return arr.map(item => {
+        if (item.type === 2) {
+          return {
+            ...item.relationInfo,
+            collectionType: CollectionTypeEnum.API_DATA
+          };
+        } else {
+          item.collectionType = CollectionTypeEnum.GROUP;
+          // ...
+          if (item.children?.length) {
+            item.children = formatTree(item.children);
+          }
+          return item;
+        }
+      });
+    };
+
+    const result: ImportProjectDto = {
       ...projectInfo,
       environmentList,
-      apiList,
-      groupList
-    } as unknown as ApiResponsePromise<ImportProjectDto>;
+      collections: formatTree(apiGroupTree[0].children) as Collection[]
+    };
+
+    return result as unknown as ApiResponsePromise<ImportProjectDto>;
   }
 
-  async imports(params: ImportProjectDto) {
-    const { apiList, groupList, environmentList, workSpaceUuid, projectUuid } = params;
+  @ApiResponse()
+  async import(params: ImportProjectDto) {
+    const { collections, environmentList = [], workSpaceUuid, projectUuid } = params;
 
-    this.environmentService.bulkCreate(
-      environmentList.map(e => ({
-        ...e,
-        workSpaceUuid,
-        projectUuid
-      }))
-    );
+    if (environmentList.length) {
+      this.environmentService.bulkCreate(
+        environmentList.map(e => ({
+          ...e,
+          workSpaceUuid,
+          projectUuid
+        }))
+      );
+    }
 
     const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });
 
-    await this.deepCreateGroup(groupList, apiList, workSpaceUuid, projectUuid, [rootGroup]);
+    await this.deepCreateGroup(collections, rootGroup);
+    return true;
   }
 
-  private deepCreateGroup = async (groupList = [], apiList = [], workSpaceUuid, projectUuid, rootGroup: Group[]) => {
-    const groupFilters = groupList
-      .filter(n => n.depth !== 0)
-      .map(n => {
-        const { id, children, ...rest } = n;
-        rest.parentId ??= rootGroup[0].id;
-        return rest;
-      });
-    let remoteGroups = rootGroup;
+  private bulkCreateApiData(apiList, parentGroup) {
+    const { workSpaceUuid, projectUuid, id: groupId } = parentGroup;
 
-    if (groupFilters.length) {
-      const groupIds = await this.apiGroupTable.bulkAdd(groupFilters, { allKeys: true });
-      remoteGroups = await this.apiGroupTable.bulkGet(groupIds);
-    }
-
-    console.log('remoteGroups', remoteGroups);
-    groupList.forEach((localGroup, index) => {
-      const apiFilters = apiList
-        .filter(n => n.groupId === localGroup.id)
-        .map(n => {
-          const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
-          return {
-            ...rest,
-            // 远程分组 id 替换本地分组 id
-            groupId: remoteGroups[index]?.id
-          };
-        });
-
-      if (apiFilters.length) {
-        this.apiDataService.bulkCreate({
-          apiList: apiFilters,
-          projectUuid,
-          workSpaceUuid
-        });
-      }
-
-      // 如果本地分组还有子分组
-      if (localGroup.children?.length) {
-        localGroup.children.forEach(m => {
-          m.type = 1;
-          // 远程分组 id 替换本地分组 id
-          m.parentId = remoteGroups[index]?.id;
-          m.projectUuid = projectUuid;
-          m.workSpaceUuid = workSpaceUuid;
-        });
-        this.deepCreateGroup(localGroup.children, apiList, workSpaceUuid, projectUuid, rootGroup);
-      }
+    const apiFilters = apiList.map(n => {
+      const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
+      return {
+        ...rest,
+        // 远程分组 id 替换本地分组 id
+        groupId
+      };
     });
+
+    if (apiFilters.length) {
+      return this.apiDataService.bulkCreate({
+        apiList: apiFilters,
+        projectUuid,
+        workSpaceUuid
+      });
+    }
+  }
+
+  private async bulkCreateGroup(groupList: Group[] = [], parentGroup: Group) {
+    const { workSpaceUuid, projectUuid, id: parentId } = parentGroup;
+
+    const groups = groupList.map(n => {
+      const { id, children, ...rest } = n;
+      rest.parentId = parentId;
+      rest.workSpaceUuid = workSpaceUuid;
+      rest.projectUuid = projectUuid;
+      return rest;
+    });
+
+    if (groups.length) {
+      const groupIds = await this.apiGroupTable.bulkAdd(groups, { allKeys: true });
+      const remoteGroups = await this.apiGroupTable.bulkGet(groupIds);
+
+      for (const [index, localGroup] of groupList.entries()) {
+        // 如果本地分组还有子分组
+        if (localGroup.children?.length) {
+          await this.deepCreateGroup(localGroup.children, remoteGroups[index]);
+        }
+      }
+    }
+  }
+  /** 递归创建分组及 API */
+  private deepCreateGroup = async (collections = [], parentGroup: Group) => {
+    // 将集合筛选为 groupList 和 apiDataList 两组
+    const { groupList = [], apiDataList = [] } = collections
+      .filter(n => n.depth !== 0)
+      .group((item, index) => {
+        // 排序号根据原始数组索引来
+        item.sort = index;
+        if (item.collectionType === CollectionTypeEnum.GROUP) {
+          return 'groupList';
+        } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
+          return 'apiDataList';
+        } else {
+          return '垃圾数据分类';
+        }
+      });
+
+    await this.bulkCreateApiData(apiDataList, parentGroup);
+    await this.bulkCreateGroup(groupList, parentGroup);
   };
 }

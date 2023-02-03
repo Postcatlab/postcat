@@ -5,14 +5,14 @@
     "background": "#390000",
     "primary": "#883333",
     "info": "#3794ff",
+    "border": "rgba(204, 204, 204, 0.2)",
     "divider": "rgba(204, 204, 204, 0.2)",
     "textLink": "#3794ff",
     "danger": "#be1100",
     "barBackground": "#330000",
-    "border": "transparent",
+    "tabsBadge": "rgba(255, 255, 255, 0.5)",
+    "tabsActiveBadge": "#ffffff",
     "inputIcon": "#cccccc",
-    "inputBorder": "rgba(204, 204, 204, 0.2)",
-    "selectBorder": "rgba(204, 204, 204, 0.2)",
     "inputPlaceholder": "rgba(204, 204, 204, 0.5)",
     "selectItemSelectedText": "#ffffff",
     "selectItemSelectedBackground": "#880000",
@@ -43,11 +43,12 @@
     "collapseBorder": "rgba(204, 204, 204, 0.2)",
     "collapseHeaderBackground": "rgba(204, 204, 204, 0.04)",
     "tableBorder": "rgba(204, 204, 204, 0.2)",
-    "tableHeaderBackground": "rgba(204, 204, 204, 0.04)",
     "tableHeaderText": "rgb(204, 204, 204)",
     "scrollbarThumbBackground": "rgba(121, 121, 121, 0.4)",
     "dropdownBackground": "#580000",
     "dropdownItemHoverBackground": "#880000",
-    "dropdownItemHoverText": "#ffffff"
+    "dropdownItemHoverText": "#ffffff",
+    "itemActiveBackground": "#880000",
+    "itemHoverBackground": "#880000"
   }
 }

@@ -10,6 +10,7 @@
   <section class="pt-[10px] env-list">
     <nz-empty *ngIf="!envList.length" nzNotFoundImage="simple"> </nz-empty>
     <eo-ng-tree-default
+      [nzSelectedKeys]="nzTreeSelect"
       [nzData]="envList"
       nzBlockNode
       (nzClick)="editEnv($event)"
@@ -26,11 +27,11 @@
             class="tree-item-btn"
             eo-ng-button
             nzType="text"
-            i18n-nzTooltipTitle
-            nzTooltipTitle="Delete"
+            nzPopoverOverlayClassName="background-popover"
             (click)="$event.stopPropagation()"
-            eoNgFeedbackTooltip
             nz-popconfirm
+            i18n-nzOkText
+            nzOkText="Delete"
             i18n-nzPopconfirmTitle
             nzPopconfirmTitle="Are you sure you want to delete?"
             (nzOnConfirm)="handleDeleteEnv($event, node.key)"

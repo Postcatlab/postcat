@@ -24,7 +24,7 @@ import { MemberService } from './member.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span class="text-tips">{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="!store.isLocal && ((!item.isSelf && member.isOwner) || item.isSelf)">
+            <div class="operate-btn-list" *ngIf="!item.readonly && !store.isLocal && ((!item.isSelf && member.isOwner) || item.isSelf)">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
@@ -43,7 +43,7 @@ import { MemberService } from './member.service';
         </nz-list-item-action>
       </ul>
     </nz-list-item>
-    <nz-list-empty *ngIf="!loading && list.length === 0"></nz-list-empty>
+    <nz-list-empty *ngIf="!loading && list?.length === 0"></nz-list-empty>
   </nz-list>`,
   styleUrls: ['./member-list.component.scss']
 })

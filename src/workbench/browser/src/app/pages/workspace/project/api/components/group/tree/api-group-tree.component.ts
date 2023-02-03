@@ -6,17 +6,19 @@ import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extensi
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
+import { ApiEffectService } from '../../../service/store/api-effect.service';
+import { ApiStoreService } from '../../../service/store/api-state.service';
 
+export type GroupAction = 'new' | 'edit' | 'delete';
 @Component({
   selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -69,8 +71,9 @@ export class ApiGroupTreeComponent implements OnInit {
 
   constructor(
     public electron: ElectronService,
-    public store: StoreService,
-    private effect: EffectService,
+    public globalStore: StoreService,
+    private store: ApiStoreService,
+    private effect: ApiEffectService,
     private projectApi: ProjectApiService,
     private modalService: ModalService,
     private router: Router,
@@ -79,34 +82,35 @@ export class ApiGroupTreeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEdit = !this.store.isShare;
+    this.isEdit = !this.globalStore.isShare;
     // * get group data from store
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
     autorun(() => {
       this.apiGroupTree = this.store.getApiGroupTree;
-      setTimeout(() => {
+      waitNextTick().then(() => {
+        this.initSelectKeys();
         this.expandKeys = this.getExpandKeys();
-        this.nzSelectedKeys = this.getSelectKeys();
-      }, 0);
+      });
     });
+    reaction(
+      () => this.globalStore.getUrl,
+      () => {
+        this.initSelectKeys();
+      }
+    );
   }
-  getSelectKeys() {
-    if (
-      this.route.snapshot.queryParams.uuid &&
-      ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path))
-    ) {
-      return [this.route.snapshot.queryParams.uuid];
-    } else {
-      return [];
-    }
+  initSelectKeys() {
+    const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
+    const { uuid } = this.route.snapshot.queryParams;
+    this.nzSelectedKeys = uuid && isApiPage ? [uuid] : [];
   }
   getExpandKeys() {
     if (!this.route.snapshot.queryParams.uuid) {
-      return;
+      return this.expandKeys;
     }
-    return [...(this.expandKeys || []), ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
+    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   getRequestMethodText(node) {
     return this.requestMethodMap[node.origin?.requestMethod];
@@ -124,16 +128,18 @@ export class ApiGroupTreeComponent implements OnInit {
     title: string,
     params: {
       group: GroupCreateDto | GroupUpdateDto;
-      action: 'new' | 'edit' | 'delete';
+      action: GroupAction;
     }
   ) {
     const modal: NzModalRef = this.modalService.create({
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
-      nzOnOk() {
-        modal.componentInstance.submit();
-      }
+      nzOnOk: () =>
+        modal.componentInstance.submit().then(data => {
+          if (params.action !== 'new') return;
+          this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
+        })
     });
   }
   editGroup(group) {
@@ -152,7 +158,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   addAPI(group?) {
-    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { groupId: group?.key }
     });
@@ -172,7 +178,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.projectApi.copy(api.key);
   }
   editAPI(api) {
-    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { uuid: api.key }
     });
@@ -196,19 +202,17 @@ export class ApiGroupTreeComponent implements OnInit {
       nzOnOk: () =>
         new Promise(resolve => {
           modal.componentInstance.submit(status => {
-            if (status) {
-              this.message.success($localize`${title} successfully`);
-              // TODO
-              setTimeout(() => {
-                this.effect.getGroupList();
-              }, 1000);
-              setTimeout(() => {
-                this.effect.getGroupList();
-              }, 6000);
-              modal.destroy();
-            } else {
+            this.effect.getGroupList();
+            if (!status) {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+              return resolve(true);
             }
+            if (status === 'stayModal') {
+              return resolve(true);
+            }
+            this.message.success($localize`${title} successfully`);
+            modal.destroy();
+            return resolve(true);
           });
         })
     });
@@ -219,34 +223,25 @@ export class ApiGroupTreeComponent implements OnInit {
    *
    * @param event
    */
-  treeItemDrop = (event: NzFormatEmitEvent) => {
-    const dragNode = event.dragNode;
+  treeItemDrop = ({ dragNode }: NzFormatEmitEvent) => {
     const node = eoDeepCopy(dragNode.origin);
-    // Get group sort index
-    let sort;
-    let parentNode = dragNode.parentNode;
-    if (dragNode.parentNode) {
-      const childs = dragNode.parentNode.getChildren();
-      const index = childs.findIndex(val => val.key === node.key);
-      sort = childs.length - index;
-    } else {
-      const childs = this.apiGroup.getTreeNodes().filter(n => n.level === 0);
-      const index = childs.findIndex(val => val.key === node.key);
-      sort = childs.length - index;
-    }
-    if (dragNode.isLeaf) {
-      this.projectApi.edit({
-        apiUuid: node.apiUuid,
-        //@ts-ignore
-        groupId: parentNode?.key || this.store.getRootGroup.id,
-        orderNum: sort
-      });
-    } else {
-      // * Update group
-      node.parentId = dragNode.parentNode?.key || this.store.getRootGroup.id;
-      node.sort = sort;
-      this.effect.updateGroup(node);
-    }
+    const parentNode = dragNode.parentNode;
+    const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
+    // * Get group sort index
+    const sort = children.findIndex(val => val.key === node.key);
+    console.log('TODO: sort 可能不是按顺序的', [...children]);
+    // * It will be update group list automatic
+    this.effect.sortGroup(
+      dragNode.isLeaf
+        ? {
+            id: node._group.id,
+            type: node._group.type,
+            sort,
+            //@ts-ignore
+            parentId: parentNode?.key || this.store.getRootGroup.id
+          }
+        : { ...node, sort, parentId: dragNode.parentNode?.key || this.store.getRootGroup.id }
+    );
     console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
@@ -268,9 +263,9 @@ export class ApiGroupTreeComponent implements OnInit {
       }
       case 'clickItem': {
         // * jump to api detail page
-        const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
+        const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.key }
+          queryParams: { uuid: event.node.key, groupId: event.node.origin.groupId }
         });
         break;
       }

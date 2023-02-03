@@ -5,7 +5,7 @@ import { kebabCase } from 'lodash-es';
 import { SettingService } from '../../../modules/system-setting/settings.service';
 import { ExtensionInfo } from '../../../shared/models/extension-manager';
 import { Message, MessageService } from '../../../shared/services/message';
-import StorageUtil from '../../../utils/storage/Storage';
+import StorageUtil from '../../../utils/storage/storage.utils';
 import { ThemeExtensionService } from './theme-extension.service';
 import { ThemeVariableService } from './theme-variable.service';
 import { SYSTEM_THEME, SystemUIThemeType, SystemThemeItems } from './theme.constant';
@@ -36,6 +36,8 @@ export class ThemeService {
     await this.querySystemThemes();
     let currentTheme = StorageUtil.get('pc_theme') || this.themes.find(val => val.id === this.defaultTheme);
     this.changeTheme(currentTheme);
+
+    //Quick directly change theme color if debug color change
     if (currentTheme.id === 'pc-debug') {
       this.fixedThemeIfNotValid();
     }
@@ -56,16 +58,25 @@ export class ThemeService {
     this.injectVaribale(theme.colors);
     this.changeEditorTheme(theme);
   }
+
+  changeCurrentThemeColorForDebug(colors) {
+    this.injectVaribale(colors);
+  }
+
   queryExtensionThemes() {
     const extensions = this.themeExtension.getExtensionThemes(this.coreThemes);
     this.themes.push(...extensions);
   }
   changeEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
-    const baseTheme = currentTheme.baseTheme || currentTheme.id;
-    const editorTheme = baseTheme === 'pc-dark' ? 'vs-dark' : 'vs';
+    const editorTheme = this.getEditorTheme(currentTheme);
     if (window.monaco?.editor) {
       window.monaco?.editor.setTheme(editorTheme);
     }
+  }
+  getEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
+    const baseTheme = currentTheme.baseTheme || currentTheme.id;
+    const editorTheme = baseTheme === 'pc-dark' ? 'vs-dark' : 'vs';
+    return editorTheme;
   }
   private getCoreThemes() {
     const systemThemes = SYSTEM_THEME;

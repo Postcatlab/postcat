@@ -1,4 +1,4 @@
-import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, RequestMethod } from '../../../../../modules/api-shared/api.model';
 
 export interface ApiData {
   id?: number;
@@ -18,6 +18,8 @@ export interface ApiData {
   isShared?: number;
   tag?: string;
   orderNum?: number;
+  /** 这个仅用于分组排序 */
+  sort?: number;
   hashkey?: string;
   managerId?: number;
   managerName?: string;
@@ -63,8 +65,8 @@ export interface Relation {
 }
 
 export interface ApiAttrInfo {
-  requestMethod: RequestMethod;
   contentType: ApiBodyType | number;
+  requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
   authInfo?: string;
@@ -126,7 +128,6 @@ export interface RequestParams {
 export interface HeaderParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
   partType?: number;
   structureId?: number;
   structureParamId?: string;

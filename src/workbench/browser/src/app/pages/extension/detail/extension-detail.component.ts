@@ -79,7 +79,7 @@ export class ExtensionDetailComponent implements OnInit {
       const response = await fetch(`https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.md`);
       if (response.status === 200) {
         this.changeLog = await response.text();
-      } else if (!locale && response.status === 404) {
+      } else if (response.status === 404) {
         try {
           // const result = await fetch(`https://eoapi.eolinker.com/npm/${this.extensionDetail.name}`, {
           const result = await fetch(`https://registry.npmjs.org/${this.extensionDetail.name}`, {
@@ -99,10 +99,11 @@ ${log}
         } catch (error) {
           this.changeLogNotFound = true;
         }
-      } else if (locale) {
-        //If locale README not find,fetch default locale(en-US)
-        this.fetchChangelog();
       }
+      //  else if (locale) {
+      //   //If locale README not find,fetch default locale(en-US)
+      //   this.fetchChangelog();
+      // }
     } catch (error) {
     } finally {
       clearTimeout(timer);
@@ -141,12 +142,10 @@ ${log}
     this.isOperating = true;
     switch (operate) {
       case 'install': {
-        const { name, version, main, i18n } = this.extensionDetail;
+        const { name, version, i18n } = this.extensionDetail;
         this.extensionDetail.installed = await this.extensionService.installExtension({
           name,
-          version,
-          main,
-          i18n
+          version
         });
         this.extensionDetail['enabled'] = true;
         break;

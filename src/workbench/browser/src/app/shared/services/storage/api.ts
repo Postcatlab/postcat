@@ -28,7 +28,7 @@ const http = {
         { 'update @put @update': '/api/group', json: 'id, projectUuid, workSpaceUuid, ...' },
         { 'delete @delete @delete': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api/group', query: 'id, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/group/list', query: 'projectUuid, workSpaceUuid' }
+        { 'list @get @bulkRead': '/api/group/list', query: 'projectUuid, workSpaceUuid, withItem' }
       ]
     },
     {
@@ -92,28 +92,31 @@ const http = {
         { 'getRole @get': '/api/projects/users/roles/own', query: 'projectUuid' },
         { 'userPermission @get': '/api/projects/users/roles', query: 'projectUuid' },
         { 'create @post @bulkCreate': '/api/projects', json: 'projectMsgs, workSpaceUuid' },
-        { 'detail @get @page': '/api/projects', query: 'projectUuids, workSpaceUuid' },
+        { 'list @get @page': '/api/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/api/projects', json: 'projectUuid, name, description' },
-        { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' }
+        { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' },
+        { 'import @post @import': '/api/projects/import' }
       ]
     },
     {
       name: 'role',
-      data: [{ 'list @get': '/api/roles', query: 'roleModule' }]
+      data: [{ 'list @get': '/api/roles' }]
     },
     {
-      name: 'share',
+      name: 'projectShare',
       data: [
         { 'createShare @post': '/api/project-shared', json: 'projectUuid, workSpaceUuid' },
-        { 'getShareList @get': '/api/project-shared', query: 'sharedUuid' },
+        { 'getShareLink @get': '/api//project-shared', query: 'projectUuid, workSpaceUuid' },
         { 'deleteShare @delete': '/api/project-shared', query: 'sharedUuid' }
       ]
     },
     {
-      name: 'shareDoc',
+      name: 'share',
       data: [
-        { 'getAllAPI @get': '/api/project-shared/api', query: 'sharedUuid, apiUuid' },
-        { 'getEnv @get': '/api/project-shared/env', query: 'sharedUuid' }
+        { 'projectDetail @get': '/api/project-shared/project', query: 'sharedUuid' },
+        { 'groupList @get': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
+        { 'apiDataDetail @get': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
+        { 'environmentList @get': '/api/project-shared/env/list', query: 'sharedUuid' }
       ]
     }
   ]
