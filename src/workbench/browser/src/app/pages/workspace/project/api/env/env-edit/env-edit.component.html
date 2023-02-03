@@ -1,5 +1,5 @@
 <div class="top-save-bar">
-  <button type="submit" eo-ng-button nzType="primary" [nzLoading]="isSaving" (click)="saveEnv()" i18n>Save</button>
+  <button type="submit" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveEnv()" i18n>Save</button>
 </div>
 <section class="save-container p-base" *ngIf="model">
   <form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">

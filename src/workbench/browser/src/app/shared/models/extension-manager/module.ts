@@ -51,6 +51,7 @@ export interface ExtensionInfo {
   logo: string;
   //Contribution Feature
   features?: {
+    apiPreviewTab: any;
     configuration: ModuleConfiguration;
     i18n?: FeatureI18nLocale;
     extensionTabView: ExtensionTabView[];
