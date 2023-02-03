@@ -45,10 +45,12 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
-  'release/Postcat-?.dmg',
   'release/Postcat-?-arm64.dmg',
+  'release/Postcat-?.dmg',
   'release/Postcat-?-mac.zip',
+  'release/Postcat-?.AppImage',
   'release/latest.yml',
+  'release/latest-linux.yml',
   'release/latest-mac.yml'
 ].map(it => it.replace(/\?/, `${version}`));
 // const fileList = ['releass/postcat-Setup-?.png', 'releass/postcat-?.png', 'releass/postcat-?-arm64.png'].map((it) =>
