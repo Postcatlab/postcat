@@ -10,7 +10,7 @@ import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessage
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
+import { DownloadClientModalComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { ApiFormaterPipe } from 'eo/workbench/browser/src/app/shared/pipes/api.pipe';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
@@ -27,7 +27,7 @@ import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 
-const COMPONENTS = [DownloadClienteComponent, ExtensionAppComponent];
+const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent];
 const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective];
 const SHARED_UI_MODULE = [
   NzFormModule,
