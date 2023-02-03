@@ -142,6 +142,10 @@ object {
     color: var(--text-color);
     background-color: var(--background-color);
   }
+
+  .ant-popover-arrow-content {
+    background-color: var(--background-color);
+  }
 }
 
 .eo-navbar {
