@@ -104,3 +104,10 @@ jobs:
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+
+      - name: Release for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
