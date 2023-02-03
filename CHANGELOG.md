@@ -1,30 +1,62 @@
-# [1.10.0](https://github.com/eolinker/eoapi/compare/v1.9.1...v1.10.0) (2022-11-16)
+# [0.1.0](https://github.com/eolinker/eoapi/compare/v1.11.0...v0.1.0) (2023-02-03)
+
+
+### Bug Fixes
+
+* add api space error ([5e9b1eb](https://github.com/eolinker/eoapi/commit/5e9b1eb3fb1395e89a48f31a8ae9974322841a60))
+* decode unicode for response body ([2d6f125](https://github.com/eolinker/eoapi/commit/2d6f125579e138833a668a8fac6a90f686bfe86e)), closes [#142](https://github.com/eolinker/eoapi/issues/142)
+* import openAPI ([bbfc226](https://github.com/eolinker/eoapi/commit/bbfc2266728b8b572fc4553d1c3500c6d81d68fc))
+* lose gio tab query ([347c974](https://github.com/eolinker/eoapi/commit/347c974d9c7c172802022cba23980ccce2a4f666))
+* monaco-editor can not format ([9d3bae6](https://github.com/eolinker/eoapi/commit/9d3bae63f9cfb1933bc1fedbd4d2dc118c96ba7d))
+* params import xml bug ([95a4198](https://github.com/eolinker/eoapi/commit/95a419859404a689dd265c15973c2f1971874e7b))
+* some ts error ([13e8ce0](https://github.com/eolinker/eoapi/commit/13e8ce03dd2de39dc88216a684c01516b72ac86d))
+* test response gibberish ([033d7aa](https://github.com/eolinker/eoapi/commit/033d7aacc2452db3718b3e74dedff735727f7b41)), closes [#212](https://github.com/eolinker/eoapi/issues/212)
+* theme extension i18n ([805af93](https://github.com/eolinker/eoapi/commit/805af93f76882b4db73f985d2a5e241d505f7b94))
+* window package download error ([e3fcfa9](https://github.com/eolinker/eoapi/commit/e3fcfa9b512a167c4091da3bda7eb159ff6ef29a))
+
+
+### Features
+
+* add doc about e2e ([94f4537](https://github.com/eolinker/eoapi/commit/94f4537edcffe69c5febd500ed4b351f0d65c3c3))
+* add e2e test case ([616e925](https://github.com/eolinker/eoapi/commit/616e9250dddd6d5b6a4356ed5813c0a7437d2a01))
+* add gio ([b441de0](https://github.com/eolinker/eoapi/commit/b441de0ad4ae0f7a4b7fca9acded686923a83bc0))
+* add proxy ([0d0a3ed](https://github.com/eolinker/eoapi/commit/0d0a3edd8dd77af0aa53086d68652a74f1b6d61d))
+* delete some useless api ([bf1be0b](https://github.com/eolinker/eoapi/commit/bf1be0b29e1c7f315c91088dae391889376a49f2))
+* download client from gitee ([111b7b8](https://github.com/eolinker/eoapi/commit/111b7b8bdb99d3c844e77eb8c32c7db5290746cb))
+* redirect postcat ([0b15d05](https://github.com/eolinker/eoapi/commit/0b15d057e2354c6a0949026ea132033230a8fda6))
+* script main.js ([6692e26](https://github.com/eolinker/eoapi/commit/6692e26ed93d2396c37a2a46cbf11ded4c6057a3))
+
+
+### Performance Improvements
+
+* add loading for iframe page ([ae34e5e](https://github.com/eolinker/eoapi/commit/ae34e5e74a5b21ad0a9c99d5aebb6548d2a47e6a))
+
+
+
+# [1.11.0](https://github.com/eolinker/eoapi/compare/v1.10.0...v1.11.0) (2022-12-07)
+
+
+### Bug Fixes
+
+* grpc-server emit params ([8e966f9](https://github.com/eolinker/eoapi/commit/8e966f9c2ce0f5af2dbfa79eeed7be975d7a1817))
+
+
+
+# [1.10.0](https://github.com/eolinker/eoapi/compare/v1.9.1...v1.10.0) (2022-11-18)
 
 
 ### Bug Fixes
 
 * close [#184](https://github.com/eolinker/eoapi/issues/184)  Rest not change with uri ([92b28f7](https://github.com/eolinker/eoapi/commit/92b28f7b4a11af751f23bfa22324f91ec0dc76f5))
-* eo.execute example error ([e9dea16](https://github.com/eolinker/eoapi/commit/e9dea168f70d901db500fc78c30adcb1a4594d83))
 * eo.execute example error ([6ae8cb1](https://github.com/eolinker/eoapi/commit/6ae8cb121016127ed47e1659a352912d155e6327))
-* route error ([cb5773a](https://github.com/eolinker/eoapi/commit/cb5773ab37dfd02521011a2641e17d5265c34d5c))
-* save data from test extra data ([15ecc6f](https://github.com/eolinker/eoapi/commit/15ecc6fddb7c34ab1ad97d9d8583e9498a2ca2c3))
-* sync extensin load way ([46f9626](https://github.com/eolinker/eoapi/commit/46f96263d2eb37b3d66f164609c6b73c4845ad65))
+* package error ([46a0835](https://github.com/eolinker/eoapi/commit/46a0835f7ba14e9e252d237f42d82fcca0126513))
 * sync extensin load way ([ede1dfa](https://github.com/eolinker/eoapi/commit/ede1dfa58b4ec96b3d985c7b2bfa523c3a4949fa))
-* use absolute proto path ([72af03b](https://github.com/eolinker/eoapi/commit/72af03bb36ef4c3e2a66bcf02946f77cd84bdf11))
-* web translate extension ([01ad2a8](https://github.com/eolinker/eoapi/commit/01ad2a8f9aa15b81323e7950b121cbea6ec425f5))
 * web translate extension ([90385ef](https://github.com/eolinker/eoapi/commit/90385efa18184a92f34a734c51053223b536681a))
-* window.eo is undefine in web ([2bf3001](https://github.com/eolinker/eoapi/commit/2bf3001678bd4327b060b88ac0ea4aba69b17a12))
 
 
 ### Features
 
-* add default completions ([e4bd73b](https://github.com/eolinker/eoapi/commit/e4bd73bc4363fffe6bf278d2411f4147621129c8))
 * add default completions ([9d803b1](https://github.com/eolinker/eoapi/commit/9d803b19c588ad47e82a0132e2e3e6a862a0f48f))
-* add server version for about ([446107b](https://github.com/eolinker/eoapi/commit/446107b0a637daca32d75f222548dc3fde2c36c8))
-* extension support sidebarViews & customTabs ([b598bf8](https://github.com/eolinker/eoapi/commit/b598bf8f3609179ddaaa0640d82691296df067c2))
-* grpc add context params ([c65d0cd](https://github.com/eolinker/eoapi/commit/c65d0cdb949e7d9a4e3f18a48fade59db3a91520))
-* support API sercurity check extension ([9f7b59c](https://github.com/eolinker/eoapi/commit/9f7b59c274d9eb4ccc06e8b5984d77ed27fbe5c0))
-* translate error ([21bfe57](https://github.com/eolinker/eoapi/commit/21bfe5725ae727fe99cd3b8bc3136c10831fc421))
 * translate error ([173de84](https://github.com/eolinker/eoapi/commit/173de84cb8befd0c91008508fbef2b58f6c212eb))
 
 
