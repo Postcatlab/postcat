@@ -14,7 +14,6 @@
     "start:testServer": "yarn workspace postcat-test-server run dev",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
-    "build:docker:web": "node ./build/build.js web docker",
     "lang:gen": "ng extract-i18n --output-path locale",
     "test": "ng test --watch=false",
     "test:watch": "ng test",

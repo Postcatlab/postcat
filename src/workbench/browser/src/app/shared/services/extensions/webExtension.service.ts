@@ -97,10 +97,10 @@ export class WebExtensionService {
     });
     return extensions;
   }
-  async getExtensionPackage(extName, version = '') {
+  async getExtensionPackage(extName, version?) {
     const pkgJson = this.installedList.find(n => n.name === extName)?.pkgInfo;
     const entry = pkgJson?.main;
-    version ??= pkgJson?.version || 'latest';
+    version ||= pkgJson?.version || 'latest';
     await this.injectScriptByPath(extName, entry, version);
   }
   getExtensions() {
