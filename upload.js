@@ -29,17 +29,13 @@ const uploadFile = (token, file, localFile) =>
 // * 删除单个文件
 const removeFile = (spaceName, file) =>
   new Promise(resolve => {
-    client.remove(spaceName, file, (err, ret) => {
-      return err ? resolve(false) : resolve(true);
-    });
+    client.remove(spaceName, file, (err, ret) => (err ? resolve(false) : resolve(true)));
   });
 
 // * 拷贝单个文件
 const cpFile = (fromFile, toFile) =>
   new Promise(resolve => {
-    client.copy(bucket, fromFile, bucket, toFile, err => {
-      return err ? resolve(false) : resolve(true);
-    });
+    client.copy(bucket, fromFile, bucket, toFile, err => (err ? resolve(false) : resolve(true)));
   });
 
 const version = package.version;
