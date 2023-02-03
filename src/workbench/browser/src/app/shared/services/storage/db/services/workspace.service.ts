@@ -13,7 +13,7 @@ export class WorkspaceService extends BaseService<Workspace> {
     const result = await this.baseService.bulkRead(params);
 
     result.data.forEach(item => {
-      item.title = $localize`Persional Workspace`;
+      item.title = $localize`Personal Workspace`;
     });
 
     return result;

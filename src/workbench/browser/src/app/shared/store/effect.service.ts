@@ -9,6 +9,7 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, reaction, toJS } from 'mobx';
 
 import { ApiStoreService } from '../../pages/workspace/project/api/service/store/api-state.service';
+import { waitNextTick } from '../../utils/index.utils';
 import { db } from '../services/storage/db';
 
 @Injectable({
@@ -54,11 +55,7 @@ export class EffectService {
       await this.updateWorkspaceList();
       this.fixedID();
 
-      if (!this.store.isLocal) {
-        const { roles, permissions } = await this.getWorkspacePermission();
-        this.store.setPermission(permissions, 'workspace');
-        this.store.setRole(roles, 'workspace');
-      }
+      await this.updateWorkspacePermission();
 
       // * Fetch role list
       const roleList = await this.getRoleList();
@@ -78,11 +75,15 @@ export class EffectService {
         initWorkspaceInfo();
       }
     );
+
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(async () => {
       // Use first user postcat,auto into Default project
       if (isUserFirstUse) {
-        this.switchProject(this.store.getProjectList[0].projectUuid);
+        //* Prevent 404
+        waitNextTick().then(() => {
+          this.switchProject(this.store.getProjectList[0].projectUuid);
+        });
         return;
       }
       if (this.store.getProjectList.length === 0) {
@@ -96,12 +97,8 @@ export class EffectService {
         return;
       }
 
-      if (!this.store.isLocal) {
-        // * update project role
-        const { permissions, roles } = await this.getProjectPermission();
-        this.store.setPermission(permissions, 'project');
-        this.store.setRole(roles, 'project');
-      }
+      // * update project role
+      await this.updateProjectPermission();
     });
   }
   /**
@@ -145,13 +142,9 @@ export class EffectService {
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
     // * update workspace role
-    if (!this.store.isLocal) {
-      const { roles, permissions } = await this.getWorkspacePermission();
-      this.store.setPermission(permissions, 'workspace');
-      this.store.setRole(roles, 'workspace');
-    }
+    await this.updateWorkspacePermission();
   }
-  async getWorkspacePermission() {
+  async updateWorkspacePermission() {
     // * local workspace no need to set permission
     if (this.store.isLocal) {
       return;
@@ -161,9 +154,12 @@ export class EffectService {
     if (err) {
       return;
     }
+    const { roles, permissions } = data;
+    this.store.setPermission(permissions, 'workspace');
+    this.store.setRole(roles, 'workspace');
     return data;
   }
-  async getProjectPermission() {
+  async updateProjectPermission() {
     // * localworkspace no need to set permission
     if (this.store.isLocal) {
       return;
@@ -173,7 +169,10 @@ export class EffectService {
     if (err) {
       return;
     }
-    return data.at(0);
+    const { permissions, roles } = data.at(0);
+    this.store.setPermission(permissions, 'project');
+    this.store.setRole(roles, 'project');
+    return [data, err];
   }
 
   async switchProject(pid) {
@@ -190,9 +189,7 @@ export class EffectService {
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
 
     // * update project role
-    const { permissions, roles } = await this.getProjectPermission();
-    this.store.setPermission(permissions, 'project');
-    this.store.setRole(roles, 'project');
+    await this.updateProjectPermission();
   }
   async updateWorkspaceList() {
     const [list, wErr]: any = await this.api.api_workspaceList({});
@@ -205,7 +202,7 @@ export class EffectService {
     this.store.setWorkspaceList(list);
   }
   async updateProjects(workSpaceUuid) {
-    const [data] = await this.api.api_projectDetail({ projectUuids: [], workSpaceUuid });
+    const [data] = await this.api.api_projectList({ projectUuids: [], workSpaceUuid });
     if (data) {
       this.store.setProjectList(data.items);
       return [data.items, null];

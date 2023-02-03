@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
+import { DownloadClientModalComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+
+import packageJson from '../../../../../../../../package.json';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +25,14 @@ export class WebService {
       link: ''
     },
     {
-      id: 'mac',
+      id: 'mac-intel',
       name: $localize`MacOS(Intel) Client`,
       icon: 'mac',
       suffix: 'dmg',
       link: ''
     },
     {
-      id: 'mac',
+      id: 'mac-m1',
       name: $localize`MacOS(M1) Client`,
       icon: 'mac',
       suffix: 'arm64.dmg',
@@ -44,7 +46,7 @@ export class WebService {
     } else {
       this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://54.255.141.14:8080' });
     }
-    this.getClientResource();
+    this.getClientResource('gitee');
   }
   private findLinkInSingleAssets(assets, item) {
     let result = '';
@@ -70,22 +72,49 @@ export class WebService {
     return result;
   }
 
-  private getClientResource() {
-    fetch('https://api.github.com/repos/eolinker/postcat/releases')
-      .then(response => response.json())
-      .then((data = []) => {
-        [...this.resourceInfo]
-          .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
-          .forEach(item => {
-            item.link = this.findLink(
-              data.map(val => val.assets),
-              item
-            );
+  private getClientResource(platform = 'github') {
+    switch (platform) {
+      case 'gitee': {
+        this.resourceInfo.forEach(item => {
+          switch (item.id) {
+            case 'win': {
+              item.link = `https://gitee.com/eolink_admin/postcat/releases/download/v${packageJson.version}/Postcat-Setup-${packageJson.version}.exe`;
+              break;
+            }
+            case 'mac-intel': {
+              item.link = `https://gitee.com/eolink_admin/postcat/releases/download/v${packageJson.version}/Postcat-${packageJson.version}.dmg`;
+              break;
+            }
+            case 'mac-m1': {
+              item.link = `https://gitee.com/eolink_admin/postcat/releases/download/v${packageJson.version}/Postcat-${packageJson.version}-arm64.dmg`;
+              break;
+            }
+          }
+        });
+        break;
+      }
+      case 'pc-resource': {
+        break;
+      }
+      case 'github': {
+        fetch('https://api.github.com/repos/eolinker/postcat/releases')
+          .then(response => response.json())
+          .then((data = []) => {
+            [...this.resourceInfo]
+              .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
+              .forEach(item => {
+                item.link = this.findLink(
+                  data.map(val => val.assets),
+                  item
+                );
+              });
+          })
+          .catch(e => {
+            pcConsole.log('get postcat client download link error');
           });
-      })
-      .catch(e => {
-        pcConsole.log('get postcat client download link error');
-      });
+        break;
+      }
+    }
   }
 
   async protocolCheck(): Promise<boolean> {
@@ -108,7 +137,7 @@ export class WebService {
   showDownloadClientModal(modalTitle: string) {
     const modal = this.modalService.create({
       nzTitle: modalTitle,
-      nzContent: DownloadClienteComponent,
+      nzContent: DownloadClientModalComponent,
       nzOnOk() {
         modal.destroy();
       }

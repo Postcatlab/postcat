@@ -10,7 +10,7 @@ import { ElectronService, WebService } from '../../core/services';
     </button>
     <button *ngIf="btnType !== 'icon'" eo-ng-button nzType="primary" eo-ng-dropdown [nzDropdownMenu]="download">
       <eo-iconpark-icon name="download" size="14px"></eo-iconpark-icon>
-      <span class="ml-[5px]" i18n>{{ title }}</span>
+      <span class="ml-[5px]">{{ title }}</span>
     </button>
     <eo-ng-dropdown-menu #download="nzDropdownMenu">
       <ul nz-menu>
@@ -24,7 +24,7 @@ import { ElectronService, WebService } from '../../core/services';
 })
 export class DownloadClientComponent implements OnInit {
   @Input() title: string = $localize`Download`;
-  @Input() btnType: string = 'icon';
+  @Input() btnType: string = 'button';
   resourceInfo;
   constructor(private web: WebService, public electron: ElectronService) {}
 

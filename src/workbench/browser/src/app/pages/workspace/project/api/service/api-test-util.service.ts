@@ -108,11 +108,15 @@ export class ApiTestUtilService {
     if (inData?.response?.responseType === 'text') {
       const tableData = text2table(inData.response.body);
       result.responseList[0].contentType = tableData.contentType;
-      result.responseList[0].responseParams.bodyParams = [
-        {
-          binaryRawData: tableData.data
-        }
-      ];
+      if (tableData.contentType === ApiBodyType.Raw) {
+        result.responseList[0].responseParams.bodyParams = [
+          {
+            binaryRawData: tableData.data
+          }
+        ];
+      } else {
+        result.responseList[0].responseParams.bodyParams = tableData.data;
+      }
     }
     // pcConsole.log('formatUIApiDataToStorage', result);
     return result as ApiData;

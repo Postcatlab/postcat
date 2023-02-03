@@ -72,6 +72,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
       if (id && id.includes('history_')) {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
         this.model = historyData as testViewModel;
+        this.model.requestTabIndex = 2;
       }
     }
     this.watchBasicForm();
@@ -135,7 +136,11 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.modelChange.emit(this.model);
   }
   changeQuery() {
-    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams).url;
+    this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
+      nowOperate: 'query',
+      method: 'replace'
+    }).url;
+    console.log(this.model.request.uri);
   }
   changeUri() {
     this.model.request.requestParams.queryParams = syncUrlAndQuery(
