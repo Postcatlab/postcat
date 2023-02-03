@@ -6,7 +6,7 @@ import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.util
 import { has } from 'lodash-es';
 
 // shit angular-cli 配不明白
-// import { version as postcatVersion } from '../../../../../../../../package.json' assert { type: 'json' };
+// import { version } from '../../../../../../../../package.json' assert { type: 'json' };
 import pkgInfo from '../../../../../../../../package.json';
 
 @Component({

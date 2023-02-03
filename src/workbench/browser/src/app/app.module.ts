@@ -16,7 +16,6 @@ import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/glo
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -47,7 +46,6 @@ registerLocaleData(zh);
   providers: [
     MockService,
     ExtensionService,
-    StorageService,
     IndexedDBStorage,
     HttpStorage,
     ThemeService,

@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { old2new } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/old2new';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import StorageUtil from '../../../utils/storage/storage.utils';
@@ -61,7 +58,6 @@ export class ImportApiComponent implements OnInit {
     private eoMessage: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
-    private effectService: EffectService,
     private apiService: ApiService
   ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
