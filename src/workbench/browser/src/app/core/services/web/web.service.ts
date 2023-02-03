@@ -22,21 +22,21 @@ export class WebService {
       icon: 'windows',
       keyword: 'Setup',
       suffix: 'exe',
-      link: ''
+      link: 'https://data.postcat.com/download/latest/Postcat-latest.exe'
     },
     {
       id: 'mac-intel',
       name: $localize`MacOS(Intel) Client`,
       icon: 'mac',
       suffix: 'dmg',
-      link: ''
+      link: 'https://data.postcat.com/download/latest/Postcat-latest.dmg'
     },
     {
       id: 'mac-m1',
       name: $localize`MacOS(M1) Client`,
       icon: 'mac',
       suffix: 'arm64.dmg',
-      link: ''
+      link: 'https://data.postcat.com/download/latest/Postcat-latest-arm64.dmg'
     }
   ];
   constructor(private modalService: ModalService, private settingService: SettingService, private electronService: ElectronService) {
@@ -46,7 +46,7 @@ export class WebService {
     } else {
       this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://54.255.141.14:8080' });
     }
-    this.getClientResource('gitee');
+    this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {
     let result = '';
@@ -72,7 +72,7 @@ export class WebService {
     return result;
   }
 
-  private getClientResource(platform = 'github') {
+  private getClientResource(platform = 'pc-resource') {
     switch (platform) {
       case 'gitee': {
         this.resourceInfo.forEach(item => {

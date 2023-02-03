@@ -13,15 +13,15 @@ const socket = (port = _post) => {
     transports: ['websocket']
   });
   io.on('connection', socket => {
-    // send a message to the client
+    // * send a message to the client
     socket.emit('ws-client', 'link success');
     let ws = null;
 
     const unlisten = () => {
-      if (!ws) return;
-      ws.on('close', null);
-      ws.on('upgrade', null);
-      ws.on('message', null);
+      if (!ws) return null;
+      ws.on('close', () => null);
+      ws.on('upgrade', () => null);
+      ws.on('message', () => null);
       ws = null;
     };
     socket.on('grpc-server', async data => {
@@ -42,30 +42,24 @@ const socket = (port = _post) => {
       }
       if (type === 'ws-connect') {
         const { request } = content;
-        try {
-          const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(request.uri.trim())
-            ? request.uri.trim()
-            : request.protocol + '://' + request.uri.trim().replace('//', '');
-          ws = new WebSocket(link, {
-            headers: request?.requestHeaders
-              ?.filter(it => it.name && it.value)
-              .reduce(
-                (total, { name, value }) => ({
-                  ...total,
-                  [name]: value
-                }),
-                {}
-              )
-          });
-          ws.on('error', err => {
-            socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
-            unlisten();
-          });
-        } catch (error) {
-          socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
+        const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(request.uri.trim())
+          ? request.uri.trim()
+          : request.protocol + '://' + request.uri.trim().replace('//', '');
+        ws = new WebSocket(link, {
+          headers: request?.requestParams.headerParams
+            ?.filter(it => it.name && it.value)
+            .reduce(
+              (total, { name, value }) => ({
+                ...total,
+                [name]: value
+              }),
+              {}
+            )
+        });
+        ws.on('error', err => {
+          socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
           unlisten();
-          return;
-        }
+        });
 
         const reqHeader = ws._req.getHeaders();
 
@@ -73,8 +67,7 @@ const socket = (port = _post) => {
         ws.on('open', () => {
           // console.log(`[CLIENT] open()`);
         });
-        ws.on('upgrade', res => {
-          const { headers: resHeader } = res;
+        ws.on('upgrade', ({ headers: resHeader }) => {
           socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
         });
 
@@ -86,14 +79,14 @@ const socket = (port = _post) => {
           });
         });
 
-        ws.on('close', () => {
-          socket.emit('ws-client', {
-            type: 'ws-connect-back',
-            status: -1,
-            content: 'Server disconnected'
-          });
-          unlisten();
-        });
+        // ws.on('close', () => {
+        //   socket.emit('ws-client', {
+        //     type: 'ws-connect-back',
+        //     status: -1,
+        //     content: 'Server disconnected'
+        //   });
+        //   unlisten();
+        // });
       }
       if (type === 'ws-message') {
         const { message } = content;

@@ -1,0 +1,13 @@
+:host {
+  width: 500px;
+}
+
+::ng-deep {
+  eo-root {
+    display: flex;
+  }
+
+  .console-page + eo-pages {
+    flex: 1;
+  }
+}

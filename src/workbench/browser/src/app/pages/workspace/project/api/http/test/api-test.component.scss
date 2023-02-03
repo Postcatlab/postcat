@@ -17,10 +17,8 @@
   margin-left: 10px;
 }
 
-eo-api-test-header,
-eo-api-test-body,
-eo-api-test-query,
-eo-api-test-rest {
+pc-api-test-form,
+eo-api-test-body {
   display: block;
   height: 100%;
   overflow-y: auto;
@@ -30,7 +28,6 @@ eo-api-test-rest {
   height: 100%;
 
   .scroll_container {
-    // height: calc(100% - 52px);
     overflow-y: auto;
   }
 

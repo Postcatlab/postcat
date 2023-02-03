@@ -4,13 +4,12 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, reaction, toJS } from 'mobx';
 
-import { JSONParse } from '../../utils/index.utils';
+import { ApiStoreService } from '../../pages/workspace/project/api/service/store/api-state.service';
+import { waitNextTick } from '../../utils/index.utils';
 import { db } from '../services/storage/db';
 
 @Injectable({
@@ -23,7 +22,7 @@ export class EffectService {
     private router: Router,
     private lang: LanguageService,
     private web: WebService,
-    private remote: RemoteService,
+    private apiStore: ApiStoreService,
     private eMessage: EoNgFeedbackMessageService,
     private route: ActivatedRoute
   ) {
@@ -56,11 +55,18 @@ export class EffectService {
       await this.updateWorkspaceList();
       this.fixedID();
 
-      if (!this.store.isLocal) {
-        const { roles, permissions } = await this.getWorkspacePermission();
-        this.store.setPermission(permissions, 'workspace');
-        this.store.setRole(roles, 'workspace');
-      }
+      await this.updateWorkspacePermission();
+
+      // * Fetch role list
+      const roleList = await this.getRoleList();
+      this.store.setRoleList(
+        roleList.filter(val => val.module === 1),
+        'workspace'
+      );
+      this.store.setRoleList(
+        roleList.filter(val => val.module === 2),
+        'project'
+      );
     };
     initWorkspaceInfo();
     reaction(
@@ -69,11 +75,15 @@ export class EffectService {
         initWorkspaceInfo();
       }
     );
+
     // * Init project
     this.updateProjects(this.store.getCurrentWorkspaceUuid).then(async () => {
       // Use first user postcat,auto into Default project
       if (isUserFirstUse) {
-        this.switchProject(this.store.getProjectList[0].projectUuid);
+        //* Prevent 404
+        waitNextTick().then(() => {
+          this.switchProject(this.store.getProjectList[0].projectUuid);
+        });
         return;
       }
       if (this.store.getProjectList.length === 0) {
@@ -87,19 +97,9 @@ export class EffectService {
         return;
       }
 
-      if (!this.store.isLocal) {
-        // * update project role
-        const { permissions, roles } = await this.getProjectPermission();
-        this.store.setPermission(permissions, 'project');
-        this.store.setRole(roles, 'project');
-      }
+      // * update project role
+      await this.updateProjectPermission();
     });
-
-    // * Fetch role list
-    const workspaceRoleList = await this.getRoleList(1);
-    this.store.setRoleList(workspaceRoleList, 'workspace');
-    const projectRoleList = await this.getRoleList(2);
-    this.store.setRoleList(projectRoleList, 'project');
   }
   /**
    * Fixed workspaceID and projectID
@@ -114,38 +114,13 @@ export class EffectService {
     this.switchWorkspace(wid);
     this.store.setCurrentProjectID(pid);
   }
-  async getRoleList(type) {
-    const [data, err] = await this.api.api_roleList({ roleModule: type });
+  private async getRoleList() {
+    const [data, err] = await this.api.api_roleList({});
     if (err) {
       return;
     }
     return data;
   }
-
-  async deleteEnv(id) {
-    const [, err] = await this.api.api_environmentDelete({ id });
-    if (err) {
-      return;
-    }
-    const envList = this.store.getEnvList.filter(it => it.id !== id);
-    this.store.setEnvList(envList);
-  }
-  async exportLocalProjectData(projectUuid = this.store.getCurrentProjectID) {
-    const { data } = await db.project.exports({
-      projectUuid
-    });
-    return data;
-    // return new Promise(resolve => {
-    //   this.indexedDBStorage.projectExport(projectID).subscribe((result: StorageRes) => {
-    //     if (result.status === StorageResStatus.success) {
-    //       resolve(result.data);
-    //     } else {
-    //       resolve(false);
-    //     }
-    //   });
-    // });
-  }
-
   exportCollects(apiGroup: any[], apiData: any[], parentID = 0) {
     const apiGroupFilters = apiGroup.filter(child => child.parentID === parentID);
     const apiDataFilters = apiData.filter(child => child.groupID === parentID);
@@ -167,13 +142,9 @@ export class EffectService {
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
     // * update workspace role
-    if (!this.store.isLocal) {
-      const { roles, permissions } = await this.getWorkspacePermission();
-      this.store.setPermission(permissions, 'workspace');
-      this.store.setRole(roles, 'workspace');
-    }
+    await this.updateWorkspacePermission();
   }
-  async getWorkspacePermission() {
+  async updateWorkspacePermission() {
     // * local workspace no need to set permission
     if (this.store.isLocal) {
       return;
@@ -183,9 +154,12 @@ export class EffectService {
     if (err) {
       return;
     }
+    const { roles, permissions } = data;
+    this.store.setPermission(permissions, 'workspace');
+    this.store.setRole(roles, 'workspace');
     return data;
   }
-  async getProjectPermission() {
+  async updateProjectPermission() {
     // * localworkspace no need to set permission
     if (this.store.isLocal) {
       return;
@@ -195,7 +169,10 @@ export class EffectService {
     if (err) {
       return;
     }
-    return data.at(0);
+    const { permissions, roles } = data.at(0);
+    this.store.setPermission(permissions, 'project');
+    this.store.setRole(roles, 'project');
+    return [data, err];
   }
 
   async switchProject(pid) {
@@ -204,12 +181,15 @@ export class EffectService {
       return;
     }
     this.store.setCurrentProjectID(pid);
+
+    //* update project info
+    this.apiStore.setGroupList([]);
+    //* jump to project
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
+
     // * update project role
-    const { permissions, roles } = await this.getProjectPermission();
-    this.store.setPermission(permissions, 'project');
-    this.store.setRole(roles, 'project');
+    await this.updateProjectPermission();
   }
   async updateWorkspaceList() {
     const [list, wErr]: any = await this.api.api_workspaceList({});
@@ -222,7 +202,7 @@ export class EffectService {
     this.store.setWorkspaceList(list);
   }
   async updateProjects(workSpaceUuid) {
-    const [data] = await this.api.api_projectDetail({ projectUuids: [], workSpaceUuid });
+    const [data] = await this.api.api_projectList({ projectUuids: [], workSpaceUuid });
     if (data) {
       this.store.setProjectList(data.items);
       return [data.items, null];
@@ -257,10 +237,19 @@ export class EffectService {
   }
 
   async updateShareLink() {
-    // * update share link
-    const [data, err]: any = await this.api.api_shareCreateShare({});
+    //* Query share link
+    const [data, err]: any = await this.api.api_projectShareGetShareLink({});
     if (err) {
       return 'Error ... ';
+    }
+    const shareData = data || {};
+    if (!shareData.sharedUuid) {
+      // * Create share link
+      const [createData, err]: any = await this.api.api_projectShareCreateShare({});
+      if (err) {
+        return 'Error ... ';
+      }
+      Object.assign(shareData, createData);
     }
     const host = (this.store.remoteUrl || window.location.host)
       .replace(/:\/{2,}/g, ':::')
@@ -268,215 +257,6 @@ export class EffectService {
       .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${data.sharedUuid}`;
-  }
-
-  async updateEnvList() {
-    if (this.store.isShare) {
-      const [data, err] = await this.api.api_shareDocGetEnv({
-        sharedUuid: this.store.getShareID
-      });
-      if (err) {
-        return [];
-      }
-      this.store.setEnvList(data || []);
-      return data || [];
-    }
-    const [envList, err] = await this.api.api_environmentList({});
-    if (err) {
-      return;
-    }
-    this.store.setEnvList(envList || []);
-    return envList;
-  }
-
-  // *** Data engine
-
-  async deleteHistory() {
-    const [, err] = await this.api.api_apiTestHistoryDelete({
-      ids: this.store.getTestHistory.map(it => it.id)
-    });
-    if (err) {
-      return;
-    }
-    this.store.setHistory([]);
-  }
-  // * delete group and api
-  async deleteGroup(group) {
-    // * delete group
-    await this.api.api_groupDelete(group);
-    this.getGroupList();
-    // * call deleteAPI()
-  }
-  async deleteMock(id) {
-    // * delete mock
-    const [, err] = await this.api.api_mockDelete({
-      id: id
-    });
-    if (err) {
-      return;
-    }
-    // * update API
-  }
-
-  async createApiTestHistory(params) {
-    const [data] = await this.api.api_apiTestHistoryCreate(params);
-    this.store.setHistory([...this.store.getTestHistory, data]);
-    return data;
-  }
-
-  createMock() {
-    // * update API
-  }
-
-  async getHistory(id) {
-    const [res, err] = await this.api.api_apiTestHistoryDetail({ id: Number(id) });
-    if (err) {
-      return;
-    }
-    res.request = JSONParse(res.request);
-    res.response = JSONParse(res.response);
-    return res;
-  }
-
-  async getHistoryList() {
-    const [res, err] = await this.api.api_apiTestHistoryList({ page: 1, pageSize: 200 });
-    if (err) {
-      return;
-    }
-    this.store.setHistory(res?.items);
-  }
-
-  async getGroupList(params = {}) {
-    // * get group list data
-    const [groupList = [], gErr] = await (this.store.isShare ? this.api.api_groupList({}) : this.api.api_groupList({}));
-    if (gErr) {
-      return;
-    }
-    const rootGroup = groupList.at(0);
-    rootGroup.name = $localize`Root Group`;
-    this.store.setRootGroup(rootGroup);
-
-    // console.log('Group 数据', structuredClone(groupList));
-    // * get api list data
-    const [apiListRes, aErr] = await (this.store.isShare
-      ? this.api.api_apiDataList({ ...params, statuses: 0 })
-      : this.api.api_apiDataList({ ...params, statuses: 0, order: 'order_num', sort: 'DESC' }));
-    if (aErr) {
-      return;
-    }
-    const { items, paginator } = apiListRes;
-    // console.log('API 数据', items);
-    // * set api & group list
-    this.store.setGroupList(rootGroup.children);
-    Reflect.deleteProperty(rootGroup, 'children');
-    this.store.setApiList(items);
-  }
-  updateMock() {
-    // * update mock
-  }
-  async createGroup(groups: any[] = []) {
-    // * update group
-    await this.api.api_groupCreate(
-      groups.map(n => ({
-        ...n,
-        projectUuid: this.store.getCurrentProjectID,
-        workSpaceUuid: this.store.getCurrentWorkspaceUuid
-      }))
-    );
-    this.getGroupList();
-  }
-  async updateGroup(group) {
-    // * update group
-    // * update api list
-    await this.api.api_groupUpdate(group);
-    this.getGroupList();
-  }
-  updateHistory() {}
-
-  deepCreateGroup = async (groupList = [], apiList = [], projectUuid, rootGroup) => {
-    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-    const groupFilters = groupList
-      .filter(n => n.depth !== 0)
-      .map(n => {
-        const { id, children, ...rest } = n;
-        rest.parentId ??= rootGroup.id;
-        return rest;
-      });
-    const [remoteGroups] = groupFilters.length ? await this.remote.api_groupCreate(groupFilters) : [[rootGroup]];
-    console.log('remoteGroups', remoteGroups);
-    groupList.forEach((localGroup, index) => {
-      const apiFilters = apiList
-        .filter(n => n.groupId === localGroup.id)
-        .map(n => {
-          const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
-          return {
-            ...rest,
-            // 远程分组 id 替换本地分组 id
-            groupId: remoteGroups[index]?.id
-          };
-        });
-
-      if (apiFilters.length) {
-        this.remote.api_apiDataCreate({
-          apiList: apiFilters,
-          projectUuid
-        });
-      }
-
-      // 如果本地分组还有子分组
-      if (localGroup.children?.length) {
-        localGroup.children.forEach(m => {
-          m.type = 1;
-          // 远程分组 id 替换本地分组 id
-          m.parentId = remoteGroups[index]?.id;
-          m.projectUuid = projectUuid;
-          m.workSpaceUuid = workSpaceUuid;
-        });
-        this.deepCreateGroup(localGroup.children, apiList, projectUuid, rootGroup);
-      }
-    });
-  };
-
-  // 上传本地数据到远程
-  async uploadToRemote(projectUuid, params: ImportProjectDto) {
-    const { groupList, apiList, environmentList } = params;
-    const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
-
-    environmentList.forEach(n => {
-      const { id, ...rest } = n;
-      this.remote.api_environmentCreate({
-        ...rest,
-        workSpaceUuid,
-        projectUuid
-      });
-    });
-
-    // 远程分组
-    // @ts-ignore
-    const [groups] = await this.remote.api_groupList({ projectUuid, withItem: true });
-    // 远程根分组
-    const rootGroup = groups.find(n => n.depth === 0);
-    console.log('rootGroup', rootGroup);
-
-    this.deepCreateGroup(groupList, apiList, projectUuid, rootGroup);
-  }
-
-  // TODO 等后端接口
-  async projectImport(target: 'local' | 'remote', params: ImportProjectDto) {
-    const { projectUuid = this.store.getCurrentProjectID, ...restParams } = params;
-    console.log('this.store.getCurrentWorkspaceUuid', this.store.getCurrentWorkspaceUuid);
-    if (target === 'local') {
-      const _params = {
-        ...restParams,
-        projectUuid: this.store.getCurrentProjectID,
-        workSpaceUuid: this.store.getCurrentWorkspaceUuid
-      } as ImportProjectDto;
-      await db.project.imports(_params);
-      console.log('local projectImport', params);
-    } else if (target === 'remote') {
-      console.log('remote projectImport', params);
-      await this.uploadToRemote(projectUuid, params);
-    }
+    return `${host}/${lang ? `${lang}/` : ''}share/http/test?shareId=${shareData.sharedUuid}`;
   }
 }

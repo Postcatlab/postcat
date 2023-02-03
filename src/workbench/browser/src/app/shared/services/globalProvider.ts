@@ -8,22 +8,23 @@ import { MessageService } from './message';
 import { ApiService } from './storage/api.service';
 import { convertApiData } from './storage/db/dataSource/convert';
 
+/**
+ * Provide global methods for the extension
+ */
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
   modalMaskEl: HTMLDivElement;
   constructor(
     private modalService: ModalService,
     private router: Router,
-    private state: StoreService,
-    private store: StoreService,
     private setting: SettingService,
+    private store: StoreService,
     private api: ApiService,
     private message: MessageService
   ) {
     //TODO compatible with old version
     window.__POWERED_BY_EOAPI__ = true;
     window.__POWERED_BY_POSTCAT__ = true;
-    this.getGroup();
   }
 
   injectGlobalData() {
@@ -103,7 +104,7 @@ export class GlobalProvider {
   };
 
   getCurrentProjectID = () => {
-    return this.state.getCurrentProjectID;
+    return this.store.getCurrentProjectID;
   };
 
   list2tree = (data = [], parentID = 0) => {
@@ -127,23 +128,6 @@ export class GlobalProvider {
       data: deep(data.at(0).children)
     };
     return result;
-    // this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
-    //   console.log('result', result);
-    //   if (result.status === StorageResStatus.success) {
-    //     const res = {
-    //       status: 0,
-    //       data: this.list2tree(result.data, 0)
-    //     };
-    //     resolve(res);
-    //   } else {
-    //     const res = {
-    //       status: -1,
-    //       data: null,
-    //       error: result
-    //     };
-    //     resolve(res);
-    //   }
-    // });
   };
   importProject = async (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
@@ -156,7 +140,9 @@ export class GlobalProvider {
     };
     // console.log('projectID, rest, groupID', projectID, rest, groupID);
     if (groupID === 0) {
-      groupID = this.store.getRootGroup.id;
+      const [groupList, err] = await this.api.api_groupList({});
+      const rootGroup = groupList.at(0);
+      groupID = rootGroup.id;
     }
     const [groups] = await this.api.api_groupCreate(
       rest.collections.map(n => ({
@@ -164,7 +150,7 @@ export class GlobalProvider {
         name: n.name,
         parentId: groupID,
         projectUuid: this.getCurrentProjectID(),
-        workSpaceUuid: this.state.getCurrentWorkspaceUuid
+        workSpaceUuid: this.store.getCurrentWorkspaceUuid
       }))
     );
     console.log('groups', groups);

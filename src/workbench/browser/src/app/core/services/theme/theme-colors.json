@@ -219,5 +219,7 @@
 
   "progressDefault": "",
   "progressSuccess": "",
-  "progressException": ""
+  "progressException": "",
+
+  "spin": ""
 }

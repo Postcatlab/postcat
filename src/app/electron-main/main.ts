@@ -1,12 +1,12 @@
 require('@bqy/node-module-alias/register');
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { MockServer } from 'eo/platform/node/mock-server';
 import portfinder from 'portfinder';
 
 import { processEnv } from '../../platform/node/constant';
-import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
+import { ModuleManager } from '../../platform/node/extension-manager/manager';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import socket from '../../workbench/node/server/socketio';

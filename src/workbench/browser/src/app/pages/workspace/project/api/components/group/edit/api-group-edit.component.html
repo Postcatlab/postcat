@@ -1,4 +1,4 @@
-<form nz-form [nzLayout]="'vertical'" auto-focus-form [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="!isDelete">
+<form nz-form [nzLayout]="'vertical'" auto-focus-form [formGroup]="validateForm" *ngIf="!isDelete">
   <nz-form-item nz-col class="flex-1">
     <nz-form-label nzFor="name" i18n>Group Name</nz-form-label>
     <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter group name">

@@ -5,21 +5,23 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from '../../../../shared/services/message';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
-import { EffectService } from '../../../../shared/store/effect.service';
+import { StoreService } from '../../../../shared/store/state.service';
+import { ApiEffectService } from './service/store/api-effect.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProjectApiService {
   constructor(
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private router: Router,
-    private effect: EffectService,
-    private api: ApiService
+    private effect: ApiEffectService,
+    private api: ApiService,
+    private globalStore: StoreService
   ) {}
   async get(uuid): Promise<ApiData> {
-    const [result, err] = await this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 });
+    const [result, err] = await (this.globalStore.isShare
+      ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
+      : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
     if (err || !result?.[0]) {
       this.message.error($localize`Can't find this Api`);
       return;
@@ -45,15 +47,13 @@ export class ProjectApiService {
   async edit(apiData: ApiData) {
     return await this.api.api_apiDataUpdate({ api: apiData });
   }
-  async add(apiData: ApiData[] = []) {
-    return await this.api.api_apiDataCreate({ apiList: [].concat(apiData) });
+  async add(apiData: ApiData) {
+    return await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
   }
   async copy(apiID: string) {
-    const apiData = await this.get(apiID);
+    const { apiUuid, id, ...apiData } = await this.get(apiID);
     apiData.name += ' Copy';
-    delete apiData.apiUuid;
-    delete apiData.id;
-    const [result, err] = await this.add([apiData]);
+    const [result, err] = await this.add(apiData);
     if (err) {
       console.log(err);
       this.message.error($localize`Copy API failed`);
@@ -66,7 +66,7 @@ export class ProjectApiService {
   }
   async delete(apiUuid) {
     // * delete API
-    const [result, err] = await this.api.api_apiDataDelete({
+    const [, err] = await this.api.api_apiDataDelete({
       apiUuids: [apiUuid]
     });
     if (err) {

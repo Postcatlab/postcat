@@ -18,7 +18,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() in: 'body' | 'header' | 'query' | 'rest';
   showValueTable = false;
   showLengthTable = false;
-  showEnums = false;
+  showEnums = true;
   listConfBasicInfo;
   listConfLenthInterval: ColumnItem[] = [
     {
@@ -117,7 +117,6 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     this.initBasicListConf();
     if (!this.isEdit) {
       this.transferPreviewTable();
-      console.log(this.listConfEnums);
     }
     //Init Enum List
     if (this.isEdit && this.model?.paramAttr?.paramValueList && !this.model?.paramAttr?.paramValueList.length) {

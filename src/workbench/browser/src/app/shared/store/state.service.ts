@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { genApiGroupTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import _ from 'lodash-es';
-import { action, computed, makeObservable, observable, toJS } from 'mobx';
+import { action, autorun, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
-import { JSONParse } from '../../utils/index.utils';
+import { Role } from '../models/member.model';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -19,27 +18,12 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class StoreService {
   private localWorkspace: API.Workspace;
   // * observable data
-  // ? api & group(includes api) & mock
-  @observable.shallow private currentAPI = {};
-  @observable.shallow private currentMock = {};
-  @observable private apiList = [];
-
-  // ? history
-  @observable private testHistory = [];
 
   // ? router
   @observable private url = '';
-
-  // ? env
-  @observable private envList = [];
-  @observable private envUuid = StorageUtil.get('env:selected') || null;
-
+  @observable private pageLevel = 'project';
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
-
-  // ? group
-  @observable private rootGroup: Group;
-  @observable private groupList: Group[] = [];
 
   // ? workspace
   @observable private currentWorkspace: Partial<API.Workspace> = StorageUtil.get('currentWorkspace') || {
@@ -90,73 +74,38 @@ export class StoreService {
   };
 
   // ? UI
-  @observable private rightBarStatus = false;
-  @observable.shallow private role = {
+  @observable.shallow private role: {
+    workspace: Role[];
+    project: Role[];
+  } = {
     workspace: [],
     project: []
   };
-
-  // * computed data
-  // ? api & group(includes api) & mock
-  @computed get getCurrentAPI() {
-    return this.currentAPI;
-  }
-  @computed get getCurrentMock() {
-    return this.currentMock;
-  }
-  @computed get getTestHistory() {
-    return toJS(this.testHistory).sort((a, b) => b.createTime - a.createTime);
-  }
-  @computed get getGroupTree() {
-    return genApiGroupTree([this.rootGroup, ...this.groupList], [], this.getRootGroup?.parentId);
-  }
 
   // ? router
   @computed get getUrl() {
     return this.url;
   }
 
-  // ? env
-  @computed get getCurrentEnv() {
-    const [data] = this.envList.filter(it => it.id === this.envUuid);
-    return (
-      data || {
-        hostUri: '',
-        parameters: [],
-        frontURI: '',
-        id: null
-      }
-    );
+  @computed get getPageLevel() {
+    return this.pageLevel;
   }
-  @computed get getRootGroup() {
-    return this.rootGroup;
-  }
-  @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList, this.apiList, this.getRootGroup?.id);
-  }
-  @computed get getApiList() {
-    return this.apiList;
-  }
-  @computed get getEnvList() {
-    return this.envList;
-  }
-  @computed get getEnvUuid() {
-    return this.envUuid;
-  }
+
   // ? data source
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspace?.isLocal;
   }
   @computed get mockUrl() {
-    const mockUrl = window.electron?.getMockUrl?.();
-    return this.isLocal ? mockUrl : `${mockUrl}/mock-${this.getCurrentProjectID}`;
+    return window.electron?.getMockUrl?.();
+    // const mockUrl = window.electron?.getMockUrl?.();
+    // return this.isLocal ? mockUrl : `${mockUrl}/mock-${this.getCurrentProjectID}`;
   }
   @computed get isRemote() {
     return !this.isLocal;
   }
   // ? share
   @computed get isShare() {
-    return window.location.href.includes('/home/share');
+    return window.location.href.includes('/share');
   }
   @computed get getShareID() {
     return this.shareId;
@@ -225,23 +174,14 @@ export class StoreService {
     return this.setting.getConfiguration('backend.url');
   }
 
-  // ? UI
-  @computed get isOpenRightBar() {
-    return this.rightBarStatus;
-  }
-
   constructor(private setting: SettingService, private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
-  }
-  // * actions
-  // ? history
-  @action setHistory(data = []) {
-    data.forEach(history => {
-      history.request = JSONParse(history.request, {});
-      history.response = JSONParse(history.response, {});
+    autorun(() => {
+      if (this.url) {
+        this.setPageLevel();
+      }
     });
-    this.testHistory = data;
   }
 
   @action setLocalWorkspace(data) {
@@ -251,40 +191,6 @@ export class StoreService {
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
   };
-
-  // ? env
-
-  @action setEnvUuid(data) {
-    this.envUuid = data;
-    StorageUtil.set('env:selected', data);
-  }
-
-  @action setEnvList(data = []) {
-    this.envList = data.map(val => {
-      val.parameters = JSONParse(val.parameters, []);
-      return val;
-    });
-    const isHere = data.find(it => it.id === this.envUuid);
-    if (!isHere) {
-      this.envUuid = null;
-      //  for delete env
-      StorageUtil.set('env:selected', null);
-    }
-  }
-
-  // ? group
-  @action setRootGroup(group: Group) {
-    this.rootGroup = group;
-  }
-
-  @action setApiList(list = []) {
-    this.apiList = list;
-  }
-
-  @action setGroupList(list = []) {
-    this.groupList = list;
-  }
-
   // ? share
   @action setShareId(data = '') {
     this.shareId = data;
@@ -331,7 +237,7 @@ export class StoreService {
     StorageUtil.set('userProfile', data);
   }
 
-  @action setLoginInfo(data = null) {
+  @action setLoginInfo(data = { jwt: '', rjwt: '' }) {
     this.loginInfo = { accessToken: data.jwt, refreshToken: data.rjwt };
     StorageUtil.set('accessToken', data.jwt);
     StorageUtil.set('refreshToken', data.rjwt);
@@ -344,7 +250,7 @@ export class StoreService {
       userName: '',
       userNickName: ''
     });
-    this.setLoginInfo({ accessToken: '', refreshToken: '' });
+    this.setLoginInfo();
   }
 
   @action setRoleList(data, type) {
@@ -382,16 +288,18 @@ export class StoreService {
     // console.log(this.permissions[type]);
   }
 
-  // ? UI
-  @action toggleRightBar(data = false) {
-    this.rightBarStatus = data;
-  }
-
   @action setDataSource() {
     if (!this.isLocal) {
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'false');
     } else {
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
+    }
+  }
+  @action setPageLevel() {
+    if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
+      this.pageLevel = 'workspace';
+    } else {
+      this.pageLevel = 'project';
     }
   }
 }

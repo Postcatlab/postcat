@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sidebar.service';
-import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/api-test.utils';
+import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable, observable, reaction } from 'mobx';
+import { autorun, makeObservable, observable, reaction, toJS } from 'mobx';
+
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 
 @Component({
   selector: 'eo-env-select',
@@ -72,10 +74,10 @@ import { autorun, makeObservable, observable, reaction } from 'mobx';
       >
       </eo-ng-select>
       <ng-template #renderTemplate>
-        <nz-divider *ngIf="!isShare"></nz-divider>
-        <a *ngIf="!isShare" class="!flex text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n
-          >Manage Environment</a
-        >
+        <ng-container *ngIf="!globalStore.isShare">
+          <nz-divider></nz-divider>
+          <a class="!flex text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n>Manage Environment</a>
+        </ng-container>
       </ng-template>
     </div>
   `,
@@ -85,28 +87,31 @@ export class EnvSelectComponent implements OnInit {
   @observable envUuid = '';
   isOpen = false;
   gloablParams: any = [];
-  isShare = false;
   renderEnv: Partial<Environment> = {
     name: '',
     hostUri: '',
     parameters: []
   };
   renderEnvList = [];
-  constructor(private store: StoreService, private sidebar: SidebarService, private effect: EffectService) {}
+  constructor(
+    private store: ApiStoreService,
+    public globalStore: StoreService,
+    private sidebar: SidebarService,
+    private effect: ApiEffectService,
+    private testUtils: ApiTestUtilService
+  ) {}
   ngOnInit() {
     makeObservable(this);
+    this.effect.updateEnvList();
+    this.gloablParams = this.getGlobalParams();
+
     autorun(() => {
       this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.id }));
-      this.renderEnv = this.store.getEnvList
-        .map(it => ({
-          ...it,
-          parameters: it.parameters.filter(item => item.name || item.value)
-        }))
-        .find((it: any) => it.id === this.store.getCurrentEnv?.id);
+      this.setCurrentEnv();
     });
-    autorun(() => {
-      this.isShare = this.store.isShare;
-    });
+    /**
+     * Change Select env id
+     */
     reaction(
       () => this.envUuid,
       data => {
@@ -114,8 +119,26 @@ export class EnvSelectComponent implements OnInit {
       }
     );
     this.envUuid = this.store.getEnvUuid;
-    this.effect.updateEnvList();
-    this.gloablParams = this.getGlobalParams();
+
+    /**
+     * Set current selected environment by id
+     */
+    reaction(
+      () => this.store.getEnvUuid,
+      data => {
+        /**
+         * From outside change env uuid
+         * Such as add enviroment
+         */
+        this.envUuid = this.store.getEnvUuid;
+        this.setCurrentEnv();
+      }
+    );
+  }
+  setCurrentEnv() {
+    this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
+    if (!this.renderEnv) return;
+    this.renderEnv.parameters = this.renderEnv.parameters.filter(item => item.name || item.value);
   }
   gotoEnvManager() {
     // * close select
@@ -123,7 +146,7 @@ export class EnvSelectComponent implements OnInit {
     this.sidebar.setModule('@eo-core-env');
   }
   getGlobalParams() {
-    return Object.entries(getGlobals() || {}).map(it => {
+    return Object.entries(this.testUtils.getGlobals() || {}).map(it => {
       const [key, value] = it;
       return { name: key, value };
     });

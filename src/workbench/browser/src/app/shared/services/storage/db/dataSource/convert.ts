@@ -1,14 +1,8 @@
-import { ContentType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiParamsType, ContentType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { mui } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ApiData, BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 
-import { ApiData as OldApiData, Environment as OldEnvironment, BasiApiEditParams } from './oldApiData';
-
-const mui = {
-  headerParams: 0,
-  bodyParams: 1,
-  queryParams: 2,
-  restParams: 3
-};
+import { ApiData as OldApiData, Environment as OldEnvironment, BasiApiEditParams, ApiEditBody } from './oldApiData';
 
 export const convertApiData = (apiData: OldApiData): ApiData => {
   const {
@@ -67,10 +61,11 @@ const transformContentType = (requestBodyType: OldApiData['responseBodyType'], r
   }
 };
 
-const transformParams = (params: BasiApiEditParams[] = [], partType): BodyParam[] => {
+const transformParams = (params: Array<Partial<ApiEditBody>> = [], partType): BodyParam[] => {
   return params?.map((n, i) => ({
     name: n.name,
     partType: mui[partType],
+    dataType: Number(ApiParamsType[n?.type]),
     orderNo: i,
     description: n.description,
     isRequired: Number(n.required),

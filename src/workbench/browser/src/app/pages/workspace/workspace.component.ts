@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({

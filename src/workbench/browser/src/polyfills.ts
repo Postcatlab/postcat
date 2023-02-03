@@ -63,6 +63,7 @@ import '@angular/localize/init';
 /** more see: https://github.com/zloirock/core-js */
 import 'core-js/actual/array/at';
 import 'core-js/actual/structured-clone';
+import 'core-js/proposals/array-grouping-stage-3-2';
 
 if (!Reflect.has(crypto, 'randomUUID')) {
   // https://stackoverflow.com/a/2117523/2800218

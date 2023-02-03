@@ -17,26 +17,28 @@ import { StoreService } from '../../../../shared/store/state.service';
           auto-focus-form
           nzServerSearch
           nzAutoFocus="true"
+          [nzOptionHeightPx]="54"
           i18n-nzPlaceHolder
-          nzDropdownClassName="eo-member-select"
           nzPlaceHolder="Search"
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"
         >
-          <!-- <ng-container > -->
-          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userNickName" [nzValue]="option.id">
-            <div class="flex w-full justify-between items-center option">
-              <div class="flex flex-col justify-between">
-                <span class="font-bold">{{ option.userNickName }}</span>
-                <span class="text-tips">{{ option.email }}</span>
+          <ng-container>
+            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userNickName" [nzValue]="option.id">
+              <div class="flex w-full justify-between items-center option">
+                <div class="flex flex-col justify-between">
+                  <span class="font-bold">{{ option.userNickName }}</span>
+                  <span class="text-tips">{{ option.email }}</span>
+                </div>
+                <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
               </div>
-              <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
-            </div>
-          </eo-ng-option>
-          <!-- </ng-container> -->
+            </eo-ng-option>
+          </ng-container>
+
           <!-- <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
-            <span nz-icon nzType="loading" class="loading-icon"></span>
-            Loading Data...
+            <div class="h-10 flex justify-center items-center">
+              <nz-spin nzSimple></nz-spin>
+            </div>
           </eo-ng-option> -->
         </eo-ng-select>
       </nz-list-header>
@@ -73,13 +75,12 @@ export class WorkspaceMemberComponent implements OnInit {
           return;
         }
         this.isLoading = true;
+        console.log('hel');
         const result = await this.member.searchUser(value.trim());
-        this.isLoading = false;
         const memberList = this.memberListRef.list.map(it => it.username);
-        console.log('result', result);
-        this.userList = result ? result.filter(it => !memberList.includes(it.userNickName)) : [];
+        this.userList = result.filter(it => !memberList.includes(it.userNickName));
+        this.isLoading = false;
         // this.cdk.detectChanges();
-        console.log(this.userList);
       },
       { delay: 300 }
     );

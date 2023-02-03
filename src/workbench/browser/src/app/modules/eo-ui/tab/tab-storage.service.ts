@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import StorageUtil from '../../../utils/storage/Storage';
+import StorageUtil from '../../../utils/storage/storage.utils';
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()

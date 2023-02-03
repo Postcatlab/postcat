@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 // the resulting javascript file will look as if you never imported the module at all.
 import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 
 import pkg from '../../../../../../../../package.json';
 import { StoreService } from '../../../shared/store/state.service';
