@@ -3,12 +3,9 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { has } from 'lodash-es';
 
 import packageJson from '../../../../../../../../package.json';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
-import { StoreService } from '../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-sync-api',
@@ -18,13 +15,7 @@ export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(
-    private storage: StorageService,
-    private extensionService: ExtensionService,
-    private store: StoreService,
-    private eoMessage: EoNgFeedbackMessageService,
-    private apiService: ApiService
-  ) {
+  constructor(private extensionService: ExtensionService, private eoMessage: EoNgFeedbackMessageService, private apiService: ApiService) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
   }
 
