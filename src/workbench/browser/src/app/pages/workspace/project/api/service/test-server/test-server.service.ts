@@ -18,7 +18,6 @@ export abstract class TestServerService implements TestServer {
   abstract init(receiveMessage: (message: any) => void): void;
   abstract send(action: string, message: any): void;
   formatRequestData(data: Partial<ApiData>, opts: requestDataOpts = { env: {}, lang: 'en', globals: {} }) {
-    console.log(data);
     const formatHeaders = inArr => {
       if (!Array.isArray(inArr)) {
         return [];
@@ -28,7 +27,7 @@ export abstract class TestServerService implements TestServer {
         .map((val: BodyParam) => ({
           checkbox: !!val.isRequired,
           headerName: val.name,
-          headerValue: val.paramAttr.example
+          headerValue: val.paramAttr?.example
         }));
     };
     const formatBody = (inData: Partial<ApiData>) => {
@@ -77,6 +76,7 @@ export abstract class TestServerService implements TestServer {
     if (rootType !== -1) {
       result.apiRequestParamJsonType = rootType.toString();
     }
+    // pcConsole.log('formatRequestData',result);
     return result;
   }
   formatResponseData({ globals, report, history, id }): TestServerRes {

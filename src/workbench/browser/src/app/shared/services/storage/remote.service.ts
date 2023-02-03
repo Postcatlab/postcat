@@ -1793,13 +1793,13 @@ export class RemoteService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
+  api_projectList<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }, prefix = '') {
     if (projectUuids == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
     }
     if (workSpaceUuid == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -1811,14 +1811,14 @@ export class RemoteService {
         .subscribe({
           next: ({ code, data }: any) => {
             if (code === 0) {
-              console.log('%c project:detail - api_projectDetail 接口请求成功 %c', SuccessStyle, '');
+              console.log('%c project:list - api_projectList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
             console.log('Error: ', JSON.stringify(data, null, 2));
             resolve([null, { code, data }]);
           },
           error: error => {
-            console.log('%c project:detail - api_projectDetail 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c project:list - api_projectList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });

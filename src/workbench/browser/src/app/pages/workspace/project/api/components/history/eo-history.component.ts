@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Protocol, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable } from 'mobx';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
 
 import { ApiEffectService } from '../../service/store/api-effect.service';
@@ -27,6 +26,7 @@ export class HistoryComponent implements OnInit {
     this.effect.getHistoryList();
     autorun(() => {
       this.getTestHistory = this.store.getTestHistory;
+      console.log(eoDeepCopy(this.getTestHistory));
     });
   }
   getRequestMethodText(node) {

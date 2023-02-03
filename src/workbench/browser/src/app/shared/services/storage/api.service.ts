@@ -237,8 +237,8 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectCreate<T>(params) : this.remote.api_projectCreate<T>(params);
   }
 
-  api_projectDetail<T = any>(params: { projectUuids: any; workSpaceUuid?: any }) {
-    return this.store.isLocal ? this.local.api_projectDetail<T>(params) : this.remote.api_projectDetail<T>(params);
+  api_projectList<T = any>(params: { projectUuids: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectList<T>(params) : this.remote.api_projectList<T>(params);
   }
 
   api_projectUpdate<T = any>(params: { projectUuid?: any; name: any; description: any }) {

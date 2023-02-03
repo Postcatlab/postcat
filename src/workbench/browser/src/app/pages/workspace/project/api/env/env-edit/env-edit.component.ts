@@ -111,6 +111,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     const [data, err] = await this.effect[operateName === 'edit' ? 'updateEnv' : 'addEnv'](formdata);
     this.isSaving = false;
     if (err) {
+      console.log(err);
       this.message.error(operate.error);
       return;
     }

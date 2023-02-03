@@ -995,13 +995,13 @@ export class LocalService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+  api_projectList<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuids == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
     }
     if (workSpaceUuid == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -1010,13 +1010,13 @@ export class LocalService {
         .page({ projectUuids, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project - detail 接口调用成功 %c', SuccessStyle, '');
+            console.log('%c project - list 接口调用成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           return resolve([null, { code, data }]);
         })
         .catch(error => {
-          console.log('%c project - detail 接口调用失败 %c', ErrorStyle, '');
+          console.log('%c project - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });

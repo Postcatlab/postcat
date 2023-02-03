@@ -87,18 +87,13 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
-    autorun(
-      () => {
-        this.apiGroupTree = this.store.getApiGroupTree;
-        waitNextTick().then(() => {
-          this.initSelectKeys();
-          this.expandKeys = this.getExpandKeys();
-        });
-      },
-      {
-        delay: 300
-      }
-    );
+    autorun(() => {
+      this.apiGroupTree = this.store.getApiGroupTree;
+      waitNextTick().then(() => {
+        this.initSelectKeys();
+        this.expandKeys = this.getExpandKeys();
+      });
+    });
     reaction(
       () => this.globalStore.getUrl,
       () => {
