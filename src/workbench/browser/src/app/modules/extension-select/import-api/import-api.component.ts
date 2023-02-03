@@ -61,7 +61,6 @@ export class ImportApiComponent implements OnInit {
     private apiService: ApiService
   ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
-    console.log(this.featureMap);
   }
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -70,11 +69,10 @@ export class ImportApiComponent implements OnInit {
         ...data
       });
     });
-    {
-      const { key } = this.supportList.at(0);
-      if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
-        this.currentExtension = key || '';
-      }
+    if (!this.supportList.length) return;
+    const { key } = this.supportList.at(0);
+    if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
+      this.currentExtension = key || '';
     }
   }
   uploadChange(data) {
@@ -110,11 +108,15 @@ export class ImportApiComponent implements OnInit {
         //   content = old2new(data, projectUuid, workSpaceUuid);
         //   console.log('new content', content);
         // }
-        await this.apiService.api_projectImport({
+        const [, err] = await this.apiService.api_projectImport({
           ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
+        if (err) {
+          callback(false);
+          return;
+        }
         callback(true);
         this.router.navigate(['home/workspace/project/api']);
       } catch (error) {

@@ -27,11 +27,10 @@ export class ExportApiComponent implements OnInit {
         ...data
       });
     });
-    {
-      const { key } = this.supportList.at(0);
-      if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
-        this.currentExtension = key || '';
-      }
+    if (!this.supportList.length) return;
+    const { key } = this.supportList.at(0);
+    if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
+      this.currentExtension = key || '';
     }
   }
   submit(callback: () => boolean) {
