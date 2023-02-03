@@ -3,7 +3,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -15,8 +14,6 @@ import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
 import { ModalService } from '../shared/services/modal.service';
-import { StorageRes, StorageResStatus } from '../shared/services/storage/index.model';
-import { StorageService } from '../shared/services/storage/storage.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -227,38 +224,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
           return;
         }
 
-        if (type === 'clear-user') {
-          this.store.clearAuth();
-          this.store.setUserProfile({
-            id: 0,
-            password: '',
-            userName: '',
-            userNickName: ''
-          });
-          return;
-        }
-
-        if (type === 'http-401') {
-          if (this.store.isLocal) {
-            return;
-          }
-
-          // * 唤起弹窗
-          this.isLoginModalVisible = true;
-          {
-            {
-              {
-                // * auto focus
-                setTimeout(() => {
-                  this.usernameLoginRef?.nativeElement.focus();
-                }, 300);
-              }
-            }
-          }
-
-          return;
-        }
-
         if (type === 'ping-fail') {
           this.eMessage.error($localize`Connect failed`);
           // * 唤起弹窗
@@ -283,12 +248,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
           // * 唤起弹窗
           this.isAddWorkspaceModalVisible = true;
           {
-            {
-              // * auto focus
-              setTimeout(() => {
-                this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
-              }, 300);
-            }
+            // * auto focus
+            setTimeout(() => {
+              this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
+            }, 300);
           }
 
           return;
@@ -563,24 +526,16 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   return;
                 }
 
-                // 遍历本地项目
+                // 遍历本地项目, 挨个导出并导入的远程
                 const arr = localProjects.map(async (localProject, index) => {
-                  // 导出本地数据
-                  const { apiList, groupList = [], environmentList } = await this.effect.exportLocalProjectData(localProject.uuid);
-
-                  console.log('remoteProjects', remoteProjects);
-                  console.log('environmentList', environmentList);
-
                   const remoteProject = remoteProjects[index];
-
-                  console.log('remoteProject', remoteProject);
                   // 导出本地数据
-                  const exportResult = await this.effect.exportLocalProjectData(localProject.uuid);
+                  const [exportResult] = await this.localService.api_projectExportProject({ projectUuid: localProject.uuid });
 
-                  await this.effect.projectImport('remote', {
-                    ...exportResult,
-                    projectUuid: remoteProject.projectUuid
-                  });
+                  exportResult.projectUuid = remoteProject.projectUuid;
+                  exportResult.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
+
+                  await this.api.api_projectImport(exportResult);
                 });
 
                 await Promise.all(arr);

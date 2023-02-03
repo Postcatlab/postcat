@@ -1,4 +1,4 @@
-import { ApiTestResData } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test/test-server.model';
+import { ApiTestResData } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 
 import { ApiData } from './apiData';
 

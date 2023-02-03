@@ -41,7 +41,7 @@
             display: flex;
 
             // color: var(--tabs-text-color);
-            background: transparent;
+            background-color: transparent;
           }
         }
 
@@ -105,7 +105,7 @@
 
       &:hover {
         eo-iconpark-icon {
-          background: var(--item-active-background-color);
+          background-color: var(--item-active-background-color);
           color: var(--icon-color);
         }
       }

@@ -26,6 +26,20 @@ module.exports = (config, options) => {
     })
   ];
   config.module.rules = [
+    // {
+    //   test: /\.(js|ts)$/,
+    //   use: [
+    //     {
+    //       loader: 'babel-loader',
+    //       options: {
+    //         presets: ['@babel/preset-env', 'stage-3'],
+    //         plugins: ['@babel/plugin-syntax-import-assertions']
+    //       }
+    //     }
+    //   ],
+    //   exclude: /node_modules/,
+    //   resourceQuery: { not: [/\?ngResource/] }
+    // },
     {
       test: /\.css$/,
       use: ['style-loader', 'css-loader'],

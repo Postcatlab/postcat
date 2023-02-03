@@ -124,14 +124,12 @@ export class ProjectSettingComponent implements OnInit {
                 resolve(true);
                 return;
               }
-              console.log(status);
               this.message.success($localize`${title} successfully`);
               modal.destroy();
-              resolve(true);
             } else {
               this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-              resolve(true);
             }
+            resolve(true);
           });
         });
       }

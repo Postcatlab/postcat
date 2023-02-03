@@ -1,10 +1,10 @@
+import { ApiParamsType, ApiParamsTypeByNumber } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 
-import { GroupTreeItem } from '../../shared/models';
 import { eoDeepCopy, whatType } from '../index.utils';
 
 export type TreeToObjOpts = {
@@ -103,31 +103,6 @@ export const filterTableData = (
     childKey: opts.childKey
   });
 };
-
-/**
- * Convert array items which has parent id to tree nodes.
- *
- * @param list Array<GroupTreeItem>
- * @param tree Array<GroupTreeItem>
- * @param parentID number|string
- */
-export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentID: number | string): void => {
-  list.forEach(data => {
-    if (data.parentID === parentID) {
-      const child = {
-        ...data,
-        childList: []
-      };
-      if (!data.isLeaf) {
-        listToTree(list, child.childList, data.key);
-      }
-      if (child.childList.length <= 0) {
-        delete child.childList;
-      }
-      tree.push(child);
-    }
-  });
-};
 export const flatData = data => {
   // * DFS
   const arr = [];
@@ -171,7 +146,7 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
       curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
       const namePath = valueKey.split('.');
       const lastKey = namePath.pop();
-      prev[curr[key]] = namePath.reduce((p, v) => p?.[v], curr)?.[lastKey] || fieldTypeMap.get(curr.type);
+      prev[curr[key]] = namePath.reduce((p, v) => p?.[v], curr)?.[lastKey] ?? fieldTypeMap.get(curr.dataType);
       if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
       } else if (curr?.example) {
@@ -184,30 +159,114 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
   }, initObj);
 };
 
-export const fieldTypeMap = new Map<string, any>([
-  ['boolean', false],
-  ['array', []],
-  ['object', {}],
-  ['number', 0],
-  ['null', null],
-  ['string', 'default_value']
+export const fieldTypeMap = new Map<number, any>([
+  [ApiParamsType.boolean, false],
+  [ApiParamsType.array, []],
+  [ApiParamsType.object, {}],
+  [ApiParamsType.number, 0],
+  [ApiParamsType.null, null],
+  [ApiParamsType.string, 'default_value']
 ]);
 
-export const genApiGroupTree = (apiGroups: Group[] = [], apiDatas: ApiData[] = [], groupId: number) => {
-  const apiDataFilters = apiDatas.filter(apiData => {
-    apiData['title'] = apiData.name;
-    apiData['key'] = apiData['apiUuid'];
-    apiData['isLeaf'] = true;
-    return apiData.groupId === groupId;
-  });
-  const apiGroupFilters = apiGroups.filter(n => n?.parentId === groupId);
+/**
+ * Generate Group for tree view
+ *
+ * @param apiGroups
+ * @param groupId
+ * @returns
+ */
+export const genApiGroupTree = (apiGroups: Group[] = []) => {
   return [
-    ...apiGroupFilters.map(group => ({
+    ...apiGroups.map(group => ({
       ...group,
-      title: group.name,
+      title: group.name || '',
       key: group.id,
-      children: genApiGroupTree([...(group.children || [])], apiDatas, group.id)
-    })),
-    ...apiDataFilters
+      children: genApiGroupTree([...(group?.children || [])])
+    }))
   ];
+};
+/**
+ * Get group after shrink api data
+ */
+export const getPureGroup = groupList => {
+  return [
+    ...groupList.filter(group => {
+      if (!group) return;
+      const isApi = group._group?.type === 2;
+      if (isApi) return false;
+      Object.assign(group, {
+        title: group.name || '',
+        key: group.id,
+        children: getPureGroup([...(group?.children || [])])
+      });
+      return true;
+    })
+  ];
+};
+export class PCTree {
+  private list: Group[];
+  private rootGroupID: number;
+  constructor(list, opts?) {
+    this.list = eoDeepCopy(list);
+    this.rootGroupID = opts?.rootGroupID;
+  }
+  getList() {
+    return this.list;
+  }
+  findGroupByID(id): Group {
+    return this.loopFindGroupByID(this.list, id);
+  }
+  private loopFindGroupByID(list, id): Group {
+    return list.find(group => {
+      if (group.id === id) return true;
+      if (group.children) {
+        return this.loopFindGroupByID(group.children, id);
+      }
+    });
+  }
+  add(group: Group) {
+    const isRootDir = group.parentId === this.rootGroupID;
+    if (isRootDir) {
+      this.list.push(group);
+      return;
+    }
+
+    const parent = this.findGroupByID(group.parentId);
+    parent.children.push(group);
+  }
+  update(group: Group) {
+    const origin = this.findGroupByID(group.id);
+    Object.assign(origin, group);
+  }
+  delete(group: Group) {
+    const isRootDir = group.parentId === this.rootGroupID;
+    const list = isRootDir ? this.list : this.findGroupByID(group.parentId).children;
+    list.splice(
+      list.findIndex(val => val.id === group.id),
+      1
+    );
+  }
+  sort() {}
+}
+export const hangGroupToApi = list => {
+  return list.map(it => {
+    if (it.type === 2) {
+      return {
+        ...it.relationInfo,
+        id: it.relationInfo.apiUuid,
+        isLeaf: true,
+        parentId: it.parentId,
+        _group: {
+          id: it.id,
+          type: it.type,
+          parentId: it.parentId,
+          sort: it.sort
+        }
+      };
+    }
+    return {
+      ...it,
+      children: hangGroupToApi(it.children || [])
+    };
+  });
 };

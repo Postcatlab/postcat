@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiBodyType, Protocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 
@@ -61,16 +61,17 @@ export class ApiEditService {
     }
     return this.apiEditUtil.formatStorageApiDataToUI(result);
   }
-  async editApi(apiData): Promise<[ApiData, any]> {
-    const busEvent = apiData.apiUuid ? 'editApi' : 'addApi';
-    if (busEvent === 'editApi') {
-      apiData.updateApiAttr = 1;
-      apiData.updateRequestParams = 1;
-      apiData.updateResponseList = 1;
-      return await this.projectApi.edit(apiData);
-    } else {
-      const [result, err] = await this.projectApi.add(apiData);
-      return [result[0], err];
+  async addApi(apiData): Promise<[ApiData, any]> {
+    const [result, err] = await this.projectApi.add(apiData);
+    if (err) {
+      return [result, err];
     }
+    return [result[0], err];
+  }
+  async editApi(apiData): Promise<[ApiData, any]> {
+    apiData.updateApiAttr = 1;
+    apiData.updateRequestParams = 1;
+    apiData.updateResponseList = 1;
+    return await this.projectApi.edit(apiData);
   }
 }

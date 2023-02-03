@@ -1,17 +1,19 @@
 <form nz-form auto-focus-form [formGroup]="validateForm" [nzLayout]="'vertical'">
   <div class="top-save-bar">
-    <button type="button" eo-ng-button nzType="primary" (click)="saveApi()" i18n>Save</button>
+    <button type="button" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveApi()" i18n
+      >Save</button
+    >
   </div>
   <div class="p-base">
     <nz-skeleton [nzLoading]="!model?.apiAttrInfo" [nzActive]="true"> </nz-skeleton>
-    <div class="save-container" *ngIf="model.apiAttrInfo">
+    <div class="save-container" *ngIf="model?.apiAttrInfo">
       <eo-ng-input-group nzCompact>
         <eo-ng-select class="!w-[15%] !min-w-[100px] !max-w-[200px]" formControlName="requestMethod">
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <nz-form-item nz-col class="flex-1">
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-            <input type="text" class="rounded-r" name="uri" eo-ng-input formControlName="uri" />
+            <input type="text" class="rounded-r" name="uri" (blur)="updateParamsbyUri()" eo-ng-input formControlName="uri" />
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
@@ -39,7 +41,7 @@
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
-      <!-- 请求参数 -->
+      <!-- Request -->
       <nz-collapse class="eo_collapse mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
           <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
@@ -49,34 +51,24 @@
                 <span i18n>Request Headers</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-header
+              <eo-api-edit-form
+                module="header"
                 tid="requestParams.headerParams"
                 (modelChange)="emitChangeFun()"
                 [(model)]="model.requestParams.headerParams"
               >
-              </eo-api-edit-header>
+              </eo-api-edit-form>
             </eo-ng-tab>
             <!-- Request Body -->
             <eo-ng-tab [nzTitle]="bodyTitleTmp">
               <ng-template #bodyTitleTmp>
                 <span i18n>Body</span>
-                <nz-badge
-                  class="ml-1"
-                  *ngIf="
-                    [TYPE_API_BODY.FormData, TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray, TYPE_API_BODY.XML].includes(
-                      model.apiAttrInfo.contentType
-                    )
-                      ? bindGetApiParamNum(model.requestParams.bodyParams)
-                      : model.requestParams?.bodyParams?.[0]?.binaryRawData?.length
-                  "
-                  nzStatus="success"
-                ></nz-badge>
+                <nz-badge class="ml-1" *ngIf="bindGetApiParamNum(model.requestParams.bodyParams)" nzStatus="success"></nz-badge>
               </ng-template>
               <eo-api-edit-body
                 #editBody
                 tid="requestBody"
                 [(bodyType)]="model.apiAttrInfo.contentType"
-                [jsonRootType]="model.apiAttrInfo.contentType"
                 [(model)]="model.requestParams.bodyParams"
                 (modelChange)="emitChangeFun()"
               >
@@ -87,21 +79,27 @@
                 <span i18n>Query</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [(model)]="model.requestParams.queryParams">
-              </eo-api-edit-query>
+              <eo-api-edit-form
+                module="query"
+                tid="queryParams"
+                (modelChange)="emitChangeFun()"
+                [(model)]="model.requestParams.queryParams"
+              >
+              </eo-api-edit-form>
             </eo-ng-tab>
             <eo-ng-tab [nzTitle]="restTitleTmp">
               <ng-template #restTitleTmp>
                 <span i18n>REST</span>
                 <nz-badge *ngIf="bindGetApiParamNum(model.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
               </ng-template>
-              <eo-api-edit-rest tid="restParams" [(model)]="model.requestParams.restParams" (modelChange)="emitChangeFun()">
-              </eo-api-edit-rest>
+              <eo-api-edit-form module="rest" tid="restParams" [(model)]="model.requestParams.restParams" (modelChange)="emitChangeFun()">
+              </eo-api-edit-form>
             </eo-ng-tab>
           </eo-ng-tabset>
         </nz-collapse-panel>
       </nz-collapse>
-      <!-- 响应内容 -->
+
+      <!-- Response -->
       <nz-collapse class="eo_collapse mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
           <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
@@ -114,25 +112,20 @@
                   nzStatus="success"
                 ></nz-badge>
               </ng-template>
-              <eo-api-edit-header
+              <eo-api-edit-form
+                module="header"
                 tid="responseHeaders"
                 [(model)]="model.responseList[0].responseParams.headerParams"
                 (modelChange)="emitChangeFun()"
               >
-              </eo-api-edit-header>
+              </eo-api-edit-form>
             </eo-ng-tab>
             <eo-ng-tab [nzTitle]="responseTitleTmp">
               <ng-template #responseTitleTmp>
                 <span i18n>Response</span>
                 <nz-badge
                   class="ml-1"
-                  *ngIf="
-                    [TYPE_API_BODY['FormData'], TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray, TYPE_API_BODY.XML].includes(
-                      model.responseList[0].contentType
-                    )
-                      ? bindGetApiParamNum(model.responseList[0].responseParams.bodyParams)
-                      : model.responseList[0].responseParams.bodyParams.length
-                  "
+                  *ngIf="bindGetApiParamNum(model.responseList[0].responseParams.bodyParams)"
                   nzStatus="success"
                 ></nz-badge>
               </ng-template>
@@ -142,7 +135,6 @@
                 [(bodyType)]="model.responseList[0].contentType"
                 [(model)]="model.responseList[0].responseParams.bodyParams"
                 (modelChange)="emitChangeFun()"
-                [jsonRootType]="model.responseList[0].contentType"
                 [supportType]="[TYPE_API_BODY.JSON, TYPE_API_BODY.XML, TYPE_API_BODY.Raw, TYPE_API_BODY.Binary]"
               >
               </eo-api-edit-body>

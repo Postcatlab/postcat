@@ -4,5 +4,7 @@ export const APP_CONFIG = {
   serverUrl: 'https://postcat.com',
   production: true,
   environment: 'PROD',
-  ...COMMON_CONFIG
+  ...COMMON_CONFIG,
+  REMOTE_SOCKET_URL: '',
+  NODE_SERVER_PORT: ''
 };

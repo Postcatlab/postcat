@@ -11,7 +11,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
       (click)="theme.changeTheme(option)"
       *ngFor="let option of theme.themes"
     >
-      <div class="border-all theme-block">
+      <div class="border-all theme-block" [style.background]="option.colors.background">
         <header
           class="navbar h-[15px]"
           [style.background]="option.colors.layoutHeaderBackground"

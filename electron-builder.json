@@ -1,0 +1,61 @@
+{
+  "appId": ".postcat.io",
+  "productName": "Postcat",
+  "asar": true,
+  "directories": {
+    "output": "release/"
+  },
+  "files": ["out/**/*.js*", "out/environment.js", "src/workbench/browser/dist/**/*", "!**/*.ts"],
+  "publish": [
+    "github",
+    {
+      "provider": "generic",
+      "url": "https://data.postcat.com/download/"
+    }
+  ],
+  "afterPack": "./scripts/afterPackHook.js",
+  "generateUpdatesFilesForAllChannels": true,
+  "nsis": {
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    // for win - 将协议写入主机的脚本
+    "include": "scripts/urlProtoco.nsh"
+  },
+  "protocols": [
+    // for macOS - 用于在主机注册指定协议
+    {
+      "name": "eoapi",
+      "schemes": ["eoapi"]
+    }
+  ],
+  "win": {
+    "icon": "src/app/common/images/logo.ico",
+    "target": [
+      {
+        "target": "nsis"
+      },
+      "portable"
+    ]
+  },
+  "portable": {
+    "splashImage": "src/app/common/images/postcat.bmp"
+  },
+  "mac": {
+    "icon": "src/app/common/images/512x512.png",
+    "hardenedRuntime": true,
+    "category": "public.app-category.productivity",
+    "gatekeeperAssess": false,
+    "entitlements": "scripts/entitlements.mac.plist",
+    "entitlementsInherit": "scripts/entitlements.mac.plist",
+    "target": ["dmg", "zip"]
+  },
+  "dmg": {
+    "sign": false
+  },
+  "afterSign": "scripts/notarize.js",
+  "linux": {
+    "icon": "src/app/common/images/",
+    "target": ["AppImage"]
+  }
+}

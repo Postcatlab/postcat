@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 
 import { SettingService } from '../settings.service';
 
@@ -79,14 +79,12 @@ export class DataStorageComponent implements OnInit {
       ...this.validateForm.value
     };
     const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['backend.url']);
-    console.log(isSuccess);
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);
       StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
       //Relogin to update user info
       this.messageS.send({ type: 'login', data: {} });
       this.saveConf();
-      this.messageS.send({ type: 'close-setting', data: {} });
     } else {
       this.message.error($localize`Failed to connect`);
     }

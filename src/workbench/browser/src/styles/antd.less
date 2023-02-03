@@ -1,23 +1,16 @@
 @import './variables.css';
 @import '../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
 @import '../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
-//From EOUI
+/** From EOUI
+**/
 .ant-tabs-tab {
   padding: 8px 0;
 }
-.ant-form-item-explain-error {
-  color: var(--danger-color);
-}
-.ant-divider {
-  border-color: var(--divider-color);
-}
+
 .ant-tabs-tab {
   margin: 0 0 0 var(--margin); //编剧调整为主题的 padding
 }
-.ant-card-bordered {
-  background-color: var(--background-color);
-  border-color: var(--input-border-color);
-}
+
 .ant-tabs-tab + .ant-tabs-tab {
   margin: 0 0 0 14px;
 }
@@ -42,19 +35,7 @@
 .ant-modal-body {
   padding: 16px;
 }
-.ant-card {
-  color: var(--text-color);
-}
-.ant-input-number {
-  background-color: var(--input-background-color);
-  border-color: var(--input-border-color);
-  &:hover {
-    border-color: var(--input-hover-border-color);
-  }
-}
-.ant-list-item-action li {
-  color: var(--text-color);
-}
+
 .iconpark-icon {
   height: var(--icon-size);
   vertical-align: middle;
@@ -97,17 +78,11 @@
   }
 }
 
-.ant-btn-active {
-  background: var(--item-active-background-color);
-  border-color: transparent;
-  color: var(--text-color);
-}
-
 .ant-select-tree-list-holder-inner {
   max-width: 500px;
 }
 .ant-spin-dot-item {
-  background-color: var(--primary-color);
+  background-color: var(--spin-color);
 }
 .ant-form-item-label {
   font-weight: bold;
@@ -241,4 +216,32 @@ nz-resize-handle.container-draggable {
       height: 3px;
     }
   }
+}
+
+/**
+Theme color
+**/
+.ant-card {
+  color: var(--text-color);
+}
+.ant-form-item-explain-error {
+  color: var(--danger-color);
+}
+.ant-divider {
+  border-color: var(--divider-color);
+}
+.ant-input-number {
+  background-color: var(--input-background-color);
+  border-color: var(--input-border-color);
+  color: var(--input-text-color);
+  &:hover {
+    border-color: var(--input-hover-border-color);
+  }
+}
+.ant-list-item-action li {
+  color: var(--text-color);
+}
+
+.ant-code-editor {
+  background-color: var(--background-color);
 }

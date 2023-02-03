@@ -4,8 +4,8 @@ import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo
 import { b64DecodeUnicode, decodeUnicode, getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
-import { ApiTestUtilService } from '../../../../../../../modules/api-shared/api-test-util.service';
-import { ApiTestResData } from '../../../service/api-test/test-server.model';
+import { ApiTestUtilService } from '../../../service/api-test-util.service';
+import { ApiTestResData } from '../../../service/test-server/test-server.model';
 
 @Component({
   selector: 'eo-api-test-result-response',

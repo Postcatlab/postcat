@@ -23,7 +23,7 @@ import { StoreService } from '../../../../shared/store/state.service';
       <nz-divider></nz-divider>
     </div>
     <div class="mb-2 font-bold" i18n>Actions</div>
-    <div class="border rounded">
+    <div class="border-all rounded">
       <nz-list nzItemLayout="horizontal">
         <nz-list-item *ngFor="let item of overviewList">
           <div class="flex items-center justify-between w-full px-base">

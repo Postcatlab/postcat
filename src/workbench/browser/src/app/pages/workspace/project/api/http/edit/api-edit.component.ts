@@ -3,28 +3,31 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
+import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
-import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { autorun, toJS } from 'mobx';
+import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { autorun } from 'mobx';
+import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
-import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { eoDeepCopy, isEmptyObj, enumsToArr } from '../../../../../../utils/index.utils';
+import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
+import { eoDeepCopy, isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../utils/index.utils';
+import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiStoreService } from '../../service/store/api-state.service';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditBodyComponent } from './body/api-edit-body.component';
 
 @Component({
-  selector: 'eo-api-edit-edit',
+  selector: 'pc-api-http-edit',
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy {
+export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @ViewChild('editBody') editBody: ApiEditBodyComponent;
   @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
@@ -38,9 +41,10 @@ export class ApiEditComponent implements OnDestroy {
   @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
-  groups: any[];
+  isSaving = false;
+  groups: NzTreeNode[];
   initTimes = 0;
-  expandKeys: string[];
+  expandKeys: string[] = [];
   REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
@@ -52,10 +56,11 @@ export class ApiEditComponent implements OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
+    public globalStore: StoreService,
     private message: EoNgFeedbackMessageService,
-    private effect: EffectService,
+    private effect: ApiEffectService,
     private apiEdit: ApiEditService,
-    private store: StoreService
+    private store: ApiStoreService
   ) {
     this.initShortcutKey();
     this.initBasicForm();
@@ -76,32 +81,28 @@ export class ApiEditComponent implements OnDestroy {
         id,
         groupId
       });
-      //!Prevent await async ,replace current  api data
+      // ! Prevent await async, replace current api data
       if (initTimes >= this.initTimes) {
         this.model = result;
       }
     }
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
-    //Storage origin api data
+    // Storage origin api data
     if (!this.initialModel) {
-      if (!id) {
-        // New API/New API from other page such as test page
-        this.initialModel = this.apiEdit.getPureApi({ groupId });
-      } else {
-        this.initialModel = eoDeepCopy(this.model);
-      }
+      // New API/New API from other page such as test page
+      this.initialModel = !id ? this.apiEdit.getPureApi({ groupId }) : eoDeepCopy(this.model);
     }
     this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
-    setTimeout(() => {
-      //TODO optimize
+    waitNextTick().then(() => {
       this.editBody.init();
       this.resEditBody.init();
-    }, 0);
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
+    });
   }
 
   initShortcutKey() {
@@ -111,9 +112,10 @@ export class ApiEditComponent implements OnDestroy {
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('Ctrl + s');
-          // 或者 return false;
           event.preventDefault();
+
+          //Manualy call funciton in case on blur event not trigger
+          this.updateParamsbyUri();
           this.saveApi();
         }
       });
@@ -122,7 +124,20 @@ export class ApiEditComponent implements OnDestroy {
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
-  openGroup() {}
+  updateParamsbyUri() {
+    const url = this.validateForm.controls['uri'].value;
+
+    this.model.requestParams.queryParams = syncUrlAndQuery(url, this.model.requestParams.queryParams, {
+      nowOperate: 'url',
+      method: 'keepBoth'
+    }).query;
+
+    this.resetRestFromUrl(url);
+  }
+
+  openGroup() {
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
+  }
   async saveApi() {
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
@@ -134,19 +149,21 @@ export class ApiEditComponent implements OnDestroy {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
-    let formData: any = this.getFormdata();
+    this.isSaving = true;
+    let formData: ApiData = this.getFormdata();
     const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
-    pcConsole.log('saveAPI', formData);
-    const [result, err] = await this.apiEdit.editApi(formData);
+    const [result, err] = await (busEvent === 'editApi' ? this.apiEdit.editApi(formData) : this.apiEdit.addApi(formData));
+    this.isSaving = false;
     if (err) {
       this.message.error($localize`Failed Operation`);
       return;
     }
     // Add success
     this.message.success(title);
-    this.initialModel = this.apiEditUtil.formatEditingApiData(this.getFormdata());
+    const data = this.getFormdata();
+    this.initialModel = this.apiEditUtil.formatEditingApiData(data);
     if (busEvent === 'addApi') {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
@@ -168,12 +185,12 @@ export class ApiEditComponent implements OnDestroy {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    );
+    // console.log(
+    //   'api edit origin:',
+    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
+    // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
     // console.log(`\n\n${originText}\n\n${afterText}`);
@@ -193,6 +210,7 @@ export class ApiEditComponent implements OnDestroy {
   }
   getApiGroup() {
     autorun(() => {
+      if (!this.store.getRootGroup) return;
       this.groups = this.store.getGroupTree;
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
@@ -200,14 +218,16 @@ export class ApiEditComponent implements OnDestroy {
           this.initialModel.groupId = this.model.groupId;
         }
       }
-      setTimeout(() => {
-        //@ts-ignore
-        const existGroup = this.apiGroup?.getTreeNodeByKey(this.model.groupId);
-        this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
-        if (!existGroup) {
-          this.model.groupId = this.store.getRootGroup.id;
-        }
-      }, 0);
+
+      /**
+       * If group has be deleted,reset to root group
+       */
+      const groupObj = new PCTree(this.groups);
+      const existGroup = groupObj.findGroupByID(this.model.groupId);
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
+      if (!existGroup) {
+        this.model.groupId = this.store.getRootGroup.id;
+      }
     });
   }
   /**
@@ -226,14 +246,15 @@ export class ApiEditComponent implements OnDestroy {
       controls[name] = [this.model[name] || '', [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
-    pcConsole.log('initBasicForm', controls);
+    // pcConsole.log('initBasicForm', controls);
   }
   private getFormdata(): ApiData {
+    const { name, uri, groupId } = this.validateForm.value;
     const result = {
       ...this.model,
-      name: this.validateForm.value.name,
-      uri: this.validateForm.value.uri,
-      groupId: this.validateForm.value.groupId
+      name,
+      uri,
+      groupId
     };
     result.apiAttrInfo.requestMethod = this.validateForm.value.requestMethod;
     return result;
@@ -241,16 +262,9 @@ export class ApiEditComponent implements OnDestroy {
   private watchBasicForm() {
     this.validateForm.valueChanges.subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
+      Promise.resolve().then(() => {
         this.emitChangeFun();
-      }, 0);
-    });
-    //watch uri
-    this.validateForm
-      .get('uri')
-      ?.valueChanges.pipe(debounceTime(800), takeUntil(this.destroy$))
-      .subscribe(url => {
-        this.resetRestFromUrl(url);
       });
+    });
   }
 }

@@ -500,7 +500,11 @@ export class LocalService {
     });
   }
 
-  api_groupList<T = any>({ projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+  api_groupList<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    withItem = true
+  }) {
     if (projectUuid == null) {
       console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
       return;
@@ -509,10 +513,14 @@ export class LocalService {
       console.log('%c Error: group - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
+    if (withItem == null) {
+      console.log('%c Error: group - list 接口 缺失参数 withItem %c', ErrorStyle, '');
+      return;
+    }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.group
-        .bulkRead({ projectUuid, workSpaceUuid })
+        .bulkRead({ projectUuid, workSpaceUuid, withItem })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');
@@ -987,13 +995,13 @@ export class LocalService {
     });
   }
 
-  api_projectDetail<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
+  api_projectList<T = any>({ projectUuids, workSpaceUuid = this.store.getCurrentWorkspaceUuid }) {
     if (projectUuids == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 projectUuids %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 projectUuids %c', ErrorStyle, '');
       return;
     }
     if (workSpaceUuid == null) {
-      console.log('%c Error: project - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      console.log('%c Error: project - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
@@ -1002,13 +1010,13 @@ export class LocalService {
         .page({ projectUuids, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project - detail 接口调用成功 %c', SuccessStyle, '');
+            console.log('%c project - list 接口调用成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           return resolve([null, { code, data }]);
         })
         .catch(error => {
-          console.log('%c project - detail 接口调用失败 %c', ErrorStyle, '');
+          console.log('%c project - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
@@ -1063,6 +1071,24 @@ export class LocalService {
         })
         .catch(error => {
           console.log('%c project - delete 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectImport<T = any>(params) {
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .import(params)
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - import 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - import 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
