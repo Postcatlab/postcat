@@ -78,7 +78,7 @@ export class ApiTestUtilService {
               name: val.name,
               isRequired: 1,
               paramAttr: {
-                example: val.value
+                example: JSON.stringify(val.value)
               }
             })),
             bodyParams: []

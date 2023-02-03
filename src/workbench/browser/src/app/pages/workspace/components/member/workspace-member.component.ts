@@ -35,11 +35,11 @@ import { StoreService } from '../../../../shared/store/state.service';
             </eo-ng-option>
           </ng-container>
 
-          <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
+          <!-- <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
             <div class="h-10 flex justify-center items-center">
               <nz-spin nzSimple></nz-spin>
             </div>
-          </eo-ng-option>
+          </eo-ng-option> -->
         </eo-ng-select>
       </nz-list-header>
     </nz-list>

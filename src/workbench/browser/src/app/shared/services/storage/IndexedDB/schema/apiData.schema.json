@@ -26,7 +26,7 @@
         }
       },
       "type": "object",
-      "required": ["requestMethod"]
+      "required": ["requestMethod", "contentType"]
     },
     "BodyParam": {
       "properties": {

@@ -62,6 +62,9 @@ export class ExtensionService {
     let result: any = new Map();
     if (this.electron.isElectron) {
       result = window.electron.getInstalledExtensions() || new Map();
+      result.forEach((value, key) => {
+        result.set(key, this.parseExtensionInfo(value));
+      });
     } else {
       result = this.webExtensionService.getExtensions();
       result = new Map(result);
