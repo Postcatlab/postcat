@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { has } from 'lodash-es';
 
@@ -21,7 +22,8 @@ export class SyncApiComponent implements OnInit {
     private storage: StorageService,
     private extensionService: ExtensionService,
     private store: StoreService,
-    private eoMessage: EoNgFeedbackMessageService
+    private eoMessage: EoNgFeedbackMessageService,
+    private apiService: ApiService
   ) {
     this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
   }
@@ -46,24 +48,21 @@ export class SyncApiComponent implements OnInit {
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     if (module?.[action] && typeof module[action] === 'function') {
-      const params = [this.store.getCurrentProjectID];
-      this.storage.run('projectExport', params, async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          result.data.version = packageJson.version;
-          try {
-            const output = await module[action](result.data);
-            if (has(output, 'status') && output.status !== 0) {
-              this.eoMessage.error(output.message);
-              callback('stayModal');
-              return;
-            }
-            callback(true);
-          } catch (e) {
-            console.log(e);
-            callback(false);
-          }
+      const [data] = await this.apiService.api_projectExportProject({});
+
+      data.version = packageJson.version;
+      try {
+        const output = await module[action](data);
+        if (has(output, 'status') && output.status !== 0) {
+          this.eoMessage.error(output.message);
+          callback('stayModal');
+          return;
         }
-      });
+        callback(true);
+      } catch (e) {
+        console.log(e);
+        callback(false);
+      }
     }
   }
 }
