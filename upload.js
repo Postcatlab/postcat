@@ -69,11 +69,11 @@ const app = async () => {
           ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
           fs.writeFileSync(it, YAML.stringify(ymlObj));
           await removeFile(bucket, onlyName(it));
-          const token = uptoken(bucket, `${version}/${onlyName(it)}`);
-          isOK = await uploadFile(token, `${version}/${onlyName(it)}`, it);
+          const token = uptoken(bucket, `download/${version}/${onlyName(it)}`);
+          isOK = await uploadFile(token, `download/${version}/${onlyName(it)}`, it);
         } else {
-          const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
-          isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
+          const token = uptoken(bucket, `download/${version}/${it.replace(/release\//, '')}`);
+          isOK = await uploadFile(token, `download/${version}/${it.replace(/release\//, '')}`, it);
         }
       } catch (error) {
         console.log('error', error);
@@ -84,14 +84,14 @@ const app = async () => {
   console.log('上传结果：', uploadResult);
   const deleteResult = await Promise.all(
     fileList.map(async it => {
-      const isOK = await removeFile(bucket, `latest/${toLatest(onlyName(it))}`);
+      const isOK = await removeFile(bucket, `download/latest/${toLatest(onlyName(it))}`);
       Promise.resolve(isOK || false);
     })
   );
   console.log('删除结果：', deleteResult);
   const copyResult = await Promise.all(
     fileList.map(async it => {
-      const isOK = await cpFile(`${version}/${onlyName(it)}`, `latest/${toLatest(onlyName(it))}`);
+      const isOK = await cpFile(`download/${version}/${onlyName(it)}`, `download/latest/${toLatest(onlyName(it))}`);
       Promise.resolve(isOK || false);
     })
   );

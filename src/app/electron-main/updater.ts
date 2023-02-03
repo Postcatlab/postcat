@@ -8,7 +8,7 @@ export class EoUpdater {
     this.watchLog();
     autoUpdater.setFeedURL({
       provider: 'generic',
-      url: 'https://packages.postcat.com'
+      url: 'https://extensions.postcat.com/download/latest/'
     });
     // 是否自动更新
     // autoUpdater.autoDownload = window.pc.getExtensionSettings('common.app.autoUpdate') !== false;
