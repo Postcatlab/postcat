@@ -14,6 +14,9 @@ const parseTree = (key, value): BodyParam | unknown => {
       name: key,
       isRequired: 1,
       'paramAttr.example': '',
+      paramAttr: {
+        example: ''
+      },
       dataType: ApiParamsType.string,
       description: '',
       childList: Object.keys(value).map(it => parseTree(it, value[it]))
@@ -27,11 +30,11 @@ const parseTree = (key, value): BodyParam | unknown => {
       return {
         name: key,
         isRequired: 1,
-        //TODO only test page has value
-        value: JSON.stringify(value),
-        //TODO only edit page has example
         'paramAttr.example': JSON.stringify(value),
         dataType: ApiParamsType.array,
+        paramAttr: {
+          example: JSON.stringify(value)
+        },
         description: ''
       };
     }
@@ -39,6 +42,9 @@ const parseTree = (key, value): BodyParam | unknown => {
       name: key,
       isRequired: 1,
       'paramAttr.example': '',
+      paramAttr: {
+        example: ''
+      },
       dataType: ApiParamsType.array,
       description: '',
       childList: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
@@ -48,9 +54,11 @@ const parseTree = (key, value): BodyParam | unknown => {
   return {
     name: key,
     isRequired: 1,
-    value: value == null ? '' : value.toString(),
     description: '',
     'paramAttr.example': value == null ? '' : value.toString(),
+    paramAttr: {
+      example: value == null ? '' : value.toString()
+    },
     dataType: ApiParamsType[whatType(value)]
   };
 };

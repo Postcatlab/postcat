@@ -33,11 +33,9 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
-          <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
-            <div class="h-10 flex justify-center items-center">
-              <nz-spin nzSimple></nz-spin>
-            </div>
-          </eo-ng-option>
+          <!-- <div *ngIf="isLoading" class="h-10 flex justify-center items-center">
+            <nz-spin nzSimple></nz-spin>
+          </div> -->
           <ng-container>
             <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
               <div class="flex w-full justify-between items-center">

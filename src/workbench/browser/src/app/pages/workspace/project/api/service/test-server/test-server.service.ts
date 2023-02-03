@@ -9,6 +9,7 @@ import {
   TestServerRes
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiData, BodyParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 
@@ -127,7 +128,10 @@ export abstract class TestServerService implements TestServer {
       request: {
         uri: history.requestInfo.URL,
         headers: (report.request.headers || []).map(val => ({ name: val.key, value: val.value })),
-        body: history.requestInfo.params,
+        body:
+          whatType(history.requestInfo.params) === 'array'
+            ? history.requestInfo.params.map(val => ({ ...val, name: val.key }))
+            : history.requestInfo.params,
         contentType: ['formData', 'raw', 'json', 'xml', 'binary'][history.requestInfo.requestType] || 'raw'
       }
     };

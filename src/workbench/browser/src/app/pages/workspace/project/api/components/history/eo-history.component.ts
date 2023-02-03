@@ -26,7 +26,6 @@ export class HistoryComponent implements OnInit {
     this.effect.getHistoryList();
     autorun(() => {
       this.getTestHistory = this.store.getTestHistory;
-      console.log(eoDeepCopy(this.getTestHistory));
     });
   }
   getRequestMethodText(node) {
