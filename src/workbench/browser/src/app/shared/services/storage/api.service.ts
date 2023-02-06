@@ -153,6 +153,14 @@ export class ApiService {
     return this.remote.api_userSearch<T>(params);
   }
 
+  api_userThirdLogin<T = any>(params: { type: any; client: any; redirectUri: any; appType: any; [key: string]: any }) {
+    return this.remote.api_userThirdLogin<T>(params);
+  }
+
+  api_userThirdLoginResult<T = any>(params: { code: any }) {
+    return this.remote.api_userThirdLoginResult<T>(params);
+  }
+
   api_workspaceCreate<T = any>(params: { titles: any }) {
     return this.store.isLocal ? this.local.api_workspaceCreate<T>(params) : this.remote.api_workspaceCreate<T>(params);
   }

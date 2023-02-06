@@ -91,6 +91,15 @@ export class StoreService {
     return this.pageLevel;
   }
 
+  @computed get isZh() {
+    return this.url.includes('/zh/');
+  }
+
+  @computed get isEn() {
+    // return this.url.includes('/en/');
+    return !this.url.includes('/zh/');
+  }
+
   // ? data source
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspace?.isLocal;

@@ -68,7 +68,7 @@ export class ApiEditService {
     }
     return [result[0], err];
   }
-  async editApi(apiData): Promise<[ApiData, any]> {
+  async editApi(apiData) {
     apiData.updateApiAttr = 1;
     apiData.updateRequestParams = 1;
     apiData.updateResponseList = 1;
