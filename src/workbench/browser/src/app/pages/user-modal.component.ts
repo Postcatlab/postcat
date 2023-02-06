@@ -287,6 +287,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
     {
+      // * set user info
       const [data, err]: any = await this.api.api_userReadInfo({});
       if (err) {
         return;

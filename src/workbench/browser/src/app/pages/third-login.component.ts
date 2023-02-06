@@ -12,15 +12,18 @@ enum LoginType {
 
 @Component({
   selector: 'third-login',
-  template: `<div class="flex justify-evenly pt-6">
-    <button
-      class="w-8 h-8 rounded-full bg-center bg-no-repeat bg-cover cursor-pointer border-none"
-      *ngFor="let it of renderList"
-      (click)="handleLogin(it.type)"
-      [ngStyle]="{ 'background-image': logoLink(it.logo) }"
-    >
-    </button>
-  </div>`,
+  template: ` <div class="py-6">
+      <nz-divider></nz-divider>
+    </div>
+    <div class="flex justify-evenly">
+      <button
+        class="w-8 h-8 rounded-full bg-center bg-no-repeat bg-cover cursor-pointer border-none"
+        *ngFor="let it of renderList"
+        (click)="handleLogin(it.type)"
+        [ngStyle]="{ 'background-image': logoLink(it.logo) }"
+      >
+      </button>
+    </div>`,
   styleUrls: []
 })
 export class ThirdLoginComponent implements OnInit {
