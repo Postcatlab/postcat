@@ -5,6 +5,29 @@ import { Observable, Observer } from 'rxjs';
 
 import { parserJsonFile } from '../../../utils/index.utils';
 
+export const featuresTipsMap = {
+  importAPI: {
+    type: 'format',
+    suggest: '@feature importAPI'
+  },
+  exportAPI: {
+    type: 'format',
+    suggest: '@feature exportAPI'
+  },
+  syncAPI: {
+    type: 'format',
+    suggest: '@feature syncAPI'
+  },
+  sidebarViews: {
+    type: 'format',
+    suggest: '@feature sidebarViews'
+  },
+  theme: {
+    type: 'theme',
+    suggest: '@feature theme'
+  }
+} as const;
+
 type optionType = {
   label: string;
   value: string;
@@ -20,10 +43,12 @@ export class ExtensionSelectComponent {
   @Input() allowDrag = false;
   @Input() currentOption = '';
   @Input() optionList: optionType[] = [];
+  @Input() tipsType: keyof typeof this.tipsTemp;
   @Output() readonly extensionChange = new EventEmitter<string>();
   @Output() readonly currentOptionChange = new EventEmitter<string>();
   @Output() readonly uploadChange = new EventEmitter<any>();
   filename = '';
+  tipsTemp = featuresTipsMap;
 
   constructor(private message: EoNgFeedbackMessageService, private messageService: MessageService) {}
 
@@ -41,7 +66,7 @@ export class ExtensionSelectComponent {
   }
 
   openExtension() {
-    this.messageService.send({ type: 'open-extension', data: {} });
+    this.messageService.send({ type: 'open-extension', data: { suggest: this.tipsTemp[this.tipsType]?.suggest } });
   }
 
   parserFile = file =>

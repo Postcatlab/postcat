@@ -32,16 +32,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(distinct(({ type }) => type, interval(400)))
       .subscribe(async ({ type, data }) => {
         if (type === 'open-extension') {
-          this.openExtension();
+          this.openExtension(data);
           return;
         }
       });
   }
-  openExtension() {
+  openExtension(data?) {
     this.modalService.create({
       nzClassName: 'eo-extension-modal',
       nzWidth: '80%',
       nzTitle: $localize`Extensions Hub`,
+      nzComponentParams: {
+        keyword: data?.suggest || ''
+      },
       nzContent: ExtensionComponent,
       nzFooter: null
     });

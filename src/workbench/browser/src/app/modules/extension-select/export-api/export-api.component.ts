@@ -11,7 +11,7 @@ import pkgInfo from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-export-api',
-  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `
+  template: `<extension-select [(extension)]="currentExtension" tipsType="exportAPI" [extensionList]="supportList"></extension-select> `
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');

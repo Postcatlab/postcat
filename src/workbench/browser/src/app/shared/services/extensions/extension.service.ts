@@ -6,7 +6,7 @@ import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/con
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 
 import { ExtensionStoreService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
@@ -22,6 +22,7 @@ export class ExtensionService {
   HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ExtensionInfo[] = [];
   installedMap: Map<string, ExtensionInfo>;
+  private requestPending: Subscription | null = null;
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
@@ -93,43 +94,55 @@ export class ExtensionService {
     return this.installedList.includes(name);
   }
   public async requestList(type = 'list') {
-    const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`), {
-      defaultValue: []
-    });
-    const debugExtensions = [];
+    this.requestPending?.unsubscribe();
+    return new Promise((resolve, reject) => {
+      this.requestPending = this.http.get<any>(`${this.HOST}/list?locale=${this.language.systemLanguage}`).subscribe({
+        next: async result => {
+          const debugExtensions = [];
 
-    if (type !== 'init') {
-      for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
-        const name = this.webExtensionService.debugExtensionNames[i];
-        const hasExist = this.installedList.some(val => val.name === name);
-        if (hasExist) continue;
-        debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
-      }
-    }
+          if (type !== 'init') {
+            for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
+              const name = this.webExtensionService.debugExtensionNames[i];
+              const hasExist = this.installedList.some(val => val.name === name);
+              if (hasExist) continue;
+              debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+            }
+          }
 
-    result.data = [
-      ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
-      //Local debug package
-      ...this.installedList.map(module => {
-        const extension = result.data.find(it => it.name === module.name);
-        if (extension) {
-          module.i18n = extension.i18n;
+          result.data = [
+            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
+            //Local debug package
+            ...this.installedList.map(module => {
+              const extension = result.data.find(it => it.name === module.name);
+              if (extension) {
+                module.i18n = extension.i18n;
+              }
+              return module;
+            }),
+            ...debugExtensions
+          ];
+          //Handle featue data
+          result.data = result.data.map(module => {
+            let result = this.parseExtensionInfo(module);
+            return result;
+          });
+
+          //Get debug extensions
+          this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
+
+          this.store.setExtensionList(result.data);
+          this.requestPending = null;
+          resolve(result);
+        },
+        error: () => {
+          this.requestPending = null;
+          reject([]);
         }
-        return module;
-      }),
-      ...debugExtensions
-    ];
-    //Handle featue data
-    result.data = result.data.map(module => {
-      let result = this.parseExtensionInfo(module);
-      return result;
+      });
     });
-
-    //Get debug extensions
-    this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
-
-    this.store.setExtensionList(result.data);
-    return result;
+    // const result: any = await lastValueFrom(, {
+    //   defaultValue: []
+    // });
   }
   async getDetail(name): Promise<any> {
     let result = {} as ExtensionInfo;

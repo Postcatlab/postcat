@@ -1,12 +1,32 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { autorun, computed, observable, makeObservable } from 'mobx';
+import { suggestList } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
+import { autorun, observable, makeObservable } from 'mobx';
 
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
 import { ExtensionGroupType } from '../extension.model';
 
-const extensionSearch = list => keyword => list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
+const extensionSearch = list => {
+  return (keyword: string) => {
+    return list.filter(it => {
+      const isSuggest = suggestList.some(n => keyword.startsWith(n));
 
+      if (isSuggest) {
+        const [suggest, text] = keyword.split(' ');
+
+        if (suggest === '@feature') {
+          return Object.keys(it.features).some(key => text === key);
+        } else if (suggest === '@category') {
+          return it.categories?.includes(text);
+        }
+      }
+      if (keyword) {
+        return it.name.includes(keyword) || it.keywords?.includes(keyword);
+      }
+      return true;
+    });
+  };
+};
 @Component({
   selector: 'eo-extension-list',
   templateUrl: './extension-list.component.html',
@@ -16,39 +36,13 @@ export class ExtensionListComponent implements OnInit {
   @Input() @observable type: string = ExtensionGroupType.all;
   @Input() @observable keyword = '';
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
-  allList = [];
-  officialList = [];
-  installedList = [];
+  extensionList = [];
   loading = false;
-  @computed get renderList() {
-    if (this.type === 'all') {
-      return this.allList;
-    }
-    if (this.type === 'official') {
-      return this.officialList;
-    }
-    return this.installedList;
-  }
   constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
-      switch (this.type) {
-        case 'all': {
-          this.allList = [];
-          this.allList = await this.searchPlugin(this.type, this.keyword);
-          break;
-        }
-        case 'official': {
-          this.officialList = [];
-          this.officialList = await this.searchPlugin(this.type, this.keyword);
-        }
-        default: {
-          this.installedList = [];
-          this.installedList = await this.searchPlugin(this.type, this.keyword);
-          break;
-        }
-      }
+      this.extensionList = await this.searchPlugin(this.type, this.keyword);
     });
   }
   clickExtension(event, item) {

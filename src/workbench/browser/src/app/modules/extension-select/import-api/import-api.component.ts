@@ -43,6 +43,7 @@ import StorageUtil from '../../../utils/storage/storage.utils';
   selector: 'eo-import-api',
   template: `<extension-select
     [allowDrag]="true"
+    tipsType="importAPI"
     [(extension)]="currentExtension"
     [extensionList]="supportList"
     (uploadChange)="uploadChange($event)"

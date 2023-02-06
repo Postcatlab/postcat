@@ -9,7 +9,7 @@ import packageJson from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`
+  template: `<extension-select [(extension)]="currentExtension" tipsType="syncAPI" [extensionList]="supportList"></extension-select>`
 })
 export class SyncApiComponent implements OnInit {
   currentExtension = '';

@@ -7,6 +7,19 @@
 }
 
 :host ::ng-deep {
+  .title {
+    .ant-tag {
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+  }
+
+  .subtitle {
+    .ant-divider {
+      @apply mx-[12px];
+    }
+  }
+
   .ant-skeleton {
     display: block;
 
