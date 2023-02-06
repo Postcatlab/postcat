@@ -13,6 +13,7 @@ export class LanguageService {
   systemLanguage;
   langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
   constructor(private electron: ElectronService, private setting: SettingService) {
+    //Curent language
     this.systemLanguage =
       this.languages.find(val => window.location.href.includes(`/${val.path}`))?.value ||
       this.setting.settings?.['system.language'] ||
@@ -22,8 +23,8 @@ export class LanguageService {
     return this.langHashMap.get(this.systemLanguage);
   }
   init() {
-    //Setting first
-    this.changeLanguage(this.setting.settings?.['system.language'] || this.systemLanguage);
+    //System language First
+    this.changeLanguage(this.setting.settings?.['system.language']);
   }
   changeLanguage(localeID) {
     if (!localeID || localeID === this.systemLanguage) {
