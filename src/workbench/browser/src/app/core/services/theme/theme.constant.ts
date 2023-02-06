@@ -6,7 +6,7 @@ import lightDefault from '../../../../extensions/themes/light.json';
 const debugTheme = {
   label: $localize`Debug Theme`,
   id: 'pc-debug',
-  baseTheme: 'pc-dark',
+  baseTheme: 'pc',
   path: 'debug.json'
 };
 /**
