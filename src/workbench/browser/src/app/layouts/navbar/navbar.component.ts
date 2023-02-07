@@ -43,7 +43,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       nzWidth: '80%',
       nzTitle: $localize`Extensions Hub`,
       nzComponentParams: {
-        keyword: data?.suggest || ''
+        keyword: data?.suggest || '',
+        nzSelectedKeys: [data?.suggest || 'all']
       },
       nzContent: ExtensionComponent,
       nzFooter: null

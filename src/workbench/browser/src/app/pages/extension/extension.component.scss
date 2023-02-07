@@ -5,8 +5,8 @@
   width: 100%;
   height: 100%;
 
-  .ant-tree-node-content-wrapper[title='Installed'] {
-    border-bottom: 1px solid #eee;
+  eo-ng-auto-complete input {
+    border-radius: 999px;
   }
 
   .ant-btn-link {

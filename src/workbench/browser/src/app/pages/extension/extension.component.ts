@@ -5,19 +5,7 @@ import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 import { ExtensionService } from '../../shared/services/extensions/extension.service';
-import { ExtensionGroupType } from './extension.model';
-
-export const suggestMap = {
-  '@feature ': ['importAPI', 'exportAPI', 'syncAPI', 'sidebarView', 'theme'],
-  '@category ': ['Data Migration', 'Themes', 'API Security', 'Other']
-} as const;
-export const suggestList = Object.entries(suggestMap).reduce((prev, [key, value]) => {
-  value.forEach(n => prev.push(key + n));
-  return prev;
-}, []);
-export const suggestCates = Object.keys(suggestList) as Array<keyof typeof suggestList>;
-export const suggestMapKeys = Object.keys(suggestMap) as Array<keyof typeof suggestMap>;
-
+import { extensionCates, ExtensionGroupType, suggestList } from './extension.model';
 @Component({
   selector: 'eo-extension',
   templateUrl: './extension.component.html',
@@ -27,8 +15,9 @@ export class ExtensionComponent implements OnInit {
   @observable currentExtension: ExtensionInfo | null = null;
   @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
   @Input() keyword = '';
+  @Input() nzSelectedKeys: Array<number | string> = ['all'];
+  category = '';
   searchOptions = [];
-  nzSelectedKeys: Array<number | string> = ['all'];
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'all',
@@ -46,26 +35,7 @@ export class ExtensionComponent implements OnInit {
       title: $localize`Installed`,
       isLeaf: true
     },
-    {
-      key: 'Data Migration',
-      title: $localize`Data Migration`,
-      isLeaf: true
-    },
-    {
-      key: 'Themes',
-      title: $localize`Themes`,
-      isLeaf: true
-    },
-    {
-      key: 'API Security',
-      title: $localize`API Security`,
-      isLeaf: true
-    },
-    {
-      key: 'Other',
-      title: $localize`Other`,
-      isLeaf: true
-    }
+    ...extensionCates
   ];
 
   @computed get hasExtension() {
@@ -95,8 +65,9 @@ export class ExtensionComponent implements OnInit {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
+    const { key } = event.node.origin;
     this.selectExtension('');
-    this.setGroup(event.node.key);
+    this.setGroup(key);
   }
 
   @action setGroup(data) {

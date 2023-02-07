@@ -41,7 +41,7 @@
   <div *ngIf="filename" class="h-4 my-2 text">{{ filename }}</div>
 </div>
 
-<div *ngIf="tipsTemp[tipsType] && extensionList.length" class="h-4 my-2 text" style="color: rgba(0, 0, 0, 0.45)"
-  >Can't find the {{ tipsTemp[tipsType].type }} you want?
+<div *ngIf="tipsMap[tipsType] && extensionList.length" class="h-4 my-2 text" style="color: rgba(0, 0, 0, 0.45)"
+  >Can't find the {{ tipsMap[tipsType].type }} you want?
   <a (click)="openExtension()">find more...</a>
 </div>

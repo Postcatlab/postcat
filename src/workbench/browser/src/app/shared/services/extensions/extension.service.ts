@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
@@ -93,12 +93,15 @@ export class ExtensionService {
   isInstalled(name) {
     return this.installedList.includes(name);
   }
-  public async requestList(type = 'list') {
+  public async requestList(type = 'list', queryParams = {}) {
     this.requestPending?.unsubscribe();
     return new Promise((resolve, reject) => {
-      this.requestPending = this.http.get<any>(`${this.HOST}/list?locale=${this.language.systemLanguage}`).subscribe({
+      const params = JSON.parse(JSON.stringify({ locale: this.language.systemLanguage, ...queryParams }));
+
+      this.requestPending = this.http.get<any>(`${this.HOST}/list`, { params }).subscribe({
         next: async result => {
           const debugExtensions = [];
+          const originData = structuredClone(result.data);
 
           if (type !== 'init') {
             for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
@@ -112,13 +115,19 @@ export class ExtensionService {
           result.data = [
             ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
             //Local debug package
-            ...this.installedList.map(module => {
-              const extension = result.data.find(it => it.name === module.name);
-              if (extension) {
-                module.i18n = extension.i18n;
-              }
-              return module;
-            }),
+            ...this.installedList
+              .filter(n => {
+                const target = result.data.find(m => n.name === m.name);
+                n.downloadCounts = target?.downloadCounts;
+                return target;
+              })
+              .map(module => {
+                const extension = result.data.find(it => it.name === module.name);
+                if (extension) {
+                  module.i18n = extension.i18n;
+                }
+                return module;
+              }),
             ...debugExtensions
           ];
           //Handle featue data
@@ -132,7 +141,7 @@ export class ExtensionService {
 
           this.store.setExtensionList(result.data);
           this.requestPending = null;
-          resolve(result);
+          resolve([result, originData]);
         },
         error: () => {
           this.requestPending = null;
