@@ -8,7 +8,7 @@ import { ExtensionService } from '../../shared/services/extensions/extension.ser
 import { ExtensionGroupType } from './extension.model';
 
 export const suggestMap = {
-  '@feature ': ['importAPI', 'exportAPI', 'syncAPI', 'sidebarViews', 'theme'],
+  '@feature ': ['importAPI', 'exportAPI', 'syncAPI', 'sidebarView', 'theme'],
   '@category ': ['Data Migration', 'Themes', 'API Security', 'Other']
 } as const;
 export const suggestList = Object.entries(suggestMap).reduce((prev, [key, value]) => {
@@ -16,6 +16,7 @@ export const suggestList = Object.entries(suggestMap).reduce((prev, [key, value]
   return prev;
 }, []);
 export const suggestCates = Object.keys(suggestList) as Array<keyof typeof suggestList>;
+export const suggestMapKeys = Object.keys(suggestMap) as Array<keyof typeof suggestMap>;
 
 @Component({
   selector: 'eo-extension',

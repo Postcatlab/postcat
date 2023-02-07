@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { suggestList } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
+import { suggestList, suggestMapKeys } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { autorun, observable, makeObservable } from 'mobx';
 
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
@@ -9,10 +9,11 @@ import { ExtensionGroupType } from '../extension.model';
 const extensionSearch = list => {
   return (keyword: string) => {
     return list.filter(it => {
-      const isSuggest = suggestList.some(n => keyword.startsWith(n));
+      const isSuggest = suggestMapKeys.some(n => keyword.startsWith(n));
 
       if (isSuggest) {
-        const [suggest, text] = keyword.split(' ');
+        const [suggest, ...rest] = keyword.split(' ');
+        const text = rest.join(' ');
 
         if (suggest === '@feature') {
           return Object.keys(it.features).some(key => text === key);
