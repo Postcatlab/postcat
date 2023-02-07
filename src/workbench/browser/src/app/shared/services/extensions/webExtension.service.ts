@@ -32,7 +32,7 @@ export class WebExtensionService {
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService, private store: ExtensionStoreService) {
     this.debugExtensionNames =
-      !APP_CONFIG.production || this.web.isVercel || 'http://54.255.141.14:8080'.includes(window.location.hostname) ? [] : [];
+      !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname) ? [] : [];
   }
   async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json

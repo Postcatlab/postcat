@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)
 enum LoginType {
@@ -12,8 +12,12 @@ enum LoginType {
 
 @Component({
   selector: 'third-login',
-  template: ` <div class="py-6">
-      <nz-divider></nz-divider>
+  template: ` <div class="py-4">
+      <nz-divider nzPlain [nzText]="text">
+        <ng-template #text>
+          <i class="or">or</i>
+        </ng-template>
+      </nz-divider>
     </div>
     <div class="flex justify-evenly">
       <button
@@ -24,18 +28,16 @@ enum LoginType {
       >
       </button>
     </div>`,
-  styleUrls: []
+  styleUrls: ['./third-login.component.scss']
 })
 export class ThirdLoginComponent implements OnInit {
+  @Output() readonly doneChange: EventEmitter<any> = new EventEmitter<boolean>();
   renderList = [];
-  constructor(private store: StoreService, private api: ApiService) {}
+  constructor(private api: ApiService, private web: WebService) {}
   ngOnInit() {
-    // this.renderList = this.store.isZh
-    //   ? []
-    //   : [];
+    // * It could use store.isZh and store.isEn
     this.renderList = [
       { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-      { logo: 'qq.png', label: 'QQ', type: 'qq' },
       { logo: 'github.png', label: 'Github', type: 'github' }
     ];
   }
@@ -53,6 +55,14 @@ export class ThirdLoginComponent implements OnInit {
     if (err) {
       return;
     }
-    window.location.href = res[type];
+    // * close
+    this.doneChange.emit(true);
+    if (this.web.isWeb) {
+      window.location.href = res[type];
+      return;
+    }
+    window.electron.loginWith(res[type], data => {
+      console.log('retrun data', data);
+    });
   }
 }

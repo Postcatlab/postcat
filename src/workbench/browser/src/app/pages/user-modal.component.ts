@@ -90,7 +90,7 @@ import { ModalService } from '../shared/services/modal.service';
               >
                 Sign In/Up
               </button>
-              <third-login></third-login>
+              <third-login (done)="closeLoginModal()"></third-login>
             </section>
           </form>
         </section>
@@ -279,6 +279,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (code == null) {
       return;
     }
+    if (!this.web.isWeb) {
+      window.electron.closeLogin(window.location.href);
+    }
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
     if (err) {
       this.store.clearAuth();
@@ -298,6 +301,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  closeLoginModal() {
+    this.isLoginModalVisible = false;
   }
   async e7odmm4Callback() {
     // * nzAfterClose event callback

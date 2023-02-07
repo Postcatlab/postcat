@@ -193,6 +193,7 @@ try {
       }
     }
   });
+  let loginWindow = null;
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ['on', 'handle'].forEach(eventName =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
@@ -219,6 +220,18 @@ try {
         returnValue = websocketPort;
       } else if (arg.action === 'getExtTabs') {
         returnValue = moduleManager.getExtTabs(arg.data.extName);
+      } else if (arg.action === 'loginWith') {
+        // * It is eletron, open a new window for login
+        loginWindow = new BrowserWindow({ width: 990, height: 655, autoHideMenuBar: true });
+        loginWindow.loadURL(arg.data);
+        returnValue = '';
+      } else if (arg.action === 'closeLogin') {
+        if (loginWindow != null) {
+          console.log('closeLogin', arg.data);
+          eoBrowserWindow.win.loadURL(arg.data);
+          loginWindow.destroy();
+          loginWindow = null;
+        }
       } else if (arg.action === 'getSidebarView') {
         returnValue = moduleManager.getSidebarView(arg.data.extName);
       } else if (arg.action === 'getSidebarViews') {
