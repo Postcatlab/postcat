@@ -23,6 +23,7 @@ export class NotificationService {
     }
 
     this.modal.create({
+      stayWhenRouterChange: true,
       nzTitle: $localize`Release Notes`,
       nzContent: $localize`There will be downtime updates from ${logInfo.startTime.getHours()}\:00 to ${logInfo.endTime.getHours()}\:00 today, and may be temporarily inaccessible.`
     });
