@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { NotificationService } from 'eo/workbench/browser/src/app/core/services/notification.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
@@ -83,22 +84,34 @@ export class AppModule {
     private mockService: MockService,
     private global: GlobalProvider,
     private theme: ThemeService,
-    private extensionService: ExtensionService
+    private extensionService: ExtensionService,
+    private notification: NotificationService
   ) {
     this.init();
-    this.mockService.init();
-    this.global.injectGlobalData();
+  }
+  async init() {
+    //* Init language
     if (APP_CONFIG.production) {
       this.lang.init();
     }
-  }
-  async init() {
+
+    //* Init theme
     const promiseSystem = this.theme.initTheme();
+    //* Init Extension
     await this.extensionService.init();
     this.theme.queryExtensionThemes();
+    //*Reset theme after theme/extension theme loading
     Promise.all([promiseSystem]).then(() => {
       this.theme.afterAllThemeLoad();
       this.theme.watchInstalledExtensionsChange();
     });
+
+    //* Init local mock server
+    this.mockService.init();
+    //* Inject extension global data
+    this.global.injectGlobalData();
+
+    //* Init notification
+    this.notification.init();
   }
 }

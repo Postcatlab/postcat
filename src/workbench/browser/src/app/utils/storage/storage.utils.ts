@@ -25,7 +25,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
      * @description 设置缓存
      * @param {string} key 缓存键
      * @param {*} value 缓存值
-     * @param expire
+     * @param expire unit second
      */
     set(key: string, value: any, expire: number | null = DEFAULT_CACHE_TIME) {
       const stringData = JSON.stringify({
