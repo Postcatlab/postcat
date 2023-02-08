@@ -64,7 +64,7 @@ export class ExtensionListComponent implements OnInit {
         return extensionSearch(list)(keyword);
       },
       official: async () => {
-        const [, data]: any = await this.extensionService.requestList('list', { author: 'Postcat', keyword });
+        const [{ data }]: any = await this.extensionService.requestList('list', { author: 'Postcat', keyword });
         return data;
       },
       all: async () => {
@@ -72,11 +72,11 @@ export class ExtensionListComponent implements OnInit {
         return data;
       },
       category: async () => {
-        const [, data]: any = await this.extensionService.requestList('list', { category, keyword });
+        const [{ data }]: any = await this.extensionService.requestList('list', { category, keyword });
         return data;
       },
       feature: async () => {
-        const [, data]: any = await this.extensionService.requestList('list', { feature, keyword });
+        const [{ data }]: any = await this.extensionService.requestList('list', { feature, keyword });
         return data;
       }
     };
