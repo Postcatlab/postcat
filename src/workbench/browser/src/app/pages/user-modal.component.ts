@@ -40,7 +40,7 @@ import { ModalService } from '../shared/services/modal.service';
     </nz-modal>
     <nz-modal
       [nzFooter]="null"
-      [nzWidth]="400"
+      [nzWidth]="450"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
       (nzAfterClose)="euu4ezrCallback()"
@@ -48,11 +48,12 @@ import { ModalService } from '../shared/services/modal.service';
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <section class="my-3">
+        <section class="my-3 px-5">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
               <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your email">
                 <input
+                  nzSize="large"
                   type="text"
                   #usernameLoginRef
                   eo-ng-input
@@ -65,7 +66,15 @@ import { ModalService } from '../shared/services/modal.service';
             </nz-form-item>
             <nz-form-item>
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
-                <input type="password" eo-ng-input formControlName="password" id="password" placeholder="Enter password" i18n-placeholder />
+                <input
+                  type="password"
+                  eo-ng-input
+                  formControlName="password"
+                  nzSize="large"
+                  id="password"
+                  placeholder="Enter password"
+                  i18n-placeholder
+                />
                 <ng-template #passwordErrorTpl let-control>
                   <ng-container *ngIf="control.hasError('required')" i18n> Please input your password </ng-container>
                   <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6 </ng-container>
@@ -82,6 +91,7 @@ import { ModalService } from '../shared/services/modal.service';
                 class="h-10 mt-2"
                 nzType="primary"
                 nzBlock
+                nzSize="large"
                 (click)="btnvz94ljCallback()"
                 i18n
               >

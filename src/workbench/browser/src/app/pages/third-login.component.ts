@@ -1,8 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)
 enum LoginType {
@@ -17,11 +18,11 @@ enum LoginType {
   template: ` <div class="">
       <nz-divider nzPlain [nzText]="text">
         <ng-template #text>
-          <i class="or">or</i>
+          <span class="or" i18n>or</span>
         </ng-template>
       </nz-divider>
     </div>
-    <div class="mb-4" *ngIf="store.isEn">
+    <div class="mb-4" *ngIf="lang.langHash === 'en'">
       <button
         eo-ng-button
         [nzLoading]="isLoginBtnBtnLoading"
@@ -29,6 +30,7 @@ enum LoginType {
         class="h-10"
         nzType="primary"
         nzBlock
+        nzSize="large"
         (click)="handleLogin('github')"
         nzGhost
         i18n
@@ -51,17 +53,20 @@ export class ThirdLoginComponent implements OnInit {
   @Output() readonly doneChange: EventEmitter<any> = new EventEmitter<boolean>();
   renderList = [];
   isLoginBtnBtnLoading = false;
-  constructor(private api: ApiService, private web: WebService, public store: StoreService) {}
+  constructor(private api: ApiService, private web: WebService, public lang: LanguageService) {}
   ngOnInit() {
-    autorun(() => {
-      // * It could use store.isZh and store.isEn
-      this.renderList = this.store.isZh
-        ? [
-            // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-            { logo: 'github.png', label: 'Github', type: 'github' }
-          ]
-        : [];
-    });
+    reaction(
+      () => this.lang.langHash,
+      lang => {
+        this.renderList =
+          lang === 'zh'
+            ? [
+                // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
+                { logo: 'github.png', label: 'Github', type: 'github' }
+              ]
+            : [];
+      }
+    );
   }
   logoLink(name) {
     return `url('https://cdn.eolink.com/10.7.3.4/ng14/assets/images/third_party/${name}')`;
