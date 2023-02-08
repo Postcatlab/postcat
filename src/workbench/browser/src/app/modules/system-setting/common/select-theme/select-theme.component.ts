@@ -43,7 +43,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
     </div>
     <eo-ng-feedback-alert class="block mt-[10px]" nzType="info" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
     <ng-template #templateRefMsg>
-      <div class="text" style="color: rgba(0, 0, 0, 0.45)"
+      <div class="text"
         >Can't find the {{ categoriesTipsMap.Themes.type }} you want?
         <a (click)="openExtension()">find more...</a>
       </div>

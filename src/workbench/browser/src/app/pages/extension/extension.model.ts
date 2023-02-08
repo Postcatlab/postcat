@@ -68,27 +68,28 @@ export type ContributionPoints = FeatureContributionPoints | CategoryContributio
 
 export const contributionPoints = Object.keys(featuresTipsMap).concat(Object.keys(categoriesTipsMap));
 
-export const extensionCates = [
-  {
-    key: categoriesTipsMap['Data Migration'].suggest,
-    title: $localize`Data Migration`,
-    isLeaf: true
-  },
-  {
-    key: categoriesTipsMap.Themes.suggest,
-    title: $localize`Themes`,
-    isLeaf: true
-  },
-  {
-    key: categoriesTipsMap['API Security'].suggest,
-    title: $localize`API Security`,
-    isLeaf: true
-  },
-  {
-    key: categoriesTipsMap.Other.suggest,
-    title: $localize`Other`,
-    isLeaf: true
-  }
-] as const;
+export const getExtensionCates = () =>
+  [
+    {
+      key: categoriesTipsMap['Data Migration'].suggest,
+      title: $localize`Data Migration`,
+      isLeaf: true
+    },
+    {
+      key: categoriesTipsMap.Themes.suggest,
+      title: $localize`Themes`,
+      isLeaf: true
+    },
+    {
+      key: categoriesTipsMap['API Security'].suggest,
+      title: $localize`API Security`,
+      isLeaf: true
+    },
+    {
+      key: categoriesTipsMap.Other.suggest,
+      title: $localize`Other`,
+      isLeaf: true
+    }
+  ] as const;
 
 export const suggestList = Object.values({ ...categoriesTipsMap, ...featuresTipsMap }).map(n => n.suggest);

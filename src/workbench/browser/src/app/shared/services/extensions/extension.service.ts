@@ -21,7 +21,7 @@ export class ExtensionService {
   extensionIDs: string[] = [];
   HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ExtensionInfo[] = [];
-  installedMap: Map<string, ExtensionInfo>;
+  installedMap: Map<string, ExtensionInfo> = new Map();
   private requestPending: Subscription | null = null;
   constructor(
     private http: HttpClient,

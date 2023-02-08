@@ -6,7 +6,7 @@ import { ExtensionService } from '../../../shared/services/extensions/extension.
 import { ContributionPointsPrefix, ExtensionGroupType, suggestList } from '../extension.model';
 
 const extensionSearch = list => {
-  return (keyword: string) => {
+  return (keyword = '') => {
     return list.filter(it => {
       if (keyword) {
         return it.name.includes(keyword) || it.keywords?.includes(keyword);
@@ -36,6 +36,7 @@ export class ExtensionListComponent implements OnInit {
         type = 'category';
         this.category = this.type.slice(ContributionPointsPrefix.category.length);
       }
+      this.extensionList = [];
       this.extensionList = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
     });
   }
@@ -81,7 +82,8 @@ export class ExtensionListComponent implements OnInit {
       }
     };
     try {
-      return await func[groupType]();
+      const result = await func[groupType]();
+      return result;
     } catch (error) {
     } finally {
       this.loading = false;

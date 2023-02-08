@@ -5,7 +5,7 @@ import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 import { ExtensionService } from '../../shared/services/extensions/extension.service';
-import { extensionCates, ExtensionGroupType, suggestList } from './extension.model';
+import { getExtensionCates, ExtensionGroupType, suggestList } from './extension.model';
 @Component({
   selector: 'eo-extension',
   templateUrl: './extension.component.html',
@@ -30,7 +30,7 @@ export class ExtensionComponent implements OnInit {
       title: $localize`Official`,
       isLeaf: true
     },
-    ...extensionCates,
+    ...getExtensionCates(),
     {
       key: 'installed',
       title: $localize`Installed`,

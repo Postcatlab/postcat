@@ -17,7 +17,7 @@
               <div class="flex items-center ml-[20px]">
                 <span class="flex-1 font-bold truncate" [title]="it.title">{{ it.title }}</span>
                 <div *ngIf="type === 'installed'">
-                  <nz-tag [nzColor]="'#302f2f73'">v{{ it.version }}</nz-tag>
+                  <nz-tag [nzColor]="'default'">v{{ it.version }}</nz-tag>
                 </div>
                 <div *ngIf="type !== 'installed'">
                   <span
@@ -33,10 +33,12 @@
                   <nz-divider nzType="vertical"></nz-divider>
                 </ng-template>
                 <span *nzSpaceItem>{{ it.author }}</span>
-                <span class="flex items-center" *nzSpaceItem>
-                  <eo-iconpark-icon class="mr-[5px]" name="download-two" size="14px"></eo-iconpark-icon>
-                  {{ it.downloadCounts | downloadCountFormater }}
-                </span>
+                <ng-container *ngIf="type !== 'installed'">
+                  <span class="flex items-center" *nzSpaceItem>
+                    <eo-iconpark-icon class="mr-[5px]" name="download-two" size="14px"></eo-iconpark-icon>
+                    {{ it.downloadCounts | downloadCountFormater }}
+                  </span>
+                </ng-container>
               </nz-space>
             </div>
           </div>
