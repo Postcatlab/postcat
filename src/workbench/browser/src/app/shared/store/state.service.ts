@@ -92,12 +92,12 @@ export class StoreService {
   }
 
   @computed get isZh() {
-    return this.url.includes('/zh/');
+    return this.url.includes('/zh/home/');
   }
 
   @computed get isEn() {
-    // return this.url.includes('/en/');
-    return !this.url.includes('/zh/');
+    // return this.url.includes('/en/home/');
+    return !this.url.includes('/zh/home/');
   }
 
   // ? data source
