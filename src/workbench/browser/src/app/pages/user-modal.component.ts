@@ -2,7 +2,7 @@ import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/co
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -191,7 +191,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private web: WebService,
     private remote: RemoteService,
-    private localService: LocalService
+    private localService: LocalService,
+    private electron: ElectronService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -282,12 +283,12 @@ export class UserModalComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.web.isWeb) {
+      window.electron.closeLogin(window.location.href);
+    }
     const { code } = this.route.snapshot.queryParams;
     if (code == null) {
       return;
-    }
-    if (!this.web.isWeb) {
-      window.electron.closeLogin(window.location.href);
     }
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
     if (err) {

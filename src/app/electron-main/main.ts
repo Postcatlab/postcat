@@ -222,12 +222,20 @@ try {
         returnValue = moduleManager.getExtTabs(arg.data.extName);
       } else if (arg.action === 'loginWith') {
         // * It is eletron, open a new window for login
-        loginWindow = new BrowserWindow({ width: 990, height: 655, autoHideMenuBar: true });
+        loginWindow = new BrowserWindow({
+          width: 990,
+          height: 655,
+          autoHideMenuBar: true,
+          webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: false,
+            preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
+          }
+        });
         loginWindow.loadURL(arg.data);
         returnValue = '';
       } else if (arg.action === 'closeLogin') {
         if (loginWindow != null) {
-          console.log('closeLogin', arg.data);
           eoBrowserWindow.win.loadURL(arg.data);
           loginWindow.destroy();
           loginWindow = null;
