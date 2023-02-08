@@ -1,7 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)
 enum LoginType {
@@ -52,13 +53,15 @@ export class ThirdLoginComponent implements OnInit {
   isLoginBtnBtnLoading = false;
   constructor(private api: ApiService, private web: WebService, public store: StoreService) {}
   ngOnInit() {
-    // * It could use store.isZh and store.isEn
-    this.renderList = this.store.isZh
-      ? [
-          // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-          { logo: 'github.png', label: 'Github', type: 'github' }
-        ]
-      : [];
+    autorun(() => {
+      // * It could use store.isZh and store.isEn
+      this.renderList = this.store.isZh
+        ? [
+            // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
+            { logo: 'github.png', label: 'Github', type: 'github' }
+          ]
+        : [];
+    });
   }
   logoLink(name) {
     return `url('https://cdn.eolink.com/10.7.3.4/ng14/assets/images/third_party/${name}')`;
