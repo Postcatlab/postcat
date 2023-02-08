@@ -23,7 +23,7 @@
               <span *nzSpaceItem nz-typography>{{ extensionDetail.author }}</span>
               <span *nzSpaceItem nz-typography>
                 <eo-iconpark-icon name="download-two" size="16px"></eo-iconpark-icon>
-                {{ extensionDetail.downloadCounts }}
+                {{ extensionDetail.downloadCounts | downloadCountFormater }}
               </span>
             </nz-space>
           </div>
