@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)
 enum LoginType {
@@ -12,12 +13,27 @@ enum LoginType {
 
 @Component({
   selector: 'third-login',
-  template: ` <div class="py-4">
+  template: ` <div class="">
       <nz-divider nzPlain [nzText]="text">
         <ng-template #text>
           <i class="or">or</i>
         </ng-template>
       </nz-divider>
+    </div>
+    <div class="mb-4" *ngIf="store.isEn">
+      <button
+        eo-ng-button
+        [nzLoading]="isLoginBtnBtnLoading"
+        type="submit"
+        class="h-10"
+        nzType="primary"
+        nzBlock
+        (click)="handleLogin('github')"
+        nzGhost
+        i18n
+      >
+        Sign In/Up with Github
+      </button>
     </div>
     <div class="flex justify-evenly">
       <button
@@ -33,17 +49,21 @@ enum LoginType {
 export class ThirdLoginComponent implements OnInit {
   @Output() readonly doneChange: EventEmitter<any> = new EventEmitter<boolean>();
   renderList = [];
-  constructor(private api: ApiService, private web: WebService) {}
+  isLoginBtnBtnLoading = false;
+  constructor(private api: ApiService, private web: WebService, public store: StoreService) {}
   ngOnInit() {
     // * It could use store.isZh and store.isEn
-    this.renderList = [
-      { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-      { logo: 'github.png', label: 'Github', type: 'github' }
-    ];
+    this.renderList = this.store.isZh
+      ? [
+          // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
+          { logo: 'github.png', label: 'Github', type: 'github' }
+        ]
+      : [];
   }
   logoLink(name) {
     return `url('https://cdn.eolink.com/10.7.3.4/ng14/assets/images/third_party/${name}')`;
   }
+
   async handleLogin(type) {
     // * get login url
     const [res, err] = await this.api.api_userThirdLogin({

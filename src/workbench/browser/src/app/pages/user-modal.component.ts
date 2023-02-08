@@ -51,7 +51,6 @@ import { ModalService } from '../shared/services/modal.service';
         <section class="my-3">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
-              <nz-form-label i18n nzFor="username">Email</nz-form-label>
               <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your email">
                 <input
                   type="text"
@@ -64,9 +63,7 @@ import { ModalService } from '../shared/services/modal.service';
                 />
               </nz-form-control>
             </nz-form-item>
-
             <nz-form-item>
-              <nz-form-label i18n nzFor="password">Password</nz-form-label>
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
                 <input type="password" eo-ng-input formControlName="password" id="password" placeholder="Enter password" i18n-placeholder />
                 <ng-template #passwordErrorTpl let-control>
