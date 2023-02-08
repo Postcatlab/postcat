@@ -43,7 +43,10 @@ export class ExtensionSelectComponent {
   }
 
   openExtension() {
-    this.messageService.send({ type: 'open-extension', data: { suggest: this.tipsMap[this.tipsType]?.suggest } });
+    this.messageService.send({
+      type: 'open-extension',
+      data: { suggest: this.tipsMap[this.tipsType]?.suggest }
+    });
   }
 
   parserFile = file =>

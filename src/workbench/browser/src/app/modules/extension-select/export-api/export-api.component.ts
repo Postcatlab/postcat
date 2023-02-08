@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { has } from 'lodash-es';
+import { Subject, takeUntil } from 'rxjs';
 
 // shit angular-cli 配不明白
 // import { version } from '../../../../../../../../package.json' assert { type: 'json' };
@@ -17,10 +19,22 @@ export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(private extensionService: ExtensionService, private apiService: ApiService) {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
-  }
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor(private extensionService: ExtensionService, private apiService: ApiService, private messageService: MessageService) {}
   ngOnInit(): void {
+    this.initData();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        if (inArg.type === 'installedExtensionsChange') {
+          this.initData();
+        }
+      });
+  }
+  initData = () => {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
+    this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
         key,
@@ -32,7 +46,7 @@ export class ExportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  }
+  };
   submit(callback: () => boolean) {
     this.export(callback);
   }
