@@ -17,6 +17,7 @@ export class ExtensionComponent implements OnInit {
   @Input() keyword = '';
   @Input() nzSelectedKeys: Array<number | string> = ['all'];
   category = '';
+  nzSelectedIndex = 0;
   searchOptions = [];
   treeNodes: NzTreeNodeOptions[] = [
     {
@@ -63,6 +64,9 @@ export class ExtensionComponent implements OnInit {
 
   selectExtension(ext = null) {
     this.setExtension(ext);
+    if (Number.isInteger(ext?.nzSelectedIndex)) {
+      this.nzSelectedIndex = ext?.nzSelectedIndex;
+    }
   }
   /**
    * Group tree item click.

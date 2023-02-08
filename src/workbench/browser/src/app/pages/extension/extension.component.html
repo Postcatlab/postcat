@@ -43,5 +43,10 @@
     [type]="selectGroup"
     (selectChange)="selectExtension($event)"
   ></eo-extension-list>
-  <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
+  <eo-extension-detail
+    *ngIf="hasExtension"
+    [extensionData]="getExtension"
+    [nzSelectedIndex]="nzSelectedIndex"
+    (goBack)="selectExtension()"
+  ></eo-extension-detail>
 </section>

@@ -47,10 +47,12 @@
         <div class="flex items-center justify-between" *ngIf="type === 'installed'">
           <div>
             <ng-container *ngIf="it.features?.configuration">
-              <a eo-ng-button nzType="link" i18n>Setting</a>
+              <a eo-ng-button nzType="link" i18n (click)="clickExtension($event, it, 0)">Setting</a>
               <nz-divider nzType="vertical"></nz-divider>
             </ng-container>
-            <a eo-ng-button nzType="link"><span data-id="details" i18n="@@ExtensionDetail">Details</span></a>
+            <a eo-ng-button nzType="link" (click)="clickExtension($event, it, it.features?.configuration ? 1 : 0)"
+              ><span data-id="details" i18n="@@ExtensionDetail">Details</span></a
+            >
           </div>
           <eo-ng-switch
             click-stop-propagation

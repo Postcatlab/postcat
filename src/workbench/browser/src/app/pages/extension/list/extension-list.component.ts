@@ -45,7 +45,9 @@ export class ExtensionListComponent implements OnInit {
       this.extensionList = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
     });
   }
-  clickExtension(event, item) {
+  clickExtension(event: MouseEvent, item, nzSelectedIndex?) {
+    event.stopPropagation();
+    item.nzSelectedIndex = nzSelectedIndex;
     this.selectChange.emit(item);
   }
   async searchPlugin(groupType, { keyword = '', category = '', feature = '' }) {

@@ -16,12 +16,12 @@ import { EoExtensionInfo } from '../extension.model';
 export class ExtensionDetailComponent implements OnInit {
   @Input() extensionData: ExtensionInfo | null = null;
   @Output() readonly goBack: EventEmitter<any> = new EventEmitter();
+  @Input() nzSelectedIndex = 0;
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
-  nzSelectedIndex = 0;
 
   changeLog = '';
   changeLogNotFound = false;
@@ -44,6 +44,8 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
+    const nzSelectedIndex = this.nzSelectedIndex;
+    this.nzSelectedIndex = -1;
     this.extensionDetail = { ...this.extensionDetail, ...this.extensionData };
     if (this.electron.isElectron) {
       this.isOperating = window.electron.getInstallingExtension(this.extensionData?.name, ({ type, status }) => {
@@ -56,17 +58,20 @@ export class ExtensionDetailComponent implements OnInit {
         this.isOperating = false;
       });
     }
+
     this.extensionDetail = await this.extensionService.getDetail(this.extensionData?.name);
     if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
     }
+
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
 
-    if (this.extensionDetail?.features?.configuration) {
-      this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
-    }
     this.fetchChangelog(this.language.systemLanguage);
+
+    setTimeout(() => {
+      this.nzSelectedIndex = nzSelectedIndex;
+    });
   }
 
   async fetchChangelog(locale = '') {

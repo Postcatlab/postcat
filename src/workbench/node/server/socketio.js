@@ -45,17 +45,22 @@ const socket = (port = _post) => {
         const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(request.uri.trim())
           ? request.uri.trim()
           : request.protocol + '://' + request.uri.trim().replace('//', '');
-        ws = new WebSocket(link, {
-          headers: request?.requestParams.headerParams
-            ?.filter(it => it.name && it.value)
-            .reduce(
-              (total, { name, value }) => ({
-                ...total,
-                [name]: value
-              }),
-              {}
-            )
-        });
+        try {
+          ws = new WebSocket(link, {
+            headers: request?.requestParams.headerParams
+              ?.filter(it => it.name && it.value)
+              .reduce(
+                (total, { name, value }) => ({
+                  ...total,
+                  [name]: value
+                }),
+                {}
+              )
+          });
+        } catch (error) {
+          socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
+        }
+
         ws.on('error', err => {
           socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
           unlisten();
