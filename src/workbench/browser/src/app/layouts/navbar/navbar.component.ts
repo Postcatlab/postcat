@@ -40,7 +40,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   openExtension(data?) {
     this.modalService.create({
       nzClassName: 'eo-extension-modal',
-      nzWidth: '80%',
+      nzWidth: '85%',
       nzTitle: $localize`Extensions Hub`,
       nzComponentParams: {
         keyword: data?.suggest || '',
