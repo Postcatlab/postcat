@@ -30,12 +30,12 @@ export class ExtensionComponent implements OnInit {
       title: $localize`Official`,
       isLeaf: true
     },
+    ...extensionCates,
     {
       key: 'installed',
       title: $localize`Installed`,
       isLeaf: true
-    },
-    ...extensionCates
+    }
   ];
 
   @computed get hasExtension() {

@@ -41,10 +41,13 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
         </div>
       </div>
     </div>
-    <div class="h-4 my-2 text" style="color: rgba(0, 0, 0, 0.45)"
-      >Can't find the {{ categoriesTipsMap.Themes.type }} you want?
-      <a (click)="openExtension()">find more...</a>
-    </div> `,
+    <eo-ng-feedback-alert class="block mt-[10px]" nzType="info" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+    <ng-template #templateRefMsg>
+      <div class="text" style="color: rgba(0, 0, 0, 0.45)"
+        >Can't find the {{ categoriesTipsMap.Themes.type }} you want?
+        <a (click)="openExtension()">find more...</a>
+      </div>
+    </ng-template> `,
   styleUrls: ['./select-theme.component.scss']
 })
 export class SelectThemeComponent {

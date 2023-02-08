@@ -33,7 +33,7 @@
   }
 
   .ant-tabs-nav-list {
-    margin-left: 20px;
+    margin-left: 12px;
   }
 
   .ant-tabs {
@@ -56,7 +56,7 @@
   }
 
   .tab-content-container {
-    @apply w-4/5 m-auto;
+    @apply px-[20px] m-auto;
   }
 
   .md-preview {
