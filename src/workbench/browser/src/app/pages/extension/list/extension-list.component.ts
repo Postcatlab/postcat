@@ -31,6 +31,11 @@ export class ExtensionListComponent implements OnInit {
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
+      if (this.keyword) {
+        const notCompleteSuggest = suggestList.some(n => n.startsWith(this.keyword) && this.keyword !== n);
+        if (notCompleteSuggest) return;
+      }
+
       let type = this.type;
       if (type.startsWith(ContributionPointsPrefix.category)) {
         type = 'category';
