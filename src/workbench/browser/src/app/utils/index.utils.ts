@@ -327,3 +327,11 @@ export const waitNextTick = () =>
   new Promise(resolve => {
     setTimeout(() => resolve(true), 0);
   });
+
+export const getUrlParams = url => {
+  const u = new URL(url);
+  const s = new URLSearchParams(u.search);
+  const obj = {};
+  s.forEach((v, k) => (obj[k] = v));
+  return obj;
+};

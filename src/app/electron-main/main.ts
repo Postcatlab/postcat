@@ -236,7 +236,8 @@ try {
         returnValue = '';
       } else if (arg.action === 'closeLogin') {
         if (loginWindow != null) {
-          eoBrowserWindow.win.loadURL(arg.data);
+          console.log('arg.data', arg.data);
+          arg.data && eoBrowserWindow.win.loadURL(arg.data);
           loginWindow.destroy();
           loginWindow = null;
         }

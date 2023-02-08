@@ -10,6 +10,7 @@ import { LocalService } from 'eo/workbench/browser/src/app/shared/services/stora
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { getUrlParams } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
@@ -282,8 +283,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (this.store.isShare) {
       return;
     }
-
     if (!this.web.isWeb) {
+      // const { code }: any = getUrlParams(window.location.href);
+      // const [, err] = await this.api.api_userThirdLoginResult({ code });
+      // window.electron.closeLogin(code == null || err ? '' : window.location.href);
       window.electron.closeLogin(window.location.href);
     }
     const { code } = this.route.snapshot.queryParams;
