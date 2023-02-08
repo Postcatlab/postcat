@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "start": "npm-run-all -p start:testServer start:zh",
+    "start": "npm-run-all -p start:testServer start:en",
     "start:en": "ng serve --hmr -c dev -o",
     "start:zh": "ng serve --hmr -c devCn -o",
     "start:direct": "ng serve --hmr -c dev",
