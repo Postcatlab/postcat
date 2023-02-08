@@ -54,6 +54,11 @@ export class ExtensionComponent implements OnInit {
 
   onInput(value: string): void {
     this.searchOptions = value.trim() ? suggestList.filter(n => n.startsWith(value)) : [];
+    const suggest = suggestList.find(n => n.startsWith(value));
+    const node = this.treeNodes.find(n => n.key === suggest);
+    if (suggest && node) {
+      this.nzSelectedKeys = [node.key];
+    }
   }
 
   selectExtension(ext = null) {
@@ -66,6 +71,9 @@ export class ExtensionComponent implements OnInit {
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
     const { key } = event.node.origin;
+    if (this.selectGroup !== key) {
+      this.keyword = '';
+    }
     this.selectExtension('');
     this.setGroup(key);
   }
