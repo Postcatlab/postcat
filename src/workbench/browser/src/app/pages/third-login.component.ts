@@ -55,18 +55,15 @@ export class ThirdLoginComponent implements OnInit {
   isLoginBtnBtnLoading = false;
   constructor(private api: ApiService, private web: WebService, public lang: LanguageService) {}
   ngOnInit() {
-    reaction(
-      () => this.lang.langHash,
-      lang => {
-        this.renderList =
-          lang === 'zh'
-            ? [
-                // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-                { logo: 'github.png', label: 'Github', type: 'github' }
-              ]
-            : [];
-      }
-    );
+    autorun(() => {
+      this.renderList =
+        this.lang.langHash === 'zh'
+          ? [
+              // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
+              { logo: 'github.png', label: 'Github', type: 'github' }
+            ]
+          : [];
+    });
   }
   logoLink(name) {
     return `url('https://cdn.eolink.com/10.7.3.4/ng14/assets/images/third_party/${name}')`;
