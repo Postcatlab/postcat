@@ -4,10 +4,10 @@
 !define INSTALL_APPEND_PATH         "Postcat"	  #安装路径追加的名称
 !define INSTALL_DEFALT_SETUPPATH    ""       #默认生成的安装路径
 !define EXE_NAME               		"Postcat.exe"
-!define PRODUCT_VERSION        		"0.0.2.0-beta" # 这里的版本是通过脚本动态生成的，不要改
+!define PRODUCT_VERSION        		"0.1.0.0" # 这里的版本是通过脚本动态生成的，不要改
 !define PRODUCT_PUBLISHER      		"Postcat"
 !define PRODUCT_LEGAL          		"Postcat Copyright（c）2022"
-!define INSTALL_OUTPUT_NAME    		"Postcat-Setup-0.0.2-beta.exe" # 这里的版本是通过脚本动态生成的，不要改
+!define INSTALL_OUTPUT_NAME    		"Postcat-Setup-0.1.0.exe" # 这里的版本是通过脚本动态生成的，不要改
 
 # ====================== 自定义宏 安装信息==============================
 !define INSTALL_7Z_PATH 	   		"..\app.7z"

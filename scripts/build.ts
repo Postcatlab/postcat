@@ -72,16 +72,16 @@ const config: Configuration = {
   ],
   win: {
     icon: 'src/app/common/images/logo.ico',
-    verifyUpdateCodeSignature: false,
-    signingHashAlgorithms: ['sha256'],
-    signDlls: false,
-    certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
-    target: ['nsis', 'portable'],
-    sign(configuration, packager) {
-      // console.log('configuration', configuration);
-      signOptions = [configuration, packager!];
-      return doSign(configuration, packager!);
-    }
+    // verifyUpdateCodeSignature: false,
+    // signingHashAlgorithms: ['sha256'],
+    // signDlls: false,
+    // certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
+    target: ['nsis', 'portable']
+    // sign(configuration, packager) {
+    //   // console.log('configuration', configuration);
+    //   signOptions = [configuration, packager!];
+    //   return doSign(configuration, packager!);
+    // }
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
@@ -117,18 +117,18 @@ const signWindows = async () => {
   if (process.platform !== 'win32') return;
 
   // 给卸载程序签名
-  signOptions[0] = {
-    ...signOptions[0],
-    path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
-  };
-  await sign(...signOptions);
+  // signOptions[0] = {
+  //   ...signOptions[0],
+  //   path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
+  // };
+  // await sign(...signOptions);
 
   copyFileSync(
     path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
     path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
   );
   // 生成 自定义安装包
-  exec(`yarn wininstaller`);
+  // exec(`yarn wininstaller`);
 
   const ls = spawn('yarn', ['wininstaller'], {
     // 仅在当前运行环境为 Windows 时，才使用 shell
@@ -136,13 +136,14 @@ const signWindows = async () => {
   });
 
   ls.stdout.on('data', async data => {
+    console.log(decoder.decode(data));
     if (decoder.decode(data).includes('请按任意键继续')) {
       // 给自定义安装包签名
-      signOptions[0] = {
-        ...signOptions[0],
-        path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
-      };
-      await sign(...signOptions);
+      // signOptions[0] = {
+      //   ...signOptions[0],
+      //   path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
+      // };
+      // await sign(...signOptions);
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
