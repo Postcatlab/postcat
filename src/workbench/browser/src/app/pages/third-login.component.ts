@@ -73,7 +73,7 @@ export class ThirdLoginComponent implements OnInit {
     // * get login url
     const [res, err] = await this.api.api_userThirdLogin({
       type: LoginType[type],
-      redirectUri: window.location.href.split('?').at(0),
+      redirectUri: this.web.isWeb ? window.location.href.split('?').at(0) : 'https://postcat.com',
       appType: 0,
       client: 0
     });
