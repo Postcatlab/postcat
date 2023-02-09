@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, macos-12, ubuntu-latest]
+        os: [windows-latest, macos-12, ubuntu-latest]
 
     steps:
       - name: Check out git repository
