@@ -17,9 +17,6 @@ window.electron = {
   loginWith(data) {
     return ipcRenderer.sendSync('eo-sync', { action: 'loginWith', data });
   },
-  closeLogin(data) {
-    return ipcRenderer.sendSync('eo-sync', { action: 'closeLogin', data });
-  },
   getSystemInfo() {
     return ipcRenderer.sendSync('get-system-info');
   },

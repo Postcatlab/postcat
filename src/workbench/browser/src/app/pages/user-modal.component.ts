@@ -283,12 +283,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (this.store.isShare) {
       return;
     }
-    if (!this.web.isWeb) {
-      // const { code }: any = getUrlParams(window.location.href);
-      // const [, err] = await this.api.api_userThirdLoginResult({ code });
-      // window.electron.closeLogin(code == null || err ? '' : window.location.href);
-      window.electron.closeLogin(window.location.href);
-    }
     const { code } = this.route.snapshot.queryParams;
     if (code == null) {
       return;
