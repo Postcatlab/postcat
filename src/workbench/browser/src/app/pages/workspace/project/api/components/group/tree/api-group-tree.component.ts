@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
+import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
@@ -20,9 +21,7 @@ import { ApiStoreService } from '../../../service/store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
-const getAllAPIId = ({ id, children = [] }) => {
-  return [id, ...children.map(getAllAPIId)];
-};
+const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllAPIId)];
 @Component({
   selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -82,6 +81,7 @@ export class ApiGroupTreeComponent implements OnInit {
     private modalService: ModalService,
     private router: Router,
     private route: ActivatedRoute,
+    private tab: ApiTabService,
     private message: EoNgFeedbackMessageService
   ) {}
 
@@ -140,8 +140,10 @@ export class ApiGroupTreeComponent implements OnInit {
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
       nzOnOk: () => {
-        console.log('this.apiGroupTree', params.group);
-        // const idList = getAllAPIId(params.group)
+        if (params.action === 'delete') {
+          const idList = [...new Set(getAllAPIId(params.group).flat(Infinity))];
+          this.tab.batchCloseTabById(idList);
+        }
         return modal.componentInstance.submit().then(data => {
           if (params.action !== 'new') return;
           this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];

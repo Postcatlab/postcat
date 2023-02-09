@@ -105,6 +105,13 @@ export class ApiTabService {
       }
     }
   }
+  batchCloseTabById(uuidList) {
+    const result = this.apiTabComponent
+      .getTabs()
+      .filter(it => uuidList.includes(it.params.uuid))
+      .map(it => it.uuid);
+    this.apiTabComponent.batchCloseTab(result);
+  }
   onChildComponentInit(componentRef) {
     this.componentRef = componentRef;
   }
