@@ -12,14 +12,15 @@ export class EnvironmentService extends BaseService<Environment> {
   @ApiResponse()
   create(params: any) {
     if (params.name?.length > 32) {
-      throw new ResObj(null, { code: 131000001, message: 'Environment name length needs to be less than 32' });
+      throw new ResObj(null, { code: 131000001, message: $localize`Environment name length needs to be less than 32` });
     }
     return this.baseService.create(params);
   }
 
+  @ApiResponse()
   update(params: any) {
     if (params.name?.length > 32) {
-      throw new ResObj(null, { code: 131000001, message: 'Environment name length needs to be less than 32' });
+      throw new ResObj(null, { code: 131000001, message: $localize`Environment name length needs to be less than 32` });
     }
     return this.baseService.update(params);
   }
