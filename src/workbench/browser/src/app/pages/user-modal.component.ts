@@ -282,35 +282,28 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (this.store.isShare) {
       return;
     }
+    // * pc
     this.electron?.ipcRenderer?.on('thirdLoginCallback', async (event, args) => {
       if (!args.isSuccess) return;
       const code = args.code;
       if (code == null) {
         return;
       }
-
-      const [data, err] = await this.api.api_userThirdLoginResult({ code });
-      if (err) {
-        this.store.clearAuth();
-        return;
-      }
-      this.store.setLoginInfo(data);
-      this.effect.updateWorkspaceList();
-      {
-        // * set user info
-        const [data, err]: any = await this.api.api_userReadInfo({});
-        if (err) {
-          return;
-        }
-        this.store.setUserProfile(data);
-      }
-      this.isLoginModalVisible = false;
+      await this.thirdLogin(code);
     });
+
+    // * web
     const { code } = this.route.snapshot.queryParams;
     if (code == null) {
       return;
     }
-
+    await this.thirdLogin(code);
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  async thirdLogin(code) {
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
     if (err) {
       this.store.clearAuth();
@@ -326,10 +319,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
       }
       this.store.setUserProfile(data);
     }
-  }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
   closeLoginModal() {
     this.isLoginModalVisible = false;
