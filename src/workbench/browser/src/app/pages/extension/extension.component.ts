@@ -56,7 +56,9 @@ export class ExtensionComponent implements OnInit {
       (value, oldValue) => {
         const isSuggest = suggestList.some(n => oldValue && n.startsWith(oldValue));
         if (value.trim() === '' && isSuggest) {
+          const node = this.treeNodes.find(n => n.key === 'all');
           this.nzSelectedKeys = ['all'];
+          node && this.setGroup(node.key);
         }
       }
     );
