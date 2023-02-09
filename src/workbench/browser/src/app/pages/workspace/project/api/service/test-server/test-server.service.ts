@@ -28,7 +28,7 @@ export abstract class TestServerService implements TestServer {
         .map((val: BodyParam) => ({
           checkbox: !!val.isRequired,
           headerName: val.name,
-          headerValue: val.paramAttr?.example
+          headerValue: val['paramAttr.example'] || val.paramAttr?.example
         }));
     };
     const formatBody = (inData: Partial<ApiData>) => {
