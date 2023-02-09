@@ -259,7 +259,6 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
           this.wsStatus = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
-          console.log('reqHeader', reqHeader);
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {
