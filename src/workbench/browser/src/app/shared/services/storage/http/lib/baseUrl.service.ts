@@ -27,7 +27,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),
-      map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data, code: event.body.code } })),
+      map((event: HttpResponse<any>) =>
+        event.clone({ body: { status: 200, message: event.body.message, data: event.body.data, code: event.body.code } })
+      ),
       tap((event: any) => {
         const { code } = event.body;
         const isLocal = this.store.isLocal;

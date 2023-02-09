@@ -24,9 +24,8 @@ export abstract class TestServerService implements TestServer {
         return [];
       }
       return inArr
-        .filter(val => val.name)
+        .filter(val => val.name && val.isRequired)
         .map((val: BodyParam) => ({
-          checkbox: !!val.isRequired,
           headerName: val.name,
           headerValue: val['paramAttr.example'] || val.paramAttr?.example
         }));
@@ -39,9 +38,8 @@ export abstract class TestServerService implements TestServer {
         }
         case ApiBodyType['FormData']: {
           return inData.requestParams.bodyParams
-            .filter(val => val.name)
+            .filter(val => val.name && val.isRequired)
             .map(val => ({
-              checkbox: !!val.isRequired,
               listDepth: 0,
               paramKey: val.name,
               //@ts-ignore
@@ -77,7 +75,7 @@ export abstract class TestServerService implements TestServer {
     if (rootType !== -1) {
       result.apiRequestParamJsonType = rootType.toString();
     }
-    // pcConsole.log('formatRequestData',result);
+    // pcConsole.log('formatRequestData', result);
     return result;
   }
   formatResponseData({ globals, report, history, id }): TestServerRes {

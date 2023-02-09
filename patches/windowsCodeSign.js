@@ -148,7 +148,9 @@ function computeSignToolArgs(options, isWin, vm = new vm_1.VmManager()) {
   if (!isWin) {
     options.resultOutputPath = outputPath;
   }
-  const args = isWin ? ['sign'] : ['-in', inputFile, '-out', outputPath];
+  // const args = isWin ? ['sign'] : ['-in', inputFile, '-out', outputPath];
+  const args = isWin ? ['-pin', 'MUQHWNFG', 'sign'] : ['-in', inputFile, '-out', outputPath];
+
   if (process.env.ELECTRON_BUILDER_OFFLINE !== 'true') {
     const timestampingServiceUrl = options.options.timeStampServer || 'http://timestamp.digicert.com';
     if (isWin) {

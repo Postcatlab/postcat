@@ -33,6 +33,7 @@ export class EffectService {
   }
   async init() {
     const result = await db.workspace.read();
+    result.data.title = $localize`Personal Workspace`;
     this.store.setLocalWorkspace(result.data as API.Workspace);
     const isUserFirstUse = !this.store.getCurrentWorkspaceUuid;
 

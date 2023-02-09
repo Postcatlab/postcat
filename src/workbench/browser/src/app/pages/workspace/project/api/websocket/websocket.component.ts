@@ -201,8 +201,29 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
       return;
     }
     {
-      const { requestTabIndex, msg, ...data } = this.model;
-      this.socket.emit('ws-server', { type: 'ws-connect', content: data });
+      const {
+        requestTabIndex,
+        msg,
+        request: {
+          requestParams: { headerParams, ...requestParamsItem },
+          ...requestItem
+        },
+        ...data
+      } = this.model;
+      // * For 'paramAttr.example' key
+      this.socket.emit('ws-server', {
+        type: 'ws-connect',
+        content: {
+          ...data,
+          request: {
+            ...requestItem,
+            requestParams: {
+              ...requestParamsItem,
+              headerParams: headerParams.map(it => ({ ...it, paramAttr: { example: it['paramAttr.example'] || '' } }))
+            }
+          }
+        }
+      });
     }
     this.listen();
   }
@@ -238,6 +259,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
           this.wsStatus = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
+          console.log('reqHeader', reqHeader);
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {

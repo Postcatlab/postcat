@@ -95,7 +95,6 @@ class EoBrowserWindow {
     });
   }
   public loadURL() {
-    console.log('loadURL');
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
@@ -193,6 +192,7 @@ try {
       }
     }
   });
+  let loginWindow = null;
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ['on', 'handle'].forEach(eventName =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
@@ -219,6 +219,40 @@ try {
         returnValue = websocketPort;
       } else if (arg.action === 'getExtTabs') {
         returnValue = moduleManager.getExtTabs(arg.data.extName);
+      } else if (arg.action === 'loginWith') {
+        // * It is eletron, open a new window for login
+        if (loginWindow) {
+          loginWindow.destroy();
+          loginWindow = null;
+        }
+        loginWindow = new BrowserWindow({
+          width: 990,
+          height: 655,
+          autoHideMenuBar: true,
+          webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: false,
+            preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
+          }
+        });
+        loginWindow.loadURL(arg.data.url);
+
+        //* Watch the login result
+        loginWindow.webContents.on('did-navigate', ($event, url = '') => {
+          const isError = url.includes('request-errors');
+          const isSuccess = url.includes('code=');
+          if (isError || isSuccess) {
+            loginWindow?.destroy();
+            loginWindow = null;
+            const querys = new URLSearchParams(url.split('?')?.[1]);
+            eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
+              isSuccess: isSuccess,
+              code: querys?.get('code')
+            });
+          }
+        });
+
+        returnValue = '';
       } else if (arg.action === 'getSidebarView') {
         returnValue = moduleManager.getSidebarView(arg.data.extName);
       } else if (arg.action === 'getSidebarViews') {

@@ -1,8 +1,8 @@
 import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -10,6 +10,7 @@ import { LocalService } from 'eo/workbench/browser/src/app/shared/services/stora
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { getUrlParams } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
@@ -40,20 +41,20 @@ import { ModalService } from '../shared/services/modal.service';
     </nz-modal>
     <nz-modal
       [nzFooter]="null"
-      [nzWidth]="400"
+      [nzWidth]="450"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
       (nzAfterClose)="euu4ezrCallback()"
-      nzTitle="Sign In/Up"
+      nzTitle=""
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <section class="my-3">
+        <section class="my-3 px-5 pt-10">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
-              <nz-form-label i18n nzFor="username">Email</nz-form-label>
               <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your email">
                 <input
+                  nzSize="large"
                   type="text"
                   #usernameLoginRef
                   eo-ng-input
@@ -64,20 +65,25 @@ import { ModalService } from '../shared/services/modal.service';
                 />
               </nz-form-control>
             </nz-form-item>
-
             <nz-form-item>
-              <nz-form-label i18n nzFor="password">Password</nz-form-label>
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
-                <input type="password" eo-ng-input formControlName="password" id="password" placeholder="Enter password" i18n-placeholder />
+                <input
+                  type="password"
+                  eo-ng-input
+                  formControlName="password"
+                  nzSize="large"
+                  id="password"
+                  placeholder="Enter password"
+                  i18n-placeholder
+                />
                 <ng-template #passwordErrorTpl let-control>
                   <ng-container *ngIf="control.hasError('required')" i18n> Please input your password </ng-container>
-
                   <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6 </ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
 
-            <section class="">
+            <section>
               <button
                 eo-ng-button
                 [nzLoading]="isLoginBtnBtnLoading"
@@ -86,11 +92,13 @@ import { ModalService } from '../shared/services/modal.service';
                 class="h-10 mt-2"
                 nzType="primary"
                 nzBlock
+                nzSize="large"
                 (click)="btnvz94ljCallback()"
                 i18n
               >
                 Sign In/Up
               </button>
+              <third-login (done)="closeLoginModal()"></third-login>
             </section>
           </form>
         </section>
@@ -181,9 +189,11 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public modal: ModalService,
     public fb: UntypedFormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private web: WebService,
     private remote: RemoteService,
-    private localService: LocalService
+    private localService: LocalService,
+    private electron: ElectronService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -212,7 +222,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.usernameLoginRef?.nativeElement.focus();
           }, 300);
-
           return;
         }
 
@@ -228,7 +237,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
           this.eMessage.error($localize`Connect failed`);
           // * 唤起弹窗
           this.isCheckConnectModalVisible = true;
-
           return;
         }
 
@@ -247,20 +255,16 @@ export class UserModalComponent implements OnInit, OnDestroy {
         if (type === 'addWorkspace') {
           // * 唤起弹窗
           this.isAddWorkspaceModalVisible = true;
-          {
-            // * auto focus
-            setTimeout(() => {
-              this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
-            }, 300);
-          }
-
+          // * auto focus
+          setTimeout(() => {
+            this.newWorkNameWorkspaceNameRef?.nativeElement.focus();
+          }, 300);
           return;
         }
 
         if (type === 'retry') {
           // * 唤起弹窗
           this.isCheckConnectModalVisible = true;
-
           return;
         }
       });
@@ -270,7 +274,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
       username: [null, [Validators.required]],
       password: [null, [Validators.required, Validators.minLength(6)]]
     });
-
     // * Init WorkspaceName form
     this.validateWorkspaceNameForm = this.fb.group({
       newWorkName: [null, [Validators.required]]
@@ -279,35 +282,57 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (this.store.isShare) {
       return;
     }
-
-    const url = this.dataSource.remoteServerUrl;
-
-    if (url === '') {
-      // * 唤起弹窗
-      // this.isOpenSettingModalVisible = true;
-
-      return;
-    }
-
-    if (this.store.getCurrentWorkspace?.isLocal) {
-      // * local workspace, then return
-      return;
-    }
-    const status = await this.dataSource.pingCloudServerUrl();
-
-    if (!status) {
-      // * 唤起弹窗
-      if (this.web.isWeb) {
+    this.electron?.ipcRenderer?.on('thirdLoginCallback', async (event, args) => {
+      if (!args.isSuccess) return;
+      const code = args.code;
+      if (code == null) {
         return;
       }
-      this.isCheckConnectModalVisible = true;
 
+      const [data, err] = await this.api.api_userThirdLoginResult({ code });
+      if (err) {
+        this.store.clearAuth();
+        return;
+      }
+      this.store.setLoginInfo(data);
+      this.effect.updateWorkspaceList();
+      {
+        // * set user info
+        const [data, err]: any = await this.api.api_userReadInfo({});
+        if (err) {
+          return;
+        }
+        this.store.setUserProfile(data);
+      }
+      this.isLoginModalVisible = false;
+    });
+    const { code } = this.route.snapshot.queryParams;
+    if (code == null) {
       return;
+    }
+
+    const [data, err] = await this.api.api_userThirdLoginResult({ code });
+    if (err) {
+      this.store.clearAuth();
+      return;
+    }
+    this.store.setLoginInfo(data);
+    this.effect.updateWorkspaceList();
+    {
+      // * set user info
+      const [data, err]: any = await this.api.api_userReadInfo({});
+      if (err) {
+        return;
+      }
+      this.store.setUserProfile(data);
     }
   }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  closeLoginModal() {
+    this.isLoginModalVisible = false;
   }
   async e7odmm4Callback() {
     // * nzAfterClose event callback
@@ -360,10 +385,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async euu4ezrCallback() {
     // * nzAfterClose event callback
-    {
-      // * auto clear form
-      this.validateLoginForm.reset();
-    }
+    // * auto clear form
+    this.validateLoginForm.reset();
   }
   async btnvz94ljCallback() {
     // * click event callback
@@ -428,10 +451,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async ebdsz2aCallback() {
     // * nzAfterClose event callback
-    {
-      // * auto clear form
-      this.validateWorkspaceNameForm.reset();
-    }
+    // * auto clear form
+    this.validateWorkspaceNameForm.reset();
   }
   async btn66ztjiCallback() {
     // * click event callback

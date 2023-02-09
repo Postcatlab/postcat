@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
+import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
@@ -19,6 +20,8 @@ import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
+
+const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllAPIId)];
 @Component({
   selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -78,6 +81,7 @@ export class ApiGroupTreeComponent implements OnInit {
     private modalService: ModalService,
     private router: Router,
     private route: ActivatedRoute,
+    private tab: ApiTabService,
     private message: EoNgFeedbackMessageService
   ) {}
 
@@ -135,11 +139,16 @@ export class ApiGroupTreeComponent implements OnInit {
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
-      nzOnOk: () =>
-        modal.componentInstance.submit().then(data => {
+      nzOnOk: () => {
+        if (params.action === 'delete') {
+          const idList = [...new Set(getAllAPIId(params.group).flat(Infinity))];
+          this.tab.batchCloseTabById(idList);
+        }
+        return modal.componentInstance.submit().then(data => {
           if (params.action !== 'new') return;
           this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
-        })
+        });
+      }
     });
   }
   editGroup(group) {
@@ -231,6 +240,7 @@ export class ApiGroupTreeComponent implements OnInit {
     const sort = children.findIndex(val => val.key === node.key);
     console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
+    this.expandKeys = parentNode?.isLeaf ? this.expandKeys : [...new Set([parentNode?.key, ...this.expandKeys])];
     this.effect.sortGroup(
       dragNode.isLeaf
         ? {
@@ -240,9 +250,8 @@ export class ApiGroupTreeComponent implements OnInit {
             //@ts-ignore
             parentId: parentNode?.key || this.store.getRootGroup.id
           }
-        : { ...node, sort, parentId: dragNode.parentNode?.key || this.store.getRootGroup.id }
+        : { ...node, sort, parentId: parentNode?.key || this.store.getRootGroup.id }
     );
-    console.log(dragNode, node, dragNode.parentNode?.key);
   };
 
   toggleExpand() {

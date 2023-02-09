@@ -2,24 +2,43 @@ import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { has } from 'lodash-es';
+import { Subject, takeUntil } from 'rxjs';
 
 import packageJson from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`
+  template: `<extension-select [(extension)]="currentExtension" tipsType="syncAPI" [extensionList]="supportList"></extension-select>`
 })
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  constructor(private extensionService: ExtensionService, private eoMessage: EoNgFeedbackMessageService, private apiService: ApiService) {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
-  }
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor(
+    private extensionService: ExtensionService,
+    private eoMessage: EoNgFeedbackMessageService,
+    private apiService: ApiService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
+    this.initData();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        if (inArg.type === 'installedExtensionsChange') {
+          this.initData();
+        }
+      });
+  }
+  initData = () => {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
+    this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
         key,
@@ -30,7 +49,7 @@ export class SyncApiComponent implements OnInit {
       const { key } = this.supportList?.at(0);
       this.currentExtension = key || '';
     }
-  }
+  };
   async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     if (!feature) {

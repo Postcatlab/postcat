@@ -38,5 +38,15 @@
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
     <p class="ant-upload-hint" i18n>Only supports importing a single file</p>
   </nz-upload>
-  <div class="h-4 my-2 text">{{ filename }}</div>
+  <div *ngIf="filename" class="h-4 my-2 text">{{ filename }}</div>
 </div>
+
+<ng-container *ngIf="tipsMap[tipsType] && extensionList.length">
+  <eo-ng-feedback-alert class="block mt-[15px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+  <ng-template #templateRefMsg>
+    <div class="text" i18n
+      >Can't find the {{ tipsMap[tipsType].name }} you want?
+      <a (click)="openExtension()">find more...</a>
+    </div>
+  </ng-template>
+</ng-container>

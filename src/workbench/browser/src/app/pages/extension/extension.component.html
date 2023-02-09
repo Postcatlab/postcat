@@ -1,8 +1,17 @@
 <section class="flex-shrink-0 p-0 left tree-sider">
   <div class="m-[10px]">
-    <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="keyword" />
-    </eo-ng-input-group>
+    <!-- <eo-ng-input-group class="!rounded-full">
+      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="keyword" [nzAutocomplete]="auto" /> -->
+    <eo-ng-auto-complete
+      [(ngModel)]="keyword"
+      (ngModelChange)="onInput($event)"
+      [nzControl]="true"
+      [nzOptions]="searchOptions"
+      [nzPrefix]="prefixTemplateUser"
+      i18n-nzPlaceholder="@@Search"
+      nzPlaceholder="Search"
+    ></eo-ng-auto-complete>
+    <!-- </eo-ng-input-group> -->
     <ng-template #prefixTemplateUser
       ><svg class="iconpark-icon">
         <use href="#search"></use></svg
@@ -30,9 +39,14 @@
 <section class="flex-1 min-w-0">
   <eo-extension-list
     *ngIf="!hasExtension"
-    [keyword]="keyword"
+    [keyword]="keyword.trim()"
     [type]="selectGroup"
     (selectChange)="selectExtension($event)"
   ></eo-extension-list>
-  <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
+  <eo-extension-detail
+    *ngIf="hasExtension"
+    [extensionData]="getExtension"
+    [nzSelectedIndex]="nzSelectedIndex"
+    (goBack)="selectExtension()"
+  ></eo-extension-detail>
 </section>

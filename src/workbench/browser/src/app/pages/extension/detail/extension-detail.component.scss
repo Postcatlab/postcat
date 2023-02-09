@@ -7,6 +7,19 @@
 }
 
 :host ::ng-deep {
+  .title {
+    .ant-tag {
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+  }
+
+  .subtitle {
+    .ant-divider {
+      @apply mx-[12px];
+    }
+  }
+
   .ant-skeleton {
     display: block;
 
@@ -20,7 +33,7 @@
   }
 
   .ant-tabs-nav-list {
-    margin-left: 20px;
+    margin-left: 30px;
   }
 
   .ant-tabs {
@@ -43,7 +56,7 @@
   }
 
   .tab-content-container {
-    @apply w-4/5 m-auto;
+    @apply px-[40px] m-auto;
   }
 
   .md-preview {

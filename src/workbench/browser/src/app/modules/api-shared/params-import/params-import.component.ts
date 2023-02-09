@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { cloneDeep, toArray, merge } from 'lodash-es';
+import { cloneDeep, toArray, merge, isEmpty } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
 
@@ -30,7 +30,7 @@ const egHash = new Map()
 export class ParamsImportComponent implements OnInit {
   @Input() disabled: boolean;
   @Input() rootType: 'array' | string | 'object' = 'object';
-  @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
+  @Input() contentType: 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
   /**
    * Table item structure
@@ -62,9 +62,35 @@ export class ParamsImportComponent implements OnInit {
       () => this.isVisible,
       () => {
         this.paramCode = '';
+        this.autoPaste();
       }
     );
   }
+
+  async autoPaste() {
+    const clipText = await navigator.clipboard.readText();
+    if (this.contentType === 'xml') {
+      if (isXML(clipText)) {
+        this.paramCode = clipText;
+      }
+    } else if (this.contentType === 'json') {
+      try {
+        JSON.parse(clipText);
+        this.paramCode = clipText;
+      } catch (error) {}
+    } else if (['formData', 'header'].includes(this.contentType)) {
+      const arr = form2json(clipText);
+      if (Array.isArray(arr) && arr.length && clipText.split(':').length > 1) {
+        this.paramCode = clipText;
+      }
+    } else if (this.contentType === 'query') {
+      const [data] = this.parseQuery(clipText);
+      if (!isEmpty(data)) {
+        this.paramCode = clipText;
+      }
+    }
+  }
+
   showModal(type): void {
     this.isVisible = true;
   }
@@ -78,7 +104,7 @@ export class ParamsImportComponent implements OnInit {
       const data = JSON.parse(code);
       return [{ data, rootType: Array.isArray(data) ? 'array' : 'object' }, null];
     } catch (error) {
-      return [null, { msg: $localize`JSON format invalid` }];
+      return [null, { msg: $localize`JSON format invalid`, data: null }];
     }
   }
 
@@ -90,13 +116,13 @@ export class ParamsImportComponent implements OnInit {
   parseXML(code) {
     const status = isXML(code);
     if (!status) {
-      return [null, { msg: $localize`XML format invalid` }];
+      return [null, { msg: $localize`XML format invalid`, data: null }];
     }
     try {
       const result = xml2json(code);
       return [{ data: result, rootType: 'object' }, null];
     } catch (error) {
-      return [null, { msg: $localize`XML format invalid` }];
+      return [null, { msg: $localize`XML format invalid`, data: null }];
     }
   }
   parseForm(code) {
@@ -124,7 +150,7 @@ export class ParamsImportComponent implements OnInit {
     };
 
     const [res, err] = func[this.contentType](this.paramCode);
-    if (err) {
+    if (err && 'msg' in err) {
       this.message.error(err.msg);
       return;
     }
