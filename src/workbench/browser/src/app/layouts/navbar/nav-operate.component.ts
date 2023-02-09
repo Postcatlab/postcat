@@ -25,7 +25,7 @@ import { ElectronService } from '../../core/services';
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
+        nzTooltipTitle="Maximize"
         [nzTooltipMouseEnterDelay]="0.4"
         nzType="text"
         (click)="toggleMaximize()"

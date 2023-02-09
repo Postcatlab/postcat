@@ -1,12 +1,20 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { autorun, computed, observable, makeObservable } from 'mobx';
+import { autorun, observable, makeObservable } from 'mobx';
 
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
-import { ExtensionGroupType } from '../extension.model';
+import { ContributionPointsPrefix, ExtensionGroupType, suggestList } from '../extension.model';
 
-const extensionSearch = list => keyword => list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
-
+const extensionSearch = list => {
+  return (keyword = '') => {
+    return list.filter(it => {
+      if (keyword) {
+        return it.name.includes(keyword) || it.keywords?.includes(keyword);
+      }
+      return true;
+    });
+  };
+};
 @Component({
   selector: 'eo-extension-list',
   templateUrl: './extension-list.component.html',
@@ -15,64 +23,74 @@ const extensionSearch = list => keyword => list.filter(it => it.name.includes(ke
 export class ExtensionListComponent implements OnInit {
   @Input() @observable type: string = ExtensionGroupType.all;
   @Input() @observable keyword = '';
+  @Input() @observable category = '';
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
-  allList = [];
-  officialList = [];
-  installedList = [];
+  extensionList = [];
   loading = false;
-  @computed get renderList() {
-    if (this.type === 'all') {
-      return this.allList;
-    }
-    if (this.type === 'official') {
-      return this.officialList;
-    }
-    return this.installedList;
-  }
   constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
-      switch (this.type) {
-        case 'all': {
-          this.allList = [];
-          this.allList = await this.searchPlugin(this.type, this.keyword);
-          break;
-        }
-        case 'official': {
-          this.officialList = [];
-          this.officialList = await this.searchPlugin(this.type, this.keyword);
-        }
-        default: {
-          this.installedList = [];
-          this.installedList = await this.searchPlugin(this.type, this.keyword);
-          break;
-        }
+      if (this.keyword) {
+        const notCompleteSuggest = suggestList.some(n => n.startsWith(this.keyword) && this.keyword !== n);
+        if (notCompleteSuggest) return;
       }
+
+      let type = this.type;
+      if (type.startsWith(ContributionPointsPrefix.category)) {
+        type = 'category';
+        this.category = this.type.slice(ContributionPointsPrefix.category.length);
+      }
+      this.extensionList = [];
+      this.extensionList = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
     });
   }
-  clickExtension(event, item) {
+  clickExtension(event: MouseEvent, item, nzSelectedIndex?) {
+    event.stopPropagation();
+    item.nzSelectedIndex = nzSelectedIndex;
     this.selectChange.emit(item);
   }
-  async searchPlugin(groupType, keyword = '') {
+  async searchPlugin(groupType, { keyword = '', category = '', feature = '' }) {
     this.loading = true;
+    const suggest = suggestList.find(n => keyword.startsWith(n));
+
+    if (suggest) {
+      const prefix = Object.values(ContributionPointsPrefix).find(n => keyword.startsWith(n));
+      const text = suggest.slice(prefix.length);
+      keyword = keyword.slice(suggest.length).trim();
+      if (prefix === ContributionPointsPrefix.feature) {
+        groupType = 'feature';
+        feature = text;
+      } else if (prefix === ContributionPointsPrefix.category) {
+        groupType = 'category';
+        category = text;
+      }
+    }
     const func = {
       installed: () => {
         const list = this.extensionService.getInstalledList();
         return extensionSearch(list)(keyword);
       },
       official: async () => {
-        const authorName = ['Postcat'];
-        const { data }: any = await this.extensionService.requestList();
-        return extensionSearch(data.filter(it => authorName.includes(it.author)))(keyword);
+        const [{ data }]: any = await this.extensionService.requestList('list', { author: 'Postcat', keyword });
+        return data;
       },
       all: async () => {
-        const { data }: any = await this.extensionService.requestList();
-        return extensionSearch(data)(keyword);
+        const [{ data }]: any = await this.extensionService.requestList('list', { keyword });
+        return data;
+      },
+      category: async () => {
+        const [{ data }]: any = await this.extensionService.requestList('list', { category, keyword });
+        return data;
+      },
+      feature: async () => {
+        const [{ data }]: any = await this.extensionService.requestList('list', { feature, keyword });
+        return data;
       }
     };
     try {
-      return await func[groupType]();
+      const result = await func[groupType]();
+      return result;
     } catch (error) {
     } finally {
       this.loading = false;

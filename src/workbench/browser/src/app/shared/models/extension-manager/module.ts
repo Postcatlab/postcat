@@ -47,6 +47,7 @@ export interface ExtensionInfo {
   //Entry js file,node environment
   node: string;
   title: string;
+  downloadCounts: number;
   // extension logo
   logo: string;
   //Contribution Feature

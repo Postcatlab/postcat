@@ -1,0 +1,35 @@
+name: TestRelease
+
+on:
+  push:
+    branches: [test/windows_sign222]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: '16'
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install OpenVPN
+        run: |
+          echo "${{ secrets.OPENVPN_CONFIG_FILE }}" > .github/workflows/client.ovpn
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: 'kota65535/github-openvpn-connect-action@v2'
+        with:
+          config_file: .github/workflows/client.ovpn
+      - name: Build something
+        env:
+          SSH_WINDOWS_IP: ${{ secrets.SSH_WINDOWS_IP }}
+          SSH_WINDOWS_USERNAME: ${{ secrets.SSH_WINDOWS_USERNAME }}
+          SSH_WINDOWS_PASSWORD: ${{ secrets.SSH_WINDOWS_PASSWORD }}
+        run: |
+          yarn
+          ping -c 4 10.8.0.130
+          yarn deployWindows
