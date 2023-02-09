@@ -135,7 +135,7 @@ export class ExtensionService {
     let result = {} as ExtensionInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    if (this.installedMap.has(name)) {
+    if (this.installedMap?.has(name)) {
       Object.assign(result, this.installedMap.get(name), { installed: true });
       result.enable = this.isEnable(result.name);
     }
