@@ -243,10 +243,6 @@ export class ApiGroupTreeComponent implements OnInit {
           }
         : { ...node, sort, parentId: parentNode?.key || this.store.getRootGroup.id }
     );
-    // console.log('parentNode', parentNode);
-    // console.log('typeof', typeof parentNode?.key);
-    // console.log('this.expandKeys', this);
-    // console.log(dragNode, node, parentNode?.key);
   };
 
   toggleExpand() {
