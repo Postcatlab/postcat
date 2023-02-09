@@ -19,6 +19,10 @@ import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
+
+const getAllAPIId = ({ id, children = [] }) => {
+  return [id, ...children.map(getAllAPIId)];
+};
 @Component({
   selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -135,11 +139,14 @@ export class ApiGroupTreeComponent implements OnInit {
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
       nzComponentParams: params,
-      nzOnOk: () =>
-        modal.componentInstance.submit().then(data => {
+      nzOnOk: () => {
+        console.log('this.apiGroupTree', params.group);
+        // const idList = getAllAPIId(params.group)
+        return modal.componentInstance.submit().then(data => {
           if (params.action !== 'new') return;
           this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
-        })
+        });
+      }
     });
   }
   editGroup(group) {
