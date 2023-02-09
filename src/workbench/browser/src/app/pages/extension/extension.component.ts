@@ -60,19 +60,12 @@ export class ExtensionComponent implements OnInit {
         }
       }
     );
-    reaction(
-      () => this.nzSelectedKeys,
-      (value, oldValue) => {
-        console.log('nzSelectedKeys', value, oldValue);
-      }
-    );
   }
 
   onInput(value: string): void {
     this.searchOptions = value.trim() ? suggestList.filter(n => n.startsWith(value)) : [];
     const suggest = suggestList.find(n => value && n.startsWith(value) && n.startsWith('@category:'));
     const node = this.treeNodes.find(n => n.key === suggest);
-    console.log('suggest', suggest);
     if (suggest && node) {
       this.nzSelectedKeys = [node.key];
     }
