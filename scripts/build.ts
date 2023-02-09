@@ -96,11 +96,7 @@ const config: Configuration = {
     // target: ['dmg', 'zip']
     target: [
       {
-        target: 'dmg',
-        arch: ['x64', 'arm64']
-      },
-      {
-        target: 'zip',
+        target: 'default',
         arch: ['x64', 'arm64']
       }
     ]
