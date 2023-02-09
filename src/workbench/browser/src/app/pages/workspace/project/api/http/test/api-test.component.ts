@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import { ApiEditUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -136,7 +137,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     private testServer: TestServerService,
     private projectApi: ProjectApiService,
     private lang: LanguageService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private apiEdit: ApiEditUtilService
   ) {
     this.initBasicForm();
     this.testServer.init(message => {
@@ -387,7 +389,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     //Add test history
     this.apiTest.addHistory({
       apiUuid: this.model.request.apiUuid || '-1',
-      request: this.model.request,
+      request: this.apiEdit.formatUIApiDataToStorage(this.model.request),
       response: message.response
     });
   }
