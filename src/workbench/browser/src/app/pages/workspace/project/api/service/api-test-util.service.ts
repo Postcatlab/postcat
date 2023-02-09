@@ -137,7 +137,7 @@ export class ApiTestUtilService {
       if (!(val.isRequired && val.name)) {
         return acc;
       }
-      return { ...acc, [val.name]: val.paramAttr?.example || '' };
+      return { ...acc, [val.name]: val['paramAttr.example'] || val.paramAttr?.example || '' };
     }, {});
     Object.keys(restByName).forEach(restName => {
       try {
@@ -187,6 +187,10 @@ export class ApiTestUtilService {
         result.requestParams.bodyParams.forEach(val => {
           val.dataType = val.dataType === ApiParamsType.file ? ApiParamsType.file : ApiParamsType.string;
         });
+        break;
+      }
+      case ApiBodyType.Raw: {
+        binaryRawData = result.requestParams.bodyParams?.[0]?.binaryRawData;
         break;
       }
       case ApiBodyType.Binary: {

@@ -23,6 +23,7 @@ import { ApiStoreService } from '../../service/store/api-state.service';
         nz-popover
         nzPopoverOverlayClassName="background-popover preview-env"
         [nzPopoverContent]="envParams"
+        (nzTooltipVisibleChange)="onVisibleChange($event)"
         nzTooltipPlacement="left"
         nzPopoverPlacement="bottomRight"
         nzPopoverTrigger="click"
@@ -100,10 +101,14 @@ export class EnvSelectComponent implements OnInit {
     private effect: ApiEffectService,
     private testUtils: ApiTestUtilService
   ) {}
+  onVisibleChange($event) {
+    if ($event) {
+      this.gloablParams = this.getGlobalParams();
+    }
+  }
   ngOnInit() {
     makeObservable(this);
     this.effect.updateEnvList();
-    this.gloablParams = this.getGlobalParams();
 
     autorun(() => {
       this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.id }));
