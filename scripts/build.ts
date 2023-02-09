@@ -52,7 +52,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: 'https://packages.postcat.com'
+      url: 'https://data.postcat.com/download/'
     }
   ],
   generateUpdatesFilesForAllChannels: true,
