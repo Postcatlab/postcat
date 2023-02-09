@@ -9,11 +9,12 @@ import { SystemSettingModule } from '../modules/system-setting/system-setting.mo
 import { SharedModule } from '../shared/shared.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
+import { ThirdLoginComponent } from './third-login.component';
 import { UserModalComponent } from './user-modal.component';
 
 @NgModule({
   imports: [PagesRoutingModule, SystemSettingModule, CommonModule, NavbarModule, ToolbarModule, SharedModule],
-  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent],
+  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ThirdLoginComponent],
   exports: [],
   providers: [],
   schemas: []

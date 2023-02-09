@@ -36,10 +36,13 @@ export class HelpDropdownComponent {
       itemClick: $event => {}
     }
   ];
-  constructor(private electron: ElectronService) {}
-  issueEnvironment = this.getEnvironment();
+  issueEnvironment: string;
+  constructor(private electron: ElectronService) {
+    this.issueEnvironment = this.getEnvironment();
+  }
   private getEnvironment(): string {
     let result = '';
+    console.log(this);
     const systemInfo = this.electron?.getSystemInfo();
     systemInfo?.forEach(val => {
       if (['homeDir'].includes(val.id)) {
@@ -47,6 +50,7 @@ export class HelpDropdownComponent {
       }
       result += `- ${val.label}: ${val.value}\r\n`;
     });
+    console.log(systemInfo);
     return encodeURIComponent(result);
   }
 }
