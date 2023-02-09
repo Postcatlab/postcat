@@ -22,42 +22,42 @@ export enum ContributionPointsPrefix {
 
 export const featuresTipsMap = {
   importAPI: {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@feature:importAPI'
   },
   exportAPI: {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@feature:exportAPI'
   },
   syncAPI: {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@feature:syncAPI'
   },
   sidebarView: {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@feature:sidebarView'
   },
   theme: {
-    type: 'theme',
+    name: 'theme',
     suggest: '@feature:theme'
   }
 } as const;
 
 export const categoriesTipsMap = {
   'Data Migration': {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@category:Data Migration'
   },
   Themes: {
-    type: 'format',
+    name: $localize`themes`,
     suggest: '@category:Themes'
   },
   'API Security': {
-    type: 'format',
+    name: $localize`extensions`,
     suggest: '@category:API Security'
   },
   Other: {
-    type: 'format',
+    name: $localize`format`,
     suggest: '@category:Other'
   }
 } as const;
