@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { observable, makeObservable, computed, action } from 'mobx';
+import { observable, makeObservable, computed, action, reaction } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 import { ExtensionService } from '../../shared/services/extensions/extension.service';
@@ -14,8 +14,8 @@ import { getExtensionCates, ExtensionGroupType, suggestList } from './extension.
 export class ExtensionComponent implements OnInit {
   @observable currentExtension: ExtensionInfo | null = null;
   @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
-  @Input() keyword = '';
-  @Input() nzSelectedKeys: Array<number | string> = ['all'];
+  @observable @Input() keyword = '';
+  @observable @Input() nzSelectedKeys: Array<number | string> = ['all'];
   category = '';
   nzSelectedIndex = 0;
   searchOptions = [];
@@ -51,12 +51,28 @@ export class ExtensionComponent implements OnInit {
 
   ngOnInit(): void {
     makeObservable(this);
+    reaction(
+      () => this.keyword,
+      (value, oldValue) => {
+        const isSuggest = suggestList.some(n => oldValue && n.startsWith(oldValue));
+        if (value.trim() === '' && isSuggest) {
+          this.nzSelectedKeys = ['all'];
+        }
+      }
+    );
+    reaction(
+      () => this.nzSelectedKeys,
+      (value, oldValue) => {
+        console.log('nzSelectedKeys', value, oldValue);
+      }
+    );
   }
 
   onInput(value: string): void {
     this.searchOptions = value.trim() ? suggestList.filter(n => n.startsWith(value)) : [];
-    const suggest = suggestList.find(n => n.startsWith(value));
+    const suggest = suggestList.find(n => value && n.startsWith(value) && n.startsWith('@category:'));
     const node = this.treeNodes.find(n => n.key === suggest);
+    console.log('suggest', suggest);
     if (suggest && node) {
       this.nzSelectedKeys = [node.key];
     }

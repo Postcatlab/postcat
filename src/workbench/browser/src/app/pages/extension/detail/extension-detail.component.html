@@ -23,10 +23,12 @@
               </ng-template>
 
               <span *nzSpaceItem>{{ extensionDetail.author }}</span>
-              <span *nzSpaceItem>
-                <eo-iconpark-icon name="download-two" size="16px"></eo-iconpark-icon>
-                {{ extensionDetail.downloadCounts | downloadCountFormater }}
-              </span>
+              <ng-container *ngIf="!extensionDetail.installed">
+                <span *nzSpaceItem>
+                  <eo-iconpark-icon name="download-two" size="16px"></eo-iconpark-icon>
+                  {{ extensionDetail.downloadCounts | downloadCountFormater }}
+                </span>
+              </ng-container>
             </nz-space>
           </div>
         </div>
