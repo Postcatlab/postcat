@@ -4,3 +4,9 @@ build/** linguist-vendored=true
 *.css linguist-detectable=false
 *.scss linguist-detectable=false
 *.js linguist-detectable=true
+
+# 无格式的文本文件,保证 Windows 的批处理文件在 checkout 至工作区时，始终被转换为 CRLF 风格的换行符；
+*.bat text eol=crlf
+
+# 对于sh文件，标记为文本文件，在文件入Git库时进行规范化，即行尾为LF。在检出到工作目录时，行尾也不会转换为CRLF（即保持LF）。
+*.sh        text eol=lf
