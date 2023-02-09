@@ -3,8 +3,11 @@ import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import StorageUtil from '../../../utils/storage/storage.utils';
 
@@ -43,6 +46,7 @@ import StorageUtil from '../../../utils/storage/storage.utils';
   selector: 'eo-import-api',
   template: `<extension-select
     [allowDrag]="true"
+    tipsType="importAPI"
     [(extension)]="currentExtension"
     [extensionList]="supportList"
     (uploadChange)="uploadChange($event)"
@@ -53,16 +57,30 @@ export class ImportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
   featureMap: Map<string, FeatureInfo>;
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(
     private router: Router,
     private eoMessage: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
-    private apiService: ApiService
-  ) {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
-  }
+    private apiService: ApiService,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {
+    this.initData();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        if (inArg.type === 'installedExtensionsChange') {
+          this.initData();
+        }
+      });
+  }
+  initData = () => {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+    this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
         key,
@@ -74,7 +92,7 @@ export class ImportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  }
+  };
   uploadChange(data) {
     this.uploadData = data;
   }
@@ -100,8 +118,6 @@ export class ImportApiComponent implements OnInit {
       }
 
       try {
-        const projectUuid = this.store.getCurrentProjectID;
-        const workSpaceUuid = this.store.getCurrentWorkspaceUuid;
         console.log('content', content);
         // TODO 兼容旧数据
         // if (Reflect.has(data, 'collections') && Reflect.has(data, 'environments')) {

@@ -7,10 +7,28 @@
         </button>
       </div>
       <nz-divider class="m-0"></nz-divider>
-      <div class="flex items-center justify-between mt-[20px] px-[20px]">
+      <div class="flex items-center justify-between mt-[20px] px-[40px]">
         <div class="flex items-center">
-          <nz-avatar nzSize="small" [nzSize]="30" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
-          <span class="font-bold text-[14px] ml-[12px]">{{ extensionDetail.title }}</span>
+          <nz-avatar nzSize="small" [nzSize]="50" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
+          <div class="flex flex-col">
+            <nz-space class="title ml-[12px]" [nzSize]="12">
+              <span *nzSpaceItem class="font-bold text-[16px]">{{ extensionDetail.title }}</span>
+              <ng-container *ngIf="extensionDetail?.installed">
+                <nz-tag *nzSpaceItem [nzColor]="'default'">v{{ extensionDetail.version }}</nz-tag>
+              </ng-container>
+            </nz-space>
+            <nz-space [nzSplit]="spaceSplit" class="subtitle ml-[12px] text-tips">
+              <ng-template #spaceSplit>
+                <nz-divider nzType="vertical"></nz-divider>
+              </ng-template>
+
+              <span *nzSpaceItem>{{ extensionDetail.author }}</span>
+              <span *nzSpaceItem>
+                <eo-iconpark-icon name="download-two" size="16px"></eo-iconpark-icon>
+                {{ extensionDetail.downloadCounts | downloadCountFormater }}
+              </span>
+            </nz-space>
+          </div>
         </div>
         <div class="flex items-center">
           <div *ngIf="extensionDetail?.installed" class="mr-[20px]">
