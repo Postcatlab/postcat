@@ -55,7 +55,7 @@ export function ApiResponse(options: ApiResponseOptions = {}): MethodDecorator {
             return new ResObj(data, options);
           }
         } catch (error) {
-          return new ResObj(error, { ...options, code: 1 });
+          return new ResObj(error, { ...options, code: error?.code ?? 1, success: false });
         }
       };
     }
