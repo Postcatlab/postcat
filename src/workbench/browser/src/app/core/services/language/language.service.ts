@@ -11,18 +11,19 @@ export class LanguageService {
   //If the user does not set it, the system default language is used
   // Web from nginx setting and App from computer system setting
   systemLanguage;
-
   langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
   constructor(private electron: ElectronService, private setting: SettingService) {
+    //Curent language
     this.systemLanguage =
-      this.setting.settings?.['system.language'] ||
       this.languages.find(val => window.location.href.includes(`/${val.path}`))?.value ||
+      this.setting.settings?.['system.language'] ||
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
   }
   get langHash() {
     return this.langHashMap.get(this.systemLanguage);
   }
   init() {
+    //System language First
     this.changeLanguage(this.setting.settings?.['system.language']);
   }
   changeLanguage(localeID) {
