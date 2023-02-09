@@ -1180,7 +1180,7 @@
           <context context-type="sourcefile">src/app/modules/system-setting/common/select-theme/select-theme.component.ts</context>
           <context context-type="linenumber">47,48</context>
         </context-group>
-        <target state="translated">找不到你想要的<x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/>?<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>查看更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">找不到你想要的<x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/>？<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>查看更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
       </trans-unit>
       <trans-unit id="4141575162728577645" datatype="html">
         <source>Only files in JSON format are supported</source>
