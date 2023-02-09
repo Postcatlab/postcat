@@ -231,6 +231,7 @@ export class ApiGroupTreeComponent implements OnInit {
     const sort = children.findIndex(val => val.key === node.key);
     console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
+    this.expandKeys = parentNode?.isLeaf ? this.expandKeys : [...new Set([parentNode?.key, ...this.expandKeys])];
     this.effect.sortGroup(
       dragNode.isLeaf
         ? {
@@ -240,9 +241,12 @@ export class ApiGroupTreeComponent implements OnInit {
             //@ts-ignore
             parentId: parentNode?.key || this.store.getRootGroup.id
           }
-        : { ...node, sort, parentId: dragNode.parentNode?.key || this.store.getRootGroup.id }
+        : { ...node, sort, parentId: parentNode?.key || this.store.getRootGroup.id }
     );
-    console.log(dragNode, node, dragNode.parentNode?.key);
+    // console.log('parentNode', parentNode);
+    // console.log('typeof', typeof parentNode?.key);
+    // console.log('this.expandKeys', this);
+    // console.log(dragNode, node, parentNode?.key);
   };
 
   toggleExpand() {
