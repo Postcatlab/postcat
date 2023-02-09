@@ -290,6 +290,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       await this.thirdLogin(code);
+      this.closeLoginModal();
     });
 
     // * web
