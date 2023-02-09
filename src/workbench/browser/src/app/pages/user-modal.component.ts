@@ -274,7 +274,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
       username: [null, [Validators.required]],
       password: [null, [Validators.required, Validators.minLength(6)]]
     });
-
     // * Init WorkspaceName form
     this.validateWorkspaceNameForm = this.fb.group({
       newWorkName: [null, [Validators.required]]
@@ -283,10 +282,35 @@ export class UserModalComponent implements OnInit, OnDestroy {
     if (this.store.isShare) {
       return;
     }
+    this.electron?.ipcRenderer?.on('thirdLoginCallback', async (event, args) => {
+      if (!args.isSuccess) return;
+      const code = args.code;
+      if (code == null) {
+        return;
+      }
+
+      const [data, err] = await this.api.api_userThirdLoginResult({ code });
+      if (err) {
+        this.store.clearAuth();
+        return;
+      }
+      this.store.setLoginInfo(data);
+      this.effect.updateWorkspaceList();
+      {
+        // * set user info
+        const [data, err]: any = await this.api.api_userReadInfo({});
+        if (err) {
+          return;
+        }
+        this.store.setUserProfile(data);
+      }
+      this.isLoginModalVisible = false;
+    });
     const { code } = this.route.snapshot.queryParams;
     if (code == null) {
       return;
     }
+
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
     if (err) {
       this.store.clearAuth();

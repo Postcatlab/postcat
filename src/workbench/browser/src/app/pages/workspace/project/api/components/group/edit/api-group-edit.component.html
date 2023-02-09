@@ -8,6 +8,6 @@
 </form>
 <p *ngIf="isDelete" i18n>
   Data from
-  <strong title="{{ group.name }}">{{ group.name.length > 50 ? group.name.slice(0, 50) + '...' : group.name }}</strong>
+  <strong title="{{ group.name }}">{{ group?.name?.length > 50 ? group?.name.slice(0, 50) + '...' : group?.name }}</strong>
   will be deleted. This cannot be undone. Are you sure you want to delete?
 </p>

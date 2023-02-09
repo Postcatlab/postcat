@@ -235,30 +235,24 @@ try {
             preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
           }
         });
-        loginWindow.loadURL(arg.data);
+        loginWindow.loadURL(arg.data.url);
 
         //* Watch the login result
         loginWindow.webContents.on('did-navigate', ($event, url) => {
+          console.log('did-navigate', url);
           const isError = url.includes('request-errors');
           const isSuccess = url.includes('code=');
-          if (isError) {
-            loginWindow?.webContents.removeAllListeners('did-navigate');
+          if (isError || isSuccess) {
             loginWindow?.destroy();
             loginWindow = null;
-          } else if (isSuccess) {
             const querys = new URLSearchParams(url.split('?')?.[1]);
-            const file: string =
-              processEnv === 'development'
-                ? 'http://localhost:4200'
-                : `file://${path.join(
-                    __dirname,
-                    `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
-                  )}?code=${querys.get('code')}`;
-            eoBrowserWindow.win.loadURL(file);
-            loginWindow?.destroy();
-            loginWindow = null;
+            eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
+              isSuccess: isSuccess,
+              code: querys.get('code')
+            });
           }
         });
+
         returnValue = '';
       } else if (arg.action === 'getSidebarView') {
         returnValue = moduleManager.getSidebarView(arg.data.extName);
