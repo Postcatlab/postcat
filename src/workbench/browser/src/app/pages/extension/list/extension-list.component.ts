@@ -35,14 +35,18 @@ export class ExtensionListComponent implements OnInit {
         const notCompleteSuggest = suggestList.some(n => n.startsWith(this.keyword) && this.keyword !== n);
         if (notCompleteSuggest) return;
       }
-
+      const originType = this.type;
       let type = this.type;
       if (type.startsWith(ContributionPointsPrefix.category)) {
         type = 'category';
         this.category = this.type.slice(ContributionPointsPrefix.category.length);
       }
       this.extensionList = [];
-      this.extensionList = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
+      const data = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
+      // 避免频繁切换，导致侧边栏选中状态与右侧展示不一致
+      if (originType === this.type) {
+        this.extensionList = data;
+      }
     });
   }
   clickExtension(event: MouseEvent, item, nzSelectedIndex?) {
