@@ -45,11 +45,11 @@ import { ModalService } from '../shared/services/modal.service';
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
       (nzAfterClose)="euu4ezrCallback()"
-      nzTitle="Sign In/Up"
+      nzTitle=""
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <section class="my-3 px-5">
+        <section class="my-3 px-5 pt-10">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
               <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your email">

@@ -222,6 +222,10 @@ try {
         returnValue = moduleManager.getExtTabs(arg.data.extName);
       } else if (arg.action === 'loginWith') {
         // * It is eletron, open a new window for login
+        if (loginWindow) {
+          loginWindow.destroy();
+          loginWindow = null;
+        }
         loginWindow = new BrowserWindow({
           width: 990,
           height: 655,
