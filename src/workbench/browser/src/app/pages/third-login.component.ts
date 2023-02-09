@@ -86,8 +86,14 @@ export class ThirdLoginComponent implements OnInit {
       window.location.href = res[type];
       return;
     }
-    window.electron.loginWith(res[type], data => {
-      console.log('retrun data', data);
-    });
+    window.electron.loginWith(
+      {
+        url: res[type],
+        redirectUrl: window.location.href
+      },
+      data => {
+        console.log('retrun data', data);
+      }
+    );
   }
 }

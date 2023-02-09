@@ -35,7 +35,6 @@ export interface TestLocalNodeData {
    */
   apiRequestParamJsonType: string;
   headers: Array<{
-    checkbox: boolean;
     headerName: string;
     headerValue: string;
   }>;
@@ -47,7 +46,6 @@ export interface TestLocalNodeData {
   params:
     | string
     | Array<{
-        checkbox: boolean;
         paramKey: string;
         paramType: string;
         paramInfo: string;
