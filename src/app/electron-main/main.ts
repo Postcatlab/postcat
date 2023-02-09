@@ -238,8 +238,7 @@ try {
         loginWindow.loadURL(arg.data.url);
 
         //* Watch the login result
-        loginWindow.webContents.on('did-navigate', ($event, url) => {
-          console.log('did-navigate', url);
+        loginWindow.webContents.on('did-navigate', ($event, url = '') => {
           const isError = url.includes('request-errors');
           const isSuccess = url.includes('code=');
           if (isError || isSuccess) {
@@ -248,7 +247,7 @@ try {
             const querys = new URLSearchParams(url.split('?')?.[1]);
             eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
               isSuccess: isSuccess,
-              code: querys.get('code')
+              code: querys?.get('code')
             });
           }
         });
