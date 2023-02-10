@@ -23,6 +23,8 @@ conn
         .end(
           [
             'set TERM=msys',
+            `set GITHUB_TOKEN=${process.env.GITHUB_TOKEN}`,
+            'set ',
             'd:',
             `cd \\git\\postcat`,
             'nvm use 16.13.2',
