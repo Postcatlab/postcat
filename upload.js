@@ -1,6 +1,5 @@
 const qiniu = require('qiniu');
-const YAML = require('yaml');
-const fs = require('fs');
+const { promises } = require('fs');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 const package = require('./package.json');
 
@@ -12,6 +11,13 @@ const uptoken = (bucket, key) => new qiniu.rs.PutPolicy(bucket + ':' + key).toke
 
 const toLatest = name => name.replace(/\d+\.\d+\.\d+/, 'latest');
 const onlyName = name => name.replace(/release\//, '');
+
+// * 检测文件是否存在
+const isExists = async filePath =>
+  await promises
+    .access(filePath)
+    .then(() => true)
+    .catch(_ => false);
 
 // * 构建客户端实例
 const client = new qiniu.rs.Client();
@@ -42,6 +48,7 @@ const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
   'release/Postcat-?-arm64.dmg',
+  'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',
   'release/Postcat-?-mac.zip',
   'release/Postcat-?.AppImage',
@@ -53,41 +60,36 @@ const fileList = [
 //   it.replace(/\?/, `${version}`)
 // );
 
-const app = async () => {
+const main = async () => {
   const uploadResult = await Promise.all(
-    fileList.map(async it => {
-      let isOK;
-      // * 生成上传 Token
-      try {
-        if (it.endsWith('.yml')) {
-          await removeFile(bucket, `download/${onlyName(it)}`);
-          const token = uptoken(bucket, `download/${onlyName(it)}`);
-          isOK = await uploadFile(token, `download/${onlyName(it)}`, it);
-        } else {
-          const token = uptoken(bucket, `download/${version}/${it.replace(/release\//, '')}`);
-          isOK = await uploadFile(token, `download/${version}/${it.replace(/release\//, '')}`, it);
-        }
-      } catch (error) {
-        console.log('error', error);
-      }
-      return Promise.resolve(isOK || false);
-    })
+    fileList
+      .filter(async it => await isExists(it))
+      .map(async it => {
+        // * 生成上传 Token
+        const token = uptoken(bucket, `download/${version}/${it.replace(/release\//, '')}`);
+        const isOK = await uploadFile(token, `download/${version}/${it.replace(/release\//, '')}`, it);
+        return Promise.resolve(isOK || false);
+      })
   );
   console.log('上传结果：', uploadResult);
-  const deleteResult = await Promise.all(
-    fileList.map(async it => {
-      const isOK = await removeFile(bucket, `download/latest/${toLatest(onlyName(it))}`);
-      Promise.resolve(isOK || false);
-    })
-  );
-  console.log('删除结果：', deleteResult);
-  const copyResult = await Promise.all(
-    fileList.map(async it => {
-      const isOK = await cpFile(`download/${version}/${onlyName(it)}`, `download/latest/${toLatest(onlyName(it))}`);
-      Promise.resolve(isOK || false);
-    })
-  );
-  console.log('拷贝结果', copyResult);
+  // const deleteResult = await Promise.all(
+  //   fileList
+  //     .filter(async it => await isExists(it))
+  //     .map(async it => {
+  //       const isOK = await removeFile(bucket, `download/latest/${toLatest(onlyName(it))}`);
+  //       return Promise.resolve(isOK || false);
+  //     })
+  // );
+  // console.log('删除结果：', deleteResult);
+  // const copyResult = await Promise.all(
+  //   fileList
+  //     .filter(async it => await isExists(it))
+  //     .map(async it => {
+  //       const isOK = await cpFile(`download/${version}/${onlyName(it)}`, `download/latest/${toLatest(onlyName(it))}`);
+  //       return Promise.resolve(isOK || false);
+  //     })
+  // );
+  // console.log('拷贝结果', copyResult);
 };
 
-app();
+main();
