@@ -1,5 +1,5 @@
 import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
-import { build, Platform } from 'electron-builder';
+import { build, CliOptions, Packager, Platform, PublishManager } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
@@ -12,6 +12,8 @@ import { exit, platform } from 'node:process';
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
 let signOptions: Parameters<typeof sign>;
+// 打包的参数
+let buildOptions: CliOptions;
 // 参数同 electron-builder cli 命令行参数
 const argv = minimist(process.argv.slice(2));
 // https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
@@ -151,6 +153,25 @@ const signWindows = async () => {
         path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
       };
       await sign(...signOptions);
+
+      const packager = new Packager(buildOptions);
+      const publishManager = new PublishManager(packager, buildOptions);
+
+      const publishConfigurations = await publishManager.getGlobalPublishConfigurations();
+
+      if (publishConfigurations) {
+        for (const publishConfiguration of publishConfigurations) {
+          // @ts-ignore
+          publishManager.scheduleUpload(
+            publishConfiguration,
+            {
+              file: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`,
+              arch: null
+            },
+            packager.appInfo
+          );
+        }
+      }
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
