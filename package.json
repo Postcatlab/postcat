@@ -26,13 +26,14 @@
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "api:gen":"donkey run",
+    "api:gen": "donkey run",
     "web:start:direct": "yarn workspace postcat-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged",
     "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim.bat",
     "pack:win": "npm run electron:build && npm run wininstaller",
-    "deployWindows": "node scripts/deployWindows.js"
+    "deployWindows": "node scripts/deployWindows.js",
+    "releaseWindows": "npx esno scripts/releaseWindows.ts"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
@@ -84,6 +85,7 @@
     "lint-staged": "~12.5.0",
     "minimist": "1.2.7",
     "npm-run-all": "4.1.5",
+    "octokit": "2.0.14",
     "postcss-html": "1.5.0",
     "postcss-scss": "4.0.6",
     "prettier": "^2.7.1",

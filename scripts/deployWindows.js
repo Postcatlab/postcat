@@ -32,6 +32,7 @@ conn
             'nvm use 16.13.2',
             'yarn install',
             'yarn build',
+            'yarn releaseWindows',
             'nvm use 12.22.10',
             'echo Windows打包发布完成!'
           ].join('\r\n')
@@ -39,7 +40,7 @@ conn
     });
   })
   .connect({
-    host: process.env.SSH_WINDOWS_IP,
-    username: process.env.SSH_WINDOWS_USERNAME,
-    password: process.env.SSH_WINDOWS_PASSWORD
+    host: process.env.SSH_WINDOWS_IP || '10.8.0.130',
+    username: process.env.SSH_WINDOWS_USERNAME || 'root',
+    password: process.env.SSH_WINDOWS_PASSWORD || 520123
   });
