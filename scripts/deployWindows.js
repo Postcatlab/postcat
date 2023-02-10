@@ -29,6 +29,7 @@ conn
             'git reset --hard',
             ...Array.from({ length: 5 }).map(_ => 'git pull'),
             'nvm use 16.13.2',
+            `echo ${process.env.QINIU_ENV_JS} > qiniu_env.js`,
             'yarn install',
             'yarn release',
             'nvm use 12.22.10',

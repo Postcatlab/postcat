@@ -30,6 +30,7 @@ jobs:
           SSH_WINDOWS_USERNAME: ${{ secrets.SSH_WINDOWS_USERNAME }}
           SSH_WINDOWS_PASSWORD: ${{ secrets.SSH_WINDOWS_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          QINIU_ENV_JS: ${{ secrets.QINIU_ENV_JS }}
         run: |
           yarn
           yarn deployWindows
