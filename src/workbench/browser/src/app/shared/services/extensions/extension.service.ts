@@ -19,6 +19,7 @@ export class ExtensionService {
   ignoreList = ['default'];
   disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
+  isFirstInit = true;
   HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ExtensionInfo[] = [];
   installedMap: Map<string, ExtensionInfo> = new Map();
@@ -94,7 +95,7 @@ export class ExtensionService {
     return this.installedList.includes(name);
   }
   public async requestList(type = 'list', queryParams = {}) {
-    if (type === 'list') {
+    if (type === 'list' && !this.isFirstInit) {
       this.requestPending?.unsubscribe();
     }
     return new Promise((resolve, reject) => {
@@ -143,6 +144,7 @@ export class ExtensionService {
 
           this.store.setExtensionList(result.data);
           this.requestPending = null;
+          this.isFirstInit = false;
           resolve([result, originData]);
         },
         error: () => {
