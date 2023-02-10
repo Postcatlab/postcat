@@ -5,7 +5,7 @@
 goto "http://localhost:4200"
 
 find: 
-    [img { width: 16px }] [img { width: 16px }] = history [label "New Request"]
+    [img { width: 14px }] [img { width: 14px }] = history [label "New Request"]
     [select "POST"] = method  [input] = input [button "Send"] = sendBtn 
     [label "Headers"] = header
 
@@ -27,12 +27,12 @@ find:
 
 wait
 
---- add New
+--- add New API
 
 goto "http://localhost:4200"
 
 find:
-    [input 'Search'] [button 'xpath:body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-sider > div > nz-content > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > pc-api-group-tree > header > div']=addBtn
+    [input 'Search' { height: 22px }] [button '' { height: 32px; width: 32px }] = addBtn 
 
 addBtn -> hover
 
@@ -43,9 +43,9 @@ find:
 newApi -> click
 
 find: 
-    [button "Save"]=save
-    [select "POST"]=method [input "/"]=path
-    [select "Root directory"] [input]=name
+    [button "Save"] = save
+    [select "POST"] = method [input "/"] = path
+    [select "Root Group"] [input] = name
     # [input]=paramName [input]=desc [input]=example
 
 method -> "GET"
