@@ -1,0 +1,91 @@
+name: Build
+
+on:
+  push:
+    branches: [feat/build]
+    # tags:
+    #   - 'v*.*.*'
+jobs:
+  release:
+    name: build and release electron app
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-12, ubuntu-latest]
+
+    steps:
+      - name: Check out git repository
+        uses: actions/checkout@v3.0.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: '16'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
+          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
+
+      - name: Release for Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Release for MacOS
+        if: matrix.os == 'macos-12'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          # BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          # PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+          # echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
+          yarn release
+
+          # clean up keychain and provisioning profile
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+
+      - name: Release for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

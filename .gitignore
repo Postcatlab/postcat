@@ -20,6 +20,7 @@ out/
 !*.config.js
 !.*.js
 !upload.js
+!publish.js
 
 # dependencies
 node_modules
