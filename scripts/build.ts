@@ -1,6 +1,6 @@
 import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
-import type { Configuration, BuildResult } from 'electron-builder';
+import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
 import { exec, spawn } from 'node:child_process';
@@ -93,7 +93,13 @@ const config: Configuration = {
     gatekeeperAssess: false,
     entitlements: 'scripts/entitlements.mac.plist',
     entitlementsInherit: 'scripts/entitlements.mac.plist',
-    target: ['dmg', 'zip']
+    // target: ['dmg', 'zip']
+    target: [
+      {
+        target: 'default',
+        arch: ['x64', 'arm64']
+      }
+    ]
   },
   dmg: {
     sign: false
@@ -161,8 +167,11 @@ Promise.all([
     ...argv
   })
 ])
-  .then(() => {
-    signWindows();
+  .then(async () => {
+    await signWindows();
+    if (process.platform !== 'win32') {
+      exit();
+    }
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);

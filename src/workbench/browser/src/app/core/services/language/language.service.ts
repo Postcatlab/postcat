@@ -15,7 +15,7 @@ export class LanguageService {
   constructor(private electron: ElectronService, private setting: SettingService) {
     //Curent language
     this.systemLanguage =
-      this.languages.find(val => window.location.href.includes(`/${val.path}`))?.value ||
+      this.languages.find(val => window.location.pathname.includes(`/${val.path}/`))?.value ||
       this.setting.settings?.['system.language'] ||
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
   }
@@ -27,6 +27,7 @@ export class LanguageService {
     this.changeLanguage(this.setting.settings?.['system.language']);
   }
   changeLanguage(localeID) {
+    console.log(this.systemLanguage, localeID);
     if (!localeID || localeID === this.systemLanguage) {
       pcConsole.warn(`[languageService]: current language has already ${localeID}`);
       return;

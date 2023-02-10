@@ -58,12 +58,12 @@ export class ExtensionDetailComponent implements OnInit {
         this.isOperating = false;
       });
     }
-
+    this.introLoading = true;
     this.extensionDetail = await this.extensionService.getDetail(this.extensionData?.name);
     if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
     }
-
+    this.introLoading = false;
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
 
@@ -121,7 +121,6 @@ ${log}
       locale = '';
     }
     try {
-      this.introLoading = true;
       const response = await fetch(
         `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/README.${locale ? `${locale}.` : ''}md`
       );
@@ -133,7 +132,6 @@ ${log}
       }
     } catch (error) {
     } finally {
-      this.introLoading = false;
     }
   }
 
