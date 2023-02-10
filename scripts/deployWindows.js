@@ -24,15 +24,13 @@ conn
           [
             'set TERM=msys',
             `set GITHUB_TOKEN=${process.env.GITHUB_TOKEN}`,
-            'set GITHUB_TOKEN',
             'd:',
             `cd \\git\\postcat`,
             'git reset --hard',
             ...Array.from({ length: 5 }).map(_ => 'git pull'),
             'nvm use 16.13.2',
             'yarn install',
-            'yarn build:static',
-            'yarn releaseWindows',
+            'yarn release',
             'nvm use 12.22.10',
             'echo Windows打包发布完成!'
           ].join('\r\n')
