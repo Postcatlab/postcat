@@ -2,7 +2,7 @@ name: TestRelease
 
 on:
   push:
-    branches: [build/windows2]
+    branches: [build/windows]
 
 jobs:
   build:

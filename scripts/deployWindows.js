@@ -24,11 +24,11 @@ conn
           [
             'set TERM=msys',
             `set GITHUB_TOKEN=${process.env.GITHUB_TOKEN}`,
-            'set ',
+            'set GITHUB_TOKEN',
             'd:',
             `cd \\git\\postcat`,
             'nvm use 16.13.2',
-            'yarn build:static',
+            'yarn build',
             'nvm use 12.22.10',
             'echo Windows打包发布完成!'
           ].join('\r\n')
