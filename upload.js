@@ -72,24 +72,6 @@ const main = async () => {
       })
   );
   console.log('上传结果：', uploadResult);
-  // const deleteResult = await Promise.all(
-  //   fileList
-  //     .filter(async it => await isExists(it))
-  //     .map(async it => {
-  //       const isOK = await removeFile(bucket, `download/latest/${toLatest(onlyName(it))}`);
-  //       return Promise.resolve(isOK || false);
-  //     })
-  // );
-  // console.log('删除结果：', deleteResult);
-  // const copyResult = await Promise.all(
-  //   fileList
-  //     .filter(async it => await isExists(it))
-  //     .map(async it => {
-  //       const isOK = await cpFile(`download/${version}/${onlyName(it)}`, `download/latest/${toLatest(onlyName(it))}`);
-  //       return Promise.resolve(isOK || false);
-  //     })
-  // );
-  // console.log('拷贝结果', copyResult);
 };
 
 main();
