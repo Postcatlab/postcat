@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { LANGUAGES } from 'eo/workbench/browser/src/app/core/services/language/language.model';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,6 @@ export class LanguageService {
     this.changeLanguage(this.setting.settings?.['system.language']);
   }
   changeLanguage(localeID) {
-    console.log(this.systemLanguage, localeID);
     if (!localeID || localeID === this.systemLanguage) {
       pcConsole.warn(`[languageService]: current language has already ${localeID}`);
       return;
@@ -39,10 +39,14 @@ export class LanguageService {
         action: 'changeLanguage',
         data: this.systemLanguage
       });
-    } else {
-      const url = window.location.href;
-      window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${this.langHashMap.get(localeID)}/home/`));
+      this.setting.set('system.language', localeID);
+
+      return;
     }
+    const url = window.location.href;
+    const targetUrl = url.replace(/\/(zh|en)\/home\//, `/${this.langHashMap.get(localeID)}/home/`);
     this.setting.set('system.language', localeID);
+    if (APP_CONFIG.production && url === targetUrl) return;
+    window.location.replace(targetUrl);
   }
 }
