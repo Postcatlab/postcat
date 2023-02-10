@@ -32,5 +32,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           yarn
-          ping -c 4 10.8.0.130
           yarn deployWindows

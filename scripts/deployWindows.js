@@ -28,7 +28,7 @@ conn
             'd:',
             `cd \\git\\postcat`,
             'git reset --hard',
-            'git pull',
+            ...Array.from({ length: 5 }).map(_ => 'git pull'),
             'nvm use 16.13.2',
             'yarn install',
             'yarn build:static',
