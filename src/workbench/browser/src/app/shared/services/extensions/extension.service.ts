@@ -94,7 +94,9 @@ export class ExtensionService {
     return this.installedList.includes(name);
   }
   public async requestList(type = 'list', queryParams = {}) {
-    this.requestPending?.unsubscribe();
+    if (type === 'list') {
+      this.requestPending?.unsubscribe();
+    }
     return new Promise((resolve, reject) => {
       const params = JSON.parse(JSON.stringify({ locale: this.language.systemLanguage, ...queryParams }));
 
