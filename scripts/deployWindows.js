@@ -27,7 +27,10 @@ conn
             'set GITHUB_TOKEN',
             'd:',
             `cd \\git\\postcat`,
+            'git reset --hard',
+            'git pull',
             'nvm use 16.13.2',
+            'yarn install',
             'yarn build',
             'nvm use 12.22.10',
             'echo Windows打包发布完成!'
