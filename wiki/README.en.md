@@ -41,7 +41,7 @@ Learn more：[Github Project](https://github.com/orgs/eolinker/projects/1/views/
 
 ## Bug and Feature Request
 
-If you'd like to contact us, please create a [Github issue](https://github.com/eolinker/postcat/issues). Thank you!
+If you'd like to contact us, please create a [Github issue](https://github.com/Postcatlab/postcat/issues). Thank you!
 
 ## Document
 
