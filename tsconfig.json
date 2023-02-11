@@ -25,7 +25,7 @@
       "eo/*": ["./src/*"]
     }
   },
-  "include": ["**/*.d.ts", "./src/**/**.ts", "./src/**/**.js", "scripts/build.js"],
+  "include": ["**/*.d.ts", "./src/**/**.ts", "./src/**/**.js", "scripts/build.js", "e2e/test.ts", "e2e/test.ts"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/browser/**/*.js", "**/browser/**/*.ts", "out"],
   "angularCompilerOptions": {
     "enableIvy": true

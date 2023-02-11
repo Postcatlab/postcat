@@ -31,7 +31,7 @@ find:
 env -> click
 
 find: 
-    [label "Environment"] [button { width: 32px }] = add
+    [label "Environment"] [img { height: 14px; width: 14px }] = add 
 
 add -> click
 
