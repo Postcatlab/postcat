@@ -54,7 +54,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: 'https://data.postcat.com/download/'
+      url: 'http://192.168.31.196:8080'
     }
   ],
   generateUpdatesFilesForAllChannels: true,
