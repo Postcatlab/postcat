@@ -6,7 +6,7 @@
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/Postcatlab/postcat.git",
   "author": "Postcat",
-  "private": true,
+  "private": true, 
   "workspaces": [
     "src/workbench/*"
   ],
