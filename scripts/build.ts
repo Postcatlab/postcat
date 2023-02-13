@@ -154,24 +154,24 @@ const signWindows = async () => {
       };
       await sign(...signOptions);
 
-      const packager = new Packager(buildOptions);
-      const publishManager = new PublishManager(packager, buildOptions);
+      // const packager = new Packager(buildOptions);
+      // const publishManager = new PublishManager(packager, buildOptions);
 
-      const publishConfigurations = await publishManager.getGlobalPublishConfigurations();
+      // const publishConfigurations = await publishManager.getGlobalPublishConfigurations();
 
-      if (publishConfigurations) {
-        for (const publishConfiguration of publishConfigurations) {
-          // @ts-ignore
-          publishManager.scheduleUpload(
-            publishConfiguration,
-            {
-              file: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`,
-              arch: null
-            },
-            packager.appInfo
-          );
-        }
-      }
+      // if (publishConfigurations) {
+      //   for (const publishConfiguration of publishConfigurations) {
+      //     // @ts-ignore
+      //     publishManager.scheduleUpload(
+      //       publishConfiguration,
+      //       {
+      //         file: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`,
+      //         arch: null
+      //       },
+      //       packager.appInfo
+      //     );
+      //   }
+      // }
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
