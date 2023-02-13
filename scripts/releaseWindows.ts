@@ -33,5 +33,5 @@ const setup = async () => {
   //   data: '@example.zip'
   // })
 };
-
+// application/octet-stream
 setup();

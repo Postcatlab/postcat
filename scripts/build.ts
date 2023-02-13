@@ -62,6 +62,7 @@ const config: Configuration = {
     oneClick: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
+    differentialPackage: false,
     // for win - 将协议写入主机的脚本
     include: 'scripts/urlProtoco.nsh'
   },
@@ -73,7 +74,7 @@ const config: Configuration = {
     }
   ],
   win: {
-    requestedExecutionLevel: 'highestAvailable',
+    // requestedExecutionLevel: 'highestAvailable',
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
