@@ -17,6 +17,8 @@ import { ElectronService } from '../../../core/services';
           target="_blank"
           nz-menu-item
           i18n
+          trace
+          traceID="report_issue"
           >Report Issue</a
         >
       </ul>

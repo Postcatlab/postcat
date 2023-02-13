@@ -15,7 +15,9 @@ import { ElectronService, WebService } from '../../core/services';
     <eo-ng-dropdown-menu #download="nzDropdownMenu">
       <ul nz-menu>
         <ng-container *ngFor="let item of resourceInfo; let index = index">
-          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+          <a [href]="item.link" traceID="download_client" [traceParams]="{ client_system: item.name }" trace nz-menu-item>{{
+            item.name
+          }}</a>
         </ng-container>
       </ul>
     </eo-ng-dropdown-menu></ng-container

@@ -7,7 +7,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
     <span i18n>Don't have Postcat Client?</span>
     <eo-ng-dropdown class="ml-5" btnType="primary" title="Download" [menus]="resourceInfo" [itemTmp]="downloadMenu"> </eo-ng-dropdown>
     <ng-template #downloadMenu let-item="item">
-      <a [href]="item.link">{{ item.name }}</a>
+      <a [href]="item.link" traceID="download_client" [traceParams]="{ client_system: item.name }" trace>{{ item.name }}</a>
     </ng-template>
   `
 })

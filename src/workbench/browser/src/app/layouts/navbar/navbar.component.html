@@ -2,7 +2,13 @@
   <div class="flex items-center">
     <eo-logo class="logo"></eo-logo>
     <!-- Star -->
-    <a href="https://github.com/eolinker/postcat" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
+    <a
+      href="https://github.com/eolinker/postcat"
+      target="_blank"
+      class="flex items-center ml-[15px] electron-can-be-click"
+      trace
+      traceID="jump_to_github"
+    >
       <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/postcat?style=social" alt="" />
     </a>
     <eo-nav-breadcrumb class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
@@ -21,6 +27,8 @@
       nzTooltipPlacement="bottom"
       nzTooltipTitle="Extensions"
       (click)="openExtension()"
+      trace
+      traceID="open_extensions"
       i18n
     >
       Extensions

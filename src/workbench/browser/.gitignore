@@ -12,6 +12,7 @@ src/**/*.js
 !src/assets/font/*.js
 !src/assets/libs/*.js
 *.js.map
+growing.config.js
 
 
 # dependencies

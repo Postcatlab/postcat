@@ -8,6 +8,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { LocalService } from 'eo/workbench/browser/src/app/shared/services/storage/local.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { getUrlParams } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -193,7 +194,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     private web: WebService,
     private remote: RemoteService,
     private localService: LocalService,
-    private electron: ElectronService
+    private electron: ElectronService,
+    private trace: TraceService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -306,10 +308,12 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async thirdLogin(code) {
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
+    console.log('data', data);
     if (err) {
       this.store.clearAuth();
       return;
     }
+    this.trace.report('register_success', {});
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
     {
