@@ -3,7 +3,7 @@ import { build, CliOptions, Packager, Platform, PublishManager } from 'electron-
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
-import { exec, spawn } from 'node:child_process';
+import { execSync, exec, spawn } from 'node:child_process';
 import { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
@@ -76,7 +76,7 @@ const config: Configuration = {
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
-    artifactName: '${productName}-${version}.${ext}',
+    // artifactName: '${productName}-${version}.${ext}',
     signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
     target: ['nsis', 'portable'],
@@ -137,8 +137,6 @@ const signWindows = async () => {
     path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
     path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
   );
-  // 生成 自定义安装包
-  // exec(`yarn wininstaller`);
 
   const ls = spawn('yarn', ['wininstaller'], {
     // 仅在当前运行环境为 Windows 时，才使用 shell
@@ -173,6 +171,7 @@ const signWindows = async () => {
       //     );
       //   }
       // }
+      execSync(`node ./scripts/afterBuild.js`);
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
