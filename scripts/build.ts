@@ -171,7 +171,7 @@ const signWindows = async () => {
       //     );
       //   }
       // }
-      execSync(`node ./scripts/afterBuild.js`);
+      // execSync(`node ./scripts/afterBuild.js`);
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
