@@ -73,6 +73,7 @@ const config: Configuration = {
     }
   ],
   win: {
+    requestedExecutionLevel: 'highestAvailable',
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
