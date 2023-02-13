@@ -44,7 +44,6 @@ export class HelpDropdownComponent {
   }
   private getEnvironment(): string {
     let result = '';
-    console.log(this);
     const systemInfo = this.electron?.getSystemInfo();
     systemInfo?.forEach(val => {
       if (['homeDir'].includes(val.id)) {
@@ -52,7 +51,6 @@ export class HelpDropdownComponent {
       }
       result += `- ${val.label}: ${val.value}\r\n`;
     });
-    console.log(systemInfo);
     return encodeURIComponent(result);
   }
 }

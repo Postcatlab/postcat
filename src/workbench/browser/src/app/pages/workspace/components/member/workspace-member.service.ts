@@ -20,7 +20,6 @@ export class WorkspaceMemberService {
   ) {
     autorun(() => {
       this.role = this.store.getWorkspaceRole;
-      console.log(this.role);
       this.workSpaceUuid = this.store.getCurrentWorkspaceUuid;
       this.isOwner = this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner');
     });

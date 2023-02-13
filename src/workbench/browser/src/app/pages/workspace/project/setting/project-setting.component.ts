@@ -92,7 +92,7 @@ export class ProjectSettingComponent implements OnInit {
         if (err) {
           return;
         }
-        this.router.navigate(['/home/workspace/overview']);
+        this.router.navigate(['/home/workspace/overview/projects']);
         this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
         modal.destroy();
       }

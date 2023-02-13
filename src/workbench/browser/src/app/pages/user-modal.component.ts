@@ -561,7 +561,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
 
                 await this.router.navigate(['**']);
 
-                this.router.navigate(['/home/workspace/overview']);
+                this.router.navigate(['/home/workspace/overview/projects']);
                 // localProjects.forEach((project, index) => {
                 //   importProject(project, index);
                 // });

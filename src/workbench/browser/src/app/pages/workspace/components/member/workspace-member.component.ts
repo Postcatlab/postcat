@@ -1,14 +1,31 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
 import { makeObservable, observable, reaction } from 'mobx';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
+import { MessageService } from '../../../../shared/services/message/message.service';
 import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
-  template: `<nz-list nzItemLayout="horizontal">
+  template: `
+    <eo-ng-feedback-alert
+      *ngIf="store.isLocal"
+      class="block mb-[20px]"
+      nzType="info"
+      [nzMessage]="templateRefMsg"
+      nzShowIcon
+    ></eo-ng-feedback-alert>
+    <ng-template #templateRefMsg>
+      <p i18n>Currently using local workspace, unable to invite members. </p>
+      <p class="flex items-center" i18n
+        >You can<button eo-ng-button nzType="default" class="mx-[5px]" nzSize="small" (click)="createWorkspace()"
+          >create a cloud workspace</button
+        >and invite members to collaborate.</p
+      ></ng-template
+    >
+    <nz-list nzItemLayout="horizontal">
       <nz-list-header *ngIf="member.isOwner">
         <eo-ng-select
           class="w-full"
@@ -43,7 +60,8 @@ import { StoreService } from '../../../../shared/store/state.service';
         </eo-ng-select>
       </nz-list-header>
     </nz-list>
-    <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> `,
+    <eo-member-list class="block mt-[10px]" #memberList></eo-member-list>
+  `,
   styles: [
     `
       .ant-list-split .ant-list-header {
@@ -61,11 +79,13 @@ export class WorkspaceMemberComponent implements OnInit {
   userList = [];
   constructor(
     public store: StoreService,
-    private message: EoNgFeedbackMessageService,
+    private eMessage: EoNgFeedbackMessageService,
     public member: MemberService,
-    private cdk: ChangeDetectorRef
+    private message: MessageService
   ) {}
-
+  createWorkspace() {
+    this.message.send({ type: 'addWorkspace', data: {} });
+  }
   ngOnInit(): void {
     makeObservable(this);
     reaction(
@@ -97,15 +117,15 @@ export class WorkspaceMemberComponent implements OnInit {
   }
   async addMember(items) {
     if (this.store.isLocal) {
-      this.message.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
+      this.eMessage.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
       return;
     }
     const [data, err]: any = await this.member.addMember(items.id);
     if (err) {
-      this.message.error($localize`Add member failed`);
+      this.eMessage.error($localize`Add member failed`);
       return;
     }
-    this.message.success($localize`Add member successfully`);
+    this.eMessage.success($localize`Add member successfully`);
     this.userList = [];
     this.userCache = '';
     this.memberListRef.queryList();

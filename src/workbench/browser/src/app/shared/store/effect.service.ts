@@ -88,7 +88,7 @@ export class EffectService {
         return;
       }
       if (this.store.getProjectList.length === 0) {
-        this.router.navigate(['/home/workspace/overview']);
+        this.router.navigate(['/home/workspace/overview/projects']);
       }
       // * Fixed projectID
       const { pid } = this.route.snapshot.queryParams;
@@ -138,7 +138,7 @@ export class EffectService {
 
     // * real set workspace
     await this.router.navigate(['**']);
-    this.router.navigate(['/home/workspace/overview']);
+    this.router.navigate(['/home/workspace/overview/projects']);
     // * update title
     document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
 
@@ -178,7 +178,7 @@ export class EffectService {
 
   async switchProject(pid) {
     if (!pid) {
-      this.router.navigate(['/home/workspace/overview']);
+      this.router.navigate(['/home/workspace/overview/projects']);
       return;
     }
     this.store.setCurrentProjectID(pid);

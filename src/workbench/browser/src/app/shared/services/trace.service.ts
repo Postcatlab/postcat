@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { accountId } from 'eo/workbench/browser/growing.config.js';
+// import { accountId } from 'eo/workbench/browser/growing.config.js';
 
 declare const gio;
 
@@ -8,7 +8,7 @@ declare const gio;
 })
 export class TraceService {
   constructor() {
-    gio('init', accountId, {});
+    // gio('init', accountId, {});
     //custom page code begin here
     // window._gr_ignore_local_rule = true; // * Open local collection
     //Electron use hash mode
