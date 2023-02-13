@@ -51,7 +51,7 @@ const config: Configuration = {
     '!**/*.ts'
   ],
   publish: [
-    'github',
+    // 'github',
     {
       provider: 'generic',
       url: 'http://192.168.31.196:8080'
