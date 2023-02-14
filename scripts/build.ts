@@ -3,6 +3,8 @@ import { build, CliOptions, Packager, Platform, PublishManager } from 'electron-
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
+import { ELETRON_APP_CONFIG } from '../src/environment';
+
 import { execSync, exec, spawn } from 'node:child_process';
 import { copyFileSync } from 'node:fs';
 import path from 'node:path';
@@ -54,7 +56,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: 'https://data.postcat.com/download/'
+      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
     }
   ],
   generateUpdatesFilesForAllChannels: true,

@@ -149,6 +149,7 @@ try {
     if (process.platform === 'win32') {
       const exePath = path.dirname(app.getPath('exe'));
       const uninstallExePath = path.join(exePath, 'Uninstall Postcat.exe');
+      console.log('uninstallExePath', uninstallExePath);
       // Read file stats
       fs.stat(uninstallExePath, (err, stats) => {
         if (err) {

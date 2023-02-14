@@ -26,12 +26,11 @@ const setup = async () => {
 
   console.log('releases data', data);
 
-  // await octokit.request(`POST /repos/Postcatlab/postcat/releases/${data.id}/assets{?name,label}`, {
-  //   owner: 'OWNER',
-  //   repo: 'REPO',
-  //   release_id: 'RELEASE_ID',
-  //   data: '@example.zip'
-  // })
+  await octokit.request(`POST /repos/Postcatlab/postcat/releases/${data.id}/assets`, {
+    ...commonInfo,
+    release_id: data.id,
+    data: '../release/Postcat-Setup-0.2.0.exe'
+  });
 };
 // application/octet-stream
 setup();
