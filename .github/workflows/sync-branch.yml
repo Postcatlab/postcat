@@ -1,0 +1,17 @@
+name: Merge main branch to build/windows
+on:
+  push:
+    branches:
+      - 'merge/test'
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Merge main -> build/windows
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: build/windows
+          github_token: ${{ github.token }}
