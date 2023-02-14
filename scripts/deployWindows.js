@@ -31,7 +31,7 @@ conn
             'nvm use 16.13.2',
             `echo ${process.env.QINIU_ENV_JS} > qiniu_env.js`,
             'yarn install',
-            'yarn release',
+            'yarn build',
             'nvm use 12.22.10',
             'echo Windows打包发布完成!'
           ].join('\r\n')
