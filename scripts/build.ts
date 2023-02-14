@@ -1,5 +1,5 @@
 import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
-import { build, CliOptions, Packager, Platform, PublishManager } from 'electron-builder';
+import { build, CliOptions, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
@@ -154,25 +154,7 @@ const signWindows = async () => {
         path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
       };
       await sign(...signOptions);
-
-      // const packager = new Packager(buildOptions);
-      // const publishManager = new PublishManager(packager, buildOptions);
-
-      // const publishConfigurations = await publishManager.getGlobalPublishConfigurations();
-
-      // if (publishConfigurations) {
-      //   for (const publishConfiguration of publishConfigurations) {
-      //     // @ts-ignore
-      //     publishManager.scheduleUpload(
-      //       publishConfiguration,
-      //       {
-      //         file: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`,
-      //         arch: null
-      //       },
-      //       packager.appInfo
-      //     );
-      //   }
-      // }
+      execSync('yarn releaseWindows');
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
