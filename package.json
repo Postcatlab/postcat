@@ -1,7 +1,7 @@
 {
   "name": "postcat",
   "souceLocale": "zh-Hans",
-  "version": "0.3.5",
+  "version": "0.2.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/Postcatlab/postcat.git",
