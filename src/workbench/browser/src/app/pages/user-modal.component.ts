@@ -11,7 +11,6 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { getUrlParams } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
@@ -308,12 +307,18 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async thirdLogin(code) {
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
-    console.log('data', data);
+    // console.log('data', data);
     if (err) {
       this.store.clearAuth();
       return;
     }
-    this.trace.report('register_success', {});
+    // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
+    const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
+    const typeHash = new Map().set(0, '登录').set(1, '注册');
+    this.trace.report('register_success', {
+      loginWay: hash.get(data.loginWay),
+      type: typeHash.get(data.type)
+    });
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
     {
@@ -472,6 +477,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
+      this.trace.report('add_workspace_success');
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       {

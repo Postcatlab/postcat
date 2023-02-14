@@ -1,16 +1,13 @@
-import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, HostListener, Input } from '@angular/core';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 
 @Directive({
   selector: '[trace]'
 })
-export class TraceDirective implements OnInit {
+export class TraceDirective {
   @Input() traceID: string;
   @Input() traceParams: any = {};
   constructor(private trace: TraceService) {}
-  ngOnInit(): void {
-    console.log('TraceDirective');
-  }
 
   @HostListener('click', ['$event'])
   tClick(event) {

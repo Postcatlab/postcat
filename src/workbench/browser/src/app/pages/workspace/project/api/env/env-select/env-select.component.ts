@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'eo/workbench/browser/src/app/layouts/sidebar/sidebar.service';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, makeObservable, observable, reaction, toJS } from 'mobx';
 
@@ -99,7 +100,8 @@ export class EnvSelectComponent implements OnInit {
     public globalStore: StoreService,
     private sidebar: SidebarService,
     private effect: ApiEffectService,
-    private testUtils: ApiTestUtilService
+    private testUtils: ApiTestUtilService,
+    private trace: TraceService
   ) {}
   onVisibleChange($event) {
     if ($event) {
@@ -121,6 +123,7 @@ export class EnvSelectComponent implements OnInit {
       () => this.envUuid,
       data => {
         this.store.setEnvUuid(data);
+        this.trace.report('select_environment');
       }
     );
     this.envUuid = this.store.getEnvUuid;

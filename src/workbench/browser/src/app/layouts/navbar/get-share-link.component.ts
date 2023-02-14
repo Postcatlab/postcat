@@ -20,6 +20,8 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       nzPopoverOverlayClassName="background-popover"
       nzPopoverTrigger="click"
       (click)="handleGetShareLink()"
+      trace
+      traceID="click_share"
       i18n
     >
       Share
