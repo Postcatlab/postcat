@@ -211,6 +211,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
     this.isSaveBtnLoading = false;
   }
   async ngOnInit(): Promise<void> {
+    if (this.store.isClientFirst) {
+      this.trace.report('first_open_client');
+    }
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -312,13 +315,20 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       return;
     }
+    this.trace.setUserID(data.userId);
     // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
     const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
-    const typeHash = new Map().set(0, '登录').set(1, '注册');
-    this.trace.report('register_success', {
-      loginWay: hash.get(data.loginWay),
-      type: typeHash.get(data.type)
-    });
+    // (0, '登录').set(1, '注册');
+    if (data.type == 0) {
+      // * login
+      this.trace.report('login_success', { login_way: data.loginWay });
+    }
+    if (data.type == 1) {
+      // * register
+      this.trace.report('register_success', {
+        register_way: hash.get(data.loginWay)
+      });
+    }
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
     {
@@ -409,6 +419,20 @@ export class UserModalComponent implements OnInit, OnDestroy {
         }
         this.eMessage.error($localize`Please check you username or password`);
         return;
+      }
+      this.trace.setUserID(data.userId);
+      // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
+      const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
+      // (0, '登录').set(1, '注册');
+      if (data.type == 0) {
+        // * login
+        this.trace.report('login_success', { login_way: data.loginWay });
+      }
+      if (data.type == 1) {
+        // * register
+        this.trace.report('register_success', {
+          register_way: hash.get(data.loginWay)
+        });
       }
       this.store.setLoginInfo(data);
       this.effect.updateWorkspaceList();
