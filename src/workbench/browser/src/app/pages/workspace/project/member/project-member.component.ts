@@ -4,6 +4,7 @@ import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -53,6 +54,8 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           nzBlock
           (click)="btn0r9zcbCallback()"
           [disabled]="btnguixdgStatus()"
+          trace
+          traceID="click_project_add_member"
           i18n
         >
           Add
@@ -103,7 +106,8 @@ export class ProjectMemberComponent implements OnInit {
     public api: ApiService,
     public eMessage: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
-    private member: MemberService
+    private member: MemberService,
+    private trace: TraceService
   ) {
     this.isInvateModalVisible = false;
     this.isSelectBtnLoading = false;
@@ -158,6 +162,7 @@ export class ProjectMemberComponent implements OnInit {
         this.eMessage.error($localize`Add member failed`);
         return;
       }
+      this.trace.report('project_add_member_success');
       this.eMessage.success($localize`Add member successfully`);
 
       // * 关闭弹窗

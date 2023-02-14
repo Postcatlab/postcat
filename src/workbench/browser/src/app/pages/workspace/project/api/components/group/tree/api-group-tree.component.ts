@@ -7,6 +7,7 @@ import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/proj
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -82,6 +83,7 @@ export class ApiGroupTreeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tab: ApiTabService,
+    private trace: TraceService,
     private message: EoNgFeedbackMessageService
   ) {}
 
@@ -220,6 +222,10 @@ export class ApiGroupTreeComponent implements OnInit {
               return resolve(true);
             }
             this.message.success($localize`${title} successfully`);
+            // * For trace
+            const sync_platform = modal.componentInstance.currentExtension;
+            const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
+            this.trace.report('import_project_success', { sync_platform, workspace_type });
             modal.destroy();
             return resolve(true);
           });

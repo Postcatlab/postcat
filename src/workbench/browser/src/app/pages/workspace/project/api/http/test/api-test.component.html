@@ -39,7 +39,18 @@
         <span *ngIf="status === 'testing'" i18n>Abort</span>
         <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
       </button>
-      <button type="button" *ngIf="isEmptyTestPage" eo-ng-button nzType="default" (click)="saveApi()" i18n> Save as API </button>
+      <button
+        type="button"
+        *ngIf="isEmptyTestPage"
+        eo-ng-button
+        nzType="default"
+        (click)="saveApi()"
+        trace
+        traceID="save_api_document_from_test"
+        i18n
+      >
+        Save as API
+      </button>
     </form>
     <!-- Request Info -->
     <eo-ng-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [(nzSelectedIndex)]="model.requestTabIndex">

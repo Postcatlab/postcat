@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { autorun, reaction } from 'mobx';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
@@ -31,7 +32,8 @@ export class WorkspaceOverviewComponent implements OnInit {
     this.router.navigate(['/home/workspace/overview/member']);
   }
   ngOnInit(): void {
-    autorun(() => {
+    autorun(async () => {
+      await waitNextTick();
       this.title = this.store.getCurrentWorkspace?.title;
       this.isOwner = this.store.getWorkspaceRole.some(it => ['Workspace Owner'].includes(it.name));
     });

@@ -8,15 +8,14 @@ declare const gio;
 })
 export class TraceService {
   constructor() {
+    // @ts-ignore
     gio('init', accountId, {});
     //custom page code begin here
-    // window._gr_ignore_local_rule = true; // * Open local collection
     //Electron use hash mode
     if (!!window.electron) {
       gio('config', { hashtag: true });
     }
     //custom page code end here
-
     gio('send');
   }
 
@@ -25,7 +24,7 @@ export class TraceService {
       return;
     }
     console.log('trace =>>', eventId, JSON.stringify(params, null, 2));
-    // gio('track', eventId, params);
+    gio('track', eventId, params);
   }
   start() {
     gio('config', { dataCollect: false });

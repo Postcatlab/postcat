@@ -12,8 +12,6 @@ import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 
-import { debug } from 'console';
-
 const actionComponent = {
   push: SyncApiComponent,
   import: ImportApiComponent,
@@ -42,13 +40,15 @@ export class ProjectSettingComponent implements OnInit {
       title: $localize`Import`,
       icon: 'afferent',
       desc: $localize`Import data from other products`,
-      type: 'import'
+      type: 'import',
+      traceID: 'click_import_project'
     },
     {
       title: $localize`Export`,
       icon: 'efferent',
       desc: $localize`Export Postcat project data`,
-      type: 'export'
+      type: 'export',
+      traceID: 'click_export_project'
     },
     {
       title: $localize`Push`,

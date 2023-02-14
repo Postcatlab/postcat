@@ -1,6 +1,8 @@
 <nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
   <div nz-result-extra>
-    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" i18n>{{ btnTitle }}</button>
+    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" trace traceID="open_client" i18n>{{
+      btnTitle
+    }}</button>
     <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>
   </div>
 </nz-result>

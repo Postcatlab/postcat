@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 
 import { SettingService } from '../../../../modules/system-setting/settings.service';
 import { ModalService } from '../../../../shared/services/modal.service';
@@ -18,7 +19,8 @@ export class ProjectListService {
     private modalService: ModalService,
     private store: StoreService,
     private effect: EffectService,
-    private router: Router
+    private router: Router,
+    private trace: TraceService
   ) {
     this.listType = this.setting.get('workbench.list.type') || 'list';
   }
@@ -48,6 +50,8 @@ export class ProjectListService {
           return;
         }
         await this.effect.createProject([model]);
+        const workspace_type = this.store.isLocal ? 'local' : 'cloud';
+        this.trace.report('add_project_success', { workspace_type });
 
         // * update project list
         this.getProjectList();

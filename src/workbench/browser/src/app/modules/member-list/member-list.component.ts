@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { autorun, reaction } from 'mobx';
 
 import { StoreService } from '../../shared/store/state.service';
@@ -51,7 +52,12 @@ export class MemberListComponent implements OnInit {
   list = [];
   roleList = [];
   loading = false;
-  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
+  constructor(
+    public store: StoreService,
+    private trace: TraceService,
+    private message: EoNgFeedbackMessageService,
+    public member: MemberService
+  ) {}
 
   ngOnInit(): void {
     this.updateList();
@@ -84,6 +90,7 @@ export class MemberListComponent implements OnInit {
     const isOK: boolean = await this.member.changeRole(item);
     if (isOK) {
       this.message.success($localize`Change role successfully`);
+      this.trace.report('switch_member_permission');
       this.queryList();
       return;
     }

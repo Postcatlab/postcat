@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { makeObservable, observable, reaction } from 'mobx';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
@@ -37,6 +38,8 @@ import { StoreService } from '../../../../shared/store/state.service';
           [nzOptionHeightPx]="54"
           i18n-nzPlaceHolder
           nzPlaceHolder="Search"
+          trace
+          traceID="click_add_workspace_member"
           [(ngModel)]="userCache"
           (nzOnSearch)="handleChange($event)"
         >
@@ -81,7 +84,8 @@ export class WorkspaceMemberComponent implements OnInit {
     public store: StoreService,
     private eMessage: EoNgFeedbackMessageService,
     public member: MemberService,
-    private message: MessageService
+    private message: MessageService,
+    private trace: TraceService
   ) {}
   createWorkspace() {
     this.message.send({ type: 'addWorkspace', data: {} });
@@ -125,6 +129,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.eMessage.error($localize`Add member failed`);
       return;
     }
+    this.trace.report('add_workspace_member_success');
     this.eMessage.success($localize`Add member successfully`);
     this.userList = [];
     this.userCache = '';

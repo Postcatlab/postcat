@@ -14,8 +14,14 @@ export class TraceDirective {
     this.trace.report(this.traceID, this.traceParams);
   }
 
+  @HostListener('keydown')
+  tKeyDown() {
+    console.log('keydown');
+  }
+
   @HostListener('focus', ['$event'])
-  fFocus(event) {
+  onFocus(event) {
+    console.log('fo');
     const tagName = event.target.tagName;
     if (!['INPUT', 'SELECT', 'RADIO'].includes(tagName)) {
       return;
