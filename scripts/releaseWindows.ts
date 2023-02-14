@@ -1,5 +1,3 @@
-// Octokit.js
-
 import { Octokit } from 'octokit';
 
 import fs from 'fs';
@@ -22,7 +20,7 @@ const setup = async () => {
   const assetName = `Postcat-Setup-${version}.exe`;
 
   // 获取id，upload_url，
-  let targetRelease = releaseList.find(obj => obj.name === version)!;
+  let targetRelease = releaseList.find(n => n.name === version)!;
 
   if (!targetRelease) {
     const { data } = await octokit.rest.repos.createRelease({

@@ -9,4 +9,3 @@ glob.sync(resolve('./release', './*.exe.*')).forEach((item, i) => {
     console.log('Rename complete!');
   });
 });
-console.log('进来了');

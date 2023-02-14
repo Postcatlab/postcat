@@ -1,12 +1,12 @@
 import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
-import { build, CliOptions, Platform } from 'electron-builder';
+import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
-import { copyFileSync } from 'node:fs';
+import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
 
@@ -14,8 +14,8 @@ import { exit, platform } from 'node:process';
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
 let signOptions: Parameters<typeof sign>;
-// 打包的参数
-let buildOptions: CliOptions;
+
+const isWin = process.platform === 'win32';
 // 参数同 electron-builder cli 命令行参数
 const argv = minimist(process.argv.slice(2));
 // https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
@@ -113,6 +113,17 @@ const config: Configuration = {
   linux: {
     icon: 'src/app/common/images/',
     target: ['AppImage']
+  },
+  afterAllArtifactBuild: (buildResult: BuildResult) => {
+    if (isWin) {
+      const file = readFileSync('./release/latest.yml', 'utf8');
+      // @ts-ignore
+      writeFileSync('./release/latest.yml', file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
+      return buildResult.artifactPaths.map(filePath => {
+        return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
+      });
+    }
+    return buildResult.artifactPaths;
   }
 };
 
@@ -126,7 +137,7 @@ const targetPlatform: Platform = {
 // 针对 Windows 签名
 const signWindows = async () => {
   // https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables
-  if (process.platform !== 'win32' || process.env.GITHUB_ACTIONS) return;
+  if (!isWin || process.env.GITHUB_ACTIONS) return;
 
   // 给卸载程序签名
   signOptions[0] = {
@@ -142,7 +153,7 @@ const signWindows = async () => {
 
   const ls = spawn('yarn', ['wininstaller'], {
     // 仅在当前运行环境为 Windows 时，才使用 shell
-    shell: process.platform === 'win32'
+    shell: isWin
   });
 
   ls.stdout.on('data', async data => {
@@ -154,7 +165,7 @@ const signWindows = async () => {
         path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
       };
       await sign(...signOptions);
-      execSync('yarn releaseWindows');
+      // execSync('yarn releaseWindows');
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
@@ -172,10 +183,10 @@ Promise.all([
   })
 ])
   .then(async () => {
-    await signWindows();
-    if (process.platform !== 'win32') {
+    if (!isWin) {
       exit();
     }
+    await signWindows();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);

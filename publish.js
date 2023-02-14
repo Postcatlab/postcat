@@ -28,7 +28,7 @@ const fileList = [
   'release/Postcat-Setup-?.exe',
   'release/Postcat Setup ?.exe',
   'release/Postcat Setup ?.exe.blockmap',
-  'build/Uninstall Postcat.exe',
+  'release/Uninstall Postcat.exe',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',
