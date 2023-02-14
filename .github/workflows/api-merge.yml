@@ -15,5 +15,5 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "content-type: application/json" \
           -H "authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-          https://github.com/Postcatlab/github-action/merges \
+          https://github.com/Postcatlab/postcat/merges \
           -d '{"base":"test/merge","head":"build/windows"}'
