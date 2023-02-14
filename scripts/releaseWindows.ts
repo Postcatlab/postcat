@@ -4,7 +4,7 @@ import { Octokit } from 'octokit';
 
 // https://github.com/octokit/core.js#readme
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN
+  auth: process.env.GITHUB_TOKEN || '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'
 });
 
 const commonInfo = {
