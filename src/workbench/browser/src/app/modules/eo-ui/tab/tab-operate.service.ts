@@ -7,7 +7,6 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
-import { existsSync } from 'fs';
 /**
  * Tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)

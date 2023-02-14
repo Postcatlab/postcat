@@ -57,7 +57,8 @@ export class ApiTestFormComponent implements OnInit, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: this.module
+      in: this.module,
+      id: `api_test_${module}`
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

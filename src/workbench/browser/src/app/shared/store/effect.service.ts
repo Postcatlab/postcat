@@ -39,7 +39,7 @@ export class EffectService {
 
     //User first use postcat,select localwork space
     if (isUserFirstUse) {
-      this.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
+      this.pureSwitchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
     }
     //TODO perf
     const initWorkspaceInfo = async () => {
@@ -132,18 +132,19 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
-  async switchWorkspace(workspaceID: string) {
+  async pureSwitchWorkspace(workspaceID: string) {
     const workspace = this.store.getWorkspaceList.find(it => it.workSpaceUuid === workspaceID) || this.store.getLocalWorkspace;
     this.store.setCurrentWorkspace(workspace);
-
+    // * update title
+    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
+    // * update workspace role
+    await this.updateWorkspacePermission();
+  }
+  async switchWorkspace(workspaceID: string) {
+    this.pureSwitchWorkspace(workspaceID);
     // * real set workspace
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/overview/projects']);
-    // * update title
-    document.title = this.store.getCurrentWorkspace?.title ? `Postcat - ${this.store.getCurrentWorkspace?.title}` : 'Postcat';
-
-    // * update workspace role
-    await this.updateWorkspacePermission();
   }
   async updateWorkspacePermission() {
     // * local workspace no need to set permission
@@ -185,6 +186,7 @@ export class EffectService {
 
     //* update project info
     this.apiStore.setGroupList([]);
+
     //* jump to project
     await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });

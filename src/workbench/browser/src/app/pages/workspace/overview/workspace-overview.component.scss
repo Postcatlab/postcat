@@ -2,7 +2,7 @@
   eo-workspace-member,
   eo-workspace-setting,
   eo-project-list {
-    height: calc(var(--body-height) - 127px);
+    height: calc(var(--body-height) - 127px) !important;
     padding-top: 15px;
     display: block;
     overflow: auto;
