@@ -115,6 +115,7 @@ const config: Configuration = {
     target: ['AppImage']
   },
   afterAllArtifactBuild: (buildResult: BuildResult) => {
+    console.log('buildResult.artifactPaths', buildResult.artifactPaths);
     if (isWin) {
       const file = readFileSync('./release/latest.yml', 'utf8');
       // @ts-ignore
