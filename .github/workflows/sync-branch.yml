@@ -2,7 +2,11 @@ name: Merge main branch to build/windows
 on:
   push:
     branches:
-      - 'merge/test'
+      - 'main'
+
+permissions:
+  contents: write
+
 jobs:
   merge-branch:
     runs-on: ubuntu-latest
@@ -13,5 +17,6 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
+          from_branch: main
           target_branch: build/windows
           github_token: ${{ github.token }}
