@@ -155,6 +155,7 @@
     [style.height.px]="responseContainerHeight"
     [style.--bottom-height]="responseContainerHeight - 15 + 'px'"
     (nzResize)="onResize($event)"
+    (nzResizeEnd)="onResizeEnd()"
   >
     <nz-resize-handle class="z-10 horizontal container-draggable" nzDirection="top"> </nz-resize-handle>
     <!-- Response -->

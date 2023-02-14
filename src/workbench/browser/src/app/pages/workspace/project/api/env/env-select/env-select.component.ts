@@ -123,7 +123,7 @@ export class EnvSelectComponent implements OnInit {
       () => this.envUuid,
       data => {
         this.store.setEnvUuid(data);
-        this.trace.report('select_environment');
+        data && this.trace.report('select_environment');
       }
     );
     this.envUuid = this.store.getEnvUuid;

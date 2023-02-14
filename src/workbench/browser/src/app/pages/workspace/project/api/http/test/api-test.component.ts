@@ -412,6 +412,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     this.apiTestResultResponseComponent.downloadResponseText();
   }
 
+  onResizeEnd() {
+    this.trace.report('drag_test_response_height', { test_response_height: this.responseContainerHeight });
+  }
+
   onResize({ height }: NzResizeEvent): void {
     this.responseContainerHeight = height;
     localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, String(height));
@@ -435,7 +439,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.waitSeconds = 0;
         this.model.responseTabIndex = 0;
         this.ref.detectChanges();
-        console.log(new Error());
         this.trace.report('api_test_finish');
         // 测试完自动帮用户将返回高度调到 40%
         const height = this.elementRef.nativeElement.parentElement.offsetHeight * 0.5;
