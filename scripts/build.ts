@@ -62,7 +62,6 @@ const config: Configuration = {
     oneClick: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
-    differentialPackage: false,
     // for win - 将协议写入主机的脚本
     include: 'scripts/urlProtoco.nsh'
   },
@@ -74,7 +73,6 @@ const config: Configuration = {
     }
   ],
   win: {
-    // requestedExecutionLevel: 'highestAvailable',
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
@@ -173,7 +171,6 @@ const signWindows = async () => {
       //     );
       //   }
       // }
-      execSync(`node ./scripts/afterBuild.js`);
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
       exit();
