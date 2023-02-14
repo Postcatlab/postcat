@@ -1,4 +1,4 @@
-name: develop Merge master
+name: develop Merge main
 
 on:
   push:
