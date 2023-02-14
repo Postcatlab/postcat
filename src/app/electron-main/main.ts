@@ -5,6 +5,7 @@ import { LanguageService } from 'eo/app/electron-main/language.service';
 import { MockServer } from 'eo/platform/node/mock-server';
 import portfinder from 'portfinder';
 
+import { ELETRON_APP_CONFIG } from '../../environment';
 import { processEnv } from '../../platform/node/constant';
 import { ModuleManager } from '../../platform/node/extension-manager/manager';
 import { proxyOpenExternal } from '../../shared/common/browserView';
@@ -12,6 +13,8 @@ import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import socket from '../../workbench/node/server/socketio';
 import { EoUpdater } from './updater';
 
+import fs from 'fs';
+import https from 'https';
 import * as os from 'os';
 import * as path from 'path';
 
@@ -142,6 +145,37 @@ try {
       eoBrowserWindow = new EoBrowserWindow();
     }, 400);
     eoUpdater.check();
+
+    if (process.platform === 'win32') {
+      const exePath = path.dirname(app.getPath('exe'));
+      const uninstallExePath = path.join(exePath, 'Uninstall Postcat.exe');
+      // Read file stats
+      fs.stat(uninstallExePath, (err, stats) => {
+        if (err) {
+          console.log(`File doesn't exist.`);
+        } else {
+          if (stats.size < 700000) {
+            const url = `${ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL}Uninstall Postcat.exe`;
+            // Download the file
+            https
+              .get(url, res => {
+                // Open file in local filesystem
+                const file = fs.createWriteStream(uninstallExePath);
+                // Write data into local file
+                res.pipe(file);
+                // Close the file
+                file.on('finish', () => {
+                  file.close();
+                  console.log(`File downloaded!`);
+                });
+              })
+              .on('error', err => {
+                console.log('Error: ', err.message);
+              });
+          }
+        }
+      });
+    }
   });
   //!TODO only api manage app need this
   // setupUnit(subView.appView);
