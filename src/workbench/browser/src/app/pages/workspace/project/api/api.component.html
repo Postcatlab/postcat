@@ -67,8 +67,8 @@
       ></eo-tab>
       <eo-ng-dropdown-menu #newTabTemplate>
         <ul nz-menu>
-          <li nz-menu-item (click)="apiTabComponent.newTab()">HTTP</li>
-          <li nz-menu-item (click)="apiTabComponent.newTab('ws')">Websocket</li>
+          <li nz-menu-item trace traceID="open_api_test" (click)="apiTabComponent.newTab()">HTTP</li>
+          <li nz-menu-item trace traceID="open_api_test" (click)="apiTabComponent.newTab('ws')">Websocket</li>
         </ul>
       </eo-ng-dropdown-menu>
       <ng-template #titleLabel let-item="item">
