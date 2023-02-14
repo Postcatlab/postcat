@@ -8,6 +8,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Using REST API pre-master2 Merge pre-master
         run: |
           git config --global user.name 'scarqin'
