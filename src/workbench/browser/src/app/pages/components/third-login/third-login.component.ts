@@ -30,9 +30,9 @@ enum LoginType {
         class="h-10"
         nzType="primary"
         nzBlock
+        nzGhost
         nzSize="large"
         (click)="handleLogin('github')"
-        nzGhost
         traceID="click_login_github"
         trace
         i18n

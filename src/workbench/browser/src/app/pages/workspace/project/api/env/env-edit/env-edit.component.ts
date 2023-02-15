@@ -72,7 +72,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           // 或者 return false;
           event.preventDefault();
-          this.saveEnv();
+          this.saveEnv('shortcut');
         }
       });
   }
@@ -87,13 +87,13 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     }
     return true;
   }
-  private async createEnv(form) {
+  private async createEnv(form, ux = 'ui') {
     const [data, err] = await this.effect.addEnv(form);
     if (err) {
       this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
       return;
     }
-    this.trace.report('add_environment_success', { trigger_way: 'ui' });
+    this.trace.report('add_environment_success', { trigger_way: ux });
     this.message.success($localize`Added successfully`);
     // * Would not refresh page
     this.router.navigate(['home/workspace/project/api/env/edit'], {
@@ -110,7 +110,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     this.message.success($localize`Edited successfully`);
     return data;
   }
-  async saveEnv() {
+  async saveEnv(ux = 'ui') {
     const isEdit = !!this.route.snapshot.queryParams.uuid;
     if (!this.checkForm()) {
       return;
@@ -119,7 +119,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     const formdata = this.formatEnvData(this.model);
     this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
-    const data = isEdit ? await this.editEnv(formdata) : await this.createEnv(formdata);
+    const data = isEdit ? await this.editEnv(formdata) : await this.createEnv(formdata, ux);
     this.isSaving = false;
     this.afterSaved.emit(this.initialModel);
     if (!this.store.getEnvUuid) {
