@@ -7,7 +7,7 @@ import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
 import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
-import path from 'node:path';
+import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
 // 当前 postcat 版本
@@ -114,12 +114,14 @@ const config: Configuration = {
     icon: 'src/app/common/images/',
     target: ['AppImage']
   },
-  afterAllArtifactBuild: (buildResult: BuildResult) => {
+  afterAllArtifactBuild: async (buildResult: BuildResult) => {
     console.log('buildResult.artifactPaths', buildResult.artifactPaths);
     if (isWin) {
-      const file = readFileSync('./release/latest.yml', 'utf8');
+      await signWindows();
+      const latestPath = path.join(__dirname, '../release/latest.yml');
+      const file = readFileSync(latestPath, 'utf8');
       // @ts-ignore
-      writeFileSync('./release/latest.yml', file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
+      writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
       return buildResult.artifactPaths.map(filePath => {
         return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
       });
@@ -136,41 +138,45 @@ const targetPlatform: Platform = {
 }[platform];
 
 // 针对 Windows 签名
-const signWindows = async () => {
-  // https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables
-  if (!isWin || process.env.GITHUB_ACTIONS) return;
-
-  // 给卸载程序签名
-  signOptions[0] = {
-    ...signOptions[0],
-    path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
-  };
-  await sign(...signOptions);
-
-  copyFileSync(
-    path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
-    path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
-  );
-
-  const ls = spawn('yarn', ['wininstaller'], {
-    // 仅在当前运行环境为 Windows 时，才使用 shell
-    shell: isWin
-  });
-
-  ls.stdout.on('data', async data => {
-    console.log(decoder.decode(data));
-    if (decoder.decode(data).includes('请按任意键继续')) {
-      // 给自定义安装包签名
-      signOptions[0] = {
-        ...signOptions[0],
-        path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
-      };
-      await sign(...signOptions);
-      // execSync('yarn releaseWindows');
-
-      console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
-      exit();
+const signWindows = () => {
+  return new Promise(async resolve => {
+    // https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables
+    if (!isWin || process.env.GITHUB_ACTIONS) {
+      return resolve(true);
     }
+
+    // 给卸载程序签名
+    signOptions[0] = {
+      ...signOptions[0],
+      path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
+    };
+    await sign(...signOptions);
+
+    copyFileSync(
+      path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
+      path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
+    );
+
+    const ls = spawn('yarn', ['wininstaller'], {
+      // 仅在当前运行环境为 Windows 时，才使用 shell
+      shell: isWin
+    });
+
+    ls.stdout.on('data', async data => {
+      console.log(decoder.decode(data));
+      if (decoder.decode(data).includes('请按任意键继续')) {
+        // 给自定义安装包签名
+        signOptions[0] = {
+          ...signOptions[0],
+          path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
+        };
+        await sign(...signOptions);
+        // execSync('yarn releaseWindows');
+
+        console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+        resolve(true);
+      }
+    });
   });
 };
 
@@ -184,10 +190,8 @@ Promise.all([
   })
 ])
   .then(async () => {
-    if (!isWin) {
-      exit();
-    }
-    await signWindows();
+    // await signWindows();
+    exit();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);
