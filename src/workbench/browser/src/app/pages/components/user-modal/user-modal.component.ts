@@ -315,7 +315,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       return;
     }
-    this.trace.setUser({ loginUserId: data.userId });
+    this.trace.setUserID(data.userId);
     // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
     const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
     // (0, '登录').set(1, '注册');
