@@ -113,21 +113,23 @@ const config: Configuration = {
   linux: {
     icon: 'src/app/common/images/',
     target: ['AppImage']
-  },
-  afterAllArtifactBuild: async (buildResult: BuildResult) => {
-    console.log('buildResult.artifactPaths', buildResult.artifactPaths);
-    if (isWin) {
-      await signWindows();
-      const latestPath = path.join(__dirname, '../release/latest.yml');
-      const file = readFileSync(latestPath, 'utf8');
-      // @ts-ignore
-      writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
-      return buildResult.artifactPaths.map(filePath => {
-        return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
-      });
-    }
-    return buildResult.artifactPaths;
   }
+  // https://www.electron.build/configuration/configuration.html#afterallartifactbuild
+  // afterAllArtifactBuild: async (buildResult: BuildResult) => {
+  //   console.log('buildResult.artifactPaths', buildResult.artifactPaths);
+  //   if (isWin) {
+  //     await signWindows();
+  //     // https://github.com/electron-userland/electron-builder/issues/4446
+  //     const latestPath = path.join(__dirname, '../release/latest.yml');
+  //     const file = readFileSync(latestPath, 'utf8');
+  //     // @ts-ignore
+  //     writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
+  //     return buildResult.artifactPaths.map(filePath => {
+  //       return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
+  //     });
+  //   }
+  //   return buildResult.artifactPaths;
+  // }
 };
 
 // 要打包的目标平台
@@ -171,7 +173,7 @@ const signWindows = () => {
           path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
         };
         await sign(...signOptions);
-        // execSync('yarn releaseWindows');
+        execSync('yarn releaseWindows');
 
         console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
         resolve(true);
@@ -190,7 +192,7 @@ Promise.all([
   })
 ])
   .then(async () => {
-    // await signWindows();
+    await signWindows();
     exit();
   })
   .catch(error => {

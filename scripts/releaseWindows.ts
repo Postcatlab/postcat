@@ -1,6 +1,7 @@
 import { Octokit } from 'octokit';
 
-import fs from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
+import path from 'path';
 
 const version = process.env.npm_package_version;
 
@@ -17,7 +18,12 @@ const commonInfo = {
 const setup = async () => {
   const { data: releaseList } = await octokit.rest.repos.listReleases(commonInfo);
 
-  const assetName = `Postcat-Setup-${version}.exe`;
+  const latestPath = path.join(__dirname, '../release/latest.yml');
+  const file = readFileSync(latestPath, 'utf8');
+  // @ts-ignore
+  writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
+
+  const assetNames = [`Postcat-Setup-${version}.exe`, 'latest.yml'];
 
   // 获取id，upload_url，
   let targetRelease = releaseList.find(n => n.name === version)!;
@@ -35,28 +41,30 @@ const setup = async () => {
 
   const { id, upload_url, assets } = targetRelease;
 
-  const targetAsset = assets.find(n => n.name === assetName);
+  for await (const assetName of assetNames) {
+    const targetAsset = assets.find(n => n.name === assetName);
 
-  if (targetAsset) {
-    await octokit.rest.repos.deleteReleaseAsset({
-      ...commonInfo,
-      asset_id: targetAsset.id
-    });
-  }
-
-  const data = fs.readFileSync(`./release/${assetName}`);
-  let param = {
-    ...commonInfo,
-    release_id: id,
-    name: assetName,
-    data: data,
-    origin: upload_url,
-    headers: {
-      'content-type': 'application/octet-stream'
+    if (targetAsset) {
+      await octokit.rest.repos.deleteReleaseAsset({
+        ...commonInfo,
+        asset_id: targetAsset.id
+      });
     }
-  };
-  // @ts-ignore
-  const res = await octokit.rest.repos.uploadReleaseAsset(param);
+
+    const data = readFileSync(`./release/${assetName}`);
+    let param = {
+      ...commonInfo,
+      release_id: id,
+      name: assetName,
+      data: data,
+      origin: upload_url,
+      headers: {
+        'content-type': 'application/octet-stream'
+      }
+    };
+    // @ts-ignore
+    const res = await octokit.rest.repos.uploadReleaseAsset(param);
+  }
 
   console.log('uploadReleaseAsset success!');
 };
