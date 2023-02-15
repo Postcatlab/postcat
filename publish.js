@@ -6,7 +6,7 @@ qiniu.conf.ACCESS_KEY = AK;
 qiniu.conf.SECRET_KEY = SK;
 
 const toLatest = name => name.replace(/\d+\.\d+\.\d+/, 'latest');
-const onlyName = name => name.replace(/release\//, '');
+const onlyName = name => name.replace(/build|release\//, '');
 
 // * 构建客户端实例
 const client = new qiniu.rs.Client();
@@ -26,6 +26,9 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
+  'release/Postcat Setup ?.exe',
+  'release/Postcat Setup ?.exe.blockmap',
+  'release/Uninstall Postcat.exe',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',

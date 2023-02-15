@@ -151,19 +151,19 @@ function computeSignToolArgs(options, isWin, vm = new vm_1.VmManager()) {
   // const args = isWin ? ['sign'] : ['-in', inputFile, '-out', outputPath];
   const args = isWin ? ['-pin', 'MUQHWNFG', 'sign'] : ['-in', inputFile, '-out', outputPath];
 
-  if (process.env.ELECTRON_BUILDER_OFFLINE !== 'true') {
-    const timestampingServiceUrl = options.options.timeStampServer || 'http://timestamp.digicert.com';
-    if (isWin) {
-      args.push(
-        options.isNest || options.hash === 'sha256' ? '/tr' : '/t',
-        options.isNest || options.hash === 'sha256'
-          ? options.options.rfc3161TimeStampServer || 'http://timestamp.digicert.com'
-          : timestampingServiceUrl
-      );
-    } else {
-      args.push('-t', timestampingServiceUrl);
-    }
-  }
+  // if (process.env.ELECTRON_BUILDER_OFFLINE !== 'true') {
+  //   const timestampingServiceUrl = options.options.timeStampServer || 'http://timestamp.digicert.com';
+  //   if (isWin) {
+  //     args.push(
+  //       options.isNest || options.hash === 'sha256' ? '/tr' : '/t',
+  //       options.isNest || options.hash === 'sha256'
+  //         ? options.options.rfc3161TimeStampServer || 'http://timestamp.digicert.com'
+  //         : timestampingServiceUrl
+  //     );
+  //   } else {
+  //     args.push('-t', timestampingServiceUrl);
+  //   }
+  // }
   const certificateFile = options.cscInfo.file;
   if (certificateFile == null) {
     const cscInfo = options.cscInfo;
@@ -186,9 +186,9 @@ function computeSignToolArgs(options, isWin, vm = new vm_1.VmManager()) {
   }
   if (!isWin || options.hash !== 'sha1') {
     args.push(isWin ? '/fd' : '-h', options.hash);
-    if (isWin && process.env.ELECTRON_BUILDER_OFFLINE !== 'true') {
-      args.push('/td', 'sha256');
-    }
+    // if (isWin && process.env.ELECTRON_BUILDER_OFFLINE !== 'true') {
+    //   args.push('/td', 'sha256');
+    // }
   }
   if (options.name) {
     args.push(isWin ? '/d' : '-n', options.name);

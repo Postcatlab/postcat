@@ -2,11 +2,12 @@ import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit, V
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiBodyType, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { getExpandGroupByKey, PCTree } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun } from 'mobx';
@@ -60,7 +61,8 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     private message: EoNgFeedbackMessageService,
     private effect: ApiEffectService,
     private apiEdit: ApiEditService,
-    private store: ApiStoreService
+    private store: ApiStoreService,
+    private trace: TraceService
   ) {
     this.initShortcutKey();
     this.initBasicForm();
@@ -116,7 +118,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
 
           //Manualy call funciton in case on blur event not trigger
           this.updateParamsbyUri();
-          this.saveApi();
+          this.saveApi('shortcut');
         }
       });
   }
@@ -138,7 +140,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
-  async saveApi() {
+  async saveApi(ux = 'ui') {
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -162,6 +164,12 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     }
     // Add success
     this.message.success(title);
+    busEvent === 'addApi' &&
+      this.trace.report('add_api_document_success', {
+        trigger_way: ux,
+        workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
+        param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
+      });
     const data = this.getFormdata();
     this.initialModel = this.apiEditUtil.formatEditingApiData(data);
     if (busEvent === 'addApi') {

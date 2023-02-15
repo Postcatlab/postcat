@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { autorun, reaction } from 'mobx';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
-import { MessageService } from '../../../shared/services/message';
 import { StoreService } from '../../../shared/store/state.service';
-import { ProjectListComponent } from '../components/project-list/project-list.component';
+import { ProjectListService } from '../components/project-list/project-list.service';
 
 @Component({
   selector: 'eo-workspace-overview',
@@ -13,29 +14,28 @@ import { ProjectListComponent } from '../components/project-list/project-list.co
   styleUrls: ['./workspace-overview.component.scss']
 })
 export class WorkspaceOverviewComponent implements OnInit {
-  @ViewChild('eoProjectList') eoProjectList: ProjectListComponent;
   title = 'Workspaces';
   nzSelectedIndex = 0;
-  isOwner = false;
+  isOwner = true;
   constructor(
-    private nzMessage: EoNgFeedbackMessageService,
-    private message: MessageService,
+    public projectList: ProjectListService,
     public store: StoreService,
-    public feature: FeatureControlService
+    private router: Router,
+    public feature: FeatureControlService,
+    private message: MessageService
   ) {}
-  invite() {
-    if (this.nzSelectedIndex) {
-      this.nzMessage.warning($localize`You has already selected members tab, you can operate now.`);
+  async invite() {
+    if (this.nzSelectedIndex !== 1) {
+      this.router.navigate(['/home/workspace/overview/member']);
     }
-    this.nzSelectedIndex = 1;
+    await waitNextTick();
+    this.message.send({ type: 'addWorkspaceMember', data: {} });
   }
   ngOnInit(): void {
-    autorun(() => {
+    autorun(async () => {
+      await waitNextTick();
       this.title = this.store.getCurrentWorkspace?.title;
-      this.isOwner = this.store.getWorkspaceRole.some(it => ['Workspace Owner'].includes(it.name));
+      this.isOwner = this.store?.getWorkspaceRole?.some(it => ['Workspace Owner'].includes(it.name));
     });
-  }
-  createWorkspace() {
-    this.message.send({ type: 'addWorkspace', data: {} });
   }
 }

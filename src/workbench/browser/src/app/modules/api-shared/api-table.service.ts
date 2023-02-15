@@ -222,6 +222,7 @@ export class ApiTableService {
   }
   initTestTable(
     inArg: {
+      id: string;
       in: 'body' | 'header' | 'query' | 'rest';
       format?: 'FormData';
     },
@@ -266,6 +267,7 @@ export class ApiTableService {
     const result = {
       columns: [],
       setting: {
+        id: inArg.id,
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
         rowSortable: true,

@@ -11,12 +11,14 @@ import { ElectronService } from '../../../core/services';
       <ul nz-menu>
         <a href="https://docs.postcat.com" target="_blank" nz-menu-item i18n>Document</a>
         <a
-          href="https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+          href="https://github.com/Postcatlab/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
             issueEnvironment
           }}"
           target="_blank"
           nz-menu-item
           i18n
+          trace
+          traceID="report_issue"
           >Report Issue</a
         >
       </ul>
@@ -32,7 +34,7 @@ export class HelpDropdownComponent {
     },
     {
       title: $localize`Report Issue`,
-      href: `https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
+      href: `https://github.com/Postcatlab/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
       itemClick: $event => {}
     }
   ];
@@ -42,7 +44,6 @@ export class HelpDropdownComponent {
   }
   private getEnvironment(): string {
     let result = '';
-    console.log(this);
     const systemInfo = this.electron?.getSystemInfo();
     systemInfo?.forEach(val => {
       if (['homeDir'].includes(val.id)) {
@@ -50,7 +51,6 @@ export class HelpDropdownComponent {
       }
       result += `- ${val.label}: ${val.value}\r\n`;
     });
-    console.log(systemInfo);
     return encodeURIComponent(result);
   }
 }

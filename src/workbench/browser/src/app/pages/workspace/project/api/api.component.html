@@ -63,6 +63,7 @@
         (beforeClose)="apiTab.beforeTabClose($event)"
         [addDropDown]="newTabTemplate"
         [titleLabel]="titleLabel"
+        (nzAdd)="apiTabComponent.newTab()"
         #apiTabComponent
       ></eo-tab>
       <eo-ng-dropdown-menu #newTabTemplate>

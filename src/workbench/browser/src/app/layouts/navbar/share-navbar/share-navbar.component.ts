@@ -10,8 +10,8 @@ import { StoreService } from '../../../shared/store/state.service';
       <div class="flex items-center">
         <eo-logo class="logo"></eo-logo>
         <!-- Star -->
-        <a href="https://github.com/eolinker/postcat" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
-          <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/postcat?style=social" alt="" />
+        <a href="https://github.com/Postcatlab/postcat" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
+          <img loading="lazy" src="https://img.shields.io/github/stars/postcatlab/postcat?style=social" alt="" />
         </a>
         <!-- Project Name -->
         <p class="ml-[15px]">{{ projectName }}</p>

@@ -28,6 +28,8 @@
     [nzData]="getTestHistory"
     [nzSelectedKeys]="nzSelectedKeys"
     nzBlockNode
+    trace
+    traceID="click_api_test_history"
     (nzClick)="gotoTestHistory($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"
     class="overflow-auto pt-[10px]"

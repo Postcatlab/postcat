@@ -9,6 +9,8 @@ import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspa
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-api-mock',
@@ -41,7 +43,9 @@ export class ApiMockComponent implements OnInit, TabViewComponent {
     public web: WebService,
     private apiMock: ApiMockService,
     private modal: ModalService,
-    private api: ProjectApiService
+    private api: ProjectApiService,
+    private store: StoreService,
+    private trace: TraceService
   ) {
     this.apiUuid = this.route.snapshot.queryParams.uuid;
   }
@@ -72,6 +76,8 @@ export class ApiMockComponent implements OnInit, TabViewComponent {
       },
       nzOnOk: async () => {
         await this.mockTable.addOrEditModal(modal.componentInstance.model);
+        const workspace_type = this.store.isLocal ? 'local' : 'cloud';
+        this.trace.report('add_mock_success', { workspace_type });
         modal.destroy();
       }
     });
