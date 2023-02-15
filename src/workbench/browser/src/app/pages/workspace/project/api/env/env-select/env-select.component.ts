@@ -150,10 +150,9 @@ export class EnvSelectComponent implements OnInit {
   }
 
   setCurrentEnv() {
-    this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
+    this.renderEnv = toJS(this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid));
     if (!this.renderEnv) return;
     this.renderEnv.parameters = this.renderEnv.parameters.filter(item => item.name || item.value);
-    console.log(' this.renderEnv.parameters ', this.renderEnv.parameters);
   }
   gotoEnvManager() {
     // * close select
