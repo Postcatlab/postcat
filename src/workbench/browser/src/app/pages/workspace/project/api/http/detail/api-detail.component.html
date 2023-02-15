@@ -7,7 +7,7 @@
         <eo-api-methods-tag [type]="model?.apiAttrInfo?.requestMethod | apiFormater : 'requestMethod'"></eo-api-methods-tag>
         <div class="flex items-center w-full mt-[10px]">
           <span class="truncate">
-            {{ model.uri }}
+            {{ url }}
           </span>
           <button eo-ng-button nzType="text" class="mx-2" (click)="handleCopy(model.uri)"
             ><eo-iconpark-icon name="copy"></eo-iconpark-icon

@@ -1,7 +1,7 @@
 <nz-breadcrumb class="flex items-center">
   <eo-select-workspace class="mr-[10px]"></eo-select-workspace>
   <nz-breadcrumb-item *ngIf="store.getPageLevel === 'project'" class="flex items-center btn-breadcrumb-item">
-    <button [routerLink]="['/home/workspace/overview']" [queryParams]="{ wid: workspaceID }" eo-ng-button nzType="text">
+    <button [routerLink]="['/home/workspace/overview/projects']" [queryParams]="{ wid: workspaceID }" eo-ng-button nzType="text">
       <eo-iconpark-icon class="mr-[5px]" name="return"></eo-iconpark-icon>
       <span i18n>Back</span>
     </button>

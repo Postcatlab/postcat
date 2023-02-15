@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { TabStorageService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
@@ -33,7 +34,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
     public tabOperate: TabOperateService,
     private modal: ModalService,
     private router: Router,
-    public store: StoreService
+    public store: StoreService,
+    private trace: TraceService
   ) {}
   ngOnInit(): void {
     this.watchRouterChange();
@@ -54,6 +56,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
+    // * Trace
+    this.trace.report('open_api_test');
     this.tabOperate.newDefaultTab(key);
   }
   doubleClickTab($event, uuid) {

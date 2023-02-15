@@ -22,6 +22,8 @@
           *ngIf="wsStatus === 'disconnect'"
           eo-ng-button
           nzType="primary"
+          trace
+          traceID="click_api_test"
           i18n
           (click)="handleConnect('connecting')"
         >
@@ -34,6 +36,8 @@
           eo-ng-button
           nzDanger
           i18n
+          trace
+          traceID="api_test_finish"
           nzType="default"
           (click)="handleConnect('disconnect')"
         >

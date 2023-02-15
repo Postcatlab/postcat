@@ -29,6 +29,7 @@ import {
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { isEmpty } from 'lodash-es';
@@ -138,13 +139,15 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     private projectApi: ProjectApiService,
     private lang: LanguageService,
     private elementRef: ElementRef,
-    private apiEdit: ApiEditUtilService
+    private apiEdit: ApiEditUtilService,
+    private trace: TraceService
   ) {
     this.initBasicForm();
     this.testServer.init(message => {
       this.receiveMessage(message);
     });
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
+      console.log('this.status$', status);
       this.changeStatus(status);
     });
   }
@@ -219,6 +222,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       return;
     }
     this.test();
+    this.trace.report('click_api_test');
   }
   /**
    * Save api test data to api
@@ -399,13 +403,20 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     }
     this.timer$ = interval(1000)
       .pipe(
-        takeWhile(() => this.waitSeconds < this.MAX_TEST_SECONDS),
-        finalize(() => this.changeStatus('tested'))
+        takeWhile(() => {
+          if (this.waitSeconds < this.MAX_TEST_SECONDS) return true;
+          this.status$.next('tested');
+          return false;
+        })
       )
       .subscribe(() => this.waitSeconds++);
   }
   downloadFile() {
     this.apiTestResultResponseComponent.downloadResponseText();
+  }
+
+  onResizeEnd() {
+    this.trace.report('drag_test_response_height', { test_response_height: this.responseContainerHeight });
   }
 
   onResize({ height }: NzResizeEvent): void {
@@ -431,6 +442,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.waitSeconds = 0;
         this.model.responseTabIndex = 0;
         this.ref.detectChanges();
+        this.trace.report('api_test_finish');
         // 测试完自动帮用户将返回高度调到 40%
         const height = this.elementRef.nativeElement.parentElement.offsetHeight * 0.5;
         if (this.responseContainerHeight < height) {
