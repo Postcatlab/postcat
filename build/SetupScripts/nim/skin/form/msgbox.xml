@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="350,180" caption="0,0,0,34">
+    <VBox bkcolor="bk_wnd_lightcolor" width="380" height="auto">
+        <HBox class="caption">
+            <Label class="font_title" name="title" width="stretch" valign="center" normaltextcolor="darkcolor"/>
+            <Button class="btn_wnd_close" name="closebtn" margin="10,6,0,0"/>
+        </HBox>
+
+        <VBox height="auto" margin="20,35,20,35">
+            <HBox height="auto">
+                <Control name="icon" width="22" height="22" margin="0,7,10,0"/>
+				<VBox height="auto">
+					<RichEdit name="information" width="305" font="20" multiline="true" vscrollbar="false" autovscroll="false" enabled="false" rich="true"/>
+					<Label font="2" name="path" singleline="false" width="300" normaltextcolor="lightcolor" visible="false" margin="0,5,0,0"/>
+					<RichEdit name="information2" width="305" font="20" multiline="true" vscrollbar="false" autovscroll="false" enabled="false" rich="true" visible="false" margin="0,10,0,0" />
+				</VBox>
+            </HBox>
+            <CheckBox class="checkbox_font12" name="checkbox" margin="35,5,0,0" visible="false"/>
+        </VBox>
+
+
+        <HBox height="30" margin="20,0,20,20" childmargin="10" >
+            <Control />
+            <Button  class="btn_global_green_80x30" name="button_1"/>
+            <Button  class="btn_global_green_80x30" name="button_2"/>
+            <Button  class="btn_global_green_80x30" name="button_3"/>
+        </HBox>
+    </VBox>
+</Window>

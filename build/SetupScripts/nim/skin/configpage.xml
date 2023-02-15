@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>  <!-- 安装目录 -->
+  <VerticalLayout bkcolor="#FFFFFFFF">
+    <Include source="logo.xml" />
+
+
+    <VerticalLayout>
+      <HorizontalLayout height="22" padding="90,0,100,44">
+        <Label width="40" textcolor="#FF333333" text="Path：" font="5"/>
+        <Control width="5" />
+        <Label name="editDir" text="" endellipsis="true" font="5" />
+        <Control width="10" />
+        <Button name="btnSelectDir" width="34" height="22" textcolor="#FF005EFF" font="5" text="Edit" cursor="hand" />
+      </HorizontalLayout>
+      <Control />
+      <CheckBox visible="false" name="chkAgree" width="125" heigh="20" font="7" text="我已经阅读并认可" textcolor="#FF333333" selected="true" valign="center" align="left" textpadding="20,0,0,0" normalimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" normalhotimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" selectedimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'" selectedhotimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'"/>
+      <Button name="btnInstall" borderround="4,4" padding="135,0,0,50" cursor="hand" width="80" height="33" bkcolor="#FFFF7433" font="5" textcolor="#FFFFFFFF" text="Install" />
+    </VerticalLayout>
+
+    <Include source="closeToolbar.xml" />
+  </VerticalLayout>
+</Windows>

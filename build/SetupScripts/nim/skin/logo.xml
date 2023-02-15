@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+  <Button width="100" height="100" normalimage="file='form\postcat.png'" padding="125,74,0,14" />
+  <Label font="3" padding="146,0,0,35" bold="true" text="Postcat" />
+</Window>
+
+
