@@ -50,11 +50,13 @@ import { ApiStoreService } from '../../service/store/api-state.service';
                 <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12 content">{{ renderEnv.hostUri }}</span>
               </div>
             </div>
-            <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n>Environment Global variable</span>
-            <div class="flex items-center justify-between px-6 h-8">
-              <span class="px-1 w-1/3 text-tips" i18n>Name</span>
-              <span class="px-1 w-2/3 text-tips" i18n>Value</span>
-            </div>
+            <ng-container *ngIf="renderEnv.parameters?.length">
+              <span class="flex items-center px-6 h-12 title" i18n>Environment Global variable</span>
+              <div class="flex items-center justify-between px-6 h-8">
+                <span class="px-1 w-1/3 text-tips" i18n>Name</span>
+                <span class="px-1 w-2/3 text-tips" i18n>Value</span>
+              </div>
+            </ng-container>
             <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8 content">
               <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
               <span class="px-1 w-2/3 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
@@ -147,6 +149,7 @@ export class EnvSelectComponent implements OnInit {
     this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
     if (!this.renderEnv) return;
     this.renderEnv.parameters = this.renderEnv.parameters.filter(item => item.name || item.value);
+    console.log(' this.renderEnv.parameters ', this.renderEnv.parameters);
   }
   gotoEnvManager() {
     // * close select

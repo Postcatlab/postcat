@@ -4,6 +4,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import { ApiStoreService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/store/api-state.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -31,6 +32,7 @@ export class ApiDetailComponent implements TabViewComponent {
     private projectApi: ProjectApiService,
     public electron: ElectronService,
     public store: StoreService,
+    public apiStore: ApiStoreService,
     private message: EoNgFeedbackMessageService
   ) {}
   handleCopy(link) {
