@@ -97,7 +97,7 @@ export class WebService {
         break;
       }
       case 'github': {
-        fetch('https://api.github.com/repos/eolinker/postcat/releases')
+        fetch('https://api.github.com/repos/Postcatlab/postcat/releases')
           .then(response => response.json())
           .then((data = []) => {
             [...this.resourceInfo]
