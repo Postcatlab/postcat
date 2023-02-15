@@ -168,7 +168,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       this.trace.report('add_api_document_success', {
         trigger_way: ux,
         workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
-        param_type: IMPORT_MUI[this.model.requestParams?.bodyParams?.at(0)?.dataType] || ''
+        param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
       });
     const data = this.getFormdata();
     this.initialModel = this.apiEditUtil.formatEditingApiData(data);
