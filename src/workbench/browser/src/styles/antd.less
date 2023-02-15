@@ -131,8 +131,12 @@
     margin-right: 0;
   }
 }
-.ant-modal-footer {
+.ant-modal-content .ant-modal-footer {
   padding: 16px 24px;
+  border-top-color: var(--system-border-color);
+}
+.ant-dropdown-menu-item-divider {
+  background-color: var(--system-border-color);
 }
 p {
   margin-bottom: 0;
@@ -200,7 +204,7 @@ nz-resize-handle.container-draggable {
   &.vertical {
     cursor: col-resize;
     width: 5px;
-    border-left: 2px solid var(--background-color);
+    border-left: 2px solid var(--tree-background-color);
     border-right: 2px solid var(--background-color);
 
     &:hover {
