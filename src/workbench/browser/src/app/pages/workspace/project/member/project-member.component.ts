@@ -38,7 +38,7 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
             <nz-spin nzSimple></nz-spin>
           </div> -->
           <ng-container>
-            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
+            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.email" [nzValue]="option.id">
               <div class="flex w-full justify-between items-center">
                 <span class="font-bold">{{ option.username }}</span>
                 <span class="text-tips">{{ option.email }}</span>

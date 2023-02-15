@@ -52,8 +52,6 @@ import { StoreService } from '../../../../shared/store/state.service';
           nzBlock
           (click)="btn0r9zcbCallback()"
           [disabled]="userCache?.length === 0"
-          trace
-          traceID="click_project_add_member"
           i18n
         >
           Add
