@@ -89,9 +89,9 @@
         (n.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + g),
         tag.parentNode.insertBefore(n, tag);
     })(window, document, 'script', 'assets.giocdn.com/2.1/gio.js', 'gio');
-    // @ts-ignore
     gio('init', 'bd7645ddc19400a8', {});
     //custom page code begin here
+
     //Electron use hash mode
     if (!!window.electron) {
       gio('config', { hashtag: true });
