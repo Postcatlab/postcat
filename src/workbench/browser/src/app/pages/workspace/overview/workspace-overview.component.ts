@@ -35,7 +35,7 @@ export class WorkspaceOverviewComponent implements OnInit {
     autorun(async () => {
       await waitNextTick();
       this.title = this.store.getCurrentWorkspace?.title;
-      this.isOwner = this.store.getWorkspaceRole.some(it => ['Workspace Owner'].includes(it.name));
+      this.isOwner = this.store?.getWorkspaceRole?.some(it => ['Workspace Owner'].includes(it.name));
     });
   }
 }
