@@ -1,17 +1,21 @@
 import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
-import { build, Platform } from 'electron-builder';
+import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
-import { exec, spawn } from 'node:child_process';
-import { copyFileSync } from 'node:fs';
-import path from 'node:path';
+import { ELETRON_APP_CONFIG } from '../src/environment';
+
+import { execSync, exec, spawn } from 'node:child_process';
+import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
 let signOptions: Parameters<typeof sign>;
+
+const isWin = process.platform === 'win32';
 // 参数同 electron-builder cli 命令行参数
 const argv = minimist(process.argv.slice(2));
 // https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
@@ -52,7 +56,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: 'https://data.postcat.com/download/'
+      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
     }
   ],
   generateUpdatesFilesForAllChannels: true,
@@ -74,6 +78,7 @@ const config: Configuration = {
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
+    // artifactName: '${productName}-${version}.${ext}',
     signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
     target: ['nsis', 'portable'],
@@ -109,6 +114,22 @@ const config: Configuration = {
     icon: 'src/app/common/images/',
     target: ['AppImage']
   }
+  // https://www.electron.build/configuration/configuration.html#afterallartifactbuild
+  // afterAllArtifactBuild: async (buildResult: BuildResult) => {
+  //   console.log('buildResult.artifactPaths', buildResult.artifactPaths);
+  //   if (isWin) {
+  //     await signWindows();
+  //     // https://github.com/electron-userland/electron-builder/issues/4446
+  //     const latestPath = path.join(__dirname, '../release/latest.yml');
+  //     const file = readFileSync(latestPath, 'utf8');
+  //     // @ts-ignore
+  //     writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
+  //     return buildResult.artifactPaths.map(filePath => {
+  //       return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
+  //     });
+  //   }
+  //   return buildResult.artifactPaths;
+  // }
 };
 
 // 要打包的目标平台
@@ -119,42 +140,45 @@ const targetPlatform: Platform = {
 }[platform];
 
 // 针对 Windows 签名
-const signWindows = async () => {
-  // https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables
-  if (process.platform !== 'win32' || process.env.GITHUB_ACTIONS) return;
-
-  // 给卸载程序签名
-  signOptions[0] = {
-    ...signOptions[0],
-    path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
-  };
-  await sign(...signOptions);
-
-  copyFileSync(
-    path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
-    path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
-  );
-  // 生成 自定义安装包
-  // exec(`yarn wininstaller`);
-
-  const ls = spawn('yarn', ['wininstaller'], {
-    // 仅在当前运行环境为 Windows 时，才使用 shell
-    shell: process.platform === 'win32'
-  });
-
-  ls.stdout.on('data', async data => {
-    console.log(decoder.decode(data));
-    if (decoder.decode(data).includes('请按任意键继续')) {
-      // 给自定义安装包签名
-      signOptions[0] = {
-        ...signOptions[0],
-        path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
-      };
-      await sign(...signOptions);
-
-      console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
-      exit();
+const signWindows = () => {
+  return new Promise(async resolve => {
+    // https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables
+    if (!isWin || process.env.GITHUB_ACTIONS) {
+      return resolve(true);
     }
+
+    // 给卸载程序签名
+    signOptions[0] = {
+      ...signOptions[0],
+      path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
+    };
+    await sign(...signOptions);
+
+    copyFileSync(
+      path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
+      path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
+    );
+
+    const ls = spawn('yarn', ['wininstaller'], {
+      // 仅在当前运行环境为 Windows 时，才使用 shell
+      shell: isWin
+    });
+
+    ls.stdout.on('data', async data => {
+      console.log(decoder.decode(data));
+      if (decoder.decode(data).includes('请按任意键继续')) {
+        // 给自定义安装包签名
+        signOptions[0] = {
+          ...signOptions[0],
+          path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
+        };
+        await sign(...signOptions);
+        execSync('yarn releaseWindows');
+
+        console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+        resolve(true);
+      }
+    });
   });
 };
 
@@ -169,10 +193,12 @@ Promise.all([
 ])
   .then(async () => {
     await signWindows();
-    if (process.platform !== 'win32') {
-      exit();
-    }
+    exit();
   })
-  .catch(error => {
+  .catch(async error => {
+    if (error.includes?.('HttpError')) {
+      await signWindows();
+    }
     console.log('\x1b[31m', '打包失败，错误信息：', error);
+    exit();
   });
