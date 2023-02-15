@@ -11,9 +11,9 @@ import packageJson from '../../../../../../../../package.json';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<extension-select [(extension)]="currentExtension" tipsType="syncAPI" [extensionList]="supportList"></extension-select>`
+  template: `<extension-select [(extension)]="currentExtension" tipsType="pushAPI" [extensionList]="supportList"></extension-select>`
 })
-export class SyncApiComponent implements OnInit {
+export class PushApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
@@ -37,7 +37,7 @@ export class SyncApiComponent implements OnInit {
       });
   }
   initData = () => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
+    this.featureMap = this.extensionService.getValidExtensionsByFature('pushAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({

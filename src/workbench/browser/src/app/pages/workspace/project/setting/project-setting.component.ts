@@ -8,12 +8,12 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
 import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
-import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
+import { PushApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 
 const actionComponent = {
-  push: SyncApiComponent,
+  push: PushApiComponent,
   import: ImportApiComponent,
   export: ExportApiComponent
 };

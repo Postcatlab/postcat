@@ -158,7 +158,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">41,40</context>
+          <context context-type="linenumber">31,30</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
@@ -170,6 +170,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/navbar/breadcrumb/select-workspace/select-workspace.component.ts</context>
           <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="994082154243565413" datatype="html">
@@ -258,7 +262,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/detail/api-detail.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/index.utils.ts</context>
@@ -391,7 +395,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/env/env-select/env-select.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2748502583404970194" datatype="html">
@@ -461,7 +465,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/env/env-select/env-select.component.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6006604033305558406" datatype="html">
@@ -581,8 +585,8 @@
           <context context-type="linenumber">99</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">519</context>
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">515</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
@@ -679,7 +683,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/env/env-select/env-select.component.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6446592578297953811" datatype="html">
@@ -1177,7 +1181,7 @@
           <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -1295,6 +1299,241 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/system-setting/system-setting.component.ts</context>
           <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6627551976444260400" datatype="html">
+        <source>or</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/third-login/third-login.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="417090665951241646" datatype="html">
+        <source> Sign In/Up with Github </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/third-login/third-login.component.ts</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7746219847230371421" datatype="html">
+        <source>Check your connection</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6670466038616853245" datatype="html">
+        <source> Can&apos;t connect right now, click to retry or </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7157352128865582233" datatype="html">
+        <source> config in the configuration </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2330577642930707695" datatype="html">
+        <source> Cancel </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">156,157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5171192616638755303" datatype="html">
+        <source> Retry </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3378481113311905011" datatype="html">
+        <source>Please input your email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8883112875168602247" datatype="html">
+        <source>Enter Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="343410938576058057" datatype="html">
+        <source>Enter password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8997193598472389068" datatype="html">
+        <source> Please input your password </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3117479673302739706" datatype="html">
+        <source> Sign In/Up </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4342352304288823613" datatype="html">
+        <source>Open setting</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2810980568784396525" datatype="html">
+        <source> If you want to collaborate, please </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2325931007888087302" datatype="html">
+        <source> open the settings </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8968485714472715480" datatype="html">
+        <source> and fill in the configuration </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6132791254957713421" datatype="html">
+        <source>Workspace Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/edit/workspace-edit.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/edit/workspace-edit.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2251474090122682384" datatype="html">
+        <source>Please input your new workspace name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6249484391846924804" datatype="html">
+        <source> Confirm </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">159,160</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7576432225554445487" datatype="html">
+        <source>Oops, server fail</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">236</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8242579071554232999" datatype="html">
+        <source>Connect failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">241</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="410921040667746587" datatype="html">
+        <source>Connect success</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">248</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7989614159698494453" datatype="html">
+        <source>Please check you username or password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">405</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">418</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6414010749852158762" datatype="html">
+        <source>Username must a email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">415</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4357325080029989758" datatype="html">
+        <source>New workspace Failed !</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">495</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8475178885380093675" datatype="html">
+        <source>New workspace successfully !</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">498</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3142179252193934984" datatype="html">
+        <source>Upload local data to the cloud</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">510</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6521173091722594034" datatype="html">
+        <source>You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?&lt;br&gt;
+          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">511,512</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6932865105766151309" datatype="html">
+        <source>Upload</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">521</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3351051817560746765" datatype="html">
+        <source>Create Project Failed !</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/user-modal/user-modal.component.ts</context>
+          <context context-type="linenumber">566</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/store/effect.service.ts</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3998053985296703283" datatype="html">
@@ -1536,248 +1775,6 @@
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6627551976444260400" datatype="html">
-        <source>or</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/third-login.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="417090665951241646" datatype="html">
-        <source> Sign In/Up with Github </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/third-login.component.ts</context>
-          <context context-type="linenumber">40,41</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7746219847230371421" datatype="html">
-        <source>Check your connection</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6670466038616853245" datatype="html">
-        <source> Can&apos;t connect right now, click to retry or </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7157352128865582233" datatype="html">
-        <source> config in the configuration </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2330577642930707695" datatype="html">
-        <source> Cancel </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">35,36</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">156,157</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5171192616638755303" datatype="html">
-        <source> Retry </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">38,39</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3378481113311905011" datatype="html">
-        <source>Please input your email</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8883112875168602247" datatype="html">
-        <source>Enter Email</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="343410938576058057" datatype="html">
-        <source>Enter password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8997193598472389068" datatype="html">
-        <source> Please input your password </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3117479673302739706" datatype="html">
-        <source> Sign In/Up </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">99,100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4342352304288823613" datatype="html">
-        <source>Open setting</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">112</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2810980568784396525" datatype="html">
-        <source> If you want to collaborate, please </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">116</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2325931007888087302" datatype="html">
-        <source> open the settings </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">117</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8968485714472715480" datatype="html">
-        <source> and fill in the configuration </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">118</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="51815168613302326" datatype="html">
-        <source>Add Workspace</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">125</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6132791254957713421" datatype="html">
-        <source>Workspace Name</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">139</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/components/edit/workspace-edit.component.ts</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/components/edit/workspace-edit.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2251474090122682384" datatype="html">
-        <source>Please input your new workspace name</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">132</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6249484391846924804" datatype="html">
-        <source> Confirm </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">159,160</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7576432225554445487" datatype="html">
-        <source>Oops, server fail</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">236</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8242579071554232999" datatype="html">
-        <source>Connect failed</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">241</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="410921040667746587" datatype="html">
-        <source>Connect success</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">248</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7989614159698494453" datatype="html">
-        <source>Please check you username or password</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">407</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">420</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6414010749852158762" datatype="html">
-        <source>Username must a email</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">417</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4357325080029989758" datatype="html">
-        <source>New workspace Failed !</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">500</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8475178885380093675" datatype="html">
-        <source>New workspace successfully !</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">503</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3142179252193934984" datatype="html">
-        <source>Upload local data to the cloud</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">514</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6521173091722594034" datatype="html">
-        <source>You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?&lt;br&gt;
-          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">515,516</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6932865105766151309" datatype="html">
-        <source>Upload</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">525</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3351051817560746765" datatype="html">
-        <source>Create Project Failed !</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">570</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/store/effect.service.ts</context>
-          <context context-type="linenumber">221</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3620188369327429839" datatype="html">
         <source> Save </source>
         <context-group purpose="location">
@@ -1838,11 +1835,29 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3026796699648659150" datatype="html">
+        <source>Add Member To Workspace</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="577038887888857351" datatype="html">
+        <source> Add </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1507089463233071847" datatype="html">
         <source>Currently using local workspace, unable to invite members. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
@@ -1855,36 +1870,33 @@
         &gt;"/>and invite members to collaborate.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">24,26</context>
+          <context context-type="linenumber">73,75</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
           <context context-type="linenumber">84,86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3249513483374643425" datatype="html">
-        <source>Add</source>
+      <trans-unit id="5206859141938172308" datatype="html">
+        <source>Please select a member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">151</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5018890081173565249" datatype="html">
-        <source>You can create a cloud workspace and invite members to collaborate.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7141735786251040499" datatype="html">
         <source>Add member failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">179</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
@@ -1895,11 +1907,22 @@
         <source>Add member successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">183</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
           <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5018890081173565249" datatype="html">
+        <source>You can create a cloud workspace and invite members to collaborate.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4656891998326985634" datatype="html">
@@ -1961,7 +1984,7 @@
         <source>New Project</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/project-list/project-list.service.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/overview/workspace-overview.component.html</context>
@@ -1994,13 +2017,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/overview/workspace-overview.component.html</context>
           <context context-type="linenumber">27,29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5959216828034594510" datatype="html">
-        <source>You has already selected members tab, you can operate now.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/overview/workspace-overview.component.ts</context>
-          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3312816458112607142" datatype="html">
@@ -2353,14 +2369,14 @@
         <source>Environment Global variable</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/env/env-select/env-select.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7622799679773767274" datatype="html">
         <source>Manage Environment</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/env/env-select/env-select.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7219712648243615821" datatype="html">
@@ -3060,13 +3076,6 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="577038887888857351" datatype="html">
-        <source> Add </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">61,62</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2304614617903385642" datatype="html">
         <source>Project Members</source>
         <context-group purpose="location">
@@ -3074,11 +3083,11 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5206859141938172308" datatype="html">
-        <source>Please select a member</source>
+      <trans-unit id="3249513483374643425" datatype="html">
+        <source>Add</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7813840572159179444" datatype="html">

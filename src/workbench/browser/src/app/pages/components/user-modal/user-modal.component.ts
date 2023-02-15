@@ -122,7 +122,7 @@ import { ModalService } from '../../../shared/services/modal.service';
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       (nzAfterClose)="ebdsz2aCallback()"
-      nzTitle="Add Workspace"
+      nzTitle="New Workspace"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
