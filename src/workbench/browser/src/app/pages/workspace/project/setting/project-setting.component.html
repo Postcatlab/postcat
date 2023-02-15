@@ -3,7 +3,7 @@
     <form nz-form nzLayout="vertical">
       <nz-form-item>
         <nz-form-label class="font-bold" nzRequired [nzSpan]="24" i18n>Project Name</nz-form-label>
-        <nz-form-control nzErrorTip="Please input your projectName">
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your projectName">
           <input eo-ng-input placeholder="Project Name" name="projectName" required [(ngModel)]="projectName" />
         </nz-form-control>
       </nz-form-item>

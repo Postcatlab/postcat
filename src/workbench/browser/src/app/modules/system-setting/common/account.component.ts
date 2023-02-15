@@ -15,7 +15,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>New password</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your new password">
+          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your new password">
             <input type="password" eo-ng-input formControlName="newPassword" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>

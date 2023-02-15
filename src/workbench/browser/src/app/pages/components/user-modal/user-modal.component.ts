@@ -14,7 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
-import { ModalService } from '../shared/services/modal.service';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -129,7 +129,7 @@ import { ModalService } from '../shared/services/modal.service';
         <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="vertical">
           <nz-form-item>
             <nz-form-label i18n nzFor="newWorkName">Workspace Name</nz-form-label>
-            <nz-form-control nzErrorTip="Please input your new work name">
+            <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your new workspace name">
               <input
                 type="text"
                 #newWorkNameWorkspaceNameRef

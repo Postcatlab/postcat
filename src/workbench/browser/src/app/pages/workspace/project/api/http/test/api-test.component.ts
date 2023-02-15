@@ -147,6 +147,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       this.receiveMessage(message);
     });
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
+      console.log('this.status$', status);
       this.changeStatus(status);
     });
   }
@@ -320,7 +321,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();
-    this.trace.report('api_test_finish');
   }
   private checkForm(): boolean {
     for (const i in this.validateForm.controls) {
@@ -403,8 +403,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     }
     this.timer$ = interval(1000)
       .pipe(
-        takeWhile(() => this.waitSeconds < this.MAX_TEST_SECONDS),
-        finalize(() => this.changeStatus('tested'))
+        takeWhile(() => {
+          if (this.waitSeconds < this.MAX_TEST_SECONDS) return true;
+          this.status$.next('tested');
+          return false;
+        })
       )
       .subscribe(() => this.waitSeconds++);
   }
