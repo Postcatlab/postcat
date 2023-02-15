@@ -30,9 +30,11 @@ enum LoginType {
         class="h-10"
         nzType="primary"
         nzBlock
+        nzGhost
         nzSize="large"
         (click)="handleLogin('github')"
-        nzGhost
+        traceID="click_login_github"
+        trace
         i18n
       >
         Sign In/Up with Github
@@ -43,6 +45,8 @@ enum LoginType {
         class="w-8 h-8 rounded-full bg-center bg-no-repeat bg-cover cursor-pointer border-none"
         *ngFor="let it of renderList"
         (click)="handleLogin(it.type)"
+        trace
+        [traceID]="'click_login_' + it.type"
         [ngStyle]="{ 'background-image': logoLink(it.logo) }"
       >
       </button>

@@ -59,10 +59,14 @@ export interface ExtensionInfo {
     sidebarView: SidebarView;
     importAPI: FeatureInfo;
     exportAPI: FeatureInfo;
-    syncAPI: FeatureInfo;
+    pushAPI: FeatureInfo;
     theme: ThemeItems[];
     //Random feature
     [index: string]: any;
+    /**
+     * @deprecated
+     */
+    syncAPI: FeatureInfo;
   };
 
   //*Field for browser generate by code,not actually in package.json

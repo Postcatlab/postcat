@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { autorun } from 'mobx';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { autorun, reaction } from 'mobx';
 
 import { StoreService } from '../../shared/store/state.service';
 import { MemberService } from './member.service';
@@ -51,20 +52,34 @@ export class MemberListComponent implements OnInit {
   list = [];
   roleList = [];
   loading = false;
-  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
+  constructor(
+    public store: StoreService,
+    private trace: TraceService,
+    private message: EoNgFeedbackMessageService,
+    public member: MemberService
+  ) {}
 
   ngOnInit(): void {
-    autorun(async () => {
-      if (this.store.isLogin) {
-        this.queryList();
-      } else {
-        this.list = [
-          {
-            username: 'Postcat'
-          }
-        ];
+    this.updateList();
+
+    //! Use  reaction not use autoRun,autoRun will cause loop
+    reaction(
+      () => this.store.isLogin,
+      async () => {
+        this.updateList();
       }
-    });
+    );
+  }
+  updateList() {
+    if (this.store.isLogin) {
+      this.queryList();
+    } else {
+      this.list = [
+        {
+          username: 'Postcat'
+        }
+      ];
+    }
   }
   async queryList(username = '') {
     this.loading = true;
@@ -75,6 +90,7 @@ export class MemberListComponent implements OnInit {
     const isOK: boolean = await this.member.changeRole(item);
     if (isOK) {
       this.message.success($localize`Change role successfully`);
+      this.trace.report('switch_member_permission');
       this.queryList();
       return;
     }

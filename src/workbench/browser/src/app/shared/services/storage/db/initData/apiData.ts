@@ -333,7 +333,7 @@ export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
               paramType: 0,
               partType: 3,
               dataType: 0,
-              isRequired: 0,
+              isRequired: 1,
               description: 'City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html',
               orderNo: 0,
               paramAttr: {

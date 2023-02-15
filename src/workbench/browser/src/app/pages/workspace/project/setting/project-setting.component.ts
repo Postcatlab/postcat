@@ -8,14 +8,12 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
 import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
-import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
+import { PushApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 
-import { debug } from 'console';
-
 const actionComponent = {
-  push: SyncApiComponent,
+  push: PushApiComponent,
   import: ImportApiComponent,
   export: ExportApiComponent
 };
@@ -42,13 +40,15 @@ export class ProjectSettingComponent implements OnInit {
       title: $localize`Import`,
       icon: 'afferent',
       desc: $localize`Import data from other products`,
-      type: 'import'
+      type: 'import',
+      traceID: 'click_import_project'
     },
     {
       title: $localize`Export`,
       icon: 'efferent',
       desc: $localize`Export Postcat project data`,
-      type: 'export'
+      type: 'export',
+      traceID: 'click_export_project'
     },
     {
       title: $localize`Push`,
@@ -92,7 +92,7 @@ export class ProjectSettingComponent implements OnInit {
         if (err) {
           return;
         }
-        this.router.navigate(['/home/workspace/overview']);
+        this.router.navigate(['/home/workspace/overview/projects']);
         this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
         modal.destroy();
       }

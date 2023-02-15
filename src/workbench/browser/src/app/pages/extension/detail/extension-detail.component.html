@@ -51,6 +51,9 @@
             [nzLoading]="isOperating"
             [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
             (click)="handleInstall()"
+            trace
+            [traceID]="!extensionDetail?.installed ? 'click_install_extension' : ''"
+            [traceParams]="{ extension_id: extensionDetail.name }"
           >
             <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
             <span *ngIf="!extensionDetail?.installed" i18n>Install</span>

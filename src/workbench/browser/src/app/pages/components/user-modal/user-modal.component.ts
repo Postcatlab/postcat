@@ -8,13 +8,13 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { LocalService } from 'eo/workbench/browser/src/app/shared/services/storage/local.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { getUrlParams } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
-import { ModalService } from '../shared/services/modal.service';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -122,14 +122,14 @@ import { ModalService } from '../shared/services/modal.service';
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       (nzAfterClose)="ebdsz2aCallback()"
-      nzTitle="Add Workspace"
+      nzTitle="New Workspace"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="vertical">
           <nz-form-item>
             <nz-form-label i18n nzFor="newWorkName">Workspace Name</nz-form-label>
-            <nz-form-control nzErrorTip="Please input your new work name">
+            <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your new workspace name">
               <input
                 type="text"
                 #newWorkNameWorkspaceNameRef
@@ -193,7 +193,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     private web: WebService,
     private remote: RemoteService,
     private localService: LocalService,
-    private electron: ElectronService
+    private electron: ElectronService,
+    private trace: TraceService
   ) {
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
@@ -210,6 +211,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
     this.isSaveBtnLoading = false;
   }
   async ngOnInit(): Promise<void> {
+    if (this.store.isClientFirst) {
+      this.trace.report('first_open_client');
+    }
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -306,9 +310,22 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async thirdLogin(code) {
     const [data, err] = await this.api.api_userThirdLoginResult({ code });
+    // console.log('data', data);
     if (err) {
       this.store.clearAuth();
       return;
+    }
+    this.trace.setUser({ loginUserId: data.userId });
+    // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
+    const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
+    // (0, '登录').set(1, '注册');
+    if (data.type == 0) {
+      // * login
+      this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
+    }
+    if (data.type == 1) {
+      // * register
+      this.trace.setUser({ register_way: hash.get(data.loginWay) });
     }
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
@@ -401,6 +418,25 @@ export class UserModalComponent implements OnInit, OnDestroy {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
+      this.trace.setUser({ loginUserId: data.userId });
+      // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
+      const hash = new Map()
+        .set(0, 'Email')
+        .set(1, 'Phone')
+        .set(2, 'Wecaht')
+        .set(3, 'QQ')
+        .set(4, 'Feishu')
+        .set(5, 'Github')
+        .set(6, 'Account');
+      // (0, '登录').set(1, '注册');
+      if (data.type == 0) {
+        // * login
+        this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
+      }
+      if (data.type == 1) {
+        // * register
+        this.trace.setUser({ register_way: hash.get(data.loginWay) });
+      }
       this.store.setLoginInfo(data);
       this.effect.updateWorkspaceList();
       // * 关闭弹窗
@@ -462,12 +498,13 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const localProjects = this.store.getProjectList;
       // ! Attention: data is array
       const [data, err]: any = await this.remote.api_workspaceCreate({ titles: [titles] });
-      const workspace = data.at(0);
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
+      this.trace.report('add_workspace_success');
+      const workspace = data.at(0);
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       {
@@ -557,7 +594,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
 
                 await this.router.navigate(['**']);
 
-                this.router.navigate(['/home/workspace/overview']);
+                this.router.navigate(['/home/workspace/overview/projects']);
                 // localProjects.forEach((project, index) => {
                 //   importProject(project, index);
                 // });

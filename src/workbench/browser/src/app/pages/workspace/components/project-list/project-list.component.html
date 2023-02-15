@@ -1,10 +1,11 @@
 <div class="project-management">
-  <nz-empty *ngIf="!initLoading && projectList.length === 0" nzNotFoundImage="simple"> </nz-empty>
-  <ng-container *ngIf="listType === 'card'">
-    <div class="flex flex-wrap">
+  <nz-empty *ngIf="!projectListService.initLoading && projectList.length === 0" nzNotFoundImage="simple"> </nz-empty>
+  <ng-container *ngIf="projectListService.listType === 'card'">
+    <nz-spin *ngIf="projectListService.initLoading"></nz-spin>
+    <div class="grid gap-[20px] 2xl:grid-cols-6 lg:grid-cols-4 sm:grid-cols-2">
       <ng-container *ngFor="let item of projectList">
-        <a class="mr-[20px]" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
-          <nz-card style="width: 300px">
+        <a [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
+          <nz-card>
             <div class="flex justify-between">
               <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
 
@@ -29,8 +30,8 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="listType === 'list'">
-    <nz-list [nzLoading]="initLoading">
+  <ng-container *ngIf="projectListService.listType === 'list'">
+    <nz-list [nzLoading]="projectListService.initLoading">
       <a *ngFor="let item of projectList" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
         <nz-list-item>
           <div>
