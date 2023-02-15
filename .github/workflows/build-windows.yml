@@ -1,8 +1,10 @@
-name: TestRelease
+name: Build Windows
 
 on:
   push:
-    branches: [test/windows_sign222]
+    # branches: [build/windows]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -29,7 +31,8 @@ jobs:
           SSH_WINDOWS_IP: ${{ secrets.SSH_WINDOWS_IP }}
           SSH_WINDOWS_USERNAME: ${{ secrets.SSH_WINDOWS_USERNAME }}
           SSH_WINDOWS_PASSWORD: ${{ secrets.SSH_WINDOWS_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          QINIU_ENV_JS: ${{ secrets.QINIU_ENV_JS }}
         run: |
           yarn
-          ping -c 4 10.8.0.130
           yarn deployWindows

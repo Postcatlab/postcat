@@ -6,7 +6,7 @@ body:
       value: |
         Before opening an issue, we recommend:
         * Use English to communicate.
-        * Search for duplicates of [Issues](https://github.com/eolinker/postcat/issues) and [Discussions](https://github.com/eolinker/postcat/discussions) unresolved.
+        * Search for duplicates of [Issues](https://github.com/Postcatlab/postcat/issues) and [Discussions](https://github.com/Postcatlab/postcat/discussions) unresolved.
   - type: textarea
     id: bug-description
     attributes:

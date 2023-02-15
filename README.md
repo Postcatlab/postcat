@@ -41,7 +41,7 @@ Postcat 现在已经支持 Windows、Mac、Linux等系统，你可以通过以�
 
 ## Bug 和需求反馈
 
-如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/postcat/issues) 联系我们，十分感谢！
+如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/Postcatlab/postcat/issues) 联系我们，十分感谢！
 
 如果你希望和 Postcat 团队近距离交流，讨论产品使用技巧以及了解更多产品最新进展，欢迎加入以下渠道。
 
