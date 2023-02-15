@@ -10,7 +10,7 @@ import { ElectronService } from '../../../core/services';
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- star -->
       <a href="https://github.com/Postcatlab/postcat" target="_blank" class="flex items-center mt-[15px]">
-        <img loading="lazy" class="mx-4" src="https://img.shields.io/github/stars/eolinker/postcat?style=social" alt="" />
+        <img loading="lazy" class="mx-4" src="https://img.shields.io/github/stars/Postcatlab/postcat?style=social" alt="" />
       </a>
       <p i18n class="text-center mt-[15px]">
         Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
