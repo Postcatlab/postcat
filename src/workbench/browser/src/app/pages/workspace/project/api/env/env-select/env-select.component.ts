@@ -114,10 +114,14 @@ export class EnvSelectComponent implements OnInit {
     makeObservable(this);
     this.effect.updateEnvList();
 
-    autorun(() => {
-      this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.id }));
-      this.setCurrentEnv();
-    });
+    reaction(
+      () => this.store.getEnvList,
+      list => {
+        this.renderEnvList = list.map(it => ({ label: it.name, value: it.id }));
+        this.setCurrentEnv();
+      }
+    );
+
     /**
      * Change Select env id
      */
