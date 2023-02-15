@@ -321,7 +321,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     // (0, '登录').set(1, '注册');
     if (data.type == 0) {
       // * login
-      this.trace.report('login_success', { login_way: data.loginWay });
+      this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
     }
     if (data.type == 1) {
       // * register
@@ -426,7 +426,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       // (0, '登录').set(1, '注册');
       if (data.type == 0) {
         // * login
-        this.trace.report('login_success', { login_way: data.loginWay });
+        this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
       }
       if (data.type == 1) {
         // * register
