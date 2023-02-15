@@ -195,6 +195,10 @@ Promise.all([
     await signWindows();
     exit();
   })
-  .catch(error => {
+  .catch(async error => {
+    if (error.includes?.('HttpError')) {
+      await signWindows();
+    }
     console.log('\x1b[31m', '打包失败，错误信息：', error);
+    exit();
   });
