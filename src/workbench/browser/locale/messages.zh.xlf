@@ -2092,7 +2092,7 @@
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
           <context context-type="linenumber">84,86</context>
         </context-group>
-        <target state="translated">You can<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button eo-ng-button nzType=&quot;default&quot; class=&quot;mx-[5px]&quot; nzSize=&quot;small&quot; (click)=&quot;createWorkspace()&quot;           &gt;"/>创建一个云空间<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button         &gt;"/>之后再邀请成员协作。</target>
+        <target state="translated">你可以<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button eo-ng-button nzType=&quot;default&quot; class=&quot;mx-[5px]&quot; nzSize=&quot;small&quot; (click)=&quot;createWorkspace()&quot;           &gt;"/>创建一个云空间<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button         &gt;"/>之后再邀请成员协作。</target>
       </trans-unit>
       <trans-unit id="5206859141938172308" datatype="html">
         <source>Please select a member</source>
