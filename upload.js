@@ -10,7 +10,7 @@ qiniu.conf.SECRET_KEY = SK;
 const uptoken = (bucket, key) => new qiniu.rs.PutPolicy(bucket + ':' + key).token();
 
 const toLatest = name => name.replace(/\d+\.\d+\.\d+/, 'latest');
-const onlyName = name => name.replace(/release\//, '');
+const onlyName = name => name.replace(/build|release\//, '');
 
 // * 检测文件是否存在
 const isExists = async filePath =>
@@ -47,6 +47,9 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
+  'release/Postcat Setup ?.exe',
+  'release/Postcat Setup ?.exe.blockmap',
+  'build/Uninstall Postcat.exe',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',
@@ -66,8 +69,8 @@ const main = async () => {
       .filter(async it => await isExists(it))
       .map(async it => {
         // * 生成上传 Token
-        const token = uptoken(bucket, `download/${version}/${it.replace(/release\//, '')}`);
-        const isOK = await uploadFile(token, `download/${version}/${it.replace(/release\//, '')}`, it);
+        const token = uptoken(bucket, `download/${version}/${onlyName(it)}`);
+        const isOK = await uploadFile(token, `download/${version}/${onlyName(it)}`, it);
         return Promise.resolve(isOK || false);
       })
   );
