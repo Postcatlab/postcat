@@ -162,7 +162,12 @@ export class ApiTestUtilService {
     const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
 
     //handle query and url
-    const tmpResult = syncUrlAndQuery(result.uri, result.requestParams.queryParams);
+    const tmpResult = syncUrlAndQuery(result.uri, result.requestParams.queryParams, {
+      method: 'replace',
+      //* Query Priority is higher than url
+      nowOperate: 'query'
+    });
+    console.log(tmpResult);
     result.uri = tmpResult.url;
     result.requestParams.queryParams = tmpResult.query;
 
