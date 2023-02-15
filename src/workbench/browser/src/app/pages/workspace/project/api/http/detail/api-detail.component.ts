@@ -24,6 +24,13 @@ export class ApiDetailComponent implements TabViewComponent {
   CONST = {
     BODY_TYPE: enumsToObject(ApiBodyType)
   };
+  get url() {
+    const isUrl = /^https?:/;
+    if (isUrl.test(this.model.uri)) {
+      return this.model.uri;
+    }
+    return this.apiStore.getCurrentEnv?.hostUri + this.model.uri;
+  }
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
