@@ -12,7 +12,7 @@ export class TraceService {
     if (!eventId) {
       return;
     }
-    console.log('trace =>>', eventId, JSON.stringify(params, null, 2));
+    // console.log('trace =>>', eventId, JSON.stringify(params, null, 2));
     gio('track', eventId, params);
   }
   setUser(data = {}) {
