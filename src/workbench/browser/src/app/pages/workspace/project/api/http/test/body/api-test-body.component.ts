@@ -214,7 +214,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'body'
+      in: 'body',
+      id: 'api_test_body'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

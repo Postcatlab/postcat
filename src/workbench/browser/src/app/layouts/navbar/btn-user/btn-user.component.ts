@@ -12,7 +12,9 @@ import { StoreService } from '../../../shared/store/state.service';
   selector: 'pc-btn-user',
   template: `
     <ng-container *ngIf="feature.config.cloudFeature">
-      <button *ngIf="!store.isLogin" eo-ng-button nzType="default" (click)="loginOrSign()" i18n>Sign in/Up</button>
+      <button *ngIf="!store.isLogin" eo-ng-button nzType="default" (click)="loginOrSign()" traceID="click_register" trace i18n
+        >Sign in/Up</button
+      >
       <button
         *ngIf="store.isLogin"
         eo-ng-button

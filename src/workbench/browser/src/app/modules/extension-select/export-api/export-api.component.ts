@@ -3,6 +3,8 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { has } from 'lodash-es';
 import { Subject, takeUntil } from 'rxjs';
@@ -20,7 +22,13 @@ export class ExportApiComponent implements OnInit {
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private extensionService: ExtensionService, private apiService: ApiService, private messageService: MessageService) {}
+  constructor(
+    private extensionService: ExtensionService,
+    private apiService: ApiService,
+    private messageService: MessageService,
+    private trace: TraceService,
+    private store: StoreService
+  ) {}
   ngOnInit(): void {
     this.initData();
     this.messageService
@@ -89,6 +97,8 @@ export class ExportApiComponent implements OnInit {
           if (filename) {
             this.transferTextToFile(filename, output);
           }
+          const workspace_type = this.store.isLocal ? 'local' : 'remote';
+          this.trace.report('export_project_success', { sync_platform: this.currentExtension, workspace_type });
           callback(true);
         } catch (e) {
           console.error(e);

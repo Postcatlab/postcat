@@ -19,6 +19,8 @@ export class StoreService {
   private localWorkspace: API.Workspace;
   // * observable data
 
+  private isBack = StorageUtil.get('isBack') || false;
+
   // ? router
   @observable private url = '';
   @observable private pageLevel = 'project';
@@ -92,6 +94,11 @@ export class StoreService {
   }
 
   // ? data source
+  @computed get isClientFirst() {
+    const isClientFist = !this.isBack && !!window.electron;
+    this.setIsBack();
+    return isClientFist;
+  }
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspace?.isLocal;
   }
@@ -182,6 +189,10 @@ export class StoreService {
         this.setPageLevel();
       }
     });
+  }
+
+  @action setIsBack() {
+    StorageUtil.set('isBack', true);
   }
 
   @action setLocalWorkspace(data) {

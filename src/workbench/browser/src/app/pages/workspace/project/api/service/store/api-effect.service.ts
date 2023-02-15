@@ -69,6 +69,10 @@ export class ApiEffectService {
     if (gErr) {
       return;
     }
+    if (!groupList?.length) {
+      pcConsole.error(`Can't get root group,groupList is empty`);
+      return;
+    }
     const rootGroup = groupList.at(0);
     rootGroup.name = $localize`Root Group`;
     this.store.setRootGroup(rootGroup);
