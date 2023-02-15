@@ -15,9 +15,7 @@ export class TraceDirective {
   }
 
   @HostListener('keydown')
-  tKeyDown() {
-    console.log('keydown');
-  }
+  tKeyDown() {}
 
   @HostListener('focus', ['$event'])
   onFocus(event) {
