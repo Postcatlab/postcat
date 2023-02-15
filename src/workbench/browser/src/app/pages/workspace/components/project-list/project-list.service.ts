@@ -32,7 +32,9 @@ export class ProjectListService {
     this.initLoading = true;
     this.store.setProjectList([]);
     const [data]: any = await this.effect.updateProjects(this.store.getCurrentWorkspaceUuid);
-    this.initLoading = false;
+    setTimeout(() => {
+      this.initLoading = false;
+    }, 300);
     return data;
   }
   createProject() {

@@ -26,11 +26,8 @@ export class TraceService {
     console.log('trace =>>', eventId, JSON.stringify(params, null, 2));
     gio('track', eventId, params);
   }
-  setUserID(id) {
-    if (!id) {
-      return;
-    }
-    gio('setUserId', id);
+  setUser(data = {}) {
+    gio('people.set', data);
   }
   start() {
     gio('config', { dataCollect: false });

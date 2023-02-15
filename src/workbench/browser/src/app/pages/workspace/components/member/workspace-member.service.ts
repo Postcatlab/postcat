@@ -24,9 +24,9 @@ export class WorkspaceMemberService {
       this.isOwner = this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner');
     });
   }
-  async addMember(ids) {
+  async addMember(ids: string[]) {
     return await this.api.api_workspaceAddMember({
-      userIds: [ids]
+      userIds: ids
     });
   }
   async queryMember(search) {

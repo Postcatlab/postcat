@@ -192,10 +192,12 @@ nz-resize-handle.container-draggable {
 
   &.vertical {
     cursor: col-resize;
-    width: 1px;
+    width: 5px;
+    border-left: 2px solid var(--background-color);
+    border-right: 2px solid var(--background-color);
 
     &:hover {
-      width: 3px;
+      border: none;
     }
   }
 
@@ -210,10 +212,12 @@ nz-resize-handle.container-draggable {
   &.horizontal {
     width: 100%;
     cursor: row-resize;
-    height: 1px;
+    height: 5px;
+    border-top: 2px solid var(--background-color);
+    border-bottom: 2px solid var(--background-color);
 
     &:hover {
-      height: 3px;
+      border: none;
     }
   }
 }

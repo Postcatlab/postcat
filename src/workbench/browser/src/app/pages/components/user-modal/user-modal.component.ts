@@ -315,19 +315,17 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       return;
     }
-    this.trace.setUserID(data.userId);
+    this.trace.setUser({ loginUserId: data.userId });
     // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
     const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
     // (0, '登录').set(1, '注册');
     if (data.type == 0) {
       // * login
-      this.trace.report('login_success', { login_way: data.loginWay });
+      this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
     }
     if (data.type == 1) {
       // * register
-      this.trace.report('register_success', {
-        register_way: hash.get(data.loginWay)
-      });
+      this.trace.setUser({ register_way: hash.get(data.loginWay) });
     }
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
@@ -420,19 +418,17 @@ export class UserModalComponent implements OnInit, OnDestroy {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
-      this.trace.setUserID(data.userId);
+      this.trace.setUser({ loginUserId: data.userId });
       // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
       const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
       // (0, '登录').set(1, '注册');
       if (data.type == 0) {
         // * login
-        this.trace.report('login_success', { login_way: data.loginWay });
+        this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
       }
       if (data.type == 1) {
         // * register
-        this.trace.report('register_success', {
-          register_way: hash.get(data.loginWay)
-        });
+        this.trace.setUser({ register_way: hash.get(data.loginWay) });
       }
       this.store.setLoginInfo(data);
       this.effect.updateWorkspaceList();
@@ -495,13 +491,13 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const localProjects = this.store.getProjectList;
       // ! Attention: data is array
       const [data, err]: any = await this.remote.api_workspaceCreate({ titles: [titles] });
-      const workspace = data.at(0);
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
       this.trace.report('add_workspace_success');
+      const workspace = data.at(0);
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       {

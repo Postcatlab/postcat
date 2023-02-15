@@ -4,7 +4,7 @@ import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable, observable, reaction, toJS } from 'mobx';
+import { autorun, makeObservable, observable, reaction, action, toJS } from 'mobx';
 
 import { ApiEffectService } from '../../service/store/api-effect.service';
 import { ApiStoreService } from '../../service/store/api-state.service';
@@ -50,11 +50,13 @@ import { ApiStoreService } from '../../service/store/api-state.service';
                 <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12 content">{{ renderEnv.hostUri }}</span>
               </div>
             </div>
-            <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n>Environment Global variable</span>
-            <div class="flex items-center justify-between px-6 h-8">
-              <span class="px-1 w-1/3 text-tips" i18n>Name</span>
-              <span class="px-1 w-2/3 text-tips" i18n>Value</span>
-            </div>
+            <ng-container *ngIf="renderEnv.parameters?.length">
+              <span class="flex items-center px-6 h-12 title" i18n>Environment Global variable</span>
+              <div class="flex items-center justify-between px-6 h-8">
+                <span class="px-1 w-1/3 text-tips" i18n>Name</span>
+                <span class="px-1 w-2/3 text-tips" i18n>Value</span>
+              </div>
+            </ng-container>
             <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8 content">
               <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
               <span class="px-1 w-2/3 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
@@ -126,7 +128,7 @@ export class EnvSelectComponent implements OnInit {
         data && this.trace.report('select_environment');
       }
     );
-    this.envUuid = this.store.getEnvUuid;
+    this.setEnvUuid(this.store.getEnvUuid);
 
     /**
      * Set current selected environment by id
@@ -138,15 +140,20 @@ export class EnvSelectComponent implements OnInit {
          * From outside change env uuid
          * Such as add enviroment
          */
-        this.envUuid = this.store.getEnvUuid;
+        this.setEnvUuid(data);
         this.setCurrentEnv();
       }
     );
   }
+  @action setEnvUuid(uuid) {
+    this.envUuid = uuid;
+  }
+
   setCurrentEnv() {
     this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
     if (!this.renderEnv) return;
     this.renderEnv.parameters = this.renderEnv.parameters.filter(item => item.name || item.value);
+    console.log(' this.renderEnv.parameters ', this.renderEnv.parameters);
   }
   gotoEnvManager() {
     // * close select

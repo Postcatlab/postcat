@@ -8,21 +8,13 @@ nz-divider {
   margin: 0.1em 0;
 }
 
-:lang(zh) {
-  .ant-select {
-    width: 132px;
-  }
-}
-
-:lang(en) {
-  .ant-select {
-    width: 162px;
-  }
-}
-
 :host ::ng-deep {
   eo-ng-select eo-ng-select-top-control {
     border: none !important;
+  }
+
+  .ant-select {
+    width: calc(100% - 40px);
   }
 }
 
