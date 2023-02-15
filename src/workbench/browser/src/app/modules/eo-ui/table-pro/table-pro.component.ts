@@ -15,7 +15,6 @@ import {
   ViewChildren
 } from '@angular/core';
 import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
-import { collectStoredAnnotations } from 'mobx/dist/internal';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
 import StorageUtil from '../../../utils/storage/storage.utils';
@@ -227,9 +226,13 @@ export class EoTableProComponent implements OnInit, OnChanges {
    * Remeber coloum size after resize
    */
   nzResizeColumn(tableList) {
+    //* If the first column is sortable, the first column will be removed from the tableList
+    if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
+      tableList = tableList.slice(1);
+    }
     const widthByKey = {};
     this.columns.forEach((val, key) => {
-      const headerCol = tableList[key];
+      const headerCol = tableList.find(col => col.title === val.title || col.key === val.key) || tableList[key];
       if (headerCol.width) {
         widthByKey[val.key || key] = headerCol.width;
       }

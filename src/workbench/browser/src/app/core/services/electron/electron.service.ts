@@ -36,7 +36,7 @@ export class ElectronService {
   }
 
   get isElectron(): boolean {
-    return !!window?.electron;
+    return !!window.electron;
   }
   getSystemInfo(): DescriptionsItem[] {
     const descriptions: DescriptionsItem[] = [

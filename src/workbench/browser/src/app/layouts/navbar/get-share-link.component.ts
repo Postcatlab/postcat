@@ -20,6 +20,8 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       nzPopoverOverlayClassName="background-popover"
       nzPopoverTrigger="click"
       (click)="handleGetShareLink()"
+      trace
+      traceID="click_share"
       i18n
     >
       Share
@@ -36,7 +38,9 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
             <span class="truncate flex-1">
               {{ link }}
             </span>
-            <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+            <button eo-ng-button nzType="text" trace traceID="copy_share_link" (click)="handleCopy()"
+              ><eo-iconpark-icon name="copy"></eo-iconpark-icon
+            ></button>
           </ng-container>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -89,7 +90,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     public web: WebService,
     private messageService: MessageService,
     private extensionService: ExtensionService,
-    public store: StoreService
+    public store: StoreService,
+    private trace: TraceService
   ) {
     this.initExtensionExtra();
     this.watchInstalledExtensionsChange();
@@ -183,6 +185,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   onResizeEnd() {
     this.isDragging = false;
+    this.trace.report('drag_group_sider_width', { group_sider_width: this.siderWidth });
   }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {

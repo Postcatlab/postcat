@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
@@ -56,7 +57,8 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private trace: TraceService
   ) {
     this.initShortcutKey();
     this.initForm();
@@ -70,7 +72,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           // 或者 return false;
           event.preventDefault();
-          this.saveEnv();
+          this.saveEnv('shortcut');
         }
       });
   }
@@ -85,8 +87,31 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     }
     return true;
   }
-  async saveEnv() {
-    const uuid = Number(this.route.snapshot.queryParams.uuid);
+  private async createEnv(form, ux = 'ui') {
+    const [data, err] = await this.effect.addEnv(form);
+    if (err) {
+      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
+      return;
+    }
+    this.trace.report('add_environment_success', { trigger_way: ux });
+    this.message.success($localize`Added successfully`);
+    // * Would not refresh page
+    this.router.navigate(['home/workspace/project/api/env/edit'], {
+      queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }
+    });
+    return data;
+  }
+  private async editEnv(form) {
+    const [data, err] = await this.effect.updateEnv(form);
+    if (err) {
+      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
+      return;
+    }
+    this.message.success($localize`Edited successfully`);
+    return data;
+  }
+  async saveEnv(ux = 'ui') {
+    const isEdit = !!this.route.snapshot.queryParams.uuid;
     if (!this.checkForm()) {
       return;
     }
@@ -94,39 +119,9 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     const formdata = this.formatEnvData(this.model);
     this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
-    const operateMUI = {
-      edit: {
-        params: [formdata, uuid],
-        success: $localize`Edited successfully`,
-        error: $localize`Failed to edit`
-      },
-      add: {
-        params: [formdata],
-        success: $localize`Added successfully`,
-        error: $localize`Failed to add`
-      }
-    };
-    const operateName = uuid ? 'edit' : 'add';
-    const operate = operateMUI[operateName];
-    const [data, err] = await this.effect[operateName === 'edit' ? 'updateEnv' : 'addEnv'](formdata);
+    const data = isEdit ? await this.editEnv(formdata) : await this.createEnv(formdata, ux);
     this.isSaving = false;
-    if (err) {
-      if (err.code == 131000001) {
-        this.message.error($localize`Environment name length needs to be less than 32`);
-        return;
-      }
-      this.message.error(operate.error);
-      return;
-    }
-    if (data) {
-      this.message.success(operate.success);
-      if (operateName === 'add') {
-        this.router.navigate(['home/workspace/project/api/env/edit'], {
-          queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }
-        });
-      }
-      this.afterSaved.emit(this.initialModel);
-    }
+    this.afterSaved.emit(this.initialModel);
     if (!this.store.getEnvUuid) {
       this.store.setEnvUuid(data.id || formdata.id);
     }
