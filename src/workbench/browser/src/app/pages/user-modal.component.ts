@@ -495,13 +495,13 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const localProjects = this.store.getProjectList;
       // ! Attention: data is array
       const [data, err]: any = await this.remote.api_workspaceCreate({ titles: [titles] });
-      const workspace = data.at(0);
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
       this.trace.report('add_workspace_success');
+      const workspace = data.at(0);
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       {
