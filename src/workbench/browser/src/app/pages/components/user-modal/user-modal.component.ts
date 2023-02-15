@@ -418,7 +418,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
-      this.trace.setUser({ loginUserId: data.userId });
+      this.trace.setUserID(data.userId);
       // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
       const hash = new Map()
         .set(0, 'Email')
