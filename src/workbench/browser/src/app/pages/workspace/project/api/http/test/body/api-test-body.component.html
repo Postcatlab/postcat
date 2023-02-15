@@ -37,7 +37,8 @@
     <input *ngSwitchDefault eo-ng-input [(ngModel)]="item.paramAttr.example" (ngModelChange)="emitModelChange()" />
     <div *ngSwitchCase="API_PARAMS_TYPE.file">
       <label class="cursor-pointer px-[5px] py-[3px] border-all rounded" for="file_{{ index }}" i18n>Choose Files</label>
-      <span class="ml-[10px]" i18n>{{ item.files?.length ? item.files?.length + ' files selected' : 'No file chosen' }}</span>
+      <span class="ml-[10px]" *ngIf="item.files?.length">{{ item.files?.length }} <span i18n>files selected</span></span>
+      <span class="ml-[10px]" *ngIf="!item.files?.length" i18n>No file chosen</span>
       <input id="file_{{ index }}" multiple type="file" class="invisible" (change)="formdataSelectFiles($event.target, item)" />
     </div>
   </div>

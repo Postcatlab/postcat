@@ -1,49 +1,80 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
-import { makeObservable, observable, reaction } from 'mobx';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { makeObservable, observable, action, reaction } from 'mobx';
 
 import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
+import { MessageService } from '../../../../shared/services/message/message.service';
 import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
-  template: `<nz-list nzItemLayout="horizontal">
-      <nz-list-header *ngIf="member.isOwner">
+  template: `
+    <nz-modal
+      [nzFooter]="null"
+      [(nzVisible)]="isInvateModalVisible"
+      (nzOnCancel)="handleInvateModalCancel()"
+      (nzAfterClose)="ehe4islCallback()"
+      nzTitle="Add Member To Workspace"
+      i18n-nzTitle
+    >
+      <ng-container *nzModalContent>
         <eo-ng-select
           class="w-full"
           nzAllowClear
-          nzShowSearch
           auto-focus-form
+          nzShowSearch
+          i18n-nzPlaceholder
           nzServerSearch
-          nzAutoFocus="true"
-          [nzOptionHeightPx]="54"
-          i18n-nzPlaceHolder
-          nzPlaceHolder="Search"
+          nzPlaceholder="Search"
           [(ngModel)]="userCache"
+          nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
+          <!-- <div *ngIf="isLoading" class="h-10 flex justify-center items-center">
+            <nz-spin nzSimple></nz-spin>
+          </div> -->
           <ng-container>
-            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.userNickName" [nzValue]="option.id">
-              <div class="flex w-full justify-between items-center option">
-                <div class="flex flex-col justify-between">
-                  <span class="font-bold">{{ option.userNickName }}</span>
-                  <span class="text-tips">{{ option.email }}</span>
-                </div>
-                <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
+            <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.email" [nzValue]="option.id">
+              <div class="flex w-full justify-between items-center">
+                <span class="font-bold">{{ option.userNickName }}</span>
+                <span class="text-tips">{{ option.email }}</span>
               </div>
             </eo-ng-option>
           </ng-container>
-
-          <!-- <eo-ng-option *ngIf="isLoading" nzDisabled nzCustomContent>
-            <div class="h-10 flex justify-center items-center">
-              <nz-spin nzSimple></nz-spin>
-            </div>
-          </eo-ng-option> -->
         </eo-ng-select>
-      </nz-list-header>
-    </nz-list>
-    <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> `,
+        <section class="h-4"></section>
+        <button
+          eo-ng-button
+          [nzLoading]="isSelectBtnLoading"
+          nzType="primary"
+          nzBlock
+          (click)="btn0r9zcbCallback()"
+          [disabled]="userCache?.length === 0"
+          i18n
+        >
+          Add
+        </button>
+      </ng-container>
+    </nz-modal>
+    <eo-ng-feedback-alert
+      *ngIf="store.isLocal"
+      class="block mb-[20px]"
+      nzType="info"
+      [nzMessage]="templateRefMsg"
+      nzShowIcon
+    ></eo-ng-feedback-alert>
+    <ng-template #templateRefMsg>
+      <p i18n>Currently using local workspace, unable to invite members. </p>
+      <p class="flex items-center" i18n
+        >You can<button eo-ng-button nzType="default" class="mx-[5px]" nzSize="small" (click)="createWorkspace()"
+          >create a cloud workspace</button
+        >and invite members to collaborate.</p
+      ></ng-template
+    >
+    <eo-member-list class="block mt-[10px]" #memberList></eo-member-list>
+  `,
   styles: [
     `
       .ant-list-split .ant-list-header {
@@ -56,16 +87,21 @@ import { StoreService } from '../../../../shared/store/state.service';
 export class WorkspaceMemberComponent implements OnInit {
   @ViewChild('memberList') memberListRef: MemberListComponent;
   @observable searchValue = '';
-  userCache;
+  userCache = [];
   isLoading = false;
   userList = [];
+  isSelectBtnLoading = false;
+  isInvateModalVisible = false;
   constructor(
     public store: StoreService,
-    private message: EoNgFeedbackMessageService,
+    private eMessage: EoNgFeedbackMessageService,
     public member: MemberService,
-    private cdk: ChangeDetectorRef
+    private message: MessageService,
+    private trace: TraceService
   ) {}
-
+  createWorkspace() {
+    this.message.send({ type: 'addWorkspace', data: {} });
+  }
   ngOnInit(): void {
     makeObservable(this);
     reaction(
@@ -75,39 +111,76 @@ export class WorkspaceMemberComponent implements OnInit {
           return;
         }
         this.isLoading = true;
-        console.log('hel');
         const result = await this.member.searchUser(value.trim());
         const memberList = this.memberListRef.list.map(it => it.username);
         this.userList = result.filter(it => !memberList.includes(it.userNickName));
+        console.log('memberList', this.userList);
         this.isLoading = false;
         // this.cdk.detectChanges();
       },
       { delay: 300 }
     );
+    this.message.get().subscribe(({ data, type }) => {
+      if (type === 'addWorkspaceMember') {
+        this.isInvateModalVisible = true;
+      }
+    });
   }
   handleChange(event) {
-    this.searchValue = event;
-    // if (this.searchValue.includes('t')) {
-    //   this.userList = [
-    //     {
-    //       userNickName: 'test'
-    //     }
-    //   ];
-    // }
+    this.SetSearchValue(event);
   }
+  @action SetSearchValue(data) {
+    this.searchValue = data;
+  }
+  handleInvateModalCancel(): void {
+    // * 关闭弹窗
+    this.isInvateModalVisible = false;
+  }
+  ehe4islCallback() {
+    // * nzAfterClose event callback
+    this.userCache = [];
+  }
+  async btn0r9zcbCallback() {
+    // * click event callback
+    this.isSelectBtnLoading = true;
+    const btnSelectRunning = async () => {
+      const userIds = this.userCache;
+      if (userIds.length === 0) {
+        this.eMessage.error($localize`Please select a member`);
+        return;
+      }
+
+      const [aData, aErr]: any = await this.member.addMember(userIds);
+      if (aErr) {
+        this.eMessage.error($localize`Add member failed`);
+        return;
+      }
+      this.trace.report('project_add_member_success');
+      this.eMessage.success($localize`Add member successfully`);
+
+      // * 关闭弹窗
+      this.isInvateModalVisible = false;
+
+      this.memberListRef.queryList();
+    };
+    await btnSelectRunning();
+    this.isSelectBtnLoading = false;
+  }
+
   async addMember(items) {
     if (this.store.isLocal) {
-      this.message.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
+      this.eMessage.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
       return;
     }
     const [data, err]: any = await this.member.addMember(items.id);
     if (err) {
-      this.message.error($localize`Add member failed`);
+      this.eMessage.error($localize`Add member failed`);
       return;
     }
-    this.message.success($localize`Add member successfully`);
+    this.trace.report('add_workspace_member_success');
+    this.eMessage.success($localize`Add member successfully`);
     this.userList = [];
-    this.userCache = '';
+    this.userCache = [];
     this.memberListRef.queryList();
   }
 }

@@ -1,17 +1,17 @@
 :host ::ng-deep {
-  .ant-tabs-tabpane {
+  eo-workspace-member,
+  eo-workspace-setting,
+  eo-project-list {
+    height: calc(var(--body-height) - 127px) !important;
     padding-top: 15px;
-  }
-
-  .half-part-container {
-    width: 50%;
     display: block;
-    margin: 0 auto;
+    overflow: auto;
   }
 
-  .ant-tabs-content {
-    height: calc(var(--body-height) - 127px);
-    overflow: auto;
+  eo-workspace-member,
+  eo-workspace-setting {
+    width: 50%;
+    margin: 0 auto;
   }
 }
 
