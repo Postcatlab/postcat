@@ -21,7 +21,6 @@ export class TraceDirective {
 
   @HostListener('focus', ['$event'])
   onFocus(event) {
-    console.log('fo');
     const tagName = event.target.tagName;
     if (!['INPUT', 'SELECT', 'RADIO'].includes(tagName)) {
       return;

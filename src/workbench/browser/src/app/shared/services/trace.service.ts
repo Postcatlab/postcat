@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { accountId } from 'eo/workbench/browser/growing.config';
 
 declare const gio;
 
@@ -7,17 +6,7 @@ declare const gio;
   providedIn: 'root'
 })
 export class TraceService {
-  constructor() {
-    // @ts-ignore
-    gio('init', accountId, {});
-    //custom page code begin here
-    //Electron use hash mode
-    if (!!window.electron) {
-      gio('config', { hashtag: true });
-    }
-    //custom page code end here
-    gio('send');
-  }
+  constructor() {}
 
   report(eventId, params = {}) {
     if (!eventId) {
