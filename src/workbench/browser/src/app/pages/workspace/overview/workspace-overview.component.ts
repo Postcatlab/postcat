@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { autorun, reaction } from 'mobx';
 
@@ -18,18 +18,18 @@ export class WorkspaceOverviewComponent implements OnInit {
   nzSelectedIndex = 0;
   isOwner = true;
   constructor(
-    private nzMessage: EoNgFeedbackMessageService,
     public projectList: ProjectListService,
     public store: StoreService,
     private router: Router,
-    public feature: FeatureControlService
+    public feature: FeatureControlService,
+    private message: MessageService
   ) {}
-  invite() {
-    if (this.nzSelectedIndex === 1) {
-      this.nzMessage.warning($localize`You has already selected members tab, you can operate now.`);
-      return;
+  async invite() {
+    if (this.nzSelectedIndex !== 1) {
+      this.router.navigate(['/home/workspace/overview/member']);
     }
-    this.router.navigate(['/home/workspace/overview/member']);
+    await waitNextTick();
+    this.message.send({ type: 'addWorkspaceMember', data: {} });
   }
   ngOnInit(): void {
     autorun(async () => {

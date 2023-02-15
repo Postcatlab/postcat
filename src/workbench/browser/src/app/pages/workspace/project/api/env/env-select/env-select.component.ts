@@ -4,7 +4,7 @@ import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/workspace
 import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, makeObservable, observable, reaction, toJS } from 'mobx';
+import { autorun, makeObservable, observable, reaction, action, toJS } from 'mobx';
 
 import { ApiEffectService } from '../../service/store/api-effect.service';
 import { ApiStoreService } from '../../service/store/api-state.service';
@@ -128,7 +128,7 @@ export class EnvSelectComponent implements OnInit {
         data && this.trace.report('select_environment');
       }
     );
-    this.envUuid = this.store.getEnvUuid;
+    this.setEnvUuid(this.store.getEnvUuid);
 
     /**
      * Set current selected environment by id
@@ -140,11 +140,15 @@ export class EnvSelectComponent implements OnInit {
          * From outside change env uuid
          * Such as add enviroment
          */
-        this.envUuid = this.store.getEnvUuid;
+        this.setEnvUuid(data);
         this.setCurrentEnv();
       }
     );
   }
+  @action setEnvUuid(uuid) {
+    this.envUuid = uuid;
+  }
+
   setCurrentEnv() {
     this.renderEnv = this.store.getEnvList.find((it: any) => it.id === this.store.getEnvUuid);
     if (!this.renderEnv) return;
