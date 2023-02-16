@@ -13,7 +13,12 @@ import { MemberService } from './member.service';
       <nz-list-item-meta>
         <nz-list-item-meta-title>
           <div class="flex items-center">
-            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ (item.username || item.email)?.at(0) }}" class="mr-[10px]"></nz-avatar>
+            <nz-avatar
+              [nzShape]="'square'"
+              [nzSize]="40"
+              nzText="{{ (item.username || item.email)?.at(0) }}"
+              class="mr-[10px] flex-none"
+            ></nz-avatar>
             <div class="flex flex-col">
               <span class="font-bold link">{{ item.username }}</span>
               <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
