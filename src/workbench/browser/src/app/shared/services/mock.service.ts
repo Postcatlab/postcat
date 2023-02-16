@@ -137,14 +137,18 @@ export class MockService {
     }
   }
 
-  async batchMatchApiData(projectID = 1, req) {
-    const [data] = await this.apiServiece.api_apiDataList({ pageSize: 200, statuses: [0] });
+  async batchMatchApiData(projectID = 1, req, page = 1) {
+    const pageSize = 200;
+    const [data] = await this.apiServiece.api_apiDataList({ page, pageSize, statuses: [0] });
     let result;
     for (const api of data.items) {
       result = await this.matchApiData(api, req);
       if (result?.statusCode !== 404) {
         return result;
       }
+    }
+    if (data.paginator?.total > page * pageSize && result?.statusCode === 404) {
+      return this.batchMatchApiData(projectID, req, page + 1);
     }
     return result;
   }
