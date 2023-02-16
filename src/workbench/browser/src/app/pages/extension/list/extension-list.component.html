@@ -9,7 +9,7 @@
       *ngFor="let it of extensionList"
       trace
       traceID="click_extension_detail"
-      [traceParams]="{ extenison_id: it.name }"
+      [traceParams]="{ extension_id: it.name }"
       (click)="clickExtension($event, it)"
     >
       <div class="flex flex-col w-full h-full p-5">

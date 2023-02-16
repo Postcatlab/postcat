@@ -1,56 +1,36 @@
-### Features
-* Github Third-Login 
-* Extension market optimization
+## [0.2.1](https://github.com/Postcatlab/postcat/compare/v0.2.0...v0.2.1) (2023-02-09)
+
 
 ### Bug Fixes
+
+* pc third login error&& env page change language error ([da90e5e](https://github.com/Postcatlab/postcat/commit/da90e5e069fb720489fa6fc60e665b0379ec07ca))
+
+
+
+# [0.2.0](https://github.com/Postcatlab/postcat/compare/v0.1.0...v0.2.0) (2023-02-09)
+
+
+### Bug Fixes
+
 * delete group after delete tab by id ([34520bf](https://github.com/Postcatlab/postcat/commit/34520bfbd1911ae89449f666354c7378111ac655))
+* extension-tree select issue ([8b7d9a8](https://github.com/Postcatlab/postcat/commit/8b7d9a8bf1322d7da696f8d8ba5e5fcd630fa172))
 * header send error ([3cfbeb5](https://github.com/Postcatlab/postcat/commit/3cfbeb5d78059c12498302bfd0a433105afe3322))
+* localize environment response msg ([58c0508](https://github.com/Postcatlab/postcat/commit/58c0508fc82b3245a6edece68b4c9e5066fabee9))
 * mock download isInstalled status error ([a66d019](https://github.com/Postcatlab/postcat/commit/a66d019622232d55592334f77a71bbc067553962))
 * Notification can't stay in page ([da21132](https://github.com/Postcatlab/postcat/commit/da211322650d49e66d161ee046cb9d41b674f9f5))
-* test restore from history error ([7a2f05d](https://github.com/Postcatlab/postcat/commit/7a2f05d3527b9a85306f5726ecee1a5ed1fe5c06))
-* extension-tree select issue ([8b7d9a8](https://github.com/Postcatlab/postcat/commit/8b7d9a8bf1322d7da696f8d8ba5e5fcd630fa172))
-* localize environment response msg ([58c0508](https://github.com/Postcatlab/postcat/commit/58c0508fc82b3245a6edece68b4c9e5066fabee9))
-* search extension ([9c39e66](https://github.com/Postcatlab/postcat/commit/9c39e66f8195d047642fc57a07213378c6d129b8))
-* third login error ([365600b](https://github.com/Postcatlab/postcat/commit/365600b7405e9474502cb4a3558ac5dbcedff503))
-* add & update environment validtor ([02d3f6b](https://github.com/Postcatlab/postcat/commit/02d3f6b527ae9174192cc552b52a93b2c78a63e1))
-
-
-# [0.2.0](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.2.0) (2023-02-09)
-
-
-### Bug Fixes
-
-* extension-tree select issue ([8b7d9a8](https://github.com/Postcatlab/postcat/commit/8b7d9a8bf1322d7da696f8d8ba5e5fcd630fa172))
-* localize environment response msg ([58c0508](https://github.com/Postcatlab/postcat/commit/58c0508fc82b3245a6edece68b4c9e5066fabee9))
 * search extension ([9c39e66](https://github.com/Postcatlab/postcat/commit/9c39e66f8195d047642fc57a07213378c6d129b8))
 * some style ([e95c344](https://github.com/Postcatlab/postcat/commit/e95c344702dd1808cd6ce2f9cf0b3de5882c17df))
-* third login error ([365600b](https://github.com/Postcatlab/postcat/commit/365600b7405e9474502cb4a3558ac5dbcedff503))
-
-
-### Features
-
-* add & update environment validtor ([02d3f6b](https://github.com/Postcatlab/postcat/commit/02d3f6b527ae9174192cc552b52a93b2c78a63e1))
-* github login cancel logic ([850b43b](https://github.com/Postcatlab/postcat/commit/850b43b8e06abadea5a5d015d8f836d5f61c2c11))
-* update ([ecfdff8](https://github.com/Postcatlab/postcat/commit/ecfdff83c7b66a65110288ab5c4e8516520a2a30))
-
-
-
-## [0.2.1](https://github.com/Postcatlab/postcat/compare/v0.1.0...v0.2.1) (2023-02-09)
-
-
-### Bug Fixes
-
-* delete group after delete tab by id ([34520bf](https://github.com/Postcatlab/postcat/commit/34520bfbd1911ae89449f666354c7378111ac655))
-* header send error ([3cfbeb5](https://github.com/Postcatlab/postcat/commit/3cfbeb5d78059c12498302bfd0a433105afe3322))
-* mock download isInstalled status error ([a66d019](https://github.com/Postcatlab/postcat/commit/a66d019622232d55592334f77a71bbc067553962))
-* Notification can't stay in page ([da21132](https://github.com/Postcatlab/postcat/commit/da211322650d49e66d161ee046cb9d41b674f9f5))
 * test restore from history error ([7a2f05d](https://github.com/Postcatlab/postcat/commit/7a2f05d3527b9a85306f5726ecee1a5ed1fe5c06))
+* third login error ([365600b](https://github.com/Postcatlab/postcat/commit/365600b7405e9474502cb4a3558ac5dbcedff503))
 
 
 ### Features
 
 * 0.2.0 ([3d18b48](https://github.com/Postcatlab/postcat/commit/3d18b48853ac37269dca3fde4eb048d314221470))
+* add & update environment validtor ([02d3f6b](https://github.com/Postcatlab/postcat/commit/02d3f6b527ae9174192cc552b52a93b2c78a63e1))
 * add release note ([e97c169](https://github.com/Postcatlab/postcat/commit/e97c169ca67ca09e8012c36380d341cd4311be4d))
+* github login cancel logic ([850b43b](https://github.com/Postcatlab/postcat/commit/850b43b8e06abadea5a5d015d8f836d5f61c2c11))
+* update ([ecfdff8](https://github.com/Postcatlab/postcat/commit/ecfdff83c7b66a65110288ab5c4e8516520a2a30))
 
 
 
