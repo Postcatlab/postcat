@@ -29,7 +29,7 @@ import { StoreService } from '../../../shared/store/state.service';
       <eo-ng-dropdown-menu #userMenu>
         <ul nz-menu>
           <li class="px-[12px] py-[5px] font-bold">
-            {{ store.getUserProfile?.userNickName }}
+            {{ store.getUserProfile?.email }}
           </li>
           <li nz-menu-item (click)="openSettingModal()" i18n>Account Setting</li>
           <li nz-menu-item (click)="loginOut()" i18n>Sign Out</li>
