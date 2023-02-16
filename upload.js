@@ -10,7 +10,7 @@ qiniu.conf.SECRET_KEY = SK;
 const uptoken = (bucket, key) => new qiniu.rs.PutPolicy(bucket + ':' + key).token();
 
 const toLatest = name => name.replace(/\d+\.\d+\.\d+/, 'latest');
-const onlyName = name => name.replace(/build|release\//, '');
+const onlyName = name => name.replace(/build\/|release\//, '');
 
 // * 检测文件是否存在
 const isExists = async filePath =>

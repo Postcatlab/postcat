@@ -6,7 +6,7 @@ qiniu.conf.ACCESS_KEY = AK;
 qiniu.conf.SECRET_KEY = SK;
 
 const toLatest = name => name.replace(/\d+\.\d+\.\d+/, 'latest');
-const onlyName = name => name.replace(/build|release\//, '');
+const onlyName = name => name.replace(/build\/|release\//, '');
 
 // * 构建客户端实例
 const client = new qiniu.rs.Client();
