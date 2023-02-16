@@ -179,6 +179,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
   isCancelBtnLoading;
   isSaveBtnLoading;
   private destroy$: Subject<void> = new Subject<void>();
+  // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
+  hash = new Map().set(0, 'Email').set(1, 'Phone').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, 'Account');
   constructor(
     public store: StoreService,
     public message: MessageService,
@@ -316,16 +318,14 @@ export class UserModalComponent implements OnInit, OnDestroy {
       return;
     }
     this.trace.setUserID(data.userId);
-    // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
-    const hash = new Map().set(0, '邮箱').set(1, '手机号').set(2, 'Wecaht').set(3, 'QQ').set(4, 'Feishu').set(5, 'Github').set(6, '账号');
     // (0, '登录').set(1, '注册');
     if (data.type == 0) {
       // * login
-      this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
+      this.trace.report('login_success', { login_way: this.hash.get(data.loginWay) });
     }
     if (data.type == 1) {
       // * register
-      this.trace.setUser({ register_way: hash.get(data.loginWay) });
+      this.trace.setUser({ register_way: this.hash.get(data.loginWay) });
     }
     this.store.setLoginInfo(data);
     this.effect.updateWorkspaceList();
@@ -419,23 +419,15 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.trace.setUserID(data.userId);
-      // * 0=邮箱 1=手机号 2=wx 3=qq 4=飞书 5=github 6=帐号 7=跳转登录
-      const hash = new Map()
-        .set(0, 'Email')
-        .set(1, 'Phone')
-        .set(2, 'Wecaht')
-        .set(3, 'QQ')
-        .set(4, 'Feishu')
-        .set(5, 'Github')
-        .set(6, 'Account');
+
       // (0, '登录').set(1, '注册');
       if (data.type == 0) {
         // * login
-        this.trace.report('login_success', { login_way: hash.get(data.loginWay) });
+        this.trace.report('login_success', { login_way: this.hash.get(data.loginWay) });
       }
       if (data.type == 1) {
         // * register
-        this.trace.setUser({ register_way: hash.get(data.loginWay) });
+        this.trace.setUser({ register_way: this.hash.get(data.loginWay) });
       }
       this.store.setLoginInfo(data);
       this.effect.updateWorkspaceList();
