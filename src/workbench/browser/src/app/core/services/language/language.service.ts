@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { LANGUAGES } from 'eo/workbench/browser/src/app/core/services/language/language.model';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 @Injectable({
@@ -13,12 +14,13 @@ export class LanguageService {
   // Web from nginx setting and App from computer system setting
   systemLanguage;
   langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
-  constructor(private electron: ElectronService, private setting: SettingService) {
+  constructor(private electron: ElectronService, private setting: SettingService, private trace: TraceService) {
     //Curent language
     this.systemLanguage =
       this.languages.find(val => window.location.pathname.includes(`/${val.path}/`))?.value ||
       this.setting.settings?.['system.language'] ||
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
+    this.trace.setUser({ app_language: this.systemLanguage });
   }
   get langHash() {
     return this.langHashMap.get(this.systemLanguage);
