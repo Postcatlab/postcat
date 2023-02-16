@@ -325,6 +325,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     }
     if (data.type == 1) {
       // * register
+      this.trace.report('register_success');
       this.trace.setUser({ register_way: this.hash.get(data.loginWay) });
     }
     this.store.setLoginInfo(data);
@@ -427,6 +428,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       }
       if (data.type == 1) {
         // * register
+        this.trace.report('register_success');
         this.trace.setUser({ register_way: this.hash.get(data.loginWay) });
       }
       this.store.setLoginInfo(data);
