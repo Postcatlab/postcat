@@ -12,6 +12,7 @@ export interface ApiData {
   name: string;
   uri: string;
   protocol: number;
+  requestMethod?: number;
   status?: number;
   starred?: number;
   encoding?: string;
