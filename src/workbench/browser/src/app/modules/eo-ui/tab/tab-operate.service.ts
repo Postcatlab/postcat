@@ -33,7 +33,7 @@ export class TabOperateService {
     //* Allow development mode debug not exist router at init
     allowNotExistRouter: !APP_CONFIG.production,
     //* Allow open new tab by url at init
-    allowOpenNewTabByUrl: false
+    allowOpenNewTabByUrl: true
   };
   constructor(
     private tabStorage: TabStorageService,
