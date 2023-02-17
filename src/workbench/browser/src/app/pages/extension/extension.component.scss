@@ -5,6 +5,12 @@
   width: 100%;
   height: 100%;
 
+  eo-ng-tree-default {
+    height: calc(62vh - 32px);
+    overflow: auto;
+    display: block;
+  }
+
   eo-ng-auto-complete input {
     border-radius: 999px;
   }
