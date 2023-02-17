@@ -153,12 +153,12 @@ ${log}
           version
         });
         this.extensionDetail['enabled'] = true;
-        this.trace.report('install_extension_success', { extenison_id: id });
+        this.trace.report('install_extension_success', { extension_id: id });
         break;
       }
       case 'uninstall': {
         this.extensionDetail.installed = !(await this.extensionService.uninstallExtension(id));
-        this.trace.report('uninstall_extension_success', { extenison_id: id });
+        this.trace.report('uninstall_extension_success', { extension_id: id });
         break;
       }
     }
