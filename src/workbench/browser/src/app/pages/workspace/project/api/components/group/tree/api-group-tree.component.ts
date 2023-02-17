@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
+import { SyncApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/sync-api/sync-api.component';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
@@ -19,6 +20,7 @@ import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
 import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
+import templateJSON from './template.json';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
@@ -238,9 +240,17 @@ export class ApiGroupTreeComponent implements OnInit {
     const title = $localize`:@@ImportAPI:Sync API from URL`;
     const modal = this.modalService.create({
       nzTitle: title,
-      nzContent: ImportApiComponent,
-      nzFooter: this.tplFooter
+      nzContent: SyncApiComponent,
+      nzFooter: this.tplFooter,
+      nzComponentParams: {
+        model: {},
+        configuration: templateJSON.features.updateAPI.configuration
+      }
     });
+  }
+
+  syncNow(modelRef: NzModalRef) {
+    console.log('modelRef', modelRef);
   }
 
   /**

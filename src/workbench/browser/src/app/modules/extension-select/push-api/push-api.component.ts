@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
@@ -11,21 +10,13 @@ import { Subject, takeUntil } from 'rxjs';
 import packageJson from '../../../../../../../../package.json';
 
 @Component({
-  selector: 'eo-sync-api',
-  template: `<eo-schema-form #schemaForm [model]="model" [configuration]="configuration" />`
+  selector: 'eo-push-api',
+  template: `<extension-select [(extension)]="currentExtension" tipsType="pushAPI" [extensionList]="supportList"></extension-select>`
 })
-export class SyncApiComponent implements OnInit {
-  @Input() configuration = {} as any;
-  @Input() model = {} as Record<string, any>;
-  @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
+export class PushApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-
-  get isValid() {
-    return this.schemaForm?.validateForm?.valid;
-  }
-
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private extensionService: ExtensionService,

@@ -120,6 +120,6 @@
 
 <ng-template #tplFooter let-ref="modalRef">
   <button eo-ng-button (click)="ref.destroy()" i18n>Cancel</button>
-  <button eo-ng-button i18n> Sync Now </button>
+  <button eo-ng-button i18n (click)="syncNow(ref)" [disabled]="!ref.componentInstance?.isValid"> Sync Now </button>
   <button eo-ng-button nzType="primary" i18n> Save </button>
 </ng-template>

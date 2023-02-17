@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 
 @Component({
   selector: 'eo-schema-form',
@@ -28,7 +26,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
             i18n-placeholder
             placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.label || '') }}"
             formControlName="{{ field }}"
-            [(ngModel)]="localSettings[field]"
+            [(ngModel)]="model[field]"
           />
           <!-- </ng-container> -->
 
@@ -36,7 +34,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
           <ng-container *ngIf="properties[field]?.type === 'boolean'">
             <label
               eo-ng-checkbox
-              [(ngModel)]="localSettings[field]"
+              [(ngModel)]="model[field]"
               id="{{ field }}"
               [nzDisabled]="properties[field]?.disabled"
               formControlName="{{ field }}"
@@ -48,7 +46,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
           <!-- 数字类型 -->
           <ng-container *ngIf="properties[field]?.type === 'number'">
             <nz-input-number
-              [(ngModel)]="localSettings[field]"
+              [(ngModel)]="model[field]"
               id="{{ field }}"
               [nzDisabled]="properties[field]?.disabled"
               formControlName="{{ field }}"
@@ -61,18 +59,14 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
     </form>
   `
 })
-export class SchemaFormComponent implements OnInit {
+export class EoSchemaFormComponent implements OnInit {
   @Input() configuration = {} as any;
-  localSettings = {} as Record<string, any>;
+  @Input() model = {} as Record<string, any>;
   validateForm!: FormGroup;
   objectKeys = Object.keys;
   properties = {};
 
-  get allRequiredIsNotEmpty() {
-    return;
-  }
-
-  constructor(private fb: FormBuilder, private settingService: SettingService, private message: EoNgFeedbackMessageService) {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.init();
@@ -80,7 +74,6 @@ export class SchemaFormComponent implements OnInit {
 
   private init() {
     this.formatProperties();
-    this.localSettings = this.settingService.settings;
     const controls = {};
 
     this.setSettingsModel(this.properties, controls);
@@ -104,7 +97,7 @@ export class SchemaFormComponent implements OnInit {
     //  Flat configuration object
     Object.keys(properties).forEach(fieldKey => {
       const props = properties[fieldKey];
-      this.localSettings[fieldKey] ??= props.default;
+      this.model[fieldKey] ??= props.default;
       // Extensible to add more default checks
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
@@ -113,9 +106,4 @@ export class SchemaFormComponent implements OnInit {
       }
     });
   }
-
-  handleSave = () => {
-    this.settingService.saveSetting(this.localSettings);
-    this.message.success($localize`Save Success`);
-  };
 }
