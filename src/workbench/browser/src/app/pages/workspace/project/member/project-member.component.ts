@@ -82,7 +82,7 @@ import { MemberListComponent } from '../../../../modules/member-list/member-list
           <p i18n>Currently using local workspace, unable to invite members. </p>
           <p class="flex items-center" i18n
             >You can<button eo-ng-button nzType="default" class="mx-[5px]" nzSize="small" (click)="createWorkspace()"
-              >create a cloud workspace</button
+              >new a cloud workspace</button
             >and invite members to collaborate.</p
           ></ng-template
         >

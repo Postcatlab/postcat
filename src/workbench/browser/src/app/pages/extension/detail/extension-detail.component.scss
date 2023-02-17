@@ -23,7 +23,7 @@
   .ant-skeleton {
     display: block;
 
-    &[ng-reflect-nz-loading='true'] {
+    &.loading {
       display: table;
     }
   }
