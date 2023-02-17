@@ -29,7 +29,10 @@
       </a>
       <li nz-menu-divider></li>
       <a>
-        <li nz-menu-item i18n trace traceID="click_import_project" (click)="importAPI()">Import API </li>
+        <li nz-menu-item i18n trace traceID="click_import_project" (click)="importAPI()">Import from file </li>
+      </a>
+      <a>
+        <li nz-menu-item i18n trace traceID="sync_api_from_url" (click)="syncAPI()">Sync API from URL </li>
       </a>
     </ul>
   </eo-ng-dropdown-menu>
@@ -114,3 +117,9 @@
     <nz-empty *ngIf="!apiGroupTree.length" nzNotFoundImage="simple"> </nz-empty>
   </nz-skeleton>
 </div>
+
+<ng-template #tplFooter let-ref="modalRef">
+  <button eo-ng-button (click)="ref.destroy()" i18n>Cancel</button>
+  <button eo-ng-button i18n> Sync Now </button>
+  <button eo-ng-button nzType="primary" i18n> Save </button>
+</ng-template>

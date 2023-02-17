@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { NzModalService, ModalButtonOptions, NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalService, ModalButtonOptions, ModalOptions } from 'ng-zorro-antd/modal';
 import { filter } from 'rxjs';
 
-export type ModalOptions = {
+export type EoModalOptions = {
   nzTitle: string;
   nzContent: any;
-  nzFooter?: null | ModalButtonOptions[];
+  nzFooter?: null | ModalButtonOptions[] | ModalOptions['nzFooter'];
   [propName: string]: any;
 };
 @Injectable({
@@ -20,8 +20,8 @@ export class ModalService {
       });
     });
   }
-  create = (inOpts: ModalOptions) => {
-    const modalOpts: ModalOptions = {
+  create = (inOpts: EoModalOptions) => {
+    const modalOpts: EoModalOptions = {
       nzTitle: null,
       nzContent: inOpts.nzContent,
       nzClosable: 'nzClosable' in inOpts ? inOpts.nzClosable : true,
@@ -58,7 +58,7 @@ export class ModalService {
     return modal;
   };
   confirm = inOpts => {
-    const modalOpts: ModalOptions = {
+    const modalOpts: EoModalOptions = {
       nzTitle: null,
       nzContent: inOpts.nzContent,
       nzCancelText: $localize`Cancel`,

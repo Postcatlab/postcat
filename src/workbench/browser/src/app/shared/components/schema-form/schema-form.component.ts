@@ -4,15 +4,8 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 
 @Component({
-  selector: 'eo-extension-setting',
+  selector: 'eo-schema-form',
   template: `
-    <div
-      class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
-      style="border-color: var(--border-color); background-color: var(--background-color); border-bottom: 1px solid var(--system-border-color);"
-    >
-      <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
-    </div>
-
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form mt-2">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
@@ -68,13 +61,16 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
     </form>
   `
 })
-export class ExtensionSettingComponent implements OnInit {
+export class SchemaFormComponent implements OnInit {
   @Input() configuration = {} as any;
-  @Input() extName: string;
   localSettings = {} as Record<string, any>;
   validateForm!: FormGroup;
   objectKeys = Object.keys;
   properties = {};
+
+  get allRequiredIsNotEmpty() {
+    return;
+  }
 
   constructor(private fb: FormBuilder, private settingService: SettingService, private message: EoNgFeedbackMessageService) {}
 

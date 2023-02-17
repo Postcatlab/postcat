@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
@@ -30,6 +30,7 @@ const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllA
 })
 export class ApiGroupTreeComponent implements OnInit {
   @ViewChild('apiGroup') apiGroup: NzTreeComponent;
+  @ViewChild('tplFooter') tplFooter: TemplateRef<{}>;
   /**
    * Expanded keys of tree.
    */
@@ -230,6 +231,15 @@ export class ApiGroupTreeComponent implements OnInit {
             return resolve(true);
           });
         })
+    });
+  }
+
+  syncAPI() {
+    const title = $localize`:@@ImportAPI:Sync API from URL`;
+    const modal = this.modalService.create({
+      nzTitle: title,
+      nzContent: ImportApiComponent,
+      nzFooter: this.tplFooter
     });
   }
 
