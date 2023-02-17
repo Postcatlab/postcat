@@ -81,7 +81,7 @@
       <!-- Details -->
       <eo-ng-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
         <div class="h-full overflow-auto tab-content-container pt-[10px]">
-          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
+          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true" [class]="{ loading: introLoading }">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }"> </eo-shadow-dom>
           </nz-skeleton>
         </div>

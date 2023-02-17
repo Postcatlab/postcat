@@ -91,6 +91,7 @@ export class ExtensionComponent implements OnInit {
     }
     this.selectExtension('');
     this.setGroup(key);
+    this.nzSelectedKeys = [key];
   }
 
   @action setGroup(data) {
