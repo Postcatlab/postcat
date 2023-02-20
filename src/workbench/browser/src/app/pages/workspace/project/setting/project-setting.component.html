@@ -9,6 +9,17 @@
       </nz-form-item>
       <button eo-ng-button nzType="primary" i18n (click)="changeProjectName(projectName)" [nzLoading]="isLoading" i18n>Save</button>
     </form>
+
+    <div class="flex justify-between">
+      <p nz-typography nzEditable [(nzContent)]="projectName"></p>
+
+      <a nz-tooltip [nzTooltipTitle]="titleTemplate" [nzTooltipTitleContext]="{ $implicit: 'Icon' }">This Tooltip has an Icon</a>
+      <ng-template #titleTemplate let-thing>
+        <h4 nz-typography>Workspace ID</h4>
+        <p nz-typography nzCopyable nzCopyText="Hello, Ant Design!">Replace copy text.</p>
+      </ng-template>
+    </div>
+
     <div class="my-2">
       <nz-divider></nz-divider>
     </div>
