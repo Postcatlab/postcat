@@ -44,17 +44,23 @@ export class ProjectSettingComponent implements OnInit {
       traceID: 'click_import_project'
     },
     {
+      title: $localize`Sync`,
+      icon: 'play-cycle',
+      desc: $localize`Sync API from URL`,
+      type: 'sync'
+    },
+    {
+      title: $localize`Push`,
+      icon: 'play-cycle',
+      desc: $localize`Push API to other products`,
+      type: 'push'
+    },
+    {
       title: $localize`Export`,
       icon: 'efferent',
       desc: $localize`Export Postcat project data`,
       type: 'export',
       traceID: 'click_export_project'
-    },
-    {
-      title: $localize`Push`,
-      icon: 'play-cycle',
-      desc: $localize`Push/Sync API to other products`,
-      type: 'push'
     },
     {
       title: $localize`Delete`,

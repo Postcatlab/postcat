@@ -1,0 +1,108 @@
+{
+  "type": "object",
+  "properties": {
+    "schedule": {
+      "type": "number",
+      "label": "Auto Sync",
+      "ui:widget": "radio",
+      "default": 4,
+      "required": true,
+      "oneOf": [
+        {
+          "type": "number",
+          "title": "Off",
+          "default": -1,
+          "const": -1
+        },
+        {
+          "type": "number",
+          "title": "Every four hours",
+          "default": 4,
+          "const": 4
+        },
+        {
+          "type": "number",
+          "title": "Every twelve hours",
+          "default": 12,
+          "const": 12
+        },
+        {
+          "type": "number",
+          "title": "Every day",
+          "default": 24,
+          "const": 24
+        }
+      ]
+    },
+    "format": {
+      "type": "string",
+      "label": "Format",
+      "ui:widget": "radio",
+      "default": "foo",
+      "required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "title": "foo",
+          "default": "foo",
+          "const": "foo"
+        },
+        {
+          "type": "string",
+          "title": "bar",
+          "default": "bar",
+          "const": "bar"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "format": {
+            "const": "foo"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "label": "Swagger URL",
+            "required": true
+          },
+          "key": {
+            "type": "string",
+            "label": "Basic Auth Key"
+          },
+          "value": {
+            "type": "string",
+            "label": "Basic Auth Value"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "format": {
+            "const": "bar"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "label": "username"
+          },
+          "password": {
+            "type": "string",
+            "label": "password"
+          }
+        }
+      }
+    }
+  ]
+}

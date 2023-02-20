@@ -9,16 +9,17 @@ import { has } from 'lodash-es';
 import { Subject, takeUntil } from 'rxjs';
 
 import packageJson from '../../../../../../../../package.json';
+import schemaJson from './schema.json';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<eo-schema-form #schemaForm [model]="model" [configuration]="configuration" />`
+  template: `<eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" />`
 })
 export class SyncApiComponent implements OnInit {
-  @Input() configuration = {} as any;
   @Input() model = {} as Record<string, any>;
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   currentExtension = '';
+  schemaJson = schemaJson;
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
 
@@ -46,7 +47,7 @@ export class SyncApiComponent implements OnInit {
       });
   }
   initData = () => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('pushAPI');
+    this.featureMap = this.extensionService.getValidExtensionsByFature('updateAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
