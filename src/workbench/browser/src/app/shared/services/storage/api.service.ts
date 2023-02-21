@@ -262,19 +262,19 @@ export class ApiService {
   }
 
   api_projectCreateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
-    return this.remote.api_projectCreateSyncSetting<T>(params);
+    return this.store.isLocal ? this.local.api_projectCreateSyncSetting<T>(params) : this.remote.api_projectCreateSyncSetting<T>(params);
   }
 
   api_projectUpdateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
-    return this.remote.api_projectUpdateSyncSetting<T>(params);
+    return this.store.isLocal ? this.local.api_projectUpdateSyncSetting<T>(params) : this.remote.api_projectUpdateSyncSetting<T>(params);
   }
 
   api_projectDelSyncSetting<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_projectDelSyncSetting<T>(params);
+    return this.store.isLocal ? this.local.api_projectDelSyncSetting<T>(params) : this.remote.api_projectDelSyncSetting<T>(params);
   }
 
   api_projectGetSyncSettingList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_projectGetSyncSettingList<T>(params);
+    return this.store.isLocal ? this.local.api_projectGetSyncSettingList<T>(params) : this.remote.api_projectGetSyncSettingList<T>(params);
   }
 
   api_roleList<T = any>(params: any) {

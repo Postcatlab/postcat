@@ -7,7 +7,8 @@ import {
   ApiData,
   Environment,
   ApiTestHistory,
-  Mock
+  Mock,
+  ProjectSyncSetting
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/project.service';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/workspace.service';
@@ -16,6 +17,7 @@ import { merge } from 'lodash-es';
 class DataSource extends Dexie {
   workspace!: Table<Workspace, number>;
   project!: Table<Project, number>;
+  projectSyncSetting!: Table<ProjectSyncSetting, number>;
   group!: Table<Group, number>;
   environment!: Table<Environment, number>;
   apiData!: Table<ApiData, number>;

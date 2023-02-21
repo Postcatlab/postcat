@@ -159,6 +159,7 @@ export class EoSchemaFormComponent implements OnInit {
   formatProperties(properties = {}) {
     this.properties = Object.entries<any>({ ...this.configuration?.properties, ...properties }).reduce((prev, [key, value]) => {
       prev[key] = value;
+      // 不指定组件 则默认根据数据类型生成对应组件
       value['ui:widget'] ??= compMap[value.type];
       return prev;
     }, {});

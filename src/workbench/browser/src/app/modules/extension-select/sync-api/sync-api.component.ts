@@ -5,10 +5,8 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { has } from 'lodash-es';
 import { Subject, takeUntil } from 'rxjs';
 
-import packageJson from '../../../../../../../../package.json';
 import schemaJson from './schema.json';
 
 @Component({
@@ -64,7 +62,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
   updateExtensionModel() {
     this.currentFormater = this.syncSettingList.find(n => n.pluginId === this.model.__formater);
     if (this.currentFormater) {
-      Object.assign(this.model, JSON.parse(this.currentFormater.pluginSettingJson));
+      Object.assign(this.model, JSON.parse(this.currentFormater.pluginSettingJson), { __crontab: this.currentFormater.crontab });
     }
   }
 

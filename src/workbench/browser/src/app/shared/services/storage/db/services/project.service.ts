@@ -19,6 +19,7 @@ import { GroupService } from 'eo/workbench/browser/src/app/shared/services/stora
 
 export class ProjectService extends BaseService<Project> {
   baseService = new BaseService(dataSource.project);
+  projectSyncSettingService = new BaseService(dataSource.projectSyncSetting);
   apiDataService = new ApiDataService();
   groupService = new GroupService();
   environmentService = new EnvironmentService();
@@ -32,6 +33,33 @@ export class ProjectService extends BaseService<Project> {
   constructor() {
     super(dataSource.project);
   }
+
+  // 添加项目同步配置
+  async createSyncSetting(params) {
+    const { data: target } = await this.projectSyncSettingService.read(params);
+    if (params.id || target) {
+      params.id = target.id ?? params.id;
+      return this.projectSyncSettingService.update(params);
+    } else {
+      return this.projectSyncSettingService.create(params);
+    }
+  }
+
+  // 更新项目同步配置
+  updateSyncSetting(params) {
+    return this.projectSyncSettingService.update(params);
+  }
+
+  // 获取项目同步配置
+  getSyncSettingList(params) {
+    return this.projectSyncSettingService.bulkRead(params);
+  }
+
+  // 删除项目同步配置
+  delSyncSetting(params) {
+    return this.projectSyncSettingService.delete(params);
+  }
+
   async bulkCreate(params: ProjectBulkCreateDto) {
     const { projectMsgs, workSpaceUuid } = params;
 
