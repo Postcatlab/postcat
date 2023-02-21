@@ -98,8 +98,8 @@ const http = {
         { 'update @put @update': '/api/projects', json: 'projectUuid, name, description' },
         { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' },
         { 'import @post @import': '/api/projects/import' },
-        { 'createSyncSetting @post': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid' },
-        { 'updateSyncSetting @put': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid' },
+        { 'createSyncSetting @post': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid, ...' },
+        { 'updateSyncSetting @put': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid, ...' },
         { 'delSyncSetting @delete': '/api/project/sync-setting', query: 'id, projectUuid, workSpaceUuid' },
         { 'getSyncSettingList @get': '/api/project/sync-setting', query: 'projectUuid, workSpaceUuid' }
       ]

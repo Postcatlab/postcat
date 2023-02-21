@@ -1973,7 +1973,7 @@ export class RemoteService {
   }
 
   api_projectCreateSyncSetting<T = any>(
-    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
     prefix = ''
   ) {
     if (projectUuid == null) {
@@ -1989,7 +1989,8 @@ export class RemoteService {
       this.http
         .post(`${prefix}/api/project/sync-setting`, {
           projectUuid,
-          workSpaceUuid
+          workSpaceUuid,
+          ...items
         })
         .subscribe({
           next: ({ code, data, message }: any) => {
@@ -2009,7 +2010,7 @@ export class RemoteService {
   }
 
   api_projectUpdateSyncSetting<T = any>(
-    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
     prefix = ''
   ) {
     if (projectUuid == null) {
@@ -2025,7 +2026,8 @@ export class RemoteService {
       this.http
         .put(`${prefix}/api/project/sync-setting`, {
           projectUuid,
-          workSpaceUuid
+          workSpaceUuid,
+          ...items
         })
         .subscribe({
           next: ({ code, data, message }: any) => {

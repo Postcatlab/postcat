@@ -261,11 +261,11 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
   }
 
-  api_projectCreateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_projectCreateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
     return this.remote.api_projectCreateSyncSetting<T>(params);
   }
 
-  api_projectUpdateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+  api_projectUpdateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
     return this.remote.api_projectUpdateSyncSetting<T>(params);
   }
 
