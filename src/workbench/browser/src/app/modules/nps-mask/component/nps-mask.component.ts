@@ -6,9 +6,8 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
 @Component({
   selector: 'pc-nps-mask',
   template: `<ng-container pcNpsPosition>
-    <!-- <div i18n class="title">您如何评价当前的体验？</div> -->
     <div i18n class="title">How would you rate you experience with the Postcat</div>
-    <div class="blank"></div>
+    <div class="tips text-tips"></div>
   </ng-container> `,
   styleUrls: ['./nps-mask.component.scss'],
   hostDirectives: [NpsPositionDirective]

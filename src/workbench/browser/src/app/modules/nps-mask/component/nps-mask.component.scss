@@ -11,18 +11,27 @@
     sans-serif;
 }
 
-.blank {
+.tips {
   display: none;
   position: absolute;
   z-index: 1000000000;
   background-color: #fff;
-  height: 20px;
+  height: 53px;
+  line-height: 53px;
+  text-align: center;
 }
 
 ::ng-deep {
-  .nps-show {
-    .title,
-    .blank {
+  .nps-show,
+  .nps-show-title {
+    .title {
+      display: block;
+    }
+  }
+
+  .nps-show,
+  .nps-show-tips {
+    .tips {
       display: block;
     }
   }
