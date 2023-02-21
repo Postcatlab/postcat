@@ -93,7 +93,7 @@ export class EoSchemaFormComponent implements OnInit {
     this.init();
   }
 
-  private init() {
+  init() {
     this.validateForm = this.fb.group({});
 
     this.formatProperties();

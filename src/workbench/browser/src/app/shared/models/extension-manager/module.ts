@@ -14,6 +14,7 @@ export type FeatureInfo = {
   description: string;
   //Function name
   action: string;
+  configuration?: Record<string, any>;
 
   //ExportAPI.Filename
   filename?: string;

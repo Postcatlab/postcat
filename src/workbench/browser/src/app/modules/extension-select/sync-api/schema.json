@@ -1,7 +1,7 @@
 {
   "type": "object",
   "properties": {
-    "schedule": {
+    "__crontab": {
       "type": "number",
       "label": "Auto Sync",
       "ui:widget": "radio",
@@ -34,7 +34,7 @@
         }
       ]
     },
-    "format": {
+    "__formater": {
       "type": "string",
       "label": "Format",
       "ui:widget": "radio",
@@ -60,7 +60,7 @@
     {
       "if": {
         "properties": {
-          "format": {
+          "__formater": {
             "const": "foo"
           }
         }
@@ -86,7 +86,7 @@
     {
       "if": {
         "properties": {
-          "format": {
+          "__formater": {
             "const": "bar"
           }
         }
