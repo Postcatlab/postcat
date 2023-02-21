@@ -9,11 +9,13 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
 import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
 import { PushApiComponent } from '../../../../modules/extension-select/push-api/push-api.component';
+import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiService } from '../../../../shared/services/storage/api.service';
 
 const actionComponent = {
   push: PushApiComponent,
+  sync: SyncApiComponent,
   import: ImportApiComponent,
   export: ExportApiComponent
 };
@@ -25,6 +27,8 @@ const actionComponent = {
 export class ProjectSettingComponent implements OnInit {
   isLoading: boolean;
   projectName: string;
+  isEdit = false;
+  isInit = false;
   constructor(
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
@@ -47,7 +51,23 @@ export class ProjectSettingComponent implements OnInit {
       title: $localize`Sync`,
       icon: 'play-cycle',
       desc: $localize`Sync API from URL`,
-      type: 'sync'
+      btns: [
+        {
+          title: $localize`Sync`,
+          type: 'sync',
+          traceID: 'sync_api_from_url_success',
+          show: () => true,
+          onClick: args => {
+            this.message.success('同步成功');
+          }
+        },
+        {
+          title: $localize`Setting`,
+          type: 'sync',
+          show: () => true,
+          onClick: args => this.handleClickCard(args)
+        }
+      ]
     },
     {
       title: $localize`Push`,
@@ -73,17 +93,22 @@ export class ProjectSettingComponent implements OnInit {
   ngOnInit(): void {
     autorun(() => {
       this.projectName = this.store.getCurrentProject.name;
+      this.isInit = true;
     });
   }
 
-  clickItem(event, inParams) {
+  startEditProjectName() {
+    this.isEdit = true;
+  }
+
+  clickItem(inParams) {
     switch (inParams.type) {
       case 'delete': {
         this.delete();
         break;
       }
       default: {
-        this.handleClickCard(inParams);
+        inParams.onClick ? inParams.onClick(inParams) : this.handleClickCard(inParams);
         break;
       }
     }
@@ -105,8 +130,9 @@ export class ProjectSettingComponent implements OnInit {
     });
   }
   async changeProjectName(name) {
-    if (!name) return;
-    this.isLoading = true;
+    if (!name) {
+      return this.message.error($localize`Please input your projectName`);
+    }
     const project = this.store.getCurrentProject;
     try {
       await this.effect.updateProject({ ...project, name });
@@ -114,7 +140,7 @@ export class ProjectSettingComponent implements OnInit {
     } catch (error) {
       this.message.error($localize`Failed Operation`);
     }
-    this.isLoading = false;
+    this.isEdit = false;
   }
 
   private handleClickCard({ title, desc, type }) {
@@ -122,23 +148,39 @@ export class ProjectSettingComponent implements OnInit {
       nzTitle: desc,
       nzContent: actionComponent[type],
       nzComponentParams: {},
-      nzOnOk: () => {
-        return new Promise(resolve => {
-          modal.componentInstance.submit(status => {
-            if (status) {
-              if (status === 'stayModal') {
+      nzFooter: [
+        {
+          label: $localize`Cancel`,
+          onClick: () => modal.destroy()
+        },
+        {
+          label: $localize`Sync Now`,
+          show: actionComponent[type] === SyncApiComponent,
+          disabled: () => !modal.componentInstance?.isValid,
+          onClick: () => modal.destroy()
+        },
+        {
+          label: $localize`Confirm`,
+          type: 'primary',
+          onClick: () => {
+            return new Promise(resolve => {
+              modal.componentInstance.submit(status => {
+                if (status) {
+                  if (status === 'stayModal') {
+                    resolve(true);
+                    return;
+                  }
+                  this.message.success($localize`${title} successfully`);
+                  modal.destroy();
+                } else {
+                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                }
                 resolve(true);
-                return;
-              }
-              this.message.success($localize`${title} successfully`);
-              modal.destroy();
-            } else {
-              this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-            }
-            resolve(true);
-          });
-        });
-      }
+              });
+            });
+          }
+        }
+      ]
     });
   }
 }

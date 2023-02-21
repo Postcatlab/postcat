@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
@@ -24,6 +24,11 @@ import templateJSON from './template.json';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
+const actionComponent = {
+  sync: SyncApiComponent,
+  import: ImportApiComponent
+};
+
 const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllAPIId)];
 @Component({
   selector: 'pc-api-group-tree',
@@ -32,7 +37,6 @@ const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllA
 })
 export class ApiGroupTreeComponent implements OnInit {
   @ViewChild('apiGroup') apiGroup: NzTreeComponent;
-  @ViewChild('tplFooter') tplFooter: TemplateRef<{}>;
   /**
    * Expanded keys of tree.
    */
@@ -73,6 +77,21 @@ export class ApiGroupTreeComponent implements OnInit {
     {
       title: $localize`:@@Delete:Delete`,
       click: inArg => this.deleteGroup(inArg.group?.origin)
+    }
+  ];
+
+  extensionActions = [
+    {
+      title: $localize`:@@ImportAPI:Import API`,
+      menuTitle: $localize`Import from file`,
+      traceID: 'click_import_project',
+      click: title => this.importAPI('import', title)
+    },
+    {
+      title: $localize`Sync API from URL`,
+      menuTitle: $localize`Sync API from URL`,
+      traceID: 'sync_api_from_url',
+      click: title => this.importAPI('sync', title)
     }
   ];
 
@@ -207,45 +226,48 @@ export class ApiGroupTreeComponent implements OnInit {
       action: 'new'
     });
   }
-  importAPI() {
-    const title = $localize`:@@ImportAPI:Import API`;
+  importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({
       nzTitle: title,
-      nzContent: ImportApiComponent,
+      nzContent: actionComponent[type],
       nzComponentParams: {},
-      nzOnOk: () =>
-        new Promise(resolve => {
-          modal.componentInstance.submit(status => {
-            this.effect.getGroupList();
-            if (!status) {
-              this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-              return resolve(true);
-            }
-            if (status === 'stayModal') {
-              return resolve(true);
-            }
-            this.message.success($localize`${title} successfully`);
-            // * For trace
-            const sync_platform = modal.componentInstance.currentExtension;
-            const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
-            this.trace.report('import_project_success', { sync_platform, workspace_type });
-            modal.destroy();
-            return resolve(true);
-          });
-        })
-    });
-  }
-
-  syncAPI() {
-    const title = $localize`:@@ImportAPI:Sync API from URL`;
-    const modal = this.modalService.create({
-      nzTitle: title,
-      nzContent: SyncApiComponent,
-      nzFooter: this.tplFooter,
-      nzComponentParams: {
-        model: {},
-        configuration: templateJSON.features.updateAPI.configuration
-      }
+      nzFooter: [
+        {
+          label: $localize`Cancel`,
+          onClick: () => modal.destroy()
+        },
+        {
+          label: $localize`Sync Now`,
+          show: actionComponent[type] === SyncApiComponent,
+          disabled: () => !modal.componentInstance?.isValid,
+          onClick: () => modal.destroy()
+        },
+        {
+          label: $localize`Confirm`,
+          type: 'primary',
+          onClick: () => {
+            return new Promise(resolve => {
+              modal.componentInstance.submit(status => {
+                this.effect.getGroupList();
+                if (!status) {
+                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                  return resolve(true);
+                }
+                if (status === 'stayModal') {
+                  return resolve(true);
+                }
+                this.message.success($localize`${title} successfully`);
+                // * For trace
+                const sync_platform = modal.componentInstance.currentExtension;
+                const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
+                this.trace.report('import_project_success', { sync_platform, workspace_type });
+                modal.destroy();
+                return resolve(true);
+              });
+            });
+          }
+        }
+      ]
     });
   }
 
