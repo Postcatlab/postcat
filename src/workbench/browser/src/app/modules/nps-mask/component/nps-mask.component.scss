@@ -1,0 +1,29 @@
+.title {
+  display: none;
+  position: absolute;
+  z-index: 1000000000;
+  font-weight: 600;
+  background-color: #fff;
+  text-align: center;
+  height: 43px;
+  font-size: 15px;
+  font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Heiti SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei',
+    sans-serif;
+}
+
+.blank {
+  display: none;
+  position: absolute;
+  z-index: 1000000000;
+  background-color: #fff;
+  height: 20px;
+}
+
+::ng-deep {
+  .nps-show {
+    .title,
+    .blank {
+      display: block;
+    }
+  }
+}
