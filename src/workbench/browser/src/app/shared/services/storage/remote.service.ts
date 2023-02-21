@@ -2023,7 +2023,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/api/project/sync-setting`, {
+        .put(`${prefix}/api/project/sync-setting`, {
           projectUuid,
           workSpaceUuid
         })
