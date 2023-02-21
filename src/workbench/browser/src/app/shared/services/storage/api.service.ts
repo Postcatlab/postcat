@@ -261,6 +261,22 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
   }
 
+  api_projectCreateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectCreateSyncSetting<T>(params);
+  }
+
+  api_projectUpdateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectUpdateSyncSetting<T>(params);
+  }
+
+  api_projectDelSyncSetting<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectDelSyncSetting<T>(params);
+  }
+
+  api_projectGetSyncSettingList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.remote.api_projectGetSyncSettingList<T>(params);
+  }
+
   api_roleList<T = any>(params: any) {
     return this.remote.api_roleList<T>(params);
   }

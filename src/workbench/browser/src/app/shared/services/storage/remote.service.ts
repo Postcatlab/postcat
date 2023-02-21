@@ -1972,6 +1972,152 @@ export class RemoteService {
     });
   }
 
+  api_projectCreateSyncSetting<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - createSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'createSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - createSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'createSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .post(`${prefix}/api/project/sync-setting`, {
+          projectUuid,
+          workSpaceUuid
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c project:createSyncSetting - api_projectCreateSyncSetting 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c project:createSyncSetting - api_projectCreateSyncSetting 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectUpdateSyncSetting<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - updateSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'updateSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - updateSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'updateSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .post(`${prefix}/api/project/sync-setting`, {
+          projectUuid,
+          workSpaceUuid
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c project:updateSyncSetting - api_projectUpdateSyncSetting 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c project:updateSyncSetting - api_projectUpdateSyncSetting 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectDelSyncSetting<T = any>(
+    { id, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (id == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 id %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 id' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .delete(`${prefix}/api/project/sync-setting`, {
+          params: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c project:delSyncSetting - api_projectDelSyncSetting 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c project:delSyncSetting - api_projectDelSyncSetting 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_projectGetSyncSettingList<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - getSyncSettingList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'getSyncSettingList 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - getSyncSettingList 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'getSyncSettingList 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project/sync-setting`, {
+          params: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c project:getSyncSettingList - api_projectGetSyncSettingList 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c project:getSyncSettingList - api_projectGetSyncSettingList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
   api_roleList<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http.get(`${prefix}/api/roles`, params).subscribe({

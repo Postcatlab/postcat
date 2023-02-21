@@ -97,7 +97,11 @@ const http = {
         { 'list @get @page': '/api/projects', query: 'projectUuids, workSpaceUuid' },
         { 'update @put @update': '/api/projects', json: 'projectUuid, name, description' },
         { 'delete @delete @bulkDelete': '/api/projects', query: 'projectUuids' },
-        { 'import @post @import': '/api/projects/import' }
+        { 'import @post @import': '/api/projects/import' },
+        { 'createSyncSetting @post': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid' },
+        { 'updateSyncSetting @post': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid' },
+        { 'delSyncSetting @delete': '/api/project/sync-setting', query: 'id, projectUuid, workSpaceUuid' },
+        { 'getSyncSettingList @get': '/api/project/sync-setting', query: 'projectUuid, workSpaceUuid' }
       ]
     },
     {
