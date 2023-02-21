@@ -266,7 +266,7 @@ export class ApiGroupTreeComponent implements OnInit {
                 this.trace.report('import_project_success', { sync_platform, workspace_type });
                 modal.destroy();
                 return resolve(true);
-              });
+              }, modal);
             });
           }
         }

@@ -13,7 +13,17 @@ import schemaJson from './schema.json';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" />`
+  template: `
+    <ng-container *ngIf="supportList.length; else empty">
+      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" />
+    </ng-container>
+    <ng-template #empty>
+      <div class="mb-4" i18n>
+        This feature requires plugin support, please open <a (click)="openExtension()"> Extensions Hub </a>
+        download or open exist extensions.
+      </div>
+    </ng-template>
+  `
 })
 export class SyncApiComponent implements OnInit, OnChanges {
   @Input() model = {} as Record<string, any>;
@@ -62,6 +72,13 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
   }
 
+  openExtension() {
+    this.messageService.send({
+      type: 'open-extension',
+      data: { suggest: '@feature:updateAPI' }
+    });
+  }
+
   updateExtensionModel() {
     this.currentFormater = this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater);
     if (this.currentFormater) {
@@ -83,10 +100,13 @@ export class SyncApiComponent implements OnInit, OnChanges {
         ...data
       });
     });
-    {
-      const { key } = this.supportList?.at(0);
-      this.currentExtension = key || '';
+
+    if (!this.supportList.length) {
+      return;
     }
+
+    const { key } = this.supportList?.at(0);
+    this.currentExtension = key || '';
 
     if (this.store.isLocal) {
       Reflect.deleteProperty(this.schemaJson.properties, '__crontab');
@@ -134,8 +154,11 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
   }
 
-  async submit(callback) {
-    if (this.validateForm.valid) {
+  async submit(callback, modal) {
+    if (!this.supportList.length) {
+      return modal?.destroy?.();
+    }
+    if (this.validateForm?.valid) {
       const { __formater, __crontab, ...rest } = this.validateForm.value;
       console.log('submit', this.validateForm.value);
       const params = {
