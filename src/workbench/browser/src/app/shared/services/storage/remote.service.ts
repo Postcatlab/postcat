@@ -2120,6 +2120,37 @@ export class RemoteService {
     });
   }
 
+  api_projectSyncApiFromDocs<T = any>(
+    { projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
+    prefix = ''
+  ) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - syncApiFromDocs 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncApiFromDocs 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - syncApiFromDocs 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncApiFromDocs 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.put(`${prefix}/api/sync`, { projectUuid, workSpaceUuid, ...items }).subscribe({
+        next: ({ code, data, message }: any) => {
+          if (code === 0) {
+            console.log('%c project:syncApiFromDocs - api_projectSyncApiFromDocs 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          console.log('Error: ', message);
+          resolve([null, { code, message, data }]);
+        },
+        error: error => {
+          console.log('%c project:syncApiFromDocs - api_projectSyncApiFromDocs 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
   api_roleList<T = any>(params, prefix = '') {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http.get(`${prefix}/api/roles`, params).subscribe({

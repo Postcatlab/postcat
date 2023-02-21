@@ -34,6 +34,8 @@ export class StoreService {
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [];
 
+  @observable private syncSettingList = [];
+
   // ? project
   @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
@@ -139,6 +141,9 @@ export class StoreService {
   @computed get getProjectList() {
     return this.projectList;
   }
+  @computed get getSyncSettingList() {
+    return this.syncSettingList;
+  }
   @computed get getCurrentProjectID() {
     return this.currentProjectID;
   }
@@ -229,6 +234,10 @@ export class StoreService {
     }
     this.currentWorkspace = workspace;
     StorageUtil.set('currentWorkspace', workspace);
+  }
+
+  @action setSyncSettingList(data) {
+    this.syncSettingList = data;
   }
 
   // ? project

@@ -5,6 +5,8 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject, takeUntil } from 'rxjs';
 
 import schemaJson from './schema.json';
@@ -18,10 +20,9 @@ export class SyncApiComponent implements OnInit, OnChanges {
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   currentExtension = '';
   currentFormater;
-  schemaJson = schemaJson;
+  schemaJson = structuredClone(schemaJson);
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
-  syncSettingList = [];
 
   get isValid() {
     return this.schemaForm?.validateForm?.valid;
@@ -36,7 +37,9 @@ export class SyncApiComponent implements OnInit, OnChanges {
     private extensionService: ExtensionService,
     private eoMessage: EoNgFeedbackMessageService,
     private apiService: ApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store: StoreService,
+    private effectService: EffectService
   ) {}
 
   ngOnInit(): void {
@@ -60,15 +63,14 @@ export class SyncApiComponent implements OnInit, OnChanges {
   }
 
   updateExtensionModel() {
-    this.currentFormater = this.syncSettingList.find(n => n.pluginId === this.model.__formater);
+    this.currentFormater = this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater);
     if (this.currentFormater) {
       Object.assign(this.model, JSON.parse(this.currentFormater.pluginSettingJson), { __crontab: this.currentFormater.crontab });
     }
   }
 
   async getSyncSettingList() {
-    const [data] = await this.apiService.api_projectGetSyncSettingList({});
-    this.syncSettingList = data;
+    await this.effectService.getSyncSettingList();
     this.updateExtensionModel();
   }
 
@@ -85,6 +87,11 @@ export class SyncApiComponent implements OnInit, OnChanges {
       const { key } = this.supportList?.at(0);
       this.currentExtension = key || '';
     }
+
+    if (this.store.isLocal) {
+      Reflect.deleteProperty(this.schemaJson.properties, '__crontab');
+    }
+
     this.schemaJson.properties.__formater.oneOf = [];
     this.schemaJson.allOf = [];
     let index = 0;
@@ -116,6 +123,17 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
     console.log('featureMap', this.featureMap);
   };
+
+  async syncNow() {
+    const feature = this.featureMap.get(this.currentExtension);
+    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
+    console.log('feature', feature);
+    console.log('module', module);
+    if (typeof module[feature.action] === 'function') {
+      module[feature.action]();
+    }
+  }
+
   async submit(callback) {
     if (this.validateForm.valid) {
       const { __formater, __crontab, ...rest } = this.validateForm.value;
@@ -133,6 +151,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
         callback('stayModal');
         return;
       }
+      this.effectService.getSyncSettingList();
 
       callback(true);
     } else {
@@ -142,6 +161,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+      callback('stayModal');
     }
   }
 }

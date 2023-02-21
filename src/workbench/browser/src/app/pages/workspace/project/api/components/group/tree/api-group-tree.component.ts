@@ -240,7 +240,10 @@ export class ApiGroupTreeComponent implements OnInit {
           label: $localize`Sync Now`,
           show: actionComponent[type] === SyncApiComponent,
           disabled: () => !modal.componentInstance?.isValid,
-          onClick: () => modal.destroy()
+          onClick: async () => {
+            await modal.componentInstance?.syncNow?.();
+            modal.destroy();
+          }
         },
         {
           label: $localize`Confirm`,

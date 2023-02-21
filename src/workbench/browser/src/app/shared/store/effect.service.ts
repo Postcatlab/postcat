@@ -36,7 +36,13 @@ export class EffectService {
     result.data.title = $localize`Personal Workspace`;
     this.store.setLocalWorkspace(result.data as API.Workspace);
     const isUserFirstUse = !this.store.getCurrentWorkspaceUuid;
-
+    reaction(
+      () => this.store.getCurrentProjectID,
+      async () => {
+        this.getSyncSettingList();
+      },
+      { fireImmediately: true }
+    );
     //User first use postcat,select localwork space
     if (isUserFirstUse) {
       this.pureSwitchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
@@ -261,5 +267,10 @@ export class EffectService {
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
     return `${host}/${lang ? `${lang}/` : ''}share/http/test?shareId=${shareData.sharedUuid}`;
+  }
+
+  async getSyncSettingList() {
+    const [data] = await this.api.api_projectGetSyncSettingList({});
+    this.store.setSyncSettingList(data);
   }
 }

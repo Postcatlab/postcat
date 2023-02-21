@@ -11,8 +11,8 @@
         {
           "type": "number",
           "title": "Off",
-          "default": -1,
-          "const": -1
+          "default": 0,
+          "const": 0
         },
         {
           "type": "number",

@@ -34,6 +34,18 @@ export class ProjectService extends BaseService<Project> {
     super(dataSource.project);
   }
 
+  async syncApiFromDocs(params) {
+    const { collections = [], projectUuid, workSpaceUuid } = params;
+    collections.map(async item => {
+      if (item.collectionType === 0) {
+        const targetGroup = await this.groupService.read({ name: item.name, projectUuid, workSpaceUuid });
+        if (targetGroup) {
+        } else {
+        }
+      }
+    });
+  }
+
   // 添加项目同步配置
   async createSyncSetting(params) {
     const { data: target } = await this.projectSyncSettingService.read(params);

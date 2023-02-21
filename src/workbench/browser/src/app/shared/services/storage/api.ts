@@ -101,7 +101,8 @@ const http = {
         { 'createSyncSetting @post @createSyncSetting': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid, ...' },
         { 'updateSyncSetting @put @updateSyncSetting': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid, ...' },
         { 'delSyncSetting @delete @delSyncSetting': '/api/project/sync-setting', query: 'id, projectUuid, workSpaceUuid' },
-        { 'getSyncSettingList @get @getSyncSettingList': '/api/project/sync-setting/list', query: 'projectUuid, workSpaceUuid' }
+        { 'getSyncSettingList @get @getSyncSettingList': '/api/project/sync-setting/list', query: 'projectUuid, workSpaceUuid' },
+        { 'syncApiFromDocs @put @syncApiFromDocs': '/api/sync', json: 'projectUuid, workSpaceUuid, ...' }
       ]
     },
     {
