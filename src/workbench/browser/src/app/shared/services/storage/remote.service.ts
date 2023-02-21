@@ -2100,7 +2100,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .get(`${prefix}/api/project/sync-setting`, {
+        .get(`${prefix}/api/project/sync-setting/list`, {
           params: { projectUuid, workSpaceUuid }
         })
         .subscribe({
