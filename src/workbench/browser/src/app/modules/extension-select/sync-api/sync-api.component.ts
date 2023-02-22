@@ -163,6 +163,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     if (typeof module[feature.action] === 'function') {
       await this.submit();
       await module[feature.action]();
+      this.eoMessage.success($localize`Sync Successfully`);
       this.trace.report('sync_api_from_url_success');
       apiGroupTree?.effect?.getGroupList();
     }

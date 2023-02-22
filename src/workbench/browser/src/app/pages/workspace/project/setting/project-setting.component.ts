@@ -76,7 +76,7 @@ export class ProjectSettingComponent implements OnInit {
               await module[info.action]();
             }
             this.syncLoading = false;
-            this.message.success($localize`Sync Succeeded`);
+            this.message.success($localize`Sync Successfully`);
             this.trace.report('sync_api_from_url_success');
           }
         },
