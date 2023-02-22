@@ -105,12 +105,7 @@
         [nzMinWidth]="RIGHT_SIDER_SHRINK_WIDTH"
         (nzResize)="onRightPanelResize($event)"
       >
-        <nz-resize-handle
-          *ngIf="!store.isShare"
-          class="bottom-0 z-10 vertical container-draggable"
-          [ngClass]="{ isDragging }"
-          nzDirection="left"
-        >
+        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left">
           <div class="left"></div>
           <div class="right"></div>
         </nz-resize-handle>
