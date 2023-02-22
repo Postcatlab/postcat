@@ -57,6 +57,7 @@
                   class="ml-[6px] w-[96px] flex-shrink-0"
                   *ngIf="n.show?.() ?? true"
                   eo-ng-button
+                  [nzLoading]="n.loading?.()"
                   nzType="default"
                   [nzDanger]="n.type === 'delete'"
                   trace

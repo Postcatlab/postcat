@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, toJS } from 'mobx';
@@ -29,13 +30,15 @@ export class ProjectSettingComponent implements OnInit {
   projectName: string;
   isEdit = false;
   isInit = false;
+  syncLoading = false;
   constructor(
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
     public store: StoreService,
     private api: ApiService,
     private router: Router,
-    private effect: EffectService
+    private effect: EffectService,
+    private extensionService: ExtensionService
   ) {
     this.isLoading = false;
   }
@@ -56,9 +59,22 @@ export class ProjectSettingComponent implements OnInit {
           title: $localize`Sync`,
           type: 'sync',
           traceID: 'sync_api_from_url_success',
+          loading: () => this.syncLoading,
           show: () => this.store.getSyncSettingList.length,
-          onClick: args => {
-            this.message.success('同步成功');
+          onClick: async args => {
+            this.syncLoading = true;
+            const featureMap = this.extensionService.getValidExtensionsByFature('updateAPI');
+
+            if (!featureMap.size) {
+              this.message.info($localize`Please Install extension first`);
+            }
+
+            for (const [name, info] of featureMap) {
+              const module = await this.extensionService.getExtensionPackage(name);
+              await module[info.action]();
+            }
+            this.syncLoading = false;
+            this.message.success($localize`Sync Succeeded`);
           }
         },
         {
@@ -155,9 +171,12 @@ export class ProjectSettingComponent implements OnInit {
         },
         {
           label: $localize`Sync Now`,
-          show: actionComponent[type] === SyncApiComponent,
+          show: () => actionComponent[type] === SyncApiComponent && modal.componentInstance?.supportList?.length,
           disabled: () => !modal.componentInstance?.isValid,
-          onClick: () => modal.destroy()
+          onClick: async () => {
+            await modal.componentInstance?.syncNow?.();
+            modal.destroy();
+          }
         },
         {
           label: $localize`Confirm`,
