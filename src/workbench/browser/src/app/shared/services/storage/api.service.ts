@@ -277,8 +277,8 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_projectGetSyncSettingList<T>(params) : this.remote.api_projectGetSyncSettingList<T>(params);
   }
 
-  api_projectSyncApiFromDocs<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
-    return this.store.isLocal ? this.local.api_projectSyncApiFromDocs<T>(params) : this.remote.api_projectSyncApiFromDocs<T>(params);
+  api_projectSyncBatchUpdate<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_projectSyncBatchUpdate<T>(params) : this.remote.api_projectSyncBatchUpdate<T>(params);
   }
 
   api_roleList<T = any>(params: any) {

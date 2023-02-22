@@ -32,7 +32,7 @@ export class ProjectService extends BaseService<Project> {
   }
 
   @ApiResponse()
-  async syncApiFromDocs(params) {
+  async syncBatchUpdate(params) {
     const { collections = [], projectUuid } = params;
 
     const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });

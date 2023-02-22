@@ -1221,32 +1221,32 @@ export class LocalService {
     });
   }
 
-  api_projectSyncApiFromDocs<T = any>({
+  api_projectSyncBatchUpdate<T = any>({
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid,
     ...items
   }) {
     if (projectUuid == null) {
-      console.log('%c Error: project - syncApiFromDocs 接口 缺失参数 projectUuid %c', ErrorStyle, '');
-      return [null, { message: 'syncApiFromDocs 接口 缺失参数 projectUuid' }];
+      console.log('%c Error: project - syncBatchUpdate 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncBatchUpdate 接口 缺失参数 projectUuid' }];
     }
     if (workSpaceUuid == null) {
-      console.log('%c Error: project - syncApiFromDocs 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
-      return [null, { message: 'syncApiFromDocs 接口 缺失参数 workSpaceUuid' }];
+      console.log('%c Error: project - syncBatchUpdate 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncBatchUpdate 接口 缺失参数 workSpaceUuid' }];
     }
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.project
-        .syncApiFromDocs({ projectUuid, workSpaceUuid, ...items })
+        .syncBatchUpdate({ projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
-            console.log('%c project - syncApiFromDocs 接口调用成功 %c', SuccessStyle, '');
+            console.log('%c project - syncBatchUpdate 接口调用成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
           return resolve([null, { code, data }]);
         })
         .catch(error => {
-          console.log('%c project - syncApiFromDocs 接口调用失败 %c', ErrorStyle, '');
+          console.log('%c project - syncBatchUpdate 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
