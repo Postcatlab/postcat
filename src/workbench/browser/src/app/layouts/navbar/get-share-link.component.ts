@@ -27,7 +27,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       Share
     </button>
     <ng-template #contentTemplate>
-      <div class="w-[360px] pb-4">
+      <div class="w-[360px] py-4">
         <p i18n class="font-bold">Share via link</p>
         <p i18n class="pb-2 text-xs text-tips">
           This link will be updated with the API content. Everyone can access it without logging in

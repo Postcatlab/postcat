@@ -147,7 +147,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       this.receiveMessage(message);
     });
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
-      console.log('this.status$', status);
       this.changeStatus(status);
     });
   }

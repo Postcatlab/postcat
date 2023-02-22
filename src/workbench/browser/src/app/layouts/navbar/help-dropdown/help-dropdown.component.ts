@@ -9,7 +9,7 @@ import { ElectronService } from '../../../core/services';
     </button>
     <eo-ng-dropdown-menu #helpMenu="nzDropdownMenu">
       <ul nz-menu>
-        <a href="https://docs.postcat.com" target="_blank" nz-menu-item i18n>Document</a>
+        <a href="https://docs.postcat.com" target="_blank" trace traceID="jump_to_docs" nz-menu-item i18n>Document</a>
         <a
           href="https://github.com/Postcatlab/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
             issueEnvironment
