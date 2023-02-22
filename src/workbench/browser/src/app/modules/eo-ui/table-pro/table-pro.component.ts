@@ -76,7 +76,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   private DEFAULT_ID: string;
   private showItems = [];
   // private COLUMN_;
-  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef, @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig) {
+  constructor(private elRef: ElementRef, @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig) {
     this.tableConfig = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.tableConfig);
     this.TABLE_DEFAULT_BTN = {
       add: {
