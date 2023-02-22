@@ -19,7 +19,7 @@ Postcat 现在已经支持 Windows、Mac、Linux等系统，你可以通过以�
 
 **[https://postcat.com/](https://postcat.com//)**
 
-如果你试用之后觉得不错，请给我们的猫咪一个 Star 和 Fork~ 你的支持是我们不断改进产品的动力！
+如果你试用之后觉得不错，**请给我们的猫咪一个 Star 和 Fork~**你的支持是我们不断改进产品的动力！
 
 ## 功能特性和迭代计划（Roadmap）
 
