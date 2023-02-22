@@ -9,7 +9,15 @@
             nzErrorTip="Please input your projectName"
           >
             <div class="flex">
-              <input *ngIf="isEdit" eo-ng-input placeholder="Project Name" name="projectName" required [(ngModel)]="projectName" />
+              <input
+                *ngIf="isEdit"
+                eo-ng-input
+                placeholder="Project Name"
+                name="projectName"
+                (blur)="changeProjectName(projectName)"
+                required
+                [(ngModel)]="projectName"
+              />
               <ng-container *ngIf="!isEdit">
                 <h4 nz-typography>{{ projectName }}</h4>
                 <a nz-button nzType="link" class="ml-[5px]" (click)="startEditProjectName()">

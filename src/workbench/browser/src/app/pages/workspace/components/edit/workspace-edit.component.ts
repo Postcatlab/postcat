@@ -10,15 +10,37 @@ import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-setting',
-  template: `<form *ngIf="validateForm" auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
-      <nz-form-item>
-        <nz-form-label i18n nzRequired nzFor="title">Workspace Name</nz-form-label>
-        <nz-form-control nzErrorTip="Please input your new work name">
-          <input type="text" eo-ng-input id="title" formControlName="title" placeholder="Workspace Name" i18n-placeholder />
-        </nz-form-control>
-      </nz-form-item>
-      <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" nzType="primary" (click)="save($event)" i18n> Save </button>
-    </form>
+  template: ` <div class="flex justify-between">
+      <form nz-form nzLayout="inline" auto-focus-form nz-form [formGroup]="validateForm" (ngSubmit)="save()">
+        <nz-form-item>
+          <nz-form-control
+            [nzValidateStatus]="!validateForm || validateForm.value?.title ? '' : 'error'"
+            i18n-nzErrorTip
+            nzErrorTip="Please input your new work name"
+          >
+            <div class="flex">
+              <input
+                *ngIf="isEdit"
+                type="text"
+                eo-ng-input
+                id="title"
+                formControlName="title"
+                placeholder="Workspace Name"
+                i18n-placeholder
+                (blur)="save()"
+              />
+              <ng-container *ngIf="!isEdit">
+                <h4 nz-typography>{{ validateForm.value?.title }}</h4>
+                <a nz-button nzType="link" class="ml-[5px]" (click)="startEdit()">
+                  <eo-iconpark-icon name="edit"></eo-iconpark-icon>
+                </a>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+
     <div class="my-2">
       <nz-divider></nz-divider>
     </div>
@@ -41,6 +63,7 @@ import { StoreService } from '../../../../shared/store/state.service';
 export class WorkspaceSettingComponent {
   validateForm: UntypedFormGroup;
   isSaveBtnLoading = false;
+  isEdit = false;
   overviewList = [
     {
       title: $localize`Delete Workspace`,
@@ -101,8 +124,12 @@ export class WorkspaceSettingComponent {
       }
     });
   }
-  async save($event) {
-    $event.stopPropagation();
+
+  startEdit() {
+    this.isEdit = true;
+  }
+
+  async save() {
     if (!this.validateForm.valid) {
       return;
     }
@@ -122,5 +149,6 @@ export class WorkspaceSettingComponent {
     this.store.setCurrentWorkspace(this.store.getCurrentWorkspace);
 
     this.isSaveBtnLoading = false;
+    this.isEdit = false;
   }
 }
