@@ -7,11 +7,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { MemberListModule } from '../../../modules/member-list/member-list.module';
 import { MemberService } from '../../../modules/member-list/member.service';
 import { SharedModule } from '../../../shared/shared.module';
-import { WorkspaceSettingComponent } from '../components/edit/workspace-edit.component';
-import { WorkspaceMemberComponent } from '../components/member/workspace-member.component';
-import { WorkspaceMemberService } from '../components/member/workspace-member.service';
-import { ProjectListModule } from '../components/project-list/project-list.module';
-import { ProjectListService } from '../components/project-list/project-list.service';
+import { WorkspaceSettingComponent } from './edit/workspace-edit.component';
+import { WorkspaceMemberComponent } from './member/workspace-member.component';
+import { WorkspaceMemberService } from './member/workspace-member.service';
+import { ProjectListModule } from './project-list/project-list.module';
+import { ProjectListService } from './project-list/project-list.service';
 import { WorkspaceOverviewComponent } from './workspace-overview.component';
 
 @NgModule({
@@ -34,7 +34,7 @@ import { WorkspaceOverviewComponent } from './workspace-overview.component';
           },
           {
             path: 'projects',
-            loadChildren: () => import('../components/project-list/project-list.module').then(m => m.ProjectListModule)
+            loadChildren: () => import('./project-list/project-list.module').then(m => m.ProjectListModule)
           },
           {
             path: 'member',

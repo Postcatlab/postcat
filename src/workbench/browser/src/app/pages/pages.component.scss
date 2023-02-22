@@ -34,3 +34,9 @@
     }
   }
 }
+
+::ng-deep {
+  .cookie-notification {
+    width: 200px;
+  }
+}

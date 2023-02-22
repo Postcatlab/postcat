@@ -44,7 +44,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
     <eo-ng-feedback-alert class="block mt-[15px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
     <ng-template #templateRefMsg>
       <div class="text" i18n
-        >Can't find the {{ categoriesTipsMap.Themes.name }} you want?
+        >Couldn't find the {{ categoriesTipsMap.Themes.name }} you were looking for?
         <a (click)="openExtension()">find more...</a>
       </div>
     </ng-template> `,
