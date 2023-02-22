@@ -10,6 +10,7 @@ import {
   Collection,
   CollectionTypeEnum
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
+import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
@@ -117,7 +118,7 @@ export class ProjectService extends BaseService<Project> {
     return this.projectSyncSettingService.delete(params);
   }
 
-  async bulkCreate(params: ProjectBulkCreateDto) {
+  async bulkCreate(params: ProjectBulkCreateDto, isInitApiData = false) {
     const { projectMsgs, workSpaceUuid } = params;
 
     const result = await this.baseService.bulkCreate(
@@ -134,7 +135,15 @@ export class ProjectService extends BaseService<Project> {
       workSpaceUuid: item.workSpaceUuid
     }));
 
-    this.groupService.bulkCreate(groups);
+    this.groupService.bulkCreate(groups).then(({ data }) => {
+      if (isInitApiData) {
+        data.forEach(group => {
+          const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
+          // @ts-ignore
+          this.apiDataService.bulkCreate(sampleApiData);
+        });
+      }
+    });
 
     return result;
   }
