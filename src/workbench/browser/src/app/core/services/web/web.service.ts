@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { DownloadClientModalComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import packageJson from '../../../../../../../../package.json';
+import { StoreService } from '../../../shared/store/state.service';
+import { getBrowserType } from '../../../utils/browser-type';
+import StorageUtil from '../../../utils/storage/storage.utils';
 
+type DescriptionsItem = {
+  readonly id: string;
+  readonly label: string;
+  value: string;
+};
 @Injectable({
   providedIn: 'root'
 })
@@ -39,14 +47,45 @@ export class WebService {
       link: 'https://data.postcat.com/download/latest/Postcat-latest-arm64.dmg'
     }
   ];
-  constructor(private modalService: ModalService, private settingService: SettingService, private electronService: ElectronService) {
+  githubBugUrl: string;
+  constructor(
+    private modalService: ModalService,
+    private settingService: SettingService,
+    private electronService: ElectronService,
+    private store: StoreService
+  ) {
     this.isWeb = !this.electronService.isElectron;
+    this.githubBugUrl = this.getGithubUrl();
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     } else {
       this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://52.76.76.88:8080' });
     }
     this.getClientResource();
+  }
+  getGithubUrl(opts = {}) {
+    const href = 'https://github.com/Postcatlab/postcat/issues/new';
+    const query = {
+      assignees: '',
+      labels: '',
+      template: 'bug_report.yml',
+      environment: this.getEnvironment(),
+      ...opts
+    };
+    return `${href}?${Object.keys(query)
+      .map(key => `${key}=${query[key]}`)
+      .join('&')}`;
+  }
+  private getEnvironment(): string {
+    let result = '';
+    const systemInfo = this.getSystemInfo();
+    systemInfo?.forEach(val => {
+      if (['homeDir'].includes(val.id)) {
+        return;
+      }
+      result += `- ${val.label}: ${val.value}\r\n`;
+    });
+    return encodeURIComponent(result);
   }
   private findLinkInSingleAssets(assets, item) {
     let result = '';
@@ -156,5 +195,89 @@ export class WebService {
         resolve(true);
       }
     });
+  }
+
+  getSystemInfo(): DescriptionsItem[] {
+    const descriptions: DescriptionsItem[] = [
+      {
+        id: 'version',
+        label: $localize`Version`,
+        value: packageJson.version
+      }
+      // {
+      //   id: 'publishTime',
+      //   label: $localize`Publish Time`,
+      //   value: '',
+      // },
+    ];
+
+    const electronDetails: DescriptionsItem[] = [
+      {
+        id: 'electron',
+        label: 'Electron',
+        value: ''
+      },
+      {
+        id: 'chrome',
+        label: 'Chromium',
+        value: ''
+      },
+      {
+        id: 'node',
+        label: 'Node.js',
+        value: ''
+      },
+      {
+        id: 'v8',
+        label: 'V8',
+        value: ''
+      },
+      {
+        id: 'os',
+        label: 'OS',
+        value: ''
+      },
+      {
+        id: 'homeDir',
+        label: 'Install Location',
+        value: ''
+      }
+    ];
+    let systemInfo = {};
+    if (!this.isWeb) {
+      systemInfo = window.electron.getSystemInfo();
+      descriptions.push(...electronDetails);
+    } else {
+      systemInfo = getBrowserType(getSettings()?.['system.language']);
+      descriptions.push(
+        ...Object.entries<string>(systemInfo).map(([key, value]) => ({
+          id: key,
+          label: key.replace(/^\S/, s => s.toUpperCase()),
+          value
+        }))
+      );
+    }
+    descriptions.forEach(item => {
+      if (item.id in systemInfo) {
+        item.value = systemInfo[item.id];
+      }
+    });
+
+    // remote server version
+    const serverVersion = StorageUtil.get('server_version');
+    if (serverVersion && !this.store.isLocal) {
+      descriptions.push({
+        id: 'server',
+        label: 'Server',
+        value: serverVersion
+      });
+    }
+    descriptions.push({
+      id: 'platForm',
+      label: $localize`Platform`,
+      value: !this.isWeb ? 'Electron' : 'Web'
+    });
+
+    return descriptions;
   }
 }

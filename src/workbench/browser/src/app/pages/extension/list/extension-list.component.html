@@ -66,4 +66,20 @@
       </div>
     </div>
   </div>
+  <ng-container *ngIf="!loading">
+    <eo-ng-feedback-alert class="block mb-[20px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+    <ng-template #templateRefMsg>
+      <div class="text" i18n
+        >Couldn't find the extension you were looking for?
+        <a
+          [href]="githubFeatureUrl"
+          trace
+          traceID="jump_to_github"
+          [traceParams]="{ where_jump_to_github: 'request_extension' }"
+          target="_blank"
+          >find more...</a
+        >
+      </div>
+    </ng-template>
+  </ng-container>
 </div>

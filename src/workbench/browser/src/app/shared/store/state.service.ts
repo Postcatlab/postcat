@@ -19,7 +19,8 @@ export class StoreService {
   private localWorkspace: API.Workspace;
   // * observable data
 
-  private isBack = StorageUtil.get('isBack') || false;
+  //* Has been initialized
+  private appHasInitial = StorageUtil.get('appHasInitial') || false;
 
   // ? router
   @observable private url = '';
@@ -92,11 +93,12 @@ export class StoreService {
   @computed get getPageLevel() {
     return this.pageLevel;
   }
-
+  @computed get getAppHasInitial() {
+    return this.appHasInitial;
+  }
   // ? data source
   @computed get isClientFirst() {
-    const isClientFist = !this.isBack && !!window.electron;
-    this.setIsBack();
+    const isClientFist = !this.appHasInitial && !!window.electron;
     return isClientFist;
   }
   @computed get isLocal() {
@@ -189,10 +191,17 @@ export class StoreService {
         this.setPageLevel();
       }
     });
+
+    window.addEventListener('beforeunload', e => {
+      this.setAppHasInitial();
+    });
   }
 
-  @action setIsBack() {
-    StorageUtil.set('isBack', true);
+  /**
+   * @description Set has been initialized
+   */
+  @action setAppHasInitial() {
+    StorageUtil.set('appHasInitial', true);
   }
 
   @action setLocalWorkspace(data) {
