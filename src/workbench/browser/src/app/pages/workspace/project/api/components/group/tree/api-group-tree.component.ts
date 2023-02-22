@@ -238,10 +238,10 @@ export class ApiGroupTreeComponent implements OnInit {
         },
         {
           label: $localize`Sync Now`,
-          show: actionComponent[type] === SyncApiComponent,
+          show: () => actionComponent[type] === SyncApiComponent && modal.componentInstance?.supportList?.length,
           disabled: () => !modal.componentInstance?.isValid,
           onClick: async () => {
-            await modal.componentInstance?.syncNow?.();
+            await modal.componentInstance?.syncNow?.(this);
             modal.destroy();
           }
         },
@@ -272,10 +272,6 @@ export class ApiGroupTreeComponent implements OnInit {
         }
       ]
     });
-  }
-
-  syncNow(modelRef: NzModalRef) {
-    console.log('modelRef', modelRef);
   }
 
   /**

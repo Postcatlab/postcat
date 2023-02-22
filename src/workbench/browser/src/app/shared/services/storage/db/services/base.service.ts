@@ -11,13 +11,18 @@ export class BaseService<T extends object> {
     const entries = Object.entries(params);
     return this.db.filter(obj => {
       return entries.every(([key, value]) => {
-        if (!Reflect.has(obj, key)) {
+        // support keypath
+        const keys = key.split('.');
+        const lastKey = keys.pop();
+        const lastObj = keys.reduce((p, k) => p[k], obj);
+
+        if (!Reflect.has(lastObj, lastKey)) {
           return true;
         }
         if (Array.isArray(value)) {
-          return value.includes(obj[key]);
+          return value.includes(lastObj[lastKey]);
         } else {
-          return Object.is(obj[key], value);
+          return Object.is(lastObj[lastKey], value);
         }
       });
     });

@@ -144,17 +144,18 @@ export class SyncApiComponent implements OnInit, OnChanges {
     console.log('featureMap', this.featureMap);
   };
 
-  async syncNow() {
+  async syncNow(apiGroupTree) {
     const feature = this.featureMap.get(this.currentExtension);
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
-    console.log('feature', feature);
-    console.log('module', module);
+
     if (typeof module[feature.action] === 'function') {
-      module[feature.action]();
+      await this.submit();
+      await module[feature.action]();
+      apiGroupTree?.effect?.getGroupList();
     }
   }
 
-  async submit(callback, modal) {
+  async submit(callback?, modal?) {
     if (!this.supportList.length) {
       return modal?.destroy?.();
     }
@@ -171,12 +172,12 @@ export class SyncApiComponent implements OnInit, OnChanges {
 
       if (err) {
         console.error(err.msg);
-        callback('stayModal');
+        callback?.('stayModal');
         return;
       }
       this.effectService.getSyncSettingList();
 
-      callback(true);
+      callback?.(true);
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -184,7 +185,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
-      callback('stayModal');
+      callback?.('stayModal');
     }
   }
 }

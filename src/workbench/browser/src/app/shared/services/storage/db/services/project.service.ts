@@ -10,7 +10,6 @@ import {
   Collection,
   CollectionTypeEnum
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
-import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
 import { Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/apiData.service';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
@@ -26,24 +25,70 @@ export class ProjectService extends BaseService<Project> {
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
-  apiTestHistoryTable = dataSource.apiTestHistory;
-  environmentTable = dataSource.environment;
-  mockTable = dataSource.mock;
 
   constructor() {
     super(dataSource.project);
   }
 
+  @ApiResponse()
   async syncApiFromDocs(params) {
-    const { collections = [], projectUuid, workSpaceUuid } = params;
-    collections.map(async item => {
-      if (item.collectionType === 0) {
-        const targetGroup = await this.groupService.read({ name: item.name, projectUuid, workSpaceUuid });
+    const { collections = [], projectUuid } = params;
+
+    const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });
+
+    await this.deepIncreUpdateGroup(collections, rootGroup);
+    return true;
+  }
+  async deepIncreUpdateGroup(collections = [], parentGroup: Group) {
+    const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
+
+    const promises = collections.map(async item => {
+      if (item.collectionType === CollectionTypeEnum.GROUP) {
+        const { data: targetGroup } = await this.groupService.read({
+          name: item.name,
+          depth: depth + 1,
+          parentId,
+          projectUuid,
+          workSpaceUuid
+        });
         if (targetGroup) {
+          if (item.children?.length) {
+            await this.deepIncreUpdateGroup(item.children, targetGroup);
+          }
         } else {
+          const groupID = await this.apiGroupTable.add({ ...item, parentId, depth: depth + 1, projectUuid, workSpaceUuid });
+          const group = await this.apiGroupTable.get(groupID);
+
+          if (item.children?.length) {
+            await this.deepIncreUpdateGroup(item.children, group);
+          }
+        }
+      } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
+        const { data: apiData } = await this.apiDataService.read({
+          projectUuid,
+          uri: item.uri,
+          'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
+        });
+        if (apiData) {
+          // @ts-ignore
+          await this.apiDataTable.update(apiData.id, {
+            ...apiData,
+            ...item,
+            groupId: parentId,
+            projectUuid,
+            workSpaceUuid
+          });
+        } else {
+          await this.apiDataTable.add({
+            ...item,
+            groupId: parentId,
+            projectUuid,
+            workSpaceUuid
+          });
         }
       }
     });
+    await Promise.all(promises);
   }
 
   // 添加项目同步配置
@@ -89,13 +134,7 @@ export class ProjectService extends BaseService<Project> {
       workSpaceUuid: item.workSpaceUuid
     }));
 
-    this.groupService.bulkCreate(groups).then(({ data }) => {
-      data.forEach(group => {
-        const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
-        // @ts-ignore
-        this.apiDataService.bulkCreate(sampleApiData);
-      });
-    });
+    this.groupService.bulkCreate(groups);
 
     return result;
   }
@@ -128,8 +167,8 @@ export class ProjectService extends BaseService<Project> {
   async afterBulkDelete(params, result) {
     if (result.code === 0 && result.data > 0) {
       const projectUuids = params.uuid;
-      const needHandles = [this.apiDataTable, this.apiGroupTable, this.apiTestHistoryTable, this.environmentTable, this.mockTable];
-      const promises = needHandles.map(table => table.filter(item => projectUuids.includes(item.projectUuid)).delete());
+
+      const promises = dataSource.tables.map(table => table.filter(item => projectUuids.includes(item.projectUuid)).delete());
       const result = await Promise.all(promises);
       console.log('删除项目', result);
     }
@@ -211,11 +250,12 @@ export class ProjectService extends BaseService<Project> {
   }
 
   private async bulkCreateGroup(groupList: Group[] = [], parentGroup: Group) {
-    const { workSpaceUuid, projectUuid, id: parentId } = parentGroup;
+    const { workSpaceUuid, projectUuid, id: parentId, depth } = parentGroup;
 
     const groups = groupList.map(n => {
       const { id, children, ...rest } = n;
       rest.parentId = parentId;
+      rest.depth = depth + 1;
       rest.workSpaceUuid = workSpaceUuid;
       rest.projectUuid = projectUuid;
       return rest;
@@ -233,8 +273,8 @@ export class ProjectService extends BaseService<Project> {
       }
     }
   }
-  /** 递归创建分组及 API */
-  private deepCreateGroup = async (collections = [], parentGroup: Group) => {
+
+  private groupCollections(collections = []) {
     // 将集合筛选为 groupList 和 apiDataList 两组
     const { groupList = [], apiDataList = [] } = collections
       .filter(n => n.depth !== 0)
@@ -249,8 +289,14 @@ export class ProjectService extends BaseService<Project> {
           return '垃圾数据分类';
         }
       });
+    return { groupList, apiDataList };
+  }
 
-    await this.bulkCreateApiData(apiDataList, parentGroup);
-    await this.bulkCreateGroup(groupList, parentGroup);
+  /** 递归创建分组及 API */
+  private deepCreateGroup = async (collections = [], parentGroup: Group) => {
+    // 将集合筛选为 groupList 和 apiDataList 两组
+    const { groupList = [], apiDataList = [] } = this.groupCollections(collections);
+
+    await Promise.all([this.bulkCreateApiData(apiDataList, parentGroup), this.bulkCreateGroup(groupList, parentGroup)]);
   };
 }
