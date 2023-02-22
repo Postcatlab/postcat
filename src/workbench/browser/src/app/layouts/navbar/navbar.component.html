@@ -8,6 +8,7 @@
       class="flex items-center ml-[15px] electron-can-be-click"
       trace
       traceID="jump_to_github"
+      [traceParams]="{ where_jump_to_github: 'star' }"
     >
       <img loading="lazy" src="https://img.shields.io/github/stars/postcatlab/postcat?style=social" alt="" />
     </a>
@@ -30,9 +31,8 @@
       trace
       traceID="open_extensions"
       i18n
+      >Extensions</button
     >
-      Extensions
-    </button>
     <nz-divider nzType="vertical"></nz-divider>
     <div class="right-group-btn">
       <!-- Help -->
