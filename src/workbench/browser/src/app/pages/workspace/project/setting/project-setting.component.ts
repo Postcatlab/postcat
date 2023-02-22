@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, toJS } from 'mobx';
@@ -38,7 +39,8 @@ export class ProjectSettingComponent implements OnInit {
     private api: ApiService,
     private router: Router,
     private effect: EffectService,
-    private extensionService: ExtensionService
+    private extensionService: ExtensionService,
+    private trace: TraceService
   ) {
     this.isLoading = false;
   }
@@ -75,6 +77,7 @@ export class ProjectSettingComponent implements OnInit {
             }
             this.syncLoading = false;
             this.message.success($localize`Sync Succeeded`);
+            this.trace.report('sync_api_from_url_success');
           }
         },
         {

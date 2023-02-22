@@ -5,6 +5,7 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -59,7 +60,8 @@ export class SyncApiComponent implements OnInit, OnChanges {
     private apiService: ApiService,
     private messageService: MessageService,
     private store: StoreService,
-    private effectService: EffectService
+    private effectService: EffectService,
+    private trace: TraceService
   ) {}
 
   ngOnInit(): void {
@@ -161,6 +163,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     if (typeof module[feature.action] === 'function') {
       await this.submit();
       await module[feature.action]();
+      this.trace.report('sync_api_from_url_success');
       apiGroupTree?.effect?.getGroupList();
     }
   }
