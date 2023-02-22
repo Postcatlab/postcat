@@ -1,7 +1,5 @@
 import { Directive, ElementRef } from '@angular/core';
 
-import { waitNextTick } from '../../utils/index.utils';
-
 @Directive({
   selector: '[pcNpsPosition]',
   standalone: true,
@@ -21,18 +19,24 @@ export class NpsPositionDirective {
   hideMask() {
     this.showTitle = false;
     this.showtips = false;
+    const tipsDom = this.el.nativeElement.querySelector('.tips');
+    tipsDom.innerText = '';
   }
   resetTitlePostion(rect) {
     const titleDom = this.el.nativeElement.querySelector('.title');
-    titleDom.style.right = `${24 + this.padding / 2}px`;
-    titleDom.style.bottom = '160px';
-    titleDom.style.width = `${rect.width - this.padding}px`;
+    this.batchSetPropery(titleDom, {
+      right: `${24 + this.padding / 2}px`,
+      bottom: '160px',
+      width: `${rect.width - this.padding}px`
+    });
   }
   resettipsPostion(rect) {
     const tipsDom = this.el.nativeElement.querySelector('.tips');
-    tipsDom.style.right = `${24}px`;
-    tipsDom.style.bottom = '40px';
-    tipsDom.style.width = `${rect.width}px`;
+    this.batchSetPropery(tipsDom, {
+      right: `${24}px`,
+      bottom: '40px',
+      width: `${rect.width}px`
+    });
   }
   resetMaskPostion(dom: HTMLIFrameElement) {
     const rect = dom.getBoundingClientRect();
@@ -72,11 +76,11 @@ export class NpsPositionDirective {
         npsDomObserver = new MutationObserver(e => {
           iframe = e[0].target.nodeName === 'IFRAME' ? e[0].target : iframe;
           if (!iframe) return;
-
           const className = e[0].target['className'] || '';
           const npsSlideIn = className.includes('widget_SlideInRightBottom');
           const hasSubmit = className.includes('modal-widget_widgetTransition') && e[0].attributeName === 'style';
-          // console.log(iframe, step, className, hasSubmit, e);
+          const hasClose = className.includes('modal-widget_backdropBase') && !className.includes('modal-widget_backdropIn');
+          // console.log(step, className, npsSlideIn, hasSubmit, hasClose);
           //* 1. Show mask
           if (iframe && npsSlideIn && step < 1) {
             step = 1;
@@ -86,13 +90,20 @@ export class NpsPositionDirective {
             }, 150);
             return;
           }
+          //* 1.1 Directly Close mask
+          if (step === 1 && hasClose) {
+            this.hideMask();
+            npsDomObserver.disconnect();
+            return;
+          }
+
           //* 2. Submit NPS
           if (hasSubmit && step < 2) {
             // console.log('submitNps');
             step = 2;
             this.showTitle = false;
             const tipsDom = this.el.nativeElement.querySelector('.tips');
-            tipsDom.innerText = $localize`Thanks for you feedback`;
+            tipsDom.innerText = $localize`Thank you for your feedback`;
             return;
           }
 
@@ -110,5 +121,10 @@ export class NpsPositionDirective {
     };
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
+  }
+  batchSetPropery(dom, propsObj) {
+    Object.keys(propsObj).forEach(keyName => {
+      dom.style.setProperty(keyName, propsObj[keyName]);
+    });
   }
 }

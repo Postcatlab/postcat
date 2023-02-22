@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 import { LocalWorkspaceTipComponent } from '../layouts/local-workspace-tip/local-workspace-tip.component';
 import { NavbarModule } from '../layouts/navbar/navbar.module';
@@ -13,7 +14,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
 
 @NgModule({
-  imports: [PagesRoutingModule, SystemSettingModule, CommonModule, NavbarModule, ToolbarModule, SharedModule],
+  imports: [PagesRoutingModule, NzNotificationModule, SystemSettingModule, CommonModule, NavbarModule, ToolbarModule, SharedModule],
   declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ThirdLoginComponent],
   exports: [],
   providers: [],

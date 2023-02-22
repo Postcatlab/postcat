@@ -6,7 +6,7 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
 @Component({
   selector: 'pc-nps-mask',
   template: `<ng-container pcNpsPosition>
-    <div i18n class="title">How would you rate you experience with the Postcat</div>
+    <div i18n class="title">How would you rate your experience with the Postcat</div>
     <div class="tips text-tips"></div>
   </ng-container> `,
   styleUrls: ['./nps-mask.component.scss'],
@@ -21,8 +21,8 @@ export class npsMaskComponent implements OnInit {
     const userProfile = this.store.getUserProfile;
     //@ts-ignore
     _howxm('identify', {
-      uid: userProfile.id,
-      email: userProfile.email
+      uid: userProfile?.id,
+      email: userProfile?.email
     });
   }
 }

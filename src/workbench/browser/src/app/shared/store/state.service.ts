@@ -7,6 +7,7 @@ import _ from 'lodash-es';
 import { action, autorun, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
+import { ElectronService } from '../../core/services';
 import { Role } from '../models/member.model';
 
 /** is show switch success tips */
@@ -19,7 +20,8 @@ export class StoreService {
   private localWorkspace: API.Workspace;
   // * observable data
 
-  private isBack = StorageUtil.get('isBack') || false;
+  //* Has been initialized
+  private appHasInitial = StorageUtil.get('appHasInitial') || false;
 
   // ? router
   @observable private url = '';
@@ -95,8 +97,7 @@ export class StoreService {
 
   // ? data source
   @computed get isClientFirst() {
-    const isClientFist = !this.isBack && !!window.electron;
-    this.setIsBack();
+    const isClientFist = !this.appHasInitial && !!window.electron;
     return isClientFist;
   }
   @computed get isLocal() {
@@ -189,10 +190,17 @@ export class StoreService {
         this.setPageLevel();
       }
     });
+
+    window.addEventListener('beforeunload', e => {
+      // this.setAppHasInitial();
+    });
   }
 
-  @action setIsBack() {
-    StorageUtil.set('isBack', true);
+  /**
+   * @description Set has been initialized
+   */
+  @action setAppHasInitial() {
+    StorageUtil.set('appHasInitial', true);
   }
 
   @action setLocalWorkspace(data) {
