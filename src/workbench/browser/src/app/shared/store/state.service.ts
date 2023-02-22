@@ -7,7 +7,6 @@ import _ from 'lodash-es';
 import { action, autorun, computed, makeObservable, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
-import { ElectronService } from '../../core/services';
 import { Role } from '../models/member.model';
 
 /** is show switch success tips */
@@ -94,7 +93,9 @@ export class StoreService {
   @computed get getPageLevel() {
     return this.pageLevel;
   }
-
+  @computed get getAppHasInitial() {
+    return this.appHasInitial;
+  }
   // ? data source
   @computed get isClientFirst() {
     const isClientFist = !this.appHasInitial && !!window.electron;
@@ -192,7 +193,7 @@ export class StoreService {
     });
 
     window.addEventListener('beforeunload', e => {
-      // this.setAppHasInitial();
+      this.setAppHasInitial();
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { autorun, observable, makeObservable } from 'mobx';
 
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
@@ -27,7 +27,14 @@ export class ExtensionListComponent implements OnInit {
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
   extensionList = [];
   loading = false;
-  constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
+  githubFeatureUrl;
+  constructor(public extensionService: ExtensionService, public web: WebService) {
+    this.githubFeatureUrl = this.web.getGithubUrl({
+      title: 'New Extension Request: ',
+      template: 'feature_request.yml',
+      labels: 'extension'
+    });
+  }
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {

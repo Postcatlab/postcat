@@ -7,6 +7,7 @@ import { filter } from 'rxjs';
 import { LanguageService } from '../core/services/language/language.service';
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
 import { StoreService } from '../shared/store/state.service';
+import StorageUtil from '../utils/storage/storage.utils';
 import { SocketService } from './extension/socket.service';
 
 @Component({
@@ -17,13 +18,13 @@ import { SocketService } from './extension/socket.service';
 export class PagesComponent implements OnInit {
   @ViewChild('notificationTmp', { read: TemplateRef, static: true }) notificationTmp: TemplateRef<HTMLDivElement>;
   cookieNotification: NzNotificationRef;
+  hasShowCookieTips = StorageUtil.get('has_show_cookie_tips');
   isShowNotification;
   sidebarViews: any[] = [];
   constructor(
     private socket: SocketService,
     public electron: ElectronService,
     private router: Router,
-    private store: StoreService,
     private lang: LanguageService,
     private sidebar: SidebarService,
     private notification: NzNotificationService
@@ -36,10 +37,11 @@ export class PagesComponent implements OnInit {
       this.initSidebarVisible(res.url);
     });
 
-    console.log(this.store.isClientFirst);
-    // if (this.store.isClientFirst && this.lang.systemLanguage === 'en-US') {
-    this.showCookiesTips();
-    // }
+    // Show cookie tips
+    if (!this.hasShowCookieTips && this.lang.systemLanguage === 'en-US') {
+      StorageUtil.set('has_show_cookie_tips', true);
+      this.showCookiesTips();
+    }
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);

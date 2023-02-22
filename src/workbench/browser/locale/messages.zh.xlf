@@ -2,26 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template" target-language="zh-CN">
     <body>
-      <trans-unit id="2724055831234181057" datatype="html">
-        <source>Version</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/services/electron/electron.service.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
-        <target state="translated">版本</target>
-      </trans-unit>
-      <trans-unit id="962765493084218985" datatype="html">
-        <source>Platform</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/services/electron/electron.service.ts</context>
-          <context context-type="linenumber">120</context>
-        </context-group>
-        <target state="translated">平台</target>
-      </trans-unit>
       <trans-unit id="2121703973472311215" datatype="html">
         <source>Release Notes</source>
         <context-group purpose="location">
@@ -114,7 +94,7 @@
         <source>Windows Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <target state="translated">Windows 客户端</target>
       </trans-unit>
@@ -122,7 +102,7 @@
         <source>MacOS(Intel) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <target state="translated">MacOS(Intel) 客户端</target>
       </trans-unit>
@@ -130,9 +110,29 @@
         <source>MacOS(M1) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <target state="translated">MacOS(M1) 客户端</target>
+      </trans-unit>
+      <trans-unit id="2724055831234181057" datatype="html">
+        <source>Version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
+          <context context-type="linenumber">204</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <target state="translated">版本</target>
+      </trans-unit>
+      <trans-unit id="962765493084218985" datatype="html">
+        <source>Platform</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+        <target state="translated">平台</target>
       </trans-unit>
       <trans-unit id="8481244575805690440" datatype="html">
         <source>The current data is stored locally,If you want to collaborate,Please</source>
@@ -308,21 +308,13 @@
           <context context-type="sourcefile">src/app/layouts/navbar/help-dropdown/help-dropdown.component.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/layouts/navbar/help-dropdown/help-dropdown.component.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
         <target state="translated">文档</target>
       </trans-unit>
       <trans-unit id="2885841847445486474" datatype="html">
         <source>Report Issue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/navbar/help-dropdown/help-dropdown.component.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/layouts/navbar/help-dropdown/help-dropdown.component.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">13</context>
         </context-group>
         <target state="translated">问题反馈</target>
       </trans-unit>
@@ -366,17 +358,13 @@
         <source>Extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/navbar/navbar.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">29</context>
         </context-group>
-        <target state="translated">插件广场</target>
-      </trans-unit>
-      <trans-unit id="410599095970694816" datatype="html">
-        <source> Extensions </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/navbar/navbar.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">34</context>
         </context-group>
-        <target state="translated"> 插件 </target>
+        <target state="translated">插件广场</target>
       </trans-unit>
       <trans-unit id="1762579199463627317" datatype="html">
         <source>Open Settings</source>
@@ -770,7 +758,7 @@
         <source>The test service connection failed, please submit an Issue to contact the community</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/api-shared/api.model.ts</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <target state="translated">测试服务连接失败，请提交 Issue 联系社区</target>
       </trans-unit>
@@ -1170,8 +1158,8 @@
         </context-group>
         <target state="translated">仅支持导入单个文件</target>
       </trans-unit>
-      <trans-unit id="1722727568438964625" datatype="html">
-        <source>Can&apos;t find the <x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/> you want? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>find more...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+      <trans-unit id="1606910020400324851" datatype="html">
+        <source>Couldn&apos;t find the <x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/> you were looking for? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>find more...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/extension-select/select/extension-select.component.html</context>
           <context context-type="linenumber">48,49</context>
@@ -1180,7 +1168,7 @@
           <context context-type="sourcefile">src/app/modules/system-setting/common/select-theme/select-theme.component.ts</context>
           <context context-type="linenumber">47,48</context>
         </context-group>
-        <target state="translated">找不到你想要的<x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/>？<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>查看更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">找不到您想要的<x id="INTERPOLATION" equiv-text="{{ tipsMap[tipsType].name }}"/>？<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;openExtension()&quot;&gt;"/>查看更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
       </trans-unit>
       <trans-unit id="4141575162728577645" datatype="html">
         <source>Only files in JSON format are supported</source>
@@ -1258,7 +1246,7 @@
         <source>Thank you for your feedback</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/nps-mask/nps-mask-postion.directive.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <target state="translated">感谢您的反馈</target>
       </trans-unit>
@@ -1266,7 +1254,7 @@
         <source> Hi!~ If you like <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Postcat<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>, please give the Postcat a Star!<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Your support is our greatest motivation~ </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/system-setting/common/about.component.ts</context>
-          <context context-type="linenumber">15,17</context>
+          <context context-type="linenumber">22,24</context>
         </context-group>
         <target state="translated"> 您好~ 如果您喜欢 <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Postcat<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>, 请给 Postcat 一颗星！<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>您的支持是我们最大的动力~ </target>
       </trans-unit>
@@ -1997,6 +1985,30 @@
           <context context-type="linenumber">90</context>
         </context-group>
         <target state="translated">其他</target>
+      </trans-unit>
+      <trans-unit id="3505707934319828442" datatype="html">
+        <source>Couldn&apos;t find the extension you were looking for? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           [href]=&quot;githubFeatureUrl&quot;           trace           traceID=&quot;jump_to_github&quot;           [traceParams]=&quot;{ where_jump_to_github: &apos;request_extension&apos; }&quot;           target=&quot;_blank&quot;           &gt;"/>find more...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a         &gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
+          <context context-type="linenumber">73,83</context>
+        </context-group>
+        <target state="translated">找不到您想要的插件？ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           [href]=&quot;githubFeatureUrl&quot;           trace           traceID=&quot;jump_to_github&quot;           [traceParams]=&quot;{ where_jump_to_github: 'request_extension' }&quot;           target=&quot;_blank&quot;           &gt;"/>反馈需求...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a         &gt;"/></target>
+      </trans-unit>
+      <trans-unit id="2469690755787699585" datatype="html">
+        <source>We use cookies</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pages.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <target state="translated">我们使用 Cookie</target>
+      </trans-unit>
+      <trans-unit id="3847612745046208693" datatype="html">
+        <source>GOT IT</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pages.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <target state="translated">了解</target>
       </trans-unit>
       <trans-unit id="3620188369327429839" datatype="html">
         <source> Save </source>
