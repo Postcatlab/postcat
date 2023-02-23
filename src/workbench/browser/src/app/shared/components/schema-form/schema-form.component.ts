@@ -4,16 +4,21 @@ import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular
 const compMap = {
   string: 'input',
   number: 'input-number',
-  boolean: 'checkbox'
+  boolean: 'switch'
 } as const;
 
 @Component({
   selector: 'eo-schema-form',
   template: `
-    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form mt-2">
+    <form nz-form [formGroup]="validateForm" class="form mt-2">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
-          <nz-form-label nzFor="{{ field }}" [nzRequired]="properties[field]?.required" class="label font-bold">
+          <nz-form-label
+            nzFor="{{ field }}"
+            [nzSpan]="properties[field]?.span ?? 24"
+            [nzRequired]="properties[field]?.required"
+            class="label font-bold"
+          >
             {{ properties[field]?.label }}
           </nz-form-label>
         </ng-container>
@@ -38,15 +43,14 @@ const compMap = {
 
           <!-- 布尔类型 -->
           <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.boolean">
-            <label
-              eo-ng-checkbox
+            <eo-ng-switch
               [(ngModel)]="model[field]"
               id="{{ field }}"
               [nzDisabled]="properties[field]?.disabled"
               formControlName="{{ field }}"
             >
               {{ properties[field]?.description }}
-            </label>
+            </eo-ng-switch>
           </ng-container>
 
           <!-- 数字类型 -->
@@ -97,7 +101,7 @@ export class EoSchemaFormComponent implements OnInit {
     this.validateForm = this.fb.group({});
 
     this.formatProperties();
-    this.initIfThenElse();
+    this.initIfThenElse(this.configuration);
 
     this.setSettingsModel(this.properties);
   }
@@ -120,12 +124,12 @@ export class EoSchemaFormComponent implements OnInit {
   }
 
   // https://json-schema.org/understanding-json-schema/reference/conditionals.html#if-then-else
-  initIfThenElse() {
-    if (Array.isArray(this.configuration?.allOf)) {
-      const ifFields = this.configuration.allOf.reduce((prev, curr) => {
+  initIfThenElse(configuration) {
+    if (Array.isArray(configuration?.allOf)) {
+      const ifFields = configuration.allOf.reduce((prev, curr) => {
         if (curr.if?.properties) {
           Object.entries<any>(curr.if.properties).forEach(([key, value]) => {
-            if (value.const) {
+            if (Reflect.has(value, 'const')) {
               prev[key] ??= {};
               prev[key][value.const] = curr;
             }
@@ -134,7 +138,7 @@ export class EoSchemaFormComponent implements OnInit {
         return prev;
       }, {});
 
-      this.configuration.allOf.forEach(item => {
+      configuration.allOf.forEach(item => {
         if (item.if?.properties) {
           Object.entries<any>(item.if.properties).forEach(([key, value]) => {
             let __value;
@@ -144,8 +148,14 @@ export class EoSchemaFormComponent implements OnInit {
                 return __value;
               },
               set: val => {
-                if (val !== this.model[key] && ifFields[key]?.[val]?.then?.properties) {
-                  this.formatProperties(ifFields[key][val].then.properties);
+                const conf = ifFields[key]?.[val]?.then;
+                if (val !== this.model[key]) {
+                  if (conf?.properties) {
+                    this.formatProperties({ ...configuration?.properties, ...conf.properties });
+                  }
+                  if (conf) {
+                    this.initIfThenElse(conf);
+                  }
                 }
                 __value = val;
               }

@@ -125,6 +125,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
           }
         },
         then: {
+          ...conf.configuration,
           properties: conf.configuration?.properties
         }
       });

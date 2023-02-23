@@ -102,7 +102,7 @@ const http = {
         { 'updateSyncSetting @put @updateSyncSetting': '/api/project/sync-setting', json: 'projectUuid, workSpaceUuid, ...' },
         { 'delSyncSetting @delete @delSyncSetting': '/api/project/sync-setting', query: 'id, projectUuid, workSpaceUuid' },
         { 'getSyncSettingList @get @getSyncSettingList': '/api/project/sync-setting/list', query: 'projectUuid, workSpaceUuid' },
-        { 'syncBatchUpdate @post @syncBatchUpdate': '/api/api/sync/batch-update', json: 'projectUuid, workSpaceUuid, ...' }
+        { 'syncBatchUpdate @post @syncBatchUpdate': '/api/api/batch-update', json: 'projectUuid, workSpaceUuid, ...' }
       ]
     },
     {

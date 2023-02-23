@@ -10,6 +10,7 @@ import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessage
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
+import { EoNgSwitchModule } from 'eo-ng-switch';
 import { ExtensionFeedbackComponent } from 'eo/workbench/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
 import { TraceDirective } from 'eo/workbench/browser/src/app/shared/directives/trace.directive';
@@ -37,6 +38,7 @@ const SHARED_UI_MODULE = [
   EoNgButtonModule,
   EoNgDropdownModule,
   EoNgCheckboxModule,
+  EoNgSwitchModule,
   EoNgSelectModule,
   EoNgInputModule,
   EoNgRadioModule,

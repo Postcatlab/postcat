@@ -48,21 +48,21 @@ export interface ApiData {
 }
 
 export interface Introduction {
-  apiUuid: string;
-  noteType: number;
-  noteRaw: string;
-  note: string;
-  createTime: number;
-  updateTime: number;
+  apiUuid?: string;
+  noteType?: number;
+  noteRaw?: string;
+  note?: string;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface Relation {
-  apiUuid: string;
-  bindAmtApiId: number;
-  swaggerId: string;
-  fileName: string;
-  fileUrl: string;
-  fileId: string;
+  apiUuid?: string;
+  bindAmtApiId?: number;
+  swaggerId?: string;
+  fileName?: string;
+  fileUrl?: string;
+  fileId?: string;
 }
 
 export interface ApiAttrInfo {
@@ -76,54 +76,54 @@ export interface ApiAttrInfo {
 }
 
 export interface DubboApiAttrInfo {
-  serverHost: string;
-  interfaceName: string;
-  methodName: string;
-  appName: string;
-  group: string;
-  version: string;
-  apiNumber: number;
-  createTime: number;
-  updateTime: number;
+  serverHost?: string;
+  interfaceName?: string;
+  methodName?: string;
+  appName?: string;
+  group?: string;
+  version?: string;
+  apiNumber?: number;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface SoapApiAttrInfo {
-  beforeInject: string;
-  afterInject: string;
-  authInfo: string;
-  requestMethod: number;
-  contentType: number;
-  wsdlContent: string;
-  testData: string;
-  soapOperation: string;
-  soapAction: string;
-  soapBinding: string;
-  soapService: string;
-  createTime: number;
-  updateTime: number;
+  beforeInject?: string;
+  afterInject?: string;
+  authInfo?: string;
+  requestMethod?: number;
+  contentType?: number;
+  wsdlContent?: string;
+  testData?: string;
+  soapOperation?: string;
+  soapAction?: string;
+  soapBinding?: string;
+  soapService?: string;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface GrpcApiAttrInfo {
-  authInfo: string;
-  serverHost: string;
-  interfaceName: string;
-  methodName: string;
-  appName: string;
-  group: string;
-  version: string;
-  proto: string;
-  apiRequestMetadata: string;
-  responseMetadata: string;
-  responseTrailingMetadata: string;
-  createTime: number;
-  updateTime: number;
+  authInfo?: string;
+  serverHost?: string;
+  interfaceName?: string;
+  methodName?: string;
+  appName?: string;
+  group?: string;
+  version?: string;
+  proto?: string;
+  apiRequestMetadata?: string;
+  responseMetadata?: string;
+  responseTrailingMetadata?: string;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface RequestParams {
-  headerParams: HeaderParam[];
-  bodyParams: BodyParam[];
-  queryParams: QueryParam[];
-  restParams: RestParam[];
+  headerParams?: HeaderParam[];
+  bodyParams?: BodyParam[];
+  queryParams?: QueryParam[];
+  restParams?: RestParam[];
 }
 
 export interface HeaderParam {
@@ -228,19 +228,19 @@ export interface ResponseList {
 }
 
 export interface ResponseParams {
-  headerParams: HeaderParam[];
-  bodyParams: BodyParam[];
+  headerParams?: HeaderParam[];
+  bodyParams?: BodyParam[];
 }
 
 export interface ResultList {
-  id: number;
-  name: string;
-  httpCode: string;
-  httpContentType: string;
-  type: number;
-  content: string;
-  createTime: number;
-  updateTime: number;
+  id?: number;
+  name?: string;
+  httpCode?: string;
+  httpContentType?: string;
+  type?: number;
+  content?: string;
+  createTime?: number;
+  updateTime?: number;
 }
 
 export interface HistoryInfo {
