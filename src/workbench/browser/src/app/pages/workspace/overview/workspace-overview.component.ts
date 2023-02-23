@@ -6,7 +6,7 @@ import { autorun, reaction } from 'mobx';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
 import { StoreService } from '../../../shared/store/state.service';
-import { ProjectListService } from '../components/project-list/project-list.service';
+import { ProjectListService } from './project-list/project-list.service';
 
 @Component({
   selector: 'eo-workspace-overview',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ElectronService } from '../../../core/services';
+import { WebService } from '../../../core/services';
 @Component({
   selector: 'eo-about',
   template: `
@@ -9,13 +9,27 @@ import { ElectronService } from '../../../core/services';
       <p class="font-bold mt-[15px] text-[16px]">Postcat</p>
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- star -->
-      <a href="https://github.com/Postcatlab/postcat" target="_blank" class="flex items-center mt-[15px]" trace traceID="jump_to_github">
+      <a
+        href="https://github.com/Postcatlab/postcat"
+        target="_blank"
+        class="flex items-center mt-[15px]"
+        trace
+        traceID="jump_to_github"
+        [traceParams]="{ where_jump_to_github: 'star' }"
+      >
         <img loading="lazy" class="mx-4" src="https://img.shields.io/github/stars/postcatlab/postcat?style=social" alt="" />
       </a>
       <p i18n class="text-center mt-[15px]">
         Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
       </p>
-      <a class="favor-image-link mt-[15px]" target="_blank" href="https://github.com/Postcatlab/postcat" trace traceID="jump_to_github">
+      <a
+        class="favor-image-link mt-[15px]"
+        target="_blank"
+        href="https://github.com/Postcatlab/postcat"
+        trace
+        traceID="jump_to_github"
+        [traceParams]="{ where_jump_to_github: 'heart' }"
+      >
         <img loading="lazy" class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
       </a>
       <nz-divider></nz-divider>
@@ -30,10 +44,10 @@ export class AboutComponent implements OnInit {
   list;
   versionInfo;
 
-  constructor(private electron: ElectronService) {}
+  constructor(private web: WebService) {}
 
   ngOnInit(): void {
-    const result = this.electron.getSystemInfo();
+    const result = this.web.getSystemInfo();
     this.versionInfo = {
       version: result.shift().value
     };

@@ -15,7 +15,7 @@ conn
         })
         .on('data', data => {
           console.log(data.toString());
-          if (data.toString().includes('Windows打包发布完成!')) {
+          if (data.toString().includes('Windows 打包发布完成!')) {
             conn.end();
             process.exit();
           }
