@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
@@ -35,7 +35,7 @@ import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
   `,
   styleUrls: ['./token.component.scss']
 })
-export class TokenComponent implements OnInit {
+export class TokenComponent {
   token;
   constructor(
     private api: ApiService,
@@ -44,10 +44,6 @@ export class TokenComponent implements OnInit {
     private store: StoreService
   ) {
     this.token = '';
-  }
-
-  ngOnInit(): void {
-    console.log('Token');
   }
 
   handleCopy(text) {
