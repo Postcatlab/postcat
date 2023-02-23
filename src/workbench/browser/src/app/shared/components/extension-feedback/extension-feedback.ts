@@ -14,6 +14,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
       </div>
     </ng-template>
 
+    <ng-content select="demo"></ng-content>
+
     <ng-container *ngIf="extensionLength">
       <eo-ng-feedback-alert class="block mt-[15px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
       <ng-template #templateRefMsg>
