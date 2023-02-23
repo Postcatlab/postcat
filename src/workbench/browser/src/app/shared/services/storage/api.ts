@@ -62,7 +62,9 @@ const http = {
         { 'logout @post': '/usercenter/common/sso/logout' }, // 退出登录
         { 'search @get': '/api/user', query: 'username' }, // 搜索用户
         { 'thirdLogin @post': '/usercenter/common/third-party/uri', json: 'type, client, redirectUri, appType, ...' },
-        { 'thirdLoginResult @post': '/usercenter/common/third-party/login-check', json: 'code' }
+        { 'thirdLoginResult @post': '/usercenter/common/third-party/login-check', json: 'code' },
+        { 'getToken @get': '/api/user/access-token' }, // 获取 Token
+        { 'resetToken @post': '/api/user/access-token/reset' } // 重置 Token
       ]
     },
     {
