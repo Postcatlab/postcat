@@ -99,6 +99,8 @@ export class AppModule {
 
     //* Inject extension global data
     this.global.injectGlobalData();
+    //* Init local mock server
+    this.mockService.init();
 
     //* Init theme
     const promiseSystem = this.theme.initTheme();
@@ -110,9 +112,6 @@ export class AppModule {
       this.theme.afterAllThemeLoad();
       this.theme.watchInstalledExtensionsChange();
     });
-
-    //* Init local mock server
-    this.mockService.init();
 
     //* Init notification
     this.notification.init();
