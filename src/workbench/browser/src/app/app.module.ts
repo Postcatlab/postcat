@@ -95,6 +95,9 @@ export class AppModule {
       this.lang.init();
     }
 
+    //* Inject extension global data
+    this.global.injectGlobalData();
+
     //* Init theme
     const promiseSystem = this.theme.initTheme();
     //* Init Extension
@@ -108,8 +111,6 @@ export class AppModule {
 
     //* Init local mock server
     this.mockService.init();
-    //* Inject extension global data
-    this.global.injectGlobalData();
 
     //* Init notification
     this.notification.init();

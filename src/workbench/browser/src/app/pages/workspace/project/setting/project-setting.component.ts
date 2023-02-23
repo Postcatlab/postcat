@@ -83,7 +83,6 @@ export class ProjectSettingComponent implements OnInit {
         {
           title: $localize`Setting`,
           type: 'sync',
-          show: () => true,
           onClick: args => this.handleClickCard(args)
         }
       ]
@@ -182,7 +181,7 @@ export class ProjectSettingComponent implements OnInit {
           }
         },
         {
-          label: $localize`Confirm`,
+          label: actionComponent[type] === SyncApiComponent ? $localize`Save Config` : $localize`Confirm`,
           type: 'primary',
           onClick: () => {
             return new Promise(resolve => {
