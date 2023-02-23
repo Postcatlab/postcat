@@ -15,25 +15,9 @@ import schemaJson from './schema.json';
 @Component({
   selector: 'eo-sync-api',
   template: `
-    <ng-container *ngIf="supportList.length; else empty">
+    <extension-feedback [extensionLength]="supportList.length" suggest="@feature:pullAPI">
       <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" />
-    </ng-container>
-    <ng-template #empty>
-      <div class="mb-4" i18n>
-        This feature requires plugin support, please open <a (click)="openExtension()"> Extensions Hub </a>
-        download or open exist extensions.
-      </div>
-    </ng-template>
-
-    <ng-container *ngIf="supportList.length">
-      <eo-ng-feedback-alert class="block mt-[15px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
-      <ng-template #templateRefMsg>
-        <div class="text" i18n
-          >Can't find the format you want?
-          <a (click)="openExtension()">find more...</a>
-        </div>
-      </ng-template>
-    </ng-container>
+    </extension-feedback>
   `
 })
 export class SyncApiComponent implements OnInit, OnChanges {
@@ -82,13 +66,6 @@ export class SyncApiComponent implements OnInit, OnChanges {
     if (changes.model.previousValue.__formater !== changes.model.currentValue.__formater) {
       this.updateExtensionModel();
     }
-  }
-
-  openExtension() {
-    this.messageService.send({
-      type: 'open-extension',
-      data: { suggest: '@feature:pullAPI' }
-    });
   }
 
   updateExtensionModel() {

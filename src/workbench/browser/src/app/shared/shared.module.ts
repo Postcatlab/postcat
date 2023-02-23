@@ -10,6 +10,7 @@ import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessage
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
+import { ExtensionFeedbackComponent } from 'eo/workbench/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
 import { TraceDirective } from 'eo/workbench/browser/src/app/shared/directives/trace.directive';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -28,7 +29,7 @@ import { DownloadClientModalComponent } from './components/download-client.compo
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 
-const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent, EoSchemaFormComponent];
+const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent, EoSchemaFormComponent, ExtensionFeedbackComponent];
 const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective, TraceDirective];
 
 const SHARED_UI_MODULE = [
