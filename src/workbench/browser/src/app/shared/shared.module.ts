@@ -11,7 +11,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
-import { TraceDirective } from 'eo/workbench/browser/src/app/shared/services/trace.directive';
+import { TraceDirective } from 'eo/workbench/browser/src/app/shared/directives/trace.directive';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';

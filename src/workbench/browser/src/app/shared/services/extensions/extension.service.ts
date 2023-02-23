@@ -134,7 +134,7 @@ export class ExtensionService {
               }),
             ...debugExtensions
           ];
-          //Handle featue data
+          //Handle feature data
           result.data = result.data.map(module => {
             let result = this.parseExtensionInfo(module);
             return result;

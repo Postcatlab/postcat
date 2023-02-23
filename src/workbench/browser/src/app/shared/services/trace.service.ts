@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 
+import { ElectronService } from '../../core/services/electron/electron.service';
+
 declare const gio;
 
 @Injectable({
   providedIn: 'root'
 })
 export class TraceService {
-  constructor() {}
+  constructor(private electron: ElectronService) {
+    this.setUser({ client_type: this.electron.isElectron ? 'client' : 'web' });
+  }
 
   report(eventId, params = {}) {
     if (!eventId) {
