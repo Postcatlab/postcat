@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { StoreService } from '../../../shared/store/state.service';
 import { NpsPositionDirective } from '../nps-mask-postion.directive';
@@ -13,6 +14,12 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
   hostDirectives: [NpsPositionDirective]
 })
 export class npsMaskComponent implements OnInit {
+  /**
+   * After durantion,the NPS will show
+   *
+   * In development mode,it will show immediately
+   */
+  duration = APP_CONFIG.production ? 20 : 0;
   constructor(private store: StoreService) {}
   ngOnInit(): void {
     this.bindUserID();
@@ -20,7 +27,7 @@ export class npsMaskComponent implements OnInit {
     //* Trigger NPS after wondering 20 seconds
     setTimeout(() => {
       this.showNps();
-    }, 20 * 1000);
+    }, this.duration * 1000);
   }
   bindUserID() {
     const userProfile = this.store.getUserProfile;
