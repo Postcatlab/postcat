@@ -3,7 +3,7 @@ import { AccountComponent } from 'eo/workbench/browser/src/app/modules/system-se
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { SettingItem } from '../eo-ui/setting/setting.component';
-import { AboutComponent, LanguageSwticherComponent, SelectThemeComponent } from './common';
+import { AboutComponent, LanguageSwticherComponent, SelectThemeComponent, TokenComponent } from './common';
 
 @Component({
   selector: 'eo-system-setting',
@@ -21,6 +21,7 @@ export class SystemSettingComponent {
       },
       comp: AccountComponent
     },
+    { title: $localize`Token`, id: 'token', comp: TokenComponent },
     {
       title: $localize`:@@Theme:Theme`,
       id: 'theme',
