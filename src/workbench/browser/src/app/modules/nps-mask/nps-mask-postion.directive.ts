@@ -103,7 +103,7 @@ export class NpsPositionDirective {
             step = 2;
             this.showTitle = false;
             const tipsDom = this.el.nativeElement.querySelector('.tips');
-            tipsDom.innerText = $localize`Thank you for your feedback`;
+            // tipsDom.innerText = $localize`Thank you for your feedback`;
             return;
           }
 
@@ -123,6 +123,7 @@ export class NpsPositionDirective {
     observer.observe(targetNode, config);
   }
   batchSetPropery(dom, propsObj) {
+    if (!dom) return;
     Object.keys(propsObj).forEach(keyName => {
       dom.style.setProperty(keyName, propsObj[keyName]);
     });
