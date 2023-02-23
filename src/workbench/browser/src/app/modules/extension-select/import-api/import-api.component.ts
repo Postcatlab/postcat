@@ -124,11 +124,12 @@ export class ImportApiComponent implements OnInit {
         //   content = old2new(data, projectUuid, workSpaceUuid);
         //   console.log('new content', content);
         // }
-        const [, err] = await this.apiService.api_projectImport({
+        const [result, err] = await this.apiService.api_projectImport({
           ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
+        console.log('result', result, err);
         if (err) {
           callback(false);
           return;

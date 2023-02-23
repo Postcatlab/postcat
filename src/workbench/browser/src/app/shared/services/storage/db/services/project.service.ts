@@ -16,6 +16,7 @@ import { ApiDataService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 import { EnvironmentService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/environment.service';
 import { GroupService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/group.service';
+import { parseAndCheckApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
 
 export class ProjectService extends BaseService<Project> {
   baseService = new BaseService(dataSource.project);
@@ -233,32 +234,54 @@ export class ProjectService extends BaseService<Project> {
 
     const { data: rootGroup } = await this.groupService.read({ projectUuid, depth: 0 });
 
-    await this.deepCreateGroup(collections, rootGroup);
-    return true;
+    const result = {
+      errors: {
+        apiData: []
+      },
+      successes: {
+        group: [],
+        apiData: [],
+        environment: []
+      }
+    };
+
+    await this.deepCreateGroup(collections, rootGroup, result);
+    return result;
   }
 
-  private bulkCreateApiData(apiList, parentGroup) {
+  private async bulkCreateApiData(apiList, parentGroup, result) {
     const { workSpaceUuid, projectUuid, id: groupId } = parentGroup;
 
-    const apiFilters = apiList.map(n => {
-      const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
-      return {
-        ...rest,
-        // 远程分组 id 替换本地分组 id
-        groupId
-      };
-    });
+    const apiFilters = apiList
+      .filter(item => {
+        const parseResult = parseAndCheckApiData(item);
+        if (!parseResult.validate) {
+          result.errors.apiData.push(item.name || item.uri);
+          return;
+        }
+        return parseResult.validate;
+      })
+      .map(n => {
+        const { id, apiUuid, uuid, workSpaceUuid, ...rest } = n;
+        return {
+          ...rest,
+          // 远程分组 id 替换本地分组 id
+          groupId
+        };
+      });
 
     if (apiFilters.length) {
-      return this.apiDataService.bulkCreate({
+      const createResult = await this.apiDataService.bulkCreate({
         apiList: apiFilters,
         projectUuid,
         workSpaceUuid
       });
+      result.successes.apiData.push(...createResult.data);
+      return createResult;
     }
   }
 
-  private async bulkCreateGroup(groupList: Group[] = [], parentGroup: Group) {
+  private async bulkCreateGroup(groupList: Group[] = [], parentGroup: Group, result) {
     const { workSpaceUuid, projectUuid, id: parentId, depth } = parentGroup;
 
     const groups = groupList.map(n => {
@@ -277,7 +300,7 @@ export class ProjectService extends BaseService<Project> {
       for (const [index, localGroup] of groupList.entries()) {
         // 如果本地分组还有子分组
         if (localGroup.children?.length) {
-          await this.deepCreateGroup(localGroup.children, remoteGroups[index]);
+          await this.deepCreateGroup(localGroup.children, remoteGroups[index], result);
         }
       }
     }
@@ -302,10 +325,10 @@ export class ProjectService extends BaseService<Project> {
   }
 
   /** 递归创建分组及 API */
-  private deepCreateGroup = async (collections = [], parentGroup: Group) => {
+  private deepCreateGroup = async (collections = [], parentGroup: Group, result) => {
     // 将集合筛选为 groupList 和 apiDataList 两组
     const { groupList = [], apiDataList = [] } = this.groupCollections(collections);
 
-    await Promise.all([this.bulkCreateApiData(apiDataList, parentGroup), this.bulkCreateGroup(groupList, parentGroup)]);
+    await Promise.all([this.bulkCreateApiData(apiDataList, parentGroup, result), this.bulkCreateGroup(groupList, parentGroup, result)]);
   };
 }

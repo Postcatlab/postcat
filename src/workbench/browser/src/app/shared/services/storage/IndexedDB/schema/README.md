@@ -13,11 +13,11 @@ npm install typescript-json-schema -g
 2. genreate
 
 ```
-cd  src/workbench/browser/src/app/shared/services/storage
-//genrate apidata
-typescript-json-schema "index.model.ts" 'ApiData' -o "./indexedDB/schema/apiData.json"
+cd  src/workbench/browser/src/app/shared/services/storage/db/models
+//genrate apidata  --ignoreErrors
+typescript-json-schema "apiData.ts" 'ApiData' -o "../schema/apiData.json" 
 //genrate env
-typescript-json-schema "index.model.ts" 'Environment' -o "./indexedDB/schema/env.json"
+typescript-json-schema "index.ts" 'Environment' -o "../schema/env.json"
 ```
 
 3. compare and merge
