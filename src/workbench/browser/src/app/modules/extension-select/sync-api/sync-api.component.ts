@@ -128,7 +128,6 @@ export class SyncApiComponent implements OnInit, OnChanges {
     this.schemaJson.allOf = [];
     let index = 0;
     for (const [name, conf] of this.featureMap) {
-      console.log('name, conf', name, conf);
       if (index++ == 0) {
         this.schemaJson.properties.__formater.default = name;
       }
@@ -162,8 +161,12 @@ export class SyncApiComponent implements OnInit, OnChanges {
 
     if (typeof module[feature.action] === 'function') {
       await this.submit();
-      await module[feature.action]();
-      this.eoMessage.success($localize`Sync Successfully`);
+      const [data, err] = await module[feature.action]();
+      if (err) {
+        this.eoMessage.error(err);
+        return Promise.reject(err);
+      }
+      this.eoMessage.success($localize`Sync API from URL Successfully`);
       this.trace.report('sync_api_from_url_success');
       apiGroupTree?.effect?.getGroupList();
     }

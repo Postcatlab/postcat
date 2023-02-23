@@ -259,7 +259,12 @@ export class ApiGroupTreeComponent implements OnInit {
                 if (status === 'stayModal') {
                   return resolve(true);
                 }
-                this.message.success($localize`${title} successfully`);
+                if (actionComponent[type] === SyncApiComponent) {
+                  this.message.success($localize` Save sync API config successfully`);
+                } else {
+                  this.message.success($localize`${title} successfully`);
+                }
+
                 // * For trace
                 const sync_platform = modal.componentInstance.currentExtension;
                 const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
