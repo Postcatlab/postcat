@@ -2135,7 +2135,7 @@ export class RemoteService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
-        .post(`${prefix}/api/api/sync/batch-update`, {
+        .post(`${prefix}/api/api/batch-update`, {
           projectUuid,
           workSpaceUuid,
           ...items
