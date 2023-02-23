@@ -56,7 +56,7 @@ export class GlobalProvider {
       this.router.navigate(commands, extras);
     };
     window.pc.updateAPIData = (collections = []) => {
-      return this.api.api_projectSyncBatchUpdate(collections);
+      return this.api.api_projectSyncBatchUpdate({ collections });
     };
     window.pc.getGroups = window.pc.getGroup = this.getGroup;
     window.pc.importProject = this.importProject;
