@@ -21,7 +21,6 @@ export class SystemSettingComponent {
       },
       comp: AccountComponent
     },
-    { title: $localize`Token`, id: 'token', comp: TokenComponent },
     {
       title: $localize`:@@Theme:Theme`,
       id: 'theme',
@@ -38,6 +37,7 @@ export class SystemSettingComponent {
       id: 'language',
       comp: LanguageSwticherComponent
     },
+    { title: $localize`Token`, id: 'token', comp: TokenComponent },
     {
       title: $localize`About`,
       id: 'about',
