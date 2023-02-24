@@ -20,7 +20,6 @@ import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
 import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
-import templateJSON from './template.json';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 

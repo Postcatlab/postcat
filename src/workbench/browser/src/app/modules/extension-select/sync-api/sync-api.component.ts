@@ -172,7 +172,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
       }
       this.effectService.getSyncSettingList();
 
-      callback?.(true);
+      callback?.('stayModal');
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {

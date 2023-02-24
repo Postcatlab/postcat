@@ -64,7 +64,7 @@ export class ProjectSettingComponent implements OnInit {
           show: () => this.store.getSyncSettingList.length,
           onClick: async args => {
             this.syncLoading = true;
-            const featureMap = this.extensionService.getValidExtensionsByFature('updateAPI');
+            const featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
 
             if (!featureMap.size) {
               this.message.info($localize`Please Install extension first`);
