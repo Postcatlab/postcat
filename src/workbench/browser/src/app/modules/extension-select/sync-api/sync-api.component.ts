@@ -134,12 +134,21 @@ export class SyncApiComponent implements OnInit, OnChanges {
   };
 
   async syncNow(apiGroupTree) {
+    if (!this.validateForm?.valid) {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return Promise.reject();
+    }
+
     const feature = this.featureMap.get(this.currentExtension);
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
 
     if (typeof module[feature.action] === 'function') {
-      await this.submit();
-      const [data, err] = await module[feature.action]();
+      const [data, err] = await module[feature.action](this.validateForm?.value);
       if (err) {
         this.eoMessage.error(err);
         return Promise.reject(err);

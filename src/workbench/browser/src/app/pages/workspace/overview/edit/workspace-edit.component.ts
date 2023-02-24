@@ -31,9 +31,9 @@ import { StoreService } from '../../../../shared/store/state.service';
               />
               <ng-container *ngIf="!isEdit">
                 <h4 nz-typography>{{ validateForm.value?.title }}</h4>
-                <a nz-button nzType="link" class="ml-[5px]" (click)="startEdit()">
+                <span nz-button nzType="link" class="ml-[5px] cursor-pointer" (click)="startEdit()">
                   <eo-iconpark-icon name="edit"></eo-iconpark-icon>
-                </a>
+                </span>
               </ng-container>
             </div>
           </nz-form-control>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { parseAndCheckCollections } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { MessageService } from './message';
@@ -56,7 +57,7 @@ export class GlobalProvider {
       this.router.navigate(commands, extras);
     };
     window.pc.updateAPIData = (collections = []) => {
-      return this.api.api_projectSyncBatchUpdate({ collections });
+      return this.api.api_projectSyncBatchUpdate({ collections: parseAndCheckCollections(collections) });
     };
     window.pc.getGroups = window.pc.getGroup = this.getGroup;
     window.pc.importProject = this.importProject;
