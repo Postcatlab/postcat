@@ -81,7 +81,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
   }
 
   initData = () => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('updateAPI');
+    this.featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
