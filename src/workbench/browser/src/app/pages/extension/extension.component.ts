@@ -86,7 +86,7 @@ export class ExtensionComponent implements OnInit {
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
     const { key } = event.node.origin;
-    if (this.selectGroup !== key) {
+    if (String(this.nzSelectedKeys) !== key) {
       this.keyword = '';
     }
     this.selectExtension('');

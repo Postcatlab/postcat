@@ -1093,4 +1093,162 @@ export class LocalService {
         });
     });
   }
+
+  api_projectCreateSyncSetting<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - createSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'createSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - createSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'createSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .createSyncSetting({ projectUuid, workSpaceUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - createSyncSetting 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - createSyncSetting 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectUpdateSyncSetting<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - updateSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'updateSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - updateSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'updateSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .updateSyncSetting({ projectUuid, workSpaceUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - updateSyncSetting 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - updateSyncSetting 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectDelSyncSetting<T = any>({
+    id,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
+    if (id == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 id %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 id' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - delSyncSetting 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'delSyncSetting 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .delSyncSetting({ id, projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - delSyncSetting 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - delSyncSetting 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectGetSyncSettingList<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - getSyncSettingList 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'getSyncSettingList 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - getSyncSettingList 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'getSyncSettingList 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .getSyncSettingList({ projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - getSyncSettingList 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - getSyncSettingList 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_projectSyncBatchUpdate<T = any>({
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
+    if (projectUuid == null) {
+      console.log('%c Error: project - syncBatchUpdate 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncBatchUpdate 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: project - syncBatchUpdate 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'syncBatchUpdate 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.project
+        .syncBatchUpdate({ projectUuid, workSpaceUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c project - syncBatchUpdate 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c project - syncBatchUpdate 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
 }

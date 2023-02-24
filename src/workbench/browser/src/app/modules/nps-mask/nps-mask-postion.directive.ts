@@ -1,5 +1,7 @@
 import { Directive, ElementRef } from '@angular/core';
 
+import { TraceService } from '../../shared/services/trace.service';
+
 @Directive({
   selector: '[pcNpsPosition]',
   standalone: true,
@@ -13,7 +15,7 @@ export class NpsPositionDirective {
   showTitle = false;
   showtips = false;
   padding = 30;
-  constructor(private el: ElementRef) {
+  constructor(private el: ElementRef, private trace: TraceService) {
     this.getNpsPosition();
   }
   hideMask() {
@@ -101,6 +103,7 @@ export class NpsPositionDirective {
           if (hasSubmit && step < 2) {
             // console.log('submitNps');
             step = 2;
+            this.trace.report('submit_nps');
             this.showTitle = false;
             const tipsDom = this.el.nativeElement.querySelector('.tips');
             // tipsDom.innerText = $localize`Thank you for your feedback`;

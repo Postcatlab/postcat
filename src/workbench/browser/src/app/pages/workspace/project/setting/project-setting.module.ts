@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
@@ -18,7 +19,8 @@ import { ProjectSettingComponent } from './project-setting.component';
     ExtensionSelectModule,
     NzUploadModule,
     NzCardModule,
-    SharedModule
+    SharedModule,
+    NzToolTipModule
   ],
   declarations: [ProjectSettingComponent]
 })
