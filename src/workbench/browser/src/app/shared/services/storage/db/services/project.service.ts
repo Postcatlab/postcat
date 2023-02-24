@@ -44,7 +44,7 @@ export class ProjectService extends BaseService<Project> {
   async deepIncreUpdateGroup(collections = [], parentGroup: Group) {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
-    const promises = collections.map(async item => {
+    const promises = collections.map(async (item, sort) => {
       if (item.collectionType === CollectionTypeEnum.GROUP) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
@@ -54,11 +54,13 @@ export class ProjectService extends BaseService<Project> {
           workSpaceUuid
         });
         if (targetGroup) {
+          // @ts-ignore
+          this.apiGroupTable.update(targetGroup.id, { sort });
           if (item.children?.length) {
             await this.deepIncreUpdateGroup(item.children, targetGroup);
           }
         } else {
-          const groupID = await this.apiGroupTable.add({ ...item, parentId, depth: depth + 1, projectUuid, workSpaceUuid });
+          const groupID = await this.apiGroupTable.add({ ...item, parentId, sort, depth: depth + 1, projectUuid, workSpaceUuid });
           const group = await this.apiGroupTable.get(groupID);
 
           if (item.children?.length) {
@@ -76,6 +78,7 @@ export class ProjectService extends BaseService<Project> {
           await this.apiDataTable.update(apiData.id, {
             ...apiData,
             ...item,
+            sort,
             groupId: parentId,
             projectUuid,
             workSpaceUuid
@@ -83,6 +86,7 @@ export class ProjectService extends BaseService<Project> {
         } else {
           await this.apiDataTable.add({
             ...item,
+            sort,
             groupId: parentId,
             projectUuid,
             workSpaceUuid
