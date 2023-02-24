@@ -115,10 +115,10 @@ export class ApiGroupTreeComponent implements OnInit {
       this.isLoading = false;
     });
     autorun(() => {
+      this.expandKeys = this.getExpandKeys();
       this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
-        this.expandKeys = this.getExpandKeys();
         console.log(this.expandKeys);
       });
     });
@@ -135,6 +135,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.nzSelectedKeys = uuid && isApiPage ? [uuid] : [];
   }
   getExpandKeys() {
+    this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
     if (!this.route.snapshot.queryParams.uuid) {
       return this.expandKeys;
     }
@@ -307,9 +308,9 @@ export class ApiGroupTreeComponent implements OnInit {
     );
   };
 
-  toggleExpand() {
-    this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
-  }
+  // toggleExpand() {
+  //   this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
+  // }
   /**
    * Group tree item click.
    *
@@ -320,7 +321,7 @@ export class ApiGroupTreeComponent implements OnInit {
     switch (eventName) {
       case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;
-        this.toggleExpand();
+        // this.toggleExpand();
         break;
       }
       case 'clickItem': {

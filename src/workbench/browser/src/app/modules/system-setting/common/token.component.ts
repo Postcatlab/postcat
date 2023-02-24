@@ -5,6 +5,8 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
+import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
+
 @Component({
   selector: 'eo-token',
   template: `
@@ -12,11 +14,11 @@ import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
       <eo-ng-feedback-alert nzType="success" [nzMessage]="templateRefSuccessMessage" i18n-nzMessage i18n-nzDescription>
         <ng-template #templateRefSuccessMessage>
           <section class="pt-1 px-3">
-            <div class="alert-title flex justify-between" i18n>
-              <span>Token succeddfully generated</span>
+            <div class="alert-title flex justify-between">
+              <span i18n>Token succeddfully generated</span>
               <span class="cursor-pointer" (click)="closeAlert()"><eo-iconpark-icon name="close"></eo-iconpark-icon></span>
             </div>
-            <div>Make sure to copy your token. It will never be displayed again.</div>
+            <div i18n>Make sure to copy your token. It will never be displayed again.</div>
             <div>
               <span class="alert-text">{{ token }}</span>
               <button eo-ng-button nzType="text" class="copy-btn mx-2" (click)="handleCopy(token)"
@@ -41,7 +43,8 @@ export class TokenComponent {
     private api: ApiService,
     private message: MessageService,
     private eoMessage: EoNgFeedbackMessageService,
-    private store: StoreService
+    private store: StoreService,
+    private dataSource: DataSourceService
   ) {
     this.token = '';
   }
@@ -59,15 +62,13 @@ export class TokenComponent {
   }
 
   async resetToken() {
-    if (!this.store.isLogin) {
-      this.message.send({ type: 'login', data: {} });
-      return;
-    }
-    const [data, err] = await this.api.api_userResetToken({});
-    if (err) {
-      return;
-    }
-    this.token = data.accessToken;
+    this.dataSource.checkRemoteCanOperate(async () => {
+      const [data, err] = await this.api.api_userResetToken({});
+      if (err) {
+        return;
+      }
+      this.token = data.accessToken;
+    });
   }
 
   async getToken() {}

@@ -13,7 +13,7 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
   styleUrls: ['./nps-mask.component.scss'],
   hostDirectives: [NpsPositionDirective]
 })
-export class npsMaskComponent implements OnInit {
+export class NpsMaskComponent implements OnInit {
   /**
    * After durantion,the NPS will show
    *

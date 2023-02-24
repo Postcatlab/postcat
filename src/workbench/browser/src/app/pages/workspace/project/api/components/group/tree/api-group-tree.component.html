@@ -34,7 +34,6 @@
     </ul>
   </eo-ng-dropdown-menu>
 </header>
-
 <!-- Custom Group -->
 <div class="group-tree">
   <eo-ng-tree-default
@@ -43,9 +42,8 @@
     #apiGroup
     [nzSearchValue]="searchValue"
     [nzHideUnMatched]="true"
-    [nzExpandedKeys]="expandKeys"
+    [(nzExpandedKeys)]="expandKeys"
     (nzClick)="clickTreeItem($event)"
-    (nzExpandChange)="toggleExpand()"
     [nzDraggable]="isEdit"
     nzBlockNode
     (nzOnDrop)="treeItemDrop($event)"
