@@ -9,7 +9,6 @@ import { distinct } from 'rxjs/operators';
 import { ElectronService } from '../../core/services';
 import { ThemeService } from '../../core/services/theme/theme.service';
 import { SettingService } from '../../modules/system-setting/settings.service';
-import { ModalService } from '../../shared/services/modal.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
