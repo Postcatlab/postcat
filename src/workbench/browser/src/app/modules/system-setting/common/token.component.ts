@@ -30,8 +30,7 @@ import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
     <h2 class="text-lg flex justify-between items-center">
       <span class="font-bold text-base mb-2" i18n>Personal Access Token</span>
     </h2>
-    <button eo-ng-button nzType="primary" *ngIf="!token" class="w-32" i18n (click)="resetToken()">Generate Token</button>
-    <button eo-ng-button nzType="primary" *ngIf="token" class="w-32" i18n (click)="resetToken()">Reset Token</button>
+    <button eo-ng-button nzType="primary" trace traceID="generate_token" class="w-32" i18n (click)="resetToken()">Generate Token</button>
   `,
   styleUrls: ['./token.component.scss']
 })
