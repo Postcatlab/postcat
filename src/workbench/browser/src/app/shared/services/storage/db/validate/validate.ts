@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { CollectionTypeEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData, Environment, Group } from '../../index.model';
@@ -65,4 +66,21 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
     console.error(validate.errors, env);
     return { validate: false, error: validate.errors };
   }
+};
+
+export const parseAndCheckCollections = (collections = []) => {
+  return collections.reduce((prev, curr) => {
+    if (curr.collectionType === CollectionTypeEnum.GROUP) {
+      prev.push(curr);
+      if (curr.children?.length) {
+        curr.children = parseAndCheckCollections(curr.children);
+      }
+    } else if (curr.collectionType === CollectionTypeEnum.API_DATA) {
+      const res = parseAndCheckApiData(curr);
+      if (res.validate) {
+        prev.push(res.data);
+      }
+    }
+    return prev;
+  }, []);
 };

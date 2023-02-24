@@ -37,6 +37,10 @@ export const featuresTipsMap = {
     name: $localize`format`,
     suggest: '@feature:syncAPI'
   },
+  pullAPI: {
+    name: $localize`format`,
+    suggest: '@feature:pullAPI'
+  },
   sidebarView: {
     name: $localize`format`,
     suggest: '@feature:sidebarView'

@@ -5,6 +5,7 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
+import { parseAndCheckCollections } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -124,8 +125,12 @@ export class ImportApiComponent implements OnInit {
         //   content = old2new(data, projectUuid, workSpaceUuid);
         //   console.log('new content', content);
         // }
+        const collections = parseAndCheckCollections(data.collections);
         const [result, err] = await this.apiService.api_projectImport({
-          ...data,
+          ...{
+            ...data,
+            collections
+          },
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
