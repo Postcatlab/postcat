@@ -34,15 +34,15 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
         </p>
         <div class="flex items-center">
           <nz-spin *ngIf="!link" class="flex-1 mt-[10px]"></nz-spin>
-          <ng-container *ngIf="link">
-            <span class="truncate flex-1">
-              {{ link }}
-            </span>
-            <button eo-ng-button nzType="text" trace traceID="copy_share_link" (click)="handleCopy()"
-              ><eo-iconpark-icon name="copy"></eo-iconpark-icon
-            ></button>
-          </ng-container>
         </div>
+        <ng-container *ngIf="link">
+          <p nz-typography nzCopyable nzEllipsis [nzCopyText]="link" [nzCopyIcons]="[copedIcon, copedIcon]">
+            {{ link }}
+          </p>
+          <ng-template #copedIcon>
+            <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+          </ng-template>
+        </ng-container>
       </div>
     </ng-template>
   `
