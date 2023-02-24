@@ -119,6 +119,7 @@ export class ApiGroupTreeComponent implements OnInit {
       waitNextTick().then(() => {
         this.initSelectKeys();
         this.expandKeys = this.getExpandKeys();
+        console.log(this.expandKeys);
       });
     });
     reaction(

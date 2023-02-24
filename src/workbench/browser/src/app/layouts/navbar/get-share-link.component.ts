@@ -18,13 +18,13 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
       nzPopoverOverlayClassName="background-popover"
-      nzPopoverTrigger="click"
+      [nzPopoverTrigger]="!store.isLocal ? 'click' : null"
       (click)="handleGetShareLink()"
       trace
       traceID="click_share"
       i18n
     >
-      Share
+      Share API
     </button>
     <ng-template #contentTemplate>
       <div class="w-[360px] py-4">
@@ -73,7 +73,12 @@ export class GetShareLinkComponent {
       });
     }
   }
-  async handleGetShareLink() {
-    this.link = await this.effect.updateShareLink();
+  handleGetShareLink() {
+    this.dataSourceService.checkRemoteCanOperate(async () => {
+      if (this.store.isLocal) {
+        this.message.info($localize`If you want to share API,Please switch to cloud workspace`);
+      }
+      this.link = await this.effect.updateShareLink();
+    });
   }
 }
