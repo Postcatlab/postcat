@@ -161,6 +161,14 @@ export class ApiService {
     return this.remote.api_userThirdLoginResult<T>(params);
   }
 
+  api_userGetToken<T = any>(params: any) {
+    return this.remote.api_userGetToken<T>(params);
+  }
+
+  api_userResetToken<T = any>(params: any) {
+    return this.remote.api_userResetToken<T>(params);
+  }
+
   api_workspaceCreate<T = any>(params: { titles: any }) {
     return this.store.isLocal ? this.local.api_workspaceCreate<T>(params) : this.remote.api_workspaceCreate<T>(params);
   }

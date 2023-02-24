@@ -1241,6 +1241,44 @@ export class RemoteService {
     });
   }
 
+  api_userGetToken<T = any>(params, prefix = '') {
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.get(`${prefix}/api/user/access-token`, params).subscribe({
+        next: ({ code, data, message }: any) => {
+          if (code === 0) {
+            console.log('%c user:getToken - api_userGetToken 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          console.log('Error: ', message);
+          resolve([null, { code, message, data }]);
+        },
+        error: error => {
+          console.log('%c user:getToken - api_userGetToken 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userResetToken<T = any>(params, prefix = '') {
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http.post(`${prefix}/api/user/access-token/reset`, params).subscribe({
+        next: ({ code, data, message }: any) => {
+          if (code === 0) {
+            console.log('%c user:resetToken - api_userResetToken 接口请求成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          console.log('Error: ', message);
+          resolve([null, { code, message, data }]);
+        },
+        error: error => {
+          console.log('%c user:resetToken - api_userResetToken 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
   api_workspaceCreate<T = any>({ titles }, prefix = '') {
     if (titles == null) {
       console.log('%c Error: workspace - create 接口 缺失参数 titles %c', ErrorStyle, '');
