@@ -68,6 +68,7 @@ export interface ExtensionInfo {
      * @deprecated
      */
     syncAPI: FeatureInfo;
+    pullAPI: FeatureInfo;
   };
 
   //*Field for browser generate by code,not actually in package.json
