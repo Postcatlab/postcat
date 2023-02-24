@@ -8,7 +8,7 @@
             i18n-nzErrorTip
             nzErrorTip="Please input your projectName"
           >
-            <div class="flex">
+            <div class="flex items-center">
               <input
                 *ngIf="isEdit"
                 eo-ng-input
@@ -19,7 +19,7 @@
                 [(ngModel)]="projectName"
               />
               <ng-container *ngIf="!isEdit">
-                <h4 nz-typography>{{ projectName }}</h4>
+                <h4 nz-typography class="!mb-[0px]">{{ projectName }}</h4>
                 <span nz-button nzType="link" class="ml-[5px] cursor-pointer" (click)="startEditProjectName()">
                   <eo-iconpark-icon name="edit"></eo-iconpark-icon>
                 </span>

@@ -18,7 +18,7 @@ import { StoreService } from '../../../../shared/store/state.service';
             i18n-nzErrorTip
             nzErrorTip="Please input your new workspace name"
           >
-            <div class="flex">
+            <div class="flex items-center">
               <input
                 *ngIf="isEdit"
                 type="text"
@@ -30,7 +30,7 @@ import { StoreService } from '../../../../shared/store/state.service';
                 (blur)="save()"
               />
               <ng-container *ngIf="!isEdit">
-                <h4 nz-typography>{{ validateForm.value?.title }}</h4>
+                <h4 nz-typography class="!mb-[0px]">{{ validateForm.value?.title }}</h4>
                 <span nz-button nzType="link" class="ml-[5px] cursor-pointer" (click)="startEdit()">
                   <eo-iconpark-icon name="edit"></eo-iconpark-icon>
                 </span>
