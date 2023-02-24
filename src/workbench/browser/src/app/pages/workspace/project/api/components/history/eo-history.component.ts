@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Protocol, requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
@@ -20,7 +21,7 @@ export class HistoryComponent implements OnInit {
   requestMethodMap = requestMethodMap;
   nzSelectedKeys: NzTreeNodeKey[];
   getTestHistory = [];
-  constructor(private router: Router, private store: ApiStoreService, private effect: ApiEffectService) {}
+  constructor(private router: Router, private store: ApiStoreService, private trace: TraceService, private effect: ApiEffectService) {}
 
   ngOnInit(): void {
     this.effect.getHistoryList();
@@ -38,6 +39,7 @@ export class HistoryComponent implements OnInit {
     return method.length > 5 ? method.slice(0, 3) : method;
   }
   gotoTestHistory(e) {
+    this.trace.report('click_api_test_history');
     this.nzSelectedKeys = [];
     const origin = e.node.origin;
     const protocol = origin.request?.protocol === Protocol.WEBSOCKET ? 'ws' : 'http';

@@ -93,6 +93,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
+  isDragging = false;
 
   beforeScriptCompletions = beforeScriptCompletions;
   afterScriptCompletions = afterScriptCompletions;
@@ -147,7 +148,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       this.receiveMessage(message);
     });
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
-      console.log('this.status$', status);
       this.changeStatus(status);
     });
   }
@@ -416,10 +416,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
 
   onResizeEnd() {
+    this.isDragging = false;
     this.trace.report('drag_test_response_height', { test_response_height: this.responseContainerHeight });
   }
 
   onResize({ height }: NzResizeEvent): void {
+    this.isDragging = true;
     this.responseContainerHeight = height;
     localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, String(height));
   }

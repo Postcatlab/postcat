@@ -47,7 +47,10 @@
           <eo-history class="tree-sider"></eo-history>
         </eo-ng-tab>
       </eo-ng-tabset>
-      <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
+      <nz-resize-handle class="vertical container-draggable" [ngClass]="{ isDragging }" nzDirection="right">
+        <div class="left"></div>
+        <div class="right"></div>
+      </nz-resize-handle>
     </eo-ng-content>
   </eo-ng-sider>
   <eo-ng-content class="inner-content">
@@ -102,7 +105,10 @@
         [nzMinWidth]="RIGHT_SIDER_SHRINK_WIDTH"
         (nzResize)="onRightPanelResize($event)"
       >
-        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left"> </nz-resize-handle>
+        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left">
+          <div class="left"></div>
+          <div class="right"></div>
+        </nz-resize-handle>
         <div class="flex flex-col p-2">
           <ng-container *ngFor="let item of rightExtras">
             <button

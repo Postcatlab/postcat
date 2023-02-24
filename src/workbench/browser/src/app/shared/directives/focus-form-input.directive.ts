@@ -16,8 +16,8 @@ export class FormFocusDirective implements AfterViewInit {
       const dom = this.element.nativeElement.querySelector(className);
       if (dom) {
         input = dom;
+        return true;
       }
-      return true;
     });
     if (input) {
       setTimeout(() => {

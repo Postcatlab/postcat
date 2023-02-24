@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
 
 import { PageBlankComponent } from '../layouts/page-blank/page-blank.component';
 import { PagesComponent } from './pages.component';
@@ -29,10 +28,6 @@ const routes: Routes = [
       {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
-      },
-      {
-        path: 'extensionSidebarView/:extName',
-        component: ExtensionAppComponent
       }
     ]
   }

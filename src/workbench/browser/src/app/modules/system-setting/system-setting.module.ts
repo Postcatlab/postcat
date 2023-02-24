@@ -11,7 +11,7 @@ import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
 import { EoSettingModule } from '../eo-ui/setting/setting.module';
 import { LogoModule } from '../logo/logo.module';
-import { AboutComponent, DataStorageComponent, LanguageSwticherComponent } from './common';
+import { AboutComponent, DataStorageComponent, LanguageSwticherComponent, TokenComponent } from './common';
 import { AccountComponent } from './common/account.component';
 import { SelectThemeComponent } from './common/select-theme/select-theme.component';
 import { SystemSettingComponent } from './system-setting.component';
@@ -22,6 +22,7 @@ const ANTDMODULES = [NzDividerModule, NzInputNumberModule, NzEmptyModule, NzDesc
     SystemSettingComponent,
     SelectThemeComponent,
     AccountComponent,
+    TokenComponent,
     DataStorageComponent,
     LanguageSwticherComponent,
     AboutComponent

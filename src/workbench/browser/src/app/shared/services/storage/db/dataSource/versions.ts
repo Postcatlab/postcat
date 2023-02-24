@@ -47,4 +47,12 @@ export const setupVersions = (db: DataSourceInstance) => {
       mock: '++id, name, projectUuid, workSpaceUuid'
     })
     .upgrade(migrationToV4);
+
+  /**
+   * 0.3.0
+   * 新增项目同步配置
+   */
+  db.version(5).stores({
+    projectSyncSetting: '++id, &uuid, pluginId, pluginSettingJson, projectUuid, workSpaceUuid'
+  });
 };

@@ -161,6 +161,14 @@ export class ApiService {
     return this.remote.api_userThirdLoginResult<T>(params);
   }
 
+  api_userGetToken<T = any>(params: any) {
+    return this.remote.api_userGetToken<T>(params);
+  }
+
+  api_userResetToken<T = any>(params: any) {
+    return this.remote.api_userResetToken<T>(params);
+  }
+
   api_workspaceCreate<T = any>(params: { titles: any }) {
     return this.store.isLocal ? this.local.api_workspaceCreate<T>(params) : this.remote.api_workspaceCreate<T>(params);
   }
@@ -259,6 +267,26 @@ export class ApiService {
 
   api_projectImport<T = any>(params: any) {
     return this.store.isLocal ? this.local.api_projectImport<T>(params) : this.remote.api_projectImport<T>(params);
+  }
+
+  api_projectCreateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_projectCreateSyncSetting<T>(params) : this.remote.api_projectCreateSyncSetting<T>(params);
+  }
+
+  api_projectUpdateSyncSetting<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_projectUpdateSyncSetting<T>(params) : this.remote.api_projectUpdateSyncSetting<T>(params);
+  }
+
+  api_projectDelSyncSetting<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectDelSyncSetting<T>(params) : this.remote.api_projectDelSyncSetting<T>(params);
+  }
+
+  api_projectGetSyncSettingList<T = any>(params: { projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_projectGetSyncSettingList<T>(params) : this.remote.api_projectGetSyncSettingList<T>(params);
+  }
+
+  api_projectSyncBatchUpdate<T = any>(params: { projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_projectSyncBatchUpdate<T>(params) : this.remote.api_projectSyncBatchUpdate<T>(params);
   }
 
   api_roleList<T = any>(params: any) {

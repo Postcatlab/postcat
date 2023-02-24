@@ -28,13 +28,12 @@
         <li nz-menu-item (click)="addGroup()" i18n>New Group</li>
       </a>
       <li nz-menu-divider></li>
-      <a>
-        <li nz-menu-item i18n trace traceID="click_import_project" (click)="importAPI()">Import API </li>
+      <a *ngFor="let item of extensionActions">
+        <li nz-menu-item trace [traceID]="item.traceID" (click)="item.click(item.title)">{{ item.menuTitle }} </li>
       </a>
     </ul>
   </eo-ng-dropdown-menu>
 </header>
-
 <!-- Custom Group -->
 <div class="group-tree">
   <eo-ng-tree-default
@@ -43,9 +42,8 @@
     #apiGroup
     [nzSearchValue]="searchValue"
     [nzHideUnMatched]="true"
-    [nzExpandedKeys]="expandKeys"
+    [(nzExpandedKeys)]="expandKeys"
     (nzClick)="clickTreeItem($event)"
-    (nzExpandChange)="toggleExpand()"
     [nzDraggable]="isEdit"
     nzBlockNode
     (nzOnDrop)="treeItemDrop($event)"

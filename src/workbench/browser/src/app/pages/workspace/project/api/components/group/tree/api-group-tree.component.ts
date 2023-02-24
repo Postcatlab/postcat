@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { requestMethodMap } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
+import { SyncApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/sync-api/sync-api.component';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
@@ -21,6 +22,11 @@ import { ApiEffectService } from '../../../service/store/api-effect.service';
 import { ApiStoreService } from '../../../service/store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
+
+const actionComponent = {
+  sync: SyncApiComponent,
+  import: ImportApiComponent
+};
 
 const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllAPIId)];
 @Component({
@@ -73,6 +79,21 @@ export class ApiGroupTreeComponent implements OnInit {
     }
   ];
 
+  extensionActions = [
+    {
+      title: $localize`:@@ImportAPI:Import API`,
+      menuTitle: $localize`Import from file`,
+      traceID: 'click_import_project',
+      click: title => this.importAPI('import', title)
+    },
+    {
+      title: $localize`Sync API from URL`,
+      menuTitle: $localize`Sync API from URL`,
+      traceID: 'sync_api_from_url',
+      click: title => this.importAPI('sync', title)
+    }
+  ];
+
   constructor(
     public electron: ElectronService,
     public globalStore: StoreService,
@@ -94,10 +115,11 @@ export class ApiGroupTreeComponent implements OnInit {
       this.isLoading = false;
     });
     autorun(() => {
+      this.expandKeys = this.getExpandKeys();
       this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
-        this.expandKeys = this.getExpandKeys();
+        console.log(this.expandKeys);
       });
     });
     reaction(
@@ -113,6 +135,7 @@ export class ApiGroupTreeComponent implements OnInit {
     this.nzSelectedKeys = uuid && isApiPage ? [uuid] : [];
   }
   getExpandKeys() {
+    this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
     if (!this.route.snapshot.queryParams.uuid) {
       return this.expandKeys;
     }
@@ -204,32 +227,57 @@ export class ApiGroupTreeComponent implements OnInit {
       action: 'new'
     });
   }
-  importAPI() {
-    const title = $localize`:@@ImportAPI:Import API`;
+  importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({
       nzTitle: title,
-      nzContent: ImportApiComponent,
+      nzContent: actionComponent[type],
       nzComponentParams: {},
-      nzOnOk: () =>
-        new Promise(resolve => {
-          modal.componentInstance.submit(status => {
-            this.effect.getGroupList();
-            if (!status) {
-              this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-              return resolve(true);
-            }
-            if (status === 'stayModal') {
-              return resolve(true);
-            }
-            this.message.success($localize`${title} successfully`);
-            // * For trace
-            const sync_platform = modal.componentInstance.currentExtension;
-            const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
-            this.trace.report('import_project_success', { sync_platform, workspace_type });
+      nzFooter: [
+        {
+          label: $localize`Cancel`,
+          onClick: () => modal.destroy()
+        },
+        {
+          label: $localize`Sync Now`,
+          show: () => actionComponent[type] === SyncApiComponent && modal.componentInstance?.supportList?.length,
+          disabled: () => !modal.componentInstance?.isValid,
+          onClick: async () => {
+            await modal.componentInstance?.syncNow?.(this);
             modal.destroy();
-            return resolve(true);
-          });
-        })
+          }
+        },
+        {
+          label: actionComponent[type] === SyncApiComponent ? $localize`Save Config` : $localize`Confirm`,
+          type: 'primary',
+          onClick: () => {
+            return new Promise(resolve => {
+              modal.componentInstance.submit(status => {
+                this.effect.getGroupList();
+                if (!status) {
+                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                  return resolve(true);
+                }
+                if (status === 'stayModal') {
+                  return resolve(true);
+                }
+                //Sync API
+                if (actionComponent[type] === SyncApiComponent) {
+                  this.message.success($localize` Save sync API config successfully`);
+                  return resolve(true);
+                }
+
+                // Import API
+                this.message.success($localize`${title} successfully`);
+                // * For trace
+                const sync_platform = modal.componentInstance.currentExtension;
+                const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
+                this.trace.report('import_project_success', { sync_platform, workspace_type });
+                modal.destroy();
+              }, modal);
+            });
+          }
+        }
+      ]
     });
   }
 
@@ -260,9 +308,9 @@ export class ApiGroupTreeComponent implements OnInit {
     );
   };
 
-  toggleExpand() {
-    this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
-  }
+  // toggleExpand() {
+  //   this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
+  // }
   /**
    * Group tree item click.
    *
@@ -273,7 +321,7 @@ export class ApiGroupTreeComponent implements OnInit {
     switch (eventName) {
       case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;
-        this.toggleExpand();
+        // this.toggleExpand();
         break;
       }
       case 'clickItem': {
