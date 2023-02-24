@@ -4,7 +4,7 @@ import { has, omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
-import { ModalOptions, ModalService } from '../../shared/services/modal.service';
+import { EoModalOptions, ModalService } from '../../shared/services/modal.service';
 import { BodyParam } from '../../shared/services/storage/db/models/apiData';
 import { enumsToArr, eoDeepCopy, JSONParse } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
@@ -18,7 +18,7 @@ export class ApiTableService {
       item = eoDeepCopy(omit(item, ['childList']));
       item.paramAttr = item.paramAttr || {};
       item.paramAttr.paramValueList = JSONParse(item.paramAttr.paramValueList, []);
-      const modalConf: ModalOptions = {
+      const modalConf: EoModalOptions = {
         nzTitle: $localize`More Settings`,
         nzContent: ApiParamsExtraSettingComponent,
         nzWidth: '60%',

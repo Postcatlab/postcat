@@ -157,7 +157,10 @@
     (nzResize)="onResize($event)"
     (nzResizeEnd)="onResizeEnd()"
   >
-    <nz-resize-handle class="z-10 horizontal container-draggable" nzDirection="top"> </nz-resize-handle>
+    <nz-resize-handle class="z-10 horizontal container-draggable" [ngClass]="{ isDragging }" nzDirection="top">
+      <div class="top"></div>
+      <div class="bottom"></div>
+    </nz-resize-handle>
     <!-- Response -->
     <eo-ng-tabset
       [nzTabBarStyle]="{ 'padding-left': '10px' }"

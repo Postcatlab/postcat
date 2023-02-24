@@ -60,8 +60,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
           isShare: false,
           isOffical: false,
           icon: item.icon,
-          activeRoute: `home/extensionSidebarView/${item.extensionID}`,
-          route: `home/extensionSidebarView/${item.extensionID}`
+          activeRoute: `home/workspace/project/extensionSidebarView/${item.extensionID}`,
+          route: `home/workspace/project/extensionSidebarView/${item.extensionID}`
         });
       }
     });

@@ -5,16 +5,8 @@
 
       border: 1px solid transparent;
 
-      .operate-btn-list {
-        visibility: hidden;
-      }
-
       &:hover {
         border: 1px solid var(--primary-color);
-
-        .operate-btn-list {
-          visibility: visible;
-        }
       }
     }
   }

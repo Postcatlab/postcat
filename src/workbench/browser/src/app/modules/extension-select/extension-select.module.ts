@@ -9,10 +9,11 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { EoIconparkIconModule } from '../eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { ExportApiComponent } from './export-api/export-api.component';
 import { ImportApiComponent } from './import-api/import-api.component';
+import { PushApiComponent } from './push-api/push-api.component';
 import { ExtensionSelectComponent } from './select/extension-select.component';
-import { PushApiComponent } from './sync-api/sync-api.component';
+import { SyncApiComponent } from './sync-api/sync-api.component';
 
-const COMPONENTS = [ExtensionSelectComponent, ExportApiComponent, ImportApiComponent, PushApiComponent];
+const COMPONENTS = [ExtensionSelectComponent, ExportApiComponent, ImportApiComponent, PushApiComponent, SyncApiComponent];
 @NgModule({
   imports: [EoNgRadioModule, NzUploadModule, EoNgFeedbackTooltipModule, EoIconparkIconModule, CommonModule, FormsModule, SharedModule],
   declarations: [...COMPONENTS]
