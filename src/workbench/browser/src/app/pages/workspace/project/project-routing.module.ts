@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
 
 import { RedirectProjectID } from '../../services/redirect.services';
 
@@ -27,6 +28,10 @@ const routes: Routes = [
     canActivate: [RedirectProjectID],
     runGuardsAndResolvers: 'always',
     loadChildren: () => import('./setting/project-setting.module').then(m => m.ProjectSettingModule)
+  },
+  {
+    path: 'extensionSidebarView/:extName',
+    component: ExtensionAppComponent
   }
 ];
 
