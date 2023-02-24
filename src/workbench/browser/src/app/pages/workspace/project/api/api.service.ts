@@ -23,7 +23,7 @@ export class ProjectApiService {
       ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
       : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
     if (err || !result?.[0]) {
-      this.message.error($localize`Can't find this Api`);
+      this.message.error($localize`Can't find this API`);
       return;
     }
     const apiData = result[0];

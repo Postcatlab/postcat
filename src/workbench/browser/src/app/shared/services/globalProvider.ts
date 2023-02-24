@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { parseAndCheckCollections } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { MessageService } from './message';
@@ -31,6 +32,15 @@ export class GlobalProvider {
     window.pc = {};
     window.pc.modalService = this.modalService;
     window.pc.getExtensionSettings = this.setting.getConfiguration;
+    window.pc.getProjectSettings = async name => {
+      const [data] = await this.api.api_projectGetSyncSettingList({});
+      const target = data.find(n => n.pluginId === name);
+      try {
+        return JSON.parse(target.pluginSettingJson);
+      } catch (error) {
+        return target;
+      }
+    };
     /** prload 里面同时有的方法 end */
     window.pc.navigate = (commands: any[], extras?: NavigationExtras) => {
       if (commands[0] === 'home/extension/detail') {
@@ -45,6 +55,9 @@ export class GlobalProvider {
       });
       console.log(commands[0]);
       this.router.navigate(commands, extras);
+    };
+    window.pc.updateAPIData = (collections = []) => {
+      return this.api.api_projectSyncBatchUpdate({ collections: parseAndCheckCollections(collections) });
     };
     window.pc.getGroups = window.pc.getGroup = this.getGroup;
     window.pc.importProject = this.importProject;
@@ -173,29 +186,5 @@ export class GlobalProvider {
     });
     // console.log('importProject result', result);
     return result;
-
-    // return new Promise(resolve => {
-    //   // 只能导入到当前 项目 所以 currentProjectID写死。。。
-    //   this.storage.run('projectImport', [currentProjectID, rest, groupID], (result: StorageRes) => {
-    //     console.log('result', result);
-    //     if (result.status === StorageResStatus.success) {
-    //       resolve(
-    //         this.serializationData({
-    //           status: 0,
-    //           ...result
-    //         })
-    //       );
-    //     } else {
-    //       resolve(
-    //         this.serializationData({
-    //           status: -1,
-    //           data: null,
-    //           error: result
-    //         })
-    //       );
-    //     }
-    //     console.log('projectImport result', result);
-    //   });
-    // });
   };
 }

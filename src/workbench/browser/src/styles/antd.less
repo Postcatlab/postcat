@@ -197,19 +197,43 @@ nz-resize-handle.container-draggable {
   z-index: 10;
   background-color: var(--system-border-color);
 
-  &:hover {
+  &:hover,
+  &.isDragging {
     background-color: var(--primary-color);
   }
 
   &.vertical {
     cursor: col-resize;
-    width: 5px;
-    border-left: 2px solid var(--tree-background-color);
-    border-right: 2px solid var(--background-color);
+    width: 1px;
 
-    &:hover {
-      border-left: 1px solid var(--background-color);
-      border-right: 1px solid var(--background-color);
+    > div.left,
+    > div.right {
+      position: absolute;
+      background-color: transparent;
+      width: 2px;
+      top: 0;
+      bottom: 0;
+      z-index: 99999;
+    }
+
+    > div.left {
+      right: 1px;
+    }
+
+    > div.right {
+      left: 1px;
+    }
+
+    &:hover,
+    &.isDragging {
+      width: 5px;
+      right: -2px;
+      z-index: 9999999;
+
+      > div.left,
+      > div.right {
+        width: 0;
+      }
     }
   }
 
@@ -224,13 +248,36 @@ nz-resize-handle.container-draggable {
   &.horizontal {
     width: 100%;
     cursor: row-resize;
-    height: 5px;
-    border-top: 2px solid var(--background-color);
-    border-bottom: 2px solid var(--background-color);
+    height: 1px;
 
-    &:hover {
-      border-top: 1px solid var(--background-color);
-      border-bottom: 1px solid var(--background-color);
+    > div.left,
+    > div.right {
+      position: absolute;
+      background-color: transparent;
+      height: 2px;
+      left: 0;
+      right: 0;
+      z-index: 99999;
+    }
+
+    > div.top {
+      top: 1px;
+    }
+
+    > div.bottom {
+      bottom: 1px;
+    }
+
+    &:hover,
+    &.isDragging {
+      height: 5px;
+      bottom: -2px;
+      z-index: 9999999;
+
+      > div.left,
+      > div.right {
+        height: 0;
+      }
     }
   }
 }
@@ -240,6 +287,10 @@ Theme color
 **/
 .ant-card {
   color: var(--text-color);
+  background-color: var(--background-color);
+}
+.ant-card-bordered {
+  border-color: var(--system-border-color);
 }
 .ant-form-item-explain-error {
   color: var(--danger-color);
@@ -261,4 +312,11 @@ Theme color
 
 .ant-code-editor {
   background-color: var(--background-color);
+}
+
+h4.ant-typography,
+div.ant-typography-h4,
+div.ant-typography-h4 > textarea,
+.ant-typography h4 {
+  color: var(--text-color);
 }

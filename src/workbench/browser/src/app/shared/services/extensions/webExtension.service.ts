@@ -31,8 +31,8 @@ export class WebExtensionService {
   debugExtensionNames;
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService, private store: ExtensionStoreService) {
-    this.debugExtensionNames =
-      !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname) ? [] : [];
+    const isDevEnv = !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname);
+    this.debugExtensionNames = isDevEnv ? ['postcat-sync-swagger'] : [];
   }
   async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json
@@ -166,14 +166,15 @@ export class WebExtensionService {
 
   async getPkgInfo(extName: string, version = 'latest') {
     const newestExt = this.store.getExtensionList.find(val => val.name === extName);
-    version = version === 'latest' ? newestExt?.version : version;
-
+    version = version === 'latest' ? newestExt?.version || 'latest' : version;
     let pkgInfo;
-    if (version === newestExt.version) {
+    if (version === newestExt?.version) {
       pkgInfo = newestExt;
     } else {
-      const res = await fetch(`${this.resourceUrl}/${extName}@${version}/package.json`);
-      pkgInfo = res.status === 200 ? JSONParse(res.json()) : null;
+      pkgInfo = await fetch(`${this.resourceUrl}/${extName}@${version}/package.json`)
+        .then(res => res.json())
+        .catch(e => {});
+      // pkgInfo = res.status === 200 ? JSONParse(res.json()) : null;
     }
     if (!pkgInfo) return null;
 
@@ -216,7 +217,6 @@ export class WebExtensionService {
         }
       }
     }
-
     // Get i18n by http request, if not exist in package.json
     if (!pkgInfo.i18n?.length && pkgInfo.features.i18n) {
       pkgInfo.i18n = await this.getExtI18n(pkgInfo.name);

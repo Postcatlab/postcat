@@ -34,26 +34,27 @@ export class ExtensionService {
   ) {}
   async init() {
     await this.requestList('init');
-    if (!this.electron.isElectron) {
-      const installedName = [];
 
-      //Get extensions
-      [...this.webExtensionService.installedList, ...defaultExtensions.map(name => ({ name }))].forEach(val => {
-        if (this.installedList.some(m => m.name === val.name)) return;
-        installedName.push(val.name);
-      });
-
-      //* Install Extension by foreach because of async
-      const uniqueNames = Array.from(new Set(installedName));
-      for (let i = 0; i < uniqueNames.length; i++) {
-        const name = uniqueNames[i];
-        await this.installExtension({
-          name
-        });
-      }
-    } else {
+    if (this.electron.isElectron) {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'init'
+      });
+    }
+
+    //* Web Installl
+    const installedName = [];
+    //Get extensions
+    [...this.webExtensionService.installedList, ...defaultExtensions.map(name => ({ name }))].forEach(val => {
+      if (this.installedList.some(m => m.name === val.name)) return;
+      installedName.push(val.name);
+    });
+
+    //* Install Extension by foreach because of async
+    const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
+    for (let i = 0; i < uniqueNames.length; i++) {
+      const name = uniqueNames[i];
+      await this.installExtension({
+        name
       });
     }
   }

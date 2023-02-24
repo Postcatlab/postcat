@@ -217,12 +217,16 @@ export class PCTree {
     return this.loopFindGroupByID(this.list, id);
   }
   private loopFindGroupByID(list, id): Group {
-    return list.find(group => {
-      if (group.id === id) return true;
+    let result;
+    list.find(group => {
+      if (group.id === id) {
+        return (result = group);
+      }
       if (group.children) {
-        return this.loopFindGroupByID(group.children, id);
+        return (result = this.loopFindGroupByID(group.children, id));
       }
     });
+    return result;
   }
   add(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;

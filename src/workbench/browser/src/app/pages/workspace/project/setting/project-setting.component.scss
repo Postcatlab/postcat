@@ -1,0 +1,12 @@
+::ng-deep .project-info-tooltip {
+  .ant-tooltip-arrow-content::before {
+    background: linear-gradient(to right bottom, var(--background-color), var(--background-color));
+    background-repeat: no-repeat;
+    background-position: -10px -10px;
+  }
+
+  .ant-tooltip-inner {
+    background-color: var(--background-color);
+    width: 260px;
+  }
+}

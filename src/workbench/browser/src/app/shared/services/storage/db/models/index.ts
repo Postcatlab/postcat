@@ -22,6 +22,13 @@ export interface Project extends Base {
   workSpaceUuid: string;
   description?: string;
 }
+export interface ProjectSyncSetting extends Base {
+  pluginId: string;
+  projectUuid: string;
+  workSpaceUuid: string;
+  crontab?: number;
+  pluginSettingJson?: string;
+}
 
 export interface Group extends Base {
   type: number;

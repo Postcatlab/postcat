@@ -26,7 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
-import { npsMaskModule } from './modules/nps-mask/nps-mask.module';
+import { NpsMaskModule } from './modules/nps-mask/nps-mask.module';
 import { PcConsoleModule } from './modules/pc-console/pc-console.module';
 import { MockService } from './shared/services/mock.service';
 registerLocaleData(en);
@@ -35,7 +35,7 @@ registerLocaleData(zh);
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    npsMaskModule,
+    NpsMaskModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -97,6 +97,11 @@ export class AppModule {
       this.lang.init();
     }
 
+    //* Inject extension global data
+    this.global.injectGlobalData();
+    //* Init local mock server
+    this.mockService.init();
+
     //* Init theme
     const promiseSystem = this.theme.initTheme();
     //* Init Extension
@@ -107,11 +112,6 @@ export class AppModule {
       this.theme.afterAllThemeLoad();
       this.theme.watchInstalledExtensionsChange();
     });
-
-    //* Init local mock server
-    this.mockService.init();
-    //* Inject extension global data
-    this.global.injectGlobalData();
 
     //* Init notification
     this.notification.init();
