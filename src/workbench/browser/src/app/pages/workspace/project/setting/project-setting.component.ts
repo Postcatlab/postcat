@@ -55,7 +55,6 @@ export class ProjectSettingComponent implements OnInit {
     {
       title: $localize`Sync`,
       icon: 'play-cycle',
-      desc: $localize`Sync API from URL`,
       btns: [
         {
           title: $localize`Sync`,
@@ -83,6 +82,7 @@ export class ProjectSettingComponent implements OnInit {
         {
           title: $localize`Setting`,
           type: 'sync',
+          desc: $localize`Sync API from URL`,
           onClick: args => this.handleClickCard(args)
         }
       ]

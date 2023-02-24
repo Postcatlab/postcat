@@ -10,7 +10,7 @@ const compMap = {
 @Component({
   selector: 'eo-schema-form',
   template: `
-    <form nz-form [formGroup]="validateForm" class="form mt-2">
+    <form nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
@@ -22,12 +22,12 @@ const compMap = {
             {{ properties[field]?.label }}
           </nz-form-label>
         </ng-container>
-        <!-- 二级说明 -->
+        <!-- Description -->
         <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
           {{ properties[field]?.description }}
         </div>
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
-          <!-- 字符串类型 -->
+          <!-- String -->
           <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.string">
             <input
               type="text"
@@ -41,7 +41,7 @@ const compMap = {
             />
           </ng-container>
 
-          <!-- 布尔类型 -->
+          <!-- Switch -->
           <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.boolean">
             <eo-ng-switch
               [(ngModel)]="model[field]"
@@ -53,7 +53,7 @@ const compMap = {
             </eo-ng-switch>
           </ng-container>
 
-          <!-- 数字类型 -->
+          <!-- Number -->
           <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.number">
             <nz-input-number
               [(ngModel)]="model[field]"
@@ -65,7 +65,7 @@ const compMap = {
             </nz-input-number>
           </ng-container>
 
-          <!-- 单选框 -->
+          <!-- Radio -->
           <ng-container *ngIf="properties[field]?.type !== 'array' && properties[field]?.['ui:widget'] === 'radio'">
             <eo-ng-radio-group
               [(ngModel)]="model[field]"
