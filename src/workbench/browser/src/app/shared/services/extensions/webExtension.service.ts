@@ -217,7 +217,6 @@ export class WebExtensionService {
         }
       }
     }
-    console.log(pkgInfo);
     // Get i18n by http request, if not exist in package.json
     if (!pkgInfo.i18n?.length && pkgInfo.features.i18n) {
       pkgInfo.i18n = await this.getExtI18n(pkgInfo.name);

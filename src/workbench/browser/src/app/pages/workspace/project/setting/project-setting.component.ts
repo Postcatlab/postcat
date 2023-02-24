@@ -196,7 +196,18 @@ export class ProjectSettingComponent implements OnInit {
                     resolve(true);
                     return;
                   }
+                  //Sync API
+                  if (actionComponent[type] === SyncApiComponent) {
+                    this.message.success($localize` Save sync API config successfully`);
+                    return resolve(true);
+                  }
+
+                  // Import API
                   this.message.success($localize`${title} successfully`);
+                  // * For trace
+                  const sync_platform = modal.componentInstance.currentExtension;
+                  const workspace_type = this.store.isLocal ? 'local' : 'remote';
+                  this.trace.report('import_project_success', { sync_platform, workspace_type });
                   modal.destroy();
                 } else {
                   this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
