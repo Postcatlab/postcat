@@ -105,7 +105,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     this.schemaJson.allOf = [];
     let index = 0;
     for (const [name, conf] of this.featureMap) {
-      if (index++ == 0) {
+      if (index++ === 0) {
         this.schemaJson.properties.__formater.default = name;
       }
       // 创建 formater 单选框组
