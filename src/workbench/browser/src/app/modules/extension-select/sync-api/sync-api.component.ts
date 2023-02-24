@@ -10,7 +10,8 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject, takeUntil } from 'rxjs';
 
-import schemaJson from './schema.json';
+import { eoDeepCopy } from '../../../utils/index.utils';
+import { SYNC_API_SCHEMA } from './schema';
 
 @Component({
   selector: 'eo-sync-api',
@@ -25,7 +26,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   currentExtension = '';
   currentFormater;
-  schemaJson = structuredClone(schemaJson);
+  schemaJson = eoDeepCopy(SYNC_API_SCHEMA);
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
 

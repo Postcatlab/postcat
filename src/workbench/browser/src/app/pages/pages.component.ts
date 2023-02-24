@@ -38,7 +38,7 @@ export class PagesComponent implements OnInit {
     });
 
     // Show cookie tips
-    if (!this.hasShowCookieTips && this.lang.systemLanguage === 'en-US') {
+    if (!(this.hasShowCookieTips || this.electron.isElectron) && this.lang.systemLanguage === 'en-US') {
       StorageUtil.set('has_show_cookie_tips', true);
       this.showCookiesTips();
     }

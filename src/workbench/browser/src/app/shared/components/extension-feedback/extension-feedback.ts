@@ -30,7 +30,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 export class ExtensionFeedbackComponent {
   @Input() extensionLength = 0;
   @Input() suggest = '';
-  @Input() tipsText = 'format';
+  @Input() tipsText = $localize`format`;
 
   constructor(private messageService: MessageService) {}
 

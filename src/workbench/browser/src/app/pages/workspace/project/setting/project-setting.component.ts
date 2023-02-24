@@ -55,6 +55,7 @@ export class ProjectSettingComponent implements OnInit {
     {
       title: $localize`Sync`,
       icon: 'play-cycle',
+      desc: $localize`Sync API from URL`,
       btns: [
         {
           title: $localize`Sync`,
@@ -67,7 +68,7 @@ export class ProjectSettingComponent implements OnInit {
             const featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
 
             if (!featureMap.size) {
-              return this.message.info($localize`Please Install extension first`);
+              return this.message.info($localize`Please install extension first`);
             }
 
             for (const [name, info] of featureMap) {
@@ -80,7 +81,7 @@ export class ProjectSettingComponent implements OnInit {
               }
             }
             this.syncLoading = false;
-            this.message.success($localize`Sync Successfully`);
+            this.message.success($localize`Sync successfully`);
             this.trace.report('sync_api_from_url_success');
           }
         },

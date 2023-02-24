@@ -29,7 +29,7 @@
       </a>
       <li nz-menu-divider></li>
       <a *ngFor="let item of extensionActions">
-        <li nz-menu-item i18n trace [traceID]="item.traceID" (click)="item.click(item.title)">{{ item.menuTitle }} </li>
+        <li nz-menu-item trace [traceID]="item.traceID" (click)="item.click(item.title)">{{ item.menuTitle }} </li>
       </a>
     </ul>
   </eo-ng-dropdown-menu>

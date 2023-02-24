@@ -16,7 +16,7 @@ import { StoreService } from '../../../../shared/store/state.service';
           <nz-form-control
             [nzValidateStatus]="!validateForm || validateForm.value?.title ? '' : 'error'"
             i18n-nzErrorTip
-            nzErrorTip="Please input your new work name"
+            nzErrorTip="Please input your new workspace name"
           >
             <div class="flex">
               <input
