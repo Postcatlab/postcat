@@ -4,14 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "codegen":"playwright codegen localhost:4200",
     "test": "playwright test",
     "test:watch": "playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "^1.27.0",
-    "playwright": "^1.27.0"
+    "@playwright/test": "^1.31.1",
+    "playwright": "^1.31.1"
   },
   "dependencies": {
-    "ark-pkg": "0.5.1"
+    "ark-pkg": "0.5.4"
   }
 }
