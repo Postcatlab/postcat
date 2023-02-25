@@ -26,7 +26,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
-import { NpsMaskModule } from './modules/nps-mask/nps-mask.module';
 import { PcConsoleModule } from './modules/pc-console/pc-console.module';
 import { MockService } from './shared/services/mock.service';
 registerLocaleData(en);
@@ -35,7 +34,6 @@ registerLocaleData(zh);
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    NpsMaskModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
