@@ -131,10 +131,9 @@ export class SyncApiComponent implements OnInit, OnChanges {
         }
       });
     }
-    console.log('featureMap', this.featureMap);
   };
 
-  async syncNow(apiGroupTree) {
+  async syncNow(): Promise<boolean | string> {
     if (!this.validateForm?.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -142,48 +141,27 @@ export class SyncApiComponent implements OnInit, OnChanges {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
-      return Promise.reject();
+      return false;
     }
-
     const feature = this.featureMap.get(this.currentExtension);
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
 
-    if (typeof module[feature.action] === 'function') {
-      const [data, err] = await module[feature.action](this.validateForm?.value);
-      if (err) {
-        this.eoMessage.error(err);
-        return Promise.reject(err);
-      }
-      this.eoMessage.success($localize`Sync API from URL Successfully`);
-      this.trace.report('sync_api_from_url_success');
-      apiGroupTree?.effect?.getGroupList();
+    if (typeof module[feature.action] !== 'function') return false;
+    const [data, err] = await module[feature.action](this.validateForm?.value);
+    if (err) {
+      this.eoMessage.error($localize`Sync API from URL error: ${err}`);
+      return 'stayModal';
     }
+    // this.eoMessage.success($localize`Sync API from URL Successfully`);
+    this.trace.report('sync_api_from_url_success');
+    return true;
   }
 
   async submit(callback?, modal?) {
     if (!this.supportList.length) {
       return modal?.destroy?.();
     }
-    if (this.validateForm?.valid) {
-      const { __formater, __crontab, ...rest } = this.validateForm.value;
-      console.log('submit', this.validateForm.value);
-      const params = {
-        id: this.currentFormater?.id,
-        pluginId: __formater,
-        crontab: __crontab,
-        pluginSettingJson: JSON.stringify(rest)
-      };
-      const [data, err] = await this.apiService[params.id ? 'api_projectUpdateSyncSetting' : 'api_projectCreateSyncSetting'](params);
-
-      if (err) {
-        console.error(err.msg);
-        callback?.('stayModal');
-        return;
-      }
-      this.effectService.getSyncSettingList();
-
-      callback?.('stayModal');
-    } else {
+    if (!this.validateForm?.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
@@ -191,6 +169,24 @@ export class SyncApiComponent implements OnInit, OnChanges {
         }
       });
       callback?.('stayModal');
+      return;
     }
+    const { __formater, __crontab, ...rest } = this.validateForm.value;
+    const params = {
+      id: this.currentFormater?.id,
+      pluginId: __formater,
+      crontab: __crontab,
+      pluginSettingJson: JSON.stringify(rest)
+    };
+    const [data, err] = await this.apiService[params.id ? 'api_projectUpdateSyncSetting' : 'api_projectCreateSyncSetting'](params);
+    if (err) {
+      this.eoMessage.error(err.msg);
+      console.error(err.msg);
+      callback?.('stayModal');
+      return;
+    }
+    this.effectService.getSyncSettingList();
+    const result = await this.syncNow();
+    callback(result);
   }
 }
