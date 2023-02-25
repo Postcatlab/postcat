@@ -178,42 +178,22 @@ export class ProjectSettingComponent implements OnInit {
           onClick: () => modal.destroy()
         },
         {
-          label: $localize`Sync Now`,
-          show: () => actionComponent[type] === SyncApiComponent && modal.componentInstance?.supportList?.length,
-          disabled: () => !modal.componentInstance?.isValid,
-          onClick: async () => {
-            await modal.componentInstance?.syncNow?.();
-            modal.destroy();
-          }
-        },
-        {
-          label: actionComponent[type] === SyncApiComponent ? $localize`Save Config` : $localize`Confirm`,
+          label: actionComponent[type] === SyncApiComponent ? $localize`Save and Sync` : $localize`Confirm`,
           type: 'primary',
+          disabled: () => !modal.componentInstance?.isValid,
           onClick: () => {
             return new Promise(resolve => {
               modal.componentInstance.submit(status => {
-                if (status) {
-                  if (status === 'stayModal') {
-                    resolve(true);
-                    return;
-                  }
-                  //Sync API
-                  if (actionComponent[type] === SyncApiComponent) {
-                    this.message.success($localize` Save sync API config successfully`);
-                    return resolve(true);
-                  }
-
-                  // Import API
-                  this.message.success($localize`${title} successfully`);
-                  // * For trace
-                  const sync_platform = modal.componentInstance.currentExtension;
-                  const workspace_type = this.store.isLocal ? 'local' : 'remote';
-                  this.trace.report('import_project_success', { sync_platform, workspace_type });
-                  modal.destroy();
-                } else {
+                if (!status) {
                   this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                  return resolve(true);
                 }
+                if (status === 'stayModal') {
+                  return resolve(true);
+                }
+                this.message.success($localize`${title} successfully`);
                 resolve(true);
+                modal.destroy();
               });
             });
           }

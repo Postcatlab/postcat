@@ -15,6 +15,7 @@ import packageJson from '../../../../../../../../package.json';
 })
 export class PushApiComponent implements OnInit {
   currentExtension = '';
+  isValid = true;
   supportList: any[] = [];
   featureMap: Map<string, FeatureInfo>;
   private destroy$: Subject<void> = new Subject<void>();
