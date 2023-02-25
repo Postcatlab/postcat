@@ -1,11 +1,8 @@
-//Other module
-
-//I18n
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
@@ -24,6 +21,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GlobalErrorHandler } from './core/services/errorHandle.service';
 import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
 import { PcConsoleModule } from './modules/pc-console/pc-console.module';
@@ -50,6 +48,7 @@ registerLocaleData(zh);
     IndexedDBStorage,
     HttpStorage,
     ThemeService,
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     {
       provide: TABLE_PRO_CONFIG,
       useValue: {

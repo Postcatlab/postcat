@@ -20,6 +20,7 @@ import pkgInfo from '../../../../../../../../package.json';
 export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
+  isValid = true;
   featureMap: Map<string, FeatureInfo>;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
