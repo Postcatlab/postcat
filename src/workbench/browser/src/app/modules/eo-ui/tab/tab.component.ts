@@ -78,7 +78,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
    * Select tab
    */
   selectChange($event) {
-    this.tabOperate.navigateTabRoute(this.getCurrentTab());
+    this.tabOperate.navigateByTab(this.getCurrentTab());
   }
   async closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
     if (this.checkTabCanLeave && !(await this.checkTabCanLeave(tab))) {
@@ -154,7 +154,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
    * @returns
    */
   getExistTabByUrl(url: string): TabItem | null {
-    const existTab = this.tabOperate.getSameContentTab(this.tabOperate.getBasicInfoFromUrl(url));
+    const existTab = this.tabOperate.getSameTab(this.tabOperate.getBasicInfoFromUrl(url));
     if (!existTab) {
       return null;
     }

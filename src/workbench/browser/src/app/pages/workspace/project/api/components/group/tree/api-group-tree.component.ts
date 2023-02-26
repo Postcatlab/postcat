@@ -191,7 +191,7 @@ export class ApiGroupTreeComponent implements OnInit {
   addAPI(group?) {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
-      queryParams: { groupId: group?.key }
+      queryParams: { groupId: group?.key, pageID: Date.now() }
     });
   }
   deleteAPI(apiInfo) {

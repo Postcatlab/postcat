@@ -259,7 +259,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       requestAnimationFrame(async () => {
         if (this.codeEdtor) {
           this.updateReadOnlyCode(async () => {
-            await this.codeEdtor.getAction('editor.action.formatDocument').run();
+            await this.codeEdtor.getAction('editor.action.formatDocument')?.run();
             resolve(this.codeEdtor.getValue() || '');
           }, this.config.readOnly);
         } else {
