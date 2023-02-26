@@ -115,6 +115,8 @@ class EoBrowserWindow {
     const opts = {
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
+      minWidth: 400,
+      minHeight: 300,
       webPreferences: {
         webSecurity: false,
         preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
