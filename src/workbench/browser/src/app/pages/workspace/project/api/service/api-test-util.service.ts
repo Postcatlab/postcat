@@ -167,7 +167,6 @@ export class ApiTestUtilService {
       //* Query Priority is higher than url
       nowOperate: 'query'
     });
-    console.log(tmpResult);
     result.uri = tmpResult.url;
     result.requestParams.queryParams = tmpResult.query;
 

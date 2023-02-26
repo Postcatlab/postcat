@@ -253,6 +253,7 @@ export class TabOperateService {
     const existTab = this.getSameContentTab(pureTab);
 
     const nextTab = this.generateTabFromUrl(res.url);
+
     //!Every tab must has pageID
     //If lack pageID,Jump to exist tab item to keep same  pageID and so on
     if (!pureTab.uuid) {

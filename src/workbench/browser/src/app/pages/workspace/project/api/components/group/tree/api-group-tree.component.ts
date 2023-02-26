@@ -117,7 +117,6 @@ export class ApiGroupTreeComponent implements OnInit {
       this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
-        console.log(this.expandKeys);
       });
     });
     reaction(
@@ -289,9 +288,6 @@ export class ApiGroupTreeComponent implements OnInit {
     );
   };
 
-  // toggleExpand() {
-  //   this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
-  // }
   /**
    * Group tree item click.
    *

@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit, ViewChildren, TemplateRef, QueryList } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
@@ -41,7 +41,10 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
-  validateForm: FormGroup;
+
+  validateForm: FormGroup = new FormGroup({
+    groupId: new FormControl('')
+  });
   isSaving = false;
   groups: NzTreeNode[];
   initTimes = 0;
@@ -112,7 +115,8 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
         const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
+
+        // Ctrl+s
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           event.preventDefault();
 
@@ -254,7 +258,6 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       controls[name] = [this.model[name] || '', [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
-    // pcConsole.log('initBasicForm', controls);
   }
   private getFormdata(): ApiData {
     const { name, uri, groupId } = this.validateForm.value;
