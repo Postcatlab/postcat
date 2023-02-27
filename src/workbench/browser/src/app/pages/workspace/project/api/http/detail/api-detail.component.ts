@@ -42,15 +42,6 @@ export class ApiDetailComponent implements TabViewComponent {
     public apiStore: ApiStoreService,
     private message: EoNgFeedbackMessageService
   ) {}
-  handleCopy(link) {
-    if (!link) {
-      return;
-    }
-    const isOk = copy(link);
-    if (isOk) {
-      this.message.success($localize`Copied`);
-    }
-  }
   async init() {
     if (!this.model) {
       this.model = {} as ApiData;

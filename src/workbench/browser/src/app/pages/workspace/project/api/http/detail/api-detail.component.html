@@ -1,19 +1,16 @@
 <div class="w-full p-base">
   <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model?.uri" [nzActive]="true"> </nz-skeleton>
   <div *ngIf="model?.uri">
-    <div class="flex items-center justify-between">
-      <div class="flex flex-wrap items-center min-w-0">
+    <div class="flex flex-wrap items-center">
+      <div class="flex items-center">
         <nz-tag [class]="model.protocol | apiFormater : 'protocal' | lowercase">{{ model.protocol | apiFormater : 'protocal' }}</nz-tag>
         <eo-api-methods-tag [type]="model?.apiAttrInfo?.requestMethod | apiFormater : 'requestMethod'"></eo-api-methods-tag>
-        <div class="flex items-center w-full mt-[10px]">
-          <span class="truncate">
-            {{ url }}
-          </span>
-          <button eo-ng-button nzType="text" class="mx-2" (click)="handleCopy(model.uri)"
-            ><eo-iconpark-icon name="copy"></eo-iconpark-icon
-          ></button>
-        </div>
       </div>
+      <p class="flex-1" [nzContent]="url" nz-typography nzCopyable nzEllipsis [nzCopyText]="url" [nzCopyIcons]="[copedIcon, copedIcon]">
+      </p>
+      <ng-template #copedIcon>
+        <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+      </ng-template>
     </div>
     <p class="truncate mt-[10px]">{{ model.name }}</p>
     <!-- Request Headers -->
