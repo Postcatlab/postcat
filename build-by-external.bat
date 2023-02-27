@@ -2,9 +2,9 @@
 @rem 打包脚本名称，如leeqia_simple，对于于SetupScripts目录下的具体文件夹名称
 @set project_name=%1
 @rem electron中配置的guid，用于指定注册表中的key
-@set electron_guid=%2
+@set electron_guid=Postcat
 @rem 软件版本号
-@set electron_app_version=%3
+@set electron_app_version=0.3.0
 @rem 完整的安装包名
 @set output_setup_file_name=%4
 @rem 是安装到所有用户下，还是安装到当前用户下，all/current
