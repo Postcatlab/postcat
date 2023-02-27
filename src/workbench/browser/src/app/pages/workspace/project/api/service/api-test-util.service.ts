@@ -137,11 +137,12 @@ export class ApiTestUtilService {
       if (!(val.isRequired && val.name)) {
         return acc;
       }
-      return { ...acc, [val.name]: val['paramAttr.example'] || val.paramAttr?.example || '' };
+      return { ...acc, [val.name]: val['paramAttr.example'] || '' };
     }, {});
     Object.keys(restByName).forEach(restName => {
       try {
-        result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
+        const pattStr = `{${restName}}`;
+        result = result.replace(new RegExp(pattStr, 'g'), restByName[restName] || pattStr);
       } catch (e) {}
     });
     return result;
