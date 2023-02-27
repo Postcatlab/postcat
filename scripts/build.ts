@@ -61,6 +61,8 @@ const config: Configuration = {
   ],
   generateUpdatesFilesForAllChannels: true,
   nsis: {
+    // 指定guid，此guid会存放在注册表中，如果没有指定则系统会自动生成
+    guid: 'Postcat',
     oneClick: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
