@@ -124,6 +124,7 @@ export class EoSchemaFormComponent implements OnInit {
   }
 
   // https://json-schema.org/understanding-json-schema/reference/conditionals.html#if-then-else
+  // 在线测试：https://jsonschema.dev/s/hpWFy
   initIfThenElse(configuration) {
     if (Array.isArray(configuration?.allOf)) {
       const ifFields = configuration.allOf.reduce((prev, curr) => {
