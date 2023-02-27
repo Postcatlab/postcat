@@ -11,7 +11,7 @@ const compMap = {
 @Component({
   selector: 'eo-schema-form',
   template: `
-    <form *ngIf="isInit && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
+    <form *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
@@ -92,7 +92,7 @@ export class EoSchemaFormComponent implements OnChanges {
   objectKeys = Object.keys;
   properties = {};
   compMap = compMap;
-  isInit = true;
+  isInited = true;
 
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({});
@@ -108,12 +108,12 @@ export class EoSchemaFormComponent implements OnChanges {
   }
 
   init = debounce(() => {
-    this.isInit = false;
+    this.isInited = false;
     this.formatProperties();
     this.initIfThenElse(this.configuration);
 
     setTimeout(() => {
-      this.isInit = true;
+      this.isInited = true;
       this.setSettingsModel(this.properties);
     });
   }, 50);
