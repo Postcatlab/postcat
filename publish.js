@@ -23,6 +23,7 @@ const cpFile = (fromFile, toFile) =>
     client.copy(bucket, fromFile, bucket, toFile, err => (err ? resolve(false) : resolve(true)));
   });
 
+// * If you need to revert, change the version, such as v0.3.0
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
