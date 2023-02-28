@@ -1,5 +1,5 @@
 <div class="w-full p-base">
-  <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model?.uri" [nzActive]="true"> </nz-skeleton>
+  <nz-skeleton *ngIf="!globalStore.isLocal" [nzLoading]="!model?.uri" [nzActive]="true"> </nz-skeleton>
   <div *ngIf="model?.uri">
     <div class="flex flex-wrap items-center">
       <div class="flex items-center">

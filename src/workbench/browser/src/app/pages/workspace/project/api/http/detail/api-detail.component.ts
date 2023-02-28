@@ -7,6 +7,7 @@ import { ApiStoreService } from 'eo/workbench/browser/src/app/pages/workspace/pr
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { cloneDeep } from 'lodash-es';
+import { reaction } from 'mobx';
 
 import { enumsToObject } from '../../../../../../utils/index.utils';
 import { ProjectApiService } from '../../api.service';
@@ -30,19 +31,29 @@ export class ApiDetailComponent implements TabViewComponent {
     private route: ActivatedRoute,
     private projectApi: ProjectApiService,
     public electron: ElectronService,
-    public store: StoreService,
-    public apiStore: ApiStoreService
-  ) {}
+    public globalStore: StoreService,
+    public store: ApiStoreService
+  ) {
+    this.watchEnvChange();
+  }
+  watchEnvChange() {
+    reaction(
+      () => this.store.getCurrentEnv,
+      (env: any) => {
+        this.url = this.getEnvUrl(this.model.uri);
+      }
+    );
+  }
   private getEnvUrl(url) {
-    if (!this.apiStore.getCurrentEnv?.hostUri) return url;
+    if (!this.store.getCurrentEnv?.hostUri) return url;
     try {
       const isUrl = new URL(url);
       if (isUrl.origin) {
         return url;
       }
-      return this.apiStore.getCurrentEnv.hostUri + url;
+      return this.store.getCurrentEnv.hostUri + url;
     } catch (e) {
-      return this.apiStore.getCurrentEnv.hostUri + url;
+      return this.store.getCurrentEnv.hostUri + url;
     }
   }
   async init() {
