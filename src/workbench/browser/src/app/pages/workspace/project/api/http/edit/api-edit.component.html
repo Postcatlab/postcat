@@ -12,8 +12,15 @@
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <nz-form-item nz-col class="flex-1">
+          <!-- <button
+            class="absolute invisible h-0"
+            nz-popconfirm
+            nzPopconfirmPlacement="top"
+            nzPopconfirmTitle="There is domain name information in your path, whether to add it to the environment?"
+            [nzPopconfirmVisible]="showEnvTips"
+          ></button> -->
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-            <input type="text" class="rounded-r" name="uri" (blur)="updateParamsbyUri()" eo-ng-input formControlName="uri" />
+            <input type="text" class="rounded-r" name="uri" (blur)="blurUri()" eo-ng-input formControlName="uri" />
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>

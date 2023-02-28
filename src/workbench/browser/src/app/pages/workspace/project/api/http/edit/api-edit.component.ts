@@ -41,7 +41,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   @Output() readonly afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
-
+  // showEnvTips = false;
   validateForm: FormGroup = new FormGroup({
     groupId: new FormControl('')
   });
@@ -130,9 +130,11 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
-  updateParamsbyUri() {
+  blurUri() {
+    this.updateParamsbyUri();
+  }
+  private updateParamsbyUri() {
     const url = this.validateForm.controls['uri'].value;
-
     this.model.requestParams.queryParams = syncUrlAndQuery(url, this.model.requestParams.queryParams, {
       nowOperate: 'url',
       method: 'keepBoth'
@@ -277,5 +279,15 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
         this.emitChangeFun();
       });
     });
+    // this.validateForm.get('uri').valueChanges.subscribe(uri => {
+    //   this.showEnvTips = false;
+    //   try {
+    //     const url = new URL(uri);
+    //     if (url.host) {
+    //       this.showEnvTips = true;
+    //       console.log(this.showEnvTips);
+    //     }
+    //   } catch (e) {}
+    // });
   }
 }

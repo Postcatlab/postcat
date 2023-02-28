@@ -1,13 +1,11 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ApiStoreService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/store/api-state.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
 
 import { enumsToObject } from '../../../../../../utils/index.utils';
@@ -24,13 +22,7 @@ export class ApiDetailComponent implements TabViewComponent {
   CONST = {
     BODY_TYPE: enumsToObject(ApiBodyType)
   };
-  get url() {
-    const isUrl = /^https?:/;
-    if (isUrl.test(this.model.uri)) {
-      return this.model.uri;
-    }
-    return this.apiStore.getCurrentEnv?.hostUri + this.model.uri;
-  }
+  url: string = '';
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
@@ -39,9 +31,20 @@ export class ApiDetailComponent implements TabViewComponent {
     private projectApi: ProjectApiService,
     public electron: ElectronService,
     public store: StoreService,
-    public apiStore: ApiStoreService,
-    private message: EoNgFeedbackMessageService
+    public apiStore: ApiStoreService
   ) {}
+  private getEnvUrl(url) {
+    if (!this.apiStore.getCurrentEnv?.hostUri) return url;
+    try {
+      const isUrl = new URL(url);
+      if (isUrl.origin) {
+        return url;
+      }
+      return this.apiStore.getCurrentEnv.hostUri + url;
+    } catch (e) {
+      return this.apiStore.getCurrentEnv.hostUri + url;
+    }
+  }
   async init() {
     if (!this.model) {
       this.model = {} as ApiData;
@@ -53,6 +56,8 @@ export class ApiDetailComponent implements TabViewComponent {
         console.error(`Can't no find api`);
       }
     }
+
+    this.url = this.getEnvUrl(this.model.uri);
     this.eoOnInit.emit(this.model);
   }
 }
