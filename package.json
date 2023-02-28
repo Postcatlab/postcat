@@ -18,6 +18,7 @@
     "build": "npx patch-package && npm-run-all -s electron:build:web clear:electron:tsc electron:tsc && npx esno scripts/build.ts",
     "build:web": "yarn workspace postcat-web run build:web",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && npx esno scripts/build.ts",
+    "build:win:noSign": "npm run clear:electron:tsc&&npm run electron:tsc && npx esno scripts/buildNoSign.ts",
     "electron:build:web": "yarn workspace postcat-web run build",
     "electron:static": "npm run electron:tsc && electron .",
     "release": "npm-run-all -s electron:build:web electron:tsc && npx esno scripts/build.ts --publish=always && node upload.js",
