@@ -69,7 +69,7 @@ export class ModuleHandler extends CoreHandler {
    * @param isLocal 本地安装用link
    */
   async install(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
-    // * Check the registry before install
+    // * Check the registry before install, you can see the log in terminal
     // const check = spawn('npm', ['config', 'get', 'registry']);
     // check.stdout
     //   .on('data', (data: string) => {
