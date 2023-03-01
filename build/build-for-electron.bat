@@ -48,7 +48,7 @@ Call get_electron_app_version.bat
 @echo !define /ifndef PRODUCT_VERSION        	   "%electron_app_version%.0"				#版本号	>> %pre_define_file%
 @echo !define /ifndef INSTALL_OUTPUT_NAME    		"%output_setup_file_name%"	#默认的安装包名称，在bat中控制传入  >> %pre_define_file%
 @echo !define /ifndef INSTALL_LOCATION_KEY 		    "InstallLocation"				#默认的注册表中安装位置的key值    >> %pre_define_file%
-@echo !define /ifndef TEST_SLEEP 				 1		#测试安装过程中的延时开关，方便查看进度变化和轮播图，实际使用，请改成0    >> %pre_define_file%
+@echo !define /ifndef TEST_SLEEP 				 0		#测试安装过程中的延时开关，方便查看进度变化和轮播图，实际使用，请改成0    >> %pre_define_file%
 
 :: 以下注释的这部分，都是在soft_setup.nsi中有默认的值，如果你要修改，则将下面的指定注释打开，并修改宏的值(也可以直接在soft_setup.nsi中修改)
 :: @echo !define /ifndef PRODUCT_PUBLISHER      		"Leeqia"				#发布者    >> %pre_define_file%

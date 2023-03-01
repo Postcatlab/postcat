@@ -2,7 +2,7 @@
 @set output_filename=%2
 @rem 打包模式1是app.7z, 2是no7z，3是online
 @set package_mode=%3
-@set uninst_name=uninst.exe
+@set uninst_name="Uninstall Postcat.exe"
 @set unpacket_file_dir_name=%4
 @set project_name=%5
 @set more_macro=%6
@@ -27,23 +27,23 @@ if %auto_write_uninst% == 1 (
 ) ^
 else ( 
 	@rem 生成带uninst.exe的安装包
-	del .\Output\%output_filename%
+	del ..\release\%output_filename%
 	@echo sleep
 	ping -n 3 127.0.0.1 > nul
 	".\NSIS\makensis.exe" /DBUILD_FOR_GENERATE_UNINST=1 %more_macro% %auto_write_uninst_macro% /DUNINST_FILE_NAME=%uninst_name% /DINSTALL_OUTPUT_NAME=%output_filename% %more_macro% "%nsi_path%"
 	@echo sleep
 	ping -n 3 127.0.0.1 > nul
-	del .\Output\%uninst_name%
+	del ..\release\%uninst_name%
 	@rem 释放uninst.exe
-	.\Output\%output_filename%
+	..\release\%output_filename%
 	@rem uninst.exe签名
 	if %need_sign% == 1 ( 
 	    cd .\Sign\
-		Call sign.bat ..\Output\%uninst_name%
+		Call sign.bat ...\release\%uninst_name%
 		cd ..\
 	)	
 	@rem 复制uninst.exe到FilesToInstall
-	copy .\Output\%uninst_name% ".\%unpacket_file_dir_name%\"
+	copy ..\release\%uninst_name% ".\%unpacket_file_dir_name%\"
 )
 
 if "%package_mode%" == "1" ( 
@@ -61,17 +61,17 @@ else if "%package_mode%" == "3" (
 	@echo. >> ".\SetupScripts\app.nsh"
 	
 	@rem 生成在线的app.7z至Output目录下
-	del ".\Output\app.7z"
-	7z.exe a ".\Output\app.7z" ".\%unpacket_file_dir_name%\*.*" -r
+	del "..\release\app.7z"
+	7z.exe a "..\release\app.7z" ".\%unpacket_file_dir_name%\*.*" -r
 	@rem 生成config.ini
-	del ".\Output\config.ini"
+	del "..\release\config.ini"
 	"./Helper/NSISHelper.exe" --mode="generate_online_config" --src="%~dp0\Output\app.7z" --dst="%~dp0\Output\config.ini"
 	
 	@set more_macro=/DINSTALL_DOWNLOAD_7Z=1
 )
 
 @rem 打正常包
-del .\Output\%output_filename%
+del ..\release\%output_filename%
 @echo sleep
 ping -n 3 127.0.0.1 > nul
 @echo ".\NSIS\makensis.exe" %auto_write_uninst_macro% /DUNINST_FILE_NAME=%uninst_name% /DINSTALL_OUTPUT_NAME=%output_filename% %more_macro% "%nsi_path%"

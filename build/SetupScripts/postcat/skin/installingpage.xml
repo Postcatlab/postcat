@@ -2,7 +2,7 @@
 <Windows>
 <!-- 进度 -->
   <VerticalLayout >
-    <ImageShow images="images\banner1.png images\banner2.png" padding="30,20,0,0" imagecount="2" elapse="2500" loop="true" width="500" height="200" />
+    <ImageShow images="images\banner2.png" padding="30,20,0,0" imagecount="1" elapse="2500" loop="true" width="500" height="200" />
 	
 		
 	<Slider name="slrProgress" padding="20,80,20,0" height="8" value="1" min="0" max="100" mouse="false" forecolor="0xFF32C5FF" forecolor2="0xFF5158EF" thumbsize="0,0" bkcolor="#FFE3E3E3"  />

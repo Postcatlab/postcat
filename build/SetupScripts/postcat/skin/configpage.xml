@@ -3,9 +3,9 @@
    <!-- 安装目录 -->
    <VerticalLayout >
    
-	<Control padding="215,55,0,0" width="130" height="130" bkimage="images\logo2.png" />
+	<Control padding="215,55,0,0" width="130" height="130" bkimage="images\postcat_logo.png" />
 	
-	<Label name="instinfo" padding="20,-16,20,0" height="22" font="3" align="center" textcolor="0xFFFFFFFF" text="客户端平台" />
+	<Label name="instinfo" padding="20,-16,20,0" height="22" font="3" align="center" textcolor="0xFFFFFFFF" text="Postcat" />
 	<VerticalLayout float="true" pos="0,214,560,350" name="config-bottom" >
 	<Button name="btnInstall" visible="true" cursor="hand" width="160" height="56" font="1" textpadding="0,-18,0,0" padding="200,0,200,0" textcolor="0xFF333333" align="center" msgid="msg.install" text="快速安装" normalimage="images/install_btn_bk_normail.png" hotimage="images/install_btn_bk_hover.png" pushedimage="images/install_btn_bk_push.png" disabledimage="images/install_btn_bk_not.png"  />
 	
@@ -22,8 +22,8 @@
 	</VerticalLayout>
 	
 	<HorizontalLayout name="license_layer" float="true" visible="true" pos="20,314,280,330" >
-	<CheckBox name="chkAgree" width="110" font="0" msgid="msg.agree" text="我已阅读并同意" />
-	<Button name="btnAgreement" cursor="hand" padding="-10,0,0,0" msgid="msg.licence" text="《用户许可协议》" showhtml="true" textcolor="#FF0091FF" font="0" width="140" align="left" height="16"/>
+	<CheckBox name="chkAgree" visible="false" width="110" font="0" msgid="msg.agree" text="我已阅读并同意" />
+	<Button name="btnAgreement" visible="false" cursor="hand" padding="-10,0,0,0" msgid="msg.licence" text="《用户许可协议》" showhtml="true" textcolor="#FF0091FF" font="0" width="140" align="left" height="16"/>
 	</HorizontalLayout>	
 	
 	<HorizontalLayout name="morelayer" float="true" visible="false" pos="398,300,560,350" >

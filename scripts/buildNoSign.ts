@@ -13,6 +13,7 @@ import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'nod
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
+const pkgPath = path.join(__dirname, '../package.json');
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
@@ -80,13 +81,13 @@ const config: Configuration = {
   ],
   win: {
     icon: 'src/app/common/images/logo.ico',
-    target: ['nsis', 'portable'],
-    extraFiles: [
-      {
-        from: './build/Uninstall Postcat.exe',
-        to: '.'
-      }
-    ]
+    target: ['nsis', 'portable']
+    // extraFiles: [
+    //   {
+    //     from: './build/Uninstall Postcat.exe',
+    //     to: '.'
+    //   }
+    // ]
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
@@ -116,6 +117,21 @@ const config: Configuration = {
   }
 };
 
+// 这里动态往 package.json 中写入 electron-builder 配置，主要是为了给 build-for-electron.bat 脚本读取配置
+const modifyPkgInfo = () => {
+  // @ts-ignore
+  pkgInfo.build = config;
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+  // 退出进程/意外退出进程 时主动还原 package.json 信息
+  process.on('exit', restorePkgInfo);
+};
+
+const restorePkgInfo = () => {
+  Reflect.deleteProperty(pkgInfo, 'build');
+  // 还原 package.json 文件
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+};
+
 // 要打包的目标平台
 const targetPlatform: Platform = {
   darwin: Platform.MAC,
@@ -133,10 +149,7 @@ Promise.all([
   })
 ])
   .then(async () => {
-    const pkgPath = path.join(__dirname, '../package.json');
-    // @ts-ignore
-    pkgInfo.build = config;
-    writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+    modifyPkgInfo();
 
     const ls = spawn('yarn', ['wininstaller'], {
       // 仅在当前运行环境为 Windows 时，才使用 shell
@@ -145,11 +158,8 @@ Promise.all([
 
     ls.stdout.on('data', async data => {
       console.log(decoder.decode(data));
+      // build-by-external.bat
       if (decoder.decode(data).includes('pack postcat finished!')) {
-        Reflect.deleteProperty(pkgInfo, 'build');
-        // 还原 package.json 文件
-        writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
-
         console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
         exit();
       }

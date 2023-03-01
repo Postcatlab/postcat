@@ -34,4 +34,4 @@ if "%gen_latest%" == "1" (
 
 @echo "pack postcat finished!"
 
-".\output\%output_setup_file_name%"
+:: ".\output\%output_setup_file_name%"
