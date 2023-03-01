@@ -3,6 +3,7 @@ import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 
+import pkgInfo from '../package.json';
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
@@ -10,6 +11,7 @@ import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
+const pkgPath = path.join(__dirname, '../package.json');
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
@@ -116,22 +118,21 @@ const config: Configuration = {
     icon: 'src/app/common/images/',
     target: ['AppImage']
   }
-  // https://www.electron.build/configuration/configuration.html#afterallartifactbuild
-  // afterAllArtifactBuild: async (buildResult: BuildResult) => {
-  //   console.log('buildResult.artifactPaths', buildResult.artifactPaths);
-  //   if (isWin) {
-  //     await signWindows();
-  //     // https://github.com/electron-userland/electron-builder/issues/4446
-  //     const latestPath = path.join(__dirname, '../release/latest.yml');
-  //     const file = readFileSync(latestPath, 'utf8');
-  //     // @ts-ignore
-  //     writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
-  //     return buildResult.artifactPaths.map(filePath => {
-  //       return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
-  //     });
-  //   }
-  //   return buildResult.artifactPaths;
-  // }
+};
+
+// 这里动态往 package.json 中写入 electron-builder 配置，主要是为了给 build-for-electron.bat 脚本读取配置
+const modifyPkgInfo = () => {
+  // @ts-ignore
+  pkgInfo.build = config;
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+  // 退出进程/意外退出进程 时主动还原 package.json 信息
+  process.on('exit', restorePkgInfo);
+};
+
+const restorePkgInfo = () => {
+  Reflect.deleteProperty(pkgInfo, 'build');
+  // 还原 package.json 文件
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
 };
 
 // 要打包的目标平台
@@ -149,26 +150,28 @@ const signWindows = () => {
       return resolve(true);
     }
 
-    // 给卸载程序签名
-    signOptions[0] = {
-      ...signOptions[0],
-      path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
-    };
-    await sign(...signOptions);
-
-    copyFileSync(
-      path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
-      path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
-    );
-
+    modifyPkgInfo();
     const ls = spawn('yarn', ['wininstaller'], {
       // 仅在当前运行环境为 Windows 时，才使用 shell
       shell: isWin
     });
 
     ls.stdout.on('data', async data => {
-      console.log(decoder.decode(data));
-      if (decoder.decode(data).includes('请按任意键继续')) {
+      const logText = decoder.decode(data);
+      console.log(logText);
+
+      // build/nsis-build-and-sign.bat
+      if (logText.includes('是时候给 Uninstall Postcat.exe 签名了')) {
+        signOptions[0] = {
+          ...signOptions[0],
+          path: 'D:\\git\\postcat\\release\\Uninstall Postcat.exe'
+        };
+        await sign(...signOptions);
+        console.log('卸载程序签名完成！');
+      }
+
+      // build/build-by-external.bat
+      if (logText.includes('pack postcat finished!')) {
         // 给自定义安装包签名
         signOptions[0] = {
           ...signOptions[0],

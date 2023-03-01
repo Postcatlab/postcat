@@ -42,8 +42,10 @@ else (
 		Call sign.bat ...\release\%uninst_name%
 		cd ..\
 	)	
+	@echo "是时候给 Uninstall Postcat.exe 签名了"
 	@rem 复制uninst.exe到FilesToInstall
 	copy ..\release\%uninst_name% ".\%unpacket_file_dir_name%\"
+	@echo "复制uninst.exe到FilesToInstall 完成！"
 )
 
 if "%package_mode%" == "1" ( 
