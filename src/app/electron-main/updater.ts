@@ -1,4 +1,4 @@
-import { dialog } from 'electron';
+// import { dialog } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 
@@ -18,24 +18,24 @@ export class EoUpdater {
     if (appVersion.includes('beta')) autoUpdater.channel = 'beta';
     console.log('appVersion', appVersion, autoUpdater.channel);
 
-    autoUpdater.on('update-downloaded', info => {
-      log.info('Update downloaded.');
+    // autoUpdater.on('update-downloaded', info => {
+    //   log.info('Update downloaded.');
 
-      // The update will automatically be installed the next time the
-      // app launches. If you want to, you can force the installation
-      // now:
-      const dialogOpts = {
-        type: 'info',
-        buttons: ['重启', '稍后'],
-        title: '版本升级',
-        message: '有新版本可用了',
-        detail: `新版本 (${info.version}) 已经下载，重启并更新.`
-      };
+    //   // The update will automatically be installed the next time the
+    //   // app launches. If you want to, you can force the installation
+    //   // now:
+    //   const dialogOpts = {
+    //     type: 'info',
+    //     buttons: ['重启', '稍后'],
+    //     title: '版本升级',
+    //     message: '有新版本可用了',
+    //     detail: `新版本 (${info.version}) 已经下载，重启并更新.`
+    //   };
 
-      dialog.showMessageBox(dialogOpts).then(returnValue => {
-        if (returnValue.response === 0) autoUpdater.quitAndInstall(false, true);
-      });
-    });
+    //   dialog.showMessageBox(dialogOpts).then(returnValue => {
+    //     if (returnValue.response === 0) autoUpdater.quitAndInstall(false, true);
+    //   });
+    // });
   }
   check() {
     autoUpdater.checkForUpdatesAndNotify();

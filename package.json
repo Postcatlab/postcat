@@ -1,12 +1,12 @@
 {
   "name": "postcat",
   "souceLocale": "zh-Hans",
-  "version": "0.6.0",
+  "version": "0.3.7",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/Postcatlab/postcat.git",
   "author": "Postcat",
-  "private": true, 
+  "private": true,
   "workspaces": [
     "src/workbench/*"
   ],
@@ -31,7 +31,7 @@
     "web:start:direct": "yarn workspace postcat-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged",
-    "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim.bat",
+    "wininstaller": "cd build && build-for-electron-postcat.bat",
     "pack:win": "npm run electron:build && npm run wininstaller",
     "deployWindows": "node scripts/deployWindows.js",
     "releaseWindows": "npx esno scripts/releaseWindows.ts"

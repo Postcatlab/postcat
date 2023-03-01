@@ -1,0 +1,69 @@
+html, body { font-family: Verdana, Arial, Helvetica, sans-serif; color: #000000; background-color: #ffffff; }
+html { font-size: 0.8em; }
+body { font-size: 1em; font-size: 1rem; }
+
+p, li {
+	font-size: 100%;
+}
+h1 {
+	font-size: 170%;
+}
+h2 {
+	font-size: 150%;
+}
+h3 {
+	font-size: 130%;
+}
+h4 {
+	font-size: 120%;
+}
+h5 {
+	font-size: 115%;
+}
+h6 {
+	font-size: 110%;
+}
+pre, code {
+	font-family: Courier New, Courier, monospace,serif; /* code.iamkate.com/html-and-css/fixing-browsers-broken-monospace-font-handling/ */
+}
+code {
+	font-size: 100%;
+}
+pre {
+	font-size: 100%;
+	background-color: #F7F7F7;
+	padding: 1px;
+}
+pre b {
+	text-decoration: underline;
+}
+a {
+	color: #567599;
+	text-decoration: none;
+}
+a:hover {
+	color: #303030;
+	text-decoration: underline;
+}
+.btitle {
+	color: #000000;
+	text-decoration: none;
+}
+.btitle:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+.wb {
+	color: #000000; background-color: #FFFFD8;
+	border: 1px solid #CECEAA;
+	padding: 0.2em;
+}
+
+:root { color-scheme: light dark; }
+@media (prefers-color-scheme: dark) {
+html, body { color: #eee; background-color:#161616; }
+a, a:link, a:visited, a:active { color: #8ce; } a:hover { color: #29c; }
+.btitle { color: #ccc !important; } .btitle:hover { color: #aaa !important; }
+pre { background-color: #202020; }
+.wb { color: #a6a688; background-color: #454535; border-color: #3b3b30; }
+}

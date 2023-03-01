@@ -1,4 +1,4 @@
-/***************************************************************************
+ï»¿/***************************************************************************
 * Copyright (C) 2014 Jeffery Jiang. <china_jeffery@163.com>
 *
 * You may opt to use, copy, modify, merge, publish, distribute and/or sell
@@ -12,7 +12,7 @@
  ***************************************************************************/
  
 # ============================
-# ×Ô¶¨Òåº¯Êı»òÕßºê
+# è‡ªå®šä¹‰å‡½æ•°æˆ–è€…å®
 # ============================
 
 !include "nsProcess.nsh"
@@ -29,9 +29,9 @@
 !define MAX_RETRY 10
 Var RetryTimes
 
-# ÖÕÖ¹½ø³Ì
+# ç»ˆæ­¢è¿›ç¨‹
 Function TerminateProcess
-    # Ê¹ÓÃRtlAdjustPrivilegeº¯ÊıÌáÉı×ÔÉí½ø³Ìµ½ÏµÍ³È¨ÏŞ
+    # ä½¿ç”¨RtlAdjustPrivilegeå‡½æ•°æå‡è‡ªèº«è¿›ç¨‹åˆ°ç³»ç»Ÿæƒé™
     System::Call ntdll::RtlAdjustPrivilege(i20,i1,i0,*i)
     StrCpy $RetryTimes 0
 loop__:
@@ -52,7 +52,7 @@ TerminateProcessOver:
 FunctionEnd
 
 Function un.TerminateProcess4Uninstall
-    # Ê¹ÓÃRtlAdjustPrivilegeº¯ÊıÌáÉı×ÔÉí½ø³Ìµ½ÏµÍ³È¨ÏŞ
+    # ä½¿ç”¨RtlAdjustPrivilegeå‡½æ•°æå‡è‡ªèº«è¿›ç¨‹åˆ°ç³»ç»Ÿæƒé™
     System::Call ntdll::RtlAdjustPrivilege(i20,i1,i0,*i)
     StrCpy $RetryTimes 0
 loop__:
@@ -74,8 +74,8 @@ FunctionEnd
 
 
 
-# ´¦Àí×Ô¶¨ÒåÁÙÊ±Ä¿Â¼,Ê¹ÓÃ²å¼şchngvrbl.dll¡£
-# ¸Ãºê±ØĞëÔÚ.onInitÖĞµ÷ÓÃ¡£
+# å¤„ç†è‡ªå®šä¹‰ä¸´æ—¶ç›®å½•,ä½¿ç”¨æ’ä»¶chngvrbl.dllã€‚
+# è¯¥å®å¿…é¡»åœ¨.onInitä¸­è°ƒç”¨ã€‚
 !macro ChangeTempDir dirPath
     StrCmp "${dirPath}" "" ChangeTempDirOver +1
     CreateDirectory "${dirPath}"
@@ -91,14 +91,14 @@ ChangeTempDirOver:
     RMDir /r "$TEMP"
 !macroend
 
-# ½âÎöÆô¶¯²ÎÊı
+# è§£æå¯åŠ¨å‚æ•°
 # foo.exe /S /USERNAME Bar /D C:\Program Files\Foo
 !macro ParseParameters paramName paramValue
 	${GetParameters} $R0
 	${GetOptions} $R0 "${paramName}" ${paramValue}
 !macroend
 
-# È·±£VALUEÒÔEND_WITH½áÊø
+# ç¡®ä¿VALUEä»¥END_WITHç»“æŸ
 !macro EnsureEndsWith VALUE END_WITH
   StrLen $R7 "${END_WITH}"
   IntOp $R8 0 - $R7
@@ -107,15 +107,15 @@ ChangeTempDirOver:
   StrCpy ${VALUE} "${VALUE}${END_WITH}"
 !macroend
 
-# ×ÖÌå°²×°
+# å­—ä½“å®‰è£…
 !macro InstallFont fontFilePath fontFilename fontShowName
     IfFileExists "$FONTS\${fontFilename}" InstallFontOver
     
     System::Call "ntdll::RtlAdjustPrivilege(i20,i1,i0,*i) i.s"
     Pop $R9
     #${If} $R9 <> 0
-        # ÌáÉıÈ¨ÏŞÊ§°Ü
-        #MessageBox MB_ICONINFORMATION|MB_OK "ÌáÉıÈ¨ÏŞÊ§°Ü!" /SD IDOK
+        # æå‡æƒé™å¤±è´¥
+        #MessageBox MB_ICONINFORMATION|MB_OK "æå‡æƒé™å¤±è´¥!" /SD IDOK
     #${EndIf}
 
     File /oname=$FONTS\${fontFilename} ${fontFilePath}
@@ -123,22 +123,22 @@ ChangeTempDirOver:
     System::Call "GDI32::AddFontResource(t'$FONTS\${fontFilename}') i.s"
     Pop $R9
     ${If} $R9 == 0
-        MessageBox MB_ICONINFORMATION|MB_OK "°²×°×ÖÌåÊ§°Ü!" /SD IDOK
+        MessageBox MB_ICONINFORMATION|MB_OK "å®‰è£…å­—ä½“å¤±è´¥!" /SD IDOK
     ${EndIf}
 !macroend
 
 
 
 
-# »ñÈ¡¿Ø¼şÎ»ÖÃ
+# è·å–æ§ä»¶ä½ç½®
 !macro GetWindowPos parentHwnd ctrlHwnd l t r b
     
     System::Call "*(i0,i0,i0,i0) i.r11"
     System::Call "User32::GetWindowRect(i${ctrlHwnd}, i$R1)"
     System::Call "*$R1(i.r16,i.r17,i.r18,i.r19)"
     
-    System::Call "*(i$R6,i$R7) i.r12)" # ×óÉÏ
-    System::Call "*(i$R8,i$R9) i.r13)" # ÓÒÏÂ
+    System::Call "*(i$R6,i$R7) i.r12)" # å·¦ä¸Š
+    System::Call "*(i$R8,i$R9) i.r13)" # å³ä¸‹
     
     System::Call "User32::ScreenToClient(i${parentHwnd}, i$R2)"
     System::Call "User32::ScreenToClient(i${parentHwnd}, i$R3)"
@@ -158,7 +158,7 @@ ChangeTempDirOver:
 
 
 
-# ¿Ø¼ş±³¾°Í¸Ã÷»¯
+# æ§ä»¶èƒŒæ™¯é€æ˜åŒ–
 !macro SetTransparent HWND IDC fontClr
   GetDlgItem $R0 ${HWND} ${IDC}
   SetCtlColors $R0 ${fontClr} transparent

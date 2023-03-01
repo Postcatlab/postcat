@@ -4,6 +4,7 @@ import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
 import YAML from 'yaml';
 
+import pkgInfo from '../package.json';
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
@@ -11,20 +12,6 @@ import { createHash } from 'node:crypto';
 import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
-function hashFile(file: string, algorithm = 'sha512', encoding: 'base64' | 'hex' = 'base64', options?: any): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    const hash = createHash(algorithm);
-    hash.on('error', reject).setEncoding(encoding);
-
-    createReadStream(file, { ...options, highWaterMark: 1024 * 1024 /* better to use more memory but hash faster */ })
-      .on('error', reject)
-      .on('end', () => {
-        hash.end();
-        resolve(hash.read() as string);
-      })
-      .pipe(hash, { end: false });
-  });
-}
 
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
@@ -77,6 +64,7 @@ const config: Configuration = {
   ],
   generateUpdatesFilesForAllChannels: true,
   nsis: {
+    guid: 'Postcat',
     oneClick: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
@@ -126,22 +114,6 @@ const config: Configuration = {
     icon: 'src/app/common/images/',
     target: ['AppImage']
   }
-  // https://www.electron.build/configuration/configuration.html#afterallartifactbuild
-  // afterAllArtifactBuild: async (buildResult: BuildResult) => {
-  //   console.log('buildResult.artifactPaths', buildResult.artifactPaths);
-  //   if (isWin) {
-  //     await signWindows();
-  //     // https://github.com/electron-userland/electron-builder/issues/4446
-  //     const latestPath = path.join(__dirname, '../release/latest.yml');
-  //     const file = readFileSync(latestPath, 'utf8');
-  //     // @ts-ignore
-  //     writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
-  //     return buildResult.artifactPaths.map(filePath => {
-  //       return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
-  //     });
-  //   }
-  //   return buildResult.artifactPaths;
-  // }
 };
 
 // 要打包的目标平台
@@ -161,6 +133,11 @@ Promise.all([
   })
 ])
   .then(async () => {
+    const pkgPath = path.join(__dirname, '../package.json');
+    // @ts-ignore
+    pkgInfo.build = config;
+    writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+
     const ls = spawn('yarn', ['wininstaller'], {
       // 仅在当前运行环境为 Windows 时，才使用 shell
       shell: isWin
@@ -168,15 +145,10 @@ Promise.all([
 
     ls.stdout.on('data', async data => {
       console.log(decoder.decode(data));
-      if (decoder.decode(data).includes('请按任意键继续')) {
-        const sha512 = await hashFile(path.join(__dirname, `../release/Postcat-Setup-${version}.exe`));
-        const latestPath = path.join(__dirname, '../release/latest.yml');
-        const file = readFileSync(latestPath, 'utf8');
-        const latestYml = YAML.parse(file);
-        latestYml.sha512 = sha512;
-        latestYml.files.forEach(item => (item.sha512 = sha512));
-
-        writeFileSync(latestPath, YAML.stringify(latestYml));
+      if (decoder.decode(data).includes('pack postcat finished!')) {
+        Reflect.deleteProperty(pkgInfo, 'build');
+        // 还原 package.json 文件
+        writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
 
         console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
         exit();

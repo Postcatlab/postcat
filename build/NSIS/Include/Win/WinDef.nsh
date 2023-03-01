@@ -5,9 +5,7 @@
 !ifndef __WIN_NOINC_WINDEF
 
 
-!ifndef MAX_PATH
-!define MAX_PATH 260
-!endif
+!define /ifndef MAX_PATH 260
 #define NULL 0
 
 
@@ -41,8 +39,7 @@ IntOp ${_outvar} "${_in}" & 0xFFFF
 !define LOWORD "!insertmacro _Win_LOWORD "
 
 !macro _Win_HIWORD _outvar _in
-IntOp ${outvar} "${_in}" >> 16 ;sign extended :(
-${LOWORD} ${_outvar} ${outvar} ;make sure we strip off the upper word
+IntOp ${_outvar} "${_in}" >>> 16
 !macroend
 !define HIWORD "!insertmacro _Win_HIWORD "
 
@@ -60,13 +57,9 @@ IntOp ${_tmpvar} "${_whi}" << 16
 IntOp ${_outvar} ${_outvar} | ${_tmpvar}
 !macroend
 !define MAKELONG "!insertmacro _Win_MAKELONG32 "
-!if "${__WIN_PTRSIZE}" <= 4
 !define MAKEWPARAM "${MAKELONG}"
 !define MAKELPARAM "${MAKELONG}"
 !define MAKELRESULT "${MAKELONG}"
-!else
-!error "Missing 64bit imp!"
-!endif
 
 
 !endif /* __WIN_NOINC_WINDEF */

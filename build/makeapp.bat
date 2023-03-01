@@ -1,12 +1,4 @@
 del ".\SetupScripts\app.7z"
+@set unpacked_file_path=%1
 
-rem ����app.7z
-7z.exe a ".\SetupScripts\app.7z" "..\release\win-unpacked\*.*"
-
-@set DestPath=%cd%\..\release\win-unpacked\
-@echo off& setlocal EnableDelayedExpansion
-
-for /f "delims=" %%a in ('dir /ad/b %DestPath%') do (
-7z.exe a ".\SetupScripts\app.7z" "..\release\win-unpacked\%%a"
-@echo "compressing ..\release\win-unpacked\%%a"
-)
+7z.exe a ".\SetupScripts\app.7z" ".\%unpacked_file_path%\*.*" -r

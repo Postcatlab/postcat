@@ -87,17 +87,16 @@
 !endif
 
 !ifndef __WIN_MS_NOWINOFFSETS
-/* in nsDialogs.nsh...
-!define GWL_STYLE           -16
-!define GWL_EXSTYLE         -20 */
-!define GWLP_WNDPROC        -4
-!define GWLP_HINSTANCE      -6
-!define GWLP_HWNDPARENT     -8
-!define GWLP_USERDATA       -21
-!define GWLP_ID             -12
+!define /ifndef GWL_STYLE       -16
+!define /ifndef GWL_EXSTYLE     -20
+!define /ifndef GWLP_WNDPROC    -4
+!define /ifndef GWLP_HINSTANCE  -6
+!define /ifndef GWLP_HWNDPARENT -8
+!define /ifndef GWLP_USERDATA   -21
+!define /ifndef GWLP_ID         -12
 !define DWLP_MSGRESULT  0
-!define /math DWLP_DLGPROC    ${DWLP_MSGRESULT} + ${__WIN_PTRSIZE} ;DWLP_MSGRESULT + sizeof(LRESULT) 
-!define /math DWLP_USER       ${DWLP_DLGPROC} + ${__WIN_PTRSIZE} ;DWLP_DLGPROC + sizeof(DLGPROC)
+!define /math DWLP_DLGPROC ${DWLP_MSGRESULT} + ${NSIS_PTR_SIZE} ;DWLP_MSGRESULT + sizeof(LRESULT) 
+!define /math DWLP_USER    ${DWLP_DLGPROC} + ${NSIS_PTR_SIZE} ;DWLP_DLGPROC + sizeof(DLGPROC)
 !endif
 
 !ifndef __WIN_MS_NONCMESSAGES
@@ -155,40 +154,41 @@
 !define SC_SEPARATOR    0xF00F
 !endif
 
-!define IDC_ARROW       32512
-!define IDC_IBEAM       32513
-!define IDC_WAIT        32514
-!define IDC_CROSS       32515
-!define IDC_UPARROW     32516
-!define IDC_SIZENWSE    32642
-!define IDC_SIZENESW    32643
-!define IDC_SIZEWE      32644
-!define IDC_SIZENS      32645
-!define IDC_SIZEALL     32646
-!define IDC_NO          32648 
-!define IDC_HAND        32649
-!define IDC_APPSTARTING 32650 
-!define IDC_HELP        32651
+!define /ifndef IDC_ARROW       32512
+!define /ifndef IDC_IBEAM       32513
+!define /ifndef IDC_WAIT        32514
+!define /ifndef IDC_CROSS       32515
+!define /ifndef IDC_UPARROW     32516
+!define /ifndef IDC_SIZE        32640
+!define /ifndef IDC_ICON        32641
+!define /ifndef IDC_SIZENWSE    32642
+!define /ifndef IDC_SIZENESW    32643
+!define /ifndef IDC_SIZEWE      32644
+!define /ifndef IDC_SIZENS      32645
+!define /ifndef IDC_SIZEALL     32646
+!define /ifndef IDC_NO          32648 
+!define /ifndef IDC_HAND        32649
+!define /ifndef IDC_APPSTARTING 32650 
+!define /ifndef IDC_HELP        32651
 
-/* in nsDialogs.nsh...
-!define IMAGE_BITMAP 0
-!define IMAGE_ICON   1
-!define IMAGE_CURSOR 2*/
+!define /ifndef IMAGE_BITMAP        0
+!define /ifndef IMAGE_ICON          1
+!define /ifndef IMAGE_CURSOR        2
+!define /ifndef IMAGE_ENHMETAFILE   3
 
-/* in nsDialogs.nsh...
-!define LR_DEFAULTCOLOR     0x0000
-!define LR_MONOCHROME       0x0001
-!define LR_COLOR            0x0002
-!define LR_COPYRETURNORG    0x0004
-!define LR_COPYDELETEORG    0x0008
-!define LR_LOADFROMFILE     0x0010
-!define LR_LOADTRANSPARENT  0x0020
-!define LR_DEFAULTSIZE      0x0040
-!define LR_VGACOLOR         0x0080
-!define LR_LOADMAP3DCOLORS  0x1000
-!define LR_CREATEDIBSECTION 0x2000
-!define LR_COPYFROMRESOURCE 0x4000
-!define LR_SHARED           0x8000*/
+!define /ifndef LR_DEFAULTCOLOR     0x0000
+!define /ifndef LR_MONOCHROME       0x0001
+!define /ifndef LR_COLOR            0x0002
+!define /ifndef LR_COPYRETURNORG    0x0004
+!define /ifndef LR_COPYDELETEORG    0x0008
+!define /ifndef LR_LOADFROMFILE     0x0010
+!define /ifndef LR_LOADTRANSPARENT  0x0020
+!define /ifndef LR_DEFAULTSIZE      0x0040
+!define /ifndef LR_VGACOLOR         0x0080
+!define /ifndef LR_LOADMAP3DCOLORS  0x1000
+!define /ifndef LR_CREATEDIBSECTION 0x2000
+!define /ifndef LR_COPYFROMRESOURCE 0x4000
+!define /ifndef LR_SHARED           0x8000
 
 !define GA_PARENT    1
 !define GA_ROOT      2
