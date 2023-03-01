@@ -2,13 +2,29 @@ import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
+import YAML from 'yaml';
 
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
+function hashFile(file: string, algorithm = 'sha512', encoding: 'base64' | 'hex' = 'base64', options?: any): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const hash = createHash(algorithm);
+    hash.on('error', reject).setEncoding(encoding);
+
+    createReadStream(file, { ...options, highWaterMark: 1024 * 1024 /* better to use more memory but hash faster */ })
+      .on('error', reject)
+      .on('end', () => {
+        hash.end();
+        resolve(hash.read() as string);
+      })
+      .pipe(hash, { end: false });
+  });
+}
 
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
@@ -145,7 +161,27 @@ Promise.all([
   })
 ])
   .then(async () => {
-    exit();
+    const ls = spawn('yarn', ['wininstaller'], {
+      // 仅在当前运行环境为 Windows 时，才使用 shell
+      shell: isWin
+    });
+
+    ls.stdout.on('data', async data => {
+      console.log(decoder.decode(data));
+      if (decoder.decode(data).includes('请按任意键继续')) {
+        const sha512 = await hashFile(path.join(__dirname, `../release/Postcat-Setup-${version}.exe`));
+        const latestPath = path.join(__dirname, '../release/latest.yml');
+        const file = readFileSync(latestPath, 'utf8');
+        const latestYml = YAML.parse(file);
+        latestYml.sha512 = sha512;
+        latestYml.files.forEach(item => (item.sha512 = sha512));
+
+        writeFileSync(latestPath, YAML.stringify(latestYml));
+
+        console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+        exit();
+      }
+    });
   })
   .catch(async error => {
     if (error.includes?.('HttpError')) {
