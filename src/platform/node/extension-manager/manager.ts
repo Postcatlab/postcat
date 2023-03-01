@@ -50,7 +50,7 @@ export class ModuleManager {
     this.lang = LanguageService;
     this.moduleHandler = new ModuleHandler({
       baseDir: HOME_DIR,
-      registry: this.lang.get === 'zh-Hans' ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org'
+      registry: this.lang.get() === 'zh-Hans' ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org'
     });
     this.modules = new Map();
     this.features = new Map();
