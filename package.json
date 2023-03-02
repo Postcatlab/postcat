@@ -5,7 +5,7 @@
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/Postcatlab/postcat.git",
   "author": "Postcat",
-  "private": true, 
+  "private": true,
   "workspaces": [
     "src/workbench/*"
   ],
@@ -15,9 +15,9 @@
     "start:web": "yarn workspace postcat-web run start",
     "start:electron": "npm-run-all -p web:start:direct electron:dev",
     "build": "npx patch-package && npm-run-all -s electron:build:web clear:electron:tsc electron:tsc && npx esno scripts/build.ts",
-    "build:win:noSign": "npx patch-package && npm-run-all -s electron:build:web clear:electron:tsc electron:tsc && npx esno scripts/buildNoSign.ts",
     "build:web": "yarn workspace postcat-web run build:web",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && npx esno scripts/build.ts",
+    "build:win:noSign": "npm run clear:electron:tsc&&npm run electron:tsc && npx esno scripts/buildNoSign.ts",
     "electron:build:web": "yarn workspace postcat-web run build",
     "electron:static": "npm run electron:tsc && electron .",
     "release": "npm-run-all -s electron:build:web electron:tsc && npx esno scripts/build.ts --publish=always && node upload.js",
@@ -31,7 +31,7 @@
     "web:start:direct": "yarn workspace postcat-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged",
-    "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim.bat",
+    "wininstaller": "cd build && build-for-electron-postcat.bat",
     "pack:win": "npm run electron:build && npm run wininstaller",
     "deployWindows": "node scripts/deployWindows.js",
     "releaseWindows": "npx esno scripts/releaseWindows.ts"

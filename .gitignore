@@ -2,6 +2,10 @@
 
 # compiled output
 dist/
+/build/ElectronInstall/
+/build/FilesToInstall/
+/build/Output/
+/build/NiuNiuCaptureElectronDemo/
 out/
 /tmp
 /out-tsc

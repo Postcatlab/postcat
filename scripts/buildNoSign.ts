@@ -2,14 +2,18 @@ import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
+import YAML from 'yaml';
 
+import pkgInfo from '../package.json';
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
+const pkgPath = path.join(__dirname, '../package.json');
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
@@ -61,6 +65,7 @@ const config: Configuration = {
   ],
   generateUpdatesFilesForAllChannels: true,
   nsis: {
+    guid: 'Postcat',
     oneClick: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
@@ -77,6 +82,12 @@ const config: Configuration = {
   win: {
     icon: 'src/app/common/images/logo.ico',
     target: ['nsis', 'portable']
+    // extraFiles: [
+    //   {
+    //     from: './build/Uninstall Postcat.exe',
+    //     to: '.'
+    //   }
+    // ]
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
@@ -104,22 +115,22 @@ const config: Configuration = {
     icon: 'src/app/common/images/',
     target: ['AppImage']
   }
-  // https://www.electron.build/configuration/configuration.html#afterallartifactbuild
-  // afterAllArtifactBuild: async (buildResult: BuildResult) => {
-  //   console.log('buildResult.artifactPaths', buildResult.artifactPaths);
-  //   if (isWin) {
-  //     await signWindows();
-  //     // https://github.com/electron-userland/electron-builder/issues/4446
-  //     const latestPath = path.join(__dirname, '../release/latest.yml');
-  //     const file = readFileSync(latestPath, 'utf8');
-  //     // @ts-ignore
-  //     writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
-  //     return buildResult.artifactPaths.map(filePath => {
-  //       return filePath.replace(`Postcat Setup ${version}.exe`, `Postcat-Setup-${version}.exe`);
-  //     });
-  //   }
-  //   return buildResult.artifactPaths;
-  // }
+};
+
+// 这里动态往 package.json 中写入 electron-builder 配置，主要是为了给 build-for-electron.bat 脚本读取配置
+const modifyPkgInfo = () => {
+  // @ts-ignore
+  pkgInfo.build = config;
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
+  // 退出进程/意外退出进程 时主动还原 package.json 信息
+  process.on('exit', restorePkgInfo);
+  process.on('uncaughtException', restorePkgInfo);
+};
+
+const restorePkgInfo = () => {
+  Reflect.deleteProperty(pkgInfo, 'build');
+  // 还原 package.json 文件
+  writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
 };
 
 // 要打包的目标平台
@@ -139,7 +150,21 @@ Promise.all([
   })
 ])
   .then(async () => {
-    exit();
+    modifyPkgInfo();
+
+    const ls = spawn('yarn', ['wininstaller'], {
+      // 仅在当前运行环境为 Windows 时，才使用 shell
+      shell: isWin
+    });
+
+    ls.stdout.on('data', async data => {
+      console.log(decoder.decode(data));
+      // build-by-external.bat
+      if (decoder.decode(data).includes('pack postcat finished!')) {
+        console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+        exit();
+      }
+    });
   })
   .catch(async error => {
     if (error.includes?.('HttpError')) {
