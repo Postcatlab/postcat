@@ -32,7 +32,7 @@ import { StorageUtil } from '../../utils/storage/storage.utils';
 export class LocalWorkspaceTipComponent implements OnInit {
   @Input() isShow: boolean;
   @Output() readonly isShowChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+  manualClose = StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'false';
   constructor(
     private eoMessage: EoNgFeedbackMessageService,
     private message: MessageService,
@@ -40,15 +40,16 @@ export class LocalWorkspaceTipComponent implements OnInit {
     private effect: EffectService
   ) {}
   ngOnInit(): void {
-    this.isShow = StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     autorun(() => {
-      const status = this.store.isLocal && this.store.isLogin && this.isShow;
-      Promise.resolve().then(() => {
-        this.isShowChange.emit(status);
-      });
+      this.updateIsShow();
     });
   }
-
+  updateIsShow() {
+    const status = this.store.isLocal && this.store.isLogin && !this.manualClose;
+    Promise.resolve().then(() => {
+      this.isShowChange.emit(status);
+    });
+  }
   switchToTheCloud = () => {
     const workspaces = this.store.getWorkspaceList;
     if (workspaces.length === 1) {
@@ -61,7 +62,8 @@ export class LocalWorkspaceTipComponent implements OnInit {
   };
 
   closeNotification() {
-    this.isShow = false;
-    StorageUtil.set(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false');
+    this.manualClose = true;
+    StorageUtil.set(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false', 60 * 60 * 24 * 15);
+    this.updateIsShow();
   }
 }

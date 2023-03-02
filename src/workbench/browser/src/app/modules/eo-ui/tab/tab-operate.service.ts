@@ -108,7 +108,7 @@ export class TabOperateService {
       targetTab.params = { ...validTabItem.params, ...targetTab.params };
     }
     this.selectedIndex = tabCache.selectedIndex;
-    this.navigateTabRoute(targetTab);
+    this.navigateByTab(targetTab);
   }
   /**
    * Add Default tab
@@ -120,10 +120,10 @@ export class TabOperateService {
       ...eoDeepCopy(this.BASIC_TABS.find(val => val.pathname.includes(routerStr)) || this.BASIC_TABS[0])
     };
     tabItem.params = {};
-    tabItem.uuid = tabItem.params.pageID = Date.now();
+    tabItem.uuid = tabItem.params.pageID = Date.now().toString();
     Object.assign(tabItem, { isLoading: false });
     this.tabStorage.addTab(tabItem);
-    this.navigateTabRoute(tabItem as TabItem);
+    this.navigateByTab(tabItem as TabItem);
   }
 
   closeTab(index: number) {
@@ -132,7 +132,7 @@ export class TabOperateService {
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
     } else {
-      this.navigateTabRoute(this.getCurrentTab());
+      this.navigateByTab(this.getCurrentTab());
     }
   }
   /**
@@ -151,23 +151,29 @@ export class TabOperateService {
    *
    * @param tab
    */
-  navigateTabRoute(tab: TabItem) {
+  navigateByTab(tab: TabItem) {
     if (!tab) {
       return;
     }
-    const queryParams = { pageID: tab.uuid, ...tab.params };
+    const queryParams = { pageID: tab.params?.pageID, ...tab.params };
+    if (!queryParams.pageID) Reflect.deleteProperty(queryParams, 'pageID');
     this.router.navigate([tab.pathname], {
       queryParams
     });
   }
   /**
-   * Get exist tab index
+   * Get exist tab item
    *
-   * @param type sameTab means has same pageID and same {params.uuid}
+   * @description SameTab means has same uuid and same path
+   *
    * @param tab
-   * @returns
    */
-  getSameContentTab(tab: Partial<TabItem>): TabItem | null {
+  getSameTab(
+    tab: Partial<TabItem>,
+    opts: {
+      match: 'all' | 'uuid';
+    } = { match: 'all' }
+  ): TabItem | null {
     let result = null;
     if (!tab.params.uuid) {
       const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
@@ -181,7 +187,8 @@ export class TabOperateService {
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tabInfo = mapObj[key];
-        if (tabInfo.params.uuid === tab.params.uuid && tabInfo.pathname === tab.pathname) {
+        if (tabInfo.pathname !== tab.pathname && opts.match === 'all') continue;
+        if (tabInfo.params.uuid === tab.params.uuid) {
           result = tabInfo;
           break;
         }
@@ -206,14 +213,11 @@ export class TabOperateService {
     }
     // Parse query params
     new URLSearchParams(urlArr[1]).forEach((value, key) => {
-      if (key === 'pageID') {
-        params[key] = Number(value);
-        return;
-      }
       params[key] = value;
     });
+    const tabUuid = params.pageID || params.uuid || '';
     const result = {
-      uuid: params.pageID,
+      uuid: tabUuid,
       pathname: basicTab.pathname,
       icon: basicTab.icon,
       params
@@ -237,7 +241,9 @@ export class TabOperateService {
       pcConsole.error(`: Please check this router has added in BASIC_TABS,current route:${url}`);
       return;
     }
-    result.params.pageID = result.params.pageID || Date.now();
+    if (!result.uuid) {
+      result.params.pageID = result.params.pageID || Date.now().toString();
+    }
     Object.assign(result, { isLoading: true }, basicTab);
     return result as TabItem;
   }
@@ -249,17 +255,17 @@ export class TabOperateService {
    * @param res.url location.pathname+location.search
    */
   operateTabAfterRouteChange(res: { url: string }) {
-    const pureTab = this.getBasicInfoFromUrl(res.url);
-    const existTab = this.getSameContentTab(pureTab);
+    const routeTab = this.getBasicInfoFromUrl(res.url);
+    const existTab = this.getSameTab(routeTab);
 
     const nextTab = this.generateTabFromUrl(res.url);
-    //!Every tab must has pageID
-    //If lack pageID,Jump to exist tab item to keep same  pageID and so on
-    if (!pureTab.uuid) {
+    //!Every tab must has tab uuid
+    //If lack pageID or page[uuid],Redirect to exist tab item to keep same  pageID and so on
+    if (!routeTab.uuid) {
       if (existTab) {
-        pureTab.uuid = pureTab.params.pageID = existTab.uuid;
+        routeTab.uuid = routeTab.params.pageID = existTab.uuid;
       }
-      this.navigateTabRoute(nextTab);
+      this.navigateByTab(nextTab);
       return;
     }
 
@@ -290,7 +296,7 @@ export class TabOperateService {
     }
     //Determine whether to replace the current Tab
     let canbeReplaceTab = null;
-    if (this.tabStorage.tabsByID.has(pureTab.uuid)) {
+    if (this.tabStorage.tabsByID.has(routeTab.uuid)) {
       //If the same tab exists, directly replace
       canbeReplaceTab = nextTab;
     } else {

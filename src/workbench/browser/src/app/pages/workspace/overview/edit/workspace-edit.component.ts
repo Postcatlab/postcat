@@ -23,6 +23,7 @@ import { StoreService } from '../../../../shared/store/state.service';
                 *ngIf="isEdit"
                 type="text"
                 eo-ng-input
+                autofocus
                 id="title"
                 formControlName="title"
                 placeholder="Workspace Name"

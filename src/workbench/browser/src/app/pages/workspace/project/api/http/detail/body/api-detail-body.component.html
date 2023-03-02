@@ -11,6 +11,7 @@
 <eo-monaco-editor
   [(code)]="model[0].binaryRawData"
   *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
+  [maxHeight]="600"
   [config]="{ readOnly: true }"
   [autoType]="true"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"

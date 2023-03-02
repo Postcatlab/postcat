@@ -10,7 +10,7 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Send' }).click();
   const request = await responsePromise;
   const res = await request.json();
-  await page.screenshot({ path: './unit-test-basic.png', fullPage: true });
+  await page.screenshot({ path: './images/unit-test-basic.png', fullPage: true });
 });
 /**
  * XML

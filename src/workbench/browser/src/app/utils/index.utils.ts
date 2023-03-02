@@ -172,24 +172,6 @@ export const getBlobUrl = (inputStream, inputFileType) => {
   return tmpUrlObj.createObjectURL(tmpBlob);
 };
 
-export const copyText = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    return Promise.resolve(text);
-  } catch (e) {
-    const input = document.createElement('input');
-    input.setAttribute('readonly', 'readonly');
-    input.setAttribute('value', text);
-    document.body.appendChild(input);
-    input.setSelectionRange(0, 9999);
-    if (document.execCommand('copy')) {
-      document.execCommand('copy');
-      console.log($localize`Copied`);
-    }
-    document.body.removeChild(input);
-    return Promise.resolve(text);
-  }
-};
 // fn 是需要防抖处理的函数
 // wait 是时间间隔
 export function debounce(fn, wait = 50) {

@@ -337,9 +337,13 @@ export class ThemeVariableService {
               'tableRowHoverBackground',
               'treeHoverBackground',
               'buttonDefaultHoverBackground',
-              'layoutFooterItemHoverBackground',
-              'buttonTextHoverBackground'
+              'layoutFooterItemHoverBackground'
             ]
+          },
+          {
+            action: 'darken',
+            alpha: 0.05,
+            target: ['buttonTextHoverBackground']
           }
         ]
       },
@@ -449,7 +453,7 @@ export class ThemeVariableService {
       const barBackgroundRule = colorsDefaultRule.find(val => val.source === 'barBackground');
       barBackgroundRule.rule.push({
         action: 'darken',
-        alpha: 0.03,
+        alpha: 0.01,
         target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
       });
 

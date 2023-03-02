@@ -51,8 +51,8 @@ export class SyncApiComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.initData();
     this.getSyncSettingList();
+    this.initData();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -78,8 +78,10 @@ export class SyncApiComponent implements OnInit, OnChanges {
   }
 
   updateExtensionModel() {
-    const currentFormater = this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater);
-    if (currentFormater && this.currentFormater !== currentFormater) {
+    const currentFormater =
+      this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater) || this.store.getSyncSettingList.at(0);
+    // console.log('currentFormater', { ...currentFormater });
+    if ((currentFormater && this.currentFormater !== currentFormater) || currentFormater.pluginId !== this.model.__formater) {
       this.currentFormater = currentFormater;
       this.model = {
         ...this.model,

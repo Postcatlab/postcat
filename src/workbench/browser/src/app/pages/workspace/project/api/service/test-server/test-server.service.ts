@@ -27,7 +27,7 @@ export abstract class TestServerService implements TestServer {
         .filter(val => val.name && val.isRequired)
         .map((val: BodyParam) => ({
           headerName: val.name,
-          headerValue: val['paramAttr.example'] || val.paramAttr?.example
+          headerValue: val['paramAttr.example']
         }));
     };
     const formatBody = (inData: Partial<ApiData>) => {
@@ -45,7 +45,7 @@ export abstract class TestServerService implements TestServer {
               //@ts-ignore
               files: val.files?.map(file => file.content),
               paramType: val.dataType === ApiParamsType.file ? '1' : '0',
-              paramInfo: val['paramAttr.example'] || val.paramAttr?.example
+              paramInfo: val['paramAttr.example']
             }));
         }
       }

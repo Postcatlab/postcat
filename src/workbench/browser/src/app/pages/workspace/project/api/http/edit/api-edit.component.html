@@ -12,14 +12,21 @@
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <nz-form-item nz-col class="flex-1">
+          <!-- <button
+            class="absolute invisible h-0"
+            nz-popconfirm
+            nzPopconfirmPlacement="top"
+            nzPopconfirmTitle="There is domain name information in your path, whether to add it to the environment?"
+            [nzPopconfirmVisible]="showEnvTips"
+          ></button> -->
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-            <input type="text" class="rounded-r" name="uri" (blur)="updateParamsbyUri()" eo-ng-input formControlName="uri" />
+            <input type="text" class="rounded-r" name="uri" (blur)="blurUri()" eo-ng-input formControlName="uri" />
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
       <eo-ng-input-group nzCompact>
-        <nz-form-item class="w-[30%] !mb-0" nz-col>
-          <nz-form-control i18n-nzErrorTip required nzErrorTip="Please select an API group">
+        <nz-form-item class="w-[30%] !mb-0">
+          <nz-form-control nz-col i18n-nzErrorTip required nzErrorTip="Please select an API group">
             <eo-ng-tree-select
               class="group-select"
               nzAllowClear="false"
@@ -30,13 +37,13 @@
               (nzOpenChange)="openGroup()"
               [nzShowSearch]="true"
               #apiGroup
-              formControlName="groupId"
+              [formControl]="$any(validateForm.get('groupId'))"
             >
             </eo-ng-tree-select>
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item nz-col class="flex-1 !mb-0">
-          <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name" [nzValidateStatus]="this.validateForm.controls.name">
+        <nz-form-item class="flex-1 !mb-0">
+          <nz-form-control nz-col i18n-nzErrorTip nzErrorTip="Please enter API name" [nzValidateStatus]="this.validateForm.controls.name">
             <input type="text" class="rounded-r" name="name" eo-ng-input formControlName="name" />
           </nz-form-control>
         </nz-form-item>
