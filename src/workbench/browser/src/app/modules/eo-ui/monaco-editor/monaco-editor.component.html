@@ -6,7 +6,7 @@
 </div>
 <nz-code-editor
   [ngModel]="$$code"
-  style="min-height: 100px"
+  [style.height]="height + 'px'"
   [nzEditorOption]="editorOption"
   (nzEditorInitialized)="onEditorInitialized($event)"
   (ngModelChange)="modelChangeFn($event)"

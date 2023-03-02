@@ -12,6 +12,8 @@
     <eo-monaco-editor
       class="mt-[15px] border-all"
       [(code)]="paramCode"
+      [maxHeight]="400"
+      [minHeight]="150"
       [editorType]="contentTypeEditor"
       [eventList]="['type', 'format', 'copy', 'search', 'replace']"
     ></eo-monaco-editor>
