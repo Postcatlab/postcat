@@ -39,7 +39,9 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.setCode(val);
   }
   /** Scroll bars appear over 20 lines */
-  @Input() maxLine: number;
+  @Input() maxHeight: number;
+  @Input() minHeight = 100;
+  @Input() autoHeight = false;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   /** Automatically identify the type */
@@ -89,6 +91,16 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     overviewRulerLanes: 0,
     quickSuggestions: { other: true, strings: true }
   };
+  contentHeight = 100;
+  get height() {
+    if (this.autoHeight) {
+      return undefined;
+    }
+    if (this.maxHeight && this.contentHeight > this.maxHeight) {
+      return this.maxHeight;
+    }
+    return Math.max(this.minHeight, this.contentHeight);
+  }
   private resizeObserver: ResizeObserver;
   private readonly el: HTMLElement; /** monaco config */
   get editorOption(): JoinedEditorOptions {
@@ -216,7 +228,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
 
     this.codeEdtor.onDidChangeModelContent(e => {
+      console.log('e', e);
       this.handleChange();
+    });
+
+    this.codeEdtor.onDidContentSizeChange(e => {
+      this.contentHeight = e.contentHeight;
     });
 
     this.codeEdtor.onDidBlurEditorText(e => {

@@ -47,6 +47,7 @@
 <eo-monaco-editor
   *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
   [(code)]="model[0].binaryRawData"
+  [maxHeight]="600"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
   [autoType]="true"
   (codeChange)="rawChange($event)"

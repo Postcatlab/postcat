@@ -50,6 +50,7 @@
   (codeChange)="rawDataChange($event)"
   *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"
   [(code)]="model[0].binaryRawData"
+  [autoHeight]="true"
   [editorType]="editorType"
   [config]="editorConfig"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"

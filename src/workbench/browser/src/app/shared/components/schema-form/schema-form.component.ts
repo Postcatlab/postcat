@@ -1,3 +1,4 @@
+import { trigger, transition, animate, style } from '@angular/animations';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { debounce } from 'lodash-es';
@@ -9,8 +10,25 @@ const compMap = {
 } as const;
 @Component({
   selector: 'eo-schema-form',
+  animations: [
+    trigger('myInsertRemoveTrigger', [
+      transition(':enter', [style({ opacity: 0 }), animate('100ms', style({ opacity: 1 }))]),
+      transition(':leave', [animate('100ms', style({ opacity: 0 }))])
+    ])
+  ],
+  styles: [
+    `
+      form {
+        min-height: 200px;
+        display: none;
+      }
+      form:last-of-type {
+        display: block;
+      }
+    `
+  ],
   template: `
-    <form *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
+    <form @myInsertRemoveTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
