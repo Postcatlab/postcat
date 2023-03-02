@@ -7,7 +7,6 @@ const compMap = {
   number: 'input-number',
   boolean: 'switch'
 } as const;
-
 @Component({
   selector: 'eo-schema-form',
   template: `
