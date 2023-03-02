@@ -1,8 +1,0 @@
-version: {version}
-files:
-  - url: {filename}
-    sha512: {sha512}
-    size: {size}
-path: {filename}
-sha512: {sha512}
-releaseDate: '{time}'
