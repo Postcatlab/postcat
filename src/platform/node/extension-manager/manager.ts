@@ -1,3 +1,4 @@
+import { LanguageService } from 'eo/app/electron-main/language.service';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { HOME_DIR } from 'eo/shared/electron-main/constant';
 import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -43,8 +44,14 @@ export class ModuleManager {
    */
   private readonly features: Map<string, Map<string, FeatureInfo>>;
 
+  private lang;
+
   constructor() {
-    this.moduleHandler = new ModuleHandler({ baseDir: HOME_DIR });
+    this.lang = LanguageService;
+    this.moduleHandler = new ModuleHandler({
+      baseDir: HOME_DIR,
+      registry: this.lang.get() === 'zh-Hans' ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org'
+    });
     this.modules = new Map();
     this.features = new Map();
     this.init();
