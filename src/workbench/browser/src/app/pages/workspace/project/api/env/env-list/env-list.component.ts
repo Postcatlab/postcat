@@ -70,6 +70,8 @@ export class EnvListComponent implements OnDestroy {
     });
   }
   addEnv(pid = 1) {
-    this.router.navigate(['/home/workspace/project/api/env/edit']);
+    this.router.navigate(['/home/workspace/project/api/env/edit'], {
+      queryParams: { pageID: Date.now() }
+    });
   }
 }

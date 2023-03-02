@@ -10,7 +10,7 @@ export class TestServerLocalNodeService extends TestServerService {
   }
   init(receiveMessage: (message) => void) {
     this.electron.ipcRenderer.on('unitTest', (event, args) => {
-      console.log('[localNode]receiveMessage', args);
+      // console.log('[localNode]receiveMessage', args);
       receiveMessage(this.formatResponseData(args));
     });
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationError, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
@@ -190,7 +190,16 @@ export class StoreService {
 
   constructor(private setting: SettingService, private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
+    this.router.events
+      .pipe(
+        filter(event => {
+          if (event instanceof NavigationError) {
+            console.error('NavigationError', event);
+          }
+          return event instanceof NavigationEnd;
+        })
+      )
+      .subscribe(this.routeListener);
     autorun(() => {
       if (this.url) {
         this.setPageLevel();

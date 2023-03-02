@@ -3,7 +3,6 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 
@@ -20,10 +19,19 @@ import { DataSourceService } from '../../../shared/services/data-source/data-sou
             </div>
             <div i18n>Make sure to copy your token. It will never be displayed again.</div>
             <div>
-              <span class="alert-text">{{ token }}</span>
-              <button eo-ng-button nzType="text" class="copy-btn mx-2" (click)="handleCopy(token)"
-                ><eo-iconpark-icon name="copy"></eo-iconpark-icon
-              ></button>
+              <p
+                class="alert-text"
+                nz-typography
+                [nzContent]="token"
+                nzCopyable
+                nzEllipsis
+                [nzCopyText]="token"
+                [nzCopyIcons]="[copedIcon, copedIcon]"
+              >
+              </p>
+              <ng-template #copedIcon>
+                <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+              </ng-template>
             </div>
           </section>
         </ng-template>
@@ -46,13 +54,6 @@ export class TokenComponent {
     private dataSource: DataSourceService
   ) {
     this.token = '';
-  }
-
-  handleCopy(text) {
-    const isOk = copy(text);
-    if (isOk) {
-      this.eoMessage.success($localize`Copied`);
-    }
   }
 
   closeAlert() {
