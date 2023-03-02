@@ -45,8 +45,8 @@ export class WorkspaceOverviewComponent implements OnInit {
       }
     );
     autorun(async () => {
-      await waitNextTick();
-      this.title = this.store.getCurrentWorkspace?.title;
+      if (!this.store.getCurrentWorkspace) return;
+      this.title = this.store.getCurrentWorkspace.title;
     });
   }
 }

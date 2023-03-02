@@ -51,6 +51,7 @@ export interface ColumnItem {
   errorTip?: string;
   right?: boolean;
   left?: boolean;
+  maxlength?: number;
   sortable?: boolean;
   filterable?: boolean;
   resizeable?: boolean;

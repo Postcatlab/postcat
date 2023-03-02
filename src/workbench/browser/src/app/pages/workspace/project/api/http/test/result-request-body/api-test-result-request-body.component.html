@@ -14,6 +14,7 @@
   <eo-monaco-editor
     *ngIf="contentType !== 'formData'"
     class="mt-[20px]"
+    [autoHeight]="true"
     [(code)]="model"
     [config]="{ readOnly: true }"
     [eventList]="['type', 'format', 'copy', 'search']"

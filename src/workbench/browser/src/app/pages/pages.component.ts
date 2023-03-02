@@ -38,10 +38,10 @@ export class PagesComponent implements OnInit {
     });
 
     // Show cookie tips
-    if (!(this.hasShowCookieTips || this.electron.isElectron) && this.lang.systemLanguage === 'en-US') {
-      StorageUtil.set('has_show_cookie_tips', true);
-      this.showCookiesTips();
-    }
+    // if (!(this.hasShowCookieTips || this.electron.isElectron) && this.lang.systemLanguage === 'en-US') {
+    //   StorageUtil.set('has_show_cookie_tips', true);
+    //   this.showCookiesTips();
+    // }
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);
