@@ -37,7 +37,7 @@ If you feel good after trying it out, please give our cat a Star and Fork~ Your 
 - 🧩 Custom theme style
 - 🌐 Multilingual support: Chinese, English
 
-Learn more：[Github Project](https://github.com/orgs/eolinker/projects/1/views/16)
+Learn more：[Github Project](https://github.com/orgs/Postcatlab/projects/3)
 
 ## Bug and Feature Request
 

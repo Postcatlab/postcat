@@ -467,7 +467,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
 
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    pcConsole.log(this.theadConf, this.tbodyConf);
+    // pcConsole.log(this.theadConf, this.tbodyConf);
   }
   private initColumnWidth() {
     this.COLUMN_WIDTH_KEY = `TABLE_COLUMN_WIDTH_${this.setting.id || this.DEFAULT_ID}`;
