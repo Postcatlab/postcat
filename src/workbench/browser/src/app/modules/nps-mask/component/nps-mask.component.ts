@@ -38,7 +38,6 @@ export class NpsMaskComponent implements OnInit {
     });
   }
   private showNps() {
-    console.log('showNps');
     //@ts-ignore
     _howxm('event', 'show_nps', {});
   }
