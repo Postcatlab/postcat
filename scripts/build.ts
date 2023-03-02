@@ -151,6 +151,7 @@ const signWindows = () => {
     }
 
     modifyPkgInfo();
+    // 生成自定义安装包
     const ls = spawn('yarn', ['wininstaller'], {
       // 仅在当前运行环境为 Windows 时，才使用 shell
       shell: isWin

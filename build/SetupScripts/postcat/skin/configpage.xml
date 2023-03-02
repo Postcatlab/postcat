@@ -3,7 +3,7 @@
    <!-- 安装目录 -->
    <VerticalLayout >
    
-	<Control padding="215,55,0,0" width="130" height="130" bkimage="images\postcat_logo.png" />
+	<Control padding="215,55,0,0" width="130" height="130" bkimage="images\logo2.png" />
 	
 	<Label name="instinfo" padding="20,-16,20,0" height="22" font="3" align="center" textcolor="0xFFFFFFFF" text="Postcat" />
 	<VerticalLayout float="true" pos="0,214,560,350" name="config-bottom" >

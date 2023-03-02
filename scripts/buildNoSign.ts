@@ -124,6 +124,7 @@ const modifyPkgInfo = () => {
   writeFileSync(pkgPath, JSON.stringify(pkgInfo, null, 2));
   // 退出进程/意外退出进程 时主动还原 package.json 信息
   process.on('exit', restorePkgInfo);
+  process.on('uncaughtException', restorePkgInfo);
 };
 
 const restorePkgInfo = () => {
