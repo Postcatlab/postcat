@@ -1,0 +1,1 @@
+!define SKINZIP_PWD "rEnCqP05u064348lOKaxQ3Xg"

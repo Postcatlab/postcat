@@ -1,0 +1,191 @@
+﻿# Header, don't edit
+NLF v6
+# Start editing here
+# Language ID
+1030
+# Font and size - dash (-) means default
+-
+-
+# Codepage - dash (-) means ASCII code page
+1252
+# RTL - anything else than RTL means LTR
+-
+# Translation by Claus Futtrup, scootergrisen
+# ^Branding
+Nullsoft Install System %s
+# ^SetupCaption
+$(^Name) Installation
+# ^UninstallCaption
+$(^Name) Afinstallation
+# ^LicenseSubCaption
+: Licensaftale
+# ^ComponentsSubCaption
+: Installationsvalgmuligheder
+# ^DirSubCaption
+: Installationsmappe
+# ^InstallingSubCaption
+: Installerer
+# ^CompletedSubCaption
+: Gennemført
+# ^UnComponentsSubCaption
+: Afinstallationsvalgmuligheder
+# ^UnDirSubCaption
+: Afinstallationsmappe
+# ^ConfirmSubCaption
+: Bekræft
+# ^UninstallingSubCaption
+: Afinstallerer
+# ^UnCompletedSubCaption
+: Gennemført
+# ^BackBtn
+< &Tilbage
+# ^NextBtn
+&Næste >
+# ^AgreeBtn
+Jeg &accepterer
+# ^AcceptBtn
+Jeg &accepterer vilkårene i licensaftalen
+# ^DontAcceptBtn
+Jeg &accepterer ikke vilkårene i licensaftalen
+# ^InstallBtn
+&Installer
+# ^UninstallBtn
+&Afinstaller
+# ^CancelBtn
+Annuller
+# ^CloseBtn
+&Luk
+# ^BrowseBtn
+G&ennemse...
+# ^ShowDetailsBtn
+Vis &detaljer
+# ^ClickNext
+Tryk på Næste for at fortsætte.
+# ^ClickInstall
+Tryk på Installer for at starte installationen.
+# ^ClickUninstall
+Tryk på Afinstaller for at starte afinstallationen.
+# ^Name
+Navn
+# ^Completed
+Gennemført
+# ^LicenseText
+Gennemlæs venligst licensaftalen før installationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du klikke på Jeg accepterer.
+# ^LicenseTextCB
+Gennemlæs venligst licensaftalen før installationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du klikke på afkrydsningsfeltet nedenfor. $_CLICK
+# ^LicenseTextRB
+Gennemlæs venligst licensaftalen før installationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du vælge den første valgmulighed nedenfor. $_CLICK
+# ^UnLicenseText
+Gennemlæs venligst licensaftalen før afinstallationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du trykke på Jeg accepterer.
+# ^UnLicenseTextCB
+Gennemlæs venligst licensaftalen før afinstallationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du klikke på afkrydsningsfeltet nedenfor. $_CLICK
+# ^UnLicenseTextRB
+Gennemlæs venligst licensaftalen før afinstallationen af $(^NameDA). Hvis du accepterer alle vilkår i aftalen, skal du vælge den første valgmulighed nedenfor. $_CLICK
+# ^Custom
+Brugerdefineret
+# ^ComponentsText
+Tilvælg de komponenter du vil installere, og fravælg de komponenter du ikke vil installere. $_CLICK
+# ^ComponentsSubText1
+Vælg installationstype:
+# ^ComponentsSubText2_NoInstTypes
+Vælg de komponenter der skal installeres:
+# ^ComponentsSubText2
+Eller vælg de valgfrie komponenter du ønsker at installere:
+# ^UnComponentsText
+Tilvælg de komponenter du vil afinstallere, og fravælg de komponenter du ikke vil afinstallere. $_CLICK
+# ^UnComponentsSubText1
+Vælg afinstallationstype:
+# ^UnComponentsSubText2_NoInstTypes
+Vælg de komponenter der skal afinstalleres:
+# ^UnComponentsSubText2
+Eller vælg de valgfrie komponenter du ønsker at afinstallere:
+# ^DirText
+Installationsguiden vil installere $(^NameDA) i følgende mappe. For at installere i en anden mappe, tryk på Gennemse og vælg en anden mappe. $_CLICK
+# ^DirSubText
+Destinationsmappe
+# ^DirBrowseText
+Vælg den mappe hvori $(^NameDA) skal installeres:
+# ^UnDirText
+Installationsguiden vil afinstallere $(^NameDA) fra følgende mappe. For at afinstallere fra en anden mappe, tryk på Gennemse og vælg en anden mappe. $_CLICK
+# ^UnDirSubText
+""
+# ^UnDirBrowseText
+Vælg den mappe hvorfra $(^NameDA) skal afinstalleres:
+# ^SpaceAvailable
+"Ledig plads: "
+# ^SpaceRequired
+"Nødvendig plads: "
+# ^UninstallingText
+$(^NameDA) vil blive afinstalleret fra følgende mappe. $_CLICK
+# ^UninstallingSubText
+Afinstallerer fra:
+# ^FileError
+Fejl ved skrivning af fil til skrivning: \r\n\r\n$0\r\n\r\nTryk på Annuller for at stoppe installationen,\r\nPrøv igen for at prøve igen, eller\r\nIgnorer for at springe over denne fil.
+# ^FileError_NoIgnore
+Fejl ved åbning af fil til skrivning: \r\n\r\n$0\r\n\r\nTryk på Prøv igen for at prøve igen, eller\r\nAnnuller for at stoppe installationen.
+# ^CantWrite
+"Kan ikke skrive: "
+# ^CopyFailed
+Kopiering mislykkedes
+# ^CopyTo
+"Kopier til "
+# ^Registering
+"Registrerer: "
+# ^Unregistering
+"Afregisterer: "
+# ^SymbolNotFound
+"Kunne ikke finde symbol: "
+# ^CouldNotLoad
+"Kunne ikke indlæse: "
+# ^CreateFolder
+"Opret mappe: "
+# ^CreateShortcut
+"Opret genvej: "
+# ^CreatedUninstaller
+"Afinstallationsguide oprettet: "
+# ^Delete
+"Slet fil: "
+# ^DeleteOnReboot
+"Slet ved genstart: "
+# ^ErrorCreatingShortcut
+"Fejl ved oprettelse af genvej: "
+# ^ErrorCreating
+"Fejl ved oprettelse: "
+# ^ErrorDecompressing
+Fejl ved udpakning af data! Beskadiget installationsguide?
+# ^ErrorRegistering
+Fejl ved registrering af DLL
+# ^ExecShell
+"ExecShell: "
+# ^Exec
+"Kør: "
+# ^Extract
+"Udpak: "
+# ^ErrorWriting
+"Udpak: fejl ved skrivning til fil "
+# ^InvalidOpcode
+Beskadiget installationsguide: ugyldig opcode
+# ^NoOLE
+"Ingen OLE for: "
+# ^OutputFolder
+"Outputmappe: "
+# ^RemoveFolder
+"Slet mappe: "
+# ^RenameOnReboot
+"Omdøb ved genstart: "
+# ^Rename
+"Omdøb: "
+# ^Skipped
+"Sprunget over: "
+# ^CopyDetails
+Kopier detaljer til udklipsholderen
+# ^LogInstall
+Log installationsproces
+# ^Byte
+B
+# ^Kilo
+ K
+# ^Mega
+ M
+# ^Giga
+ G

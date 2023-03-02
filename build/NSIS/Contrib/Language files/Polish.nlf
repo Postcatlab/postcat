@@ -1,0 +1,195 @@
+﻿# Header, don't edit
+NLF v6
+# Start editing here
+# Language ID
+1045
+# Font and size - dash (-) means default
+-
+-
+# Codepage - dash (-) means ASCII code page
+1250
+# RTL - anything else than RTL means LTR
+-
+# Translation by Piotr Murawski & Rafał Lampe
+# Updated by cube and SYSTEMsoft Group
+# Corrected by Marek Stępień <mstepien@aviary.pl> - http://www.aviary.pl
+# Corrected by Mateusz Gola (aka Prozac) - http://www.avirecomp.com
+# Updated by Paweł Porwisz (http://www.pawelporwisz.pl)
+# ^Branding
+Nullsoft Install System %s
+# ^SetupCaption
+Instalator $(^Name)
+# ^UninstallCaption
+Deinstalator $(^Name)
+# ^LicenseSubCaption
+: Umowa licencyjna
+# ^ComponentsSubCaption
+: Opcje instalacji
+# ^DirSubCaption
+: Folder instalacyjny
+# ^InstallingSubCaption
+: Instalowanie plików
+# ^CompletedSubCaption
+: Zakończono
+# ^UnComponentsSubCaption
+: Opcje deinstalacji
+# ^UnDirSubCaption
+: Folder deinstalacyjny
+# ^ConfirmSubCaption
+: Potwierdzenie
+# ^UnDirSubCaption
+: Deinstalowanie plików
+# ^UnCompletedSubCaption
+: Zakończono
+# ^BackBtn
+< &Wstecz
+# ^NextBtn
+&Dalej >
+# ^AgreeBtn
+&Zgadzam się
+# ^AcceptBtn
+&Akceptuję warunki umowy licencyjnej
+# ^DontAcceptBtn
+&Nie akceptuję warunków umowy licencyjnej
+# ^InstallBtn
+&Zainstaluj
+# ^UninstallBtn
+&Odinstaluj
+# ^CancelBtn
+Anuluj
+# ^CloseBtn
+&Zamknij
+# ^BrowseBtn
+&Przeglądaj...
+# ^ShowDetailsBtn
+Pokaż &szczegóły
+# ^ClickNext
+Kliknij przycisk 'Dalej', aby kontynuować.
+# ^ClickInstall
+Kliknij przycisk 'Zainstaluj', aby rozpocząć instalację.
+# ^ClickUninstall
+Kliknij przycisk 'Odinstaluj', aby rozpocząć deinstalację.
+# ^Name
+Nazwa
+# ^Completed
+Zakończono
+# ^LicenseText
+Przed instalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, kliknij przycisk 'Zgadzam się'.
+# ^LicenseTextCB
+Przed instalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, kliknij poniższe pole wyboru. $_CLICK.
+# ^LicenseTextRB
+Przed instalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, wybierz pierwszą z poniższych opcji. $_CLICK.
+# ^UnLicenseText
+Przed deinstalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, kliknij przycisk 'Zgadzam się'.
+# ^UnLicenseTextCB
+Przed deinstalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, kliknij poniższe pole wyboru. $_CLICK.
+# ^UnLicenseTextRB
+Przed deinstalacją $(^NameDA) zapoznaj się z warunkami licencji. Jeśli akceptujesz wszystkie warunki umowy, wybierz pierwszą z poniższych opcji. $_CLICK.
+# ^Custom
+Użytkownika
+# ^ComponentsText
+Zaznacz komponenty, które chcesz zainstalować i odznacz te, których nie chcesz instalować. $_CLICK
+# ^ComponentsSubText1
+Wybierz typ instalacji:
+# ^ComponentsSubText2_NoInstTypes
+Wybierz komponenty do zainstalowania:
+# ^ComponentsSubText2
+Albo wybierz opcjonalne komponenty, które chcesz zainstalować:
+# ^UnComponentsText
+Zaznacz komponenty, które chcesz odinstalować i odznacz te, które nie zostaną odinstalowane. $_CLICK
+# ^UnComponentsSubText1
+Wybierz typ deinstalacji:
+# ^UnComponentsSubText2_NoInstTypes
+Wybierz komponenty do odinstalowania:
+# ^UnComponentsSubText2
+Albo wybierz opcjonalne komponenty, które chcesz odinstalować:
+# ^DirText
+Instalator zainstaluje $(^NameDA) w podanym poniżej folderze docelowym (możesz także kliknąć przycisk 'Przeglądaj...' i wybrać inny folder). $_CLICK
+# ^DirSubText
+Folder docelowy
+# ^DirBrowseText
+Wybierz folder instalacyjny $(^NameDA):
+# ^UnDirText
+Deinstalator usunie $(^NameDA) z następującego folderu. Aby odinstalować z innego folderu, kliknij przycisk 'Przeglądaj...' i wybierz folder. $_CLICK
+# ^UnDirSubText
+""
+# ^UnDirBrowseText
+Wybierz folder, z którego zostanie odinstalowany $(^NameDA):
+# ^SpaceAvailable
+"Dostępne miejsce: "
+# ^SpaceRequired
+"Wymagane miejsce: "
+# ^UninstallingText
+Ten kreator odinstaluje $(^NameDA) z Twojego komputera. $_CLICK
+# ^UninstallingSubText
+Deinstalacja z: 
+# ^FileError
+Błąd otwarcia pliku do zapisu: \r\n\r\n$0\r\n\r\nWybierz 'Anuluj', aby przerwać instalację,\r\n'Ponów', aby ponowić zapis do pliku lub\r\n'Ignoruj', aby pominąć ten plik.
+# ^FileError_NoIgnore
+Błąd otwarcia pliku do zapisu: \r\n\r\n$0\r\n\r\nWybierz 'Ponów', aby ponowić zapis do pliku lub\r\n'Anuluj', aby przerwać instalację.
+# ^CantWrite
+"Nie można zapisać: "
+# ^CopyFailed
+Błąd kopiowania
+# ^CopyTo
+"Kopiuj do "
+# ^Registering 
+"Rejestrowanie: "
+# ^Unregistering
+"Wyrejestrowywanie: "
+# ^SymbolNotFound
+"Nie można odnaleźć symbolu: "
+# ^CouldNotLoad
+"Nie można wczytać: "
+#^CreateFolder
+"Utwórz folder: "
+# ^CreateShortcut
+"Utwórz skrót: "
+# ^CreatedUninstaller
+"Utworzono deinstalator: "
+# ^Delete
+"Usuń plik: "
+# ^DeleteOnReboot
+"Usuń przy ponownym uruchomieniu: "
+# ^ErrorCreatingShortcut
+"Błąd tworzenia skrótu: "
+# ^ErrorCreating
+"Błąd tworzenia: "
+# ^ErrorDecompressing
+Błąd wyodrębniania danych! Uszkodzony instalator?
+# ^ErrorRegistering
+Błąd rejestracji pliku DLL
+# ^ExecShell
+"ExecShell: "
+# ^Exec
+"Uruchom: "
+# ^Extract
+"Wyodrębnij: "
+# ^ErrorWriting
+"Wyodrębnij: błąd zapisu do pliku "
+# ^InvalidOpcode
+Instalator uszkodzony: nieprawidłowy kod operacji
+# ^NoOLE
+"Brak OLE dla: "
+# ^OutputFolder
+"Folder wyjściowy: "
+# ^RemoveFolder
+"Usuń folder: "
+# ^RenameOnReboot
+"Zmień nazwę przy ponownym uruchomieniu: "
+# ^Rename
+"Zmień nazwę: "
+# ^Skipped
+"Pominięte: "
+# ^CopyDetails
+Kopiuj szczegóły do schowka
+# ^LogInstall
+Rejestruj przebieg instalacji
+# ^Byte
+B
+# ^Kilo
+ K
+# ^Mega
+ M
+# ^Giga
+ G

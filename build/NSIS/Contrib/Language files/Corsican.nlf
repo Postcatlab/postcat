@@ -1,0 +1,193 @@
+﻿# Header, don't edit
+NLF v6
+# Language ID
+1155
+# Font and size - dash (-) means default
+-
+-
+# Codepage - dash (-) means ASCII code page
+1252
+# RTL - anything other than RTL means LTR
+-
+# Translation by Patriccollu di Santa Maria è Sichè - <Patrick.Santa-Maria(AT)laposte.net>
+# Updated on August 9th, 2020 for version 3.06.1
+# Created on April 24th, 2016 for version 3.0rc1
+# Traduzzione corsa creata è mantinuta da Patriccollu di Santa Maria è Sichè
+# ^Branding
+Nullsoft Install System %s
+# ^SetupCaption
+Assistente d’installazione di $(^Name)
+# ^UninstallCaption
+Disinstallazione di $(^Name)
+# ^LicenseSubCaption
+: Cuntrattu di licenza
+# ^ComponentsSubCaption
+: Ozzioni d’installazione
+# ^DirSubCaption
+: Cartulare d’installazione
+# ^InstallingSubCaption
+: Installazione in corsu
+# ^CompletedSubCaption
+: Installazione compia
+# ^UnComponentsSubCaption
+: Ozzioni di disinstallazione
+# ^UnDirSubCaption
+: Cartulare di disinstallazione
+# ^ConfirmSubCaption
+: Cunfirmazione
+# ^UninstallingSubCaption
+: Disinstallazione in corsu
+# ^UnCompletedSubCaption
+: Disinstallazione compia
+# ^BackBtn
+< &Precedente
+# ^NextBtn
+&Seguente >
+# ^AgreeBtn
+&Accunsentu
+# ^AcceptBtn
+Sò d’&accunsentu cù i termini di u cuntrattu di licenza
+# ^DontAcceptBtn
+Ùn sò &micca d’accunsentu cù i termini di u cuntrattu di licenza
+# ^InstallBtn
+&Installà
+# ^UninstallBtn
+&Disinstallà
+# ^CancelBtn
+Abbandunà
+# ^CloseBtn
+&Chjode
+# ^BrowseBtn
+&Sfuglià...
+# ^ShowDetailsBtn
+Affissà i &ditaglii
+# ^ClickNext
+Sciglite Seguente per cuntinuà.
+# ^ClickInstall
+Sciglite Installà per principià l’installazione.
+# ^ClickUninstall
+Sciglite Disinstallà per principià a disinstallazione.
+# ^Name
+Nome
+# ^Completed
+Compiu
+# ^LicenseText
+Ci vole à leghje u cuntrattu di licenza nanzu d’installà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite Accunsentu.
+# ^LicenseTextCB
+Ci vole à leghje u cuntrattu di licenza nanzu d’installà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite a casella inghjò. $_CLICK
+# ^LicenseTextRB
+Ci vole à leghje u cuntrattu di licenza nanzu d’installà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite a prima ozzione inghjò. $_CLICK
+# ^UnLicenseText
+Ci vole à leghje u cuntrattu di licenza nanzu di disinstallà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite Accunsentu.
+# ^UnLicenseTextCB
+Ci vole à leghje u cuntrattu di licenza nanzu di disinstallà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite a casella inghjò. $_CLICK
+# ^UnLicenseTextRB
+Ci vole à leghje u cuntrattu di licenza nanzu di disinstallà $(^NameDA). S’è voi site d’accunsentu cù tutti i termini di u cuntrattu, sciglite a prima ozzione inghjò. $_CLICK
+# ^Custom
+Persunalizata
+# ^ComponentsText
+Selezziunà i cumpunenti chì voi vulete installà è viutà a casella di quelli ch’ellu ùn ci vole micca à installà. $_CLICK
+# ^ComponentsSubText1
+Selezziunà u tipu d’installazione :
+# ^ComponentsSubText2_NoInstTypes
+Selezziunà i cumpunenti à installà :
+# ^ComponentsSubText2
+Osinnò, selezziunà i cumpunenti addizziunali chì voi vulete installà :
+# ^UnComponentsText
+Selezziunà i cumpunenti chì voi vulete disinstallà è viutà a casella di quelli ch’ellu ùn ci vole à disinstallà. $_CLICK
+# ^UnComponentsSubText1
+Selezziunà u tipu di disinstallazione :
+# ^UnComponentsSubText2_NoInstTypes
+Selezziunà i cumpunenti à disinstallà :
+# ^UnComponentsSubText2
+Osinnò, selezziunà i cumpunenti addizziunali chì voi vulete disinstallà :
+# ^DirText
+L’assistente hà da installà $(^NameDA) in quessu cartulare. Per installà in un altru cartulare, sciglite Sfuglià è selezziunà un altru cartulare. $_CLICK
+# ^DirSubText
+Cartulare di destinazione
+# ^DirBrowseText
+Selezziunà u cartulare d’installazione di $(^NameDA) :
+# ^UnDirText
+L’assistente hà da disinstallà $(^NameDA) da quessu cartulare. Per disinstallà da un altru cartulare, sciglite Sfuglià è selezziunà un altru cartulare. $_CLICK
+# ^UnDirSubText
+Cartulare d’installazione
+# ^UnDirBrowseText
+Selezziunà u cartulare di disinstallazione di $(^NameDA) :
+# ^SpaceAvailable
+Spaziu dispunibule :
+# ^SpaceRequired
+Spaziu richiestu :
+# ^UninstallingText
+$(^NameDA) serà disinstallatu da quessu cartulare. $_CLICK
+# ^UninstallingSubText
+Disinstallazione da :
+# ^FileError
+Sbagliu durante l’accessu in scrittura di u schedariu : \r\n\r\n$0\r\n\r\nSciglite Interrompe per piantà l’installazione,\r\nTorna per pruvà torna, o\r\nIgnurà per ignurà stu schedariu.
+# ^FileError_NoIgnore
+Sbagliu durante l’accessu in scrittura di u schedariu : \r\n\r\n$0\r\n\r\nSciglite Torna per pruvà torna, o\r\nAbbandunà per piantà l’installazione.
+# ^CantWrite
+Ùn pò micca scrive :
+# ^CopyFailed
+Fiascu di a copia
+# ^CopyTo
+Cupià ver di
+# ^Registering
+Arregistramentu :
+# ^Unregistering
+Disarregistramentu :
+# ^SymbolNotFound
+Impussibule di truvà un simbolu :
+# ^CouldNotLoad
+Impussibule di caricà :
+# ^CreateFolder
+Creazione di u cartulare :
+# ^CreateShortcut
+Creazione di l’accurtatoghju :
+# ^CreatedUninstaller
+Creazione di l’assistente di disinstallazione :
+# ^Delete
+Squassatura di schedariu :
+# ^DeleteOnReboot
+Squassatura à l’avviu di l’urdinatore :
+# ^ErrorCreatingShortcut
+Sbagliu durante a creazione di l’accurtatoghju :
+# ^ErrorCreating
+Sbagliu durante a creazione di :
+# ^ErrorDecompressing
+Sbagliu durante a scumprezzione di i dati ! Stalladore alteratu ?
+# ^ErrorRegistering
+Sbagliu durante l’arregistramentu di DLL
+# ^ExecShell
+ExecShell :
+# ^Exec
+Eseguisce :
+# ^Extract
+Estrazzione :
+# ^ErrorWriting
+Estrazzione : sbagliu di scrittura ver di u schedariu
+# ^InvalidOpcode
+Stalladore alteratu : opcode micca accettevule
+# ^NoOLE
+Alcunu OLE per :
+# ^OutputFolder
+Cartulare di destinazione :
+# ^RemoveFolder
+Cacciatura di u cartulare :
+# ^RenameOnReboot
+Rinumà à l’avviu di l’urdinatore :
+# ^Rename
+Rinumà :
+# ^Skipped
+Tralasciatu :
+# ^CopyDetails
+Cupià i detaglii ver di u preme’papei
+# ^LogInstall
+Arregistrà u ghjurnale d’installazione
+# ^Byte
+o
+# ^Kilo
+ K
+# ^Mega
+ M
+# ^Giga
+ G

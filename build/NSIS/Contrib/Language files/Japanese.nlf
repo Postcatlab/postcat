@@ -1,0 +1,190 @@
+﻿# Header, don't edit
+NLF v6
+# Language ID
+1041
+# Font and size - dash (-) means default
+ＭＳ Ｐゴシック
+9
+# Codepage - dash (-) means ASCII code page
+932
+# RTL - anything else than RTL means LTR
+-
+# Translation by Dnanako(2002), Updated by Takahiro Yoshimura(2003) <takahiro_y@monolithworks.co.jp>, maboroshin(2020)
+# ^Branding
+Nullsoft Install System %s
+# ^SetupCaption
+$(^Name) セットアップ
+# ^UninstallCaption
+$(^Name) アンインストール
+# ^LicenseSubCaption
+:使用許諾契約
+# ^ComponentsSubCaption
+:インストール オプション
+# ^DirSubCaption
+:インストール フォルダ
+# ^InstallingSubCaption
+:インストール
+# ^CompletedSubCaption
+:完了
+# ^UnComponentsSubCaption
+: アンインストール オプション
+# ^UnDirSubCaption
+: アンインストール フォルダ
+# ^ComfirmSubCaption
+:確認
+# ^UninstallingSubCaption
+:アンインストール
+# ^UnCompletedSubCaption
+:完了
+# ^BackBtn
+< 戻る(&B)
+# ^NextBtn
+次へ(&N) >
+# ^AgreeBtn
+同意する(&A)
+# ^AcceptBtn
+この使用許諾契約に同意する(&A)
+# ^DontAcceptBtn
+この使用許諾契約に同意しません(&D)
+# ^InstallBtn
+インストール(&I)
+# ^UninstallBtn
+ｱﾝｲﾝｽﾄｰﾙ(&U)
+# ^CancelBtn
+キャンセル
+# ^CloseBtn
+閉じる(&C)
+# ^BrowseBtn
+参照(&R)...
+# ^ShowDetailsBtn
+詳細を表示(&D)
+# ^ClickNext
+「次へ」をクリックし続行します。
+# ^ClickInstall
+「インストール」をクリックしインストールを開始します。
+# ^ClickUninstall
+「アンインストール」をクリックしアンインストールを開始します。
+# ^Name
+アプリケーション
+# ^Completed
+完了
+# ^LicenseText
+$(^NameDA) をインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、「同意する」をクリックしてください。
+# ^LicenseTextCB
+$(^NameDA) をインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、下のチェックボックスをクリックしてください。 $_CLICK
+# ^LicenseTextRB
+$(^NameDA) をインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、下の選択肢から最初のものを選択してください。 $_CLICK
+# ^UnLicenseText
+$(^NameDA) をアンインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、「同意する」をクリックしてください。
+# ^UnLicenseTextCB
+$(^NameDA) をアンインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、下のチェックボックスをクリックしてください。 $_CLICK
+# ^UnLicenseTextRB
+$(^NameDA) をアンインストールする前に、使用許諾契約を確認してください。契約のすべての条件に同意するなら、下の選択肢から最初のものを選択してください。 $_CLICK
+# ^Custom
+カスタム
+# ^ComponentsText
+インストールしたい構成要素にチェックしてください。不要なものはチェックを外してください。 $_CLICK
+# ^ComponentsSubText1
+インストールの種類を選択:
+# ^ComponentsSubText2_NoInstTypes
+インストールする構成要素を選択:
+# ^ComponentsSubText2
+またはインストールしたい構成要素を選択:
+# ^UnComponentsText
+アンインストールしたい構成要素にチェックしてください。そうでないものはチェックを外してください。 $_CLICK
+# ^UnComponentsSubText1
+アンインストールの種類を選択:
+# ^UnComponentsSubText2_NoInstTypes
+アンインストールする構成要素を選択:
+# ^UnComponentsSubText2
+またはアンインストールしたい構成要素を選択:
+# ^DirText
+$(^NameDA) を以下のフォルダにインストールします。別のフォルダにインストールするには、「参照」 を押しフォルダを選択してください。 $_CLICK
+# ^DirSubText
+インストール先のフォルダ
+# ^DirBrowseText
+$(^NameDA) をインストールするフォルダを選択:
+# ^UnDirText
+$(^NameDA) を以下のフォルダからアンインストールします。別のフォルダからアンインストールするには、「参照」 を押しフォルダを選択してください。 $_CLICK
+# ^UnDirSubText
+""
+# ^UnDirBrowseText
+$(^NameDA) をアンインストールするフォルダを選択:
+# ^SpaceAvailable
+空き容量: 
+# ^SpaceRequired
+必要容量: 
+# ^UninstallingText
+$(^NameDA) を以下のフォルダからアンインストールされます。 $_CLICK
+# ^UninstallingSubText
+アンインストール元:
+# ^FileError
+書き込みファイルオープンのエラー:\r\n\t"$0"\r\nインストールを中止するには「中止」、\r\n再びこのファイルの作成を試みるには「再試行」、\r\nこのファイルをスキップして続けるには「無視」を押してください。
+# ^FileError_NoIgnore
+書き込みファイルオープンのエラー: \r\n\t"$0"\r\n再びこのファイルの作成を試みるには「再試行」、\r\nインストールを中止するには「キャンセル」を押してください。
+# ^CantWrite
+書き込めません:
+# ^CopyFailed
+コピー失敗
+# ^CopyTo
+コピー
+# ^Registering
+登録中:
+# ^Unregistering
+登録解除中:
+# ^SymbolNotFound
+シンボルが見つかりません:
+# ^CouldNotLoad
+読み込みに失敗:
+# ^CreateFolder
+フォルダ作成:
+# ^CreateShortcut
+ショートカット作成:
+# ^CreatedUninstaller
+アンインストーラ作成:
+# ^Delete
+ファイル削除:
+# ^DeleteOnReboot
+再起動時に削除:
+# ^ErrorCreatingShortcut
+ショートカット作成エラー:
+# ^ErrorCreating
+作成エラー:
+# ^ErrorDecompressing
+データの展開エラー\r\n\r\nインストーラが破損していませんか？
+# ^ErrorRegistering
+DLL の登録エラー
+# ^ExecShell
+拡張子の関連付け実行: 
+# ^Execute
+実行:
+# ^Extract
+展開:
+# ^ErrorWriting
+展開:ファイルへの書き込みエラー
+# ^InvalidOpcode
+インストーラーが壊れている:無効な opcode
+# ^NoOLE
+OLE がありません:
+# ^OutputFolder
+出力先フォルダ:
+# ^RemoveFolder
+フォルダ削除:
+# ^RenameOnReboot
+再起動時に名前の変更:
+# ^Rename
+名前の変更:
+# ^Skipped
+省略:
+# ^CopyDetails
+クリップボードへ詳細をコピー
+# ^LogInstall
+インストールの経過をログヘ記録
+# ^Byte
+B
+# ^Kilo
+ K
+# ^Mega
+ M
+# ^Giga
+ G
