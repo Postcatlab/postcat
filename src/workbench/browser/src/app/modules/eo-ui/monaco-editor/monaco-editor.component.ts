@@ -41,6 +41,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   /** Scroll bars appear over 20 lines */
   @Input() maxHeight: number;
   @Input() minHeight = 100;
+  @Input() autoHeight = false;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   /** Automatically identify the type */
@@ -92,6 +93,9 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   };
   contentHeight = 100;
   get height() {
+    if (this.autoHeight) {
+      return undefined;
+    }
     if (this.maxHeight && this.contentHeight > this.maxHeight) {
       return this.maxHeight;
     }
