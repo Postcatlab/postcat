@@ -79,7 +79,6 @@ export class SyncApiComponent implements OnInit, OnChanges {
 
   updateExtensionModel() {
     const currentFormater = this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater);
-    // console.log('currentFormater', { ...currentFormater });
     if (currentFormater && this.currentFormater !== currentFormater) {
       this.currentFormater = currentFormater;
       this.model = {
