@@ -37,7 +37,7 @@ Postcat 现在已经支持 Windows、Mac、Linux等系统，你可以通过以�
 - 🧩 自定义主题风格
 - 🌐 多语言支持：中文、English
 
-了解更多具体迭代计划：[Github Project](https://github.com/orgs/eolinker/projects/1/views/16)
+了解更多具体迭代计划：[Github Project](https://github.com/orgs/Postcatlab/projects/3)
 
 ## Bug 和需求反馈
 
