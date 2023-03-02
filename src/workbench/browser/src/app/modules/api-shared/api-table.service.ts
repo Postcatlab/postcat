@@ -69,6 +69,7 @@ export class ApiTableService {
         left: true,
         type: 'input',
         columnVisible: 'fixed',
+        maxlength: 65535,
         key: 'name'
       },
       dataType: {
@@ -94,6 +95,7 @@ export class ApiTableService {
       example: {
         title: $localize`Example`,
         type: 'input',
+        maxlength: 65535,
         key: 'paramAttr.example'
       },
       editOperate: {
@@ -233,6 +235,7 @@ export class ApiTableService {
         title: $localize`Name`,
         left: true,
         type: 'input',
+        maxlength: 65535,
         columnVisible: 'fixed',
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name'
@@ -252,6 +255,7 @@ export class ApiTableService {
       value: {
         title: $localize`Value`,
         type: 'input',
+        maxlength: 65535,
         key: 'paramAttr.example'
       },
       editOperate: {

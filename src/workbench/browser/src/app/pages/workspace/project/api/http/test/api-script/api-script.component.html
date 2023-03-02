@@ -52,6 +52,7 @@
     <eo-monaco-editor
       [(code)]="code"
       [config]="{ language: 'javascript' }"
+      [autoHeight]="true"
       [eventList]="['format', 'copy', 'search', 'replace']"
       (codeChange)="handleChange($event)"
       [completions]="completions"

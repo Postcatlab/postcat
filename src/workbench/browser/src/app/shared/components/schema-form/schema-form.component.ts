@@ -1,3 +1,4 @@
+import { trigger, transition, animate, style } from '@angular/animations';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { debounce } from 'lodash-es';
@@ -7,11 +8,27 @@ const compMap = {
   number: 'input-number',
   boolean: 'switch'
 } as const;
-
 @Component({
   selector: 'eo-schema-form',
+  animations: [
+    trigger('myInsertRemoveTrigger', [
+      transition(':enter', [style({ opacity: 0 }), animate('100ms', style({ opacity: 1 }))]),
+      transition(':leave', [animate('100ms', style({ opacity: 0 }))])
+    ])
+  ],
+  styles: [
+    `
+      form {
+        min-height: 200px;
+        display: none;
+      }
+      form:last-of-type {
+        display: block;
+      }
+    `
+  ],
   template: `
-    <form *ngIf="isInit && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
+    <form @myInsertRemoveTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
@@ -92,7 +109,7 @@ export class EoSchemaFormComponent implements OnChanges {
   objectKeys = Object.keys;
   properties = {};
   compMap = compMap;
-  isInit = true;
+  isInited = true;
 
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({});
@@ -108,12 +125,12 @@ export class EoSchemaFormComponent implements OnChanges {
   }
 
   init = debounce(() => {
-    this.isInit = false;
+    this.isInited = false;
     this.formatProperties();
     this.initIfThenElse(this.configuration);
 
     setTimeout(() => {
-      this.isInit = true;
+      this.isInited = true;
       this.setSettingsModel(this.properties);
     });
   }, 50);
@@ -144,6 +161,7 @@ export class EoSchemaFormComponent implements OnChanges {
   }
 
   // https://json-schema.org/understanding-json-schema/reference/conditionals.html#if-then-else
+  // 在线测试：https://jsonschema.dev/s/hpWFy
   initIfThenElse(configuration) {
     if (Array.isArray(configuration?.allOf)) {
       const ifFields = configuration.allOf.reduce((prev, curr) => {

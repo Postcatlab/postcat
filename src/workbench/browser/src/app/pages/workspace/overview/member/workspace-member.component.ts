@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MemberService } from 'eo/workbench/browser/src/app/modules/member-list/member.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { makeObservable, observable, action, reaction } from 'mobx';
 
@@ -97,10 +98,13 @@ export class WorkspaceMemberComponent implements OnInit {
     private eMessage: EoNgFeedbackMessageService,
     public member: MemberService,
     private message: MessageService,
-    private trace: TraceService
+    private trace: TraceService,
+    private dataSource: DataSourceService
   ) {}
   createWorkspace() {
-    this.message.send({ type: 'addWorkspace', data: {} });
+    this.dataSource.checkRemoteCanOperate(() => {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    });
   }
   ngOnInit(): void {
     makeObservable(this);

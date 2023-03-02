@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { copyText, eoDeepCopy, copy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy, copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData } from '../../shared/services/storage/db/models/apiData';
 import { ApiMockEntity } from '../../shared/services/storage/index.model';
@@ -12,12 +12,19 @@ import { ApiMockEntity } from '../../shared/services/storage/index.model';
   selector: 'eo-api-mock-table',
   template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
-      <div class="flex items-center">
-        <span class="truncate flex-1">
-          {{ item.url }}
-        </span>
-        <button eo-ng-button nzType="text" (click)="copyText(item.url)"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
-      </div>
+      <p
+        class="flex-1"
+        [nzContent]="item.url"
+        nz-typography
+        nzCopyable
+        nzEllipsis
+        [nzCopyText]="item.url"
+        [nzCopyIcons]="[copedIcon, copedIcon]"
+      >
+      </p>
+      <ng-template #copedIcon>
+        <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+      </ng-template>
     </ng-template>`
 })
 export class ApiMockTableComponent implements OnInit, OnChanges {
@@ -122,10 +129,6 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     });
   }
 
-  async copyText(text: string) {
-    await copyText(text);
-    this.message.success($localize`Copied`);
-  }
   async addOrEditModal(item, index?) {
     if (item.id) {
       await this.apiMock.updateMock(item);

@@ -1,7 +1,6 @@
 {
-  "name": "e2e",
+  "name": "postcat-e2e",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "codegen":"playwright codegen localhost:4200",

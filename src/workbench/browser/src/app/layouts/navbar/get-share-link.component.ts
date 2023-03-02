@@ -36,9 +36,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
           <nz-spin *ngIf="!link" class="flex-1 mt-[10px]"></nz-spin>
         </div>
         <ng-container *ngIf="link">
-          <p nz-typography nzCopyable nzEllipsis [nzCopyText]="link" [nzCopyIcons]="[copedIcon, copedIcon]">
-            {{ link }}
-          </p>
+          <p nz-typography [nzContent]="link" nzCopyable nzEllipsis [nzCopyText]="link" [nzCopyIcons]="[copedIcon, copedIcon]"> </p>
           <ng-template #copedIcon>
             <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
           </ng-template>
@@ -56,23 +54,6 @@ export class GetShareLinkComponent {
     public dataSourceService: DataSourceService,
     private message: EoNgFeedbackMessageService
   ) {}
-  handleCopy() {
-    if (this.isCopy) {
-      return;
-    }
-    if (!this.link) {
-      this.isCopy = false;
-      return;
-    }
-    const isOk = copy(this.link);
-    if (isOk) {
-      this.message.success($localize`Copied`);
-      this.isCopy = true;
-      interval(700).subscribe(() => {
-        this.isCopy = false;
-      });
-    }
-  }
   handleGetShareLink() {
     this.dataSourceService.checkRemoteCanOperate(async () => {
       if (this.store.isLocal) {
