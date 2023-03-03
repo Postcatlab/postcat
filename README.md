@@ -10,16 +10,14 @@
   <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
-
-![Postcat UI](https://data.eolink.com/h3WxNsJd3033427ca244b54b655d043d97e5711f680cd36)
+![Postcat UI](https://data.eolink.com/ImGzhCi79d0beb5b8221670dffceb61bf642af1960d3881)
 
 Postcat 是一个强大的开源、跨平台（Windows、Mac、Linux、Browsers...）的 **API 开发测试工具**，支持 REST、Websocket 等协议（即将支持 GraphQL、gRPC、TCP、UDP），帮助你加速完成 API 开发和测试工作。
 
 
 我们在保证 Postcat 轻巧灵活的同时，还为 Postcat 设计了一个强大的插件系统，让你一键使用插件来增强 Postcat 的功能。
 
-
-![Postcat Extensions](https://data.eolink.com/zrr65z9832906aee9d6868796280802d058ca1d172136b3)
+![Postcat Extensions](https://data.eolink.com/22UMwcV01e087e3549edb91361f15a9ba8047e16d0d3f3f)
 
 因此 Postcat 理论上是一个拥有无限可能的 API 产品，我们也形象地为 Postcat 的猫咪加上了一件披风，代表它的无限可能。
 

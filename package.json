@@ -12,7 +12,9 @@
   "scripts": {
     "prepare": "husky install && electron-builder install-app-deps && node ./scripts/afterInstall.js && npx patch-package",
     "start": "npm-run-all -p start:web electron:dev",
+    "start:zh": "npm-run-all -p start:web:zh electron:dev",
     "start:web": "yarn workspace postcat-web run start",
+    "start:web:zh": "yarn workspace postcat-web run start:zh",
     "start:electron": "npm-run-all -p web:start:direct electron:dev",
     "build": "npx patch-package && npm-run-all -s electron:build:web clear:electron:tsc electron:tsc && npx esno scripts/build.ts",
     "build:web": "yarn workspace postcat-web run build:web",
