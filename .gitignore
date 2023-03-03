@@ -19,12 +19,9 @@ out/
 !src/workbench/node/request/**/*.js
 !src/workbench/node/server/**/*.js
 !/api/*.js
-!/scripts/*.js
-!/tools/*.js
+!/scripts/**/*.js
 !*.config.js
 !.*.js
-!upload.js
-!publish.js
 
 # dependencies
 node_modules

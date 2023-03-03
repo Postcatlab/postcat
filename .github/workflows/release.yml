@@ -30,4 +30,4 @@ jobs:
         run: |
           npm i -g qiniu@6.x
           echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
-          node publish.js
+          node scripts/publish.js
