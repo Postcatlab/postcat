@@ -39,7 +39,7 @@ export const SYNC_API_SCHEMA = {
       type: 'string',
       label: $localize`:@@SyncFormat:Format`,
       'ui:widget': 'radio',
-      default: 'foo',
+      default: '',
       required: true,
       oneOf: []
     }

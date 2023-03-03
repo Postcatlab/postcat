@@ -5,7 +5,7 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { parseAndCheckCollections } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
+import { parseAndCheckCollections, parseAndCheckEnv } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
@@ -123,12 +123,16 @@ export class ImportApiComponent implements OnInit {
 
       try {
         console.log('content', content);
-        const collections = parseAndCheckCollections(data.collections);
+        data.collections = parseAndCheckCollections(data.collections);
+        data.environmentList = data.environmentList.filter(n => {
+          const { validate, data } = parseAndCheckEnv(n);
+          if (validate) {
+            return data;
+          }
+          return false;
+        });
         const [result, err] = await this.apiService.api_projectImport({
-          ...{
-            ...data,
-            collections
-          },
+          ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
