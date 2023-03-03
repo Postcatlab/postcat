@@ -123,14 +123,16 @@ export class ImportApiComponent implements OnInit {
 
       try {
         console.log('content', content);
-        const collections = parseAndCheckCollections(data.collections);
-        const environmentList = data.environmentList.filter(n => parseAndCheckEnv(n).validate);
+        data.collections = parseAndCheckCollections(data.collections);
+        data.environmentList = data.environmentList.filter(n => {
+          const { validate, data } = parseAndCheckEnv(n);
+          if (validate) {
+            return data;
+          }
+          return false;
+        });
         const [result, err] = await this.apiService.api_projectImport({
-          ...{
-            ...data,
-            collections,
-            environmentList
-          },
+          ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
