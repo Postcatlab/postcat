@@ -1,4 +1,5 @@
 import Ajv from 'ajv';
+import { safeStringify } from 'ajv/dist/compile/codegen/code';
 import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { CollectionTypeEnum } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -59,7 +60,7 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
         projectUuid: env.projectUuid,
         name: env.name,
         hostUri: env.hostUri,
-        parameters: env.parameters
+        parameters: typeof env.parameters === 'object' ? safeStringify(env.parameters) : env.parameters
       }
     };
   } else {
