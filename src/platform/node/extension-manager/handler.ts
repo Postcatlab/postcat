@@ -146,7 +146,9 @@ export class ModuleHandler extends CoreHandler {
   }
   private setRegistry() {
     return new Promise(resolve => {
-      const npm = spawn('npm', ['config', 'set', 'registry', this.registry], { cwd: this.baseDir });
+      const npm = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['config', 'set', 'registry', this.registry], {
+        cwd: this.baseDir
+      });
       npm.on('close', () => {
         resolve(true);
       });

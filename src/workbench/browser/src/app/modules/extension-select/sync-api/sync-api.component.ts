@@ -25,7 +25,6 @@ import { SYNC_API_SCHEMA } from './schema';
 export class SyncApiComponent implements OnInit, OnChanges {
   @Input() model = {} as Record<string, any>;
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
-  currentExtension = '';
   currentFormater;
   schemaJson = eoDeepCopy(SYNC_API_SCHEMA);
   supportList: any[] = [];
@@ -58,7 +57,14 @@ export class SyncApiComponent implements OnInit, OnChanges {
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
         if (inArg.type === 'installedExtensionsChange') {
-          this.initData();
+          this.initData(() => {
+            if (this.supportList?.length) {
+              const { key } = this.supportList.at(0);
+              this.model.__formater = key || '';
+            } else {
+              this.model.__formater = '';
+            }
+          });
         }
       });
   }
@@ -81,7 +87,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     const currentFormater =
       this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater) || this.store.getSyncSettingList.at(0);
     // console.log('currentFormater', { ...currentFormater });
-    if ((currentFormater && this.currentFormater !== currentFormater) || currentFormater.pluginId !== this.model.__formater) {
+    if (currentFormater && (this.currentFormater !== currentFormater || this.model.__formater === '')) {
       this.currentFormater = currentFormater;
       this.model = {
         ...this.model,
@@ -97,7 +103,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     this.updateExtensionModel();
   }
 
-  initData = debounce(() => {
+  initData = debounce((afterInitCallback?) => {
     this.featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -111,10 +117,6 @@ export class SyncApiComponent implements OnInit, OnChanges {
       return;
     }
     this.schemaJson = { ...SYNC_API_SCHEMA };
-
-    const { key } = this.supportList?.at(0);
-    this.currentExtension = key || '';
-
     if (this.store.isLocal) {
       Reflect.deleteProperty(this.schemaJson.properties, '__crontab');
     }
@@ -148,6 +150,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
         }
       });
     }
+    afterInitCallback?.();
   });
 
   async syncNow(): Promise<boolean | string> {
@@ -160,8 +163,8 @@ export class SyncApiComponent implements OnInit, OnChanges {
       });
       return false;
     }
-    const feature = this.featureMap.get(this.currentExtension);
-    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
+    const feature = this.featureMap.get(this.model.__formater);
+    const module = await this.extensionService.getExtensionPackage(this.model.__formater);
 
     if (typeof module[feature.action] !== 'function') return false;
     const [data, err] = await module[feature.action](this.validateForm?.value);
@@ -190,7 +193,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
     const { __formater, __crontab, ...rest } = this.validateForm.value;
     const params = {
-      id: this.currentFormater?.id,
+      id: this.currentFormater?.pluginId === __formater ? this.currentFormater?.id : undefined,
       pluginId: __formater,
       crontab: __crontab,
       pluginSettingJson: JSON.stringify(rest)
