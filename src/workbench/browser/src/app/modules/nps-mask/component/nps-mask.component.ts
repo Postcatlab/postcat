@@ -24,7 +24,7 @@ export class NpsMaskComponent implements OnInit {
   ngOnInit(): void {
     this.bindUserID();
 
-    //* Trigger NPS after wondering 20 seconds
+    //* Trigger NPS after wondering 30 seconds
     setTimeout(() => {
       this.showNps();
     }, this.duration * 1000);
