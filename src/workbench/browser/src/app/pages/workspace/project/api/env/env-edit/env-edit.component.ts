@@ -132,7 +132,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
       this.model = {
         name: '',
         hostUri: '',
-        parameters: []
+        parameters: '[]'
       };
       this.initialModel = eoDeepCopy(this.model);
     } else {
