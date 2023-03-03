@@ -94,11 +94,11 @@ class EoBrowserWindow {
       this.win = null;
     });
   }
-  public loadURL() {
+  public async loadURL() {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`)}`;
+        : `file://${path.join(__dirname, `../../../src/workbench/browser/dist/${await LanguageService.getPath()}/index.html`)}`;
     this.win.loadURL(file);
     if (['development'].includes(processEnv)) {
       this.win.webContents.openDevTools({

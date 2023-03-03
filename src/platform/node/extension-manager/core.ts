@@ -37,7 +37,7 @@ export class CoreHandler {
    *
    * @param {string} name 模块名称
    */
-  info(name: string): ExtensionInfo {
+  async info(name: string): Promise<ExtensionInfo> {
     let extensionInfo: ExtensionInfo;
     try {
       const baseDir: string = this.getModuleDir(name);
@@ -45,7 +45,7 @@ export class CoreHandler {
       extensionInfo.baseDir = baseDir;
       // Get language locale
       //!Warn:baseDir must be set before get locale file
-      const lang = LanguageService.get();
+      const lang = await LanguageService.get();
       if (extensionInfo.features?.i18n) {
         const locale = getLocaleData(extensionInfo, lang);
         if (locale) {
