@@ -5,7 +5,8 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
-import { parseAndCheckCollections } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
+import { parseAndCheckCollections, parseAndCheckEnv } from 'eo/workbench/browser/src/app/shared/services/storage/db/validate/validate';
+import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -57,11 +58,13 @@ export class ImportApiComponent implements OnInit {
   supportList: any[] = [];
   currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
+  isValid = true;
   featureMap: Map<string, FeatureInfo>;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
+    private trace: TraceService,
     private eoMessage: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
@@ -120,17 +123,16 @@ export class ImportApiComponent implements OnInit {
 
       try {
         console.log('content', content);
-        // TODO 兼容旧数据
-        // if (Reflect.has(data, 'collections') && Reflect.has(data, 'environments')) {
-        //   content = old2new(data, projectUuid, workSpaceUuid);
-        //   console.log('new content', content);
-        // }
-        const collections = parseAndCheckCollections(data.collections);
+        data.collections = parseAndCheckCollections(data.collections);
+        data.environmentList = data.environmentList.filter(n => {
+          const { validate, data } = parseAndCheckEnv(n);
+          if (validate) {
+            return data;
+          }
+          return false;
+        });
         const [result, err] = await this.apiService.api_projectImport({
-          ...{
-            ...data,
-            collections
-          },
+          ...data,
           projectUuid: this.store.getCurrentProjectID,
           workSpaceUuid: this.store.getCurrentWorkspaceUuid
         });
@@ -140,6 +142,10 @@ export class ImportApiComponent implements OnInit {
           return;
         }
         callback(true);
+        // * For trace
+        const sync_platform = this.currentExtension;
+        const workspace_type = this.store.isLocal ? 'local' : 'remote';
+        this.trace.report('import_project_success', { sync_platform, workspace_type });
         this.router.navigate(['home/workspace/project/api']);
       } catch (error) {
         callback(false);

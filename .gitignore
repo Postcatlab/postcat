@@ -2,6 +2,10 @@
 
 # compiled output
 dist/
+/build/ElectronInstall/
+/build/FilesToInstall/
+/build/Output/
+/build/NiuNiuCaptureElectronDemo/
 out/
 /tmp
 /out-tsc
@@ -15,12 +19,9 @@ out/
 !src/workbench/node/request/**/*.js
 !src/workbench/node/server/**/*.js
 !/api/*.js
-!/scripts/*.js
-!/tools/*.js
+!/scripts/**/*.js
 !*.config.js
 !.*.js
-!upload.js
-!publish.js
 
 # dependencies
 node_modules

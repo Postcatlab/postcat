@@ -231,7 +231,7 @@ export type ThemeColorRule = {
   rule?: ThemeColorSingleRule[];
 };
 export type ThemeColorSingleRule = {
-  action?: 'replace' | 'filter' | string;
+  action?: 'replace' | 'filter' | 'darken' | string;
   alpha?: number;
   target?: Array<keyof ThemeColors> | string[];
 };

@@ -1,16 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { debounce } from 'lodash-es';
 
 const compMap = {
   string: 'input',
   number: 'input-number',
   boolean: 'switch'
 } as const;
-
 @Component({
   selector: 'eo-schema-form',
+  animations: [
+    trigger('myInsertRemoveTrigger', [
+      transition(':enter', [style({ opacity: 0 }), animate('100ms', style({ opacity: 1 }))]),
+      transition(':leave', [animate('100ms', style({ opacity: 0 }))])
+    ])
+  ],
+  styles: [
+    `
+      form {
+        min-height: 200px;
+        display: none;
+      }
+      form:last-of-type {
+        display: block;
+      }
+    `
+  ],
   template: `
-    <form nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
+    <form @myInsertRemoveTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
@@ -73,9 +91,9 @@ const compMap = {
               [nzDisabled]="properties[field]?.disabled"
               formControlName="{{ field }}"
             >
-              <label *ngFor="let item of properties[field]?.oneOf" eo-ng-radio [nzValue]="item.default || item.const">{{
-                item.title
-              }}</label>
+              <label *ngFor="let item of properties[field]?.oneOf" eo-ng-radio [nzValue]="item.default ?? item.const">
+                {{ item.title }}
+              </label>
             </eo-ng-radio-group>
           </ng-container>
         </nz-form-control>
@@ -83,27 +101,46 @@ const compMap = {
     </form>
   `
 })
-export class EoSchemaFormComponent implements OnInit {
+export class EoSchemaFormComponent implements OnChanges {
   @Input() configuration = {} as any;
   @Input() model = {} as Record<string, any>;
+  @Output() readonly valueChanges: EventEmitter<any> = new EventEmitter<any>();
   validateForm!: FormGroup;
   objectKeys = Object.keys;
   properties = {};
   compMap = compMap;
+  isInited = true;
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.init();
+  constructor(private fb: FormBuilder) {
+    this.validateForm = this.fb.group({});
+    this.initEmitter();
   }
 
-  init() {
-    this.validateForm = this.fb.group({});
+  ngOnChanges(changes: SimpleChanges) {
+    const modelIsNotEqual = !Object.is(changes.model?.previousValue, changes.model?.currentValue);
+    const configurationIsNotEqual = !Object.is(changes.configuration?.previousValue, changes.configuration?.currentValue);
+    if (modelIsNotEqual || configurationIsNotEqual) {
+      this.init();
+    }
+  }
 
+  init = debounce(() => {
+    this.isInited = false;
     this.formatProperties();
     this.initIfThenElse(this.configuration);
 
-    this.setSettingsModel(this.properties);
+    setTimeout(() => {
+      this.isInited = true;
+      this.setSettingsModel(this.properties);
+    });
+  }, 50);
+
+  initEmitter() {
+    this.validateForm.valueChanges.subscribe(
+      debounce(val => {
+        this.valueChanges.emit(val);
+      })
+    );
   }
 
   updateControls() {
@@ -124,6 +161,7 @@ export class EoSchemaFormComponent implements OnInit {
   }
 
   // https://json-schema.org/understanding-json-schema/reference/conditionals.html#if-then-else
+  // 在线测试：https://jsonschema.dev/s/hpWFy
   initIfThenElse(configuration) {
     if (Array.isArray(configuration?.allOf)) {
       const ifFields = configuration.allOf.reduce((prev, curr) => {
@@ -141,7 +179,8 @@ export class EoSchemaFormComponent implements OnInit {
       configuration.allOf.forEach(item => {
         if (item.if?.properties) {
           Object.entries<any>(item.if.properties).forEach(([key, value]) => {
-            let __value;
+            let isInit = true;
+            let __value = this.model[key];
             Object.defineProperty(this.model, key, {
               configurable: true,
               get: () => {
@@ -149,9 +188,10 @@ export class EoSchemaFormComponent implements OnInit {
               },
               set: val => {
                 const conf = ifFields[key]?.[val]?.then;
-                if (val !== this.model[key]) {
+                if (isInit || val !== this.model[key]) {
                   if (conf?.properties) {
                     this.formatProperties({ ...configuration?.properties, ...conf.properties });
+                    isInit = false;
                   }
                   if (conf) {
                     this.initIfThenElse(conf);

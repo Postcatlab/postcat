@@ -8,7 +8,6 @@ import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/proj
 import { ApiGroupEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/group.dto';
-import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -104,7 +103,6 @@ export class ApiGroupTreeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tab: ApiTabService,
-    private trace: TraceService,
     private message: EoNgFeedbackMessageService
   ) {}
 
@@ -119,7 +117,6 @@ export class ApiGroupTreeComponent implements OnInit {
       this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
-        console.log(this.expandKeys);
       });
     });
     reaction(
@@ -194,7 +191,7 @@ export class ApiGroupTreeComponent implements OnInit {
   addAPI(group?) {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     this.router.navigate([`${prefix}/http/edit`], {
-      queryParams: { groupId: group?.key }
+      queryParams: { groupId: group?.key, pageID: Date.now() }
     });
   }
   deleteAPI(apiInfo) {
@@ -238,21 +235,12 @@ export class ApiGroupTreeComponent implements OnInit {
           onClick: () => modal.destroy()
         },
         {
-          label: $localize`Sync Now`,
-          show: () => actionComponent[type] === SyncApiComponent && modal.componentInstance?.supportList?.length,
+          label: actionComponent[type] === SyncApiComponent ? $localize`Save and Sync` : $localize`Confirm`,
           disabled: () => !modal.componentInstance?.isValid,
-          onClick: async () => {
-            await modal.componentInstance?.syncNow?.(this);
-            modal.destroy();
-          }
-        },
-        {
-          label: actionComponent[type] === SyncApiComponent ? $localize`Save Config` : $localize`Confirm`,
           type: 'primary',
           onClick: () => {
             return new Promise(resolve => {
               modal.componentInstance.submit(status => {
-                this.effect.getGroupList();
                 if (!status) {
                   this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
                   return resolve(true);
@@ -260,18 +248,10 @@ export class ApiGroupTreeComponent implements OnInit {
                 if (status === 'stayModal') {
                   return resolve(true);
                 }
-                //Sync API
-                if (actionComponent[type] === SyncApiComponent) {
-                  this.message.success($localize` Save sync API config successfully`);
-                  return resolve(true);
-                }
-
                 // Import API
+                this.effect.getGroupList();
                 this.message.success($localize`${title} successfully`);
-                // * For trace
-                const sync_platform = modal.componentInstance.currentExtension;
-                const workspace_type = this.globalStore.isLocal ? 'local' : 'remote';
-                this.trace.report('import_project_success', { sync_platform, workspace_type });
+                resolve(true);
                 modal.destroy();
               }, modal);
             });
@@ -308,9 +288,6 @@ export class ApiGroupTreeComponent implements OnInit {
     );
   };
 
-  // toggleExpand() {
-  //   this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
-  // }
   /**
    * Group tree item click.
    *

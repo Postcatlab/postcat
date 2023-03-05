@@ -1,3 +1,4 @@
+import { LanguageService } from 'eo/app/electron-main/language.service';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { HOME_DIR } from 'eo/shared/electron-main/constant';
 import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -26,7 +27,7 @@ export class ModuleManager {
   /**
    * 模块管理器
    */
-  private readonly moduleHandler: ModuleHandler;
+  private moduleHandler: ModuleHandler;
 
   /**
    * extension list
@@ -36,19 +37,19 @@ export class ModuleManager {
   /**
    * 模块集合
    */
-  private readonly modules: Map<string, ExtensionInfo>;
+  private modules: Map<string, ExtensionInfo>;
 
   /**
    * 功能点集合
    */
-  private readonly features: Map<string, Map<string, FeatureInfo>>;
+  private features: Map<string, Map<string, FeatureInfo>>;
+
+  private lang;
 
   constructor() {
-    this.moduleHandler = new ModuleHandler({ baseDir: HOME_DIR });
-    this.modules = new Map();
-    this.features = new Map();
+    this.lang = LanguageService;
+
     this.init();
-    this.updateAll();
   }
 
   async getRemoteExtension(): Promise<ModuleManagerInfo[]> {
@@ -83,7 +84,7 @@ export class ModuleManager {
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
     const result = await this.moduleHandler.install([module], module?.isLocal || false);
     if (result.code === 0) {
-      const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
+      const moduleInfo: ExtensionInfo = await this.moduleHandler.info(module.name);
       this.set(moduleInfo);
     }
     return result;
@@ -95,7 +96,7 @@ export class ModuleManager {
    * @param module
    */
   async uninstall(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
+    const moduleInfo: ExtensionInfo = await this.moduleHandler.info(module.name);
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
@@ -136,8 +137,8 @@ export class ModuleManager {
    *
    * @param module
    */
-  refresh(module: ModuleManagerInfo): void {
-    const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
+  async refresh(module: ModuleManagerInfo) {
+    const moduleInfo: ExtensionInfo = await this.moduleHandler.info(module.name);
     this.set(moduleInfo);
   }
   /**
@@ -281,12 +282,20 @@ export class ModuleManager {
   /**
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
    */
-  private init() {
+  private async init() {
+    this.moduleHandler = new ModuleHandler({
+      baseDir: HOME_DIR,
+      registry: (await this.lang.get()) === 'zh-Hans' ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org'
+    });
+    this.modules = new Map();
+    this.features = new Map();
+
     const names: string[] = this.moduleHandler.list();
-    names.forEach((name: string) => {
-      const moduleInfo: ExtensionInfo = this.moduleHandler.info(name);
+    names.forEach(async (name: string) => {
+      const moduleInfo: ExtensionInfo = await this.moduleHandler.info(name);
       this.setup(moduleInfo);
     });
+    this.updateAll();
   }
 
   getExtFeatures(extName: string): ExtensionInfo['features'] {

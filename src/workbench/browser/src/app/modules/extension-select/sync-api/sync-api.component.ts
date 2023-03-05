@@ -8,6 +8,7 @@ import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { debounce } from 'lodash-es';
 import { Subject, takeUntil } from 'rxjs';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
@@ -17,14 +18,13 @@ import { SYNC_API_SCHEMA } from './schema';
   selector: 'eo-sync-api',
   template: `
     <extension-feedback [extensionLength]="supportList.length" suggest="@feature:pullAPI">
-      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" />
+      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" (valueChanges)="handleValueChanges($event)" />
     </extension-feedback>
   `
 })
 export class SyncApiComponent implements OnInit, OnChanges {
   @Input() model = {} as Record<string, any>;
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
-  currentExtension = '';
   currentFormater;
   schemaJson = eoDeepCopy(SYNC_API_SCHEMA);
   supportList: any[] = [];
@@ -50,14 +50,21 @@ export class SyncApiComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.initData();
     this.getSyncSettingList();
+    this.initData();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
         if (inArg.type === 'installedExtensionsChange') {
-          this.initData();
+          this.initData(() => {
+            if (this.supportList?.length) {
+              const { key } = this.supportList.at(0);
+              this.model.__formater = key || '';
+            } else {
+              this.model.__formater = '';
+            }
+          });
         }
       });
   }
@@ -69,10 +76,25 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
   }
 
+  handleValueChanges(val) {
+    if (val.__formater !== this.currentFormater?.pluginId) {
+      this.model.__formater = val.__formater;
+      this.updateExtensionModel();
+    }
+  }
+
   updateExtensionModel() {
-    this.currentFormater = this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater);
-    if (this.currentFormater) {
-      Object.assign(this.model, JSON.parse(this.currentFormater.pluginSettingJson), { __crontab: this.currentFormater.crontab });
+    const currentFormater =
+      this.store.getSyncSettingList.find(n => n.pluginId === this.model.__formater) || this.store.getSyncSettingList.at(0);
+    // console.log('currentFormater', { ...currentFormater });
+    if (currentFormater && (this.currentFormater !== currentFormater || this.model.__formater === '')) {
+      this.currentFormater = currentFormater;
+      this.model = {
+        ...this.model,
+        ...JSON.parse(this.currentFormater.pluginSettingJson),
+        __formater: this.currentFormater.pluginId,
+        __crontab: this.currentFormater.crontab
+      };
     }
   }
 
@@ -81,7 +103,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     this.updateExtensionModel();
   }
 
-  initData = () => {
+  initData = debounce((afterInitCallback?) => {
     this.featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -94,10 +116,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     if (!this.supportList.length) {
       return;
     }
-
-    const { key } = this.supportList?.at(0);
-    this.currentExtension = key || '';
-
+    this.schemaJson = { ...SYNC_API_SCHEMA };
     if (this.store.isLocal) {
       Reflect.deleteProperty(this.schemaJson.properties, '__crontab');
     }
@@ -131,10 +150,10 @@ export class SyncApiComponent implements OnInit, OnChanges {
         }
       });
     }
-    console.log('featureMap', this.featureMap);
-  };
+    afterInitCallback?.();
+  });
 
-  async syncNow(apiGroupTree) {
+  async syncNow(): Promise<boolean | string> {
     if (!this.validateForm?.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -142,48 +161,27 @@ export class SyncApiComponent implements OnInit, OnChanges {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
-      return Promise.reject();
+      return false;
     }
+    const feature = this.featureMap.get(this.model.__formater);
+    const module = await this.extensionService.getExtensionPackage(this.model.__formater);
 
-    const feature = this.featureMap.get(this.currentExtension);
-    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
-
-    if (typeof module[feature.action] === 'function') {
-      const [data, err] = await module[feature.action](this.validateForm?.value);
-      if (err) {
-        this.eoMessage.error(err);
-        return Promise.reject(err);
-      }
-      this.eoMessage.success($localize`Sync API from URL Successfully`);
-      this.trace.report('sync_api_from_url_success');
-      apiGroupTree?.effect?.getGroupList();
+    if (typeof module[feature.action] !== 'function') return false;
+    const [data, err] = await module[feature.action](this.validateForm?.value);
+    if (err) {
+      this.eoMessage.error($localize`Sync API from URL error: ${err}`);
+      return 'stayModal';
     }
+    // this.eoMessage.success($localize`Sync API from URL Successfully`);
+    this.trace.report('sync_api_from_url_success');
+    return true;
   }
 
   async submit(callback?, modal?) {
     if (!this.supportList.length) {
       return modal?.destroy?.();
     }
-    if (this.validateForm?.valid) {
-      const { __formater, __crontab, ...rest } = this.validateForm.value;
-      console.log('submit', this.validateForm.value);
-      const params = {
-        id: this.currentFormater?.id,
-        pluginId: __formater,
-        crontab: __crontab,
-        pluginSettingJson: JSON.stringify(rest)
-      };
-      const [data, err] = await this.apiService[params.id ? 'api_projectUpdateSyncSetting' : 'api_projectCreateSyncSetting'](params);
-
-      if (err) {
-        console.error(err.msg);
-        callback?.('stayModal');
-        return;
-      }
-      this.effectService.getSyncSettingList();
-
-      callback?.('stayModal');
-    } else {
+    if (!this.validateForm?.valid) {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
@@ -191,6 +189,24 @@ export class SyncApiComponent implements OnInit, OnChanges {
         }
       });
       callback?.('stayModal');
+      return;
     }
+    const { __formater, __crontab, ...rest } = this.validateForm.value;
+    const params = {
+      id: this.currentFormater?.pluginId === __formater ? this.currentFormater?.id : undefined,
+      pluginId: __formater,
+      crontab: __crontab,
+      pluginSettingJson: JSON.stringify(rest)
+    };
+    const [data, err] = await this.apiService[params.id ? 'api_projectUpdateSyncSetting' : 'api_projectCreateSyncSetting'](params);
+    if (err) {
+      this.eoMessage.error(err.msg);
+      console.error(err.msg);
+      callback?.('stayModal');
+      return;
+    }
+    this.effectService.getSyncSettingList();
+    const result = await this.syncNow();
+    callback(result);
   }
 }

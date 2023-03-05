@@ -69,6 +69,13 @@ export class ModuleHandler extends CoreHandler {
    * @param isLocal 本地安装用link
    */
   async install(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
+    // * Check the registry before install, you can see the log in terminal
+    // const check = spawn('npm', ['config', 'get', 'registry']);
+    // check.stdout
+    //   .on('data', (data: string) => {
+    //     console.log('===========>>>>>>>>', data.toString());
+    //   })
+    //   .pipe(process.stdout);
     return await this.execCommand(isLocal ? 'link' : 'install', modules);
   }
   /**
@@ -137,34 +144,14 @@ export class ModuleHandler extends CoreHandler {
       });
     });
   }
-  private executeBySystemNpm(command: string, modules: string[], resolve) {
-    let args = [command].concat(modules).concat('--color=always', '--save');
-    if (!['link', 'unlink', 'uninstall', 'update'].includes(command)) {
-      if (this.registry) {
-        args = args.concat(`--registry=${this.registry}`);
-      }
-      if (this.proxy) {
-        args = args.concat(`--proxy=${this.proxy}`);
-      }
-    }
-    const npm = spawn('npm', args, { cwd: this.baseDir });
-    let output = '';
-    npm.stdout
-      .on('data', (data: string) => {
-        output += data;
-      })
-      .pipe(process.stdout);
-    npm.stderr
-      .on('data', (data: string) => {
-        output += data;
-      })
-      .pipe(process.stderr);
-    npm.on('close', (code: number) => {
-      if (!code) {
-        resolve({ code: 0, data: output });
-      } else {
-        resolve({ code: code, data: output });
-      }
+  private setRegistry() {
+    return new Promise(resolve => {
+      const npm = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['config', 'set', 'registry', this.registry], {
+        cwd: this.baseDir
+      });
+      npm.on('close', () => {
+        resolve(true);
+      });
     });
   }
   /**
@@ -174,8 +161,11 @@ export class ModuleHandler extends CoreHandler {
    * @param modules
    */
   private async execCommand(command: string, modules: any[]): Promise<ModuleHandlerResult> {
-    return await new Promise((resolve: any, reject: any): void => {
+    return await new Promise(async (resolve: any, reject: any): Promise<void> => {
       // this.executeBySystemNpm(command, modules, resolve)
+      // * Set Proxy
+      // * Set registry
+      await this.setRegistry();
       this.executeByAppNpm(command, modules, resolve, reject);
     });
   }

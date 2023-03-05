@@ -100,7 +100,6 @@ export class MockService {
    * @returns
    */
   generateResponse(responseBody: BodyParam[]) {
-    console.log('responseBody', responseBody);
     return tree2obj([].concat(responseBody), { key: 'name', valueKey: 'paramAttr.example' });
   }
   /**

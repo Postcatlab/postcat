@@ -291,6 +291,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
         {
           key: col.key,
           title: col.slot,
+          maxlength: col.maxlength,
           left: col.left,
           change: col.change,
           //Slot priority higher than type
