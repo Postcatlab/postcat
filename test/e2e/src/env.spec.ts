@@ -7,9 +7,9 @@ test('test', async ({ page }) => {
   await page.locator('a').filter({ hasText: 'Environment' }).click();
   await page.getByRole('banner').getByRole('button').click();
   await page.getByLabel('Name').fill('test');
-  await page.getByLabel('Host').click();
+  await page.getByLabel('Host').click({ timeout: 1000 });
   await page.getByLabel('Host').fill('www.baidu.com');
-  await page.getByPlaceholder('Name').click();
+  await page.getByPlaceholder('Name').click({ timeout: 1000 });
   await page.getByPlaceholder('Name').fill('globalName');
   await page.getByPlaceholder('Value').first().dblclick();
   await page.getByPlaceholder('Value').first().fill('globalVariable');
