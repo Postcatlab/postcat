@@ -33,7 +33,7 @@ conn
             `
             cat>./scripts/qiniu_env.js<<EOF
             ${process.env.QINIU_ENV_JS}
-            EOF
+EOF
             `,
             'yarn install',
             'yarn release',
