@@ -30,7 +30,7 @@ conn
             ...Array.from({ length: 5 }).map(_ => 'git pull'),
             'nvm install 16.19.1',
             'nvm use 16.19.1',
-            `echo ${process.env.QINIU_ENV_JS} > qiniu_env.js`,
+            `echo ${process.env.QINIU_ENV_JS} > ./scripts/qiniu_env.js`,
             'yarn install',
             'yarn release',
             'nvm use 12.22.10',
