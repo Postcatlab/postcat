@@ -1,4 +1,8 @@
-const qiniu = require('qiniu');
+const { execSync } = require('child_process');
+// get root folder of global node modules
+const root = execSync('npm root -g').toString().trim();
+
+const qiniu = require(`${root}/qiniu`);
 const package = require('../package.json');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 
