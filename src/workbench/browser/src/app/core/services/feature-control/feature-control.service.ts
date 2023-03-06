@@ -10,4 +10,6 @@ export class FeatureControlService {
   constructor() {
     this.config = featureJSON;
   }
+  openFearure() {}
+  closeFeature() {}
 }

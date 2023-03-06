@@ -1,0 +1,33 @@
+:host {
+  display: flex;
+  margin-bottom: 1.5rem;
+
+  .message-content {
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  &.not-reply {
+    flex-direction: row-reverse;
+
+    .message-content {
+      background: var(--item-hover-background-color);
+      color: var(--text-color);
+    }
+
+    nz-avatar {
+      margin-left: 5px;
+    }
+  }
+
+  &.reply {
+    .message-content {
+      background: #36f;
+      color: #fff;
+    }
+
+    nz-avatar {
+      margin-right: 5px;
+    }
+  }
+}

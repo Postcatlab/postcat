@@ -6,9 +6,11 @@ import { LocalWorkspaceTipComponent } from '../layouts/local-workspace-tip/local
 import { NavbarModule } from '../layouts/navbar/navbar.module';
 import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
 import { ToolbarModule } from '../layouts/toolbar/toolbar.module';
+import { ChatRobotModule } from '../modules/chat-robot/chat-robot.module';
 import { NpsMaskModule } from '../modules/nps-mask/nps-mask.module';
 import { SystemSettingModule } from '../modules/system-setting/system-setting.module';
 import { SharedModule } from '../shared/shared.module';
+import { ChatgptRobotComponent } from './components/chatgpt-robot/chatgpt-robot.component';
 import { ThirdLoginComponent } from './components/third-login/third-login.component';
 import { UserModalComponent } from './components/user-modal/user-modal.component';
 import { PagesRoutingModule } from './pages-routing.module';
@@ -23,9 +25,17 @@ import { PagesComponent } from './pages.component';
     CommonModule,
     NavbarModule,
     ToolbarModule,
-    SharedModule
+    SharedModule,
+    ChatRobotModule
   ],
-  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ThirdLoginComponent],
+  declarations: [
+    PagesComponent,
+    SidebarComponent,
+    LocalWorkspaceTipComponent,
+    UserModalComponent,
+    ThirdLoginComponent,
+    ChatgptRobotComponent
+  ],
   exports: [],
   providers: [],
   schemas: []

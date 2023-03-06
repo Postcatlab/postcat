@@ -1,0 +1,20 @@
+:host {
+  position: absolute;
+  right: 25px;
+  bottom: 25px;
+  z-index: 10;
+}
+
+.favor-image-link {
+  background-color: #eee;
+  border-radius: 50%;
+  padding: 13px;
+}
+
+.favor-image {
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
