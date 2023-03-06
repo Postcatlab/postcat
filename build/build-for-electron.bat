@@ -32,9 +32,9 @@ Call get_electron_app_version.bat
 
 
 :: 主程序名称 
-@set main_exe_name=%app_name%.exe
+@set main_exe_name=Postcat.exe
 :: 完整的安装包名称
-@set output_setup_file_name=%app_name%-Setup-%electron_app_version%.exe
+@set output_setup_file_name=Postcat-Setup-%electron_app_version%.exe
 
 @echo %pre_define_file%
 @del "%pre_define_file%"

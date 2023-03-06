@@ -2,7 +2,7 @@ name: Build Windows
 
 on:
   push:
-    # branches: [build/windows]
+    branches: [build/windows]
     tags:
       - 'v*.*.*'
 
