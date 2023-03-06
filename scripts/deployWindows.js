@@ -31,7 +31,7 @@ conn
             'nvm install 16.19.1',
             'nvm use 16.19.1',
             `
-            cat>test1<<EOF
+            cat>./scripts/qiniu_env.js<<EOF
             ${process.env.QINIU_ENV_JS}
             EOF
             `,
