@@ -180,7 +180,10 @@ const signWindows = () => {
           path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
         };
         await sign(...signOptions);
-        execSync('yarn releaseWindows');
+
+        if (argv.publish === 'always') {
+          execSync('yarn releaseWindows');
+        }
 
         console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
         resolve(true);
