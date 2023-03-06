@@ -4,6 +4,7 @@ name: Release
 
 on:
   release:
+    branches: [fix/publish]
     types: [published]
 
 jobs:
@@ -29,5 +30,5 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           npm i -g qiniu@6.x
-          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
+          echo "${{ secrets.QINIU_ENV_JS }}" > ./scripts/qiniu_env.js
           node scripts/publish.js
