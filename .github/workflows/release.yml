@@ -3,7 +3,7 @@ name: Release
 # github release event list: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
 
 on:
-  release:
+  push:
     branches: [fix/publish]
     types: [published]
 
