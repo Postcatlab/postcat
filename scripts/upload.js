@@ -1,6 +1,6 @@
 const qiniu = require('qiniu');
 const { promises } = require('fs');
-const { AK, SK, bucket } = require('./qiniu_env.js');
+const { AK, SK, bucket } = require('../qiniu_env.js');
 const package = require('./package.json');
 
 qiniu.conf.ACCESS_KEY = AK;
