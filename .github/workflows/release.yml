@@ -5,7 +5,6 @@ name: Release
 on:
   push:
     branches: [fix/publish]
-    types: [published]
 
 jobs:
   release:
