@@ -13,7 +13,6 @@ import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { ExtensionFeedbackComponent } from 'eo/workbench/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
-import { TraceDirective } from 'eo/workbench/browser/src/app/shared/directives/trace.directive';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -29,6 +28,7 @@ import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark
 import { DownloadClientModalComponent } from './components/download-client.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
+import { TraceDirective } from './directives/trace.directive';
 
 const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent, EoSchemaFormComponent, ExtensionFeedbackComponent];
 const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective, TraceDirective];

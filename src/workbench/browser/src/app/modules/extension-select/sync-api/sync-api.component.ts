@@ -56,7 +56,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        if (inArg.type === 'installedExtensionsChange') {
+        if (inArg.type === 'extensionsChange') {
           this.initData(() => {
             if (this.supportList?.length) {
               const { key } = this.supportList.at(0);

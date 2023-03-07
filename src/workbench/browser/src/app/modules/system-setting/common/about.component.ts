@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services';
 @Component({
@@ -8,9 +9,9 @@ import { WebService } from '../../../core/services';
       <eo-logo class="logo mt-[30px] w-[150px] h-[150px]"></eo-logo>
       <p class="font-bold mt-[15px] text-[16px]">Postcat</p>
       <p class="">V{{ versionInfo?.version }}</p>
-      <!-- star -->
+      <!-- Star -->
       <a
-        href="https://github.com/Postcatlab/postcat"
+        [href]="APP_CONFIG.GITHUB_REPO_URL"
         target="_blank"
         class="flex items-center mt-[15px]"
         trace
@@ -19,31 +20,20 @@ import { WebService } from '../../../core/services';
       >
         <img loading="lazy" class="mx-4" src="https://img.shields.io/github/stars/postcatlab/postcat?style=social" alt="" />
       </a>
-      <p i18n class="text-center mt-[15px]">
-        Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
-      </p>
-      <a
-        class="favor-image-link mt-[15px]"
-        target="_blank"
-        href="https://github.com/Postcatlab/postcat"
-        trace
-        traceID="jump_to_github"
-        [traceParams]="{ where_jump_to_github: 'heart' }"
-      >
-        <img loading="lazy" class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
-      </a>
+      <!-- Star motivation -->
+      <pc-star-motivation></pc-star-motivation>
       <nz-divider></nz-divider>
+      <!-- System info -->
       <div class="w-[300px] text-[12px] text-center m-auto">
         <p *ngFor="let item of list" class="mt-[10px]">{{ item.label }}: {{ item.value }}</p>
       </div>
     </div>
-  `,
-  styleUrls: ['./about.component.scss']
+  `
 })
 export class AboutComponent implements OnInit {
   list;
   versionInfo;
-
+  readonly APP_CONFIG = APP_CONFIG;
   constructor(private web: WebService) {}
 
   ngOnInit(): void {

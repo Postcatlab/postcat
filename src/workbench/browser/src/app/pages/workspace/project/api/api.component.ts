@@ -98,7 +98,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   watchInstalledExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'installedExtensionsChange') {
+      if (inArg.type === 'extensionsChange') {
         const name = inArg.data.name;
         const extension: ExtensionInfo = inArg.data.installedMap.get(name);
         if (!extension?.features?.apiPreviewTab) return;
