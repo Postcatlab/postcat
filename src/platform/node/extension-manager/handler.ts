@@ -145,16 +145,26 @@ export class ModuleHandler extends CoreHandler {
     });
   }
   private setRegistry() {
+    const decoder = new TextDecoder('gbk');
     return new Promise(resolve => {
-      console.log('====》测试 npm');
-      const npm = spawn(
-        require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`),
-        ['config', 'set', 'registry', this.registry],
-        {
-          stdio: 'inherit',
-          shell: process.platform === 'win32'
-        }
-      );
+      const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`);
+      console.log('====》测试 npm', npmPath);
+      const npm1 = spawn(npmPath, ['-v', this.registry], {
+        stdio: 'inherit',
+        shell: process.platform === 'win32'
+      });
+
+      npm1.stdout.on('data', async data => {
+        console.log('npm1', decoder.decode(data));
+      });
+
+      const npm = spawn(npmPath, ['config', 'set', 'registry', this.registry], {
+        stdio: 'inherit',
+        shell: process.platform === 'win32'
+      });
+      npm.stdout.on('data', async data => {
+        console.log('data', decoder.decode(data));
+      });
       npm.on('close', () => {
         resolve(true);
       });
