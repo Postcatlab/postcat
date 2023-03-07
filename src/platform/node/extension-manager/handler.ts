@@ -147,12 +147,11 @@ export class ModuleHandler extends CoreHandler {
   private setRegistry() {
     const decoder = new TextDecoder('gbk');
     return new Promise(resolve => {
-      const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`);
+      const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`).replace('app.asar', 'app.asar.unpacked');
       console.log('====》测试 npm', npmPath);
       const npm1 = spawn(npmPath, ['-v', this.registry], {
         shell: process.platform === 'win32'
       });
-      console.log('====》测试 npm1', npm1);
 
       npm1.stdout.on('data', async data => {
         console.log('npm1', decoder.decode(data));
