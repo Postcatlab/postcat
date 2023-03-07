@@ -13,7 +13,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       [placeholder]="placeholder"
       (keyup.enter)="sendMessage()"
     ></textarea>
-    <button eo-ng-button nzType="primary" (click)="sendMessage()" class="send-button">Send</button>
+    <button eo-ng-button nzType="primary" [nzLoading]="loading" (click)="sendMessage()" i18n class="send-button">Send</button>
   </div>`,
   styles: []
 })
@@ -26,14 +26,16 @@ export class ChatRobotFormComponent {
   @Input() message: string = '';
   @Input() placeholder: string = '';
 
+  @Input() loading: boolean = false;
+
   /**
    * Send message triggle event
    */
   @Output() readonly send = new EventEmitter<{ message: string }>();
   sendMessage() {
-    console.log(this.message);
+    if (this.loading) return;
     if (!String(this.message).trim().length) return;
-    this.send.emit({ message: this.message });
+    this.send.emit({ message: this.message.replace(/^[\r\n]+|[\r\n]+$/g, '') });
     this.message = '';
   }
 }

@@ -1,17 +1,17 @@
-import { Component, HostBinding, Input, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'pc-chat-robot-message',
   template: `
     <nz-avatar [nzSize]="40" class="flex-shrink-0" nzIcon="user" [nzSrc]="avatar"></nz-avatar>
-    <div class="message">
+    <div class="message flex flex-col">
       <p class="sender mb-0.5 text-tips font-[12px]">
         <span class="mr-[5px]">{{ sender }}</span>
         <span>{{ date | date }}</span>
       </p>
       <div class="message-content">
         <ng-container *ngTemplateOutlet="messageContent"></ng-container>
-        <p class="text"> {{ message }} </p>
+        <pre class="text !mb-0"> {{ message }} </pre>
       </div>
     </div>
   `,

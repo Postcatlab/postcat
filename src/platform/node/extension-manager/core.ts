@@ -91,6 +91,6 @@ export class CoreHandler {
       // @ts-ignore
       modules = Object.keys(packageInfo.dependencies || {});
     }
-    return modules;
+    return modules.filter(val => val);
   }
 }

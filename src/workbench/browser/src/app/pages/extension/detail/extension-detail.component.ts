@@ -149,11 +149,11 @@ ${log}
     switch (operate) {
       case 'install': {
         const { name, version, i18n } = this.extensionDetail;
+        this.extensionDetail['enabled'] = true;
         this.extensionDetail.installed = await this.extensionService.installExtension({
           name,
           version
         });
-        this.extensionDetail['enabled'] = true;
         this.trace.report('install_extension_success', { extension_id: id });
         break;
       }

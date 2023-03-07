@@ -1,7 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
@@ -17,14 +15,16 @@ export class BaseUrlInterceptor implements HttpInterceptor {
   constructor(private store: StoreService, private messageService: MessageService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const isSystemUrl = !this.protocolReg.test(req.url);
+    if (!isSystemUrl) return next.handle(req);
+
     const serverUrl = this.store.remoteUrl || '';
     req = req.clone({
-      url: this.protocolReg.test(req.url) ? req.url : `${serverUrl}${req.url}`,
+      url: `${serverUrl}${req.url}`,
       headers: new HttpHeaders({
         Authorization: this.store.getLoginInfo?.accessToken || ''
       })
     });
-
     return next.handle(req).pipe(
       filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),
       map((event: HttpResponse<any>) =>

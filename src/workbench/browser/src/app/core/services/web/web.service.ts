@@ -41,7 +41,7 @@ export class WebService {
     },
     {
       id: 'mac-m1',
-      name: $localize`MacOS(M1) Client`,
+      name: $localize`MacOS(Apple) Client`,
       icon: 'mac',
       suffix: 'arm64.dmg',
       link: 'https://data.postcat.com/download/latest/Postcat-latest-arm64.dmg'

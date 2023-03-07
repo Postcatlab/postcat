@@ -4,5 +4,5 @@
   "apimanage.document": true,
   "apimanage.edit": true,
   "apimanage.mock": true,
-  "chatRobot": true
+  "chatRobot": false
 }

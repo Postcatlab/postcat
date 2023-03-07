@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ChatRobotService {
-  isShow: boolean = true;
+  isShow: boolean = false;
   constructor() {}
   open() {
     this.isShow = true;

@@ -48,7 +48,6 @@ export class ExtensionService {
       if (this.installedList.some(m => m.name === val.name)) return;
       installedName.push(val.name);
     });
-
     //* Install Extension by foreach because of async
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {
@@ -85,9 +84,10 @@ export class ExtensionService {
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
     this.messageService.send({
-      type: 'installedExtensionsChange',
+      type: 'extensionsChange',
       data: {
         installedMap: this.installedMap,
+        extension: this.installedList.find(val => val.name === opts.name),
         ...opts
       }
     });
@@ -117,8 +117,8 @@ export class ExtensionService {
           }
 
           result.data = [
-            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
-            //Local debug package
+            ...debugExtensions,
+            //Installed package
             ...this.installedList
               .filter(n => {
                 const target = result.data.find(m => n.name === m.name);
@@ -132,7 +132,7 @@ export class ExtensionService {
                 }
                 return module;
               }),
-            ...debugExtensions
+            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name))
           ];
           //Handle feature data
           result.data = result.data.map(module => {
@@ -205,10 +205,12 @@ export class ExtensionService {
     }
   }
   async uninstallExtension(name): Promise<boolean> {
+    const extension = this.installedList.find(it => it.name === name);
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'uninstall',
-        name
+        name,
+        extension
       });
     };
     if (this.electron.isElectron) {

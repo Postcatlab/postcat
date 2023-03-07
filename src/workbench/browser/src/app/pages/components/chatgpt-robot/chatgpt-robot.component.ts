@@ -2,11 +2,14 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FeatureControlService } from 'eo/workbench/browser/src/app/core/services/feature-control/feature-control.service';
+import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { ChatRobotModule } from '../../../modules/chat-robot/chat-robot.module';
 import { ChatRobotService } from '../../../modules/chat-robot/chat-robot.service';
 import { StarMotivationComponent } from '../../../modules/star-motivation/star-motivation.component';
-import { TraceService } from '../../../shared/services/trace.service';
 
 type messageItem = {
   text: string;
@@ -25,12 +28,12 @@ type messageItem = {
   imports: [StarMotivationComponent, CommonModule, ChatRobotModule],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [style({ transform: 'translateX(100%)' }), animate('200ms ease-in', style({ transform: 'translateX(0)' }))]),
-      transition(':leave', [animate('200ms ease-in', style({ transform: 'translateX(100%)' }))])
+      transition(':enter', [style({ transform: 'translateX(100%)' }), animate('300ms ease-in', style({ transform: 'translateX(0)' }))]),
+      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateX(100%)' }))])
     ])
   ],
   template: `
-    <pc-chat-robot *ngIf="chat.isShow" [@slideInOut] [powerBy]="powerBy" [title]="title">
+    <pc-chat-robot *ngIf="chat.isShow && feature.config.chatRobot" [@slideInOut] [powerBy]="powerBy" [title]="title">
       <pc-chat-robot-message
         [reply]="initMessage.reply"
         [sender]="initMessage.user.name"
@@ -50,13 +53,19 @@ type messageItem = {
         [avatar]="msg.user.avatar"
         [date]="msg.date"
       ></pc-chat-robot-message>
-      <pc-chat-robot-form (send)="sendMessage($event)"></pc-chat-robot-form>
+      <pc-chat-robot-form
+        (send)="sendMessage($event)"
+        [loading]="loading"
+        placeholder="Send message to AI"
+        i18n-placeholder
+      ></pc-chat-robot-form>
     </pc-chat-robot>
   `,
   styleUrls: ['./chatgpt-robot.component.scss']
 })
 export class ChatgptRobotComponent implements OnInit {
   title = $localize`ChatGPT Robot`;
+  loading = false;
   initMessage = {
     date: new Date(),
     reply: true,
@@ -71,45 +80,68 @@ export class ChatgptRobotComponent implements OnInit {
     link: 'https://www.apispace.com?utm_source=postcat&utm_medium=robot&utm_term=chatgptturbo'
   };
   messages: messageItem[] = [];
-  constructor(private http: HttpClient, public chat: ChatRobotService) {}
+  constructor(
+    private http: HttpClient,
+    public chat: ChatRobotService,
+    public feature: FeatureControlService,
+    private message: MessageService
+  ) {}
   ngOnInit() {
-    this.messages.push(
-      {
-        text: 'test im user',
-        date: new Date(),
-        reply: false,
-        type: 'text',
-        user: {
-          name: 'Visitor',
-          avatar: 'https://data.eolink.com/PXMbLGmc2f0b29596764f7456eefb75478ed77b4fd172d9'
-        }
-      },
-      {
-        text: `I'm sorry, I cannot respond to this as it is not a coherent sentence or request. Please provide a valid question or statement.`,
-        date: new Date(),
-        reply: true,
-        type: 'text',
-        user: {
-          name: 'ChatGPT',
-          avatar: 'https://data-apibee.apispace.com/license/167773762614902e10710-8d88-4d7e-b962-2df477b361ec'
-        }
-      }
-    );
+    setTimeout(() => {
+      this.watchExtensionChange();
+    }, 5 * 1000);
   }
   sendChatGPTMessage($event) {
+    this.loading = true;
     this.http
-      .post(
-        'https://eolink.o.apispace.com/chatgpt-turbo/create',
-        {},
-        {
-          headers: {
-            'Authorization-Type': 'apikey',
-            'X-APISpace-Token': ''
+      .post(`${APP_CONFIG.EXTENSION_URL}/chatGPT`, {
+        message: this.messages.map(val => {
+          if (val.reply) {
+            return `assistant: ${val.text}`;
           }
+          return `user: ${val.text}`;
+        })
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          if (!res?.result) {
+            this.messages.push({
+              text: `ChatGPT Error:${res?.msg}`,
+              date: new Date(),
+              reply: true,
+              type: 'text',
+              user: {
+                name: 'ChatGPT',
+                avatar: 'https://data-apibee.apispace.com/license/167773762614902e10710-8d88-4d7e-b962-2df477b361ec'
+              }
+            });
+            return;
+          }
+          this.messages.push({
+            text: res.result,
+            date: new Date(),
+            reply: true,
+            type: 'text',
+            user: {
+              name: 'ChatGPT',
+              avatar: 'https://data-apibee.apispace.com/license/167773762614902e10710-8d88-4d7e-b962-2df477b361ec'
+            }
+          });
+        },
+        error: e => {
+          this.loading = false;
+          this.messages.push({
+            text: 'ChatGPT Error',
+            date: new Date(),
+            reply: true,
+            type: 'text',
+            user: {
+              name: 'ChatGPT',
+              avatar: 'https://data-apibee.apispace.com/license/167773762614902e10710-8d88-4d7e-b962-2df477b361ec'
+            }
+          });
         }
-      )
-      .subscribe((res: any) => {
-        console.log(res);
       });
   }
   sendMessage($event) {
@@ -119,8 +151,23 @@ export class ChatgptRobotComponent implements OnInit {
       reply: false,
       type: 'text',
       user: {
-        name: 'Visitor',
+        name: $localize`Visitor`,
         avatar: 'https://data.eolink.com/PXMbLGmc2f0b29596764f7456eefb75478ed77b4fd172d9'
+      }
+    });
+    this.sendChatGPTMessage($event);
+  }
+  watchExtensionChange() {
+    this.message.get().subscribe((inArg: Message) => {
+      if (inArg.type !== 'extensionsChange') return;
+      const extension: ExtensionInfo = inArg.data.extension;
+      if (!extension?.features?.featureControl?.length) return;
+      switch (inArg.data.action) {
+        case 'install':
+        case 'enable': {
+          this.chat.open();
+          break;
+        }
       }
     });
   }

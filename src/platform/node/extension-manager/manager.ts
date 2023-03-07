@@ -82,6 +82,7 @@ export class ModuleManager {
    * @param module
    */
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
+    if (!module) return;
     const result = await this.moduleHandler.install([module], module?.isLocal || false);
     if (result.code === 0) {
       const moduleInfo: ExtensionInfo = await this.moduleHandler.info(module.name);

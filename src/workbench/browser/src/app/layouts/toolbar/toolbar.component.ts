@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FeatureControlService } from 'eo/workbench/browser/src/app/core/services/feature-control/feature-control.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -16,7 +17,12 @@ export class ToolbarComponent implements OnDestroy {
   hideSidebar = $localize`Hide Sidebar`;
   showSidebar = $localize`Show Sidebar`;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public sidebar: SidebarService, private modal: ModalService, private chat: ChatRobotService) {}
+  constructor(
+    public sidebar: SidebarService,
+    private modal: ModalService,
+    private chat: ChatRobotService,
+    public feature: FeatureControlService
+  ) {}
   toggleCollapsed() {
     this.sidebar.toggleCollapsed();
   }
