@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.2) (2023-03-06)
+=======
 ## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.3.1...v0.3.2) (2023-03-07)
 
 
@@ -14,6 +17,7 @@
 
 
 ## [0.3.1](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.1) (2023-03-06)
+>>>>>>> main
 
 
 ### Bug Fixes
@@ -46,6 +50,10 @@
 * API Authorization ([938ec7d](https://github.com/Postcatlab/postcat/commit/938ec7d68270c2be4c17cd2e1098377f2db180d2))
 * change description ([0341ba8](https://github.com/Postcatlab/postcat/commit/0341ba8f423cd6554fc83c50bf477dd9d1b36a9c))
 * change github project url ([42c801c](https://github.com/Postcatlab/postcat/commit/42c801c49cbd859c876e9aafc2d4bae8fb38b9b6))
+<<<<<<< HEAD
+* chat robot ([7878664](https://github.com/Postcatlab/postcat/commit/78786640f464f7370c14aaf14bb224c61a29ae03))
+=======
+>>>>>>> main
 * delete useless code ([a558094](https://github.com/Postcatlab/postcat/commit/a55809494695b1cdcb44009ca55213ca2fc2a570))
 * delete useless log ([d878582](https://github.com/Postcatlab/postcat/commit/d87858232292f61f89e1412b259dc27b5e644a79))
 * nps ([426a08f](https://github.com/Postcatlab/postcat/commit/426a08ff1af75d401a8358dae1940f4cfd8f3268))

@@ -1,4 +1,4 @@
-<div class="flex app_toolbar">
+<div class="flex justify-between app_toolbar">
   <div class="flex items-center">
     <button
       eo-ng-button
@@ -24,6 +24,20 @@
       (click)="changeTheme()"
     >
       <eo-iconpark-icon name="theme"></eo-iconpark-icon>
+    </button>
+  </div>
+  <div class="flex items-center mr-[10px]">
+    <button
+      eo-ng-button
+      *ngIf="feature.config.chatRobot"
+      nzType="text"
+      class="flex items-center"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      nzTooltipTitle="ChatGPT Robot"
+      (click)="openRobot()"
+    >
+      <eo-iconpark-icon name="robot"></eo-iconpark-icon>
     </button>
   </div>
 </div>

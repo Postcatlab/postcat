@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services/web/web.service';
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
@@ -20,15 +20,15 @@ export class ExtensionDetailComponent implements OnInit {
   @Input() nzSelectedIndex = 0;
   isOperating = false;
   introLoading = false;
+  isAvailableElectron = true;
   changelogLoading = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
-
+  readonly APP_CONFIG = APP_CONFIG;
   changeLog = '';
   changeLogNotFound = false;
   constructor(
     public extensionService: ExtensionService,
-    private route: ActivatedRoute,
     private webService: WebService,
     private electron: ElectronService,
     private language: LanguageService,
@@ -68,14 +68,13 @@ export class ExtensionDetailComponent implements OnInit {
     this.introLoading = false;
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
-
+    this.isAvailableElectron = this.checkisAvailableElectron(this.extensionDetail);
     this.fetchChangelog(this.language.systemLanguage);
 
     setTimeout(() => {
       this.nzSelectedIndex = nzSelectedIndex;
     });
   }
-
   async fetchChangelog(locale = '') {
     //Default locale en-US
     if (locale === 'en-US') {
@@ -136,23 +135,25 @@ ${log}
     } finally {
     }
   }
-
   handleTabChange = e => {
     if (e.tab?.nzTitle === 'ChangeLog') {
       this.fetchChangelog();
     }
   };
-
+  checkisAvailableElectron(pkgInfo): boolean {
+    if (this.electron.isElectron && this.extensionDetail.browser && !this.extensionDetail.main) return false;
+    return true;
+  }
   private async manageExtension(operate: string, id) {
     this.isOperating = true;
     switch (operate) {
       case 'install': {
         const { name, version, i18n } = this.extensionDetail;
+        this.extensionDetail['enabled'] = true;
         this.extensionDetail.installed = await this.extensionService.installExtension({
           name,
           version
         });
-        this.extensionDetail['enabled'] = true;
         this.trace.report('install_extension_success', { extension_id: id });
         break;
       }
