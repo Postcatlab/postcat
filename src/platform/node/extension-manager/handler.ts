@@ -150,22 +150,21 @@ export class ModuleHandler extends CoreHandler {
       const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`);
       console.log('====》测试 npm', npmPath);
       const npm1 = spawn(npmPath, ['-v', this.registry], {
-        stdio: 'inherit',
         shell: process.platform === 'win32'
       });
+      console.log('====》测试 npm1', npm1);
 
       npm1.stdout.on('data', async data => {
         console.log('npm1', decoder.decode(data));
       });
 
       const npm = spawn(npmPath, ['config', 'set', 'registry', this.registry], {
-        stdio: 'inherit',
         shell: process.platform === 'win32'
       });
       npm.stdout.on('data', async data => {
         console.log('data', decoder.decode(data));
       });
-      npm.on('close', () => {
+      npm.stdout.on('close', () => {
         resolve(true);
       });
     });
