@@ -60,8 +60,8 @@
           </button>
         </div>
         <div class="flex flex-col" *ngIf="!isAvailableElectron">
-          <button eo-ng-button nzType="primary">Jump to Use</button>
-          <p class="text-[12px] mt-[10px] text-tips">This exension only support web</p>
+          <a [href]="APP_CONFIG.serverUrl" target="_bank"><button eo-ng-button nzType="primary" i18n>Jump to Use</button></a>
+          <p class="text-[12px] mt-[10px] text-tips" i18n>* This exension only support web</p>
         </div>
       </div>
     </div>

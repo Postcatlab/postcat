@@ -59,7 +59,7 @@ export class WebService {
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     } else {
-      this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://52.76.76.88:8080' });
+      this.settingService.putSettings({ 'backend.url': APP_CONFIG.serverUrl });
     }
     this.getClientResource();
   }

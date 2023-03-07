@@ -3,6 +3,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services/web/web.service';
 import { ExtensionService } from '../../../shared/services/extensions/extension.service';
@@ -23,7 +24,7 @@ export class ExtensionDetailComponent implements OnInit {
   changelogLoading = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
-
+  readonly APP_CONFIG = APP_CONFIG;
   changeLog = '';
   changeLogNotFound = false;
   constructor(
