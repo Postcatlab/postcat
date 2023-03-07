@@ -194,30 +194,29 @@ export class ThemeService {
   }
   watchInstalledExtensionsChange() {
     this.message.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'installedExtensionsChange') {
-        //Rest newest theme list
-        this.themes = this.themes.filter(val => !val.isExtension);
-        this.queryExtensionThemes();
-        this.afterAllThemeLoad();
+      if (inArg.type !== 'extensionsChange') return;
+      //Rest newest theme list
+      this.themes = this.themes.filter(val => !val.isExtension);
+      this.queryExtensionThemes();
+      this.afterAllThemeLoad();
 
-        switch (inArg.data.action) {
-          case 'enable':
-          case 'install': {
-            const name = inArg.data.name;
-            const extension: ExtensionInfo = inArg.data.installedMap.get(name);
-            if (!extension?.features?.theme?.length) break;
+      switch (inArg.data.action) {
+        case 'enable':
+        case 'install': {
+          const name = inArg.data.name;
+          const extension: ExtensionInfo = inArg.data.installedMap.get(name);
+          if (!extension?.features?.theme?.length) break;
 
-            //Change theme after install/enable extension
-            const themeID = extension.features.theme[0].id;
-            const id = this.themeExtension.getExtensionID(name, themeID);
-            const theme = this.themes.find(val => val.id === id);
-            if (!theme) return;
-            this.changeTheme(theme);
-            break;
-          }
-          default: {
-            break;
-          }
+          //Change theme after install/enable extension
+          const themeID = extension.features.theme[0].id;
+          const id = this.themeExtension.getExtensionID(name, themeID);
+          const theme = this.themes.find(val => val.id === id);
+          if (!theme) return;
+          this.changeTheme(theme);
+          break;
+        }
+        default: {
+          break;
         }
       }
     });

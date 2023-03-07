@@ -2,12 +2,14 @@ import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, BuildResult, Platform } from 'electron-builder';
 import type { Configuration } from 'electron-builder';
 import minimist from 'minimist';
+import YAML from 'yaml';
 
 import pkgInfo from '../package.json';
 import { ELETRON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
@@ -34,6 +36,21 @@ if (process.platform === 'darwin') {
 // window 系统删除 release 目录
 if (process.platform === 'win32') {
   exec(`rd/s/q ${path.resolve(__dirname, '../release')}`);
+}
+
+function hashFile(file: string, algorithm = 'sha512', encoding: 'base64' | 'hex' = 'base64', options?: any): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const hash = createHash(algorithm);
+    hash.on('error', reject).setEncoding(encoding);
+
+    createReadStream(file, { ...options, highWaterMark: 1024 * 1024 /* better to use more memory but hash faster */ })
+      .on('error', reject)
+      .on('end', () => {
+        hash.end();
+        resolve(hash.read() as string);
+      })
+      .pipe(hash, { end: false });
+  });
 }
 
 const config: Configuration = {
@@ -180,7 +197,20 @@ const signWindows = () => {
           path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
         };
         await sign(...signOptions);
-        execSync('yarn releaseWindows');
+
+        if (argv.publish === 'always') {
+          const latestYmlPath = path.join(__dirname, '../release/latest.yml');
+          const latestYml = readFileSync(latestYmlPath, 'utf8');
+          const latestYmlObj = YAML.parse(latestYml);
+
+          const sha512 = await hashFile(signOptions[0].path);
+          latestYmlObj.sha512 = sha512;
+          for (const file of latestYmlObj.files) {
+            file.sha512 = sha512;
+          }
+          writeFileSync(latestYmlPath, YAML.stringify(latestYmlObj));
+          execSync('yarn releaseWindows');
+        }
 
         console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
         resolve(true);

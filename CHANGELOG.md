@@ -1,3 +1,76 @@
+<<<<<<< HEAD
+## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.2) (2023-03-06)
+=======
+## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.3.1...v0.3.2) (2023-03-07)
+
+
+### Bug Fixes
+
+* cmd syntax error ([7832723](https://github.com/Postcatlab/postcat/commit/783272327daf3617cca066a6e39dce9dd748f224))
+* long text input file error with windows ([97c9490](https://github.com/Postcatlab/postcat/commit/97c9490731c2138290d93748d5f44a41df2c6328))
+* long text input file error with windows ([c7f284f](https://github.com/Postcatlab/postcat/commit/c7f284f7a160c608ba93b4d38e31afa7a92a8e7d))
+* project action not show ([805494d](https://github.com/Postcatlab/postcat/commit/805494d7ad9eae55b822c852dcec7e58e5db03d7))
+* qiniu_env.js output path ([5249607](https://github.com/Postcatlab/postcat/commit/5249607d391dcf90869b0c168ffc6befa9ea7e47))
+* upload & publish module not found ([230219b](https://github.com/Postcatlab/postcat/commit/230219b14666ebf3482db44b3507f2e994b1d1c6))
+* upload script module not found ([15dbef4](https://github.com/Postcatlab/postcat/commit/15dbef4968a9d48e4a07ba12864b1653a0bd9947))
+
+
+
+## [0.3.1](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.1) (2023-03-06)
+>>>>>>> main
+
+
+### Bug Fixes
+
+* APISpace jump to detail page error ([e06e200](https://github.com/Postcatlab/postcat/commit/e06e200b8dc749fecb71320df6972c9a5eb13292))
+* env parameters error ([9cc5513](https://github.com/Postcatlab/postcat/commit/9cc55134e363107cf9029d3b8f1ab64493e1c986))
+* extension detail settings style ([d377eea](https://github.com/Postcatlab/postcat/commit/d377eead9a0cf13b4c45caf57ef4eb1b3f302c9e))
+* extension detail skeleton not show ([2059912](https://github.com/Postcatlab/postcat/commit/2059912f63677fce97fc8d190737faf1b78762d4))
+* fix some e2e test ([31eb8f6](https://github.com/Postcatlab/postcat/commit/31eb8f6df1459ede787f37a80b09da135b47e11e))
+* gio bind userID ([0b0ef7d](https://github.com/Postcatlab/postcat/commit/0b0ef7d22e48327df35024f335247d7429772507))
+* gio bind userID ([441322f](https://github.com/Postcatlab/postcat/commit/441322f63ee8fbc8362d75bd38b0e36c5845c256))
+* gio install extension error ([c2c87fc](https://github.com/Postcatlab/postcat/commit/c2c87fc0be7084472323c70b79f9db207181b308))
+* **i18n:** change language error ([fc65a5e](https://github.com/Postcatlab/postcat/commit/fc65a5e639161394dafbed6468649fd69ce89c15))
+* import api env validate ([d6595ec](https://github.com/Postcatlab/postcat/commit/d6595ecd518719fdb64cecfea9a7fb2777bf4e9b))
+* installed list is empty ([3ff219e](https://github.com/Postcatlab/postcat/commit/3ff219e14587f87fa395fdcbf599f62a5636b2f5))
+* installed list may be empty ([e744cbf](https://github.com/Postcatlab/postcat/commit/e744cbf71e9f10fafdea8681d87e92670ed20c36))
+* member avatar be extrusion ([11bc7ba](https://github.com/Postcatlab/postcat/commit/11bc7bab6cf47ae736414181571c8e53d2310cbe))
+* mock match bug ([7f062d4](https://github.com/Postcatlab/postcat/commit/7f062d46a3306469b79d01213e5af8cb100d613a))
+* npm install error in windows os ([8fa1b3d](https://github.com/Postcatlab/postcat/commit/8fa1b3da02d183f6332b4273eb20aa22bb0e72da))
+* register_success event error ([b5288f9](https://github.com/Postcatlab/postcat/commit/b5288f96d781916e34ee2fdcdea949f9ebc7cf4b))
+* show nps after view init ([5357d6d](https://github.com/Postcatlab/postcat/commit/5357d6d5e14950af9d8e1917a8c005c87de5c2dd))
+* sync-api not reactive ([df24b5d](https://github.com/Postcatlab/postcat/commit/df24b5d1541d218dc291f175136ef0e2fd292ac1))
+
+
+### Features
+
+* action watch ([#237](https://github.com/Postcatlab/postcat/issues/237)) ([fcd09fa](https://github.com/Postcatlab/postcat/commit/fcd09fa688dda07defa6391077cadcee749255fa))
+* add comment ([831b4bc](https://github.com/Postcatlab/postcat/commit/831b4bce2b731f9c80f6b329ad3f4472655e94da))
+* add trace about client_type & app_language ([4bd7ea2](https://github.com/Postcatlab/postcat/commit/4bd7ea2ad25722ca0a00dc0db9b4ba61bc2c1bfc))
+* API Authorization ([938ec7d](https://github.com/Postcatlab/postcat/commit/938ec7d68270c2be4c17cd2e1098377f2db180d2))
+* change description ([0341ba8](https://github.com/Postcatlab/postcat/commit/0341ba8f423cd6554fc83c50bf477dd9d1b36a9c))
+* change github project url ([42c801c](https://github.com/Postcatlab/postcat/commit/42c801c49cbd859c876e9aafc2d4bae8fb38b9b6))
+<<<<<<< HEAD
+* chat robot ([7878664](https://github.com/Postcatlab/postcat/commit/78786640f464f7370c14aaf14bb224c61a29ae03))
+=======
+>>>>>>> main
+* delete useless code ([a558094](https://github.com/Postcatlab/postcat/commit/a55809494695b1cdcb44009ca55213ca2fc2a570))
+* delete useless log ([d878582](https://github.com/Postcatlab/postcat/commit/d87858232292f61f89e1412b259dc27b5e644a79))
+* nps ([426a08f](https://github.com/Postcatlab/postcat/commit/426a08ff1af75d401a8358dae1940f4cfd8f3268))
+* replace reg ([263cb4f](https://github.com/Postcatlab/postcat/commit/263cb4f0d10da3c7cb7ff1bc367541ce159397e8))
+* replace setFeedURL url ([4303743](https://github.com/Postcatlab/postcat/commit/43037434ac28bd4b43614f22017faf8e2a39ee2a))
+* set registry automaic ([8f64179](https://github.com/Postcatlab/postcat/commit/8f641799d63f77193cea31c2920d590c09f4aaa7))
+* sync and save by one step ([70a01fa](https://github.com/Postcatlab/postcat/commit/70a01fae0193ca180ff27a5ac666667da43f4d29))
+* translate ([f445a80](https://github.com/Postcatlab/postcat/commit/f445a806da92b9eb0181b51f3f007251612f12a3))
+* translate error ([8d5e5f3](https://github.com/Postcatlab/postcat/commit/8d5e5f3bbdb871e31d541fe6890f631e305c240b))
+
+
+### Performance Improvements
+
+* optimize old code ([4001bef](https://github.com/Postcatlab/postcat/commit/4001bef79a0274f8861b4299330ebb153b93f468))
+
+
+
 ## [0.2.1](https://github.com/Postcatlab/postcat/compare/v0.2.0...v0.2.1) (2023-02-09)
 
 

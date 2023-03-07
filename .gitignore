@@ -6,6 +6,7 @@ dist/
 /build/FilesToInstall/
 /build/Output/
 /build/NiuNiuCaptureElectronDemo/
+/build/SetupScripts/skinpwd.nsh
 out/
 /tmp
 /out-tsc

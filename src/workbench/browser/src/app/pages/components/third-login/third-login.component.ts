@@ -3,6 +3,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { autorun, reaction } from 'mobx';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)
@@ -77,7 +78,7 @@ export class ThirdLoginComponent implements OnInit {
     // * get login url
     const [res, err] = await this.api.api_userThirdLogin({
       type: LoginType[type],
-      redirectUri: this.web.isWeb ? window.location.href.split('?').at(0) : 'https://postcat.com',
+      redirectUri: this.web.isWeb ? window.location.href.split('?').at(0) : APP_CONFIG.serverUrl,
       appType: 0,
       client: 0
     });

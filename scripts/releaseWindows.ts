@@ -1,7 +1,6 @@
 import { Octokit } from 'octokit';
 
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
+import { readFileSync } from 'fs';
 
 const version = process.env.npm_package_version;
 
@@ -17,11 +16,6 @@ const commonInfo = {
 
 const setup = async () => {
   const { data: releaseList } = await octokit.rest.repos.listReleases(commonInfo);
-
-  const latestPath = path.join(__dirname, '../release/latest.yml');
-  const file = readFileSync(latestPath, 'utf8');
-  // @ts-ignore
-  writeFileSync(latestPath, file.replaceAll(`Postcat-Setup-${version}.exe`, `Postcat Setup ${version}.exe`));
 
   const assetNames = [`Postcat-Setup-${version}.exe`, 'latest.yml'];
 

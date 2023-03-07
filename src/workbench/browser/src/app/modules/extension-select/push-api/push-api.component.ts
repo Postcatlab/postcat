@@ -32,7 +32,7 @@ export class PushApiComponent implements OnInit {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        if (inArg.type === 'installedExtensionsChange') {
+        if (inArg.type === 'extensionsChange') {
           this.initData();
         }
       });

@@ -41,7 +41,7 @@ export class WebService {
     },
     {
       id: 'mac-m1',
-      name: $localize`MacOS(M1) Client`,
+      name: $localize`MacOS(Apple) Client`,
       icon: 'mac',
       suffix: 'arm64.dmg',
       link: 'https://data.postcat.com/download/latest/Postcat-latest-arm64.dmg'
@@ -59,12 +59,12 @@ export class WebService {
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     } else {
-      this.settingService.putSettings({ 'backend.url': APP_CONFIG.production ? 'https://postcat.com' : 'http://52.76.76.88:8080' });
+      this.settingService.putSettings({ 'backend.url': APP_CONFIG.serverUrl });
     }
     this.getClientResource();
   }
   getGithubUrl(opts = {}) {
-    const href = 'https://github.com/Postcatlab/postcat/issues/new';
+    const href = `${APP_CONFIG.GITHUB_REPO_URL}/issues/new`;
     const query = {
       assignees: '',
       labels: '',
