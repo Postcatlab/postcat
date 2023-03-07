@@ -8,7 +8,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 
-import { ExtensionStoreService } from './extension-store.service';
+import { ExtensionCommonService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
@@ -27,7 +27,7 @@ export class ExtensionService {
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
-    private store: ExtensionStoreService,
+    private extensionCommon: ExtensionCommonService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
@@ -48,7 +48,6 @@ export class ExtensionService {
       if (this.installedList.some(m => m.name === val.name)) return;
       installedName.push(val.name);
     });
-
     //* Install Extension by foreach because of async
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {
@@ -66,7 +65,7 @@ export class ExtensionService {
     if (this.electron.isElectron) {
       result = window.electron.getInstalledExtensions() || new Map();
       result.forEach((value, key) => {
-        result.set(key, this.parseExtensionInfo(value));
+        result.set(key, this.extensionCommon.parseExtensionInfo(value));
       });
     } else {
       result = this.webExtensionService.getExtensions();
@@ -85,9 +84,10 @@ export class ExtensionService {
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
     this.messageService.send({
-      type: 'installedExtensionsChange',
+      type: 'extensionsChange',
       data: {
         installedMap: this.installedMap,
+        extension: this.installedList.find(val => val.name === opts.name),
         ...opts
       }
     });
@@ -117,8 +117,8 @@ export class ExtensionService {
           }
 
           result.data = [
-            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
-            //Local debug package
+            ...debugExtensions,
+            //Installed package
             ...this.installedList
               .filter(n => {
                 const target = result.data.find(m => n.name === m.name);
@@ -132,18 +132,18 @@ export class ExtensionService {
                 }
                 return module;
               }),
-            ...debugExtensions
+            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name))
           ];
           //Handle feature data
           result.data = result.data.map(module => {
-            let result = this.parseExtensionInfo(module);
+            let result = this.extensionCommon.parseExtensionInfo(module);
             return result;
           });
 
           //Get debug extensions
           this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
 
-          this.store.setExtensionList(result.data);
+          this.extensionCommon.setExtensionList(result.data);
           this.requestPending = null;
           this.isFirstInit = false;
           resolve([result, originData]);
@@ -166,7 +166,7 @@ export class ExtensionService {
       Object.assign(result, this.installedMap.get(name), { installed: true });
       result.enable = this.isEnable(result.name);
     }
-    result = this.parseExtensionInfo(result);
+    result = this.extensionCommon.parseExtensionInfo(result);
     return result;
   }
   /**
@@ -205,10 +205,12 @@ export class ExtensionService {
     }
   }
   async uninstallExtension(name): Promise<boolean> {
+    const extension = this.installedList.find(it => it.name === name);
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'uninstall',
-        name
+        name,
+        extension
       });
     };
     if (this.electron.isElectron) {
@@ -316,19 +318,5 @@ export class ExtensionService {
     return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
-  }
-  /**
-   * Parse extension info for ui show
-   * such as: author, translate ...
-   *
-   * @param pkg
-   * @returns
-   */
-  private parseExtensionInfo(pkg): ExtensionInfo {
-    pkg = this.webExtensionService.translateModule(pkg);
-    if (typeof pkg.author === 'object') {
-      pkg.author = pkg.author['name'] || '';
-    }
-    return pkg;
   }
 }
