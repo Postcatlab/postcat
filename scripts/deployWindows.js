@@ -23,17 +23,22 @@ conn
         .end(
           [
             'set TERM=msys',
-            `set GITHUB_TOKEN=${process.env.GITHUB_TOKEN}`,
-            'd:',
-            `cd \\git\\postcat`,
+            `export GITHUB_TOKEN=${process.env.GITHUB_TOKEN}`,
+            `cd d:/git/postcat`,
             'git reset --hard',
+            'git checkout build/windows',
             ...Array.from({ length: 5 }).map(_ => 'git pull'),
-            'nvm use 16.13.2',
-            `echo ${process.env.QINIU_ENV_JS} > qiniu_env.js`,
+            'nvm install 16.19.1',
+            'nvm use 16.19.1',
+            `
+            cat>./scripts/qiniu_env.js<<EOF
+            ${process.env.QINIU_ENV_JS}
+EOF
+            `,
             'yarn install',
             'yarn release',
             'nvm use 12.22.10',
-            'echo Windows打包发布完成!'
+            'echo Windows 打包发布完成!'
           ].join('\r\n')
         );
     });
