@@ -127,7 +127,7 @@ export class ModuleHandler extends CoreHandler {
   }
   private executeByAppNpm(command: string, modules: any[], resolve, reject) {
     // https://www.npmjs.com/package/bin-links
-    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, loaderr => {
+    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir, registry: this.registry }, loaderr => {
       const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
       let executeCommand = ['update', 'install', 'uninstall'];
       if (!executeCommand.includes(command)) {
@@ -165,7 +165,7 @@ export class ModuleHandler extends CoreHandler {
       // this.executeBySystemNpm(command, modules, resolve)
       // * Set Proxy
       // * Set registry
-      await this.setRegistry();
+      // await this.setRegistry();
       this.executeByAppNpm(command, modules, resolve, reject);
     });
   }
