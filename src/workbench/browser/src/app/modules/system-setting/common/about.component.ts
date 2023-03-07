@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services';
 @Component({
@@ -10,7 +11,7 @@ import { WebService } from '../../../core/services';
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- Star -->
       <a
-        href="https://github.com/Postcatlab/postcat"
+        [href]="APP_CONFIG.GITHUB_REPO_URL"
         target="_blank"
         class="flex items-center mt-[15px]"
         trace
@@ -32,7 +33,7 @@ import { WebService } from '../../../core/services';
 export class AboutComponent implements OnInit {
   list;
   versionInfo;
-
+  readonly APP_CONFIG = APP_CONFIG;
   constructor(private web: WebService) {}
 
   ngOnInit(): void {

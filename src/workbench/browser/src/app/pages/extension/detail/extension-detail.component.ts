@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -20,6 +19,7 @@ export class ExtensionDetailComponent implements OnInit {
   @Input() nzSelectedIndex = 0;
   isOperating = false;
   introLoading = false;
+  isAvailableElectron = true;
   changelogLoading = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
@@ -28,7 +28,6 @@ export class ExtensionDetailComponent implements OnInit {
   changeLogNotFound = false;
   constructor(
     public extensionService: ExtensionService,
-    private route: ActivatedRoute,
     private webService: WebService,
     private electron: ElectronService,
     private language: LanguageService,
@@ -68,14 +67,13 @@ export class ExtensionDetailComponent implements OnInit {
     this.introLoading = false;
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
-
+    this.isAvailableElectron = this.checkisAvailableElectron(this.extensionDetail);
     this.fetchChangelog(this.language.systemLanguage);
 
     setTimeout(() => {
       this.nzSelectedIndex = nzSelectedIndex;
     });
   }
-
   async fetchChangelog(locale = '') {
     //Default locale en-US
     if (locale === 'en-US') {
@@ -136,13 +134,15 @@ ${log}
     } finally {
     }
   }
-
   handleTabChange = e => {
     if (e.tab?.nzTitle === 'ChangeLog') {
       this.fetchChangelog();
     }
   };
-
+  checkisAvailableElectron(pkgInfo): boolean {
+    if (this.electron.isElectron && this.extensionDetail.browser && !this.extensionDetail.main) return false;
+    return true;
+  }
   private async manageExtension(operate: string, id) {
     this.isOperating = true;
     switch (operate) {

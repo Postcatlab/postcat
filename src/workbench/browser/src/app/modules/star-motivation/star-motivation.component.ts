@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { SharedModule } from '../../shared/shared.module';
 
@@ -12,7 +13,7 @@ import { SharedModule } from '../../shared/shared.module';
     <a
       class="favor-image-link mt-[15px]"
       target="_blank"
-      href="https://github.com/Postcatlab/postcat"
+      [href]="APP_CONFIG.GITHUB_REPO_URL"
       trace
       traceID="jump_to_github"
       [traceParams]="{ where_jump_to_github: 'heart' }"
@@ -41,4 +42,6 @@ import { SharedModule } from '../../shared/shared.module';
 })
 export class StarMotivationComponent {
   @Input() subject: string = 'Postcat';
+
+  readonly APP_CONFIG = APP_CONFIG;
 }

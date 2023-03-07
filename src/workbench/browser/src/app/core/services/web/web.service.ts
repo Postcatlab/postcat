@@ -64,7 +64,7 @@ export class WebService {
     this.getClientResource();
   }
   getGithubUrl(opts = {}) {
-    const href = 'https://github.com/Postcatlab/postcat/issues/new';
+    const href = `${APP_CONFIG.GITHUB_REPO_URL}/issues/new`;
     const query = {
       assignees: '',
       labels: '',

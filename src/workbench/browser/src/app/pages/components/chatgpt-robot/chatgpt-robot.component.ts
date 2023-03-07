@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -22,8 +23,14 @@ type messageItem = {
   selector: 'pc-chatgpt-robot',
   standalone: true,
   imports: [StarMotivationComponent, CommonModule, ChatRobotModule],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [style({ transform: 'translateX(100%)' }), animate('200ms ease-in', style({ transform: 'translateX(0)' }))]),
+      transition(':leave', [animate('200ms ease-in', style({ transform: 'translateX(100%)' }))])
+    ])
+  ],
   template: `
-    <pc-chat-robot *ngIf="chat.isShow" [powerBy]="powerBy" [title]="title">
+    <pc-chat-robot *ngIf="chat.isShow" [@slideInOut] [powerBy]="powerBy" [title]="title">
       <pc-chat-robot-message
         [reply]="initMessage.reply"
         [sender]="initMessage.user.name"

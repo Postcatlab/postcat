@@ -5,7 +5,7 @@ import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/sr
 import { createServer } from 'http-server/lib/http-server';
 import portfinder from 'portfinder';
 
-import { ELETRON_APP_CONFIG } from '../../../environment';
+import { COMMON_APP_CONFIG } from '../../../environment';
 import { ModuleHandler } from './handler';
 import { ModuleHandlerResult, ModuleManagerInfo } from './handler.model';
 
@@ -55,7 +55,7 @@ export class ModuleManager {
   async getRemoteExtension(): Promise<ModuleManagerInfo[]> {
     return new Promise(resolve => {
       let data = '';
-      https.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`, res => {
+      https.get(`${COMMON_APP_CONFIG.EXTENSION_URL}/list`, res => {
         res.on('data', chunk => {
           data += chunk;
         });
