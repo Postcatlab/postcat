@@ -1,0 +1,14 @@
+:host {
+  @apply p-[20px];
+}
+
+.top-save-bar {
+  top: -21px;
+  background-color: var(--background-color);
+  border-bottom: none;
+
+  &.is-pinned {
+    padding-top: 1px;
+    border-bottom: 1px solid var(--border-color);
+  }
+}

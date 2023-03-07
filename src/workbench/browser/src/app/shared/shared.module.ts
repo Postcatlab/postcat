@@ -11,6 +11,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
+import { AuthorizationExtensionFormComponent } from 'eo/workbench/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ExtensionFeedbackComponent } from 'eo/workbench/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'eo/workbench/browser/src/app/shared/components/schema-form/schema-form.component';
 import { TraceDirective } from 'eo/workbench/browser/src/app/shared/directives/trace.directive';
@@ -30,7 +31,13 @@ import { DownloadClientModalComponent } from './components/download-client.compo
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 
-const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent, EoSchemaFormComponent, ExtensionFeedbackComponent];
+const COMPONENTS = [
+  DownloadClientModalComponent,
+  ExtensionAppComponent,
+  EoSchemaFormComponent,
+  ExtensionFeedbackComponent,
+  AuthorizationExtensionFormComponent
+];
 const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective, TraceDirective];
 
 const SHARED_UI_MODULE = [

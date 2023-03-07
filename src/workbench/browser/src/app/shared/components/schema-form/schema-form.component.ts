@@ -11,7 +11,7 @@ const compMap = {
 @Component({
   selector: 'eo-schema-form',
   animations: [
-    trigger('myInsertRemoveTrigger', [
+    trigger('animateTrigger', [
       transition(':enter', [style({ opacity: 0 }), animate('100ms', style({ opacity: 1 }))]),
       transition(':leave', [animate('100ms', style({ opacity: 0 }))])
     ])
@@ -28,7 +28,7 @@ const compMap = {
     `
   ],
   template: `
-    <form @myInsertRemoveTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
+    <form @animateTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
         <ng-container *ngIf="properties[field]?.label">
           <nz-form-label
@@ -131,9 +131,9 @@ export class EoSchemaFormComponent implements OnChanges {
 
     setTimeout(() => {
       this.isInited = true;
-      this.setSettingsModel(this.properties);
+      this.properties2Model(this.properties);
     });
-  }, 50);
+  });
 
   initEmitter() {
     this.validateForm.valueChanges.subscribe(
@@ -221,11 +221,10 @@ export class EoSchemaFormComponent implements OnChanges {
    *
    * @param properties
    */
-  private setSettingsModel(properties) {
+  private properties2Model(properties) {
     //  Flat configuration object
-    Object.keys(properties).forEach(fieldKey => {
-      const props = properties[fieldKey];
-      this.model[fieldKey] ??= props.default || props.const;
+    Object.entries<any>(properties).forEach(([fieldKey, fieldValue]) => {
+      this.model[fieldKey] ??= fieldValue.default ?? fieldValue.const;
     });
   }
 }

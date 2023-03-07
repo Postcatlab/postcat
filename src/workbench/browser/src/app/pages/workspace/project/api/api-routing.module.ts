@@ -51,6 +51,10 @@ const routes: Routes = [
       {
         path: 'env',
         loadChildren: () => import('./env/env.module').then(m => m.EnvModule)
+      },
+      {
+        path: 'group',
+        loadChildren: () => import('./group/group.module').then(m => m.EnvModule)
       }
       // {
       //   path: 'grpc',

@@ -157,6 +157,7 @@ export class TabOperateService {
     }
     const queryParams = { pageID: tab.params?.pageID, ...tab.params };
     if (!queryParams.pageID) Reflect.deleteProperty(queryParams, 'pageID');
+    console.log('tab', { ...tab });
     this.router.navigate([tab.pathname], {
       queryParams
     });

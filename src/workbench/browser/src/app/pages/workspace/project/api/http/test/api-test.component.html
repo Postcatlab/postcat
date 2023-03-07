@@ -117,6 +117,15 @@
           (modelChange)="emitChangeFun('restParams')"
         ></pc-api-test-form>
       </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="authorizationTitleTmp">
+        <ng-template #authorizationTitleTmp>
+          <span i18n>Authorization</span>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <div class="p-[20px]">
+          <authorization-extension-form [authType]="authType" [groupID]="model.request?.groupId"></authorization-extension-form>
+        </div>
+      </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
