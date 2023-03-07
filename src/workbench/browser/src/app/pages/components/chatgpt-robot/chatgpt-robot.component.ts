@@ -1,7 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
+import { ChatRobotModule } from '../../../modules/chat-robot/chat-robot.module';
 import { ChatRobotService } from '../../../modules/chat-robot/chat-robot.service';
+import { StarMotivationComponent } from '../../../modules/star-motivation/star-motivation.component';
+import { TraceService } from '../../../shared/services/trace.service';
 
 type messageItem = {
   text: string;
@@ -16,8 +20,10 @@ type messageItem = {
 
 @Component({
   selector: 'pc-chatgpt-robot',
+  standalone: true,
+  imports: [StarMotivationComponent, CommonModule, ChatRobotModule],
   template: `
-    <pc-chat-robot *ngIf="chat.isShow" [title]="title">
+    <pc-chat-robot *ngIf="chat.isShow" [powerBy]="powerBy" [title]="title">
       <pc-chat-robot-message
         [reply]="initMessage.reply"
         [sender]="initMessage.user.name"
@@ -26,21 +32,7 @@ type messageItem = {
         [messageContent]="messageTemplate"
       >
         <ng-template #messageTemplate>
-          <div class="flex flex-col items-center">
-            <p i18n class="text-center mt-[15px]">
-              Hi!~ If you like <b>ChatGPT Extensions</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
-            </p>
-            <a
-              class="favor-image-link mt-[15px]"
-              target="_blank"
-              href="https://github.com/Postcatlab/postcat"
-              trace
-              traceID="jump_to_github"
-              [traceParams]="{ where_jump_to_github: 'heart' }"
-            >
-              <img loading="lazy" class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
-            </a>
-          </div>
+          <pc-star-motivation subject="ChatGPT Extensions" i18n-subject></pc-star-motivation>
         </ng-template>
       </pc-chat-robot-message>
       <pc-chat-robot-message
@@ -66,6 +58,10 @@ export class ChatgptRobotComponent implements OnInit {
       name: 'Postcat',
       avatar: './assets/images/logo.svg'
     }
+  };
+  powerBy = {
+    title: 'APISPace',
+    link: 'https://www.apispace.com?utm_source=postcat&utm_medium=robot&utm_term=chatgptturbo'
   };
   messages: messageItem[] = [];
   constructor(private http: HttpClient, public chat: ChatRobotService) {}
