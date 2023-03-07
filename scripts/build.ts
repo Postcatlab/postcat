@@ -57,10 +57,6 @@ const config: Configuration = {
   appId: '.postcat.io',
   productName: 'Postcat',
   asar: true,
-  asarUnpack: [
-    //使用asarUnpack属性，将不需要打进asar包里的文件路径指定。
-    'node_modules/npm'
-  ],
   directories: {
     output: 'release/'
   },

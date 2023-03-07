@@ -13,7 +13,7 @@ type Action = 'uninstall' | 'install' | 'update';
  * Install npm packages in case of missing Node Environment
  * ! npm version should be 6.14.8, otherwise npm function can't be used
  * */
-// const npmCli = require('npm');
+const npmCli = require('npm');
 
 /**
  * Fix the $PATH on macOS and Linux when run from a GUI app
@@ -126,52 +126,30 @@ export class ModuleHandler extends CoreHandler {
     }
   }
   private executeByAppNpm(command: string, modules: any[], resolve, reject) {
-    const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
-    let executeCommand = ['update', 'install', 'uninstall'];
-    if (!executeCommand.includes(command)) {
-      return;
-    }
-
-    const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`).replace('app.asar', 'app.asar.unpacked');
-
-    const npm = spawn(npmPath, [command, '--prefix', this.baseDir, '--registry', this.registry, ...moduleList], {
-      shell: process.platform === 'win32'
-    });
-    npm.stdout.setEncoding('utf8');
-    npm.stdout.on('data', async data => {
-      console.log('data', data);
-    });
-    npm.stdout.on('error', err => {
-      console.log(`npm ${command} error`, err);
-      if (err) {
-        return reject(err);
+    // https://www.npmjs.com/package/bin-links
+    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir, registry: this.registry }, loaderr => {
+      const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
+      let executeCommand = ['update', 'install', 'uninstall'];
+      if (!executeCommand.includes(command)) {
+        return;
       }
-    });
-    npm.stdout.on('end', () => {
-      process.chdir(this.baseDir);
-      return resolve({ code: 0, data: true });
+      npmCli.commands[command](moduleList, (err, data) => {
+        // console.log('command', command);
+        process.chdir(this.baseDir);
+        if (err) {
+          return reject(err);
+        }
+        this.operatePackage(data, moduleList, command as Action);
+        return resolve({ code: 0, data });
+      });
     });
   }
   private setRegistry() {
-    const decoder = new TextDecoder('gbk');
     return new Promise(resolve => {
-      const npmPath = require.resolve(`npm/bin/npm${process.platform === 'win32' ? '.cmd' : ''}`).replace('app.asar', 'app.asar.unpacked');
-      console.log('====》测试 npm', npmPath);
-      const npm1 = spawn(npmPath, ['-v', this.registry], {
-        shell: process.platform === 'win32'
+      const npm = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['config', 'set', 'registry', this.registry], {
+        cwd: this.baseDir
       });
-
-      npm1.stdout.on('data', async data => {
-        console.log('npm1', decoder.decode(data));
-      });
-
-      const npm = spawn(npmPath, ['config', 'set', 'registry', this.registry], {
-        shell: process.platform === 'win32'
-      });
-      npm.stdout.on('data', async data => {
-        console.log('data', decoder.decode(data));
-      });
-      npm.stdout.on('close', () => {
+      npm.on('close', () => {
         resolve(true);
       });
     });
@@ -187,7 +165,7 @@ export class ModuleHandler extends CoreHandler {
       // this.executeBySystemNpm(command, modules, resolve)
       // * Set Proxy
       // * Set registry
-      await this.setRegistry();
+      // await this.setRegistry();
       this.executeByAppNpm(command, modules, resolve, reject);
     });
   }
