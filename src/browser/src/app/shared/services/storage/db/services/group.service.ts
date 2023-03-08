@@ -46,6 +46,14 @@ export class GroupService extends BaseService<Group> {
     super(dataSource.group);
   }
 
+  async bulkCreate(params = []) {
+    const { data: parentGroups } = await this.baseService.bulkRead({ id: params.map(n => n.parentId) });
+    parentGroups.forEach((item, index) => {
+      params[index].depth = item.depth + 1;
+    });
+    return this.baseService.bulkCreate(params);
+  }
+
   @ApiResponse()
   async update(params?: Record<string, any>) {
     const { id, parentId, name, sort, type } = params;
@@ -119,6 +127,8 @@ export class GroupService extends BaseService<Group> {
       if (parentId && oldGroup.parentId !== parentId) {
         // 没有指定 sort，则默认排在最后
         params.sort = groupList.length + apiDataList.length + 1;
+        const { data: parentGroup } = await this.baseService.read({ id: parentId });
+        params.depth = parentGroup.depth + 1;
       }
 
       return this.baseService.update(params);

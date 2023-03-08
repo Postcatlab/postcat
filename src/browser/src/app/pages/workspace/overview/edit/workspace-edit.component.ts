@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
@@ -21,6 +21,7 @@ import { StoreService } from '../../../../shared/store/state.service';
             <div class="flex items-center">
               <input
                 *ngIf="isEdit"
+                #inputRef
                 type="text"
                 eo-ng-input
                 autofocus
@@ -62,6 +63,8 @@ import { StoreService } from '../../../../shared/store/state.service';
     </div>`
 })
 export class WorkspaceSettingComponent {
+  @ViewChild('inputRef') inputRef: ElementRef<HTMLInputElement>;
+
   validateForm: UntypedFormGroup;
   isSaveBtnLoading = false;
   isEdit = false;
@@ -128,6 +131,9 @@ export class WorkspaceSettingComponent {
 
   startEdit() {
     this.isEdit = true;
+    setTimeout(() => {
+      this.inputRef.nativeElement.focus();
+    });
   }
 
   async save() {

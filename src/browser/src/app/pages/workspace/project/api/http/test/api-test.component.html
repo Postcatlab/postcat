@@ -117,13 +117,21 @@
           (modelChange)="emitChangeFun('restParams')"
         ></pc-api-test-form>
       </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="authorizationTitleTmp">
+        <ng-template #authorizationTitleTmp>
+          <span i18n>Authorization</span>
+        </ng-template>
+        <div class="p-[20px]">
+          <authorization-extension-form [groupID]="isEmptyTestPage ? undefined : model.request?.groupId"></authorization-extension-form>
+        </div>
+      </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
           <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.beforeInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
-          *ngIf="model.requestTabIndex === 4"
+          *ngIf="model.requestTabIndex === 5"
           [(code)]="model.request.apiAttrInfo.beforeInject"
           (codeChange)="emitChangeFun('beforeScript')"
           [treeData]="BEFORE_DATA"
@@ -137,7 +145,7 @@
           <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.afterInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
-          *ngIf="model.requestTabIndex === 5"
+          *ngIf="model.requestTabIndex === 6"
           [(code)]="model.request.apiAttrInfo.afterInject"
           (codeChange)="emitChangeFun('afterScript')"
           [treeData]="AFTER_DATA"

@@ -104,6 +104,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
   $$contentType: ContentType = contentTypeMap[0];
+
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }

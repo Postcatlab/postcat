@@ -21,6 +21,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ExtensionFeedbackComponent } from 'pc/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 
@@ -30,7 +31,13 @@ import { ExtensionAppComponent } from './components/extension-app/extension-app.
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 import { TraceDirective } from './directives/trace.directive';
 
-const COMPONENTS = [DownloadClientModalComponent, ExtensionAppComponent, EoSchemaFormComponent, ExtensionFeedbackComponent];
+const COMPONENTS = [
+  DownloadClientModalComponent,
+  ExtensionAppComponent,
+  EoSchemaFormComponent,
+  ExtensionFeedbackComponent,
+  AuthorizationExtensionFormComponent
+];
 const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective, TraceDirective];
 
 const SHARED_UI_MODULE = [

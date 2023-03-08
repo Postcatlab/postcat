@@ -174,13 +174,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   editGroup(group) {
-    this.groupModal($localize`Edit Group`, {
-      group: {
-        id: group.id,
-        name: group.name
-      },
-      action: 'edit'
-    });
+    this.navigate2group({ groupId: group.id });
   }
   deleteGroup(group) {
     this.groupModal($localize`Delete Group`, {
@@ -215,14 +209,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   addGroup(group = this.store.getRootGroup) {
-    this.groupModal($localize`Add Group`, {
-      group: {
-        type: 1,
-        name: '',
-        parentId: group.id
-      },
-      action: 'new'
-    });
+    this.navigate2group({ parentId: group.id });
   }
   importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({
@@ -299,6 +286,9 @@ export class ApiGroupTreeComponent implements OnInit {
       case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;
         // this.toggleExpand();
+        // * jump to group detail page
+        const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
+        this.navigate2group({ groupId: event.node.key });
         break;
       }
       case 'clickItem': {
@@ -310,5 +300,11 @@ export class ApiGroupTreeComponent implements OnInit {
         break;
       }
     }
+  }
+
+  navigate2group(queryParams) {
+    this.router.navigate([`/home/workspace/project/api/group/edit`], {
+      queryParams
+    });
   }
 }
