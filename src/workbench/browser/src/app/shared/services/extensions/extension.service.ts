@@ -185,8 +185,7 @@ export class ExtensionService {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: isInit ? 'init' : 'install',
-        name,
-        extension: this.installedList.find(val => val.name === name)
+        name
       });
       if (isInit) return;
       if (!this.isEnable(name)) {
