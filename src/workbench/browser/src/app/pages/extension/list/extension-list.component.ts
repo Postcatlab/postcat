@@ -53,6 +53,9 @@ export class ExtensionListComponent implements OnInit {
       // 避免频繁切换，导致侧边栏选中状态与右侧展示不一致
       if (originType === this.type) {
         this.extensionList = data;
+        this.extensionList.sort((a, b) => {
+          return a.name === 'postcat-chat-robot' ? -1 : 1;
+        });
       }
     });
   }
