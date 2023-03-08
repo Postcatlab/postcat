@@ -40,11 +40,12 @@ const compMap = {
             {{ properties[field]?.label }}
           </nz-form-label>
         </ng-container>
-        <!-- Description -->
-        <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
-          {{ properties[field]?.description }}
-        </div>
+
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
+          <!-- Description -->
+          <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
+            {{ properties[field]?.description }}
+          </div>
           <!-- String -->
           <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.string">
             <input

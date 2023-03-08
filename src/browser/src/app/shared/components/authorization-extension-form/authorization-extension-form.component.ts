@@ -41,7 +41,7 @@ export const inheritAuth = {
         </div>
       </ng-container>
       <ng-container *ngIf="!isDefaultAuthType">
-        <eo-ng-feedback-alert class="block mt-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+        <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
         <ng-template #templateRefMsg>
           <div class="text" i18n>
             These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend using
@@ -51,7 +51,9 @@ export const inheritAuth = {
         </ng-template>
       </ng-container>
 
-      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+      <ng-container *ngIf="schemaObj">
+        <eo-schema-form #schemaForm [model]="model" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+      </ng-container>
     </div>
   `
 })
@@ -62,7 +64,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   model: Record<string, any> = {};
   inheritAuth = inheritAuth;
   validateForm!: UntypedFormGroup;
-  schemaObj = {};
+  schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo>;
 
   get authType() {
@@ -143,6 +145,8 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   handleAuthTypeChange(authType) {
     if (this.authAPIMap.has(authType)) {
       this.schemaObj = this.authAPIMap.get(authType).configuration;
+    } else {
+      this.schemaObj = null;
     }
     console.log('handleAuthTypeChange', authType);
   }
