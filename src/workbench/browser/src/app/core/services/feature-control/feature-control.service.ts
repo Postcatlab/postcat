@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 import featureJSON from './feature.json';
@@ -9,7 +8,8 @@ type configKey = keyof typeof featureJSON;
 })
 export class FeatureControlService {
   config: { [key: configKey | string]: boolean };
-  constructor(private message: MessageService) {
+  constructor(private message: MessageService) {}
+  init() {
     this.config = featureJSON;
     this.watchExtensionChange();
   }

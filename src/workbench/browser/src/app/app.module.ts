@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
+import { FeatureControlService } from 'eo/workbench/browser/src/app/core/services/feature-control/feature-control.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { NotificationService } from 'eo/workbench/browser/src/app/core/services/notification.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
@@ -83,10 +84,13 @@ export class AppModule {
     private mockService: MockService,
     private global: GlobalProvider,
     private theme: ThemeService,
+    private feature: FeatureControlService,
     private extensionService: ExtensionService,
     private notification: NotificationService
   ) {
     this.init();
+    //! Feature show init before extensionService init
+    this.feature.init();
   }
   async init() {
     //* Init language
