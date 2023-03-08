@@ -1,15 +1,20 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
 
 export const noAuth = {
-  name: 'No Auth'
+  name: 'none',
+  label: 'No Auth'
 };
 
 export const inheritAuth = {
-  name: 'Inherit auth from parent'
+  name: 'inherited',
+  label: 'Inherit auth from parent'
 };
 
 @Component({
@@ -19,9 +24,9 @@ export const inheritAuth = {
       <nz-form-item>
         <nz-form-label i18n>Type</nz-form-label>
         <nz-form-control>
-          <eo-ng-radio-group formControlName="authType">
+          <eo-ng-radio-group formControlName="authType" (ngModelChange)="handleAuthTypeChange($event)">
             <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
-              {{ item.name }}
+              {{ item.label }}
             </label>
           </eo-ng-radio-group>
         </nz-form-control>
@@ -45,16 +50,20 @@ export const inheritAuth = {
           </div>
         </ng-template>
       </ng-container>
+
+      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
     </div>
   `
 })
 export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   @Input() groupID: number;
-
+  @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   groupInfo: Group;
-
+  model: Record<string, any> = {};
   inheritAuth = inheritAuth;
   validateForm!: UntypedFormGroup;
+  schemaObj = {};
+  authAPIMap: Map<string, FeatureInfo>;
 
   get authType() {
     return this.groupInfo?.depth ? inheritAuth : noAuth;
@@ -68,22 +77,30 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     return [this.authType, ...this.extensionList];
   }
 
-  extensionList = [
-    {
-      name: 'Basic Auth'
-    },
-    {
-      name: 'JWT Bearer'
-    }
-  ];
+  extensionList: Array<typeof noAuth> = [];
 
-  constructor(private fb: UntypedFormBuilder, private apiService: ApiService, private router: Router) {}
+  constructor(
+    private fb: UntypedFormBuilder,
+    private apiService: ApiService,
+    private router: Router,
+    private extensionService: ExtensionService
+  ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       authType: this.groupID ? inheritAuth.name : noAuth.name,
       fieldA: [null, [Validators.required]],
       filedB: [null, [Validators.required]]
+    });
+    this.initExtensions();
+  }
+
+  initExtensions() {
+    this.authAPIMap = this.extensionService.getValidExtensionsByFature('authAPI');
+    console.log('authAPIMap', this.authAPIMap);
+    this.extensionList = [];
+    this.authAPIMap.forEach((value, key) => {
+      this.extensionList.push({ name: key, label: value.label });
     });
   }
 
@@ -118,6 +135,16 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  handleValueChanges(values) {
+    console.log('handleValueChanges', values);
+  }
+  handleAuthTypeChange(authType) {
+    if (this.authAPIMap.has(authType)) {
+      this.schemaObj = this.authAPIMap.get(authType).configuration;
+    }
+    console.log('handleAuthTypeChange', authType);
   }
 
   navigate2group() {
