@@ -114,7 +114,7 @@ const variables = {
   '--MARGIN': '--margin',
   '--MR_ICON': '--button-icon-margin'
 };
-searchFilesInDirectoryAsync(['../src/workbench/browser/src'], sortByKeylength(variables));
+searchFilesInDirectoryAsync(['../src/browser/src'], sortByKeylength(variables));
 //Lazy to await
 setTimeout(() => {
   console.log('Replaced Success!\n', replaceSuccess);

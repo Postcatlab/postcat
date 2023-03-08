@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "../../",
+    "outDir": "./dist/out-tsc",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "paths": {
+      "pc/*": ["./src/*"]
+    },
+    "allowJs": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules", "dist", ".angular", "src/app/assets"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "useDefineForClassFields": true,
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true,
+    "annotateForClosureCompiler": true,
+    "strictInjectionParameters": true,
+    "skipTemplateCodegen": false,
+    "skipMetadataEmit": false,
+    "disableTypeScriptVersionCheck": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInputAccessModifiers": true
+  }
+}

@@ -65,9 +65,9 @@ const config: Configuration = {
     'out/platform/**/*.js*',
     'out/environment.js',
     'out/shared/**/*.js*',
-    'src/workbench/browser/dist/**/*',
-    'out/workbench/browser/src/**/*.js*',
-    'out/workbench/node/**/*.js*',
+    'src/browser/dist/**/*',
+    'out/browser/src/**/*.js*',
+    'out/node/test-server/**/*.js*',
     'out/app/common/**/*',
     '!**/*.ts'
   ],

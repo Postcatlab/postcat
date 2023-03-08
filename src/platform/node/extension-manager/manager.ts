@@ -1,8 +1,8 @@
-import { LanguageService } from 'eo/app/electron-main/language.service';
-import { isNotEmpty } from 'eo/shared/common/common';
-import { HOME_DIR } from 'eo/shared/electron-main/constant';
-import { ExtensionInfo, SidebarView, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { createServer } from 'http-server/lib/http-server';
+import { LanguageService } from 'pc/app/electron-main/language.service';
+import { ExtensionInfo, SidebarView, FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { isNotEmpty } from 'pc/shared/common/common';
+import { HOME_DIR } from 'pc/shared/electron-main/constant';
 import portfinder from 'portfinder';
 
 import { COMMON_APP_CONFIG } from '../../../environment';
