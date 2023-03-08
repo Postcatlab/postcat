@@ -89,14 +89,15 @@ export class AppModule {
     private notification: NotificationService
   ) {
     this.init();
-    //! Feature show init before extensionService init
-    this.feature.init();
   }
   async init() {
     //* Init language
     if (APP_CONFIG.production) {
       this.lang.init();
     }
+
+    //* Init feature before extension install
+    this.feature.init();
 
     //* Inject extension global data
     this.global.injectGlobalData();
@@ -108,10 +109,10 @@ export class AppModule {
     //* Init Extension
     await this.extensionService.init();
     this.theme.queryExtensionThemes();
+
     //*Reset theme after theme/extension theme loading
     Promise.all([promiseSystem]).then(() => {
       this.theme.afterAllThemeLoad();
-      this.theme.watchInstalledExtensionsChange();
     });
 
     //* Init notification
