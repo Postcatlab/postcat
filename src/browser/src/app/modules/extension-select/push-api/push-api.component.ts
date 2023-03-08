@@ -7,7 +7,7 @@ import { Message, MessageService } from 'pc/browser/src/app/shared/services/mess
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Subject, takeUntil } from 'rxjs';
 
-import packageJson from '../../../../../../../../package.json';
+import packageJson from '../../../../../../../package.json';
 
 @Component({
   selector: 'eo-push-api',

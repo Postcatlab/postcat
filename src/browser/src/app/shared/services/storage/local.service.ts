@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { db } from './db';
 

@@ -5,7 +5,7 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { tree2obj } from 'pc/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 
-import packageJson from '../../../../../../../../../../package.json';
+import packageJson from '../../../../../../../../../package.json';
 import {
   Project,
   Environment,

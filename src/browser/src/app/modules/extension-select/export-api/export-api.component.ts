@@ -11,7 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 // shit angular-cli 配不明白
 // import { version } from '../../../../../../../../package.json' assert { type: 'json' };
-import pkgInfo from '../../../../../../../../package.json';
+import pkgInfo from '../../../../../../../package.json';
 
 @Component({
   selector: 'eo-export-api',

@@ -6,7 +6,7 @@ import { PROTOCOL } from 'pc/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'pc/browser/src/app/shared/services/modal.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
-import packageJson from '../../../../../../../../package.json';
+import packageJson from '../../../../../../../package.json';
 import { StoreService } from '../../../shared/store/state.service';
 import { getBrowserType } from '../../../utils/browser-type';
 import StorageUtil from '../../../utils/storage/storage.utils';
