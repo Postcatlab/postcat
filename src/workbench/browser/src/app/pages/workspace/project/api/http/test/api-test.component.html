@@ -122,7 +122,7 @@
           <span i18n>Authorization</span>
         </ng-template>
         <div class="p-[20px]">
-          <authorization-extension-form [authType]="authType" [groupID]="model.request?.groupId"></authorization-extension-form>
+          <authorization-extension-form [groupID]="isEmptyTestPage ? undefined : model.request?.groupId"></authorization-extension-form>
         </div>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">

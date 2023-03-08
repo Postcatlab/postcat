@@ -28,37 +28,41 @@ export const inheritAuth = {
       </nz-form-item>
     </form>
     <nz-divider></nz-divider>
-    <ng-container *ngIf="inheritAuth.name === validateForm.value.authType">
-      <div class="text-tips my-[16px]" i18n>
-        This API Request is using <b>{{ validateForm.value.authType }}</b> from
-        <a (click)="navigate2group()">{{ groupInfo?.name }}</a>
-      </div>
-    </ng-container>
-    <eo-ng-feedback-alert class="tips block mt-[20px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
-    <ng-template #templateRefMsg>
-      <div class="text" i18n>
-        These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend using
-        variables. Learn more about
-        <a href="https://docs.postcat.com/docs/global-variable.html" target="_blank" rel="noopener noreferrer">variables</a>
-      </div>
-    </ng-template>
-  `,
-  styles: [
-    `
-      :host .tips {
-        background-color: rgba(249, 224, 199, 1);
-      }
-    `
-  ]
+    <div class="my-[24px]">
+      <ng-container *ngIf="inheritAuth.name === validateForm.value.authType">
+        <div class="text-tips" i18n>
+          This API Request is using <b>{{ validateForm.value.authType }}</b> from
+          <a (click)="navigate2group()">{{ groupInfo?.name }}</a>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isDefaultAuthType">
+        <eo-ng-feedback-alert class="block mt-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+        <ng-template #templateRefMsg>
+          <div class="text" i18n>
+            These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend using
+            variables. Learn more about
+            <a href="https://docs.postcat.com/docs/global-variable.html" target="_blank" rel="noopener noreferrer">variables</a>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  `
 })
 export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
-  @Input() authType = noAuth;
   @Input() groupID: number;
 
   groupInfo: Group;
 
   inheritAuth = inheritAuth;
   validateForm!: UntypedFormGroup;
+
+  get authType() {
+    return this.groupInfo?.depth ? inheritAuth : noAuth;
+  }
+
+  get isDefaultAuthType() {
+    return [inheritAuth.name, noAuth.name].includes(this.validateForm.value.authType);
+  }
 
   get authTypeList() {
     return [this.authType, ...this.extensionList];
@@ -77,26 +81,29 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      authType: this.authType.name,
+      authType: this.groupID ? inheritAuth.name : noAuth.name,
       fieldA: [null, [Validators.required]],
       filedB: [null, [Validators.required]]
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const { authType, groupID } = changes;
-    if (authType?.currentValue?.name) {
-      this.validateForm?.get('authType')?.setValue?.(authType.currentValue.name);
-    }
+  async ngOnChanges(changes: SimpleChanges) {
+    const { groupID } = changes;
 
     if (groupID?.currentValue !== groupID?.previousValue) {
-      this.getGroupInfo();
+      await this.getGroupInfo();
+      setTimeout(() => {
+        if (this.groupInfo.depth === 0 && this.validateForm.value.authType === inheritAuth.name) {
+          this.validateForm.get('authType')?.setValue?.(noAuth.name);
+        } else if (this.isDefaultAuthType) {
+          this.validateForm.get('authType')?.setValue?.(this.authType.name);
+        }
+      });
     }
   }
 
   async getGroupInfo() {
     const [res, err]: any = await this.apiService.api_groupDetail({ id: this.groupID });
-    console.log('res', res);
     this.groupInfo = res;
   }
 
@@ -111,10 +118,6 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
         }
       });
     }
-  }
-
-  get isHorizontal(): boolean {
-    return this.validateForm.controls.formLayout?.value === 'horizontal';
   }
 
   navigate2group() {

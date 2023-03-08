@@ -28,10 +28,6 @@ import {
   TestServerRes
 } from 'eo/workbench/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import {
-  inheritAuth,
-  noAuth
-} from 'eo/workbench/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiData, ApiTestHistory } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -111,9 +107,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
   $$contentType: ContentType = contentTypeMap[0];
-  get authType() {
-    return this.isEmptyTestPage ? noAuth : inheritAuth;
-  }
+
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }

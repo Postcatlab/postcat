@@ -27,7 +27,7 @@
   </nz-form-item>
 </form>
 
-<eo-ng-tabset>
+<eo-ng-tabset class="overflow-auto">
   <eo-ng-tab i18n-nzTitle nzTitle="Authorization">
     <div class="top-save-bar">
       <button type="submit" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveEnv()" i18n>
@@ -35,10 +35,10 @@
       </button>
     </div>
 
-    <div class="text-tips my-[16px]" i18n>
+    <div class="text-tips mt-[15px] mb-[13px]" i18n>
       Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.
     </div>
 
-    <authorization-extension-form [authType]="authType" [groupID]="model.parentId"> </authorization-extension-form>
+    <authorization-extension-form [groupID]="model.depth > 1 ? model.parentId : undefined"> </authorization-extension-form>
   </eo-ng-tab>
 </eo-ng-tabset>

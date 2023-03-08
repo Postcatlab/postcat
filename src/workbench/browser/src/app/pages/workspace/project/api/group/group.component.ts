@@ -31,10 +31,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   isEdit = false;
   topSaveBar: HTMLDivElement;
 
-  get authType() {
-    return this.model.depth > 1 ? inheritAuth : noAuth;
-  }
-
   isSaving = false;
 
   validateForm: FormGroup;
@@ -160,11 +156,13 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
+      this.message.success($localize`Update Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ name, ...rest }]);
       if (data) {
         this.model = data;
       }
+      this.message.success($localize`Create Group successfully`);
     }
 
     this.isEdit = false;
