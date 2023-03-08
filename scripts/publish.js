@@ -1,5 +1,9 @@
-const qiniu = require('qiniu');
-const package = require('./package.json');
+const { execSync } = require('child_process');
+// get root folder of global node modules
+const root = execSync('npm root -g').toString().trim();
+
+const qiniu = require(`${root}/qiniu`);
+const package = require('../package.json');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 
 qiniu.conf.ACCESS_KEY = AK;
@@ -27,7 +31,6 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
-  'release/Postcat Setup ?.exe',
   'release/Postcat Setup ?.exe.blockmap',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',

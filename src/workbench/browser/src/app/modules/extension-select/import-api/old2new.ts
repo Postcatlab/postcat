@@ -1,6 +1,6 @@
 import { CollectionTypeEnum, ImportProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 
-import { convertApiData } from './../../../shared/services/storage/db/dataSource/convert';
+import { convertApiData } from '../../../shared/services/storage/db/dataSource/convert';
 
 export const old2new = (params, projectUuid, workSpaceUuid): ImportProjectDto => {
   const { collections = [], environments } = params;

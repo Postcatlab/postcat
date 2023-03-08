@@ -70,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   watchInstalledExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'installedExtensionsChange') {
+      if (inArg.type === 'extensionsChange') {
         if (!this.sidebar.visible) return;
         const installedMap = inArg.data.installedMap;
         const extensionIDs = Array.isArray(installedMap) ? installedMap.map(n => n.name) : [...installedMap.keys()];
