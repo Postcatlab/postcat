@@ -6,7 +6,7 @@
     "types": ["node"],
     "lib": ["DOM", "ESNext"],
     "paths": {
-      "pc/*": ["../../../../src/*"]
+      "pc/*": ["../../../src/*"]
     }
   },
   "files": ["main.ts", "polyfills.ts"],
