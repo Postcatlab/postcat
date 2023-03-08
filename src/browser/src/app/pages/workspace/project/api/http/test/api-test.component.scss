@@ -99,12 +99,12 @@ div.ant-typography {
   .top_container {
     height: 100%;
 
-    form {
+    > form {
       position: sticky;
       top: 0;
     }
 
-    .ant-tabs {
+    > .ant-tabs {
       height: calc(100% - 60px);
 
       .ant-tabs-tabpane {
