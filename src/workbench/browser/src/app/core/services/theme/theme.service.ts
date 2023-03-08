@@ -31,6 +31,7 @@ export class ThemeService {
   ) {
     this.currentThemeID = this.setting.get('workbench.colorTheme') || this.defaultTheme;
     this.coreThemes = this.getCoreThemes();
+    this.watchInstalledExtensionsChange();
   }
   async initTheme() {
     await this.querySystemThemes();

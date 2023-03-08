@@ -77,7 +77,7 @@ type messageItem = {
 export class ChatgptRobotComponent implements OnInit {
   title = $localize`ChatGPT Robot`;
   loading = false;
-  MAX_LIMIT = 10;
+  MAX_LIMIT = 5;
   nowUsage = StorageUtil.get('cr_usage');
   initMessage = {
     date: new Date(),
@@ -103,9 +103,7 @@ export class ChatgptRobotComponent implements OnInit {
     private store: StoreService
   ) {}
   ngOnInit() {
-    setTimeout(() => {
-      this.watchExtensionChange();
-    }, 5000);
+    this.watchExtensionChange();
   }
   login() {
     window.open(APP_CONFIG.GITHUB_REPO_URL, '_blank');
@@ -134,7 +132,7 @@ export class ChatgptRobotComponent implements OnInit {
           this.loading = false;
           if (!res?.result) {
             this.messages.push({
-              text: `ChatGPT Error:${res?.msg}`,
+              text: `ChatGPT Error: ${res?.error || res?.msg || 'unknown error'}`,
               date: new Date(),
               reply: true,
               type: 'text',
