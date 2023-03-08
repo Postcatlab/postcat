@@ -120,7 +120,6 @@
       <eo-ng-tab [nzTitle]="authorizationTitleTmp">
         <ng-template #authorizationTitleTmp>
           <span i18n>Authorization</span>
-          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
         </ng-template>
         <div class="p-[20px]">
           <authorization-extension-form [authType]="authType" [groupID]="model.request?.groupId"></authorization-extension-form>
@@ -132,7 +131,7 @@
           <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.beforeInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
-          *ngIf="model.requestTabIndex === 4"
+          *ngIf="model.requestTabIndex === 5"
           [(code)]="model.request.apiAttrInfo.beforeInject"
           (codeChange)="emitChangeFun('beforeScript')"
           [treeData]="BEFORE_DATA"
@@ -146,7 +145,7 @@
           <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.afterInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <eo-api-script
-          *ngIf="model.requestTabIndex === 5"
+          *ngIf="model.requestTabIndex === 6"
           [(code)]="model.request.apiAttrInfo.afterInject"
           (codeChange)="emitChangeFun('afterScript')"
           [treeData]="AFTER_DATA"

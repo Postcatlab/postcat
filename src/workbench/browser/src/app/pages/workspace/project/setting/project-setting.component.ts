@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
@@ -27,6 +27,8 @@ const actionComponent = {
   styleUrls: ['./project-setting.component.scss']
 })
 export class ProjectSettingComponent implements OnInit {
+  @ViewChild('inputRef') inputRef: ElementRef<HTMLInputElement>;
+
   isLoading: boolean;
   projectName: string;
   isEdit = false;
@@ -123,6 +125,9 @@ export class ProjectSettingComponent implements OnInit {
 
   startEditProjectName() {
     this.isEdit = true;
+    setTimeout(() => {
+      this.inputRef.nativeElement.focus();
+    });
   }
 
   clickItem(inParams) {

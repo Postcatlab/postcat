@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 
@@ -29,7 +30,8 @@ export const inheritAuth = {
     <nz-divider></nz-divider>
     <ng-container *ngIf="inheritAuth.name === validateForm.value.authType">
       <div class="text-tips my-[16px]" i18n>
-        This API Request is using <b>{{ validateForm.value.authType }}</b> from <a>{{ groupInfo?.name }}</a>
+        This API Request is using <b>{{ validateForm.value.authType }}</b> from
+        <a (click)="navigate2group()">{{ groupInfo?.name }}</a>
       </div>
     </ng-container>
     <eo-ng-feedback-alert class="tips block mt-[20px]" nzType="default" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
@@ -71,7 +73,15 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     }
   ];
 
-  constructor(private fb: UntypedFormBuilder, private apiService: ApiService) {}
+  constructor(private fb: UntypedFormBuilder, private apiService: ApiService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      authType: this.authType.name,
+      fieldA: [null, [Validators.required]],
+      filedB: [null, [Validators.required]]
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     const { authType, groupID } = changes;
@@ -107,11 +117,12 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     return this.validateForm.controls.formLayout?.value === 'horizontal';
   }
 
-  ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      authType: this.authType.name,
-      fieldA: [null, [Validators.required]],
-      filedB: [null, [Validators.required]]
+  navigate2group() {
+    if (this.groupInfo.depth === 0) {
+      return;
+    }
+    this.router.navigate([`/home/workspace/project/api/group/edit`], {
+      queryParams: { groupId: this.groupID }
     });
   }
 }

@@ -1,8 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabViewComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import {
+  inheritAuth,
+  noAuth
+} from 'eo/workbench/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'eo/workbench/browser/src/app/shared/services/trace.service';
@@ -27,10 +31,14 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   isEdit = false;
   topSaveBar: HTMLDivElement;
 
+  get authType() {
+    return this.model.depth > 1 ? inheritAuth : noAuth;
+  }
+
   isSaving = false;
 
   validateForm: FormGroup;
-  @ViewChild('envParams')
+  @ViewChild('groupNameInputRef') groupNameInputRef: ElementRef<HTMLInputElement>;
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
   topSaveBarObserver: IntersectionObserver;
@@ -109,6 +117,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         parentId: Number(parentId)
       } as any;
       this.initialModel = eoDeepCopy(this.model);
+      this.isEdit = true;
     } else {
       if (!this.model) {
         const [res, err]: any = await this.api.api_groupDetail({ id });
@@ -136,13 +145,26 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     this.destroy$.complete();
     this.topSaveBarObserver.unobserve(this.topSaveBar);
   }
+
+  startEditGroupName() {
+    this.isEdit = true;
+    setTimeout(() => {
+      this.groupNameInputRef.nativeElement.focus();
+    });
+  }
+
   async changeGroupName() {
-    console.log('model', this.model);
     const { name, id, ...rest } = this.model;
+    if (name.trim() === '') {
+      return;
+    }
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
     } else {
-      await this.effect.createGroup([{ name, ...rest }]);
+      const [data] = await this.effect.createGroup([{ name, ...rest }]);
+      if (data) {
+        this.model = data;
+      }
     }
 
     this.isEdit = false;
