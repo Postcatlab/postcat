@@ -284,7 +284,7 @@ export class ApiGroupTreeComponent implements OnInit {
     const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
     switch (eventName) {
       case 'clickFolder': {
-        event.node.isExpanded = !event.node.isExpanded;
+        // event.node.isExpanded = !event.node.isExpanded;
         // this.toggleExpand();
         // * jump to group detail page
         const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';

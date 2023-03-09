@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
+import { AuthInfo } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
@@ -24,6 +25,11 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   @Output() readonly modelChange = new EventEmitter<Group>();
   @Output() readonly eoOnInit = new EventEmitter<Group>();
   @Output() readonly afterSaved = new EventEmitter<Group>();
+
+  authInfoModel: AuthInfo = {
+    authType: '',
+    authInfo: {}
+  };
   isEdit = false;
   topSaveBar: HTMLDivElement;
 
@@ -72,14 +78,9 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           // 或者 return false;
           event.preventDefault();
-          this.saveEnv('shortcut');
+          this.saveGroupInfo('shortcut');
         }
       });
-  }
-  formatEnvData(data) {
-    const result = eoDeepCopy(data);
-    const parameters = this.envParamsComponent.getPureNzData()?.filter(it => it.name || it.value);
-    return { ...result, parameters };
   }
   private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
@@ -87,15 +88,21 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     return true;
   }
-  async saveEnv(ux = 'ui') {
-    const isEdit = !!this.route.snapshot.queryParams.uuid;
+  async saveGroupInfo(ux = 'ui') {
     if (!this.checkForm()) {
       return;
     }
     this.isSaving = true;
-    const formdata = this.formatEnvData(this.model);
-    this.initialModel = eoDeepCopy(formdata);
-    formdata.parameters = JSON.stringify(formdata.parameters);
+    this.initialModel = eoDeepCopy(this.model);
+    const params = {
+      id: this.model.id,
+      type: this.model.type,
+      authInfo: {
+        authType: this.authInfoModel.authType,
+        authInfo: JSON.stringify(this.authInfoModel.authInfo)
+      }
+    };
+    const data = params.id ? await this.effect.updateGroup(params) : await this.effect.createGroup([params]);
     this.isSaving = false;
     this.afterSaved.emit(this.initialModel);
   }
@@ -129,7 +136,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     this.modelChange.emit(this.model);
   }
   isFormChange() {
-    const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
+    const hasChanged = JSON.stringify(this.model) !== JSON.stringify(this.initialModel);
     return hasChanged;
   }
   ngOnDestroy() {
