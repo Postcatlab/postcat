@@ -144,8 +144,46 @@ export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>
   // }
 ];
 
+export const postmanCompletions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>> = [
+  {
+    label: 'pc.request.url',
+    insertText: 'pc.request.url',
+    detail: ''
+  },
+  {
+    label: 'pc.request.headers',
+    insertText: 'pc.request.headers',
+    detail: ''
+  },
+  {
+    label: 'pc.request.headers.add',
+    insertText: 'pc.request.headers.add',
+    detail: ''
+  },
+  {
+    label: 'pc.request.headers.remove',
+    insertText: 'pc.request.headers.remove',
+    detail: ''
+  },
+  {
+    label: 'pc.request.headers.upsert',
+    insertText: 'pc.request.headers.upsert',
+    detail: ''
+  },
+  {
+    label: 'pc.request.method',
+    insertText: 'pc.request.method',
+    detail: ''
+  },
+  {
+    label: 'pc.request.body',
+    insertText: 'pc.request.body',
+    detail: ''
+  }
+];
+
 export const getDefaultCompletions = (): Array<Omit<languages.CompletionItem, 'range'>> =>
-  completions.map(item => ({
+  [...completions, ...postmanCompletions].map(item => ({
     ...item,
     kind: monaco.languages.CompletionItemKind.Function
   }));

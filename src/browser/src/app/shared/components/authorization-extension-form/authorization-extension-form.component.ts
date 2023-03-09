@@ -1,27 +1,37 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
+import { JSONParse } from 'pc/browser/src/app/utils/index.utils';
 
 export const noAuth = {
-  name: 'No Auth'
+  name: 'none',
+  label: 'No Auth'
 };
 
 export const inheritAuth = {
-  name: 'Inherit auth from parent'
+  name: 'inherited',
+  label: 'Inherit auth from parent'
+};
+
+export type AuthInfo = {
+  authType: string;
+  authInfo: Record<string, any>;
 };
 
 @Component({
   selector: 'authorization-extension-form',
   template: `
-    <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label i18n>Type</nz-form-label>
+        <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
         <nz-form-control>
-          <eo-ng-radio-group formControlName="authType">
+          <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="model.authType" (ngModelChange)="handleAuthTypeChange($event)">
             <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
-              {{ item.name }}
+              {{ item.label }}
             </label>
           </eo-ng-radio-group>
         </nz-form-control>
@@ -29,14 +39,14 @@ export const inheritAuth = {
     </form>
     <nz-divider></nz-divider>
     <div class="my-[24px]">
-      <ng-container *ngIf="inheritAuth.name === validateForm.value.authType">
+      <ng-container *ngIf="inheritAuth.name === model.authType && parentGroup.depth !== 0">
         <div class="text-tips" i18n>
-          This API Request is using <b>{{ validateForm.value.authType }}</b> from
-          <a (click)="navigate2group()">{{ groupInfo?.name }}</a>
+          This API Request is using <b>{{ model.authType }}</b> from
+          <a (click)="nav2group()">{{ parentGroup?.name }}</a>
         </div>
       </ng-container>
       <ng-container *ngIf="!isDefaultAuthType">
-        <eo-ng-feedback-alert class="block mt-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+        <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
         <ng-template #templateRefMsg>
           <div class="text" i18n>
             These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend using
@@ -45,87 +55,114 @@ export const inheritAuth = {
           </div>
         </ng-template>
       </ng-container>
+
+      <ng-container *ngIf="schemaObj">
+        <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+      </ng-container>
     </div>
   `
 })
 export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
+  @Input() type: 'group' | 'api' = 'group';
+  @Input() model: AuthInfo = {
+    authType: '',
+    authInfo: {}
+  };
   @Input() groupID: number;
-
-  groupInfo: Group;
-
+  @Output() readonly modelChange = new EventEmitter<AuthInfo>();
+  @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
+  currGroup: Group;
+  parentGroup: Group;
   inheritAuth = inheritAuth;
-  validateForm!: UntypedFormGroup;
+  schemaObj: Record<string, any> | null;
+  authAPIMap: Map<string, FeatureInfo>;
 
   get authType() {
-    return this.groupInfo?.depth ? inheritAuth : noAuth;
+    return this.parentGroup?.depth ? inheritAuth : noAuth;
   }
 
   get isDefaultAuthType() {
-    return [inheritAuth.name, noAuth.name].includes(this.validateForm.value.authType);
+    return [inheritAuth.name, noAuth.name].includes(this.model.authType);
   }
 
   get authTypeList() {
     return [this.authType, ...this.extensionList];
   }
 
-  extensionList = [
-    {
-      name: 'Basic Auth'
-    },
-    {
-      name: 'JWT Bearer'
-    }
-  ];
+  extensionList: Array<typeof noAuth> = [];
 
-  constructor(private fb: UntypedFormBuilder, private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService, private router: Router, private extensionService: ExtensionService) {}
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      authType: this.groupID ? inheritAuth.name : noAuth.name,
-      fieldA: [null, [Validators.required]],
-      filedB: [null, [Validators.required]]
+    this.model.authType = this.groupID ? inheritAuth.name : noAuth.name;
+    this.initExtensions();
+  }
+
+  initExtensions() {
+    this.authAPIMap = this.extensionService.getValidExtensionsByFature('authAPI');
+    console.log('authAPIMap', this.authAPIMap);
+    this.extensionList = [];
+    this.authAPIMap.forEach((value, key) => {
+      this.extensionList.push({ name: key, label: value.label });
     });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
     const { groupID } = changes;
-
     if (groupID?.currentValue !== groupID?.previousValue) {
-      await this.getGroupInfo();
-      setTimeout(() => {
-        if (this.groupInfo.depth === 0 && this.validateForm.value.authType === inheritAuth.name) {
-          this.validateForm.get('authType')?.setValue?.(noAuth.name);
-        } else if (this.isDefaultAuthType) {
-          this.validateForm.get('authType')?.setValue?.(this.authType.name);
-        }
-      });
+      await this.getGroupInfo(this.groupID);
+      if (this.currGroup.depth === 0 && this.model.authType === inheritAuth.name) {
+        this.model.authType = noAuth.name;
+      } else if (this.isDefaultAuthType) {
+        this.model.authType = this.authType.name;
+      }
+      this.modelChange.emit(this.model);
     }
   }
 
-  async getGroupInfo() {
-    const [res, err]: any = await this.apiService.api_groupDetail({ id: this.groupID });
-    this.groupInfo = res;
+  async getGroupInfo(groupID) {
+    try {
+      if (!groupID) {
+        this.model.authType = this.authType.name;
+        this.model.authInfo = {};
+        return;
+      }
+
+      const [currGroup]: any = await this.apiService.api_groupDetail({ id: groupID });
+      this.currGroup = currGroup;
+      this.model.authType = currGroup.authInfo?.authType || this.authType.name;
+      this.model.authInfo = JSONParse(currGroup.authInfo?.authInfo || {});
+      this.handleAuthTypeChange(this.model.authType);
+      this.modelChange.emit(this.model);
+      if (this.type === 'group') {
+        const [parentGroup]: any = await this.apiService.api_groupDetail({ id: currGroup.parentId });
+        this.parentGroup = parentGroup;
+      } else {
+        this.parentGroup = currGroup;
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
+  handleValueChanges(values) {
+    console.log('handleValueChanges', values);
+  }
+  handleAuthTypeChange(authType) {
+    if (this.authAPIMap.has(authType)) {
+      this.schemaObj = this.authAPIMap.get(authType).configuration;
     } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
+      this.schemaObj = null;
     }
+    console.log('handleAuthTypeChange', authType);
   }
 
-  navigate2group() {
-    if (this.groupInfo.depth === 0) {
+  nav2group() {
+    if (this.currGroup.depth === 0) {
       return;
     }
     this.router.navigate([`/home/workspace/project/api/group/edit`], {
-      queryParams: { groupId: this.groupID }
+      queryParams: { groupId: this.parentGroup.id, pageID: Date.now().toString() }
     });
   }
 }

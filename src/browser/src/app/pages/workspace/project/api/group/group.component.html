@@ -1,23 +1,22 @@
-<form nz-form nzLayout="inline" (ngSubmit)="changeGroupName()">
+<form nz-form nzLayout="inline" [formGroup]="validateForm" (ngSubmit)="changeGroupName()">
   <nz-form-item>
-    <nz-form-control [nzValidateStatus]="model?.name ? '' : 'error'" i18n-nzErrorTip nzErrorTip="Please input your projectName">
+    <nz-form-control nzErrorTip="Please input groupName" [nzValidateStatus]="validateForm.controls['name']">
       <div class="flex items-center">
         <ng-container *ngIf="isEdit">
-          <div class="invisible px-[20px] min-w-[151px]">{{ model.name }}</div>
+          <div class="invisible px-[20px] min-w-[151px]">{{ validateForm.value.name }}</div>
           <input
             #groupNameInputRef
             class="absolute"
             eo-ng-input
             autofocus
-            placeholder="Project Name"
-            name="projectName"
+            placeholder="Group Name"
             (blur)="changeGroupName()"
-            required
-            [(ngModel)]="model.name"
+            formControlName="name"
+            id="name"
           />
         </ng-container>
         <ng-container *ngIf="!isEdit">
-          <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
+          <h4 nz-typography class="!mb-[0px]">{{ validateForm.value?.name }}</h4>
           <span nz-button nzType="link" class="ml-[5px] cursor-pointer" (click)="startEditGroupName()">
             <eo-iconpark-icon name="edit"></eo-iconpark-icon>
           </span>
@@ -30,7 +29,7 @@
 <eo-ng-tabset class="overflow-auto">
   <eo-ng-tab i18n-nzTitle nzTitle="Authorization">
     <div class="top-save-bar">
-      <button type="submit" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveEnv()" i18n>
+      <button type="submit" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveGroupInfo()" i18n>
         Save
       </button>
     </div>
@@ -38,7 +37,6 @@
     <div class="text-tips mt-[15px] mb-[13px]" i18n>
       Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.
     </div>
-
-    <authorization-extension-form [groupID]="model.depth > 1 ? model.parentId : undefined"> </authorization-extension-form>
+    <authorization-extension-form [(model)]="authInfoModel" [groupID]="model.id"> </authorization-extension-form>
   </eo-ng-tab>
 </eo-ng-tabset>

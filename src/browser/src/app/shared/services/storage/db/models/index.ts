@@ -37,8 +37,8 @@ export interface Group extends Base {
   depth?: number;
   parentId?: number;
   sort?: number;
-  projectUuid: string;
-  workSpaceUuid: string;
+  projectUuid?: string;
+  workSpaceUuid?: string;
   children?: Group[];
 }
 

@@ -5,7 +5,9 @@ export const SYNC_API_SCHEMA = {
     __crontab: {
       type: 'number',
       label: $localize`Auto Sync`,
-      'ui:widget': 'radio',
+      ui: {
+        widget: 'radio'
+      },
       default: 4,
       required: true,
       oneOf: [
@@ -38,7 +40,9 @@ export const SYNC_API_SCHEMA = {
     __formater: {
       type: 'string',
       label: $localize`:@@SyncFormat:Format`,
-      'ui:widget': 'radio',
+      ui: {
+        widget: 'radio'
+      },
       default: '',
       required: true,
       oneOf: []

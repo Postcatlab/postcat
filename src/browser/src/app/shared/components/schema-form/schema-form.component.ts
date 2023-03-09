@@ -40,13 +40,14 @@ const compMap = {
             {{ properties[field]?.label }}
           </nz-form-label>
         </ng-container>
-        <!-- Description -->
-        <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
-          {{ properties[field]?.description }}
-        </div>
+
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
+          <!-- Description -->
+          <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
+            {{ properties[field]?.description }}
+          </div>
           <!-- String -->
-          <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.string">
+          <ng-container *ngIf="properties[field].ui.widget === compMap.string">
             <input
               type="text"
               eo-ng-input
@@ -59,8 +60,23 @@ const compMap = {
             />
           </ng-container>
 
+          <!-- String -->
+          <ng-container *ngIf="properties[field].ui.widget === 'textarea'">
+            <textarea
+              type="text"
+              eo-ng-input
+              id="{{ field }}"
+              [disabled]="properties[field]?.disabled"
+              i18n-placeholder
+              placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.label || '') }}"
+              formControlName="{{ field }}"
+              [rows]="properties[field].ui.rows ?? 4"
+              [(ngModel)]="model[field]"
+            ></textarea>
+          </ng-container>
+
           <!-- Switch -->
-          <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.boolean">
+          <ng-container *ngIf="properties[field].ui.widget === compMap.boolean">
             <eo-ng-switch
               [(ngModel)]="model[field]"
               id="{{ field }}"
@@ -72,7 +88,7 @@ const compMap = {
           </ng-container>
 
           <!-- Number -->
-          <ng-container *ngIf="properties[field]?.['ui:widget'] === compMap.number">
+          <ng-container *ngIf="properties[field]?.ui.widget === compMap.number">
             <nz-input-number
               [(ngModel)]="model[field]"
               id="{{ field }}"
@@ -84,7 +100,7 @@ const compMap = {
           </ng-container>
 
           <!-- Radio -->
-          <ng-container *ngIf="properties[field]?.type !== 'array' && properties[field]?.['ui:widget'] === 'radio'">
+          <ng-container *ngIf="properties[field]?.type !== 'array' && properties[field].ui.widget === 'radio'">
             <eo-ng-radio-group
               [(ngModel)]="model[field]"
               id="{{ field }}"
@@ -95,6 +111,30 @@ const compMap = {
                 {{ item.title }}
               </label>
             </eo-ng-radio-group>
+          </ng-container>
+
+          <!-- Select -->
+          <ng-container *ngIf="properties[field].ui.widget === 'select'">
+            <eo-ng-select
+              [(ngModel)]="model[field]"
+              id="{{ field }}"
+              [nzDisabled]="properties[field]?.disabled"
+              formControlName="{{ field }}"
+            >
+              <eo-ng-option *ngFor="let item of properties[field]?.enum" [nzValue]="item.value" [nzLabel]="item.label"></eo-ng-option>
+            </eo-ng-select>
+          </ng-container>
+
+          <!-- Checkbox -->
+          <ng-container *ngIf="properties[field]?.type === 'boolean' && properties[field].ui.widget === 'checkbox'">
+            <label
+              eo-ng-checkbox
+              [(ngModel)]="model[field]"
+              id="{{ field }}"
+              [nzDisabled]="properties[field]?.disabled"
+              formControlName="{{ field }}"
+              >{{ properties[field]?.title }}</label
+            >
           </ng-container>
         </nz-form-control>
       </nz-form-item>
@@ -210,7 +250,10 @@ export class EoSchemaFormComponent implements OnChanges {
     this.properties = Object.entries<any>({ ...this.configuration?.properties, ...properties }).reduce((prev, [key, value]) => {
       prev[key] = value;
       // 不指定组件 则默认根据数据类型生成对应组件
-      value['ui:widget'] ??= compMap[value.type];
+      value.ui = {
+        widget: compMap[value.type],
+        ...value.ui
+      };
       return prev;
     }, {});
     this.updateControls();
