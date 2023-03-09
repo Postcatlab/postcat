@@ -1,6 +1,6 @@
 <form nz-form nzLayout="inline" (ngSubmit)="changeGroupName()">
   <nz-form-item>
-    <nz-form-control [nzValidateStatus]="model?.name ? '' : 'error'" i18n-nzErrorTip nzErrorTip="Please input your projectName">
+    <nz-form-control [nzValidateStatus]="model?.name ? '' : 'error'" i18n-nzErrorTip nzErrorTip="Please input groupName">
       <div class="flex items-center">
         <ng-container *ngIf="isEdit">
           <div class="invisible px-[20px] min-w-[151px]">{{ model.name }}</div>

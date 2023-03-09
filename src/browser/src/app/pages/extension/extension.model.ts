@@ -56,6 +56,10 @@ export const categoriesTipsMap = {
     name: $localize`format`,
     suggest: '@category:Data Migration'
   },
+  'API Testing': {
+    name: $localize`extensions`,
+    suggest: '@category:API Testing'
+  },
   Themes: {
     name: $localize`themes`,
     suggest: '@category:Themes'
@@ -91,6 +95,11 @@ export const getExtensionCates = () =>
     {
       key: categoriesTipsMap['API Security'].suggest,
       title: $localize`API Security`,
+      isLeaf: true
+    },
+    {
+      key: categoriesTipsMap['API Testing'].suggest,
+      title: $localize`API Testing`,
       isLeaf: true
     },
     {

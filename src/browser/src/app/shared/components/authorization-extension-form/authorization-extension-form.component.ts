@@ -156,7 +156,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
       return;
     }
     this.router.navigate([`/home/workspace/project/api/group/edit`], {
-      queryParams: { groupId: this.groupID }
+      queryParams: { groupId: this.groupID, pageID: Date.now().toString() }
     });
   }
 }
