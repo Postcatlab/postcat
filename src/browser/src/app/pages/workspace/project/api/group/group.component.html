@@ -1,23 +1,22 @@
-<form nz-form nzLayout="inline" (ngSubmit)="changeGroupName()">
+<form nz-form nzLayout="inline" [formGroup]="validateForm" (ngSubmit)="changeGroupName()">
   <nz-form-item>
-    <nz-form-control [nzValidateStatus]="model?.name ? '' : 'error'" i18n-nzErrorTip nzErrorTip="Please input groupName">
+    <nz-form-control nzErrorTip="Please input groupName" [nzValidateStatus]="validateForm.controls['name']">
       <div class="flex items-center">
         <ng-container *ngIf="isEdit">
-          <div class="invisible px-[20px] min-w-[151px]">{{ model.name }}</div>
+          <div class="invisible px-[20px] min-w-[151px]">{{ validateForm.value.name }}</div>
           <input
             #groupNameInputRef
             class="absolute"
             eo-ng-input
             autofocus
-            placeholder="Project Name"
-            name="projectName"
+            placeholder="Group Name"
             (blur)="changeGroupName()"
-            required
-            [(ngModel)]="model.name"
+            formControlName="name"
+            id="name"
           />
         </ng-container>
         <ng-container *ngIf="!isEdit">
-          <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
+          <h4 nz-typography class="!mb-[0px]">{{ validateForm.value?.name }}</h4>
           <span nz-button nzType="link" class="ml-[5px] cursor-pointer" (click)="startEditGroupName()">
             <eo-iconpark-icon name="edit"></eo-iconpark-icon>
           </span>

@@ -84,6 +84,13 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   }
   private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
+      console.log('this.validateForm.controls', this.validateForm.controls);
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
       return false;
     }
     return true;
@@ -102,9 +109,15 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         authInfo: JSON.stringify(this.authInfoModel.authInfo)
       }
     };
-    const data = params.id ? await this.effect.updateGroup(params) : await this.effect.createGroup([params]);
-    this.isSaving = false;
-    this.afterSaved.emit(this.initialModel);
+    console.log('params', params);
+    if (params.id) {
+      await this.effect.updateGroup(params);
+      this.message.success($localize`Update Group Name successfully`);
+      this.isSaving = false;
+      this.afterSaved.emit(this.initialModel);
+    } else {
+      this.checkForm();
+    }
   }
   async init() {
     const { groupId, parentId } = this.route.snapshot.queryParams;
@@ -153,15 +166,16 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   }
 
   async changeGroupName() {
-    const { name, id, ...rest } = this.model;
-    if (name.trim() === '') {
+    const name = this.validateForm.value.name;
+    const { id, ...rest } = this.model;
+    if (!this.checkForm()) {
       return;
     }
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
       this.message.success($localize`Update Group Name successfully`);
     } else {
-      const [data] = await this.effect.createGroup([{ name, ...rest }]);
+      const [data] = await this.effect.createGroup([{ ...this.model, name }]);
       if (data) {
         this.model = data;
       }

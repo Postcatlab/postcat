@@ -125,6 +125,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
       if (!groupID) {
         this.model.authType = this.authType.name;
         this.model.authInfo = {};
+        return;
       }
 
       const [currGroup]: any = await this.apiService.api_groupDetail({ id: groupID });
