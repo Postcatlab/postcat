@@ -29,7 +29,7 @@
               "src/icon.ico",
               "src/assets",
               "src/extensions",
-              { "glob": "**/*", "input": "../../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
+              { "glob": "**/*", "input": "../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
             ],
             "styles": ["src/styles/antd.less", "src/styles.scss"],
             "scripts": ["src/assets/libs/protocolcheck.js"],

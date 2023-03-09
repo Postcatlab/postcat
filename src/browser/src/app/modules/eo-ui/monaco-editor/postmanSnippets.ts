@@ -1,3 +1,9 @@
+/**
+ * Copy from postman source code
+ * package: @postman/script-examples/db.json
+ * sourcemap file:_ar-assets/node_modules/@postman/script-examples
+ * file: https://lively-crescent-175226.postman.co/_ar-assets/CollectionWorkbench-5fc7ac82a3bd34b1.min.js
+ */
 const SNIPPETS_PREREQ = [
   {
     name: 'Get an environment variable',
