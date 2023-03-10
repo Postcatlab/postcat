@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 test.describe('Add API', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/');
+    await page.goto('/');
   });
 
   test('Add Form-data API', async ({ page }) => {
