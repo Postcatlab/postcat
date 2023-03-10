@@ -58,8 +58,8 @@ export class CoreHandler {
       if (extensionInfo.main) {
         extensionInfo.main = `file://${path.join(extensionInfo.baseDir, extensionInfo.main)}`;
       }
-      if (extensionInfo.node) {
-        extensionInfo.node = `file://${path.join(extensionInfo.baseDir, extensionInfo.node)}`;
+      if (extensionInfo.browser) {
+        extensionInfo.browser = `file://${path.join(extensionInfo.baseDir, extensionInfo.browser)}`;
       }
       if (extensionInfo.logo?.length > 0 && !extensionInfo.logo.startsWith('http') && !extensionInfo.logo.includes('icon-')) {
         extensionInfo.logo = `file://${path.join(extensionInfo.baseDir, extensionInfo.logo)}`;
@@ -91,6 +91,6 @@ export class CoreHandler {
       // @ts-ignore
       modules = Object.keys(packageInfo.dependencies || {});
     }
-    return modules;
+    return modules.filter(val => val);
   }
 }

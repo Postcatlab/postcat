@@ -14,7 +14,7 @@ export class SidebarService {
   currentID: string = StorageUtil.get(this.selectKey);
   private collapsedChanged$: Subject<boolean> = new Subject();
   constructor(private setting: SettingService) {
-    this.collapsed = this.setting.get('workbench.sidebar.shrink') || false;
+    this.collapsed = this.setting.get('workbench.sidebar.shrink');
   }
   getCollapsed() {
     return this.collapsed;

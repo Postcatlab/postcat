@@ -1,5 +1,7 @@
-import { ELETRON_APP_CONFIG } from 'eo/environment';
-export const COMMON_CONFIG = { ...ELETRON_APP_CONFIG };
+import { COMMON_APP_CONFIG } from 'eo/environment';
+
+export const COMMON_CONFIG = { ...COMMON_APP_CONFIG };
+
 export type APP_CONFIG_INSTANT = {
   production: boolean;
   environment: 'DEV' | 'PROD';

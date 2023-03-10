@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { ApiService } from '../../../shared/services/storage/api.service';
 import { StoreService } from '../../../shared/store/state.service';
@@ -10,7 +11,7 @@ import { StoreService } from '../../../shared/store/state.service';
       <div class="flex items-center">
         <eo-logo class="logo"></eo-logo>
         <!-- Star -->
-        <a href="https://github.com/Postcatlab/postcat" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
+        <a [href]="APP_CONFIG.GITHUB_REPO_URL" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
           <img loading="lazy" src="https://img.shields.io/github/stars/postcatlab/postcat?style=social" alt="" />
         </a>
         <!-- Project Name -->
@@ -30,6 +31,7 @@ import { StoreService } from '../../../shared/store/state.service';
 })
 export class ShareNavbarComponent {
   projectName: string;
+  readonly APP_CONFIG = APP_CONFIG;
   constructor(private api: ApiService, private store: StoreService) {
     this.initProjectName();
   }

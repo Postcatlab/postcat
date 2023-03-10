@@ -6,7 +6,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun, reaction, toJS } from 'mobx';
+import { reaction } from 'mobx';
 
 import { ApiStoreService } from '../../pages/workspace/project/api/service/store/api-state.service';
 import { waitNextTick } from '../../utils/index.utils';

@@ -62,7 +62,7 @@ export class ProjectSettingComponent implements OnInit {
           type: 'sync',
           traceID: 'sync_api_from_url_success',
           loading: () => this.syncLoading,
-          show: () => this.store.getSyncSettingList.length,
+          show: () => this.store.getSyncSettingList?.length,
           onClick: async args => {
             this.syncLoading = true;
             const featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');

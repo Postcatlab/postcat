@@ -38,6 +38,7 @@ export interface ExtensionInfo {
   //Unique npm package name
   name: string;
   version: string;
+  browser: string;
   author: string | { name: 'string' };
   //Entry js file,webRender environment
   main: string;

@@ -1,7 +1,7 @@
 const qiniu = require('qiniu');
 const { promises } = require('fs');
 const { AK, SK, bucket } = require('./qiniu_env.js');
-const package = require('./package.json');
+const package = require('../package.json');
 
 qiniu.conf.ACCESS_KEY = AK;
 qiniu.conf.SECRET_KEY = SK;
@@ -47,7 +47,6 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
-  'release/Postcat Setup ?.exe',
   'release/Postcat Setup ?.exe.blockmap',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',

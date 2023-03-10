@@ -98,7 +98,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   watchInstalledExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'installedExtensionsChange') {
+      if (inArg.type === 'extensionsChange') {
         const name = inArg.data.name;
         const extension: ExtensionInfo = inArg.data.installedMap.get(name);
         if (!extension?.features?.apiPreviewTab) return;
@@ -108,6 +108,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   async initExtensionExtra() {
     this.rightExtras = [];
+    if (!this.router.url.includes('home/workspace/project/api/http/detail')) return;
     const apiPreviewTab = this.extensionService.getValidExtensionsByFature('apiPreviewTab');
     apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);

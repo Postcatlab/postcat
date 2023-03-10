@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FeatureControlService } from 'eo/workbench/browser/src/app/core/services/feature-control/feature-control.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { ChatRobotService } from '../../modules/chat-robot/chat-robot.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 import { SidebarService } from '../sidebar/sidebar.service';
@@ -12,19 +14,15 @@ import { SidebarService } from '../sidebar/sidebar.service';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnDestroy {
-  sideBarCollapsed: boolean;
   hideSidebar = $localize`Hide Sidebar`;
   showSidebar = $localize`Show Sidebar`;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public sidebar: SidebarService, private modal: ModalService) {
-    this.sideBarCollapsed = this.sidebar.getCollapsed();
-    this.sidebar
-      .onCollapsedChanged()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(isCollapsed => {
-        this.sideBarCollapsed = isCollapsed;
-      });
-  }
+  constructor(
+    public sidebar: SidebarService,
+    private modal: ModalService,
+    private chat: ChatRobotService,
+    public feature: FeatureControlService
+  ) {}
   toggleCollapsed() {
     this.sidebar.toggleCollapsed();
   }
@@ -38,6 +36,9 @@ export class ToolbarComponent implements OnDestroy {
       },
       withoutFooter: true
     });
+  }
+  openRobot() {
+    this.chat.open();
   }
   ngOnDestroy(): void {
     this.destroy$.next();

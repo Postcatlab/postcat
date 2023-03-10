@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from 'eo/platform/common/i18n';
-import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import { WebService } from '../../../core/services';
 import { LanguageService } from '../../../core/services/language/language.service';
-import { ExtensionInfo } from '../../models/extension-manager';
-import { ExtensionStoreService } from './extension-store.service';
+import { ExtensionCommonService } from './extension-store.service';
 
 type ExtensionItem = {
   name: string;
@@ -26,13 +23,19 @@ const extKey = 'ext_installed_list';
 })
 export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
-  disabledExtensionNames = [];
-  debugExtensions = [];
+  /**
+   * Debug Extensions Name
+   */
   debugExtensionNames;
+  /**
+   * Storage Debug Extensions Info
+   */
+  debugExtensions = [];
+  disabledExtensionNames = [];
   resourceUrl = 'https://unpkg.com';
-  constructor(private web: WebService, private language: LanguageService, private store: ExtensionStoreService) {
+  constructor(private web: WebService, private language: LanguageService, private extensionCommon: ExtensionCommonService) {
     const isDevEnv = !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname);
-    this.debugExtensionNames = isDevEnv ? [] : [];
+    this.debugExtensionNames = isDevEnv && this.web.isWeb ? [] : [];
   }
   async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json
@@ -136,18 +139,6 @@ export class WebExtensionService {
     return true;
   }
 
-  isEnable(name: string) {
-    return !this.getDisabledExtensionNames().includes(name);
-  }
-
-  getDisabledExtensionNames() {
-    try {
-      return (this.disabledExtensionNames = JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]'));
-    } catch (error) {
-      return [];
-    }
-  }
-
   insertScript(scriptText) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
@@ -165,7 +156,7 @@ export class WebExtensionService {
   }
 
   async getPkgInfo(extName: string, version = 'latest') {
-    const newestExt = this.store.getExtensionList.find(val => val.name === extName);
+    const newestExt = this.extensionCommon.getExtensionList.find(val => val.name === extName);
     version = version === 'latest' ? newestExt?.version || 'latest' : version;
     let pkgInfo;
     if (version === newestExt?.version) {
@@ -221,20 +212,8 @@ export class WebExtensionService {
     if (!pkgInfo.i18n?.length && pkgInfo.features.i18n) {
       pkgInfo.i18n = await this.getExtI18n(pkgInfo.name);
     }
-    pkgInfo = this.translateModule(pkgInfo);
+    pkgInfo = this.extensionCommon.parseExtensionInfo(pkgInfo);
 
     return pkgInfo;
-  }
-  translateModule(module: ExtensionInfo) {
-    const lang = this.language.systemLanguage;
-    //If extension from web,transalte package content from http moduleInfo
-    //Locale extension will translate from local i18n file
-
-    const locale = module.i18n?.find(val => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
-    return module;
   }
 }

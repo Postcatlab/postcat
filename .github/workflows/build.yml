@@ -38,7 +38,7 @@ jobs:
       - name: Install
         run: |
           yarn install --frozen-lockfile
-          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
+          echo "${{ secrets.QINIU_ENV_JS }}" > scripts/qiniu_env.js
 
       - name: Release for MacOS
         if: matrix.os == 'macos-12'

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
@@ -15,6 +16,7 @@ import { SettingService } from '../../modules/system-setting/settings.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  readonly APP_CONFIG = APP_CONFIG;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,

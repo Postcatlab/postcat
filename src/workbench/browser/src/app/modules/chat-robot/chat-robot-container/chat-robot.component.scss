@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: 500px;
+  height: 600px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px var(--shadow-color);
+}
+
+.header,
+.messages,
+.form {
+  padding: 15px 20px;
+}
+
+.header,
+.messages {
+  border-bottom: 1px solid var(--system-border-color);
+}
+
+.header {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.messages {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -2,7 +2,7 @@
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 
-import { ELETRON_APP_CONFIG } from '../../environment';
+import { COMMON_APP_CONFIG } from '../../environment';
 
 const appVersion = require('../../../package.json').version;
 
@@ -11,7 +11,7 @@ export class EoUpdater {
     this.watchLog();
     autoUpdater.setFeedURL({
       provider: 'generic',
-      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
+      url: COMMON_APP_CONFIG.BASE_DOWNLOAD_URL
     });
     // 是否自动更新
     // autoUpdater.autoDownload = window.pc.getExtensionSettings('common.app.autoUpdate') !== false;

@@ -5,10 +5,11 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 
-import { ExtensionStoreService } from './extension-store.service';
+import { ExtensionCommonService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
@@ -27,7 +28,7 @@ export class ExtensionService {
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
-    private store: ExtensionStoreService,
+    private extensionCommon: ExtensionCommonService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
@@ -39,6 +40,7 @@ export class ExtensionService {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'init'
       });
+      return;
     }
 
     //* Web Installl
@@ -48,14 +50,16 @@ export class ExtensionService {
       if (this.installedList.some(m => m.name === val.name)) return;
       installedName.push(val.name);
     });
-
     //* Install Extension by foreach because of async
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {
       const name = uniqueNames[i];
-      await this.installExtension({
-        name
-      });
+      await this.installExtension(
+        {
+          name
+        },
+        true
+      );
     }
   }
   getExtension(name: string) {
@@ -66,7 +70,7 @@ export class ExtensionService {
     if (this.electron.isElectron) {
       result = window.electron.getInstalledExtensions() || new Map();
       result.forEach((value, key) => {
-        result.set(key, this.parseExtensionInfo(value));
+        result.set(key, this.extensionCommon.parseExtensionInfo(value));
       });
     } else {
       result = this.webExtensionService.getExtensions();
@@ -85,9 +89,10 @@ export class ExtensionService {
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
     this.messageService.send({
-      type: 'installedExtensionsChange',
+      type: 'extensionsChange',
       data: {
         installedMap: this.installedMap,
+        extension: this.installedList.find(val => val.name === opts.name),
         ...opts
       }
     });
@@ -117,8 +122,8 @@ export class ExtensionService {
           }
 
           result.data = [
-            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
-            //Local debug package
+            ...debugExtensions,
+            //Installed package
             ...this.installedList
               .filter(n => {
                 const target = result.data.find(m => n.name === m.name);
@@ -132,18 +137,18 @@ export class ExtensionService {
                 }
                 return module;
               }),
-            ...debugExtensions
+            ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name))
           ];
           //Handle feature data
           result.data = result.data.map(module => {
-            let result = this.parseExtensionInfo(module);
+            let result = this.extensionCommon.parseExtensionInfo(module);
             return result;
           });
 
           //Get debug extensions
           this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
 
-          this.store.setExtensionList(result.data);
+          this.extensionCommon.setExtensionList(result.data);
           this.requestPending = null;
           this.isFirstInit = false;
           resolve([result, originData]);
@@ -166,21 +171,23 @@ export class ExtensionService {
       Object.assign(result, this.installedMap.get(name), { installed: true });
       result.enable = this.isEnable(result.name);
     }
-    result = this.parseExtensionInfo(result);
+    result = this.extensionCommon.parseExtensionInfo(result);
     return result;
   }
   /**
    *  install extension by id
    *
    * @param id
+   * @param isInit first time install
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest' }): Promise<boolean> {
+  async installExtension({ name, version = 'latest' }, isInit = false): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
-        action: 'install',
+        action: isInit ? 'init' : 'install',
         name
       });
+      if (isInit) return;
       if (!this.isEnable(name)) {
         this.toggleEnableExtension(name, true);
       }
@@ -205,10 +212,12 @@ export class ExtensionService {
     }
   }
   async uninstallExtension(name): Promise<boolean> {
+    const extension = this.installedList.find(it => it.name === name);
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'uninstall',
-        name
+        name,
+        extension
       });
     };
     if (this.electron.isElectron) {
@@ -252,7 +261,7 @@ export class ExtensionService {
   }
 
   private setDisabledExtension(arr: string[]) {
-    localStorage.setItem(DISABLE_EXTENSION_NAMES, JSON.stringify(arr));
+    StorageUtil.set(DISABLE_EXTENSION_NAMES, arr);
     this.disabledExtensionNames = arr;
   }
   async getExtensionPackage(name: string): Promise<any> {
@@ -296,11 +305,7 @@ export class ExtensionService {
     return result;
   }
   private getDisableExtensionNames() {
-    try {
-      return JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]');
-    } catch (error) {
-      return [];
-    }
+    return StorageUtil.get(DISABLE_EXTENSION_NAMES) || [];
   }
   private async requestDetail(id) {
     const debugExtension = this.webExtensionService.debugExtensions.find(val => val.name === id);
@@ -316,19 +321,5 @@ export class ExtensionService {
     return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
-  }
-  /**
-   * Parse extension info for ui show
-   * such as: author, translate ...
-   *
-   * @param pkg
-   * @returns
-   */
-  private parseExtensionInfo(pkg): ExtensionInfo {
-    pkg = this.webExtensionService.translateModule(pkg);
-    if (typeof pkg.author === 'object') {
-      pkg.author = pkg.author['name'] || '';
-    }
-    return pkg;
   }
 }
