@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 import { ifTipsExist } from './commom.util';
 test('User Opeate', async ({ page }) => {
-  await page.goto('http://localhost:4200/');
+  await page.goto('/');
 
   //Login
   await page.getByRole('button', { name: 'Sign in/Up' }).click();
@@ -14,7 +14,7 @@ test('User Opeate', async ({ page }) => {
   await page.getByRole('button', { name: 'switch to the cloud workspace' }).click();
 
   //Change Pasword
-  await page.locator('button[ng-reflect-title="Open Settings"]').click();
+  await page.locator('eo-iconpark-icon[name="setting"]').click();
   await page.getByText('New password', { exact: true }).click();
   await page.getByText('New password', { exact: true }).fill('123456');
   await page.getByText('New password', { exact: true }).press('Tab');
