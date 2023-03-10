@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { addTextToEditor, ifTipsExist } from './commom.util';
+import { addTextToEditor, ECHO_API_URL, ifTipsExist } from './commom.util';
 const waitForResponse = async page => {
   const responsePromise = page.waitForResponse('**/api/unit');
   await page.getByRole('button', { name: 'Send' }).click();
@@ -46,7 +46,7 @@ test.describe('Test API', () => {
 
     //Restore api test from history
     await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
-    await page.getByTitle('---').getByText('http://demo.gokuapi.com:8280/Web/Test/all/print').click({ timeout: 500 });
+    await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
 
     //Save API from test
     await page.getByRole('button', { name: 'Save as API' }).click();
@@ -66,7 +66,7 @@ test.describe('Test API', () => {
    */
   test('Formdata Test', async ({ page }) => {
     await page.getByPlaceholder('Enter URL').click();
-    await page.getByPlaceholder('Enter URL').fill('http://demo.gokuapi.com:8280/Web/Test/all/print');
+    await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
     await page.getByText('Form-Data').click();
     await page.getByPlaceholder('Name').click();
     await page.getByPlaceholder('Name').fill('test');
@@ -85,12 +85,11 @@ test.describe('Test API', () => {
    */
   test('Raw Test', async ({ page }) => {
     await page.getByPlaceholder('Enter URL').click();
-    await page.getByPlaceholder('Enter URL').fill('http://demo.gokuapi.com:8280/Web/Test/all/print');
+    await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
     //!Change to XML prevent JSON/Raw monaco editor autocompletel value
     await page.getByText('JSON').click();
     await page.getByText('XML').click();
-    const monacoEditor = page.locator('.monaco-editor').nth(0);
-    await addTextToEditor(page, monacoEditor, `{"test":1,"test1":2}`);
+    await addTextToEditor(page, `{"test":1,"test1":2}`);
     const res = await waitForResponse(page);
     expect(res.body).toEqual(`{"test":1,"test1":2}`);
   });
