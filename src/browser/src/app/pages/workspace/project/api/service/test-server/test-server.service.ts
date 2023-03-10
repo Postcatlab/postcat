@@ -67,6 +67,7 @@ export abstract class TestServerService implements TestServer {
         paramList: (opts.env.parameters || []).map(val => ({ paramKey: val.name, paramValue: val.value })),
         frontURI: opts.env.hostUri
       },
+      authInfo: data.apiAttrInfo.authInfo || {},
       beforeInject: data.apiAttrInfo.beforeInject || '',
       afterInject: data.apiAttrInfo.afterInject || '',
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale)
@@ -75,7 +76,7 @@ export abstract class TestServerService implements TestServer {
     if (rootType !== -1) {
       result.apiRequestParamJsonType = rootType.toString();
     }
-    // pcConsole.log('formatRequestData', result);
+    pcConsole.log('formatRequestData', result);
     return result;
   }
   formatResponseData({ globals, report, history, id }): TestServerRes {

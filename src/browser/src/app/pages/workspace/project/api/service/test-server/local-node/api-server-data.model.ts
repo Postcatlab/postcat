@@ -68,6 +68,7 @@ export interface TestLocalNodeData {
    * @type {string}
    */
   afterInject?: string;
+  authInfo?: Record<string, any>;
 
   /**
    * advanced http setting

@@ -70,7 +70,10 @@ export interface ApiAttrInfo {
   requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
-  authInfo?: string;
+  authInfo?: {
+    authType: string;
+    authInfo: Record<string, any>;
+  };
   createTime?: number;
   updateTime?: number;
 }

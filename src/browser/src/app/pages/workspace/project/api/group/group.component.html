@@ -11,6 +11,7 @@
             autofocus
             placeholder="Group Name"
             (blur)="changeGroupName()"
+            (ngModelChange)="emitChange($event)"
             formControlName="name"
             id="name"
           />
@@ -37,6 +38,7 @@
     <div class="text-tips mt-[15px] mb-[13px]" i18n>
       Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.
     </div>
-    <authorization-extension-form [(model)]="authInfoModel" [groupID]="model.id"> </authorization-extension-form>
+    <authorization-extension-form #authExtForm [(model)]="authInfoModel" [groupID]="model.id" (modelChange)="emitChange($event)">
+    </authorization-extension-form>
   </eo-ng-tab>
 </eo-ng-tabset>

@@ -28,6 +28,7 @@ import { ContentType } from 'pc/browser/src/app/pages/workspace/project/api/http
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { AuthIn, noAuth } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiData, ApiTestHistory } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
@@ -90,6 +91,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
+  noAuth = noAuth;
   isDragging = false;
 
   beforeScriptCompletions = beforeScriptCompletions;
@@ -104,6 +106,14 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
   $$contentType: ContentType = contentTypeMap[0];
+
+  get uuid() {
+    return this.route.snapshot.queryParams.uuid;
+  }
+
+  get authType(): AuthIn {
+    return this.uuid.includes('history_') ? 'api-test-history' : 'api-test';
+  }
 
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
@@ -160,16 +170,18 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
 
   async init() {
     this.initTimes++;
+    console.log('this.model', this.model);
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {
         requestTabIndex: 1
       } as testViewModel;
       let uuid = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
-      let requestInfo = null;
+      let requestInfo: Partial<ApiData> = null;
       if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
+        console.log('history.request', history.request);
         this.model.request = history.request;
         this.model.testResult = history.response;
       } else {
@@ -178,6 +190,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         } else {
           requestInfo = await this.projectApi.get(uuid);
         }
+        requestInfo.apiAttrInfo.authInfo = {
+          authType: '',
+          authInfo: {}
+        };
       }
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
@@ -480,7 +496,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
           contentType: ContentTypeEnum.RAW,
           requestMethod: 0,
           beforeInject: '',
-          afterInject: ''
+          afterInject: '',
+          authInfo: {}
         },
         requestParams: {
           queryParams: [],

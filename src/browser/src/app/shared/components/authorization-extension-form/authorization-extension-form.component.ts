@@ -22,6 +22,8 @@ export type AuthInfo = {
   authInfo: Record<string, any>;
 };
 
+export type AuthIn = 'group' | 'api-test' | 'api-test-history';
+
 @Component({
   selector: 'authorization-extension-form',
   template: `
@@ -63,11 +65,8 @@ export type AuthInfo = {
   `
 })
 export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
-  @Input() type: 'group' | 'api' = 'group';
-  @Input() model: AuthInfo = {
-    authType: '',
-    authInfo: {}
-  };
+  @Input() type: AuthIn = 'group';
+  @Input() model: AuthInfo;
   @Input() groupID: number;
   @Output() readonly modelChange = new EventEmitter<AuthInfo>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
@@ -76,6 +75,10 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo>;
+
+  get validateForm() {
+    return this.schemaForm?.validateForm;
+  }
 
   get authType() {
     return this.parentGroup?.depth ? inheritAuth : noAuth;
@@ -94,13 +97,13 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   constructor(private apiService: ApiService, private router: Router, private extensionService: ExtensionService) {}
 
   ngOnInit(): void {
-    this.model.authType = this.groupID ? inheritAuth.name : noAuth.name;
+    this.model.authType ||= this.groupID ? inheritAuth.name : noAuth.name;
     this.initExtensions();
   }
 
   initExtensions() {
     this.authAPIMap = this.extensionService.getValidExtensionsByFature('authAPI');
-    console.log('authAPIMap', this.authAPIMap);
+    // console.log('authAPIMap', this.authAPIMap);
     this.extensionList = [];
     this.authAPIMap.forEach((value, key) => {
       this.extensionList.push({ name: key, label: value.label });
@@ -108,8 +111,8 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    const { groupID } = changes;
-    if (groupID?.currentValue !== groupID?.previousValue) {
+    const { groupID, model } = changes;
+    if (this.type !== 'api-test-history' && groupID?.currentValue !== groupID?.previousValue) {
       await this.getGroupInfo(this.groupID);
       if (this.currGroup.depth === 0 && this.model.authType === inheritAuth.name) {
         this.model.authType = noAuth.name;
@@ -117,6 +120,10 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
         this.model.authType = this.authType.name;
       }
       this.modelChange.emit(this.model);
+    }
+
+    if (!Object.is(this.model, model.previousValue) || this.model.authType !== model.previousValue.authType) {
+      this.handleAuthTypeChange(this.model.authType);
     }
   }
 
@@ -129,7 +136,12 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
       }
 
       const [currGroup]: any = await this.apiService.api_groupDetail({ id: groupID });
+      console.log('currGroup', currGroup);
       this.currGroup = currGroup;
+      this.model ??= {
+        authType: '',
+        authInfo: {}
+      };
       this.model.authType = currGroup.authInfo?.authType || this.authType.name;
       this.model.authInfo = JSONParse(currGroup.authInfo?.authInfo || {});
       this.handleAuthTypeChange(this.model.authType);
@@ -146,7 +158,8 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   }
 
   handleValueChanges(values) {
-    console.log('handleValueChanges', values);
+    // console.log('handleValueChanges', values);
+    this.modelChange.emit(this.model);
   }
   handleAuthTypeChange(authType) {
     if (this.authAPIMap.has(authType)) {
@@ -154,7 +167,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     } else {
       this.schemaObj = null;
     }
-    console.log('handleAuthTypeChange', authType);
+    // console.log('handleAuthTypeChange', authType, this.schemaObj);
   }
 
   nav2group() {
@@ -164,5 +177,18 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     this.router.navigate([`/home/workspace/project/api/group/edit`], {
       queryParams: { groupId: this.parentGroup.id, pageID: Date.now().toString() }
     });
+  }
+
+  checkForm() {
+    if (!this.validateForm?.valid) {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return false;
+    }
+    return true;
   }
 }

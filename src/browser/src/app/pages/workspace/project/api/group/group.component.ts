@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
-import { AuthInfo } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
+import {
+  AuthInfo,
+  AuthorizationExtensionFormComponent
+} from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
@@ -12,7 +15,6 @@ import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { eoDeepCopy, JSONParse } from '../../../../../utils/index.utils';
 import { ApiEffectService } from '../service/store/api-effect.service';
-import { ApiStoreService } from '../service/store/api-state.service';
 
 @Component({
   selector: 'eo-group',
@@ -34,8 +36,8 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   topSaveBar: HTMLDivElement;
 
   isSaving = false;
-
   validateForm: FormGroup;
+  @ViewChild('authExtForm') authExtForm: AuthorizationExtensionFormComponent;
   @ViewChild('groupNameInputRef') groupNameInputRef: ElementRef<HTMLInputElement>;
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
@@ -43,12 +45,10 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   constructor(
     private api: ApiService,
     private effect: ApiEffectService,
-    private store: ApiStoreService,
     public globalStore: StoreService,
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
-    private router: Router,
     private trace: TraceService
   ) {
     this.init();
@@ -84,7 +84,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   }
   private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
-      console.log('this.validateForm.controls', this.validateForm.controls);
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
@@ -96,7 +95,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     return true;
   }
   async saveGroupInfo(ux = 'ui') {
-    if (!this.checkForm()) {
+    if (!this.checkForm() || !this.authExtForm.checkForm()) {
       return;
     }
     this.isSaving = true;
@@ -106,15 +105,15 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       type: this.model.type,
       authInfo: {
         authType: this.authInfoModel.authType,
-        authInfo: JSON.stringify(this.authInfoModel.authInfo)
+        authInfo: JSON.stringify(this.authExtForm.validateForm.value)
       }
     };
-    console.log('params', params);
     if (params.id) {
       await this.effect.updateGroup(params);
       this.message.success($localize`Update Group Name successfully`);
       this.isSaving = false;
       this.afterSaved.emit(this.initialModel);
+      this.trace.report('save_auth_success');
     } else {
       this.checkForm();
     }
@@ -169,6 +168,10 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     const name = this.validateForm.value.name;
     const { id, ...rest } = this.model;
     if (!this.checkForm()) {
+      return;
+    }
+    if (name === this.model.name) {
+      this.isEdit = false;
       return;
     }
     if (this.model.id) {

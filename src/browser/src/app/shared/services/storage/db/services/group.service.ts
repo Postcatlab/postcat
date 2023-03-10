@@ -1,3 +1,4 @@
+import { inheritAuth } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { dataSource } from 'pc/browser/src/app/shared/services/storage/db/dataSource';
 import {
   ApiResponse,
@@ -133,6 +134,21 @@ export class GroupService extends BaseService<Group> {
 
       return this.baseService.update(params);
     }
+  }
+
+  async read(params) {
+    const result = await this.baseService.read(params);
+    const group = result.data;
+    // 递归获取父级分组鉴权信息
+    if ((!group.authInfo?.authType || group.authInfo?.authType === inheritAuth.name) && group.depth) {
+      const res = await this.read({ id: result.data.parentId });
+      result.data.authInfo = {
+        authType: inheritAuth.name,
+        authInfo: res.data.authInfo?.authInfo || {},
+        ...result.data.authInfo
+      };
+    }
+    return result;
   }
 
   async bulkRead(params) {
