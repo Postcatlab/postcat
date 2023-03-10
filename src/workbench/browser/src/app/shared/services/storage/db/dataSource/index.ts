@@ -12,7 +12,6 @@ import {
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/project.service';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/workspace.service';
-import { merge } from 'lodash-es';
 
 class DataSource extends Dexie {
   workspace!: Table<Workspace, number>;
@@ -75,8 +74,7 @@ class DataSource extends Dexie {
         return obj;
       });
       table.hook('updating', (modifications, primKey, obj) => {
-        const newObj = merge({}, obj, modifications);
-        return { ...newObj, updateTime: Date.now() };
+        return { ...modifications, updateTime: Date.now() };
       });
     });
   }
