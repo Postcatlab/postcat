@@ -11,7 +11,7 @@ import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, Templ
       </p>
       <div class="message-content">
         <ng-container *ngTemplateOutlet="messageContent"></ng-container>
-        <pre class="text !mb-0"> {{ message }} </pre>
+        <pre *ngIf="message" class="text !mb-0"> {{ message }} </pre>
       </div>
     </div>
   `,

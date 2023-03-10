@@ -1,10 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { EoNgButtonModule } from 'eo-ng-button';
 import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'pc/browser/src/app/shared/services/message';
+import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import { ChatRobotModule } from '../../../modules/chat-robot/chat-robot.module';
@@ -12,9 +16,10 @@ import { ChatRobotService } from '../../../modules/chat-robot/chat-robot.service
 import { StarMotivationComponent } from '../../../modules/star-motivation/star-motivation.component';
 
 type messageItem = {
-  text: string;
+  text?: string;
   date: Date;
   reply: boolean;
+  content?: TemplateRef<any>;
   type: string;
   user: {
     name: string;
@@ -25,7 +30,7 @@ type messageItem = {
 @Component({
   selector: 'pc-chatgpt-robot',
   standalone: true,
-  imports: [StarMotivationComponent, CommonModule, ChatRobotModule],
+  imports: [StarMotivationComponent, CommonModule, EoNgButtonModule, ChatRobotModule],
   animations: [
     trigger('slideInOut', [
       transition(':enter', [style({ transform: 'translateX(100%)' }), animate('300ms ease-in', style({ transform: 'translateX(0)' }))]),
@@ -49,10 +54,16 @@ type messageItem = {
         *ngFor="let msg of messages"
         [message]="msg.text"
         [reply]="msg.reply"
+        [messageContent]="msg.content"
         [sender]="msg.user.name"
         [avatar]="msg.user.avatar"
         [date]="msg.date"
       ></pc-chat-robot-message>
+      <ng-template #moreTwice i18n>
+        You have reached the maximum usage of ChatGPT for today. Please
+        <button eo-ng-button class="mb-[2px]" nz="primary" (click)="login()" nzSize="small">Sign in</button> to your Github account to
+        star/fork to get more times.
+      </ng-template>
       <pc-chat-robot-form
         (send)="sendMessage($event)"
         [loading]="loading"
@@ -66,6 +77,8 @@ type messageItem = {
 export class ChatgptRobotComponent implements OnInit {
   title = $localize`ChatGPT Robot`;
   loading = false;
+  MAX_LIMIT = 5;
+  nowUsage = StorageUtil.get('cr_usage');
   initMessage = {
     date: new Date(),
     reply: true,
@@ -76,23 +89,35 @@ export class ChatgptRobotComponent implements OnInit {
     }
   };
   powerBy = {
-    title: 'APISPace',
+    title: 'APISpace',
     link: 'https://www.apispace.com?utm_source=postcat&utm_medium=robot&utm_term=chatgptturbo'
   };
   messages: messageItem[] = [];
+  @ViewChild('moreTwice') moreTwiceTmp: TemplateRef<any>;
   constructor(
     private http: HttpClient,
     public chat: ChatRobotService,
     public feature: FeatureControlService,
-    private message: MessageService
+    private message: MessageService,
+    private trace: TraceService,
+    private store: StoreService
   ) {}
   ngOnInit() {
+    this.watchExtensionChange();
+  }
+  login() {
+    window.open(APP_CONFIG.GITHUB_REPO_URL, '_blank');
+    this.trace.report('jump_to_github', {
+      where_jump_to_github: 'chatGPT_extension'
+    });
     setTimeout(() => {
-      this.watchExtensionChange();
-    }, 5 * 1000);
+      this.nowUsage = 0;
+      StorageUtil.set('cr_usage', this.nowUsage);
+    }, 5000);
   }
   sendChatGPTMessage($event) {
     this.loading = true;
+    this.trace.report('send_chatGPT');
     this.http
       .post(`${APP_CONFIG.EXTENSION_URL}/chatGPT`, {
         message: this.messages.map(val => {
@@ -107,7 +132,7 @@ export class ChatgptRobotComponent implements OnInit {
           this.loading = false;
           if (!res?.result) {
             this.messages.push({
-              text: `ChatGPT Error:${res?.msg}`,
+              text: `ChatGPT Error: ${res?.error || res?.msg || 'unknown error'}`,
               date: new Date(),
               reply: true,
               type: 'text',
@@ -118,6 +143,8 @@ export class ChatgptRobotComponent implements OnInit {
             });
             return;
           }
+          this.nowUsage++;
+          StorageUtil.set('cr_usage', this.nowUsage, 24 * 60 * 60);
           this.messages.push({
             text: res.result,
             date: new Date(),
@@ -151,10 +178,23 @@ export class ChatgptRobotComponent implements OnInit {
       reply: false,
       type: 'text',
       user: {
-        name: $localize`Visitor`,
+        name: this.store.getUserProfile?.email || $localize`Visitor`,
         avatar: 'https://data.eolink.com/PXMbLGmc2f0b29596764f7456eefb75478ed77b4fd172d9'
       }
     });
+    if (this.nowUsage >= this.MAX_LIMIT) {
+      this.messages.push({
+        content: this.moreTwiceTmp,
+        date: new Date(),
+        reply: true,
+        type: 'text',
+        user: {
+          name: 'Postcat',
+          avatar: './assets/images/logo.svg'
+        }
+      });
+      return;
+    }
     this.sendChatGPTMessage($event);
   }
   watchExtensionChange() {

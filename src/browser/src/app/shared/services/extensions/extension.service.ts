@@ -5,6 +5,7 @@ import { LanguageService } from 'pc/browser/src/app/core/services/language/langu
 import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'pc/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'pc/browser/src/app/shared/services/message';
+import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 
@@ -39,6 +40,7 @@ export class ExtensionService {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'init'
       });
+      return;
     }
 
     //* Web Installl
@@ -52,9 +54,12 @@ export class ExtensionService {
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {
       const name = uniqueNames[i];
-      await this.installExtension({
-        name
-      });
+      await this.installExtension(
+        {
+          name
+        },
+        true
+      );
     }
   }
   getExtension(name: string) {
@@ -173,14 +178,16 @@ export class ExtensionService {
    *  install extension by id
    *
    * @param id
+   * @param isInit first time install
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest' }): Promise<boolean> {
+  async installExtension({ name, version = 'latest' }, isInit = false): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
-        action: 'install',
+        action: isInit ? 'init' : 'install',
         name
       });
+      if (isInit) return;
       if (!this.isEnable(name)) {
         this.toggleEnableExtension(name, true);
       }
@@ -254,7 +261,7 @@ export class ExtensionService {
   }
 
   private setDisabledExtension(arr: string[]) {
-    localStorage.setItem(DISABLE_EXTENSION_NAMES, JSON.stringify(arr));
+    StorageUtil.set(DISABLE_EXTENSION_NAMES, arr);
     this.disabledExtensionNames = arr;
   }
   async getExtensionPackage(name: string): Promise<any> {
@@ -298,11 +305,7 @@ export class ExtensionService {
     return result;
   }
   private getDisableExtensionNames() {
-    try {
-      return JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]');
-    } catch (error) {
-      return [];
-    }
+    return StorageUtil.get(DISABLE_EXTENSION_NAMES) || [];
   }
   private async requestDetail(id) {
     const debugExtension = this.webExtensionService.debugExtensions.find(val => val.name === id);

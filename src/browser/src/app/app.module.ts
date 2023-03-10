@@ -10,6 +10,7 @@ import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feed
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { NotificationService } from 'pc/browser/src/app/core/services/notification.service';
 import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
@@ -83,6 +84,7 @@ export class AppModule {
     private mockService: MockService,
     private global: GlobalProvider,
     private theme: ThemeService,
+    private feature: FeatureControlService,
     private extensionService: ExtensionService,
     private notification: NotificationService
   ) {
@@ -94,6 +96,9 @@ export class AppModule {
       this.lang.init();
     }
 
+    //* Init feature before extension install
+    this.feature.init();
+
     //* Inject extension global data
     this.global.injectGlobalData();
     //* Init local mock server
@@ -104,10 +109,10 @@ export class AppModule {
     //* Init Extension
     await this.extensionService.init();
     this.theme.queryExtensionThemes();
+
     //*Reset theme after theme/extension theme loading
     Promise.all([promiseSystem]).then(() => {
       this.theme.afterAllThemeLoad();
-      this.theme.watchInstalledExtensionsChange();
     });
 
     //* Init notification

@@ -118,13 +118,13 @@ declare namespace API {
      * 用户名
      */
     username: string;
-    workspaces: ApifoxModal[];
+    workspaces: workspaceModal[];
   }
 
   /**
    * WorkspaceEntity
    */
-  export interface ApifoxModal {
+  export interface workspaceModal {
     /**
      * 空间创建者ID
      */

@@ -141,18 +141,6 @@ export class WebExtensionService {
     return true;
   }
 
-  isEnable(name: string) {
-    return !this.getDisabledExtensionNames().includes(name);
-  }
-
-  getDisabledExtensionNames() {
-    try {
-      return (this.disabledExtensionNames = JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]'));
-    } catch (error) {
-      return [];
-    }
-  }
-
   insertScript(scriptText) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
