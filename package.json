@@ -25,7 +25,7 @@
     "release": "npm-run-all -s electron:build:web electron:tsc && npx esno scripts/build.ts --publish=always && node scripts/upload.js",
     "test": "npm-run-all --serial test:*",
     "e2e": "cd test/e2e&&npx playwright test -c playwright.config.ts",
-    "test:e2e":"npm-run-all -s  start:web e2e",
+    "test:e2e": "yarn e2e",
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
     "electron:dev": "npm run electron:tsc && electron . --development",

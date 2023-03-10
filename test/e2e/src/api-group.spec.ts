@@ -1,31 +1,49 @@
 import { test, expect } from '@playwright/test';
+test.describe('Group Operate', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:4200/');
+    //Add group
+    await page.getByRole('banner').getByRole('button').hover();
+    await page.locator('a').filter({ hasText: 'New Group' }).click();
+    await page.getByLabel('Group Name').fill('Parent Group');
+    await page.getByRole('button', { name: 'Confirm' }).click();
+    //Add sub group
+    await page.getByTitle('Parent Group').locator('div').nth(1).hover();
+    await page.getByTitle('Parent Group').getByRole('button').click();
+    await page.getByText('Add Subgroup').click();
+    await page.getByLabel('Group Name').fill('Sub Group');
+    await page.getByRole('button', { name: 'Confirm' }).click();
+  });
 
-test('test', async ({ page }) => {
-  await page.goto('http://localhost:4200/');
+  test('Basic Operate', async ({ page }) => {
+    //Edit group
+    await page.getByTitle('Sub Group').locator('div').nth(1).hover();
+    await page.getByTitle('Sub Group').getByRole('button').click();
+    await page.getByText('Edit').click();
+    await page.getByLabel('Group Name').fill('Sub Group after');
+    await page.getByRole('button', { name: 'Confirm' }).click();
 
-  //Add group
-  await page.getByRole('banner').getByRole('button').hover();
-  await page.locator('a').filter({ hasText: 'New Group' }).click();
-  await page.getByLabel('Group Name').fill('Parent Group');
-  await page.getByRole('button', { name: 'Confirm' }).click();
+    //Delete group
+    await page.getByTitle('Sub Group after').locator('div').nth(1).hover();
+    await page.getByTitle('Sub Group after').getByRole('button').click();
+    await page.getByText('Delete').click();
+    await page.getByRole('button', { name: 'Confirm' }).click();
+  });
+  test('Search Group', async ({ page }) => {
+    //Search Group
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('Sub');
+    await page.getByTitle('Sub Group').click();
 
-  //Add sub group
-  await page.getByTitle('Parent Group').locator('div').nth(1).hover();
-  await page.getByTitle('Parent Group').getByRole('button').click();
-  await page.getByText('Add Subgroup').click();
-  await page.getByLabel('Group Name').fill('Sub Group');
-  await page.getByRole('button', { name: 'Confirm' }).click();
+    //Search API by Name
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('we');
+    await page.getByText('Get City Weather Today').click({ timeout: 100 });
 
-  //Edit group
-  await page.getByTitle('Sub Group').locator('div').nth(1).hover();
-  await page.getByTitle('Sub Group').getByRole('button').click();
-  await page.getByText('Edit').click();
-  await page.getByLabel('Group Name').fill('Sub Group after');
-  await page.getByRole('button', { name: 'Confirm' }).click();
-
-  //Delete group
-  await page.getByTitle('Sub Group after').locator('div').nth(1).hover();
-  await page.getByTitle('Sub Group after').getByRole('button').click();
-  await page.getByText('Delete').click();
-  await page.getByRole('button', { name: 'Confirm' }).click();
+    //Search API by URL
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('inews');
+    await page.locator('eo-ng-tree-default').getByText('COVID-19 national epidemic').click();
+  });
+  // test('Sort Group', async ({ page }) => {});
 });
