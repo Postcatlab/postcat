@@ -15,9 +15,7 @@ out/
 *.js
 *.js.map
 !patches/*
-!src/node/test-server/electron/**/*.js
-!src/node/test-server/request/**/*.js
-!src/node/test-server/server/**/*.js
+!src/node/**/*.js
 !/api/*.js
 !/scripts/**/*.js
 !*.config.js

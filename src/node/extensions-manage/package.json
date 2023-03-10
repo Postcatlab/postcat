@@ -1,0 +1,31 @@
+{
+  "name": "postcat-extensions-manage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "prepare": "node tools/install.cjs",
+    "dev": "nodemon main",
+    "start": "pm2 start main.js",
+    "stop": "pm2 stop main.js",
+    "log": "pm2 logs"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "koa": "^2.14.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^12.0.0",
+    "network-activity-viewer": "^1.0.8",
+    "node-fetch": "^3.3.0",
+    "pm2": "^5.2.2",
+    "postcat-sync-swagger": "^0.0.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
