@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+
+import { ifTipsExist } from './commom.util';
 test('User Opeate', async ({ page }) => {
   await page.goto('http://localhost:4200/');
 
@@ -19,12 +21,12 @@ test('User Opeate', async ({ page }) => {
   await page.locator('nz-form-item').filter({ hasText: 'Confirm new password' }).getByRole('textbox').fill('123456');
   await page.getByRole('button', { name: 'Change' }).click();
   await page.getByRole('button', { name: 'Close' }).click();
-  await expect(page.locator('text=Password reset success !')).toBeVisible();
+  await ifTipsExist(page, 'Password reset success !');
 
   //Logout
   await page.locator('pc-btn-user').getByRole('button').click();
   await page.getByText('Sign Out').click();
-  await expect(page.locator('text=Successfully logged out !')).toBeVisible();
+  await ifTipsExist(page, 'Successfully logged out !');
 
   //Error Login
   await page.getByRole('button', { name: 'Sign in/Up' }).click();
@@ -33,5 +35,5 @@ test('User Opeate', async ({ page }) => {
   await page.getByPlaceholder('Enter Email').press('Tab');
   await page.getByPlaceholder('Enter password').fill('123456');
   await page.getByPlaceholder('Enter password').press('Enter');
-  await expect(page.locator('text=Username must a email')).toBeVisible();
+  await ifTipsExist(page, 'Username must a email');
 });

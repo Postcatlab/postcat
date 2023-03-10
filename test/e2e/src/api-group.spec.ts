@@ -29,6 +29,21 @@ test.describe('Group Operate', () => {
     await page.getByText('Delete').click();
     await page.getByRole('button', { name: 'Confirm' }).click();
   });
-  test('Search Group', async ({ page }) => {});
+  test('Search Group', async ({ page }) => {
+    //Search Group
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('Sub');
+    await page.getByTitle('Sub Group').click();
+
+    //Search API by Name
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('we');
+    await page.getByText('Get City Weather Today').click({ timeout: 100 });
+
+    //Search API by URL
+    await page.getByPlaceholder('Search').click();
+    await page.getByPlaceholder('Search').fill('inews');
+    await page.locator('eo-ng-tree-default').getByText('COVID-19 national epidemic').click();
+  });
   // test('Sort Group', async ({ page }) => {});
 });
