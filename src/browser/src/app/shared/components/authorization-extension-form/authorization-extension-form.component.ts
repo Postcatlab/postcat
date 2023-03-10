@@ -75,6 +75,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo>;
+  extensionList: Array<typeof noAuth> = [];
 
   get validateForm() {
     return this.schemaForm?.validateForm;
@@ -91,8 +92,6 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   get authTypeList() {
     return [this.authType, ...this.extensionList];
   }
-
-  extensionList: Array<typeof noAuth> = [];
 
   constructor(private apiService: ApiService, private router: Router, private extensionService: ExtensionService) {}
 
@@ -111,19 +110,24 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    const { groupID, model } = changes;
-    if (this.type !== 'api-test-history' && groupID?.currentValue !== groupID?.previousValue) {
-      await this.getGroupInfo(this.groupID);
-      if (this.currGroup.depth === 0 && this.model.authType === inheritAuth.name) {
-        this.model.authType = noAuth.name;
-      } else if (this.isDefaultAuthType) {
-        this.model.authType = this.authType.name;
+    console.log('groupID, model', changes);
+    try {
+      const { groupID, model } = changes;
+      if (this.type !== 'api-test-history' && groupID?.currentValue !== groupID?.previousValue) {
+        await this.getGroupInfo(this.groupID);
+        if (this.currGroup.depth === 0 && this.model.authType === inheritAuth.name) {
+          this.model.authType = noAuth.name;
+        } else if (this.isDefaultAuthType) {
+          this.model.authType = this.authType.name;
+        }
+        this.modelChange.emit(this.model);
       }
-      this.modelChange.emit(this.model);
-    }
 
-    if (!Object.is(this.model, model.previousValue) || this.model.authType !== model.previousValue.authType) {
-      this.handleAuthTypeChange(this.model.authType);
+      if (!Object.is(this.model, model?.previousValue) || this.model.authType !== model?.previousValue?.authType) {
+        this.handleAuthTypeChange(this.model.authType);
+      }
+    } catch (error) {
+      console.log('error', error);
     }
   }
 
@@ -136,7 +140,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
       }
 
       const [currGroup]: any = await this.apiService.api_groupDetail({ id: groupID });
-      console.log('currGroup', currGroup);
+      // console.log('currGroup', currGroup);
       this.currGroup = currGroup;
       this.model ??= {
         authType: '',

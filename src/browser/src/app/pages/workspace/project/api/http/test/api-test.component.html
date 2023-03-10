@@ -123,12 +123,13 @@
           <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.authInfo.authType !== noAuth.name" nzStatus="success"></nz-badge>
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
-          <!-- <authorization-extension-form
+          <authorization-extension-form
+            *ngIf="!isEmptyTestPage"
             [type]="authType"
             [(model)]="model.request.apiAttrInfo.authInfo"
             (modelChange)="emitChangeFun('authInfo')"
             [groupID]="isEmptyTestPage ? undefined : model.request?.groupId"
-          ></authorization-extension-form> -->
+          ></authorization-extension-form>
         </div>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">

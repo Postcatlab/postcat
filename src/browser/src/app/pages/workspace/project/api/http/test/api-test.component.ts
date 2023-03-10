@@ -217,6 +217,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.status$.next('start');
       }
     }
+    console.log('this.model', this.model);
     this.initBasicForm();
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
