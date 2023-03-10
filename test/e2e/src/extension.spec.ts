@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 // const installExtension = async () => {};
 // test.describe('Extension Operate', () => {
 //   test.beforeEach(async ({ page }) => {
-//     await page.goto('http://localhost:4200/');
+//     await page.goto('/');
 //   });
 
 //   test('Basic Operate', async ({ page }) => {

@@ -11,7 +11,7 @@ const waitForResponse = async page => {
 };
 test.describe('Test API', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/');
+    await page.goto('/');
   });
   /**
    * Basic Test

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:4200/');
+  await page.goto('/');
 
   //Add env
   await page.locator('a').filter({ hasText: 'Environment' }).click();

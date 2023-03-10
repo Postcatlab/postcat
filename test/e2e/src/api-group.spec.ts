@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 test.describe('Group Operate', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/');
+    await page.goto('/');
     //Add group
     await page.getByRole('banner').getByRole('button').hover();
     await page.locator('a').filter({ hasText: 'New Group' }).click();
