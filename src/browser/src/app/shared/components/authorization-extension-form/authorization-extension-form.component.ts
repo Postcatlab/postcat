@@ -74,7 +74,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   parentGroup: Group;
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
-  authAPIMap: Map<string, FeatureInfo>;
+  authAPIMap: Map<string, FeatureInfo> = new Map();
 
   get validateForm() {
     return this.schemaForm?.validateForm;
