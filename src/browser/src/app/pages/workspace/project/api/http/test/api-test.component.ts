@@ -112,7 +112,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
 
   get authType(): AuthIn {
-    return this.uuid.includes('history_') ? 'api-test-history' : 'api-test';
+    return this.uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
   }
 
   get TYPE_API_BODY(): typeof ApiBodyType {

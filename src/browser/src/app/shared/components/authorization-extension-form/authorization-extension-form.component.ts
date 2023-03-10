@@ -75,7 +75,6 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo>;
-  extensionList: Array<typeof noAuth> = [];
 
   get validateForm() {
     return this.schemaForm?.validateForm;
@@ -92,6 +91,8 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
   get authTypeList() {
     return [this.authType, ...this.extensionList];
   }
+
+  extensionList: Array<typeof noAuth> = [];
 
   constructor(private apiService: ApiService, private router: Router, private extensionService: ExtensionService) {}
 
