@@ -1,23 +1,4 @@
-<<<<<<< HEAD
 ## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.2) (2023-03-06)
-=======
-## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.3.1...v0.3.2) (2023-03-07)
-
-
-### Bug Fixes
-
-* cmd syntax error ([7832723](https://github.com/Postcatlab/postcat/commit/783272327daf3617cca066a6e39dce9dd748f224))
-* long text input file error with windows ([97c9490](https://github.com/Postcatlab/postcat/commit/97c9490731c2138290d93748d5f44a41df2c6328))
-* long text input file error with windows ([c7f284f](https://github.com/Postcatlab/postcat/commit/c7f284f7a160c608ba93b4d38e31afa7a92a8e7d))
-* project action not show ([805494d](https://github.com/Postcatlab/postcat/commit/805494d7ad9eae55b822c852dcec7e58e5db03d7))
-* qiniu_env.js output path ([5249607](https://github.com/Postcatlab/postcat/commit/5249607d391dcf90869b0c168ffc6befa9ea7e47))
-* upload & publish module not found ([230219b](https://github.com/Postcatlab/postcat/commit/230219b14666ebf3482db44b3507f2e994b1d1c6))
-* upload script module not found ([15dbef4](https://github.com/Postcatlab/postcat/commit/15dbef4968a9d48e4a07ba12864b1653a0bd9947))
-
-
-
-## [0.3.1](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.1) (2023-03-06)
->>>>>>> main
 
 
 ### Bug Fixes
@@ -50,10 +31,7 @@
 * API Authorization ([938ec7d](https://github.com/Postcatlab/postcat/commit/938ec7d68270c2be4c17cd2e1098377f2db180d2))
 * change description ([0341ba8](https://github.com/Postcatlab/postcat/commit/0341ba8f423cd6554fc83c50bf477dd9d1b36a9c))
 * change github project url ([42c801c](https://github.com/Postcatlab/postcat/commit/42c801c49cbd859c876e9aafc2d4bae8fb38b9b6))
-<<<<<<< HEAD
 * chat robot ([7878664](https://github.com/Postcatlab/postcat/commit/78786640f464f7370c14aaf14bb224c61a29ae03))
-=======
->>>>>>> main
 * delete useless code ([a558094](https://github.com/Postcatlab/postcat/commit/a55809494695b1cdcb44009ca55213ca2fc2a570))
 * delete useless log ([d878582](https://github.com/Postcatlab/postcat/commit/d87858232292f61f89e1412b259dc27b5e644a79))
 * nps ([426a08f](https://github.com/Postcatlab/postcat/commit/426a08ff1af75d401a8358dae1940f4cfd8f3268))

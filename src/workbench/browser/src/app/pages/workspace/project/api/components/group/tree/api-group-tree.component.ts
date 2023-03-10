@@ -13,7 +13,7 @@ import { eoDeepCopy, waitNextTick } from 'eo/workbench/browser/src/app/utils/ind
 import { getExpandGroupByKey } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
@@ -42,6 +42,11 @@ export class ApiGroupTreeComponent implements OnInit {
   requestMethodMap = requestMethodMap;
   nzSelectedKeys = [];
   searchValue = '';
+  searchFunc = (node: NzTreeNodeOptions) => {
+    const { uri, name, title } = node;
+    // console.log('node', uri, name, title);
+    return [uri, name, title].some(n => n?.includes?.(this.searchValue));
+  };
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];
