@@ -255,11 +255,13 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       this.modelChange.emit(this.model);
     });
   }
-  updateParamsbyUri(url) {
+  updateParamsbyUri() {
     this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
       this.model.request.requestParams.queryParams
     ).query;
+  }
+  blurUri() {
     this.model.request.requestParams.restParams = [
       ...generateRestFromUrl(this.model.request.uri, this.model.request.requestParams.restParams)
     ];
@@ -267,6 +269,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
+
   /**
    * Judge has edit manualy
    */
