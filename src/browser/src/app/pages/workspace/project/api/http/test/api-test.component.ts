@@ -17,6 +17,10 @@ import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
+import {
+  AuthIn,
+  noAuth
+} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
@@ -28,7 +32,6 @@ import { ContentType } from 'pc/browser/src/app/pages/workspace/project/api/http
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { AuthIn, noAuth } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiData, ApiTestHistory } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';

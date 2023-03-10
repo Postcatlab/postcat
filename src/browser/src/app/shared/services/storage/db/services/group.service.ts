@@ -1,4 +1,4 @@
-import { inheritAuth } from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
+import { inheritAuth } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { dataSource } from 'pc/browser/src/app/shared/services/storage/db/dataSource';
 import {
   ApiResponse,

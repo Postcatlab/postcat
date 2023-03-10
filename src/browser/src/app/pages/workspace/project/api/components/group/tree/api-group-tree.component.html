@@ -55,7 +55,6 @@
         <!-- Folder -->
         <div class="flex items-center justify-between tree-node" *ngIf="!node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 25px - 8px * var(--tree-level))'">
-            <!-- <div class="flex-shrink-0 width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div> -->
             <svg class="iconpark-icon mr-[5px] flex-shrink-0">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
             </svg>
@@ -79,7 +78,6 @@
         <!-- Leaf -->
         <div class="flex items-center justify-between tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
-            <div class="flex-shrink-0 width-box" style="width: 6px" *ngIf="node.level === 0"></div>
             <b class="method-text method-text-{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">
               {{ renderRequestMethodText(node) }}
             </b>

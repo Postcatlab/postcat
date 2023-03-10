@@ -6,7 +6,7 @@ import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model
 import {
   AuthInfo,
   AuthorizationExtensionFormComponent
-} from 'pc/browser/src/app/shared/components/authorization-extension-form/authorization-extension-form.component';
+} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
