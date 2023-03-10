@@ -167,6 +167,7 @@ export class AuthorizationExtensionFormComponent implements OnInit, OnChanges {
     } else {
       this.schemaObj = null;
     }
+    this.modelChange.emit(this.model);
     // console.log('handleAuthTypeChange', authType, this.schemaObj);
   }
 

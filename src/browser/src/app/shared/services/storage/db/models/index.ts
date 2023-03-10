@@ -39,7 +39,7 @@ export interface Group extends Base {
   sort?: number;
   authInfo?: {
     authType: string;
-    authInfo: string;
+    authInfo: string | Record<string, any>;
   };
   projectUuid?: string;
   workSpaceUuid?: string;

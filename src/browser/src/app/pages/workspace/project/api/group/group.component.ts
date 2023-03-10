@@ -136,6 +136,9 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         this.initialModel = eoDeepCopy(this.model);
       }
     }
+    if (this.initialModel.authInfo) {
+      this.initialModel.authInfo.authInfo = JSONParse(this.initialModel.authInfo.authInfo);
+    }
     this.initForm();
     this.eoOnInit.emit(this.model);
   }
@@ -145,11 +148,15 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     });
   }
   emitChange($event) {
+    this.model.authInfo = this.authInfoModel;
     this.modelChange.emit(this.model);
   }
   isFormChange() {
-    const hasChanged = JSON.stringify(this.model) !== JSON.stringify(this.initialModel);
-    return hasChanged;
+    const authInfoChanged = Object.entries<any>(this.authExtForm.validateForm.value).some(
+      ([key, value]) => value !== this.initialModel.authInfo.authInfo[key]
+    );
+    const authTypeChanged = this.model.authInfo.authType !== this.initialModel.authInfo.authType;
+    return authInfoChanged || authTypeChanged;
   }
   ngOnDestroy() {
     this.destroy$.next();
