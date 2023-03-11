@@ -1,20 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-import { ifTipsExist } from './commom.util';
+import { ifTipsExist, login } from './commom.util';
 test('User Opeate', async ({ page }) => {
-  await page.goto('http://localhost:4200/');
+  await page.goto('/');
 
   //Login
-  await page.getByRole('button', { name: 'Sign in/Up' }).click();
-  await page.getByPlaceholder('Enter Email').click();
-  await page.getByPlaceholder('Enter Email').fill('scar@qq.com');
-  await page.getByPlaceholder('Enter Email').press('Tab');
-  await page.getByPlaceholder('Enter password').fill('123456');
-  await page.getByPlaceholder('Enter password').press('Enter');
-  await page.getByRole('button', { name: 'switch to the cloud workspace' }).click();
+  await login(page);
 
   //Change Pasword
-  await page.locator('button[ng-reflect-title="Open Settings"]').click();
+  await page.locator('eo-iconpark-icon[name="setting"]').click();
   await page.getByText('New password', { exact: true }).click();
   await page.getByText('New password', { exact: true }).fill('123456');
   await page.getByText('New password', { exact: true }).press('Tab');

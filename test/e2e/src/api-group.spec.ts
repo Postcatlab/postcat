@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 test.describe('Group Operate', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200/');
+    await page.goto('/');
     //Add group
     await page.getByRole('banner').getByRole('button').hover();
     await page.locator('a').filter({ hasText: 'New Group' }).click();
@@ -29,7 +29,7 @@ test.describe('Group Operate', () => {
     await page.getByText('Delete').click();
     await page.getByRole('button', { name: 'Confirm' }).click();
   });
-  test('Search Group', async ({ page }) => {
+  test('Search', async ({ page }) => {
     //Search Group
     await page.getByPlaceholder('Search').click();
     await page.getByPlaceholder('Search').fill('Sub');
@@ -46,4 +46,9 @@ test.describe('Group Operate', () => {
     await page.locator('eo-ng-tree-default').getByText('COVID-19 national epidemic').click();
   });
   // test('Sort Group', async ({ page }) => {});
+
+  test('State Synchronization', async ({ page }) => {
+    //Add API
+    //Change API Group
+  });
 });
