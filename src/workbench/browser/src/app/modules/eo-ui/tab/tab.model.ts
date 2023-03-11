@@ -19,12 +19,12 @@ export declare interface TabViewComponent {
   model?: any;
 
   /**
-   * Intial model for check form is change
+   * Initial model for check form is change
    */
   initialModel?: any;
 
   /**
-   * Emit view component data has init event for intial tab title data/loading..
+   * Emit view component data has init event for initial tab title data/loading..
    */
   eoOnInit: EventEmitter<any>;
 
