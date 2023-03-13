@@ -4,6 +4,7 @@
  */
 let _LIB_WORKER_THREAD = require('./exec_worker_thread');
 let CryptoJS = require('crypto-js');
+// const pmRuntime = await require('postman-sandbox').createContextAsync({ timeout: 10000, disableLegacyAPIs: true });
 let privateFun = {},
   _LibsCommon = require('./common'),
   // _LibsZlib = require('./zlib'),
@@ -26,7 +27,6 @@ const { document } = new JSDOM('<!doctype html><html><body></body></html>').wind
 const window = document.defaultView,
   $ = require('jquery')(window);
 
-const pmRuntime = require('postman-sandbox');
 /**
  * @desc 重置env
  * @param {object} inputSanboxVar 沙箱中的env变量
@@ -887,6 +887,7 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
 privateFun.requestPreReduceByPromise = (inputData, inputCode, inputOptions) => {
   return new Promise(resolve => {
     let tmpResponse = privateFun.pmRuntime();
+
     // let tmpResponse = privateFun.parseBeforeCode(inputData, inputCode, inputOptions);
     resolve(tmpResponse);
   });

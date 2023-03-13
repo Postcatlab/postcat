@@ -71,7 +71,7 @@ export class ThirdLoginComponent implements OnInit {
     });
   }
   logoLink(name) {
-    return `url('https://cdn.eolink.com/10.7.3.4/ng14/assets/images/third_party/${name}')`;
+    return `url('./assets/images/${name}')`;
   }
 
   async handleLogin(type) {
