@@ -210,7 +210,6 @@ export class ParamsImportComponent implements OnInit {
     const result = combineFunc[type](json2Table(data), resultData);
     // * 后处理
     const finalData = endParse([...result, ...emptyRow], this.contentType);
-    console.log(finalData);
     this.baseDataChange.emit(finalData);
     this.handleCancel();
   }

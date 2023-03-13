@@ -152,7 +152,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
   }
   handleParamsImport(data) {
-    console.log(data, '-------------');
     this.model = data;
     this.modelChange.emit(data);
   }
