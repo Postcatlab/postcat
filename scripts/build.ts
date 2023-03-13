@@ -5,7 +5,7 @@ import minimist from 'minimist';
 import YAML from 'yaml';
 
 import pkgInfo from '../package.json';
-import { ELETRON_APP_CONFIG } from '../src/environment';
+import { COMMON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -75,7 +75,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
+      url: COMMON_APP_CONFIG.BASE_DOWNLOAD_URL
     }
   ],
   generateUpdatesFilesForAllChannels: true,
