@@ -13,7 +13,7 @@ import { lastValueFrom, Subscription } from 'rxjs';
 import { ExtensionCommonService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
-const uninstallDefaultExtensions = storageUtil.get('uninstall_default_ext_list');
+const uninstallDefaultExtensions = StorageUtil.get('uninstall_default_ext_list');
 
 @Injectable({
   providedIn: 'root'
