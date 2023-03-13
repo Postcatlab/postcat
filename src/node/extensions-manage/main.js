@@ -6,27 +6,12 @@ import cors from '@koa/cors';
 import vm from 'vm';
 import fetch from 'node-fetch';
 
-import { spawn } from 'child_process';
 import config from './config.json' assert { type: 'json' };
-
+import { loadExtension } from './extension-manage.js';
 const { appKey, appId, url } = config;
 
 globalThis.fetch = fetch;
 globalThis.pc = {};
-
-const installExtension = (extension, version = 'latest') => {
-  return new Promise(resolve => {
-    const ls = spawn('npm', ['i', `${extension}@${version}`]);
-    ls.on('close', function (code) {
-      console.log('child process exited with code ' + code);
-      return resolve(true);
-    });
-    ls.stderr.on('data', function (data) {
-      console.log('stderr: ' + data);
-      return resolve(false);
-    });
-  });
-};
 
 // * 插件调用这个方法，将会向数据库发起更新数据的请求
 const updateAPIData = data =>
@@ -57,35 +42,6 @@ const updateAPIData = data =>
 //* 获取当前项目配置,当前贡献点相关的项目配置
 const getProjectSettings = () => new Promise(resolve => resolve(target));
 
-const extensionMap = new Map();
-
-const loadExtension = async ({ name, version }) => {
-  // * Is extension in Map cache ?
-  // * If true, then get the function.
-  // * If false, then install the extension and save to map cache then get the function.
-  const hasIt = extensionMap.has(`${name}:${version}`);
-  let cache = {};
-  if (!hasIt) {
-    const isOk = await installExtension(name, version);
-    if (!isOk) {
-      return [null, 'Install Extension Failed'];
-    }
-    const extPkg = await import(`${name}/package.json`, {
-      assert: {
-        type: 'json'
-      }
-    });
-    const extension = await import(name);
-    console.log(name, extension);
-    cache = {
-      extension: extension.default,
-      packageJson: extPkg
-    };
-    extensionMap.set(`${name}:${extPkg.version}`, cache);
-  }
-  return [cache, null];
-};
-
 const app = new Koa();
 const router = new Router();
 
@@ -111,7 +67,7 @@ router.get('/load/:name', async ctx => {
     ctx.body = { ...responseBody(-1, err) };
     return;
   }
-  const { action } = packageJson.features.pushAPI;
+  const { action } = packageJson.default.features.pullAPI;
   const func = extension[action];
   console.log('extension', extension, action);
   const result = await func({});
