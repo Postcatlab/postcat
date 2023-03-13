@@ -6,7 +6,10 @@
   "projects": {
     "postcat": {
       "root": "",
-      "i18n": { "sourceLocale": { "code": "en" }, "locales": { "zh": { "translation": "locale/messages.zh.xlf" } } },
+      "i18n": {
+        "sourceLocale": { "code": "en", "baseHref": "" },
+        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
+      },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": { "@schematics/angular:application": { "strict": true } },
