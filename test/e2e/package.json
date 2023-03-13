@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "codegen":"playwright codegen localhost:4200",
+    "codegen": "playwright codegen localhost:4200",
     "test": "playwright test",
     "test:watch": "playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "^1.31.1",
+    "@playwright/test": "^1.31.2",
     "playwright": "^1.31.1"
   },
   "dependencies": {

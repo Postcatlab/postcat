@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { defaultExtensions } from 'eo/workbench/browser/src/app/shared/constants/extension';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { eoDeepCopy, JSONParse } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
@@ -146,20 +146,8 @@ export class WebExtensionService {
     const uninstallDefaultExtArr = StorageUtil.get(uninstallDebugKey);
     const uninstallDefaultExt = defaultExtensions.find(item => item === extName);
     uninstallDefaultExtArr.push(uninstallDefaultExt);
-    StorageUtil.set(uninstallDebugKey, uninstallDefaultExtArr);
+    StorageUtil.set(uninstallDebugKey, Array.from(new Set(uninstallDefaultExtArr)));
     return true;
-  }
-
-  isEnable(name: string) {
-    return !this.getDisabledExtensionNames().includes(name);
-  }
-
-  getDisabledExtensionNames() {
-    try {
-      return (this.disabledExtensionNames = JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]'));
-    } catch (error) {
-      return [];
-    }
   }
 
   insertScript(scriptText) {

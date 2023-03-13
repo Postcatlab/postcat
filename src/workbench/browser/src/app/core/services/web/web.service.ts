@@ -30,7 +30,7 @@ export class WebService {
       icon: 'windows',
       keyword: 'Setup',
       suffix: 'exe',
-      link: 'https://data.postcat.com/download/latest/Postcat-latest.exe'
+      link: 'https://data.postcat.com/download/latest/Postcat-Setup-latest.exe'
     },
     {
       id: 'mac-intel',

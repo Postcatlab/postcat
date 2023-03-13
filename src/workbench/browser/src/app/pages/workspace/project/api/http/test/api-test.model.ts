@@ -1,6 +1,3 @@
-import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { BodyParam, HeaderParam } from 'eo/workbench/browser/src/app/shared/services/storage/db/models/apiData';
-
 export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file'

@@ -133,10 +133,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
       transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
-        this.model = {
-          name: file.name,
-          dataUrl: result.content
-        };
+        this.model = [
+          {
+            name: file.name,
+            dataUrl: result.content
+          }
+        ];
         this.binaryFiles = [
           {
             uid: '1',

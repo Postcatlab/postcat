@@ -33,8 +33,11 @@ type messageItem = {
   imports: [StarMotivationComponent, CommonModule, EoNgButtonModule, ChatRobotModule],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [style({ transform: 'translateX(100%)' }), animate('300ms ease-in', style({ transform: 'translateX(0)' }))]),
-      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateX(100%)' }))])
+      transition(':enter', [
+        style({ transform: 'translateY(100%) translateX(100%)' }),
+        animate('300ms ease-in', style({ transform: 'translatY(0) translateX(0)' }))
+      ]),
+      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateX(100%) translateY(100%)' }))])
     ])
   ],
   template: `
@@ -77,7 +80,7 @@ type messageItem = {
 export class ChatgptRobotComponent implements OnInit {
   title = $localize`ChatGPT Robot`;
   loading = false;
-  MAX_LIMIT = 10;
+  MAX_LIMIT = 5;
   nowUsage = StorageUtil.get('cr_usage');
   initMessage = {
     date: new Date(),
@@ -103,9 +106,7 @@ export class ChatgptRobotComponent implements OnInit {
     private store: StoreService
   ) {}
   ngOnInit() {
-    setTimeout(() => {
-      this.watchExtensionChange();
-    }, 5000);
+    this.watchExtensionChange();
   }
   login() {
     window.open(APP_CONFIG.GITHUB_REPO_URL, '_blank');
@@ -134,7 +135,7 @@ export class ChatgptRobotComponent implements OnInit {
           this.loading = false;
           if (!res?.result) {
             this.messages.push({
-              text: `ChatGPT Error:${res?.msg}`,
+              text: `ChatGPT Error: ${res?.error || res?.msg || 'unknown error'}`,
               date: new Date(),
               reply: true,
               type: 'text',

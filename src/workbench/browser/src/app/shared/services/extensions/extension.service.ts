@@ -6,14 +6,14 @@ import { defaultExtensions } from 'eo/workbench/browser/src/app/shared/constants
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import storageUtils from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 
 import { ExtensionCommonService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
-const uninstallDefaultExtensions = storageUtils.get('uninstall_default_ext_list');
+const uninstallDefaultExtensions = storageUtil.get('uninstall_default_ext_list');
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,7 @@ export class ExtensionService {
       this.updateInstalledInfo(this.getExtensions(), {
         action: 'init'
       });
+      return;
     }
 
     //* Web Installl
@@ -58,9 +59,12 @@ export class ExtensionService {
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {
       const name = uniqueNames[i];
-      await this.installExtension({
-        name
-      });
+      await this.installExtension(
+        {
+          name
+        },
+        true
+      );
     }
   }
   getExtension(name: string) {
@@ -179,14 +183,16 @@ export class ExtensionService {
    *  install extension by id
    *
    * @param id
+   * @param isInit first time install
    * @returns if install success
    */
-  async installExtension({ name, version = 'latest' }): Promise<boolean> {
+  async installExtension({ name, version = 'latest' }, isInit = false): Promise<boolean> {
     const successCallback = () => {
       this.updateInstalledInfo(this.getExtensions(), {
-        action: 'install',
+        action: isInit ? 'init' : 'install',
         name
       });
+      if (isInit) return;
       if (!this.isEnable(name)) {
         this.toggleEnableExtension(name, true);
       }
@@ -260,7 +266,7 @@ export class ExtensionService {
   }
 
   private setDisabledExtension(arr: string[]) {
-    localStorage.setItem(DISABLE_EXTENSION_NAMES, JSON.stringify(arr));
+    StorageUtil.set(DISABLE_EXTENSION_NAMES, arr);
     this.disabledExtensionNames = arr;
   }
   async getExtensionPackage(name: string): Promise<any> {
@@ -304,11 +310,7 @@ export class ExtensionService {
     return result;
   }
   private getDisableExtensionNames() {
-    try {
-      return JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]');
-    } catch (error) {
-      return [];
-    }
+    return StorageUtil.get(DISABLE_EXTENSION_NAMES) || [];
   }
   private async requestDetail(id) {
     const debugExtension = this.webExtensionService.debugExtensions.find(val => val.name === id);
