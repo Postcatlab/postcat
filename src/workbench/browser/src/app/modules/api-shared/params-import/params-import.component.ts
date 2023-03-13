@@ -181,7 +181,15 @@ export class ParamsImportComponent implements OnInit {
     const combineFunc = {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
-      mixin: (data, base) => obj2array(merge(array2obj(base), array2obj(data)))
+      mixin: (data, base) => {
+        const handleData = {};
+        for (let item of data) {
+          handleData[item.name] = {
+            'paramAttr.example': item.paramAttr.example
+          };
+        }
+        return obj2array(merge(array2obj(base), array2obj(handleData)));
+      }
     };
 
     const endParse = (data, type) => {
@@ -202,6 +210,7 @@ export class ParamsImportComponent implements OnInit {
     const result = combineFunc[type](json2Table(data), resultData);
     // * 后处理
     const finalData = endParse([...result, ...emptyRow], this.contentType);
+    console.log(finalData);
     this.baseDataChange.emit(finalData);
     this.handleCancel();
   }
