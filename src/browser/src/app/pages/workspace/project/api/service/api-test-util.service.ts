@@ -233,17 +233,19 @@ export class ApiTestUtilService {
    * @param headers
    */
   addOrReplaceContentType(contentType: ContentType, headers: HeaderParam[] | any = []) {
-    const result = headers;
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
       existHeader['paramAttr.example'] = contentType;
-      return result;
+      return headers;
     }
-    headers.unshift({
-      isRequired: 1,
-      name: 'content-type',
-      'paramAttr.example': contentType
-    });
+    const result = [
+      {
+        isRequired: 1,
+        name: 'content-type',
+        'paramAttr.example': contentType
+      },
+      ...headers
+    ];
     return result;
   }
   private filterCommonHeader(headers = []) {

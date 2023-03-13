@@ -33,8 +33,11 @@ type messageItem = {
   imports: [StarMotivationComponent, CommonModule, EoNgButtonModule, ChatRobotModule],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [style({ transform: 'translateX(100%)' }), animate('300ms ease-in', style({ transform: 'translateX(0)' }))]),
-      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateX(100%)' }))])
+      transition(':enter', [
+        style({ transform: 'translateY(100%) translateX(100%)' }),
+        animate('300ms ease-in', style({ transform: 'translatY(0) translateX(0)' }))
+      ]),
+      transition(':leave', [animate('300ms ease-in', style({ transform: 'translateX(100%) translateY(100%)' }))])
     ])
   ],
   template: `

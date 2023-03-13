@@ -40,7 +40,7 @@ import { ApiStoreService } from '../../service/store/api-state.service';
           </div>
           <div *ngFor="let it of gloablParams" class="flex items-center justify-between px-6 h-8">
             <span class="px-1 w-1/3  text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
-            <span class="px-1 w-2/3  text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+            <span class="px-1 w-2/3" nz-typography nzEllipsis [nzContent]="it.value" [title]="it.value"></span>
           </div>
           <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12 text-tips" i18n>No Global variables</span>
           <div *ngIf="renderEnv?.id">
@@ -59,7 +59,7 @@ import { ApiStoreService } from '../../service/store/api-state.service';
             </ng-container>
             <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8 content">
               <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
-              <span class="px-1 w-2/3 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+              <span class="px-1 w-2/3" nz-typography nzEllipsis [nzContent]="it.value" [title]="it.value"></span>
             </div>
           </div>
         </div>

@@ -26,8 +26,9 @@
               i18n-placeholder
               placeholder="Enter URL"
               name="uri"
+              (blur)="blurUri()"
               eo-ng-input
-              (input)="updateParamsbyUri(model.request.uri)"
+              (input)="updateParamsbyUri()"
               formControlName="uri"
               [(ngModel)]="model.request.uri"
             />

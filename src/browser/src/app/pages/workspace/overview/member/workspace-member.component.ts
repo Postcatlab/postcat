@@ -159,7 +159,7 @@ export class WorkspaceMemberComponent implements OnInit {
         this.eMessage.error($localize`Add member failed`);
         return;
       }
-      this.trace.report('project_add_member_success');
+      this.trace.report('add_workspace_member_success');
       this.eMessage.success($localize`Add member successfully`);
 
       // * 关闭弹窗
@@ -169,22 +169,5 @@ export class WorkspaceMemberComponent implements OnInit {
     };
     await btnSelectRunning();
     this.isSelectBtnLoading = false;
-  }
-
-  async addMember(items) {
-    if (this.store.isLocal) {
-      this.eMessage.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
-      return;
-    }
-    const [data, err]: any = await this.member.addMember(items.id);
-    if (err) {
-      this.eMessage.error($localize`Add member failed`);
-      return;
-    }
-    this.trace.report('add_workspace_member_success');
-    this.eMessage.success($localize`Add member successfully`);
-    this.userList = [];
-    this.userCache = [];
-    this.memberListRef.queryList();
   }
 }

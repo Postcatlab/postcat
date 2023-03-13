@@ -45,7 +45,7 @@ export abstract class TestServerService implements TestServer {
               //@ts-ignore
               files: val.files?.map(file => file.content),
               paramType: val.dataType === ApiParamsType.file ? '1' : '0',
-              paramInfo: val['paramAttr.example']
+              paramInfo: val.paramAttr?.example || ''
             }));
         }
       }
