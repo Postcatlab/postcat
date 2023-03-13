@@ -10,8 +10,8 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
     <!-- <div i18n class="title">How would you rate your experience with the Postcat</div> -->
     <div class="tips text-tips"></div>
   </ng-container> `,
-  styleUrls: ['./nps-mask.component.scss'],
-  hostDirectives: [NpsPositionDirective]
+  styleUrls: ['./nps-mask.component.scss']
+  // hostDirectives: [NpsPositionDirective]
 })
 export class NpsMaskComponent implements OnInit {
   /**

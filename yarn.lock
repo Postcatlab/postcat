@@ -41,15 +41,7 @@
     "@angular-devkit/core" "15.1.4"
     rxjs "6.6.7"
 
-"@angular-devkit/architect@0.1502.1", "@angular-devkit/architect@>=0.1500.0 < 0.1600.0":
-  version "0.1502.1"
-  resolved "https://registry.npmmirror.com/@angular-devkit/architect/-/architect-0.1502.1.tgz#0ab9919638f61eaa962b1863d99581c52ccfa2a9"
-  integrity sha512-/rtR0U4TJCplpnIfenoTOIn4omPUDDL8iAl6le0qelL2CXdEl6UjMBYF1ILS8OVMLfpEGUXfMLeZgRn0yb7DjA==
-  dependencies:
-    "@angular-devkit/core" "15.2.1"
-    rxjs "6.6.7"
-
-"@angular-devkit/architect@0.1502.2":
+"@angular-devkit/architect@0.1502.2", "@angular-devkit/architect@>=0.1500.0 < 0.1600.0":
   version "0.1502.2"
   resolved "https://registry.npmmirror.com/@angular-devkit/architect/-/architect-0.1502.2.tgz#9809a67e54fde507af703466f3e90556236f8728"
   integrity sha512-+NE2IV+tuPgcBdC+1ac7eYIBqZDH0VskXTqbhHiRKySbK0vF3/cwTw6Ie07phl0xC1dxLXeRE52L5YwX5jERFQ==
@@ -57,7 +49,7 @@
     "@angular-devkit/core" "15.2.2"
     rxjs "6.6.7"
 
-"@angular-devkit/build-angular@15.2.2":
+"@angular-devkit/build-angular@15.2.2", "@angular-devkit/build-angular@^15.0.0":
   version "15.2.2"
   resolved "https://registry.npmmirror.com/@angular-devkit/build-angular/-/build-angular-15.2.2.tgz#7fd793de28524efe79e132cc8d2b693f75f9b588"
   integrity sha512-iSav72D66ZguuIg7yZz/VcbrITidRmjBUApu1GAVfXd4rYZhdWygR072LAsAUNnSDAGwmIICFzj86c8LxYOtzA==
@@ -125,82 +117,6 @@
   optionalDependencies:
     esbuild "0.17.8"
 
-"@angular-devkit/build-angular@^15.0.0":
-  version "15.2.1"
-  resolved "https://registry.npmmirror.com/@angular-devkit/build-angular/-/build-angular-15.2.1.tgz#11dacec9f651e4491bb5d914e8b84dc2e245c955"
-  integrity sha512-EgJqlrig9iuMvqySb4h8h2AAd8OwhBqY2JMMvs+hIASZvJi3n+Qd12BdlqLuAzykRyIAdy3OeLSAaXZrmeSk0A==
-  dependencies:
-    "@ampproject/remapping" "2.2.0"
-    "@angular-devkit/architect" "0.1502.1"
-    "@angular-devkit/build-webpack" "0.1502.1"
-    "@angular-devkit/core" "15.2.1"
-    "@babel/core" "7.20.12"
-    "@babel/generator" "7.20.14"
-    "@babel/helper-annotate-as-pure" "7.18.6"
-    "@babel/helper-split-export-declaration" "7.18.6"
-    "@babel/plugin-proposal-async-generator-functions" "7.20.7"
-    "@babel/plugin-transform-async-to-generator" "7.20.7"
-    "@babel/plugin-transform-runtime" "7.19.6"
-    "@babel/preset-env" "7.20.2"
-    "@babel/runtime" "7.20.13"
-    "@babel/template" "7.20.7"
-    "@discoveryjs/json-ext" "0.5.7"
-    "@ngtools/webpack" "15.2.1"
-    ansi-colors "4.1.3"
-    autoprefixer "10.4.13"
-    babel-loader "9.1.2"
-    babel-plugin-istanbul "6.1.1"
-    browserslist "4.21.5"
-    cacache "17.0.4"
-    chokidar "3.5.3"
-    copy-webpack-plugin "11.0.0"
-    critters "0.0.16"
-    css-loader "6.7.3"
-    esbuild-wasm "0.17.8"
-    glob "8.1.0"
-    https-proxy-agent "5.0.1"
-    inquirer "8.2.4"
-    jsonc-parser "3.2.0"
-    karma-source-map-support "1.4.0"
-    less "4.1.3"
-    less-loader "11.1.0"
-    license-webpack-plugin "4.0.2"
-    loader-utils "3.2.1"
-    magic-string "0.29.0"
-    mini-css-extract-plugin "2.7.2"
-    open "8.4.1"
-    ora "5.4.1"
-    parse5-html-rewriting-stream "7.0.0"
-    piscina "3.2.0"
-    postcss "8.4.21"
-    postcss-loader "7.0.2"
-    resolve-url-loader "5.0.0"
-    rxjs "6.6.7"
-    sass "1.58.1"
-    sass-loader "13.2.0"
-    semver "7.3.8"
-    source-map-loader "4.0.1"
-    source-map-support "0.5.21"
-    terser "5.16.3"
-    text-table "0.2.0"
-    tree-kill "1.2.2"
-    tslib "2.5.0"
-    webpack "5.75.0"
-    webpack-dev-middleware "6.0.1"
-    webpack-dev-server "4.11.1"
-    webpack-merge "5.8.0"
-    webpack-subresource-integrity "5.1.0"
-  optionalDependencies:
-    esbuild "0.17.8"
-
-"@angular-devkit/build-webpack@0.1502.1":
-  version "0.1502.1"
-  resolved "https://registry.npmmirror.com/@angular-devkit/build-webpack/-/build-webpack-0.1502.1.tgz#d0332b620a24a37ce132ef3fb771af3f991c6413"
-  integrity sha512-mQ9dbuoy0U2+caQCRMhUx88fA/WmBt+JkYt8nvtTUyhVTXm5XIVckTlIfqdVk0BCA1lT8AM4yFKmy97bFXuZeQ==
-  dependencies:
-    "@angular-devkit/architect" "0.1502.1"
-    rxjs "6.6.7"
-
 "@angular-devkit/build-webpack@0.1502.2":
   version "0.1502.2"
   resolved "https://registry.npmmirror.com/@angular-devkit/build-webpack/-/build-webpack-0.1502.2.tgz#d029bd4fae14204d4006c9860765f65beccbbd95"
@@ -220,18 +136,7 @@
     rxjs "6.6.7"
     source-map "0.7.4"
 
-"@angular-devkit/core@15.2.1", "@angular-devkit/core@^15.0.0":
-  version "15.2.1"
-  resolved "https://registry.npmmirror.com/@angular-devkit/core/-/core-15.2.1.tgz#78b03a134d354df6646a29c718bef6721ac9365e"
-  integrity sha512-m6lj5vvA/L21rUVm4PokK2SXZQE1Hjsw8AMNEaj+RlyVW36ISLm2TeeCdb441siBpLJkW+yA47bC2FUJ8HgsQQ==
-  dependencies:
-    ajv "8.12.0"
-    ajv-formats "2.1.1"
-    jsonc-parser "3.2.0"
-    rxjs "6.6.7"
-    source-map "0.7.4"
-
-"@angular-devkit/core@15.2.2":
+"@angular-devkit/core@15.2.2", "@angular-devkit/core@^15.0.0":
   version "15.2.2"
   resolved "https://registry.npmmirror.com/@angular-devkit/core/-/core-15.2.2.tgz#4deae81278815385b603ccedb186fc9752f9b5be"
   integrity sha512-YPwDSldpVcuSJuIkXy5iRzaPA78ySXKc80OicHR6XtMsrHlwY7DuxQoSWr+ih9LAqpeeBz9ECMalztwohdy0MA==
@@ -1794,6 +1699,11 @@
   resolved "https://registry.npmmirror.com/@eslint/js/-/js-8.35.0.tgz#b7569632b0b788a0ca0e438235154e45d42813a7"
   integrity sha512-JXdzbRiWclLVoD8sNUjR443VVlYqiYmDVT6rGUEIEHU5YJW0gaVZwV2xgM7D4arkvASqD0IlLUVjHiFuxaftRw==
 
+"@faker-js/faker@5.5.3":
+  version "5.5.3"
+  resolved "https://registry.npmmirror.com/@faker-js/faker/-/faker-5.5.3.tgz#18e3af6b8eae7984072bbeb0c0858474d7c4cefe"
+  integrity sha512-R11tGE6yIFwqpaIqcfkcg7AICXzFg14+5h5v0TfF/9+RMDL6jhzCy/pxHVOfbALGdtVYdt6JdR21tuxEgl34dw==
+
 "@gar/promisify@^1.1.3":
   version "1.1.3"
   resolved "https://registry.npmmirror.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -1994,29 +1904,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@ngtools/webpack@15.2.1":
-  version "15.2.1"
-  resolved "https://registry.npmmirror.com/@ngtools/webpack/-/webpack-15.2.1.tgz#439ac075b2dcb9f304f0b7009182cc5049c7988a"
-  integrity sha512-YtA8rWAglPuf4CSStrFAxaprTSYE+DREGrJFc3WvZLcF5XrwVK+H4CC4Pmz07iYsG1TXShR4bWp1fbGw1cmBKw==
-
 "@ngtools/webpack@15.2.2":
   version "15.2.2"
   resolved "https://registry.npmmirror.com/@ngtools/webpack/-/webpack-15.2.2.tgz#0dc4d7722e8e657840d831c9c82862da989a811f"
   integrity sha512-xHd5CC0Wi0a/CKfKoOC4Bwb1FVjy0esj22eQAkVh0iDKeiAQH4UG/VRmsdSHvto1z0IzGbMSt4hRbv4h2aYIdw==
-
-"@ngx-translate/core@14.0.0":
-  version "14.0.0"
-  resolved "https://registry.npmmirror.com/@ngx-translate/core/-/core-14.0.0.tgz#af421d0e1a28376843f0fed375cd2fae7630a5ff"
-  integrity sha512-UevdwNCXMRCdJv//0kC8h2eSfmi02r29xeE8E9gJ1Al4D4jEJ7eiLPdjslTMc21oJNGguqqWeEVjf64SFtvw2w==
-  dependencies:
-    tslib "^2.3.0"
-
-"@ngx-translate/http-loader@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.npmmirror.com/@ngx-translate/http-loader/-/http-loader-7.0.0.tgz#905f38d8d13342621516635bf480ff9a4f73e9fc"
-  integrity sha512-j+NpXXlcGVdyUNyY/qsJrqqeAdJdizCd+GKh3usXExSqy1aE9866jlAIL+xrfDU4w+LiMoma5pgE4emvFebZmA==
-  dependencies:
-    tslib "^2.3.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -4758,10 +4649,15 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   resolved "https://registry.npmmirror.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
-caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001426, caniuse-lite@^1.0.30001449:
+caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001449:
   version "1.0.30001462"
   resolved "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001462.tgz#b2e801e37536d453731286857c8520d3dcee15fe"
   integrity sha512-PDd20WuOBPiasZ7KbFnmQRyuLE7cFXW2PVd7dmALzbkUXEP46upAuCDm9eY9vho8fgNMGmbAX92QBZHzcnWIqw==
+
+caniuse-lite@^1.0.30001426:
+  version "1.0.30001465"
+  resolved "https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001465.tgz#c1b715bbb4ff6fdc20a4827e0afe9f4374fca217"
+  integrity sha512-HvjgL3MYAJjceTDCcjRnQGjwUz/5qec9n7JPOzUursUoOTIsYCSDOb1l7RsnZE8mjbxG78zVRCKfrBXyvChBag==
 
 caniuse-lite@^1.0.30001464:
   version "1.0.30001464"
@@ -4842,6 +4738,11 @@ charm@~0.1.1:
   version "0.1.2"
   resolved "https://registry.npmmirror.com/charm/-/charm-0.1.2.tgz#06c21eed1a1b06aeb67553cdc53e23274bac2296"
   integrity sha512-syedaZ9cPe7r3hoQA9twWYKu5AIyCswN5+szkmPBe9ccdLrj4bYaCnLVPTLd2kgVRc7+zoX4tyPgRnFKCj5YjQ==
+
+charset@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/charset/-/charset-1.0.1.tgz#8d59546c355be61049a8fa9164747793319852bd"
+  integrity sha512-6dVyOOYjpfFcL1Y4qChrAoQLRHvj2ziyhcm0QJlhOcAhykL/k1kTUPbeo+87MNRTRdk2OIIsIXbuF3x2wi5EXg==
 
 chokidar@3.5.3, "chokidar@>=3.0.0 <4.0.0", chokidar@^3.0.0, chokidar@^3.0.2, chokidar@^3.5.1, chokidar@^3.5.2, chokidar@^3.5.3:
   version "3.5.3"
@@ -5588,9 +5489,9 @@ copy-webpack-plugin@11.0.0:
     serialize-javascript "^6.0.0"
 
 core-js-compat@^3.25.1:
-  version "3.29.0"
-  resolved "https://registry.npmmirror.com/core-js-compat/-/core-js-compat-3.29.0.tgz#1b8d9eb4191ab112022e7f6364b99b65ea52f528"
-  integrity sha512-ScMn3uZNAFhK2DGoEfErguoiAHhV2Ju+oJo/jK08p7B3f3UhocUrCCkTvnZaiS+edl5nlIoiBXKcwMc6elv4KQ==
+  version "3.29.1"
+  resolved "https://registry.npmmirror.com/core-js-compat/-/core-js-compat-3.29.1.tgz#15c0fb812ea27c973c18d425099afa50b934b41b"
+  integrity sha512-QmchCua884D8wWskMX8tW5ydINzd8oSJVx38lx/pVkFGqztxt73GYre3pm/hyYq8bPf+MW5In4I/uRShFDsbrA==
   dependencies:
     browserslist "^4.21.5"
 
@@ -7637,6 +7538,11 @@ file-entry-cache@^6.0.1:
   dependencies:
     flat-cache "^3.0.4"
 
+file-type@3.9.0:
+  version "3.9.0"
+  resolved "https://registry.npmmirror.com/file-type/-/file-type-3.9.0.tgz#257a078384d1db8087bc449d107d52a52672b9e9"
+  integrity sha512-RLoqTXE8/vPmMuTI88DAzhMYC99I8BWv7zYP4A1puo5HIjEJ5EX48ighy4ZyKMG9EDXxBgW6e++cn7d1xuFghA==
+
 file-uri-to-path@2:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/file-uri-to-path/-/file-uri-to-path-2.0.0.tgz#7b415aeba227d575851e0a5b0c640d7656403fba"
@@ -7769,6 +7675,11 @@ flat-cache@^3.0.4:
   dependencies:
     flatted "^3.1.0"
     rimraf "^3.0.2"
+
+flatted@3.2.6:
+  version "3.2.6"
+  resolved "https://registry.npmmirror.com/flatted/-/flatted-3.2.6.tgz#022e9218c637f9f3fc9c35ab9c9193f05add60b2"
+  integrity sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==
 
 flatted@^2.0.0:
   version "2.0.2"
@@ -8799,6 +8710,11 @@ http-proxy@^1.18.1:
     eventemitter3 "^4.0.0"
     follow-redirects "^1.0.0"
     requires-port "^1.0.0"
+
+http-reasons@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmmirror.com/http-reasons/-/http-reasons-0.1.0.tgz#a953ca670078669dde142ce899401b9d6e85d3b4"
+  integrity sha512-P6kYh0lKZ+y29T2Gqz+RlC9WBLhKe8kDmcJ+A+611jFfxdPsbMRQ5aNmFRM3lENqFkK+HTTL+tlQviAiv0AbLQ==
 
 http-response-object@^1.0.0, http-response-object@^1.0.1, http-response-object@^1.1.0:
   version "1.1.0"
@@ -10477,6 +10393,11 @@ lint-staged@~12.5.0:
     supports-color "^9.2.2"
     yaml "^1.10.2"
 
+liquid-json@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmmirror.com/liquid-json/-/liquid-json-0.3.1.tgz#9155a18136d8a6b2615e5f16f9a2448ab6b50eea"
+  integrity sha512-wUayTU8MS827Dam6MxgD72Ui+KOSF+u/eIqpatOtjnvgJ0+mnDq33uC2M7J0tPK+upe/DpUAuK4JUU89iBoNKQ==
+
 listr2@^4.0.5:
   version "4.0.5"
   resolved "https://registry.npmmirror.com/listr2/-/listr2-4.0.5.tgz#9dcc50221583e8b4c71c43f9c7dfd0ef546b75d5"
@@ -10679,7 +10600,7 @@ lodash.without@~4.4.0:
   resolved "https://registry.npmmirror.com/lodash.without/-/lodash.without-4.4.0.tgz#3cd4574a00b67bae373a94b748772640507b7aac"
   integrity sha512-M3MefBwfDhgKgINVuBJCO1YR3+gf6s9HNJsIiZ/Ru77Ws6uTb9eBuvrkpzO+9iLoAaRodGuq7tyrPCx+74QYGQ==
 
-lodash@*, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@~4.17.21:
+lodash@*, lodash@4.17.21, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@~4.17.21:
   version "4.17.21"
   resolved "https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -11099,7 +11020,14 @@ mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   resolved "https://registry.npmmirror.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
-mime-types@^2.1.12, mime-types@^2.1.18, mime-types@^2.1.27, mime-types@^2.1.31, mime-types@~2.1.17, mime-types@~2.1.19, mime-types@~2.1.24, mime-types@~2.1.34:
+mime-format@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmmirror.com/mime-format/-/mime-format-2.0.1.tgz#1274876d58bc803332427a515f5f7036e07b9413"
+  integrity sha512-XxU3ngPbEnrYnNbIX+lYSaYg0M01v6p2ntd2YaFksTu0vayaw5OJvbdRyWs07EYRlLED5qadUZ+xo+XhOvFhwg==
+  dependencies:
+    charset "^1.0.0"
+
+mime-types@2.1.35, mime-types@^2.1.12, mime-types@^2.1.18, mime-types@^2.1.27, mime-types@^2.1.31, mime-types@~2.1.17, mime-types@~2.1.19, mime-types@~2.1.24, mime-types@~2.1.34:
   version "2.1.35"
   resolved "https://registry.npmmirror.com/mime-types/-/mime-types-2.1.35.tgz#381a871b62a734450660ae3deee44813f70d959a"
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -13172,6 +13100,40 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.13, postcss@^7.0.14, postcss@^7.0.2
   dependencies:
     picocolors "^0.2.1"
     source-map "^0.6.1"
+
+postman-collection@4.1.7:
+  version "4.1.7"
+  resolved "https://registry.npmmirror.com/postman-collection/-/postman-collection-4.1.7.tgz#9a9ec376b6a78e557247bb54f3892a237d7d2b8b"
+  integrity sha512-fMICmDa6megCH/jKq66MZVcR26wrSn1G/rjIkqrtdB6Df4u/I+XLRbWueQnz91Jwm3FR+su1refy4gwIjLLGLg==
+  dependencies:
+    "@faker-js/faker" "5.5.3"
+    file-type "3.9.0"
+    http-reasons "0.1.0"
+    iconv-lite "0.6.3"
+    liquid-json "0.3.1"
+    lodash "4.17.21"
+    mime-format "2.0.1"
+    mime-types "2.1.35"
+    postman-url-encoder "3.0.5"
+    semver "7.3.8"
+    uuid "8.3.2"
+
+postman-sandbox@^4.2.3:
+  version "4.2.4"
+  resolved "https://registry.npmmirror.com/postman-sandbox/-/postman-sandbox-4.2.4.tgz#7b1a30c277d58e39904608d493118655ffbd962e"
+  integrity sha512-Yisdiz02+cW4hkFnpRF6milP7ZG7tfcRewrwFpYmNkswYrCeoHzeTZ9ozrf3tyLRmC6a6qf2ex+8wjWTcgni3Q==
+  dependencies:
+    lodash "4.17.21"
+    postman-collection "4.1.7"
+    teleport-javascript "1.0.0"
+    uvm "2.1.1"
+
+postman-url-encoder@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.npmmirror.com/postman-url-encoder/-/postman-url-encoder-3.0.5.tgz#af2efee3bb7644e2b059d8a78bc8070fae0467a5"
+  integrity sha512-jOrdVvzUXBC7C+9gkIkpDJ3HIxOHTIqjpQ4C1EMt1ZGeMvSEpbFCKq23DEfgsj46vMnDgyQf+1ZLp2Wm+bKSsA==
+  dependencies:
+    punycode "^2.1.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -15510,6 +15472,11 @@ tar@^6.1.11, tar@^6.1.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
+teleport-javascript@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/teleport-javascript/-/teleport-javascript-1.0.0.tgz#c9397fad598d662027e4d3a5fa7e7da1c8361547"
+  integrity sha512-j1llvWVFyEn/6XIFDfX5LAU43DXe0GCt3NfXDwJ8XpRRMkS+i50SAkonAONBy+vxwPFBd50MFU8a2uj8R/ccLg==
+
 temp-dir@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/temp-dir/-/temp-dir-2.0.0.tgz#bde92b05bdfeb1516e804c9c00ad45177f31321e"
@@ -16347,15 +16314,22 @@ utils-merge@1.0.1:
   resolved "https://registry.npmmirror.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
 
+uuid@8.3.2, uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.npmmirror.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
 uuid@^3.2.1, uuid@^3.3.2, uuid@^3.3.3:
   version "3.4.0"
   resolved "https://registry.npmmirror.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.2:
-  version "8.3.2"
-  resolved "https://registry.npmmirror.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+uvm@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npmmirror.com/uvm/-/uvm-2.1.1.tgz#4287db012666215700130a135b25771cae8083e1"
+  integrity sha512-BZ5w8adTpNNr+zczOBRpaX/hH8UPKAf7fmCnidrcsqt3bn8KT9bDIfuS7hgRU9RXgiN01su2pwysBONY6w8W5w==
+  dependencies:
+    flatted "3.2.6"
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

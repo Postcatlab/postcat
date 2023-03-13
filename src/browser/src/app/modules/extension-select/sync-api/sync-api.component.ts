@@ -18,7 +18,7 @@ import { SYNC_API_SCHEMA } from './schema';
   selector: 'eo-sync-api',
   template: `
     <extension-feedback [extensionLength]="supportList.length" suggest="@feature:pullAPI">
-      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" (valueChanges)="handleValueChanges($event)" />
+      <!-- <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" (valueChanges)="handleValueChanges($event)" /> -->
     </extension-feedback>
   `
 })

@@ -18,13 +18,15 @@ const TIMINGSUMMARY = {
   NS_PER_SEC: 1e9,
   MS_PER_NS: 1e6
 };
-const { NodeVM } = require('./vm2/index');
+const { NodeVM } = require('./script-engines/vm2/index');
 const querystring = require('querystring');
 
 const { JSDOM } = require('jsdom');
 const { document } = new JSDOM('<!doctype html><html><body></body></html>').window;
 const window = document.defaultView,
   $ = require('jquery')(window);
+
+const pmRuntime = require('postman-sandbox');
 /**
  * @desc 重置env
  * @param {object} inputSanboxVar 沙箱中的env变量
@@ -884,7 +886,8 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
 };
 privateFun.requestPreReduceByPromise = (inputData, inputCode, inputOptions) => {
   return new Promise(resolve => {
-    let tmpResponse = privateFun.parseBeforeCode(inputData, inputCode, inputOptions);
+    let tmpResponse = privateFun.pmRuntime();
+    // let tmpResponse = privateFun.parseBeforeCode(inputData, inputCode, inputOptions);
     resolve(tmpResponse);
   });
 };

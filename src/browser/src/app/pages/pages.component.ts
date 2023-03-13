@@ -4,9 +4,7 @@ import { NzNotificationRef, NzNotificationService } from 'ng-zorro-antd/notifica
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { filter } from 'rxjs';
 
-import { LanguageService } from '../core/services/language/language.service';
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
-import { StoreService } from '../shared/store/state.service';
 import StorageUtil from '../utils/storage/storage.utils';
 import { SocketService } from './extension/socket.service';
 
@@ -25,7 +23,6 @@ export class PagesComponent implements OnInit {
     private socket: SocketService,
     public electron: ElectronService,
     private router: Router,
-    private lang: LanguageService,
     private sidebar: SidebarService,
     private notification: NzNotificationService
   ) {}
