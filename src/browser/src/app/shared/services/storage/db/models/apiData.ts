@@ -41,6 +41,7 @@ export interface ApiData {
   resultList?: ResultList[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
+  authInfo?: any;
   script?: {
     beforeScript: '';
     afterScript: '';
@@ -70,10 +71,7 @@ export interface ApiAttrInfo {
   requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
-  authInfo?: {
-    authType: string;
-    authInfo: Record<string, any>;
-  };
+  authInfo?: string;
   createTime?: number;
   updateTime?: number;
 }

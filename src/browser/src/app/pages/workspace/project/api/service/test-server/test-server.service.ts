@@ -67,7 +67,7 @@ export abstract class TestServerService implements TestServer {
         paramList: (opts.env.parameters || []).map(val => ({ paramKey: val.name, paramValue: val.value })),
         frontURI: opts.env.hostUri
       },
-      authInfo: data.apiAttrInfo.authInfo || {},
+      authInfo: data.authInfo || {},
       beforeInject: data.apiAttrInfo.beforeInject || '',
       afterInject: data.apiAttrInfo.afterInject || '',
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale)

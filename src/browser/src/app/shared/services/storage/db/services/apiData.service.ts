@@ -9,10 +9,12 @@ import {
 } from 'pc/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 import type { ApiData } from 'pc/browser/src/app/shared/services/storage/db/models';
 import { BaseService } from 'pc/browser/src/app/shared/services/storage/db/services/base.service';
+import { GroupService } from 'pc/browser/src/app/shared/services/storage/db/services/group.service';
 
 export class ApiDataService extends BaseService<ApiData> {
   baseService = new BaseService(dataSource.apiData);
   mockService = new BaseService(dataSource.mock);
+  groupService = new GroupService();
 
   constructor() {
     super(dataSource.apiData);
@@ -42,13 +44,22 @@ export class ApiDataService extends BaseService<ApiData> {
     return result;
   }
 
-  bulkReadDetail(params: ApiDataBulkReadDetailDto) {
+  async bulkReadDetail(params: ApiDataBulkReadDetailDto) {
     const { apiUuids, workSpaceUuid, projectUuid } = params;
-    return this.baseService.bulkRead({
+    const result = await this.baseService.bulkRead({
       uuid: apiUuids.map(uuid => uuid),
       workSpaceUuid,
       projectUuid
     });
+
+    const promiseArr = result.data.map(async item => {
+      const { data: groupInfo } = await this.groupService.read({ id: item.groupId });
+      item.authInfo = groupInfo.authInfo;
+    });
+
+    await Promise.all(promiseArr);
+
+    return result;
   }
 
   bulkRead(params: ApiDataBulkReadDto) {

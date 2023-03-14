@@ -49,9 +49,9 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
+    private router: Router,
     private trace: TraceService
   ) {
-    this.init();
     this.initShortcutKey();
     this.initForm();
   }
@@ -105,7 +105,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       type: this.model.type,
       authInfo: {
         authType: this.authInfoModel.authType,
-        authInfo: JSON.stringify(this.authExtForm.validateForm.value)
+        authInfo: this.authExtForm.validateForm?.value ? JSON.stringify(this.authExtForm.validateForm.value) : null
       }
     };
     if (params.id) {
@@ -119,19 +119,27 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
   }
   async init() {
-    const { groupId, parentId } = this.route.snapshot.queryParams;
-    const id = Number(groupId);
+    const queryParams = this.route.snapshot.queryParams;
+    const { uuid, parentId } = queryParams;
+    const id = Number(uuid);
     if (!id) {
-      this.model = {
-        type: 1,
-        name: '',
-        parentId: Number(parentId)
-      } as any;
+      const [data] = await this.effect.createGroup([
+        {
+          type: 1,
+          name: $localize`New Group`,
+          parentId: Number(parentId)
+        }
+      ]);
+      if (data) {
+        this.model = data;
+        this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
+      }
       this.initialModel = eoDeepCopy(this.model);
       this.isEdit = true;
     } else {
       if (!this.model) {
         const [res, err]: any = await this.api.api_groupDetail({ id });
+        console.log('res', structuredClone(res));
         this.model = res;
         this.initialModel = eoDeepCopy(this.model);
       }
@@ -139,6 +147,10 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     if (this.initialModel.authInfo) {
       this.initialModel.authInfo.authInfo = JSONParse(this.initialModel.authInfo.authInfo);
     }
+    this.authInfoModel = {
+      ...this.model.authInfo,
+      authInfo: JSONParse(this.model.authInfo.authInfo)
+    };
     this.initForm();
     this.eoOnInit.emit(this.model);
   }
@@ -147,16 +159,20 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       name: [this.model?.name || '', [Validators.required]]
     });
   }
-  emitChange($event) {
-    this.model.authInfo = this.authInfoModel;
-    this.modelChange.emit(this.model);
+  emitChange($event?) {
+    this.modelChange.emit({
+      ...this.model,
+      name: this.validateForm.value.name,
+      authInfo: this.authInfoModel
+    });
   }
   isFormChange() {
-    const authInfoChanged = Object.entries<any>(this.authExtForm.validateForm.value).some(
-      ([key, value]) => value !== this.initialModel.authInfo.authInfo[key]
-    );
-    const authTypeChanged = this.model.authInfo.authType !== this.initialModel.authInfo.authType;
-    return authInfoChanged || authTypeChanged;
+    const formData = this.authExtForm.validateForm?.value;
+    const authInfoChanged =
+      formData && Object.entries<any>(formData).some(([key, value]) => value !== this.initialModel.authInfo?.authInfo[key]);
+    const authTypeChanged = this.model.authInfo?.authType !== this.initialModel.authInfo?.authType;
+    const nameIsChange = this.model.name !== this.validateForm.value.name;
+    return authInfoChanged || authTypeChanged || nameIsChange;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -183,6 +199,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
+      this.model.name = name;
       this.message.success($localize`Update Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ ...this.model, name }]);
@@ -193,5 +210,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
 
     this.isEdit = false;
+    this.emitChange();
   }
 }

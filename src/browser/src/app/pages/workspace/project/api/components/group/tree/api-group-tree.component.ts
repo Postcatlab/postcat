@@ -288,14 +288,14 @@ export class ApiGroupTreeComponent implements OnInit {
         // this.toggleExpand();
         // * jump to group detail page
         const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-        this.navigate2group({ groupId: event.node.key });
+        this.navigate2group({ uuid: event.node.key });
         break;
       }
       case 'clickItem': {
         // * jump to api detail page
         const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.key, groupId: event.node.origin.groupId }
+          queryParams: { uuid: event.node.key }
         });
         break;
       }

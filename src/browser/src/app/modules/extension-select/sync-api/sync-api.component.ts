@@ -18,7 +18,7 @@ import { SYNC_API_SCHEMA } from './schema';
   selector: 'eo-sync-api',
   template: `
     <extension-feedback [extensionLength]="supportList.length" suggest="@feature:pullAPI">
-      <!-- <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" (valueChanges)="handleValueChanges($event)" /> -->
+      <eo-schema-form #schemaForm [model]="model" [configuration]="schemaJson" (valueChanges)="handleValueChanges($event)" />
     </extension-feedback>
   `
 })
@@ -168,6 +168,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
 
     if (typeof module[feature.action] !== 'function') return false;
     const [data, err] = await module[feature.action](this.validateForm?.value);
+    console.log('data', data, err);
     if (err) {
       this.eoMessage.error($localize`Sync API from URL error: ${err}`);
       return 'stayModal';

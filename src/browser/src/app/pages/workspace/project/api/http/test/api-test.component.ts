@@ -12,15 +12,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isEqual } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
-import {
-  AuthIn,
-  noAuth
-} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { noAuth } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
@@ -113,11 +110,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   get uuid() {
     return this.route.snapshot.queryParams.uuid;
   }
-
-  get authType(): AuthIn {
-    return this.uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
-  }
-
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
@@ -171,9 +163,29 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     });
   }
 
+  async updateAuthInfo() {
+    if (!this.uuid) {
+      return;
+    }
+    const result = await this.projectApi.get(this.uuid);
+    const newAuthInfo = {
+      ...result.authInfo,
+      authInfo: JSONParse(result.authInfo.authInfo)
+    };
+    if (!isEqual(this.model.request?.authInfo, newAuthInfo)) {
+      this.model.request.authInfo = newAuthInfo;
+    }
+  }
+
+  async handleSelectedIndexChange(index) {
+    // update auth info when tab index change
+    if (index === 4) {
+      this.updateAuthInfo();
+    }
+  }
+
   async init() {
     this.initTimes++;
-    console.log('this.model', this.model);
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {
         requestTabIndex: 1
@@ -192,11 +204,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
           requestInfo = this.resetModel().request;
         } else {
           requestInfo = await this.projectApi.get(uuid);
+          console.log('requestInfo', requestInfo);
+          requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
         }
-        requestInfo.apiAttrInfo.authInfo = {
-          authType: '',
-          authInfo: {}
-        };
       }
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
@@ -212,6 +222,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       this.waitSeconds = 0;
       this.status = 'start';
     } else {
+      this.updateAuthInfo();
       if (this.timer$ && this.model.testStartTime) {
         this.waitSeconds = Math.round((Date.now() - this.model.testStartTime) / 1000);
         this.status$.next('testing');
@@ -220,7 +231,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.status$.next('start');
       }
     }
-    console.log('this.model', this.model);
+    console.log('request authInfo', this.model.request.authInfo);
     this.initBasicForm();
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
@@ -496,12 +507,15 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {
+        authInfo: {
+          authInfo: {},
+          authType: noAuth.name
+        },
         apiAttrInfo: {
           contentType: ContentTypeEnum.RAW,
           requestMethod: 0,
           beforeInject: '',
-          afterInject: '',
-          authInfo: {}
+          afterInject: ''
         },
         requestParams: {
           queryParams: [],

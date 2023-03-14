@@ -53,9 +53,14 @@
       </button>
     </form>
     <!-- Request Info -->
-    <eo-ng-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [(nzSelectedIndex)]="model.requestTabIndex">
+    <eo-ng-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzAnimated]="false"
+      (nzSelectedIndexChange)="handleSelectedIndexChange($event)"
+      [(nzSelectedIndex)]="model.requestTabIndex"
+    >
       <!-- Request Headers -->
-      <eo-ng-tab [nzTitle]="headerTitleTmp">
+      <eo-ng-tab [nzTitle]="headerTitleTmp" name="hhh">
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
           <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
@@ -120,14 +125,13 @@
       <eo-ng-tab [nzTitle]="authorizationTitleTmp">
         <ng-template #authorizationTitleTmp>
           <span i18n>Authorization</span>
-          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.authInfo.authType !== noAuth.name" nzStatus="success"></nz-badge>
+          <nz-badge class="ml-1" *ngIf="model.request?.authInfo?.authType !== noAuth.name" nzStatus="success"></nz-badge>
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
           <authorization-extension-form
-            [type]="authType"
-            [(model)]="model.request.apiAttrInfo.authInfo"
+            [(model)]="model.request.authInfo"
+            [groupInfo]="{ parentId: model.request?.groupId }"
             (modelChange)="emitChangeFun('authInfo')"
-            [groupID]="isEmptyTestPage ? undefined : model.request?.groupId"
           ></authorization-extension-form>
         </div>
       </eo-ng-tab>
@@ -142,7 +146,6 @@
           (codeChange)="emitChangeFun('beforeScript')"
           [treeData]="BEFORE_DATA"
           [completions]="beforeScriptCompletions"
-          class=""
         ></eo-api-script>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
@@ -156,7 +159,6 @@
           (codeChange)="emitChangeFun('afterScript')"
           [treeData]="AFTER_DATA"
           [completions]="afterScriptCompletions"
-          class=""
         ></eo-api-script>
       </eo-ng-tab>
     </eo-ng-tabset>
