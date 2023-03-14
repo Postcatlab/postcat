@@ -139,7 +139,7 @@ export class GroupService extends BaseService<Group> {
     }
   }
 
-  async read(params) {
+  async read(params, isCallByAPI = false) {
     const result = await this.baseService.read(params);
     const group = result.data;
     // 递归获取父级分组鉴权信息
@@ -149,7 +149,8 @@ export class GroupService extends BaseService<Group> {
         if (parentGroup.depth) {
           group.authInfo = {
             authType: inheritAuth.name,
-            authInfo: parentGroup.authInfo?.authInfo || {}
+            authInfo: parentGroup.authInfo?.authInfo || {},
+            ...(isCallByAPI ? parentGroup : group).authInfo
           };
         } else {
           group.authInfo = {
