@@ -28,7 +28,6 @@
     "koa": "2.13.4",
     "koa-body": "5.0.0",
     "pm2": "5.2.0",
-    "postcat-basic-auth": "0.0.3",
     "postcat-sync-swagger": "1.0.0",
     "postman-sandbox": "^4.2.3",
     "socket.io": "4.5.3",
