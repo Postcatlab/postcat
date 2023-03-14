@@ -1,10 +1,9 @@
 let _LibsFlowCommon = require('../request/unit.js');
 let _LibsCommon = require('../request/libs/common.js');
-const { callErrorFromStatus } = require('@grpc/grpc-js/build/src/call.js');
 process.on('message', async message => {
   switch (message.action) {
     case 'setGlobal': {
-      console.log(message.datta);
+      global['__HOME_DIR'] = message.data.homeDir;
       break;
     }
     case 'ajax': {
