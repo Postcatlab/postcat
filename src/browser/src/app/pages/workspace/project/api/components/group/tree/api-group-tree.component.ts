@@ -179,7 +179,7 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   editGroup(group) {
-    this.navigate2group({ groupId: group.id });
+    this.navigate2group({ uuid: group.id });
   }
   deleteGroup(group) {
     this.groupModal($localize`Delete Group`, {

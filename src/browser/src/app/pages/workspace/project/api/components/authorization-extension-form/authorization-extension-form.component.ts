@@ -29,6 +29,11 @@ export type AuthInfo = {
 
 export type AuthIn = 'group' | 'api-test' | 'api-test-history';
 
+const authInMap = {
+  group: $localize`API Group`,
+  'api-test': $localize`API Request`
+};
+
 @Component({
   selector: 'authorization-extension-form',
   template: `
@@ -51,11 +56,11 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
       <div class="my-[24px]">
         <ng-container *ngIf="model?.isInherited && parentGroup?.depth !== 0">
           <div class="text-tips" i18n>
-            This API Request is using <b>{{ inheritAuthType || model.authType }}</b> from
+            This {{ authInMap[type] }} is using <b>{{ inheritAuthType || model.authType }}</b> from
             <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
         </ng-container>
-        <ng-container *ngIf="!isDefaultAuthType">
+        <ng-container *ngIf="!model?.isInherited">
           <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
           <ng-template #templateRefMsg>
             <div class="text" i18n>
@@ -82,6 +87,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   @Output() readonly modelChange = new EventEmitter<AuthInfo>();
   @Output() readonly authTypeChange = new EventEmitter<string>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
+  authInMap = authInMap;
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo> = new Map();
