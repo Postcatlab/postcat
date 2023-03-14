@@ -96,7 +96,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     return true;
   }
   async saveGroupInfo(ux = 'ui') {
-    if (!this.checkForm() || !this.authExtForm.checkForm()) {
+    if (!this.checkForm() || !this.authExtForm.checkForm() || this.isEdit) {
       return;
     }
     this.isSaving = true;
@@ -146,7 +146,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    if (this.model.authInfo?.authType === inheritAuth.name) {
+    if (this.model?.authInfo?.authType === inheritAuth.name) {
       this.model.authInfo.authInfo = '';
     }
     if (this.initialModel.authInfo) {

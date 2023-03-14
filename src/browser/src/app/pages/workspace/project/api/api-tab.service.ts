@@ -29,6 +29,7 @@ export class ApiTabService {
       extends: { method: 'POST' }
     },
     { pathname: '/share/http/detail', id: 'share-api-detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/share/group/edit', id: 'share-group-edit', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/share/ws/test',
       id: 'share-api-test',
