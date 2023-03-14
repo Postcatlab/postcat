@@ -60,7 +60,7 @@ const authInMap = {
             <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
         </ng-container>
-        <ng-container *ngIf="authType !== inheritAuth.name">
+        <ng-container *ngIf="!isDefaultAuthType">
           <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
           <ng-template #templateRefMsg>
             <div class="text" i18n>
@@ -89,6 +89,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   authInMap = authInMap;
   inheritAuth = inheritAuth;
+  noAuth = noAuth;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo> = new Map();
   extensionList: Array<typeof noAuth> = [];
@@ -108,7 +109,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   get isDefaultAuthType() {
-    return [inheritAuth.name, noAuth.name].includes(this.model.authType);
+    return [inheritAuth.name, noAuth.name].includes(this.authType);
   }
 
   get authTypeList() {
@@ -137,6 +138,8 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
 
   init() {
     this.authType = '';
+    this.parentGroup = undefined;
+    console.log('ddd');
   }
 
   initAutorun() {
