@@ -183,7 +183,7 @@ export class ParamsImportComponent implements OnInit {
     const combineFunc = {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
-      mixin: (data, base) => pcMerge(base, data, 'paramAttr.example', 'childList', false)
+      mixin: (data, base) => pcMerge(base, data, ['dataType', 'paramAttr.example'], 'childList', false)
     };
 
     const endParse = (data, type) => {
