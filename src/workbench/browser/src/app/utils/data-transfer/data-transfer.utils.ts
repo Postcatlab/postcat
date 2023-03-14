@@ -17,7 +17,7 @@ const parseTree = (key, value): BodyParam | unknown => {
       paramAttr: {
         example: ''
       },
-      dataType: ApiParamsType.string,
+      dataType: ApiParamsType.object,
       description: '',
       childList: Object.keys(value).map(it => parseTree(it, value[it]))
     };

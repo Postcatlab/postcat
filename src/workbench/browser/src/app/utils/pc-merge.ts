@@ -24,7 +24,7 @@ export interface RootObject {
  * @description Merge specified key
  * @param {RootObject[]} baseArr baseArr
  * @param {RootObject[]} newDataArr newDataArr
- * @param {string} mergerKey specified key
+ * @param {string[]} mergerKey specified key
  * @param {string} childKey childList correspondence key
  * @param {boolean} childKey isChild
  * @return {RootObject[]} assginArr
@@ -33,7 +33,7 @@ export interface RootObject {
 export const pcMerge = (
   baseArr: RootObject[],
   newDataArr: RootObject[],
-  mergerKey: string,
+  mergerKey: string[],
   childKey: string,
   isChild: boolean
 ): RootObject[] => {
@@ -45,7 +45,9 @@ export const pcMerge = (
       for (let ele of handleData) {
         if (item.name === ele.name) {
           //Assigns the specified key
-          ele[mergerKey] = item[mergerKey];
+          mergerKey.forEach(e => {
+            ele[e] = item[e];
+          });
           if (item[childKey] && item[childKey].length !== 0) {
             if (ele[childKey]) {
               //Subtree recursion
