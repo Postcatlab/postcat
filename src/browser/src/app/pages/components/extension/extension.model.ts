@@ -41,6 +41,10 @@ export const featuresTipsMap = {
     name: $localize`format`,
     suggest: '@feature:pullAPI'
   },
+  authAPI: {
+    name: $localize`format`,
+    suggest: '@feature:authAPI'
+  },
   sidebarView: {
     name: $localize`format`,
     suggest: '@feature:sidebarView'
