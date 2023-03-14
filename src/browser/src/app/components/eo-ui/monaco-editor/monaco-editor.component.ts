@@ -133,7 +133,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
               this.el.style.removeProperty('overflow');
             });
           }
-        }, 600)
+        }, 20)
       );
       this.resizeObserver.observe(this.el);
     }
@@ -228,7 +228,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
 
     this.codeEdtor.onDidChangeModelContent(e => {
-      console.log('e', e);
+      // console.log('e', e);
       this.handleChange();
     });
 
