@@ -1,4 +1,5 @@
 import { BrowserView } from 'electron';
+import { HOME_DIR } from 'pc/shared/electron-main/constant';
 
 import * as child_process from 'child_process';
 export class UnitWorker {
@@ -10,6 +11,12 @@ export class UnitWorker {
   start(message: any) {
     this.instance = child_process.fork(`${__dirname}/forkUnit.js`);
     this.watch();
+    this.instance.send({
+      action: 'setGlobal',
+      data: {
+        homeDir: HOME_DIR
+      }
+    });
     this.instance.send(message);
   }
   finish(message: any) {

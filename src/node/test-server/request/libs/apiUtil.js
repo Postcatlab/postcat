@@ -490,7 +490,6 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
           content: err.message
         });
       }
-
       //Parse authInfo to request data
       if (inputOpts.authInfo) {
         switch (inputOpts.authInfo.authType) {
@@ -503,7 +502,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
               name: inputOpts.authInfo.authType
             });
             if (err) break;
-            if (!packageJson.default?.features?.authAPI) break;
+            if (!packageJson?.features?.authAPI) break;
             //Prepare auth info,such as replace global variable
             let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpEnviroments || {});
             let authInfo = pmRes.request.auth[pmRes.request.auth.type] || [];
@@ -514,7 +513,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
             }
             try {
               authInfo = JSON.parse(authInfoStr);
-              const { action } = packageJson.default.features.authAPI;
+              const { action } = packageJson.features.authAPI;
               const func = extension[action];
               const config = (authInfo || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
               //Execute at runtime
@@ -527,7 +526,9 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
                 break;
               }
               pmRes = authPmRes;
-            } catch (e) {}
+            } catch (e) {
+              console.error(`auth error: ${e.message}`);
+            }
             break;
           }
         }
