@@ -236,7 +236,7 @@ export class PCTree {
     }
 
     const parent = this.findGroupByID(group.parentId);
-    parent.children.push(group);
+    parent?.children.push(group);
   }
   update(group: Group) {
     const origin = this.findGroupByID(group.id);

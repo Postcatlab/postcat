@@ -86,7 +86,7 @@ export class ApiGroupTreeComponent implements OnInit {
   extensionActions = [
     {
       title: $localize`:@@ImportAPI:Import API`,
-      menuTitle: $localize`Import from file`,
+      menuTitle: $localize`Import From File`,
       traceID: 'click_import_project',
       click: title => this.importAPI('import', title)
     },

@@ -291,7 +291,7 @@ export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAt
           inputObject['@eo_attr'][tmpKey] = (val.attribute || '').replace(/\s+/, ' ');
         }
       }
-      inputObject[tmpKey] = val.example;
+      inputObject[tmpKey] = val['paramAttr.example'];
       if (val.childList && val.childList.length > 0) {
         switch (val.dataType) {
           case ApiParamsType.array: {

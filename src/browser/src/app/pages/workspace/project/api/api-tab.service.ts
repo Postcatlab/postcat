@@ -58,7 +58,7 @@ export class ApiTabService {
       id: 'project-group',
       type: 'edit',
       icon: 'folder-close',
-      title: $localize`New Group`
+      title: $localize`:@@AddGroup:New Group`
     },
     { pathname: '/home/workspace/project/api/http/edit', id: 'api-http-edit', isFixed: true, type: 'edit', title: $localize`New API` },
     { pathname: '/home/workspace/project/api/http/detail', id: 'api-http-detail', type: 'preview', title: $localize`Preview` },

@@ -64,8 +64,8 @@ type messageItem = {
       ></pc-chat-robot-message>
       <ng-template #moreTwice i18n>
         You have reached the maximum usage of ChatGPT for today. Please
-        <button eo-ng-button class="mb-[2px]" nz="primary" (click)="login()" nzSize="small">Sign in</button> to your Github account to
-        star/fork to get more times.
+        <button eo-ng-button class="mb-[2px]" nzType="primary" (click)="login()" nzSize="small">Sign in</button> to your Github account to
+        Star/Fork to get more times.
       </ng-template>
       <pc-chat-robot-form
         (send)="sendMessage($event)"

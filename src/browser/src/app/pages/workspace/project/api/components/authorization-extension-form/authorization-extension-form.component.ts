@@ -13,12 +13,12 @@ import { Subject, takeUntil } from 'rxjs';
 
 export const noAuth = {
   name: 'none',
-  label: 'No Auth'
+  label: $localize`No Auth`
 };
 
 export const inheritAuth = {
   name: 'inherited',
-  label: 'Inherit auth from parent'
+  label: $localize`Inherit auth from parent`
 };
 
 export type AuthInfo = {

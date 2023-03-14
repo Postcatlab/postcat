@@ -111,7 +111,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     };
     if (params.id) {
       await this.effect.updateGroup(params);
-      this.message.success($localize`Update Group Name successfully`);
+      this.message.success($localize`Edit Group Info successfully`);
       this.isSaving = false;
       this.afterSaved.emit(this.initialModel);
       this.trace.report('save_auth_success');
@@ -128,7 +128,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       const [data] = await this.effect.createGroup([
         {
           type: 1,
-          name: $localize`New Group`,
+          name: $localize`:@@AddGroup:New Group`,
           parentId: Number(parentId)
         }
       ]);
@@ -205,7 +205,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
       this.model.name = name;
-      this.message.success($localize`Update Group Name successfully`);
+      this.message.success($localize`Edit Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ ...this.model, name }]);
       if (data) {
