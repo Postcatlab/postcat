@@ -7,15 +7,15 @@ const installExtension = (extension, version = 'latest') => {
   return new Promise(resolve => {
     const ls = spawn('npm', ['i', `${extension}@${version}`]);
     ls.on('close', function (code) {
-      console.log('child process exited with code ' + code);
+      console.log(`child process exited with code :${code}`);
       return resolve(true);
     });
     ls.stderr.on('data', function (data) {
-      console.log('stderr: ' + data);
+      console.log(`stderr :${data}`);
       return resolve(true);
     });
     ls.stderr.on('error', function (err) {
-      console.log('error: ' + err);
+      console.log(`error :${err}`);
       return resolve(false);
     });
   });
@@ -28,32 +28,33 @@ const loadExtension = async ({ name, version = 'latest' }) => {
   let cache = {};
   if (!hasIt) {
     //TODO Remote/Local Node Union
-    //Local Node
+
+    //Install Locally in Electron
     if (isElectron) {
-      const extPkg = require(path.join('/Users/qinyuanyuan/.postcat/node_modules/postcat-basic-auth', 'package.json'));
+      const extPkg = require(path.join(`${global['__HOME_DIR']}/node_modules/${name}`, 'package.json'));
+      const extension = require(`${global['__HOME_DIR']}/node_modules/${name}`);
+      if (!extension) {
+        return [null, 'Install Extension Failed'];
+      }
       cache = {
-        extension: require('/Users/qinyuanyuan/.postcat/node_modules/postcat-basic-auth'),
+        extension: extension,
         packageJson: extPkg
       };
       extensionMap.set(`${name}:${extPkg.version}`, cache);
       return [cache, null];
     }
 
-    //Remote Node
+    //Install in Remote Node
     const isOk = await installExtension(name, version);
     if (!isOk) {
       return [null, 'Install Extension Failed'];
     }
 
-    const extPkg = await import(`${name}/package.json`, {
-      assert: {
-        type: 'json'
-      }
-    });
+    const extPkg = require(`${name}/package.json`);
     const extension = await import(name);
     cache = {
       extension: extension.default,
-      packageJson: extPkg.default
+      packageJson: extPkg
     };
     extensionMap.set(`${name}:${extPkg.version}`, cache);
   }
