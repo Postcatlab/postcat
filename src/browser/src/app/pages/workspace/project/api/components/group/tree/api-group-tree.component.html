@@ -1,0 +1,113 @@
+<header class="flex items-center py-[10px] px-[10px]">
+  <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
+    <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
+  </eo-ng-input-group>
+  <ng-template #prefixTemplateUser>
+    <eo-iconpark-icon name="search"></eo-iconpark-icon>
+  </ng-template>
+  <button
+    *ngIf="!globalStore.isShare"
+    nzType="primary"
+    eo-ng-button
+    class="ml-3"
+    eo-ng-dropdown
+    [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight"
+    trace
+    traceID="open_edit_api_document"
+    (click)="addAPI()"
+  >
+    <eo-iconpark-icon name="add"></eo-iconpark-icon>
+  </button>
+  <eo-ng-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <a>
+        <li nz-menu-item i18n="@@AddAPI" (click)="addAPI()"> New API </li>
+      </a>
+      <a>
+        <li nz-menu-item (click)="addGroup()" i18n>New Group</li>
+      </a>
+      <li nz-menu-divider></li>
+      <a *ngFor="let item of extensionActions">
+        <li nz-menu-item trace [traceID]="item.traceID" (click)="item.click(item.title)">{{ item.menuTitle }} </li>
+      </a>
+    </ul>
+  </eo-ng-dropdown-menu>
+</header>
+<!-- Custom Group -->
+<div class="group-tree">
+  <eo-ng-tree-default
+    [nzData]="apiGroupTree"
+    [nzSelectedKeys]="nzSelectedKeys"
+    #apiGroup
+    [nzSearchValue]="searchValue"
+    [nzSearchFunc]="searchFunc"
+    [nzHideUnMatched]="true"
+    [(nzExpandedKeys)]="expandKeys"
+    (nzClick)="clickTreeItem($event)"
+    [nzDraggable]="isEdit"
+    nzBlockNode
+    (nzOnDrop)="treeItemDrop($event)"
+    [nzTreeTemplate]="nzTreeTemplate"
+  ></eo-ng-tree-default>
+  <nz-skeleton [nzLoading]="isLoading && !apiGroupTree.length" [nzActive]="true">
+    <ng-template #nzTreeTemplate let-node let-origin="origin">
+      <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
+        <!-- Folder -->
+        <div class="flex items-center justify-between tree-node" *ngIf="!node.isLeaf">
+          <div class="flex items-center" [style.width]="'calc(100% - 25px - 8px * var(--tree-level))'">
+            <svg class="iconpark-icon mr-[5px] flex-shrink-0">
+              <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
+            </svg>
+            <span class="text-[12px] truncate">{{ node.title }}</span>
+          </div>
+          <span class="flex tree-node-operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
+            <ng-container *ngIf="isEdit">
+              <button eo-ng-button nzType="text" class="tree-item-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
+                <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
+              </button>
+              <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item *ngFor="let item of groupItemsMenu" (click)="item.click({ group: node })">
+                    {{ item.title }}
+                  </li>
+                </ul>
+              </eo-ng-dropdown-menu>
+            </ng-container>
+          </span>
+        </div>
+        <!-- Leaf -->
+        <div class="flex items-center justify-between tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
+          <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
+            <b class="method-text method-text-{{ getRequestMethodText(node) }} mr-[5px]" *ngIf="getRequestMethodText(node)">
+              {{ renderRequestMethodText(node) }}
+            </b>
+            <span class="text-[12px] truncate">{{ node.title }}</span>
+          </div>
+          <div class="flex tree-node-operate">
+            <ng-container *ngIf="isEdit">
+              <button
+                class="tree-item-btn"
+                eo-ng-button
+                nzType="text"
+                eo-ng-dropdown
+                nzTrigger="click"
+                [nzDropdownMenu]="apiMenu"
+                (click)="$event.stopPropagation()"
+              >
+                <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
+              </button>
+              <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click(node)"> {{ item.title }} </li>
+                </ul>
+              </eo-ng-dropdown-menu>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <nz-empty *ngIf="!apiGroupTree.length" nzNotFoundImage="simple"> </nz-empty>
+  </nz-skeleton>
+</div>

@@ -1,0 +1,189 @@
+// @import "tailwindcss/base";
+
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './styles/atom';
+@import '../../../node_modules/eo-ng-checkbox/styles';
+@import '../../../node_modules/eo-ng-select/styles';
+@import '../../../node_modules/eo-ng-button/styles';
+@import '../../../node_modules/eo-ng-radio/styles';
+@import '../../../node_modules/eo-ng-input/styles';
+@import '../../../node_modules/eo-ng-auto-complete/styles';
+@import '../../../node_modules/eo-ng-tabs/styles';
+@import '../../../node_modules/eo-ng-tree/styles';
+@import '../../../node_modules/eo-ng-table/styles';
+@import '../../../node_modules/eo-ng-layout/styles';
+@import '../../../node_modules/eo-ng-feedback/styles';
+@import '../../../node_modules/eo-ng-dropdown/styles';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font-family: Arial, Helvetica, sans-serif, 'Source Sans Pro', 'Helvetica Neue';
+}
+
+img,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: unset;
+  vertical-align: unset;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-clip: content-box;
+  background-color: var(--scrollbar-thumb-background-color);
+  border-color: #eee0;
+  border-style: solid;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track-background-color);
+  border-color: transparent;
+  border-style: solid;
+  border-left-width: 0 0 0 1px;
+}
+
+.electron-can-be-click {
+  -webkit-app-region: no-drag;
+}
+
+.top-save-bar {
+  @apply sticky top-0 z-10 px-[20px] flex items-center;
+
+  background-color: var(--bar-background-color);
+  border-bottom: 1px solid var(--border-color);
+  height: var(--edit-inside-bar-height);
+}
+
+.save-container {
+  overflow: auto;
+  height: calc(100% - var(--edit-inside-bar-height));
+}
+
+.tree-sider {
+  background-color: var(--tree-background-color);
+
+  &,
+  .ant-btn-text {
+    color: var(--tree-text-color);
+  }
+
+  .ant-tree-treenode {
+    padding: initial;
+    align-items: center;
+    margin: 0;
+    border-radius: initial;
+    height: var(--tree-item-height);
+  }
+
+  .ant-tree-node-content-wrapper {
+    height: var(--tree-item-height);
+    line-height: var(--tree-item-height);
+    flex: auto;
+
+    &:hover {
+      background-color: initial;
+    }
+  }
+
+  .tree-item-btn {
+    padding: 3px;
+    height: calc(var(--tree-item-height) - 10px);
+  }
+
+  .tree-node {
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
+
+    .tree-node-operate {
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
+    }
+
+    &:hover .tree-node-operate {
+      display: initial;
+    }
+  }
+
+  nz-tree-node-title {
+    // prevent operate shrink
+    position: relative;
+    width: 0 !important;
+  }
+}
+
+.env-selector-dropdown {
+  width: 224px;
+}
+
+.background-popover {
+  .ant-popover-arrow-content::before {
+    display: none;
+  }
+
+  .ant-popover-inner,
+  .ant-popover-inner-content {
+    color: var(--text-color);
+    background-color: var(--background-color);
+  }
+
+  .ant-popover-arrow-content {
+    background-color: var(--background-color);
+  }
+}
+
+.eo-navbar {
+  -webkit-app-region: drag;
+  position: sticky;
+  width: 100%;
+  z-index: 11;
+  left: 0;
+  top: 0;
+  padding: 0 8px;
+  color: var(--layout-header-text-color);
+  background-color: var(--layout-header-background-color);
+  border-bottom: 1px solid var(--border-color);
+  height: var(--layout-header-height);
+
+  .logo {
+    width: 30px;
+  }
+
+  .right-group-btn {
+    button {
+      margin-right: 10px;
+    }
+
+    button:last-child {
+      margin-right: 0;
+    }
+
+    pc-btn-user + pc-download-client {
+      button {
+        margin-left: 10px;
+      }
+    }
+
+    pc-help-dropdown {
+      button {
+        margin-right: 10px !important;
+      }
+    }
+  }
+}

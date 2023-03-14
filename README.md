@@ -117,7 +117,7 @@ yarn start
 
 ```shell
 
-cd src/workbench/browser&&npm install
+cd src/browser&&npm install
 
 yarn start
 

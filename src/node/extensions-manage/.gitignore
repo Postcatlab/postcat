@@ -1,0 +1,4 @@
+node_modules
+.Ds_Store
+dist
+config.json

@@ -1,4 +1,4 @@
-import { LANGUAGES } from '../../workbench/browser/src/app/core/services/language/language.model';
+import { LANGUAGES } from '../../browser/src/app/core/services/language/language.model';
 import { getLocaleData } from '../node/i18n';
 export class I18N {
   constructor() {}

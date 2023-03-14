@@ -5,7 +5,7 @@ import minimist from 'minimist';
 import YAML from 'yaml';
 
 import pkgInfo from '../package.json';
-import { ELETRON_APP_CONFIG } from '../src/environment';
+import { COMMON_APP_CONFIG } from '../src/environment';
 
 import { execSync, exec, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -65,9 +65,9 @@ const config: Configuration = {
     'out/platform/**/*.js*',
     'out/environment.js',
     'out/shared/**/*.js*',
-    'src/workbench/browser/dist/**/*',
-    'out/workbench/browser/src/**/*.js*',
-    'out/workbench/node/**/*.js*',
+    'src/browser/dist/**/*',
+    'out/browser/src/**/*.js*',
+    'out/node/test-server/**/*.js*',
     'out/app/common/**/*',
     '!**/*.ts'
   ],
@@ -75,7 +75,7 @@ const config: Configuration = {
     'github',
     {
       provider: 'generic',
-      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
+      url: COMMON_APP_CONFIG.BASE_DOWNLOAD_URL
     }
   ],
   generateUpdatesFilesForAllChannels: true,
