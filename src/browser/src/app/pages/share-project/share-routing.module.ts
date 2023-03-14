@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group/group.component';
 
 import { ShareComponent } from './view/share-project.component';
 
@@ -40,7 +41,7 @@ const routes: Routes = [
         children: [
           {
             path: 'edit',
-            loadChildren: () => import('../workspace/project/api/group/group.module').then(m => m.GroupModule)
+            component: GroupComponent
           }
         ]
       }
