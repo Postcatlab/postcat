@@ -453,7 +453,7 @@ export class ThemeVariableService {
       const barBackgroundRule = colorsDefaultRule.find(val => val.source === 'barBackground');
       barBackgroundRule.rule.push({
         action: 'darken',
-        alpha: 0.01,
+        alpha: 0.025,
         target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground']
       });
 

@@ -34,7 +34,6 @@ const loadExtension = async ({ name, version }) => {
       }
     });
     const extension = await import(name);
-    console.log(name, extension);
     cache = {
       extension: extension.default,
       packageJson: extPkg

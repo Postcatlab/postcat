@@ -132,9 +132,11 @@ export class ApiGroupTreeComponent implements OnInit {
     );
   }
   initSelectKeys() {
-    const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws'].some(path => this.router.url.includes(path));
+    const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws', 'home/workspace/project/api/group/edit'].some(
+      path => this.router.url.includes(path)
+    );
     const { uuid } = this.route.snapshot.queryParams;
-    this.nzSelectedKeys = uuid && isApiPage ? [uuid] : [];
+    this.nzSelectedKeys = uuid && isApiPage ? [Number(uuid) || uuid] : [];
   }
   getExpandKeys() {
     this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
@@ -294,8 +296,12 @@ export class ApiGroupTreeComponent implements OnInit {
     const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
     switch (eventName) {
       case 'clickFolder': {
-        // event.node.isExpanded = !event.node.isExpanded;
-        // this.toggleExpand();
+        //* Open Folder
+        if (this.nzSelectedKeys.includes(event.node.key)) {
+          event.node.isExpanded = true;
+          break;
+        }
+
         // * jump to group detail page
         this.navigate2group({ uuid: event.node.key });
         break;
