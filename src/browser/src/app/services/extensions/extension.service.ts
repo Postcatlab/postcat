@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { MessageService } from 'pc/browser/src/app/services/message';
+import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'pc/browser/src/app/shared/models/extension-manager';
 import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/models/storageKeys.constant';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 
 import { ExtensionCommonService } from './extension-store.service';
 import { WebExtensionService } from './webExtension.service';
 
-const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
 })
@@ -31,7 +32,8 @@ export class ExtensionService {
     private extensionCommon: ExtensionCommonService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public store: StoreService
   ) {}
   async init() {
     await this.requestList('init');
@@ -42,14 +44,16 @@ export class ExtensionService {
       });
       return;
     }
-
     //* Web Installl
     const installedName = [];
     //Get extensions
-    [...this.webExtensionService.installedList, ...defaultExtensions.map(name => ({ name }))].forEach(val => {
-      if (this.installedList.some(m => m.name === val.name)) return;
-      installedName.push(val.name);
-    });
+    [...this.webExtensionService.installedList, ...(!this.store.getAppHasInitial ? defaultExtensions.map(name => ({ name })) : [])].forEach(
+      val => {
+        if (this.installedList.some(m => m.name === val.name)) return;
+        installedName.push(val.name);
+      }
+    );
+
     //* Install Extension by foreach because of async
     const uniqueNames = [...Array.from(new Set(installedName)), ...this.webExtensionService.debugExtensionNames];
     for (let i = 0; i < uniqueNames.length; i++) {

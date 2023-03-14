@@ -12872,6 +12872,11 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.npmmirror.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha512-xTgYBc3fuo7Yt7JbiuFxSYGToMoz8fLoE6TC9Wx1P/u+LfeThMOAqmuyECnlBaaJb+u1m9hHiXUEtwW4OzfUJg==
 
+postcat-basic-auth@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmmirror.com/postcat-basic-auth/-/postcat-basic-auth-0.0.2.tgz#ade11c3544e00561b1d7036fe22fb0361ceb6fec"
+  integrity sha512-Cvtz6kP/2cvZEXOYvWJu1+yC0YtU5JTeQZ3vPEFKwDk6d7A+rOmScbZEYCDuNkoXMPllU398Tn38ByiFLeB7Eg==
+
 postcat-sync-swagger@1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/postcat-sync-swagger/-/postcat-sync-swagger-1.0.0.tgz#36cb157e127d8cfb870d363c0b66afe04b92b387"

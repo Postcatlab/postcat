@@ -67,6 +67,7 @@ import { ApiStoreService } from '../../store/api-state.service';
       <eo-ng-select
         [nzDropdownMatchSelectWidth]="false"
         [(ngModel)]="envUuid"
+        class="env-select-componnet"
         nzDropdownClassName="env-selector-dropdown"
         [(nzOpen)]="isOpen"
         nzPlacement="bottomRight"

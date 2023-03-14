@@ -9,6 +9,19 @@ nz-divider {
 }
 
 :host ::ng-deep {
+  .env-select-componnet {
+    .ant-select-clear {
+      border: 2px solid var(--system-border-color);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -8px;
+    }
+  }
+
   eo-ng-select eo-ng-select-top-control {
     border: none !important;
   }
