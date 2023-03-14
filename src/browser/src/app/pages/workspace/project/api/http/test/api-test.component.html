@@ -130,6 +130,7 @@
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
           <authorization-extension-form
+            #authExtForm
             [(model)]="model.request.authInfo"
             type="api-test"
             [inheritAuthType]="initialModel?.request?.authInfo?.authType"

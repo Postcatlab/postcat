@@ -17,7 +17,10 @@ import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
-import { noAuth } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import {
+  AuthorizationExtensionFormComponent,
+  noAuth
+} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
@@ -87,6 +90,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     };
   }>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
+  @ViewChild('authExtForm') authExtForm: AuthorizationExtensionFormComponent;
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
@@ -186,6 +190,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
 
   async init() {
     this.initTimes++;
+    this.authExtForm?.init?.();
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {
         requestTabIndex: 1
