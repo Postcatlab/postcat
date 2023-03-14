@@ -146,7 +146,6 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
       this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
     });
     autorun(() => {
-      console.log('this.model.isInherited', this.authType, this.model);
       if (!this.authType && this.model?.isInherited === 1) {
         this.authType = inheritAuth.name;
       } else if (this.model?.isInherited === 0) {
@@ -166,10 +165,10 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
 
   async ngOnChanges(changes: SimpleChanges) {
     const { model } = changes;
-    console.log('this.model.inherited', this.model);
+    // console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
       if (this.model.authType !== inheritAuth.name) {
-        console.log('this.authType', this.authType);
+        // console.log('this.authType', this.authType);
         this.updateSchema(this.authType);
       }
     }

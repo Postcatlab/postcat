@@ -511,7 +511,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       request: {
         authInfo: {
           authInfo: {},
-          authType: noAuth.name
+          authType: noAuth.name,
+          isInherited: 0
         },
         apiAttrInfo: {
           contentType: ContentTypeEnum.RAW,
