@@ -71,7 +71,7 @@ export class ApiGroupTreeComponent implements OnInit {
     },
     {
       title: $localize`Add Subgroup`,
-      click: inArg => this.addGroup(inArg.group?.origin)
+      click: inArg => this.addGroup(inArg)
     },
     {
       title: $localize`Edit`,
@@ -213,8 +213,13 @@ export class ApiGroupTreeComponent implements OnInit {
       queryParams: { uuid: api.key }
     });
   }
-  addGroup(group = this.store.getRootGroup) {
+  addGroup(node?) {
+    const group = node?.group?.origin || this.store.getRootGroup;
     this.navigate2group({ parentId: group.id });
+    console.log('node', node);
+    if (node?.group) {
+      node.group.isExpanded = true;
+    }
   }
   importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({

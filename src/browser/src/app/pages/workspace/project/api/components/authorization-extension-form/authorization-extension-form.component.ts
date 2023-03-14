@@ -4,10 +4,12 @@ import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { Subject, takeUntil } from 'rxjs';
 
 export const noAuth = {
   name: 'none',
@@ -31,18 +33,20 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
   selector: 'authorization-extension-form',
   template: `
     <ng-container *ngIf="model">
-      <form nz-form nzLayout="vertical">
-        <nz-form-item>
-          <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
-          <nz-form-control>
-            <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="authType" (ngModelChange)="handleAuthTypeChange($event)">
-              <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
-                {{ item.label }}
-              </label>
-            </eo-ng-radio-group>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
+      <extension-feedback [extensionLength]="authTypeList.length" suggest="@feature:authAPI" [tipsText]="tipsText">
+        <form nz-form nzLayout="vertical">
+          <nz-form-item>
+            <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
+            <nz-form-control>
+              <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="authType" (ngModelChange)="handleAuthTypeChange($event)">
+                <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
+                  {{ item.label }}
+                </label>
+              </eo-ng-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </extension-feedback>
       <nz-divider></nz-divider>
       <div class="my-[24px]">
         <ng-container *ngIf="model?.isInherited && parentGroup?.depth !== 0">
@@ -85,6 +89,10 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
 
   parentGroup: Group;
 
+  tipsText = $localize`Authorization`;
+
+  private destroy$: Subject<void> = new Subject<void>();
+
   get validateForm() {
     return this.schemaForm?.validateForm;
   }
@@ -101,10 +109,24 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return [this.defaultAuthType, ...this.extensionList];
   }
 
-  constructor(private router: Router, private extensionService: ExtensionService, private store: ApiStoreService) {
+  constructor(
+    private router: Router,
+    private extensionService: ExtensionService,
+    private store: ApiStoreService,
+    private messageService: MessageService
+  ) {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
+
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        if (inArg.type === 'extensionsChange') {
+          this.initExtensions();
+        }
+      });
   }
 
   init() {
