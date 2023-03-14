@@ -41,7 +41,7 @@ const compMap = {
           </nz-form-label>
         </ng-container>
 
-        <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
+        <nz-form-control nzErrorTip="{{ placeholderTips }} {{ properties[field]?.label }}" class="form-control">
           <!-- Description -->
           <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
             {{ properties[field]?.description }}
@@ -53,8 +53,7 @@ const compMap = {
               eo-ng-input
               id="{{ field }}"
               [disabled]="properties[field]?.disabled"
-              i18n-placeholder
-              placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.label || '') }}"
+              placeholder="{{ properties[field]?.placeholder ?? placeholderTips + (properties[field]?.label || '') }}"
               formControlName="{{ field }}"
               [(ngModel)]="model[field]"
             />
@@ -67,8 +66,7 @@ const compMap = {
               eo-ng-input
               id="{{ field }}"
               [disabled]="properties[field]?.disabled"
-              i18n-placeholder
-              placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.label || '') }}"
+              placeholder="{{ properties[field]?.placeholder ?? placeholderTips + (properties[field]?.label || '') }}"
               formControlName="{{ field }}"
               [rows]="properties[field].ui.rows ?? 4"
               [(ngModel)]="model[field]"
@@ -150,7 +148,7 @@ export class EoSchemaFormComponent implements OnChanges {
   properties = {};
   compMap = compMap;
   isInited = true;
-
+  placeholderTips = $localize`Please enter `;
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({});
     this.initEmitter();
