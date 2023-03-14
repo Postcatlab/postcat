@@ -139,9 +139,15 @@ export class GroupService extends BaseService<Group> {
     }
   }
 
-  async read(params, isCallByAPI = false) {
+  async read(params, isCallByApiData = false) {
     const result = await this.baseService.read(params);
     const group = result.data;
+    const groupAuthType = group.authInfo?.authType;
+
+    if (groupAuthType && groupAuthType !== noAuth.name) {
+      return result;
+    }
+
     // 递归获取父级分组鉴权信息
     if (group && (!group.authInfo?.authType || group.authInfo?.authType === inheritAuth.name)) {
       if (group.depth) {
@@ -150,7 +156,7 @@ export class GroupService extends BaseService<Group> {
           group.authInfo = {
             authType: inheritAuth.name,
             authInfo: parentGroup.authInfo?.authInfo || {},
-            ...(isCallByAPI ? parentGroup : group).authInfo
+            ...(isCallByApiData ? parentGroup : group).authInfo
           };
         } else {
           group.authInfo = {

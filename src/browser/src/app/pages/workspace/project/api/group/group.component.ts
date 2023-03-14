@@ -153,7 +153,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     this.authInfoModel = {
       ...this.model.authInfo,
-      authInfo: JSONParse(this.model.authInfo.authInfo)
+      authInfo: JSONParse(this.model.authInfo?.authInfo)
     };
     this.initForm();
     this.eoOnInit.emit(this.model);
