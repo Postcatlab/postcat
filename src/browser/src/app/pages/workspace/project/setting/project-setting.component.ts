@@ -3,17 +3,17 @@ import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, toJS } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { EffectService } from 'pc/browser/src/app/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
-import { ImportApiComponent } from '../../../../modules/extension-select/import-api/import-api.component';
-import { PushApiComponent } from '../../../../modules/extension-select/push-api/push-api.component';
-import { SyncApiComponent } from '../../../../modules/extension-select/sync-api/sync-api.component';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { ApiService } from '../../../../shared/services/storage/api.service';
+import { ExportApiComponent } from '../../../../components/extension-select/export-api/export-api.component';
+import { ImportApiComponent } from '../../../../components/extension-select/import-api/import-api.component';
+import { PushApiComponent } from '../../../../components/extension-select/push-api/push-api.component';
+import { SyncApiComponent } from '../../../../components/extension-select/sync-api/sync-api.component';
+import { ModalService } from '../../../../services/modal.service';
+import { ApiService } from '../../../../services/storage/api.service';
 
 const actionComponent = {
   push: PushApiComponent,

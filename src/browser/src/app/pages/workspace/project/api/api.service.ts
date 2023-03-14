@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
-import { MessageService } from '../../../../shared/services/message';
-import { ApiService } from '../../../../shared/services/storage/api.service';
-import { ApiData } from '../../../../shared/services/storage/db/models/apiData';
-import { StoreService } from '../../../../shared/store/state.service';
-import { ApiEffectService } from './service/store/api-effect.service';
+import { MessageService } from '../../../../services/message';
+import { ApiService } from '../../../../services/storage/api.service';
+import { ApiData } from '../../../../services/storage/db/models/apiData';
+import { StoreService } from '../../../../store/state.service';
+import { ApiEffectService } from './store/api-effect.service';
 
 @Injectable()
 export class ProjectApiService {

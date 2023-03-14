@@ -2,19 +2,19 @@ import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewC
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
+import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import {
   AuthInfo,
   AuthorizationExtensionFormComponent
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
-import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
-import { eoDeepCopy, JSONParse } from '../../../../../utils/index.utils';
-import { ApiEffectService } from '../service/store/api-effect.service';
+import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
+import { ApiEffectService } from '../store/api-effect.service';
 
 @Component({
   selector: 'eo-group',

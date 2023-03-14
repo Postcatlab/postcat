@@ -4,8 +4,8 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { ApiSharedModule } from 'pc/browser/src/app/modules/api-shared/api-shared.module';
-import { EoMonacoEditorModule } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
+import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ApiTestModule } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.module';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 

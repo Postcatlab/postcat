@@ -6,8 +6,8 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
-import { MemberListModule } from '../../../../modules/member-list/member-list.module';
-import { MemberService } from '../../../../modules/member-list/member.service';
+import { MemberListModule } from '../../../../components/member-list/member-list.module';
+import { MemberService } from '../../../../components/member-list/member.service';
 import { ProjectMemberRoutingModule } from './project-member-routing.module';
 import { ProjectMemberComponent } from './project-member.component';
 import { ProjectMemberService } from './project-member.service';

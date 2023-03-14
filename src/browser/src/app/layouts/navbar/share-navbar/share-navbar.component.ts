@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
-import { ApiService } from '../../../shared/services/storage/api.service';
-import { StoreService } from '../../../shared/store/state.service';
+import { ApiService } from '../../../services/storage/api.service';
+import { StoreService } from '../../../store/state.service';
 
 @Component({
   selector: 'pc-share-navbar',

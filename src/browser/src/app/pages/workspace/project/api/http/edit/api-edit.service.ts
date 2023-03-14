@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
-import { ApiData } from 'pc/browser/src/app/shared/services/storage/db/models';
-import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 

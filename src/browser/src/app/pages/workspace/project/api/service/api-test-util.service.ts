@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 
-import { ApiData } from '../../../../../shared/services/storage/db/models';
-import { BodyParam, HeaderParam, RestParam } from '../../../../../shared/services/storage/db/models/apiData';
-import { table2json, text2table, json2xml } from '../../../../../utils/data-transfer/data-transfer.utils';
-import { eoDeepCopy, JSONParse } from '../../../../../utils/index.utils';
+import { ApiData } from '../../../../../services/storage/db/models';
+import { BodyParam, HeaderParam, RestParam } from '../../../../../services/storage/db/models/apiData';
+import { table2json, text2table, json2xml } from '../../../../../shared/utils/data-transfer/data-transfer.utils';
+import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
 import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { ContentType } from '../http/test/api-test.model';
 import { ApiTestResData } from './test-server/test-server.model';

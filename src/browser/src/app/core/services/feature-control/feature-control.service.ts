@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Message, MessageService } from 'pc/browser/src/app/shared/services/message';
+import { Message, MessageService } from 'pc/browser/src/app/services/message';
 
 import featureJSON from './feature.json';
 type configKey = keyof typeof featureJSON;

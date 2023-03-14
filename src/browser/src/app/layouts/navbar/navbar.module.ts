@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
-import { DownloadClientModule } from '../../modules/download-client/download-client.module';
-import { LogoModule } from '../../modules/logo/logo.module';
+import { DownloadClientModule } from '../../components/download-client/download-client.module';
+import { LogoModule } from '../../components/logo/logo.module';
 import { SharedModule } from '../../shared/shared.module';
 import { NavBreadcrumbComponent } from './breadcrumb/nav-breadcrumb.component';
 import { SelectWorkspaceComponent } from './breadcrumb/select-workspace/select-workspace.component';

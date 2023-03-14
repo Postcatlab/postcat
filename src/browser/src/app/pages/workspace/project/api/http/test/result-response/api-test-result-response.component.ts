@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { EoMonacoEditorComponent } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { b64DecodeUnicode, decodeUnicode, getBlobUrl } from 'pc/browser/src/app/utils/index.utils';
+import { EoMonacoEditorComponent } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco-editor.component';
+import { b64DecodeUnicode, decodeUnicode, getBlobUrl } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { ApiTestUtilService } from '../../../service/api-test-util.service';
 import { ApiTestResData } from '../../../service/test-server/test-server.model';

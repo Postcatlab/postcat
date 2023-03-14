@@ -12,8 +12,8 @@ import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/ap
 import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/tree/api-group-tree.directive';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
-import { EoTabModule } from '../../../../modules/eo-ui/tab/tab.module';
-import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
+import { EoTabModule } from '../../../../components/eo-ui/tab/tab.module';
+import { ExtensionSelectModule } from '../../../../components/extension-select/extension-select.module';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
 import { ProjectApiService } from './api.service';

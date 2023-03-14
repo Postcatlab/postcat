@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction } from 'mobx';
-import { MessageService } from 'pc/browser/src/app/shared/services/message';
-import { waitNextTick } from 'pc/browser/src/app/utils/index.utils';
+import { MessageService } from 'pc/browser/src/app/services/message';
+import { waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
-import { StoreService } from '../../../shared/store/state.service';
+import { StoreService } from '../../../store/state.service';
 import { ProjectListService } from './project-list/project-list.service';
 
 @Component({

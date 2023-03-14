@@ -3,9 +3,9 @@ import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ChatRobotService } from '../../modules/chat-robot/chat-robot.service';
-import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
-import { ModalService } from '../../shared/services/modal.service';
+import { ChatRobotService } from '../../components/chat-robot/chat-robot.service';
+import { SystemSettingComponent } from '../../components/system-setting/system-setting.component';
+import { ModalService } from '../../services/modal.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({

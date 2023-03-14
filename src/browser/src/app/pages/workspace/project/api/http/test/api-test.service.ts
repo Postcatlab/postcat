@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiTestHistory } from 'pc/browser/src/app/shared/services/storage/db/models';
+import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 
-import { ApiEffectService } from '../../service/store/api-effect.service';
+import { ApiEffectService } from '../../store/api-effect.service';
 
 @Injectable()
 export class ApiTestService {

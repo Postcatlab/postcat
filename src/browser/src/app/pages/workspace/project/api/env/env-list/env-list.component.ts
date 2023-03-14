@@ -1,14 +1,14 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { autorun, reaction, values } from 'mobx';
-import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { waitNextTick } from 'pc/browser/src/app/utils/index.utils';
+import { waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
+import { EffectService } from 'pc/browser/src/app/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject } from 'rxjs';
 
-import { MessageService } from '../../../../../../shared/services/message';
-import { ApiEffectService } from '../../service/store/api-effect.service';
-import { ApiStoreService } from '../../service/store/api-state.service';
+import { MessageService } from '../../../../../../services/message';
+import { ApiEffectService } from '../../store/api-effect.service';
+import { ApiStoreService } from '../../store/api-state.service';
 @Component({
   selector: 'eo-env-list',
   templateUrl: './env-list.component.html',

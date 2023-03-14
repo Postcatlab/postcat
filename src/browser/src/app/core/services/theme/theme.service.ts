@@ -2,10 +2,10 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { kebabCase } from 'lodash-es';
 
-import { SettingService } from '../../../modules/system-setting/settings.service';
+import { SettingService } from '../../../components/system-setting/settings.service';
+import { Message, MessageService } from '../../../services/message';
 import { ExtensionInfo } from '../../../shared/models/extension-manager';
-import { Message, MessageService } from '../../../shared/services/message';
-import StorageUtil from '../../../utils/storage/storage.utils';
+import StorageUtil from '../../../shared/utils/storage/storage.utils';
 import { ThemeExtensionService } from './theme-extension.service';
 import { ThemeVariableService } from './theme-variable.service';
 import { SYSTEM_THEME, SystemUIThemeType, SystemThemeItems } from './theme.constant';

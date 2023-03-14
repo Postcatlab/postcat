@@ -10,9 +10,9 @@ import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
-import { ApiSharedModule } from 'pc/browser/src/app/modules/api-shared/api-shared.module';
-import { EoMonacoEditorModule } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ApiScriptComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/api-script.component';
 import { TestServerLocalNodeService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/local-node/test-connect.service';
 import { TestServerRemoteService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/remote-node/test-connect.service';
@@ -59,8 +59,8 @@ const COMPONENTS = [
     ReactiveFormsModule,
     CommonModule,
     ...UI_COMPONETS,
-    ApiSharedModule,
     SharedModule,
+    ApiSharedModule,
     NzResizableModule
   ],
   providers: [

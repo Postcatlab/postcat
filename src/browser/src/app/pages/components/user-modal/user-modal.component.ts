@@ -3,18 +3,18 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router, ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
-import { DataSourceService } from 'pc/browser/src/app/shared/services/data-source/data-source.service';
-import { MessageService } from 'pc/browser/src/app/shared/services/message/message.service';
-import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
-import { LocalService } from 'pc/browser/src/app/shared/services/storage/local.service';
-import { RemoteService } from 'pc/browser/src/app/shared/services/storage/remote.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { DataSourceService } from 'pc/browser/src/app/services/data-source/data-source.service';
+import { MessageService } from 'pc/browser/src/app/services/message/message.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { LocalService } from 'pc/browser/src/app/services/storage/local.service';
+import { RemoteService } from 'pc/browser/src/app/services/storage/remote.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { EffectService } from 'pc/browser/src/app/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
-import { ModalService } from '../../../shared/services/modal.service';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'eo-user-modal',

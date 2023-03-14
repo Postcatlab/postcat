@@ -4,20 +4,20 @@ import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-operate.service';
+import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { Protocol, ApiBodyType } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { TabOperateService } from 'pc/browser/src/app/modules/eo-ui/tab/tab-operate.service';
-import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
+import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiParamsNumPipe } from 'pc/browser/src/app/pages/workspace/project/api/pipe/api-param-num.pipe';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ApiData } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { isEmptyObj } from 'pc/browser/src/app/utils/index.utils';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { isEmptyObj } from 'pc/browser/src/app/shared/utils/index.utils';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
-import { ApiParamsNumPipe } from '../../../../../modules/api-shared/pipe/api-param-num.pipe';
-import { ModalService } from '../../../../../shared/services/modal.service';
+import { ModalService } from '../../../../../services/modal.service';
 import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {

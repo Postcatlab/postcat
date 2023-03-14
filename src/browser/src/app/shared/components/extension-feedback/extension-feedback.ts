@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MessageService } from 'pc/browser/src/app/shared/services/message';
+import { MessageService } from 'pc/browser/src/app/services/message';
 
 @Component({
   selector: 'extension-feedback',

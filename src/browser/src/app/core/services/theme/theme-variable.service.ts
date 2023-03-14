@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as Color from 'color';
 import { capitalize, has, isNull } from 'lodash-es';
 
-import { eoDeepCopy, JSONParse } from '../../../utils/index.utils';
+import { eoDeepCopy, JSONParse } from '../../../shared/utils/index.utils';
 import _allThemeColors from './theme-colors.json';
 import { DEFAULT_THEME_COLORS, SystemThemeItems } from './theme.constant';
 import { ThemeColorRule, ThemeColors, ThemeColorSingleRule } from './theme.model';

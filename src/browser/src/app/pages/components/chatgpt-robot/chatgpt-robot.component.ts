@@ -4,16 +4,16 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
+import { Message, MessageService } from 'pc/browser/src/app/services/message';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { Message, MessageService } from 'pc/browser/src/app/shared/services/message';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
+import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
-import { ChatRobotModule } from '../../../modules/chat-robot/chat-robot.module';
-import { ChatRobotService } from '../../../modules/chat-robot/chat-robot.service';
-import { StarMotivationComponent } from '../../../modules/star-motivation/star-motivation.component';
+import { ChatRobotModule } from '../../../components/chat-robot/chat-robot.module';
+import { ChatRobotService } from '../../../components/chat-robot/chat-robot.service';
+import { StarMotivationComponent } from '../../../components/star-motivation/star-motivation.component';
 
 type messageItem = {
   text?: string;

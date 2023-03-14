@@ -12,6 +12,7 @@ const getRequestDataByAuth = async (authInfo = {}) => {
         name,
         version
       });
+      console.log(extension);
     }
   }
 };

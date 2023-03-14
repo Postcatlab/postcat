@@ -2,17 +2,17 @@ import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@a
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
-import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
-import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
-import { Environment } from '../../../../../../shared/services/storage/index.model';
-import { eoDeepCopy, JSONParse } from '../../../../../../utils/index.utils';
-import { ApiEffectService } from '../../service/store/api-effect.service';
-import { ApiStoreService } from '../../service/store/api-state.service';
+import { ColumnItem } from '../../../../../../components/eo-ui/table-pro/table-pro.model';
+import { Environment } from '../../../../../../services/storage/index.model';
+import { eoDeepCopy, JSONParse } from '../../../../../../shared/utils/index.utils';
+import { ApiEffectService } from '../../store/api-effect.service';
+import { ApiStoreService } from '../../store/api-state.service';
 
 export type EnvironmentView = Partial<Environment>;
 @Component({

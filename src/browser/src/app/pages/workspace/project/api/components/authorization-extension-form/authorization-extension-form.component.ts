@@ -2,12 +2,12 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmi
 import { Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
-import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/service/store/api-state.service';
+import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { PCTree } from 'pc/browser/src/app/utils/tree/tree.utils';
+import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 export const noAuth = {
   name: 'none',

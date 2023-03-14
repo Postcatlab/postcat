@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
+import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
-import { ApiEffectService } from '../../../service/store/api-effect.service';
+import { ApiEffectService } from '../../../store/api-effect.service';
 import { GroupAction } from '../tree/api-group-tree.component';
 
 @Component({

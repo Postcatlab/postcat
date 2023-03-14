@@ -13,20 +13,20 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { NotificationService } from 'pc/browser/src/app/core/services/notification.service';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { GlobalProvider } from 'pc/browser/src/app/shared/services/globalProvider';
-import { IndexedDBStorage } from 'pc/browser/src/app/shared/services/storage/IndexedDB/lib/';
-import { HttpStorage } from 'pc/browser/src/app/shared/services/storage/http/lib';
-import { BaseUrlInterceptor } from 'pc/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { GlobalProvider } from 'pc/browser/src/app/services/globalProvider';
+import { IndexedDBStorage } from 'pc/browser/src/app/services/storage/IndexedDB/lib';
+import { HttpStorage } from 'pc/browser/src/app/services/storage/http/lib';
+import { BaseUrlInterceptor } from 'pc/browser/src/app/services/storage/http/lib/baseUrl.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TABLE_PRO_CONFIG } from './components/eo-ui/table-pro/table-pro.token';
+import { PcConsoleModule } from './components/pc-console/pc-console.module';
 import { GlobalErrorHandler } from './core/services/errorHandle.service';
 import { ThemeService } from './core/services/theme/theme.service';
-import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
-import { PcConsoleModule } from './modules/pc-console/pc-console.module';
-import { MockService } from './shared/services/mock.service';
+import { MockService } from './services/mock.service';
 registerLocaleData(en);
 registerLocaleData(zh);
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { ElectronService } from 'pc/browser/src/app/core/services/electron/electron.service';
 import { LANGUAGES } from 'pc/browser/src/app/core/services/language/language.model';
-import { SettingService } from 'pc/browser/src/app/modules/system-setting/settings.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 @Injectable({
