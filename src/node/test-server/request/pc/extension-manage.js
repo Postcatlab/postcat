@@ -5,7 +5,7 @@ const isElectron = !!process.versions['electron'];
 //TODO install locally
 const installExtension = (extension, version = 'latest') => {
   return new Promise(resolve => {
-    const ls = spawn('npm', ['i', `${extension}@${version}`]);
+    const ls = spawn('npm', ['i', '--no-save', `${extension}@${version}`]);
     ls.on('close', function (code) {
       console.log(`child process exited with code :${code}`);
       return resolve(true);
