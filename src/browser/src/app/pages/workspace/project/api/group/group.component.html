@@ -38,7 +38,13 @@
     <div class="text-tips mt-[15px] mb-[13px]" i18n>
       Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.
     </div>
-    <authorization-extension-form #authExtForm [(model)]="authInfoModel" [groupInfo]="model" (modelChange)="emitChange($event)">
+    <authorization-extension-form
+      #authExtForm
+      [(model)]="authInfoModel"
+      [inheritAuthType]="initialModel?.authInfo?.authType"
+      [groupInfo]="model"
+      (modelChange)="emitChange($event)"
+    >
     </authorization-extension-form>
   </eo-ng-tab>
 </eo-ng-tabset>
