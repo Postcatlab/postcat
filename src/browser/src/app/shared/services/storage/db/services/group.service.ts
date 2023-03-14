@@ -156,8 +156,14 @@ export class GroupService extends BaseService<Group> {
           group.authInfo = {
             authType: inheritAuth.name,
             authInfo: parentGroup.authInfo?.authInfo || {},
-            ...(isCallByApiData ? parentGroup : group).authInfo
+            ...group.authInfo
           };
+          if (isCallByApiData) {
+            group.authInfo = parentGroup.authInfo;
+            if (group.authInfo.authType === inheritAuth.name) {
+              group.authInfo.authType = noAuth.name;
+            }
+          }
         } else {
           group.authInfo = {
             authType: noAuth.name,

@@ -69,6 +69,7 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
 export class AuthorizationExtensionFormComponent implements OnChanges {
   @Input() @observable groupInfo: Partial<Group>;
   @Input() model: AuthInfo;
+  @Input() type: AuthIn = 'group';
   @Output() readonly modelChange = new EventEmitter<AuthInfo>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   inheritAuth = inheritAuth;
@@ -83,6 +84,9 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   get authType() {
+    if (this.type !== 'group') {
+      return noAuth;
+    }
     return this.parentGroup?.depth ? inheritAuth : noAuth;
   }
 
