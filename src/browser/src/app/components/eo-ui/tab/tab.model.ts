@@ -32,7 +32,6 @@ export declare interface TabViewComponent {
    * Emit view component data has been saved
    */
   afterSaved?: EventEmitter<any>;
-
   /**
    * Emit view component data has changed event
    */
@@ -61,6 +60,10 @@ export type TabItem = {
    */
   id: string;
   isFixed?: boolean;
+  /**
+   * If true,will not cache tab content
+   */
+  disabledCache?: boolean;
   /**
    * Preview page or edit page
    */

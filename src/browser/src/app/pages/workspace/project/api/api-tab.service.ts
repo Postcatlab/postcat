@@ -197,9 +197,16 @@ export class ApiTabService {
       return;
     }
     const contentID = currentTab.id;
-    //Get tab cache
-    this.componentRef.model = currentTab?.content?.[contentID] || null;
-    this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
+
+    //Get tab from cache
+    if (!currentTab.disabledCache) {
+      this.componentRef.model = currentTab?.content?.[contentID] || null;
+      this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
+    } else {
+      this.componentRef.model = null;
+      this.componentRef.initialModel = null;
+    }
+
     this.componentRef.init();
   }
 
