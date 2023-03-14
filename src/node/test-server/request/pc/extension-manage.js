@@ -1,6 +1,7 @@
-const spawn = require('child_process');
+var spawn = require('child_process').spawn;
 const extensionMap = new Map();
 
+//TODO install locally
 const installExtension = (extension, version = 'latest') => {
   return new Promise(resolve => {
     const ls = spawn('npm', ['i', `${extension}@${version}`]);
@@ -18,7 +19,9 @@ const installExtension = (extension, version = 'latest') => {
     });
   });
 };
-const loadExtension = async ({ name, version }) => {
+
+//TODO electron load local extension
+const loadExtension = async ({ name, version = 'latest' }) => {
   // * Is extension in Map cache ?
   // * If true, then get the function.
   // * If false, then install the extension and save to map cache then get the function.

@@ -16,21 +16,23 @@
   "author": "Postcat",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "3.3.0",
     "@grpc/grpc-js": "1.7.3",
     "@grpc/proto-loader": "0.7.3",
+    "@koa/cors": "3.3.0",
+    "content-disposition": "^0.5.4",
     "crypto-js": "4.1.1",
+    "form-data": "^4.0.0",
+    "iconv-lite": "^0.6.3",
     "jquery": "3.6.1",
     "jsdom": "20.0.1",
     "koa": "2.13.4",
     "koa-body": "5.0.0",
-    "ws": "8.8.1",
     "pm2": "5.2.0",
+    "postcat-basic-auth": "0.0.2",
+    "postcat-sync-swagger": "1.0.0",
+    "postman-sandbox": "^4.2.3",
     "socket.io": "4.5.3",
-    "xml2js": "0.4.23",
-    "iconv-lite": "^0.6.3",
-    "form-data": "^4.0.0",
-    "content-disposition": "^0.5.4",
-    "postman-sandbox": "^4.2.3"
+    "ws": "8.8.1",
+    "xml2js": "0.4.23"
   }
 }

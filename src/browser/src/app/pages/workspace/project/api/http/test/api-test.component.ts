@@ -204,7 +204,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
           requestInfo = this.resetModel().request;
         } else {
           requestInfo = await this.projectApi.get(uuid);
-          console.log('requestInfo', requestInfo);
           requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
         }
       }

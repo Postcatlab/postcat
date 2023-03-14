@@ -18,6 +18,7 @@ const TIMINGSUMMARY = {
   NS_PER_SEC: 1e9,
   MS_PER_NS: 1e6
 };
+const loadExtension = require('../pc/extension-manage').loadExtension;
 const pmRuntime = require('./script-engines/postman/postman-sandbox');
 const { NodeVM } = require('./script-engines/vm2/index');
 const querystring = require('querystring');
@@ -404,7 +405,6 @@ privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) 
  * @return {object} 前置组合请求信息
  */
 privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inputScript, inputOpts = {}) {
-  console.log(inputData);
   const tmpBasicEnv = inputData.env || _LibsCommon.parseEnv();
   const tmpOutput = {
     status: 'finish',
@@ -414,12 +414,30 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
     env: tmpBasicEnv,
     reportList: []
   };
-  let tmpTargetTypeData,
-    tmpTargetTypeEnv,
-    tmpEnviroments,
-    tmpBinary = inputData.binary;
+  let tmpTargetTypeData;
+  let tmpTargetTypeEnv;
+  let tmpEnviroments;
+  let tmpBinary = inputData.binary;
+  inputOpts.authInfo = inputOpts.authInfo || { authType: 'none', authInfo: {} };
+
   switch (scritEngines) {
     case 'pm': {
+      tmpTargetTypeEnv = {
+        baseUrlParam: tmpBasicEnv.http.baseUrlParam
+      };
+
+      //There is no need to execute pmRuntime while there is no script and no authInfo
+      if (!(inputScript || inputOpts.authInfo)) {
+        tmpTargetTypeData = {
+          apiUrl: inputData.url,
+          bodyParam: inputData.raw,
+          bodyParseParam: inputData.params,
+          queryParam: inputData.query,
+          headerParam: inputData.headers
+        };
+        break;
+      }
+
       //Get runtime instance
       const ctx = await pmRuntime.createContextAsync({ timeout: 10000, disableLegacyAPIs: true });
       const context = {
@@ -436,6 +454,14 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
             6: 'PATCH'
           }[inputData.apiRequestType],
           body: {},
+          auth: {
+            type: inputOpts.authInfo.authType,
+            [inputOpts.authInfo.authType]: Object.keys(inputOpts.authInfo.authInfo).map(keyName => ({
+              key: keyName,
+              type: 'any',
+              value: inputOpts.authInfo.authInfo[keyName]
+            }))
+          },
           header: Object.keys(inputData.headers).map(keyName => ({ key: keyName, value: inputData.headers[keyName] }))
         },
         globals: Object.keys(global.eoTestGlobals).map(keyName => ({ key: keyName, type: 'any', value: global.eoTestGlobals[keyName] }))
@@ -453,20 +479,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
         }
       }
 
-      tmpTargetTypeEnv = {
-        baseUrlParam: tmpBasicEnv.http.baseUrlParam
-      };
-      if (!inputScript) {
-        tmpTargetTypeData = {
-          apiUrl: inputData.url,
-          bodyParam: inputData.raw,
-          bodyParseParam: inputData.params,
-          queryParam: inputData.query,
-          headerParam: inputData.headers
-        };
-        break;
-      }
-
+      //TODO : no script,no execute
       //Excute code in runtime
       let [pmRes, err] = await pmRuntime.executeSync(ctx, inputScript, {
         context: context
@@ -479,23 +492,42 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
       }
 
       //Parse authInfo to request data
-      if (inputData.authInfo) {
-        switch (inputData.authInfo.authType) {
+      if (inputOpts.authInfo) {
+        switch (inputOpts.authInfo.authType) {
           case 'none': {
             break;
           }
           default: {
-            //Prepare auth info,such as replace global variable
-
             //Get extension function
             const [{ extension, packageJson }, err] = await loadExtension({
-              name: inputData.authInfo.authType
+              name: inputOpts.authInfo.authType
             });
-
-            //Execute at runtime
-            console.log(extension);
-
-            //
+            if (err) break;
+            if (!packageJson.default?.features?.authAPI) break;
+            //Prepare auth info,such as replace global variable
+            let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpEnviroments || {});
+            let authInfo = pmRes.request.auth[pmRes.request.auth.type] || [];
+            let authInfoStr = JSON.stringify(authInfo);
+            for (const name in tmpEnvGlobals) {
+              const value = tmpEnvGlobals[name];
+              authInfoStr = _LibsCommon.replaceAll(`{{${name}}}`, value || '', authInfoStr);
+            }
+            try {
+              authInfo = JSON.parse(authInfoStr);
+              const { action } = packageJson.default.features.authAPI;
+              const func = extension[action];
+              const config = (authInfo || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
+              //Execute at runtime
+              const code = await func(config);
+              const [authPmRes, err] = await pmRuntime.executeSync(ctx, code, {
+                context: pmRes
+              });
+              if (err) {
+                console.log(err);
+                break;
+              }
+              pmRes = authPmRes;
+            } catch (e) {}
             break;
           }
         }
