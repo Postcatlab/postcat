@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from 'eo/platform/common/i18n';
-import { defaultExtensions } from 'eo/workbench/browser/src/app/shared/constants/extension';
-import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/storage.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -18,7 +15,6 @@ type ExtensionItem = {
 };
 
 const extKey = 'ext_installed_list';
-const uninstallDebugKey = 'uninstall_default_ext_list';
 
 //* Web Extension manage service
 //! Can't import by other component,please use ExtensionService
@@ -140,13 +136,6 @@ export class WebExtensionService {
   unInstallExtension(extName: string): boolean {
     this.installedList = this.installedList.filter(n => n.name !== extName);
     StorageUtil.set(extKey, this.installedList);
-    if (!StorageUtil.get(uninstallDebugKey)) {
-      StorageUtil.set(uninstallDebugKey, []);
-    }
-    const uninstallDefaultExtArr = StorageUtil.get(uninstallDebugKey);
-    const uninstallDefaultExt = defaultExtensions.find(item => item === extName);
-    uninstallDefaultExtArr.push(uninstallDefaultExt);
-    StorageUtil.set(uninstallDebugKey, Array.from(new Set(uninstallDefaultExtArr)));
     return true;
   }
 
