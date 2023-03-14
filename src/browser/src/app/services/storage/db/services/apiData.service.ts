@@ -53,7 +53,7 @@ export class ApiDataService extends BaseService<ApiData> {
     });
 
     const promiseArr = result.data.map(async item => {
-      const { data: groupInfo } = await this.groupService.read({ id: item.groupId });
+      const { data: groupInfo } = await this.groupService.read({ id: item.groupId }, true);
       item.authInfo = groupInfo.authInfo;
     });
 
