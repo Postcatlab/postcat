@@ -1,31 +1,39 @@
 import { test, expect } from '@playwright/test';
+const clickGroupBtn = async (page, name) => {
+  await page.locator('nz-tree-node-title').filter({ hasText: name }).locator('div').nth(1).hover();
+  await page.locator('nz-tree-node-title').filter({ hasText: name }).hover();
+  await page.locator('nz-tree-node-title').filter({ hasText: name }).getByRole('button').click();
+};
 test.describe('Group Operate', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     //Add group
     await page.getByRole('banner').getByRole('button').hover();
     await page.locator('a').filter({ hasText: 'New Group' }).click();
-    await page.getByLabel('Group Name').fill('Parent Group');
-    await page.getByRole('button', { name: 'Confirm' }).click();
+    await page.getByPlaceholder('Group Name').fill('Parent Group');
+    await page.getByPlaceholder('Group Name').press('Enter');
+    await page.locator('eo-ng-tree-default').getByText('Parent Group').click();
+
     //Add sub group
-    await page.getByTitle('Parent Group').locator('div').nth(1).hover();
-    await page.getByTitle('Parent Group').getByRole('button').click();
+    await clickGroupBtn(page, 'Parent Group');
     await page.getByText('Add Subgroup').click();
-    await page.getByLabel('Group Name').fill('Sub Group');
-    await page.getByRole('button', { name: 'Confirm' }).click();
+    await page.getByPlaceholder('Group Name').fill('Sub Group');
+    //random click to save
+    await page.locator('div').filter({ hasText: 'Authorization' }).first().click();
+    await page.locator('eo-ng-tree-default').getByText('Sub Group').click();
+    await page.getByRole('tab', { name: 'Sub Group Close tab' }).getByText('Sub Group').hover();
+    await page.getByRole('button', { name: 'Close tab' }).click();
   });
 
   test('Basic Operate', async ({ page }) => {
     //Edit group
-    await page.getByTitle('Sub Group').locator('div').nth(1).hover();
-    await page.getByTitle('Sub Group').getByRole('button').click();
-    await page.getByText('Edit').click();
+    await clickGroupBtn(page, 'Sub Group');
+    await page.locator('nz-tree-node-title').getByText('Edit').first().click();
     await page.getByLabel('Group Name').fill('Sub Group after');
     await page.getByRole('button', { name: 'Confirm' }).click();
 
     //Delete group
-    await page.getByTitle('Sub Group after').locator('div').nth(1).hover();
-    await page.getByTitle('Sub Group after').getByRole('button').click();
+    await clickGroupBtn(page, 'Sub Group after');
     await page.getByText('Delete').click();
     await page.getByRole('button', { name: 'Confirm' }).click();
   });
