@@ -297,7 +297,6 @@ export class ApiGroupTreeComponent implements OnInit {
         // event.node.isExpanded = !event.node.isExpanded;
         // this.toggleExpand();
         // * jump to group detail page
-        const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
         this.navigate2group({ uuid: event.node.key });
         break;
       }
@@ -313,7 +312,8 @@ export class ApiGroupTreeComponent implements OnInit {
   }
 
   navigate2group(queryParams) {
-    this.router.navigate([`/home/workspace/project/api/group/edit`], {
+    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
+    this.router.navigate([`${prefix}/group/edit`], {
       queryParams
     });
   }
