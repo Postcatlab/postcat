@@ -25,7 +25,7 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions
 } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
-import { ContentType } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
@@ -521,7 +521,15 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         },
         requestParams: {
           queryParams: [],
-          headerParams: [],
+          headerParams: [
+            {
+              isRequired: 1,
+              name: 'content-type',
+              paramAttr: {
+                example: CONTENT_TYPE_BY_ABRIDGE[0].value
+              }
+            }
+          ],
           restParams: [],
           bodyParams: [
             {

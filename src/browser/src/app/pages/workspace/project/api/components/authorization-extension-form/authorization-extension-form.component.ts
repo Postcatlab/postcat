@@ -166,10 +166,8 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
 
   async ngOnChanges(changes: SimpleChanges) {
     const { model } = changes;
-    console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
       if (this.model.authType !== inheritAuth.name) {
-        console.log('this.authType', this.authType);
         this.updateSchema(this.authType);
       }
     }
