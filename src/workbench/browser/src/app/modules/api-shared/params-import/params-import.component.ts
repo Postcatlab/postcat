@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { pcMerge } from 'eo/workbench/browser/src/app/utils/pc-merge';
 import { cloneDeep, toArray, merge, isEmpty } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
@@ -182,7 +183,7 @@ export class ParamsImportComponent implements OnInit {
     const combineFunc = {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
-      mixin: (data, base) => obj2array(merge(array2obj(base), array2obj(data)))
+      mixin: (data, base) => pcMerge(base, data, 'paramAttr.example', 'childList', false)
     };
 
     const endParse = (data, type) => {
