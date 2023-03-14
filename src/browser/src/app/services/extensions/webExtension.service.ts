@@ -37,7 +37,7 @@ export class WebExtensionService {
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService, private extensionCommon: ExtensionCommonService) {
     const isDevEnv = !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname);
-    this.debugExtensionNames = isDevEnv && this.web.isWeb ? ['postcat-basic-auth', 'postcat-jwt-bearer'] : [];
+    this.debugExtensionNames = isDevEnv && this.web.isWeb ? [] : [];
   }
   async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json
