@@ -1,0 +1,38 @@
+{
+  "name": "postcat-test-server",
+  "version": "1.0.0",
+  "description": "Recieve postcat test config and response http result",
+  "main": "./server/main.js",
+  "scripts": {
+    "dev": "node ./server/main.js",
+    "start": "pm2-runtime start ./server/main.js",
+    "start:io": "pm2-runtime start ./server/socketio.js",
+    "start:all": "yarn start && yarn start:io",
+    "start:all:pm2": "pm2 start ./server/main.js",
+    "watch": "pm2 list",
+    "stop": "pm2 stop all",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Postcat",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "1.7.3",
+    "@grpc/proto-loader": "0.7.3",
+    "@koa/cors": "3.3.0",
+    "content-disposition": "^0.5.4",
+    "crypto-js": "4.1.1",
+    "form-data": "^4.0.0",
+    "iconv-lite": "^0.6.3",
+    "jquery": "3.6.1",
+    "jsdom": "20.0.1",
+    "koa": "2.13.4",
+    "koa-body": "5.0.0",
+    "pm2": "5.2.0",
+    "postcat-basic-auth": "0.0.3",
+    "postcat-sync-swagger": "1.0.0",
+    "postman-sandbox": "^4.2.3",
+    "socket.io": "4.5.3",
+    "ws": "8.8.1",
+    "xml2js": "0.4.23"
+  }
+}

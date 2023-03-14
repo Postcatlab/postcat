@@ -1,0 +1,94 @@
+<div class="flex justify-center w-full p-base">
+  <div class="w-[50%] min-w-[600px] flex flex-col">
+    <div class="flex justify-between">
+      <form nz-form nzLayout="inline" (ngSubmit)="changeProjectName(projectName)">
+        <nz-form-item>
+          <nz-form-control
+            [nzValidateStatus]="!isInit || projectName ? '' : 'error'"
+            i18n-nzErrorTip
+            nzErrorTip="Please input your projectName"
+          >
+            <div class="flex items-center">
+              <input
+                *ngIf="isEdit"
+                #inputRef
+                eo-ng-input
+                autofocus
+                placeholder="Project Name"
+                name="projectName"
+                (blur)="changeProjectName(projectName)"
+                required
+                [(ngModel)]="projectName"
+              />
+              <ng-container *ngIf="!isEdit">
+                <h4 nz-typography class="!mb-[0px]">{{ projectName }}</h4>
+                <button eo-ng-button nzType="text" class="ml-[5px]" (click)="startEditProjectName()">
+                  <eo-iconpark-icon name="edit"></eo-iconpark-icon>
+                </button>
+              </ng-container>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+      <span
+        nz-tooltip
+        [nzTooltipTitle]="titleTemplate"
+        nzTooltipPlacement="bottom"
+        nzTooltipOverlayClassName="project-info-tooltip"
+        [nzTooltipTitleContext]="{ $implicit: 'Icon' }"
+        class="h-[26px] cursor-pointer"
+      >
+        <eo-iconpark-icon name="attention"></eo-iconpark-icon>
+      </span>
+      <ng-template #titleTemplate let-thing>
+        <h5 nz-typography style="font-size: 14px">Workspace ID</h5>
+        <p nz-typography nzCopyable [nzCopyText]="store.getCurrentWorkspaceUuid" [nzCopyIcons]="[copedIcon, copedIcon]">
+          {{ store.getCurrentWorkspaceUuid }}
+        </p>
+        <h5 nz-typography style="font-size: 14px">Project ID</h5>
+        <p nz-typography nzCopyable [nzCopyText]="store.getCurrentProjectID" [nzCopyIcons]="[copedIcon, copedIcon]">
+          {{ store.getCurrentProjectID }}
+        </p>
+        <ng-template #copedIcon>
+          <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+        </ng-template>
+      </ng-template>
+    </div>
+
+    <div class="my-2">
+      <nz-divider></nz-divider>
+    </div>
+    <div class="mb-2 font-bold" i18n>Actions</div>
+    <div class="rounded border-all">
+      <nz-list nzItemLayout="horizontal">
+        <nz-list-item *ngFor="let item of overviewList">
+          <div class="flex items-center justify-between w-full px-base">
+            <div class="flex w-9/12 px-[4px]">
+              <span class="w-3/12">{{ item.title }}</span>
+              <span class="w-9/12 text-tips">{{ item.desc }}</span>
+            </div>
+            <div class="flex justify-end w-2/12">
+              <ng-container *ngFor="let n of [].concat(item.btns ?? item)">
+                <button
+                  class="ml-[6px] w-[96px] flex-shrink-0"
+                  *ngIf="n.show?.() ?? true"
+                  eo-ng-button
+                  [nzLoading]="n.loading?.()"
+                  nzType="default"
+                  [nzDanger]="n.type === 'delete'"
+                  trace
+                  [traceID]="n.traceID || ''"
+                  (click)="clickItem(n)"
+                >
+                  {{ n.title }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </nz-list-item>
+        <nz-list-empty *ngIf="overviewList.length === 0"></nz-list-empty>
+      </nz-list>
+    </div>
+  </div>
+</div>

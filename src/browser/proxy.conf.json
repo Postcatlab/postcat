@@ -1,0 +1,25 @@
+{
+  "/api": {
+    // "targe": "https://postcat.com",
+    "target": "http://52.76.76.88:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/usercenter": {
+    // "targe": "https://postcat.com",
+    "target": "http://52.76.76.88:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+  // "/api": {
+  //   "target": "https://mockapi.eolink.com/Dr31QyT4b832495fe945fb9420215f167e33b2dc1fb4f27",
+  //   "secure": false,
+  //   "changeOrigin": true,
+  //   "logLevel": "debug",
+  //   "pathRewrite": {
+  //     "^/api": ""
+  //   }
+  // }
+}
