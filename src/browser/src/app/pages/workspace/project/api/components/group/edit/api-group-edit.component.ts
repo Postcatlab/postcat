@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
 import { ApiEffectService } from '../../../store/api-effect.service';
@@ -18,7 +19,12 @@ export class ApiGroupEditComponent implements OnInit {
   validateForm!: FormGroup;
   isDelete: boolean;
 
-  constructor(private fb: FormBuilder, private modalRef: NzModalRef, private effect: ApiEffectService) {}
+  constructor(
+    private fb: FormBuilder,
+    private modalRef: NzModalRef,
+    private effect: ApiEffectService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
@@ -44,6 +50,7 @@ export class ApiGroupEditComponent implements OnInit {
     switch (this.action) {
       case 'delete': {
         result = await this.effect.deleteGroup(this.group);
+        this.messageService.send({ type: 'deleteGroupSuccess', data: { uuids: [this.group.id] } });
         break;
       }
       case 'edit': {

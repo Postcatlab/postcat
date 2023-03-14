@@ -106,6 +106,17 @@ export class ApiTabService {
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
       }
+      case 'deleteGroupSuccess': {
+        const closeTabIDs = this.apiTabComponent
+          .getTabs()
+          .filter(
+            (val: TabItem) =>
+              val.pathname.includes('home/workspace/project/api/group/edit') && inArg.data.uuids.includes(Number(val.params.uuid))
+          )
+          .map(val => val.uuid);
+        this.apiTabComponent.batchCloseTab(closeTabIDs);
+        break;
+      }
       case 'tabContentInit': {
         this.updateChildView(this.router.url);
         break;
