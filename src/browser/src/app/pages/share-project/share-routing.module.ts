@@ -34,6 +34,15 @@ const routes: Routes = [
             loadChildren: () => import('../workspace/project/api/websocket/websocket.module').then(m => m.WebsocketModule)
           }
         ]
+      },
+      {
+        path: 'group',
+        children: [
+          {
+            path: 'edit',
+            loadChildren: () => import('../workspace/project/api/group/group.module').then(m => m.GroupModule)
+          }
+        ]
       }
     ]
   }
