@@ -1,0 +1,51 @@
+.env-select {
+  --select-background-color: var(--background-color);
+
+  border-bottom: 1px solid var(--border-color);
+}
+
+nz-divider {
+  margin: 0.1em 0;
+}
+
+:host ::ng-deep {
+  .env-select-componnet {
+    .ant-select-clear {
+      border: 1px solid var(--system-border-color);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: -8px;
+    }
+  }
+
+  eo-ng-select eo-ng-select-top-control {
+    border: none !important;
+  }
+
+  .ant-select {
+    width: 140px;
+  }
+}
+
+.content {
+  color: var(--text-color);
+}
+
+.title {
+  background-color: var(--item-active-background-color);
+  color: var(--text-color);
+}
+
+::ng-deep {
+  .env-selector-dropdown {
+    width: 224px;
+  }
+
+  .preview-env .ant-popover-inner-content {
+    padding: 0;
+  }
+}

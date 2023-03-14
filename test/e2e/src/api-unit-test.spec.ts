@@ -21,10 +21,10 @@ test.describe('Test API', () => {
     await page.getByPlaceholder('Enter URL').fill('http://demo.gokuapi.com:8280/Web/Test/{rest}/print');
     //Header
     await page.getByText('Headers').click();
-    await page.getByPlaceholder('Name').click();
-    await page.getByPlaceholder('Name').fill('header');
-    await page.getByPlaceholder('Value').first().click();
-    await page.getByPlaceholder('Value').first().fill('headervalue');
+    await page.getByPlaceholder('Name').nth(1).click();
+    await page.getByPlaceholder('Name').nth(1).fill('header');
+    await page.getByPlaceholder('Value').nth(1).click();
+    await page.getByPlaceholder('Value').nth(1).fill('headervalue');
     //Query
     await page.getByText('Query').click();
     await page.getByPlaceholder('Name').click();

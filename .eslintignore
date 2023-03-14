@@ -1,6 +1,7 @@
 _cli-tpl/
 dist/
 coverage/
+src/node
 
 # Logs
 logs

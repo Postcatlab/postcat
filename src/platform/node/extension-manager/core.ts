@@ -1,8 +1,8 @@
-import { LanguageService } from 'eo/app/electron-main/language.service';
-import { TranslateService } from 'eo/platform/common/i18n';
-import { getLocaleData } from 'eo/platform/node/i18n';
-import { fileExists, readFile, readJson } from 'eo/shared/node/file';
-import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { LanguageService } from 'pc/app/electron-main/language.service';
+import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { TranslateService } from 'pc/platform/common/i18n';
+import { getLocaleData } from 'pc/platform/node/i18n';
+import { fileExists, readFile, readJson } from 'pc/shared/node/file';
 
 import { ModuleHandlerOptions } from './handler.model';
 

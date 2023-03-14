@@ -1,0 +1,52 @@
+@import '../../workspace/project/api/components/group/tree/api-group-tree.component';
+
+:host ::ng-deep {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  eo-ng-tree-default {
+    height: calc(62vh - 32px);
+    overflow: auto;
+    display: block;
+  }
+
+  eo-ng-auto-complete input {
+    border-radius: 999px;
+  }
+
+  .ant-btn-link {
+    padding: 0;
+  }
+
+  .left {
+    width: 250px;
+    height: 70vh; // * necessary
+    border-right: 1px solid var(--border-color);
+
+    .plugin-link {
+      &:hover,
+      &.active {
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+
+      &:hover {
+        background-color: rgb(0 0 0 / 10%);
+      }
+    }
+  }
+
+  .right {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+::ng-deep {
+  .eo-extension-modal {
+    .ant-modal-body {
+      padding: 0;
+    }
+  }
+}

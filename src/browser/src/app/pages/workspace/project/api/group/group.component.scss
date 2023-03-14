@@ -1,0 +1,25 @@
+:host ::ng-deep {
+  @apply p-[20px];
+
+  .ant-tabs-nav {
+    margin-left: -10px;
+  }
+
+  .ant-form-inline .ant-form-item-with-help {
+    margin-bottom: 0;
+  }
+}
+
+.top-save-bar {
+  top: -21px;
+  background-color: var(--background-color);
+  border-bottom: none;
+  margin: 15px 0;
+  padding-left: 0;
+  height: auto;
+
+  &.is-pinned {
+    padding-top: 1px;
+    border-bottom: 1px solid var(--border-color);
+  }
+}

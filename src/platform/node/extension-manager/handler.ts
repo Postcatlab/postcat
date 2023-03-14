@@ -1,5 +1,5 @@
-import { fileExists, writeJson } from 'eo/shared/node/file';
 import fixPath from 'fix-path';
+import { fileExists, writeJson } from 'pc/shared/node/file';
 
 import { CoreHandler } from './core';
 import { ModuleHandlerOptions, ModuleHandlerResult } from './handler.model';

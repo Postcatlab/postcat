@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "",
+    "types": ["node"],
+    "lib": ["DOM", "ESNext"],
+    "paths": {
+      "pc/*": ["../../../src/*"]
+    }
+  },
+  "files": ["main.ts", "polyfills.ts"],
+  "include": ["**/*.d.ts"],
+  "exclude": ["**/*.spec.ts", "./app/views/*"]
+}

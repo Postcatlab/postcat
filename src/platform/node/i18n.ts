@@ -1,4 +1,4 @@
-import { I18nLocale, ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { I18nLocale, ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 interface LooseObject {
   [key: string]: any;
 }

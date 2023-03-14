@@ -1,0 +1,121 @@
+.ant-input-group.ant-input-group-compact {
+  display: flex;
+}
+
+.ant-form-item {
+  margin-bottom: 0;
+}
+
+.header-container {
+  padding: 10px 11px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+
+.ant-tabs-nav {
+  margin-left: 10px;
+}
+
+pc-api-test-form,
+eo-api-test-body {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.test_wrap {
+  height: 100%;
+
+  .scroll_container {
+    overflow-y: auto;
+  }
+
+  .bottom_container {
+    height: 100%;
+  }
+}
+
+.env-front-uri {
+  max-width: 240px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--disabled-text-color);
+  background-color: var(--disabled-background-color);
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+div.ant-typography {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep {
+  .ant-select-open eo-ng-select-top-control {
+    background-color: var(--background-color) !important;
+  }
+
+  eo-ng-select eo-ng-select-top-control,
+  .main-bg {
+    background-color: var(--bar-background-color) !important;
+
+    &:focus,
+    &:active,
+    &:target {
+      background-color: var(--background-color) !important;
+    }
+  }
+
+  .header-container {
+    eo-ng-select,
+    .ant-input,
+    .ant-btn {
+      height: 40px;
+    }
+
+    eo-ng-select {
+      eo-ng-select-top-control {
+        height: 100% !important;
+      }
+    }
+  }
+
+  .ant-tabs-content-holder {
+    height: calc(100% - 35px);
+    overflow: auto;
+  }
+
+  .response_container {
+    @apply h-full overflow-hidden;
+
+    .ant-tabs-tabpane {
+      min-height: 208px;
+    }
+  }
+
+  .top_container {
+    height: 100%;
+
+    > form {
+      position: sticky;
+      top: 0;
+    }
+
+    > .ant-tabs {
+      height: calc(100% - 60px);
+
+      .ant-tabs-tabpane {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .ant-tabs-content {
+        overflow: hidden;
+        height: 100%;
+      }
+    }
+  }
+}
