@@ -54,13 +54,13 @@ const authInMap = {
       </extension-feedback>
       <nz-divider></nz-divider>
       <div class="my-[24px]">
-        <ng-container *ngIf="model?.isInherited && parentGroup?.depth !== 0">
+        <ng-container *ngIf="authType === inheritAuth.name && parentGroup?.depth !== 0">
           <div class="text-tips" i18n>
             This {{ authInMap[type] }} is using <b>{{ inheritAuthType || model.authType }}</b> from
             <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
         </ng-container>
-        <ng-container *ngIf="!model?.isInherited">
+        <ng-container *ngIf="authType !== inheritAuth.name">
           <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
           <ng-template #templateRefMsg>
             <div class="text" i18n>
