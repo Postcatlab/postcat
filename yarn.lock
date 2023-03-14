@@ -12872,10 +12872,10 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.npmmirror.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha512-xTgYBc3fuo7Yt7JbiuFxSYGToMoz8fLoE6TC9Wx1P/u+LfeThMOAqmuyECnlBaaJb+u1m9hHiXUEtwW4OzfUJg==
 
-postcat-sync-swagger@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.npmmirror.com/postcat-sync-swagger/-/postcat-sync-swagger-0.0.13.tgz#9c07b5ae40ef0a2669279a9180dd3f6bae845a36"
-  integrity sha512-hxUrF43na4tcXdA/5H1suQqklTJ7ksSwPHibIzNXME4uP79xy5fDh0QEndMJPwBHxk3CCsCigC5kZGvveQobmg==
+postcat-sync-swagger@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/postcat-sync-swagger/-/postcat-sync-swagger-1.0.0.tgz#36cb157e127d8cfb870d363c0b66afe04b92b387"
+  integrity sha512-h+pfNFR1Lbfbd1lGLW+FYMIIF/rudjsK1QhHEl9sUfuDG+21xEZs0pDjJ7S+vLOhwCb9ll4ce0ICV5Z73Ve7xg==
   dependencies:
     lodash "*"
     lodash-es "^4.17.21"

@@ -25,7 +25,15 @@
       "pc/*": ["./src/*"]
     }
   },
-  "include": ["**/*.d.ts", "./src/**/**.ts", "./src/**/**.js", "scripts/build.js", "test/e2e/test.ts", "test/e2e/test.ts"],
+  "include": [
+    "**/*.d.ts",
+    "./src/**/**.ts",
+    "./src/**/**.js",
+    "scripts/build.js",
+    "test/e2e/test.ts",
+    "test/e2e/test.ts",
+    "src/node/extensions-manage/extension-manage.js"
+  ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/browser/**/*.js", "**/browser/**/*.ts", "out"],
   "angularCompilerOptions": {
     "enableIvy": true

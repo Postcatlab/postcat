@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzTreeComponent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { requestMethodMap } from 'pc/browser/src/app/modules/api-shared/api.model';
 import { ImportApiComponent } from 'pc/browser/src/app/modules/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/modules/extension-select/sync-api/sync-api.component';
@@ -42,6 +42,11 @@ export class ApiGroupTreeComponent implements OnInit {
   requestMethodMap = requestMethodMap;
   nzSelectedKeys = [];
   searchValue = '';
+  searchFunc = (node: NzTreeNodeOptions) => {
+    const { uri, name, title } = node;
+    // console.log('node', uri, name, title);
+    return [uri, name, title].some(n => n?.includes?.(this.searchValue));
+  };
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];

@@ -14,16 +14,16 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
     <section class="w-1/2">
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
-          <nz-form-label [nzSpan]="24" nzRequired i18n>New password</nz-form-label>
+          <nz-form-label [nzSpan]="24" nzRequired i18n nzFor="newPassword">New password</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your new password">
-            <input type="password" eo-ng-input formControlName="newPassword" placeholder="" i18n-placeholder />
+            <input type="password" eo-ng-input formControlName="newPassword" id="newPassword" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="24" nzRequired i18n>Confirm new password</nz-form-label>
+          <nz-form-label [nzSpan]="24" nzRequired i18n nzFor="confirmPassword">Confirm new password</nz-form-label>
           <nz-form-control [nzErrorTip]="confirmPasswordErrorTpl">
-            <input type="password" eo-ng-input formControlName="confirmPassword" placeholder="" i18n-placeholder />
+            <input type="password" eo-ng-input formControlName="confirmPassword" id="confirmPassword" placeholder="" i18n-placeholder />
             <ng-template #confirmPasswordErrorTpl let-control>
               <ng-container *ngIf="control.hasError('required')" i18n> Please input your confirm new password </ng-container>
 

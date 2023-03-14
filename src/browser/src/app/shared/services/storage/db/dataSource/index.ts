@@ -75,8 +75,7 @@ class DataSource extends Dexie {
         return obj;
       });
       table.hook('updating', (modifications, primKey, obj) => {
-        const newObj = merge({}, obj, modifications);
-        return { ...newObj, updateTime: Date.now() };
+        return { ...modifications, updateTime: Date.now() };
       });
     });
   }

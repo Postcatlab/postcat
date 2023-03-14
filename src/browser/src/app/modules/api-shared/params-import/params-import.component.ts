@@ -12,7 +12,7 @@ import { ApiParamsTypeJsonOrXml } from '../api.model';
 const titleHash = new Map()
   .set('xml', $localize`Import XML`)
   .set('json', $localize`Import JSON`)
-  .set('formData', $localize`Import Form-data`)
+  .set('formData', $localize`Import Form-Data`)
   .set('header', $localize`Import Header`)
   .set('query', $localize`Import Query`);
 
@@ -80,6 +80,7 @@ export class ParamsImportComponent implements OnInit {
       } catch (error) {}
     } else if (['formData', 'header'].includes(this.contentType)) {
       const arr = form2json(clipText);
+      console.log(arr);
       if (Array.isArray(arr) && arr.length && clipText.split(':').length > 1) {
         this.paramCode = clipText;
       }

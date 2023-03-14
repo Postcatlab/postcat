@@ -169,7 +169,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
   }
 
   btnClick(btnItem, index, item, apis) {
-    console.log('eo-table-pro:btnClick:', btnItem, index, item, apis);
+    // console.log('eo-table-pro:btnClick:', btnItem, index, item, apis);
     if (btnItem.click) {
       btnItem.click(item, index, apis);
       return;

@@ -1,6 +1,3 @@
-import { ApiBodyType } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { BodyParam, HeaderParam } from 'pc/browser/src/app/shared/services/storage/db/models/apiData';
-
 export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file'

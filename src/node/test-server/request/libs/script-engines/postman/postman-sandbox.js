@@ -19,77 +19,42 @@ const createContextAsync = async opts => {
     });
   });
 };
-
+//Example code
+// const code1 = `pm.globals.set("global_key","value")`;
+// const code2 = `pm.request.addHeader({"key":"header","value":new Date().getTime()});`;
+// const code5 = ` pm.request.body.formdata.push({
+//       key: "test1",
+//       value:'formcode'
+//     })`;
+// // !unsuport
+// const code3 = `pm.sendRequest("https://postman-echo.com/get", function (err, response) {
+//     pm.request.addHeader({"key":"header","value":response.json()})
+//   });`;
+// const code4 = `pm.test("Status code is 200", function () {
+//       pm.response.to.have.status(200);
+//   });`;
 const executeSync = (ctx, code, options) => {
   return new Promise((resolve, reject) => {
     const id = Crypto.randomUUID();
-    const code1 = `pm.globals.set("global_key","value")`;
-    const code2 = `pm.request.addHeader({"key":"header","value":new Date().getTime()});`;
-    const code5 = ` pm.request.body.formdata.push({
-      key: "test1",
-      value:'formcode'
-    })`;
-    // !unsuport
-    const code3 = `pm.sendRequest("https://postman-echo.com/get", function (err, response) {
-    pm.request.addHeader({"key":"header","value":response.json()})
-  });`;
-    const code4 = `pm.test("Status code is 200", function () {
-      pm.response.to.have.status(200);
-  });
-  `;
     ctx.execute(
-      code4,
+      `const pc=pm;${code}`,
       {
         debug: true,
         id: id,
-        context: {
-          enviroment: [],
-          target: 'test',
-          request: {
-            url: {
-              path: 'https://www.baidu.com',
-              query: [{ key: 'test', value: 'query' }]
-            },
-            body: {
-              mode: 'formdata',
-              formdata: [{ key: 'test', value: 'formdata' }]
-            },
-            method: 'GET',
-            headers: [{ key: 'header0', value: 'headervalue0' }]
-          },
-          globals: [],
-          response: {
-            status: 'OK',
-            code: 200,
-            header: [16],
-            cookie: [0],
-            responseTime: 904,
-            responseSize: 231066
-          }
-        }
+        context: options.context
       },
       function (err, result) {
         if (err) {
-          reject([null, err]);
-          return console.error('extecute error: ', err);
+          // console.error('extecute error: ', err);
+          resolve([null, err]);
+          return;
         }
-        console.log('extecute result:', JSON.stringify(result));
+        // console.log('extecute result:', JSON.stringify(result));
         resolve([result, null]);
       }
     );
-    ctx.on(`execution.assertion`, () => {
-      console.log('execution.assertion', arguments);
-    });
-    ctx.on(`execution.assertion.${id}`, () => {
-      console.log('execution.assertion', arguments);
-    });
   });
 };
-// async function init() {
-//   const ctx = await createContextAsync({ timeout: 10000, disableLegacyAPIs: true });
-// }
-// init();
-
 module.exports = {
   createContextAsync,
   executeSync

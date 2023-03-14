@@ -19,7 +19,7 @@ export class NpsMaskComponent implements OnInit {
    *
    * In development mode,it will show immediately
    */
-  duration = APP_CONFIG.production ? 30 : 0;
+  duration = APP_CONFIG.production ? 60 : 0;
   constructor(private store: StoreService) {}
   ngOnInit(): void {
     this.bindUserID();
