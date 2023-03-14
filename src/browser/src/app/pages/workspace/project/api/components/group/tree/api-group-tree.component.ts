@@ -4,21 +4,21 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { requestMethodMap } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { ImportApiComponent } from 'pc/browser/src/app/modules/extension-select/import-api/import-api.component';
-import { SyncApiComponent } from 'pc/browser/src/app/modules/extension-select/sync-api/sync-api.component';
+import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
+import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
 import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiGroupEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
-import { ModalService } from 'pc/browser/src/app/shared/services/modal.service';
-import { GroupCreateDto, GroupUpdateDto } from 'pc/browser/src/app/shared/services/storage/db/dto/group.dto';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/utils/index.utils';
-import { getExpandGroupByKey } from 'pc/browser/src/app/utils/tree/tree.utils';
+import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { GroupCreateDto, GroupUpdateDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
+import { getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { ProjectApiService } from '../../../api.service';
-import { ApiEffectService } from '../../../service/store/api-effect.service';
-import { ApiStoreService } from '../../../service/store/api-state.service';
+import { ApiEffectService } from '../../../store/api-effect.service';
+import { ApiStoreService } from '../../../store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 

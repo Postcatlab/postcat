@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { BodyParam } from 'pc/browser/src/app/shared/services/storage/db/dto/apiData.dto';
-import { ApiData } from 'pc/browser/src/app/shared/services/storage/db/models/apiData';
-import { eoDeepCopy } from 'pc/browser/src/app/utils/index.utils';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
-import { filterTableData } from '../../../../../../utils/tree/tree.utils';
+import { filterTableData } from '../../../../../../shared/utils/tree/tree.utils';
 
 export const mui = {
   headerParams: 0,

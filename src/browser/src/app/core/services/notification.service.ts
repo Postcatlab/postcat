@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ModalService } from 'pc/browser/src/app/shared/services/modal.service';
-import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
+import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 @Injectable({
   providedIn: 'root'

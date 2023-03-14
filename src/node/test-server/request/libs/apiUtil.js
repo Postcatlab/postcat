@@ -404,6 +404,7 @@ privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) 
  * @return {object} 前置组合请求信息
  */
 privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inputScript, inputOpts = {}) {
+  console.log(inputData);
   const tmpBasicEnv = inputData.env || _LibsCommon.parseEnv();
   const tmpOutput = {
     status: 'finish',
@@ -467,7 +468,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
       }
 
       //Excute code in runtime
-      const [pmRes, err] = await pmRuntime.executeSync(ctx, inputScript, {
+      let [pmRes, err] = await pmRuntime.executeSync(ctx, inputScript, {
         context: context
       });
       if (err) {
@@ -476,6 +477,30 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
           content: err.message
         });
       }
+
+      //Parse authInfo to request data
+      if (inputData.authInfo) {
+        switch (inputData.authInfo.authType) {
+          case 'none': {
+            break;
+          }
+          default: {
+            //Prepare auth info,such as replace global variable
+
+            //Get extension function
+            const [{ extension, packageJson }, err] = await loadExtension({
+              name: inputData.authInfo.authType
+            });
+
+            //Execute at runtime
+            console.log(extension);
+
+            //
+            break;
+          }
+        }
+      }
+
       //Handle Request Data
       const Url = require('postman-collection').Url;
       const apiUrl = new Url(pmRes.request.url);
@@ -487,6 +512,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
         headerParam: (pmRes.request.header || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {})
       };
       global.eoTestGlobals = (pmRes.globals.values || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
+
       break;
     }
     case 'vm': {

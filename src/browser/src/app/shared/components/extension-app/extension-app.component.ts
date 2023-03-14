@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 @Component({
   selector: 'extension-app',
   template: `

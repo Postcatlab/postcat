@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { MemberService } from 'pc/browser/src/app/modules/member-list/member.service';
-import { DataSourceService } from 'pc/browser/src/app/shared/services/data-source/data-source.service';
-import { MessageService } from 'pc/browser/src/app/shared/services/message/message.service';
-import { ApiService } from 'pc/browser/src/app/shared/services/storage/api.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { MemberService } from 'pc/browser/src/app/components/member-list/member.service';
+import { DataSourceService } from 'pc/browser/src/app/services/data-source/data-source.service';
+import { MessageService } from 'pc/browser/src/app/services/message/message.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
+import { MemberListComponent } from '../../../../components/member-list/member-list.component';
 
 @Component({
   selector: 'eo-project-member',

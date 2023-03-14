@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
-import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { ColumnItem } from 'pc/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
+import { ColumnItem } from 'pc/browser/src/app/components/eo-ui/table-pro/table-pro.model';
+import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { REQURIED_ENUMS } from 'pc/browser/src/app/shared/models/shared.model';
-import { BodyParam } from 'pc/browser/src/app/shared/services/storage/db/dto/apiData.dto';
 
 import { cpSync } from 'fs';
 

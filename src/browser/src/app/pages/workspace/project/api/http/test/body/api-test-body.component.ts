@@ -2,11 +2,17 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, V
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { ApiTableService } from 'pc/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType, ApiParamsType, ApiTableConf, API_BODY_TYPE, IMPORT_MUI } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { EoMonacoEditorComponent } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { BodyParam } from 'pc/browser/src/app/shared/services/storage/db/models/apiData';
-import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/utils/index.utils';
+import { EoMonacoEditorComponent } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco-editor.component';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  ApiTableConf,
+  API_BODY_TYPE,
+  IMPORT_MUI
+} from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
 import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';

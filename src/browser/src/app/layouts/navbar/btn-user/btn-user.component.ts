@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
+import { SettingService } from '../../../components/system-setting/settings.service';
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
-import { SettingService } from '../../../modules/system-setting/settings.service';
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
-import { MessageService } from '../../../shared/services/message';
-import { ApiService } from '../../../shared/services/storage/api.service';
-import { StoreService } from '../../../shared/store/state.service';
+import { DataSourceService } from '../../../services/data-source/data-source.service';
+import { MessageService } from '../../../services/message';
+import { ApiService } from '../../../services/storage/api.service';
+import { StoreService } from '../../../store/state.service';
 
 @Component({
   selector: 'pc-btn-user',

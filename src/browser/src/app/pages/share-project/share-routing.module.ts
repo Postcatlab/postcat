@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ShareComponent } from './share-project.component';
+import { ShareComponent } from './view/share-project.component';
 
 const routes: Routes = [
   {

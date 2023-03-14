@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { SettingService } from '../../modules/system-setting/settings.service';
-import StorageUtil from '../../utils/storage/storage.utils';
+import { SettingService } from '../../components/system-setting/settings.service';
+import StorageUtil from '../../shared/utils/storage/storage.utils';
 
 @Injectable({
   providedIn: 'root'

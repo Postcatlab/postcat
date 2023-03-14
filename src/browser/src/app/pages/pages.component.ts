@@ -5,8 +5,8 @@ import { ElectronService } from 'pc/browser/src/app/core/services';
 import { filter } from 'rxjs';
 
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
-import StorageUtil from '../utils/storage/storage.utils';
-import { SocketService } from './extension/socket.service';
+import StorageUtil from '../shared/utils/storage/storage.utils';
+import { SocketService } from './components/extension/socket.service';
 
 @Component({
   selector: 'eo-pages',

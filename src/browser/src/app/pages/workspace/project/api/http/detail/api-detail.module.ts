@@ -7,10 +7,10 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { EoNgCollapseModule } from 'pc/browser/src/app/modules/eo-ui/collapse/collapse.module';
-import { EoMonacoEditorModule } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { EoNgCollapseModule } from 'pc/browser/src/app/components/eo-ui/collapse/collapse.module';
+import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
+import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 
-import { ApiSharedModule } from '../../../../../../modules/api-shared/api-shared.module';
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ApiDetailComponent } from './api-detail.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';

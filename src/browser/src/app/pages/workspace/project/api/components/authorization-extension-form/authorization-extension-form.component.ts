@@ -2,12 +2,12 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmi
 import { Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
-import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/service/store/api-state.service';
+import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { Group } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { PCTree } from 'pc/browser/src/app/utils/tree/tree.utils';
+import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 export const noAuth = {
   name: 'none',
@@ -29,41 +29,44 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
 @Component({
   selector: 'authorization-extension-form',
   template: `
-    <form nz-form nzLayout="vertical">
-      <nz-form-item>
-        <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
-        <nz-form-control>
-          <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="model.authType" (ngModelChange)="handleAuthTypeChange($event)">
-            <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
-              {{ item.label }}
-            </label>
-          </eo-ng-radio-group>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-    <nz-divider></nz-divider>
-    <div class="my-[24px]">
-      <ng-container *ngIf="inheritAuth.name === model.authType && parentGroup?.depth !== 0">
-        <div class="text-tips" i18n>
-          This API Request is using <b>{{ model.authType }}</b> from
-          <a (click)="nav2group()">{{ parentGroup?.name }}</a>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!isDefaultAuthType">
-        <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
-        <ng-template #templateRefMsg>
-          <div class="text" i18n>
-            These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend using
-            variables. Learn more about
-            <a href="https://docs.postcat.com/docs/global-variable.html" target="_blank" rel="noopener noreferrer">variables</a>
+    <ng-container *ngIf="model">
+      <form nz-form nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
+          <nz-form-control>
+            <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="model.authType" (ngModelChange)="handleAuthTypeChange($event)">
+              <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
+                {{ item.label }}
+              </label>
+            </eo-ng-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+      <nz-divider></nz-divider>
+      <div class="my-[24px]">
+        <ng-container *ngIf="inheritAuth.name === model.authType && parentGroup?.depth !== 0">
+          <div class="text-tips" i18n>
+            This API Request is using <b>{{ model.authType }}</b> from
+            <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
-        </ng-template>
-      </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!isDefaultAuthType">
+          <eo-ng-feedback-alert class="block my-[20px]" nzType="warning" [nzMessage]="templateRefMsg" nzShowIcon></eo-ng-feedback-alert>
+          <ng-template #templateRefMsg>
+            <div class="text" i18n>
+              These parameters hold sensitive data. To keep this data secure while working in a collaborative environment, we recommend
+              using variables. Learn more about
+              <a href="https://docs.postcat.com/docs/global-variable.html" target="_blank" rel="noopener noreferrer">variables</a>
+            </div>
+          </ng-template>
+        </ng-container>
 
-      <ng-container *ngIf="schemaObj">
-        <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
-      </ng-container>
-    </div>
+        <ng-container *ngIf="schemaObj">
+          <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+        </ng-container>
+      </div>
+      <ng-container> </ng-container
+    ></ng-container>
   `
 })
 export class AuthorizationExtensionFormComponent implements OnChanges {

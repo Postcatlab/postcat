@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
-import { requestMethodMap } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { TabItem } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
-import { Message } from 'pc/browser/src/app/shared/services/message';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { Message } from 'pc/browser/src/app/services/message';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { debounceTime, Subject } from 'rxjs';
 
-import { EoTabComponent } from '../../../../modules/eo-ui/tab/tab.component';
-import { MessageService } from '../../../../shared/services/message';
-import { isEmptyObj } from '../../../../utils/index.utils';
+import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';
+import { MessageService } from '../../../../services/message';
+import { isEmptyObj } from '../../../../shared/utils/index.utils';
 
 @Injectable()
 export class ApiTabService {
@@ -197,9 +197,16 @@ export class ApiTabService {
       return;
     }
     const contentID = currentTab.id;
-    //Get tab cache
-    this.componentRef.model = currentTab?.content?.[contentID] || null;
-    this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
+
+    //Get tab from cache
+    if (!currentTab.disabledCache) {
+      this.componentRef.model = currentTab?.content?.[contentID] || null;
+      this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
+    } else {
+      this.componentRef.model = null;
+      this.componentRef.initialModel = null;
+    }
+
     this.componentRef.init();
   }
 

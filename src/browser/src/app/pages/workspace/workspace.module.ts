@@ -5,7 +5,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 
-import { EoSettingModule } from '../../modules/eo-ui/setting/setting.module';
+import { EoSettingModule } from '../../components/eo-ui/setting/setting.module';
 import { SharedModule } from '../../shared/shared.module';
 import { WorkspaceComponent } from './workspace.component';
 

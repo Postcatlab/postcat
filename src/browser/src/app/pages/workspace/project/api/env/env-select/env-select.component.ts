@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { autorun, makeObservable, observable, reaction, action, toJS } from 'mobx';
 import { SidebarService } from 'pc/browser/src/app/layouts/sidebar/sidebar.service';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
-import { Environment } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { Environment } from 'pc/browser/src/app/services/storage/db/models';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-import { ApiEffectService } from '../../service/store/api-effect.service';
-import { ApiStoreService } from '../../service/store/api-state.service';
+import { ApiEffectService } from '../../store/api-effect.service';
+import { ApiStoreService } from '../../store/api-state.service';
 
 @Component({
   selector: 'eo-env-select',

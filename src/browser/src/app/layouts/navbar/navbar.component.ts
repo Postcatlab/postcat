@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { ExtensionComponent } from 'pc/browser/src/app/pages/extension/extension.component';
-import { MessageService } from 'pc/browser/src/app/shared/services/message';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { ExtensionComponent } from 'pc/browser/src/app/pages/components/extension/extension.component';
+import { MessageService } from 'pc/browser/src/app/services/message';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
+import { SettingService } from '../../components/system-setting/settings.service';
 import { ElectronService } from '../../core/services';
 import { ThemeService } from '../../core/services/theme/theme.service';
-import { SettingService } from '../../modules/system-setting/settings.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',

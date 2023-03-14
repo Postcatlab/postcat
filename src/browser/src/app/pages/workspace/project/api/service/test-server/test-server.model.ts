@@ -1,4 +1,4 @@
-import { Environment } from '../../../../../../shared/services/storage/index.model';
+import { Environment } from '../../../../../../services/storage/index.model';
 /**
  * Test response from  test server to ui
  */

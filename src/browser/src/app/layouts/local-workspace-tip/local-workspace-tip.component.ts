@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
-import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'pc/browser/src/app/shared/constants/storageKeys';
-import { MessageService } from 'pc/browser/src/app/shared/services/message';
-import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { MessageService } from 'pc/browser/src/app/services/message';
+import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'pc/browser/src/app/shared/models/storageKeys.constant';
+import { EffectService } from 'pc/browser/src/app/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-import { StorageUtil } from '../../utils/storage/storage.utils';
+import { StorageUtil } from '../../shared/utils/storage/storage.utils';
 
 @Component({
   selector: 'eo-local-workspace-tip',

@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { EoNgTabsModule } from 'eo-ng-tabs';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
-import { MemberListModule } from '../../../modules/member-list/member-list.module';
-import { MemberService } from '../../../modules/member-list/member.service';
+import { MemberListModule } from '../../../components/member-list/member-list.module';
+import { MemberService } from '../../../components/member-list/member.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { WorkspaceSettingComponent } from './edit/workspace-edit.component';
 import { WorkspaceMemberComponent } from './member/workspace-member.component';

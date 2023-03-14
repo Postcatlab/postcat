@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, action, reaction } from 'mobx';
-import { MemberService } from 'pc/browser/src/app/modules/member-list/member.service';
-import { DataSourceService } from 'pc/browser/src/app/shared/services/data-source/data-source.service';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
+import { MemberService } from 'pc/browser/src/app/components/member-list/member.service';
+import { DataSourceService } from 'pc/browser/src/app/services/data-source/data-source.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
-import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
-import { MessageService } from '../../../../shared/services/message/message.service';
-import { StoreService } from '../../../../shared/store/state.service';
+import { MemberListComponent } from '../../../../components/member-list/member-list.component';
+import { MessageService } from '../../../../services/message/message.service';
+import { StoreService } from '../../../../store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',

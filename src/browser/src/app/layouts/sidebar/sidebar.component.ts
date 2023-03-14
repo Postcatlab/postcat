@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { autorun } from 'mobx';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/shared/services/message';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

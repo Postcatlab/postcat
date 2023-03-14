@@ -25,7 +25,7 @@ import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/wo
 import { ExtensionFeedbackComponent } from 'pc/browser/src/app/shared/components/extension-feedback/extension-feedback';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 
-import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
+import { EoIconparkIconModule } from '../components/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { DownloadClientModalComponent } from './components/download-client.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ClickStopPropagationDirective, FormFocusDirective } from './directives';

@@ -15,8 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { isEmpty, isEqual } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
-import { TabViewComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.model';
 import { noAuth } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
@@ -29,20 +29,20 @@ import { ContentType } from 'pc/browser/src/app/pages/workspace/project/api/http
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ApiData, ApiTestHistory } from 'pc/browser/src/app/shared/services/storage/db/models';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import StorageUtil from 'pc/browser/src/app/utils/storage/storage.utils';
+import { ApiData, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
-import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../../../../../modules/api-shared/api.model';
-import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/pipe/api-param-num.pipe';
-import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../utils/index.utils';
+import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
+import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
 import { ProjectApiService } from '../../api.service';
+import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
-import { ApiStoreService } from '../../service/store/api-state.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
+import { ApiStoreService } from '../../store/api-state.service';
 import { ApiTestService } from './api-test.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';

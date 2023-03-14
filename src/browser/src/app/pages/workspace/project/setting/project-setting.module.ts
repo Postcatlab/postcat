@@ -5,7 +5,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
-import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
+import { ExtensionSelectModule } from '../../../../components/extension-select/extension-select.module';
 import { ProjectSettingComponent } from './project-setting.component';
 
 @NgModule({

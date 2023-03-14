@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
-import { EoTabComponent } from 'pc/browser/src/app/modules/eo-ui/tab/tab.component';
-import { ExtensionService } from 'pc/browser/src/app/shared/services/extensions/extension.service';
-import { ApiData } from 'pc/browser/src/app/shared/services/storage/index.model';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
+import { ApiData } from 'pc/browser/src/app/services/storage/index.model';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
+import { Message, MessageService } from '../../../../services/message';
 import { ExtensionInfo } from '../../../../shared/models/extension-manager';
-import { Message, MessageService } from '../../../../shared/services/message';
-import StorageUtil from '../../../../utils/storage/storage.utils';
+import StorageUtil from '../../../../shared/utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';

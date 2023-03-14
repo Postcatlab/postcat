@@ -179,6 +179,7 @@ const { resolve } = require('path');
                 },
                 inputTestData.beforeInject,
                 {
+                  authInfo: inputTestData.authInfo,
                   functionCode: inputTestData.functionCode,
                   globalHeader: inputTestData.globalHeader
                 }
@@ -213,6 +214,7 @@ const { resolve } = require('path');
             await _LibsApiUtil
               .requestPreReduceByPromise(tmpWantToExecuteData, inputTestData.beforeInject, {
                 functionCode: inputTestData.functionCode,
+                authInfo: inputTestData.authInfo,
                 globalHeader: inputTestData.globalHeader
               })
               .then(tmpInputDataObj => {
@@ -234,6 +236,7 @@ const { resolve } = require('path');
                 },
                 inputTestData.beforeInject,
                 {
+                  authInfo: inputTestData.authInfo,
                   functionCode: inputTestData.functionCode,
                   globalHeader: inputTestData.globalHeader
                 }
@@ -259,6 +262,7 @@ const { resolve } = require('path');
                 },
                 inputTestData.beforeInject,
                 {
+                  authInfo: inputTestData.authInfo,
                   functionCode: inputTestData.functionCode,
                   globalHeader: inputTestData.globalHeader
                 }

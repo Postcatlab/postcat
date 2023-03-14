@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { EoNgCollapseModule } from 'pc/browser/src/app/modules/eo-ui/collapse/collapse.module';
-import { EoMonacoEditorModule } from 'pc/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { EoNgCollapseModule } from 'pc/browser/src/app/components/eo-ui/collapse/collapse.module';
+import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
+import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ApiEditService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 
-import { ApiSharedModule } from '../../../../../../modules/api-shared/api-shared.module';
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditComponent } from './api-edit.component';
@@ -31,9 +31,9 @@ const COMPONENTS = [ApiEditComponent, ApiEditFormComponent, ApiEditBodyComponent
     EoMonacoEditorModule,
     FormsModule,
     ReactiveFormsModule,
+    ApiSharedModule,
     CommonModule,
     ...NZ_COMPONETS,
-    ApiSharedModule,
     SharedModule
   ],
   providers: [ApiEditUtilService, ApiEditService]

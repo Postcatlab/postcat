@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ExtensionService } from '../../../shared/services/extensions/extension.service';
+import { ExtensionService } from '../../../services/extensions/extension.service';
 import { ThemeVariableService } from './theme-variable.service';
 
 @Injectable({

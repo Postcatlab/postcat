@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
+import { getSettings, SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { getSettings, SettingService } from 'pc/browser/src/app/modules/system-setting/settings.service';
+import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { DownloadClientModalComponent } from 'pc/browser/src/app/shared/components/download-client.component';
-import { PROTOCOL } from 'pc/browser/src/app/shared/constants/protocol';
-import { ModalService } from 'pc/browser/src/app/shared/services/modal.service';
+import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import packageJson from '../../../../../../../package.json';
-import { StoreService } from '../../../shared/store/state.service';
-import { getBrowserType } from '../../../utils/browser-type';
-import StorageUtil from '../../../utils/storage/storage.utils';
+import { getBrowserType } from '../../../shared/utils/browser-type';
+import StorageUtil from '../../../shared/utils/storage/storage.utils';
+import { StoreService } from '../../../store/state.service';
 
 type DescriptionsItem = {
   readonly id: string;

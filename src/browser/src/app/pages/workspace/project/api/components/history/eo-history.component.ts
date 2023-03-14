@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
-import { Protocol, requestMethodMap } from 'pc/browser/src/app/modules/api-shared/api.model';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
-import { eoDeepCopy } from 'pc/browser/src/app/utils/index.utils';
+import { Protocol, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
-import { ApiEffectService } from '../../service/store/api-effect.service';
-import { ApiStoreService } from '../../service/store/api-state.service';
+import { ApiEffectService } from '../../store/api-effect.service';
+import { ApiStoreService } from '../../store/api-state.service';
 @Component({
   selector: 'eo-history',
   templateUrl: './eo-history.component.html',

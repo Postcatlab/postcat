@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Inject, Injectable, LOCALE_ID } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'pc/browser/src/app/modules/api-shared/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import {
   ApiTestResData,
@@ -8,8 +8,8 @@ import {
   TestServer,
   TestServerRes
 } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
-import { ApiData, BodyParam } from 'pc/browser/src/app/shared/services/storage/db/models/apiData';
-import { whatType } from 'pc/browser/src/app/utils/index.utils';
+import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 

@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { TraceService } from 'pc/browser/src/app/shared/services/trace.service';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
 @Directive({
   selector: '[trace]'

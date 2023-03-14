@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { copy } from 'pc/browser/src/app/utils/index.utils';
+import { copy } from 'pc/browser/src/app/shared/utils/index.utils';
+import { EffectService } from 'pc/browser/src/app/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { interval } from 'rxjs';
 
-import { DataSourceService } from '../../shared/services/data-source/data-source.service';
+import { DataSourceService } from '../../services/data-source/data-source.service';
 @Component({
   selector: 'eo-get-share-link',
   template: `

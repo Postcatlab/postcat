@@ -22,7 +22,7 @@ const routes: Routes = [
       },
       {
         path: 'extension',
-        loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
+        loadChildren: () => import('./components/extension/extension.module').then(m => m.ExtensionModule)
       }
     ]
   }

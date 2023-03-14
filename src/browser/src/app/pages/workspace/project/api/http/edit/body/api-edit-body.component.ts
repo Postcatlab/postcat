@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiTableService } from 'pc/browser/src/app/modules/api-shared/api-table.service';
 import {
   ApiBodyType,
   ApiParamsType,
@@ -8,9 +7,10 @@ import {
   API_BODY_TYPE,
   IMPORT_MUI,
   JsonRootType
-} from 'pc/browser/src/app/modules/api-shared/api.model';
-import { BodyParam } from 'pc/browser/src/app/shared/services/storage/db/models/apiData';
-import { enumsToArr, eoDeepCopy } from 'pc/browser/src/app/utils/index.utils';
+} from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { enumsToArr, eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, pairwise } from 'rxjs/operators';
 
