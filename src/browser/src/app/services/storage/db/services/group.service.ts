@@ -160,7 +160,12 @@ export class GroupService extends BaseService<Group> {
         if (parentGroup.depth) {
           group.authInfo = parentGroup.authInfo;
         }
-        group.authInfo.isInherited = isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name ? 1 : 0;
+        console.log('groupAuthType', groupAuthType);
+        if (isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name) {
+          group.authInfo.isInherited = parentGroup.depth ? 1 : 0;
+        } else {
+          group.authInfo.isInherited = 0;
+        }
       }
     } else if (groupAuthType) {
       group.authInfo.isInherited = isCallByApiData ? 1 : 0;
