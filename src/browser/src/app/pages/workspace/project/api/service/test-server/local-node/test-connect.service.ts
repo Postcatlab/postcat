@@ -1,4 +1,5 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { ApiTestUtilService } from '../../api-test-util.service';
@@ -16,7 +17,7 @@ export class TestServerLocalNodeService extends TestServerService {
   }
   send(module, message) {
     console.log('[localNode]send message', message);
-    this.electron.ipcRenderer.send(module, message);
+    this.electron.ipcRenderer.send(module, eoDeepCopy(message));
   }
   close() {
     this.electron.ipcRenderer.removeAllListeners('unitTest');

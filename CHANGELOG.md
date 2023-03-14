@@ -1,38 +1,73 @@
-<<<<<<< HEAD
-# [0.4.0](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.4.0) (2023-03-08)
-=======
-## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.2) (2023-03-06)
->>>>>>> main
+# [0.4.0](https://github.com/Postcatlab/postcat/compare/v0.3.2...v0.4.0) (2023-03-14)
+
+
+### Bug Fixes
+
+* dexie update hook ([cf6f65b](https://github.com/Postcatlab/postcat/commit/cf6f65ba839ef384acc02ad96f0986c33782a164))
+* dexie update hook ([86c0c59](https://github.com/Postcatlab/postcat/commit/86c0c59187e7df3617f4bde6ab7e8c24241c8b03))
+* enable disable extension error ([54ee130](https://github.com/Postcatlab/postcat/commit/54ee1309c0572bdaade8e628a10871ae29f02569))
+* formdata send value error ([8d5736c](https://github.com/Postcatlab/postcat/commit/8d5736c41d0bc910d2785232acb42088bdcbcc18))
+* iconproblem ([75fe6d2](https://github.com/Postcatlab/postcat/commit/75fe6d241b4283b4de3c5095b8f9acd08039baac))
+* iconproblem ([34389bc](https://github.com/Postcatlab/postcat/commit/34389bc0af49e4811dfa62348a0cad227c94b4f0))
+* import dataType problem ([#269](https://github.com/Postcatlab/postcat/issues/269)) ([bf7694d](https://github.com/Postcatlab/postcat/commit/bf7694dea408b1be20806dd4527a8801d32180e0))
+* model name ([68772f7](https://github.com/Postcatlab/postcat/commit/68772f7e831ec1d0d43a2ca3e4884af081384d23))
+* **monaco-editor:** reduce re-render debounce time ([ff4a42a](https://github.com/Postcatlab/postcat/commit/ff4a42a74ece694e4eda10153d818c0224465304))
+* robot hide after install ([21e85fe](https://github.com/Postcatlab/postcat/commit/21e85fe21cf87ea8e67a6320433ac4b0cb82748b))
+* search extension keyword error ([dcb8149](https://github.com/Postcatlab/postcat/commit/dcb8149aea3ab536eb655d86c5400c0a0b9b973c))
+* **test-node:** save dev first ([e0a13db](https://github.com/Postcatlab/postcat/commit/e0a13db8ba181c11e031e22dfc4b121671780de7))
+* uninstall default and import problem ([#267](https://github.com/Postcatlab/postcat/issues/267)) ([6cbe019](https://github.com/Postcatlab/postcat/commit/6cbe01960c5804415019a427f609f1a7c3c995a1))
+* windows app download path ([e355a44](https://github.com/Postcatlab/postcat/commit/e355a4495a991fefc63431c7691bb343148e5961))
+
+
+### Features
+
+* add extension sort ([d38b827](https://github.com/Postcatlab/postcat/commit/d38b8277fb14fddb70ec3e74751628e8de34db81))
+* API Authorization ([#251](https://github.com/Postcatlab/postcat/issues/251)) ([ddf7292](https://github.com/Postcatlab/postcat/commit/ddf7292ecb5ea157d2f71dd36ca445e1b71d73cc))
+* chat robot ([#252](https://github.com/Postcatlab/postcat/issues/252)) ([80f9ef3](https://github.com/Postcatlab/postcat/commit/80f9ef3a5fb0cff5712202fe8988b1b188df7f83))
+* **gpt-robot:** add limit ([9187853](https://github.com/Postcatlab/postcat/commit/91878535c617744383484104c46c1fe4e0340f1a))
+* translate ([cb44607](https://github.com/Postcatlab/postcat/commit/cb4460768573f687d57d273791590d4754dbb296))
+
+
+
+## [0.3.2](https://github.com/Postcatlab/postcat/compare/v0.3.1...v0.3.2) (2023-03-07)
+
+
+### Bug Fixes
+
+* project action not show ([805494d](https://github.com/Postcatlab/postcat/commit/805494d7ad9eae55b822c852dcec7e58e5db03d7))
+
+
+
+## [0.3.1](https://github.com/Postcatlab/postcat/compare/v0.2.1...v0.3.1) (2023-03-06)
 
 
 ### Bug Fixes
 
 * APISpace jump to detail page error ([e06e200](https://github.com/Postcatlab/postcat/commit/e06e200b8dc749fecb71320df6972c9a5eb13292))
+* cmd syntax error ([7832723](https://github.com/Postcatlab/postcat/commit/783272327daf3617cca066a6e39dce9dd748f224))
+* env parameters error ([9cc5513](https://github.com/Postcatlab/postcat/commit/9cc55134e363107cf9029d3b8f1ab64493e1c986))
 * extension detail skeleton not show ([2059912](https://github.com/Postcatlab/postcat/commit/2059912f63677fce97fc8d190737faf1b78762d4))
 * gio install extension error ([c2c87fc](https://github.com/Postcatlab/postcat/commit/c2c87fc0be7084472323c70b79f9db207181b308))
 * import api env validate ([d6595ec](https://github.com/Postcatlab/postcat/commit/d6595ecd518719fdb64cecfea9a7fb2777bf4e9b))
+* long text input file error with windows ([97c9490](https://github.com/Postcatlab/postcat/commit/97c9490731c2138290d93748d5f44a41df2c6328))
+* long text input file error with windows ([c7f284f](https://github.com/Postcatlab/postcat/commit/c7f284f7a160c608ba93b4d38e31afa7a92a8e7d))
 * member avatar be extrusion ([11bc7ba](https://github.com/Postcatlab/postcat/commit/11bc7bab6cf47ae736414181571c8e53d2310cbe))
 * mock match bug ([7f062d4](https://github.com/Postcatlab/postcat/commit/7f062d46a3306469b79d01213e5af8cb100d613a))
 * npm install error in windows os ([8fa1b3d](https://github.com/Postcatlab/postcat/commit/8fa1b3da02d183f6332b4273eb20aa22bb0e72da))
+* qiniu_env.js output path ([5249607](https://github.com/Postcatlab/postcat/commit/5249607d391dcf90869b0c168ffc6befa9ea7e47))
 * register_success event error ([b5288f9](https://github.com/Postcatlab/postcat/commit/b5288f96d781916e34ee2fdcdea949f9ebc7cf4b))
 * show nps after view init ([5357d6d](https://github.com/Postcatlab/postcat/commit/5357d6d5e14950af9d8e1917a8c005c87de5c2dd))
 * sync-api not reactive ([df24b5d](https://github.com/Postcatlab/postcat/commit/df24b5d1541d218dc291f175136ef0e2fd292ac1))
+* upload & publish module not found ([230219b](https://github.com/Postcatlab/postcat/commit/230219b14666ebf3482db44b3507f2e994b1d1c6))
+* upload script module not found ([15dbef4](https://github.com/Postcatlab/postcat/commit/15dbef4968a9d48e4a07ba12864b1653a0bd9947))
 
 
 ### Features
 
 * add comment ([831b4bc](https://github.com/Postcatlab/postcat/commit/831b4bce2b731f9c80f6b329ad3f4472655e94da))
 * add trace about client_type & app_language ([4bd7ea2](https://github.com/Postcatlab/postcat/commit/4bd7ea2ad25722ca0a00dc0db9b4ba61bc2c1bfc))
-* API Authorization ([05d1077](https://github.com/Postcatlab/postcat/commit/05d1077d3e97c3e9e06afd8a8b15ea02bc1b820e))
 * API Authorization ([938ec7d](https://github.com/Postcatlab/postcat/commit/938ec7d68270c2be4c17cd2e1098377f2db180d2))
 * change description ([0341ba8](https://github.com/Postcatlab/postcat/commit/0341ba8f423cd6554fc83c50bf477dd9d1b36a9c))
-<<<<<<< HEAD
-=======
-* change github project url ([42c801c](https://github.com/Postcatlab/postcat/commit/42c801c49cbd859c876e9aafc2d4bae8fb38b9b6))
-* chat robot ([7878664](https://github.com/Postcatlab/postcat/commit/78786640f464f7370c14aaf14bb224c61a29ae03))
-* delete useless code ([a558094](https://github.com/Postcatlab/postcat/commit/a55809494695b1cdcb44009ca55213ca2fc2a570))
-* delete useless log ([d878582](https://github.com/Postcatlab/postcat/commit/d87858232292f61f89e1412b259dc27b5e644a79))
->>>>>>> main
 * nps ([426a08f](https://github.com/Postcatlab/postcat/commit/426a08ff1af75d401a8358dae1940f4cfd8f3268))
 * replace reg ([263cb4f](https://github.com/Postcatlab/postcat/commit/263cb4f0d10da3c7cb7ff1bc367541ce159397e8))
 * set registry automaic ([8f64179](https://github.com/Postcatlab/postcat/commit/8f641799d63f77193cea31c2920d590c09f4aaa7))
