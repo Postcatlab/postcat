@@ -140,7 +140,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   initChildBarShowStatus() {
     const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
-    const isGroupPage = this.router.url.includes('home/workspace/project/api/group/edit');
+    const isGroupPage = ['share/group/edit', 'home/workspace/project/api/group/edit'].some(n => this.router.url.includes(n));
     const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');
     this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage && !isGroupPage;
   }

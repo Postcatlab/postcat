@@ -19,4 +19,4 @@ import { GroupComponent } from './group.component';
   ],
   exports: [GroupComponent]
 })
-export class EnvModule {}
+export class GroupModule {}

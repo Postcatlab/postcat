@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group/group.component';
 
 import { ShareComponent } from './view/share-project.component';
 
@@ -32,6 +33,15 @@ const routes: Routes = [
           {
             path: 'test',
             loadChildren: () => import('../workspace/project/api/websocket/websocket.module').then(m => m.WebsocketModule)
+          }
+        ]
+      },
+      {
+        path: 'group',
+        children: [
+          {
+            path: 'edit',
+            component: GroupComponent
           }
         ]
       }
