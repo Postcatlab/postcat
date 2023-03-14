@@ -50,15 +50,11 @@ const loadExtension = async ({ name, version = 'latest' }) => {
       return [null, 'Install Extension Failed'];
     }
 
-    const extPkg = await import(`${name}/package.json`, {
-      assert: {
-        type: 'json'
-      }
-    });
+    const extPkg = require(`${name}/package.json`);
     const extension = await import(name);
     cache = {
       extension: extension.default,
-      packageJson: extPkg.default
+      packageJson: extPkg
     };
     extensionMap.set(`${name}:${extPkg.version}`, cache);
   }
