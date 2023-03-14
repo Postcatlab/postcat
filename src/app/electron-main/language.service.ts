@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import Store from 'electron-store';
 
-import { LANGUAGES } from '../../workbench/browser/src/app/core/services/language/language.model';
+import { LANGUAGES } from '../../browser/src/app/core/services/language/language.model';
 const store = new Store();
 class LanguageInstance {
   private static _instance: LanguageInstance;

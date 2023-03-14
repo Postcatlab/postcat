@@ -1,0 +1,125 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics", "cache": { "enabled": true } },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "postcat": {
+      "root": "",
+      "i18n": {
+        "sourceLocale": { "code": "en", "baseHref": "" },
+        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
+      },
+      "sourceRoot": "src",
+      "projectType": "application",
+      "schematics": { "@schematics/angular:application": { "strict": true } },
+      "architect": {
+        "build": {
+          "inlineStyleLanguage": "scss",
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "localize": true,
+            "aot": true,
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/icon.ico",
+              "src/assets",
+              "src/extensions",
+              { "glob": "**/*", "input": "../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
+            ],
+            "styles": ["src/styles/antd.less", "src/styles.scss"],
+            "scripts": ["src/assets/libs/protocolcheck.js"],
+            "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },
+            "allowedCommonJsDependencies": ["brace", "qs", "rxjs"]
+          },
+          "configurations": {
+            "dev": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "localize": false,
+              "preserveSymlinks": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }]
+            },
+            "devCn": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "preserveSymlinks": true,
+              "localize": ["zh"],
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }]
+            },
+            "production": {
+              "preserveSymlinks": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.prod.ts" }]
+            },
+            "docker": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.docker.ts" }]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": { "browserTarget": "postcat:build", "proxyConfig": "proxy.conf.json" },
+          "configurations": {
+            "dev": { "browserTarget": "postcat:build:dev" },
+            "devCn": { "browserTarget": "postcat:build:devCn" },
+            "production": { "browserTarget": "postcat:build:production" }
+          }
+        },
+        "extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n", "options": { "browserTarget": "postcat:build" } },
+        "test": {
+          "inlineStyleLanguage": "scss",
+          "builder": "@angular-builders/custom-webpack:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills-test.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "scripts": [],
+            "styles": ["src/styles.scss"],
+            "assets": ["src/assets"],
+            "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true }
+          }
+        },
+        "lint": { "builder": "@angular-eslint/builder:lint", "options": { "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"] } }
+      }
+    },
+    "postcat-e2e": {
+      "root": "e2e",
+      "projectType": "application",
+      "architect": { "lint": { "builder": "@angular-eslint/builder:lint", "options": { "lintFilePatterns": ["e2e/**/*.ts"] } } }
+    }
+  },
+  "defaultProject": "postcat",
+  "schematics": {
+    "@schematics/angular:component": { "prefix": "pc", "style": "scss", "inlineStyle": true, "inlineTemplate": true },
+    "@schematics/angular:directive": { "prefix": "pc" }
+  }
+}

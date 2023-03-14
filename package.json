@@ -1,13 +1,14 @@
 {
   "name": "postcat",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/Postcatlab/postcat.git",
   "author": "Postcat",
   "private": true,
   "workspaces": [
-    "src/workbench/*"
+    "src/node/*",
+    "src/browser"
   ],
   "scripts": {
     "prepare": "husky install && electron-builder install-app-deps && node ./scripts/afterInstall.js && npx patch-package",
@@ -108,7 +109,7 @@
   },
   "__npminstall_done": false,
   "node-module-alias": {
-    "eo": "./out"
+    "pc": "./out"
   },
   "lint-staged": {
     "*.{js,ts}": [

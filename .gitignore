@@ -14,11 +14,8 @@ out/
 /release
 *.js
 *.js.map
-*.webpack.js
 !patches/*
-!src/workbench/node/electron/**/*.js
-!src/workbench/node/request/**/*.js
-!src/workbench/node/server/**/*.js
+!src/node/**/*.js
 !/api/*.js
 !/scripts/**/*.js
 !*.config.js

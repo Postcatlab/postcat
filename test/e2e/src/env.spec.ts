@@ -32,9 +32,9 @@ test.describe('Env Operate', () => {
 
     //Delete env
   });
-  test('Use Env', async ({ page }) => {
-    //Host uri
-    //Global variable
-    //Change env will change host uri
-  });
+  // test('Use Env', async ({ page }) => {
+  //   //Host uri
+  //   //Global variable
+  //   //Change env will change host uri
+  // });
 });
