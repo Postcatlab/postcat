@@ -106,7 +106,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       type: this.model.type,
       authInfo: {
         authType: this.authInfoModel.authType,
-        authInfo: this.authExtForm.validateForm?.value ? JSON.stringify(this.authExtForm.validateForm.value) : null
+        authInfo: this.authExtForm.validateForm?.value ? JSON.stringify(this.authExtForm.validateForm.value) : {}
       }
     };
     if (params.id) {
@@ -123,6 +123,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     const queryParams = this.route.snapshot.queryParams;
     const { uuid, parentId } = queryParams;
     const id = Number(uuid);
+    this.authExtForm?.init?.();
     if (!id) {
       const [data] = await this.effect.createGroup([
         {
@@ -153,7 +154,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     this.authInfoModel = {
       ...this.model.authInfo,
-      authInfo: JSONParse(this.model.authInfo?.authInfo)
+      authInfo: JSONParse(this.model.authInfo?.authInfo) || {}
     };
     this.initForm();
     this.eoOnInit.emit(this.model);
@@ -173,7 +174,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   isFormChange() {
     const formData = this.authExtForm.validateForm?.value;
     const authInfoChanged =
-      formData && Object.entries<any>(formData).some(([key, value]) => value !== this.initialModel.authInfo?.authInfo[key]);
+      formData && Object.entries<any>(formData).some(([key, value]) => value !== this.initialModel.authInfo?.authInfo?.[key]);
     const authTypeChanged = this.model.authInfo?.authType !== this.initialModel.authInfo?.authType;
     const nameIsChange = this.model.name !== this.validateForm.value.name;
     return authInfoChanged || authTypeChanged || nameIsChange;

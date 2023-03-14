@@ -21,6 +21,7 @@ export const inheritAuth = {
 
 export type AuthInfo = {
   authType: string;
+  isInherited?: 0 | 1;
   authInfo: Record<string, any>;
 };
 
@@ -34,7 +35,7 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
         <nz-form-item>
           <nz-form-label nzFor="authType" i18n>Type</nz-form-label>
           <nz-form-control>
-            <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="model.authType" (ngModelChange)="handleAuthTypeChange($event)">
+            <eo-ng-radio-group name="authType" id="authType" [(ngModel)]="authType" (ngModelChange)="handleAuthTypeChange($event)">
               <label *ngFor="let item of authTypeList" eo-ng-radio [nzValue]="item.name">
                 {{ item.label }}
               </label>
@@ -44,9 +45,9 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
       </form>
       <nz-divider></nz-divider>
       <div class="my-[24px]">
-        <ng-container *ngIf="inheritAuth.name === model.authType && parentGroup?.depth !== 0">
+        <ng-container *ngIf="model?.isInherited && parentGroup?.depth !== 0">
           <div class="text-tips" i18n>
-            This API Request is using <b>{{ model.authType }}</b> from
+            This API Request is using <b>{{ inheritAuthType || model.authType }}</b> from
             <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
         </ng-container>
@@ -61,19 +62,21 @@ export type AuthIn = 'group' | 'api-test' | 'api-test-history';
           </ng-template>
         </ng-container>
 
-        <ng-container *ngIf="schemaObj">
+        <ng-container *ngIf="model.authInfo && schemaObj">
           <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
         </ng-container>
       </div>
-      <ng-container> </ng-container
-    ></ng-container>
+    </ng-container>
   `
 })
 export class AuthorizationExtensionFormComponent implements OnChanges {
   @Input() @observable groupInfo: Partial<Group>;
-  @Input() model: AuthInfo;
+  @Input() @observable model: AuthInfo;
+  authType: string;
+  @Input() inheritAuthType: string;
   @Input() type: AuthIn = 'group';
   @Output() readonly modelChange = new EventEmitter<AuthInfo>();
+  @Output() readonly authTypeChange = new EventEmitter<string>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   inheritAuth = inheritAuth;
   schemaObj: Record<string, any> | null;
@@ -86,10 +89,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return this.schemaForm?.validateForm;
   }
 
-  get authType() {
-    if (this.type !== 'group') {
-      return noAuth;
-    }
+  get defaultAuthType() {
     return this.parentGroup?.depth ? inheritAuth : noAuth;
   }
 
@@ -98,20 +98,32 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   get authTypeList() {
-    return [this.authType, ...this.extensionList];
+    return [this.defaultAuthType, ...this.extensionList];
   }
 
   constructor(private router: Router, private extensionService: ExtensionService, private store: ApiStoreService) {
     makeObservable(this);
     this.initExtensions();
-    this.getApiGroup();
+    this.initAutorun();
   }
 
-  getApiGroup() {
+  init() {
+    this.authType = '';
+  }
+
+  initAutorun() {
     autorun(() => {
       if (!this.groupInfo?.parentId) return;
       const groupObj = new PCTree(this.store.getGroupTree);
       this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
+    });
+    autorun(() => {
+      console.log('this.model.isInherited', this.authType, this.model);
+      if (!this.authType && this.model?.isInherited === 1) {
+        this.authType = inheritAuth.name;
+      } else if (this.model?.isInherited === 0) {
+        this.authType = this.model?.authType;
+      }
     });
   }
 
@@ -126,8 +138,12 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
 
   async ngOnChanges(changes: SimpleChanges) {
     const { model } = changes;
+    console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
-      this.handleAuthTypeChange(this.model.authType);
+      if (this.model.authType !== inheritAuth.name) {
+        console.log('this.authType', this.authType);
+        this.updateSchema(this.authType);
+      }
     }
   }
 
@@ -135,12 +151,16 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     // console.log('handleValueChanges', values);
     this.modelChange.emit(this.model);
   }
-  handleAuthTypeChange(authType) {
+  updateSchema(authType) {
     if (this.authAPIMap.has(authType)) {
       this.schemaObj = this.authAPIMap.get(authType).configuration;
     } else {
       this.schemaObj = null;
     }
+  }
+  handleAuthTypeChange(authType) {
+    this.updateSchema(authType);
+    this.model.authType = authType;
     console.log('handleAuthTypeChange', authType, this.schemaObj);
   }
 

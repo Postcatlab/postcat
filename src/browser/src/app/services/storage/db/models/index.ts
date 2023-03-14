@@ -40,6 +40,7 @@ export interface Group extends Base {
   authInfo?: {
     authType: string;
     authInfo: string | Record<string, any>;
+    isInherited?: 0 | 1;
   };
   projectUuid?: string;
   workSpaceUuid?: string;

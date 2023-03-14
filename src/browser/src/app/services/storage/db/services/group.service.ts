@@ -144,38 +144,26 @@ export class GroupService extends BaseService<Group> {
     const group = result.data;
     const groupAuthType = group.authInfo?.authType;
 
-    if (groupAuthType && groupAuthType !== noAuth.name) {
-      return result;
-    }
-
+    // if (groupAuthType === inheritAuth.name) {
+    //   group.authInfo.authType = inheritAuth.name;
+    //   group.authInfo.isInherited = group.depth > 1 ? 1 : 0;
+    // }
     // 递归获取父级分组鉴权信息
-    if (group && (!group.authInfo?.authType || group.authInfo?.authType === inheritAuth.name)) {
+    if (group && (!groupAuthType || groupAuthType === inheritAuth.name)) {
+      group.authInfo = {
+        authType: noAuth.name,
+        isInherited: 0,
+        authInfo: {}
+      };
       if (group.depth) {
         const { data: parentGroup } = await this.read({ id: group.parentId });
         if (parentGroup.depth) {
-          group.authInfo = {
-            authType: inheritAuth.name,
-            authInfo: parentGroup.authInfo?.authInfo || {},
-            ...group.authInfo
-          };
-          if (isCallByApiData) {
-            group.authInfo = parentGroup.authInfo;
-            if (group.authInfo.authType === inheritAuth.name) {
-              group.authInfo.authType = noAuth.name;
-            }
-          }
-        } else {
-          group.authInfo = {
-            authType: noAuth.name,
-            authInfo: {}
-          };
+          group.authInfo = parentGroup.authInfo;
         }
-      } else {
-        group.authInfo = {
-          authType: noAuth.name,
-          authInfo: {}
-        };
+        group.authInfo.isInherited = isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name ? 1 : 0;
       }
+    } else if (groupAuthType) {
+      group.authInfo.isInherited = isCallByApiData ? 1 : 0;
     }
     return result;
   }
