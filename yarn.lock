@@ -6672,10 +6672,10 @@ env-paths@^2.2.0, env-paths@^2.2.1:
   resolved "https://registry.npmmirror.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
 
-eo-ng-auto-complete@0.1.14:
-  version "0.1.14"
-  resolved "https://registry.npmmirror.com/eo-ng-auto-complete/-/eo-ng-auto-complete-0.1.14.tgz#008732684579f3b72b1e42433289078a6a09f7f1"
-  integrity sha512-+FxJqhVZtTS4lSv+lUo/Ksx0ZA/D482oeO20+24nBZhufobKuUkZhmN1mqniyVWuBXzTkIoNy/u+yoirbEE6fQ==
+eo-ng-auto-complete@0.1.11:
+  version "0.1.11"
+  resolved "https://registry.npmmirror.com/eo-ng-auto-complete/-/eo-ng-auto-complete-0.1.11.tgz#2083d463fb826e154fccb6db7183eaf3312355c7"
+  integrity sha512-Cn5YXwvU7EFCOFaNdssQjFCAzhxbm4Ivo5UCmNAHwOD0Xias9eA7TDLGOBZyTtUano10silbp+2SnEriP69GPA==
   dependencies:
     tslib "^2.3.0"
 
@@ -12871,11 +12871,6 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.npmmirror.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha512-xTgYBc3fuo7Yt7JbiuFxSYGToMoz8fLoE6TC9Wx1P/u+LfeThMOAqmuyECnlBaaJb+u1m9hHiXUEtwW4OzfUJg==
-
-postcat-basic-auth@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmmirror.com/postcat-basic-auth/-/postcat-basic-auth-0.0.2.tgz#ade11c3544e00561b1d7036fe22fb0361ceb6fec"
-  integrity sha512-Cvtz6kP/2cvZEXOYvWJu1+yC0YtU5JTeQZ3vPEFKwDk6d7A+rOmScbZEYCDuNkoXMPllU398Tn38ByiFLeB7Eg==
 
 postcat-sync-swagger@1.0.0:
   version "1.0.0"

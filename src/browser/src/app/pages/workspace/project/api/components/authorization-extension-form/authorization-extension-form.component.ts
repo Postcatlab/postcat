@@ -69,10 +69,9 @@ const authInMap = {
               <a href="https://docs.postcat.com/docs/global-variable.html" target="_blank" rel="noopener noreferrer">variables</a>
             </div>
           </ng-template>
-        </ng-container>
-
-        <ng-container *ngIf="model.authInfo && schemaObj">
-          <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+          <ng-container *ngIf="model.authInfo && schemaObj">
+            <eo-schema-form #schemaForm [model]="model.authInfo" [configuration]="schemaObj" (valueChanges)="handleValueChanges($event)" />
+          </ng-container>
         </ng-container>
       </div>
     </ng-container>
@@ -130,9 +129,11 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initExtensions();
-        }
+        if (inArg.type !== 'extensionsChange') return;
+        const extension = inArg.data.extension;
+        if (!extension?.features?.authAPI) return;
+        this.initExtensions();
+        this.updateSchema(this.authType);
       });
   }
 
