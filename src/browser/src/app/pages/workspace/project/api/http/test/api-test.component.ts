@@ -168,10 +168,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
 
   async updateAuthInfo() {
-    if (!this.uuid) {
+    if (this.isEmptyTestPage) {
       return;
     }
     const result = await this.projectApi.get(this.uuid);
+    if (!result) return;
     const newAuthInfo = {
       ...result.authInfo,
       authInfo: JSONParse(result.authInfo.authInfo)

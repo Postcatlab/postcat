@@ -469,7 +469,10 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
       switch (inputData.requestType) {
         case '0': {
           context.request.body.mode = 'urlencoded';
-          context.request.body.urlencoded = [{ key: 'test', value: 'formdata' }];
+          context.request.body.urlencoded = Object.keys(inputData.params).map(keyName => ({
+            key: keyName,
+            value: inputData.params[keyName]
+          }));
           break;
         }
         default: {
@@ -548,7 +551,8 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
         headerParam: (pmRes.request.header || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {})
       };
       global.eoTestGlobals = (pmRes.globals.values || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
-
+      //for fit eolink
+      tmpOutput.url = apiUrl.toString().split('?')[0];
       break;
     }
     case 'vm': {
