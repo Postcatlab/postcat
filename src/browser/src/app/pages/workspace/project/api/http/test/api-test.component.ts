@@ -207,7 +207,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
-        console.log('history.request', history.request);
         history.request.authInfo = {
           authInfo: {},
           authType: noAuth.name,
@@ -247,7 +246,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.status$.next('start');
       }
     }
-    console.log('request authInfo', this.model.request.authInfo);
     this.initBasicForm();
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
@@ -580,7 +578,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('EO_LOG[eo-api-test]: Ctrl + s');
           // 或者 return false;
           event.preventDefault();
           this.saveApi();

@@ -2,20 +2,21 @@ var spawn = require('child_process').spawn;
 const extensionMap = new Map();
 const path = require('path');
 const isElectron = !!process.versions['electron'];
-//TODO install locally
+const axios = require('axios');
 const installExtension = (name, version = 'latest') => {
   return new Promise(resolve => {
+    //TODO install locally at user home dir
     const ls = spawn('npm', ['i', '--no-save', `${name}@${version}`]);
     ls.on('close', function (code) {
       // console.log(`child process exited with code :${code}`);
       return resolve(true);
     });
     ls.stderr.on('data', function (data) {
-      console.log(`stderr :${data}`);
+      console.log(`data :${data}`);
       return resolve(true);
     });
     ls.stderr.on('error', function (err) {
-      console.log(`error :${err}`);
+      console.log(`stderr :${err}`);
       return resolve(false);
     });
   });
@@ -27,6 +28,9 @@ const loadExtension = async ({ name, version = 'latest' }) => {
 
   //TODO save version at extensionMap
   const hasIt = extensionMap.has(`${name}:${version}`);
+  if (hasIt) {
+    return [extensionMap.get(`${name}:${version}`, null)];
+  }
   let cache = {};
   if (!hasIt) {
     //TODO Remote/Local Node Union
@@ -49,16 +53,22 @@ const loadExtension = async ({ name, version = 'latest' }) => {
     //Install in Remote Node
     const isOk = await installExtension(name, version);
     if (!isOk) {
-      return [null, 'Install Extension Failed'];
+      return [null, `Install Extension #${name} Failed`];
     }
-
-    const extPkg = require(`${name}/package.json`);
-    const extension = await import(name);
-    cache = {
-      extension: extension.default,
-      packageJson: extPkg
-    };
-    extensionMap.set(`${name}:${version}`, cache);
+    try {
+      const extPkg = await axios.get(`https://unpkg.com/${name}@${version}/package.json`).catch(error => {});
+      if (!extPkg) {
+        return [null, `Request Extension #${name} Failed`];
+      }
+      const extension = await import(name);
+      cache = {
+        extension: extension.default,
+        packageJson: extPkg.data
+      };
+      extensionMap.set(`${name}:${version}`, cache);
+    } catch (e) {
+      return [null, `Import Extension #${name} Failed`];
+    }
   }
   return [cache, null];
 };
