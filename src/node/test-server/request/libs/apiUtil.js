@@ -501,13 +501,14 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
           }
           default: {
             //Get extension function
-            const [{ extension, packageJson }, err] = await loadExtension({
+            const [extensionCache, err] = await loadExtension({
               name: inputOpts.authInfo.authType
             });
             if (err) {
               console.error(`install auth extension code error: ${err}}`);
               break;
             }
+            const { extension, packageJson } = extensionCache;
             if (!packageJson?.features?.authAPI) break;
             //Prepare auth info,such as replace global variable
             let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpEnviroments || {});
@@ -524,6 +525,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
               const config = (authInfo || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
               //Execute at runtime
               const code = await func(config);
+              console.log(code);
               const [authPmRes, err] = await pmRuntime.executeSync(ctx, code, {
                 context: pmRes
               });

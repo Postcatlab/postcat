@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 
 const installExtension = (extension, version = 'latest') => {
   return new Promise(resolve => {
-    const ls = spawn('npm', ['i', '--no-save', `${extension}@${version}`]);
+    const ls = spawn('npm', ['i', `${extension}@${version}`]);
     ls.on('close', function (code) {
       console.log('child process exited with code ' + code);
       return resolve(true);
@@ -39,7 +39,6 @@ const loadExtension = async ({ name, version }) => {
       extension: extension.default,
       packageJson: extPkg
     };
-    console.log(cache);
     extensionMap.set(`${name}:${extPkg.version}`, cache);
   }
   return [cache, null];
