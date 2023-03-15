@@ -8,12 +8,12 @@ const _LibsCommon = require('../request/libs/common.js');
 const koaBody = require('koa-body');
 const Koa = require('koa');
 const cors = require('@koa/cors');
-const socketio = require('./socketio.js');
-
 const app = new Koa();
 const port = process.env.TEST_SERVER_PORT || 4201;
-console.log(port);
 
+process.on('uncaughtException', err => {
+  console.error('uncaughtException', err);
+});
 app.use(cors());
 app.use(koaBody());
 
@@ -46,6 +46,5 @@ app.use(async (ctx, next) => {
   next();
 });
 
-socketio();
 app.listen(port);
-console.log(`Server is running at port ${port} ...`);
+console.log(`Unit Server is running at port ${port} ...`);
