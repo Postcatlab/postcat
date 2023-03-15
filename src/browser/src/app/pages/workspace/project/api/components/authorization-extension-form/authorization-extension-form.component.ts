@@ -104,7 +104,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   get defaultAuthType() {
-    return this.authType === inheritAuth.name || this.parentGroup?.depth ? inheritAuth : noAuth;
+    return this.parentGroup?.depth !== 0 ? inheritAuth : noAuth;
   }
 
   get isDefaultAuthType() {
