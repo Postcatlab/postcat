@@ -132,6 +132,7 @@
           <authorization-extension-form
             #authExtForm
             [(model)]="model.request.authInfo"
+            [type]="type"
             type="api-test"
             [inheritAuthType]="initialModel?.request?.authInfo?.authType"
             [groupInfo]="{ parentId: model.request?.groupId }"
