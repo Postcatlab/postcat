@@ -1,34 +1,22 @@
 import { test, expect } from '@playwright/test';
 
-import { addTextToEditor, ifTipsExist } from './commom.util';
-const addParams = async (dom, value) => {
-  await dom.click();
-  await dom.fill(value);
-};
+import { adaTabledRow, addTableParams, addTextToEditor, ifTipsExist } from './commom.util';
 
-const addRow = async (page, opts: { index: number; where: string; valueByKey: { [key: string]: string } }) => {
-  const index = opts.index;
-  for (const name in opts.valueByKey) {
-    const value = opts.valueByKey[name];
-    await addParams(page.getByPlaceholder(name).nth(index), value);
-  }
-};
 const addRowAndSettingMore = async (page, opts) => {
-  await addRow(page, opts);
+  await adaTabledRow(page, opts);
 
   const index = opts.index;
   //More settings
   await page.locator('.eo-table-btn-td').nth(index).locator('use[href="#more"]').click();
-  await addRow(page, {
+  await adaTabledRow(page, {
     index: 0,
-    where: opts.where,
     valueByKey: {
-      enum: `${opts.where}Enum`
+      enum: `${opts.id}Enum`
     }
   });
-  await addParams(
+  await addTableParams(
     page.getByRole('row', { name: 'enum Description', exact: true }).first().getByPlaceholder('Description'),
-    `${opts.where}EnumDescription`
+    `${opts.id}EnumDescription`
   );
   await addTextToEditor(page, 'example');
   await page.getByRole('button', { name: 'Confirm' }).click();
@@ -55,7 +43,7 @@ test.describe('Operate API', () => {
     //Add twice
     await addRowAndSettingMore(page, {
       index: 1,
-      where: 'header',
+      id: 'header',
       valueByKey: {
         Key: 'header',
         Description: 'headerDescription',

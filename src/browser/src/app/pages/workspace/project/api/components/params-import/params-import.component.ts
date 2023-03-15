@@ -81,7 +81,6 @@ export class ParamsImportComponent implements OnInit {
       } catch (error) {}
     } else if (['formData', 'header'].includes(this.contentType)) {
       const arr = form2json(clipText);
-      console.log(arr);
       if (Array.isArray(arr) && arr.length && clipText.split(':').length > 1) {
         this.paramCode = clipText;
       }
