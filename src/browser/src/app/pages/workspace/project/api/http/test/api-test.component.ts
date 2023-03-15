@@ -18,6 +18,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import {
+  AuthIn,
   AuthorizationExtensionFormComponent,
   noAuth
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
@@ -121,6 +122,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     const { uuid } = this.route.snapshot.queryParams;
     return !this.globalStore.isShare && (!uuid || uuid.includes('history_'));
   }
+  get type(): AuthIn {
+    const { uuid } = this.route.snapshot.queryParams;
+    return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
+  }
   get contentType(): ContentType {
     return contentTypeMap[this.model.request.apiAttrInfo.contentType];
   }
@@ -203,6 +208,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         uuid = uuid.replace('history_', '');
         const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
         console.log('history.request', history.request);
+        history.request.authInfo = {
+          authInfo: {},
+          authType: noAuth.name,
+          ...history.request.authInfo,
+          isInherited: 0
+        };
         this.model.request = history.request;
         this.model.testResult = history.response;
       } else {

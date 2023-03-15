@@ -93,7 +93,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   authAPIMap: Map<string, FeatureInfo> = new Map();
   extensionList: Array<typeof noAuth> = [];
 
-  parentGroup: Group;
+  parentGroup: Partial<Group>;
 
   tipsText = $localize`Authorization`;
 
@@ -104,7 +104,9 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   get defaultAuthType() {
-    return this.parentGroup?.depth ? inheritAuth : noAuth;
+    const isRootGroup =
+      this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
+    return isRootGroup && this.type !== 'api-test-history' ? inheritAuth : noAuth;
   }
 
   get isDefaultAuthType() {
@@ -140,7 +142,6 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   init() {
     this.authType = '';
     this.parentGroup = undefined;
-    console.log('ddd');
   }
 
   initAutorun() {

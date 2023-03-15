@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Recieve postcat test config and response http result",
   "main": "./server/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:Postcatlab/postcat.git"
+  },
   "scripts": {
     "dev": "node ./server/main.js",
     "start": "pm2-runtime start ./server/main.js",

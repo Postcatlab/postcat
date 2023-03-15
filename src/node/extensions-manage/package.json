@@ -22,8 +22,7 @@
     "koa-router": "^12.0.0",
     "network-activity-viewer": "^1.0.8",
     "node-fetch": "^3.3.0",
-    "pm2": "^5.2.2",
-    "postcat-sync-swagger": "1.0.0"
+    "pm2": "^5.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

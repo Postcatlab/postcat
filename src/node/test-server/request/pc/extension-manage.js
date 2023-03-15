@@ -3,11 +3,11 @@ const extensionMap = new Map();
 const path = require('path');
 const isElectron = !!process.versions['electron'];
 //TODO install locally
-const installExtension = (extension, version = 'latest') => {
+const installExtension = (name, version = 'latest') => {
   return new Promise(resolve => {
-    const ls = spawn('npm', ['i', '--no-save', `${extension}@${version}`]);
+    const ls = spawn('npm', ['i', '--no-save', `${name}@${version}`]);
     ls.on('close', function (code) {
-      console.log(`child process exited with code :${code}`);
+      // console.log(`child process exited with code :${code}`);
       return resolve(true);
     });
     ls.stderr.on('data', function (data) {
@@ -24,6 +24,8 @@ const loadExtension = async ({ name, version = 'latest' }) => {
   // * Is extension in Map cache ?
   // * If true, then get the function.
   // * If false, then install the extension and save to map cache then get the function.
+
+  //TODO save version at extensionMap
   const hasIt = extensionMap.has(`${name}:${version}`);
   let cache = {};
   if (!hasIt) {
@@ -40,7 +42,7 @@ const loadExtension = async ({ name, version = 'latest' }) => {
         extension: extension,
         packageJson: extPkg
       };
-      extensionMap.set(`${name}:${extPkg.version}`, cache);
+      extensionMap.set(`${name}:${version}`, cache);
       return [cache, null];
     }
 
@@ -56,7 +58,7 @@ const loadExtension = async ({ name, version = 'latest' }) => {
       extension: extension.default,
       packageJson: extPkg
     };
-    extensionMap.set(`${name}:${extPkg.version}`, cache);
+    extensionMap.set(`${name}:${version}`, cache);
   }
   return [cache, null];
 };

@@ -155,9 +155,9 @@ export class GroupService extends BaseService<Group> {
         isInherited: 0,
         authInfo: {}
       };
-      if (group.depth) {
+      if (group.depth !== 0) {
         const { data: parentGroup } = await this.read({ id: group.parentId });
-        if (parentGroup.depth) {
+        if (parentGroup.depth !== 0) {
           group.authInfo = parentGroup.authInfo;
         }
         if (isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name) {
