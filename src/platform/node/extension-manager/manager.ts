@@ -17,7 +17,7 @@ import path from 'node:path';
 const extServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
-const defaultExtension = [{ name: 'postcat-export-openapi' }, { name: 'postcat-import-openapi' }];
+const defaultExtension = [{ name: 'postcat-export-openapi' }, { name: 'postcat-import-openapi' }, { name: 'postcat-basic-auth' }];
 const isExists = async filePath =>
   await promises
     .access(filePath)
