@@ -1,0 +1,50 @@
+<form nz-form nzLayout="inline" [formGroup]="validateForm" (ngSubmit)="changeGroupName()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input groupName" [nzValidateStatus]="validateForm.controls['name']">
+      <div class="flex items-center">
+        <ng-container *ngIf="isEdit">
+          <div class="invisible px-[20px] min-w-[151px]">{{ validateForm.value.name }}</div>
+          <input
+            #groupNameInputRef
+            class="absolute"
+            eo-ng-input
+            autofocus
+            placeholder="Group Name"
+            (blur)="changeGroupName()"
+            (ngModelChange)="emitChange($event)"
+            formControlName="name"
+            id="name"
+          />
+        </ng-container>
+        <ng-container *ngIf="!isEdit">
+          <h4 nz-typography class="!mb-[0px]">{{ validateForm.value?.name }}</h4>
+          <button eo-ng-button nzType="text" class="ml-[5px]" (click)="startEditGroupName()">
+            <eo-iconpark-icon name="edit"></eo-iconpark-icon>
+          </button>
+        </ng-container>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<eo-ng-tabset class="overflow-auto">
+  <eo-ng-tab i18n-nzTitle nzTitle="Authorization">
+    <div class="top-save-bar">
+      <button type="submit" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveGroupInfo()" i18n>
+        Save
+      </button>
+    </div>
+
+    <div class="text-tips mt-[15px] mb-[13px]" i18n>
+      Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.
+    </div>
+    <authorization-extension-form
+      #authExtForm
+      [(model)]="authInfoModel"
+      [inheritAuthType]="initialModel?.authInfo?.authType"
+      [groupInfo]="model"
+      (modelChange)="emitChange($event)"
+    >
+    </authorization-extension-form>
+  </eo-ng-tab>
+</eo-ng-tabset>

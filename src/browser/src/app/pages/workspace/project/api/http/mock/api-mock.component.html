@@ -1,0 +1,16 @@
+<nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
+  <div nz-result-extra>
+    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" trace traceID="open_client">{{
+      btnTitle
+    }}</button>
+    <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>
+  </div>
+</nz-result>
+<div *ngIf="!web.isWeb">
+  <ng-container *ngIf="canEdit">
+    <button eo-ng-button nzType="primary" (click)="addMock()" trace traceID="click_add_mock" i18n>New Mock</button>
+  </ng-container>
+  <div class="mt-[20px]">
+    <eo-api-mock-table class="table-border-all" #mockTable [apiData]="apiData" isEdit="true"></eo-api-mock-table>
+  </div>
+</div>

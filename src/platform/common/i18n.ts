@@ -1,4 +1,4 @@
-import { ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 /**
  * Single extension i18 service,chain call
  */

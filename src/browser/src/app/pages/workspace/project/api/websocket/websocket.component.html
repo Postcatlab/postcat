@@ -1,0 +1,196 @@
+<div class="h-full overflow-hidden">
+  <header class="p-[10px] websocket-header">
+    <form nz-form [formGroup]="validateForm" class="flex">
+      <nz-form-item nz-col class="flex-1">
+        <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+          <input
+            type="text"
+            i18n-placeholder
+            placeholder="Enter URL"
+            formControlName="uri"
+            (change)="changeUri()"
+            [(ngModel)]="model.request.uri"
+            class="left-1 main-bg"
+            name="uri"
+            eo-ng-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <div class="flex px-1">
+        <button
+          class="mx-1 w-28"
+          *ngIf="wsStatus === 'disconnect'"
+          eo-ng-button
+          nzType="primary"
+          trace
+          traceID="click_api_test"
+          i18n
+          (click)="handleConnect('connecting')"
+        >
+          Connect
+        </button>
+        <button i18n class="mx-1 w-28" *ngIf="wsStatus === 'connecting'" disabled eo-ng-button nzType="default"> Connecting </button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="wsStatus === 'connected'"
+          eo-ng-button
+          nzDanger
+          i18n
+          trace
+          traceID="api_test_finish"
+          nzType="default"
+          (click)="handleConnect('disconnect')"
+        >
+          Disconnect
+        </button>
+      </div>
+    </form>
+  </header>
+  <div
+    nz-resizable
+    [nzMinHeight]="50"
+    [style.height.px]="height"
+    [style.--bottom-height]="height - 15 + 'px'"
+    (nzResize)="onResize($event)"
+  >
+    <eo-ng-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzAnimated]="false"
+      class="h-full"
+      [(nzSelectedIndex)]="model.requestTabIndex"
+    >
+      <!-- Request Headers -->
+      <eo-ng-tab [nzTitle]="headerTitleTmp">
+        <ng-template #headerTitleTmp>
+          <span
+            i18n="@@RequestHeaders"
+            eoNgFeedbackTooltip
+            [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
+            >Headers</span
+          >
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams?.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <pc-api-test-form
+          module="header"
+          [disabled]="isConnecting"
+          [(model)]="model.request.requestParams.headerParams"
+          (modelChange)="emitChangeFun('requestHeaders')"
+          [nzTrClick]="handleTestQueryTableClick"
+        >
+        </pc-api-test-form>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="queryTitleTmp">
+        <ng-template #queryTitleTmp>
+          <span i18n eoNgFeedbackTooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
+            >Query Params</span
+          >
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <pc-api-test-form
+          module="query"
+          class=""
+          [disabled]="isConnecting"
+          [model]="model.request.requestParams.queryParams"
+          (modelChange)="emitChangeFun('queryParams')"
+          [nzTrClick]="handleTestQueryTableClick"
+        ></pc-api-test-form>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="messageTmp">
+        <ng-template #messageTmp i18n>Message</ng-template>
+        <div style="height: calc(100% - 48px)">
+          <eo-monaco-editor
+            [autoHeight]="true"
+            [(code)]="model.msg"
+            [config]="editorConfig"
+            [editorType]="editorConfig.language"
+            [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+            (codeChange)="rawDataChange($event)"
+          >
+          </eo-monaco-editor>
+          <div class="flex justify-between p-2">
+            <eo-ng-select [(ngModel)]="editorConfig.language">
+              <eo-ng-option nzValue="text" nzLabel="text"></eo-ng-option>
+              <eo-ng-option nzValue="xml" nzLabel="xml"></eo-ng-option>
+              <eo-ng-option nzValue="json" nzLabel="json"></eo-ng-option>
+            </eo-ng-select>
+            <button
+              eo-ng-button
+              [disabled]="wsStatus !== 'connected' || !model.msg"
+              class="mx-1"
+              nzType="primary"
+              i18n
+              (click)="handleSendMsg()"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </eo-ng-tab>
+    </eo-ng-tabset>
+    <div class="relative">
+      <nz-resize-handle class="relative z-10 horizontal container-draggable" nzDirection="bottom"> </nz-resize-handle>
+    </div>
+  </div>
+  <!-- body -->
+  <!-- response -->
+  <section style.height="calc(100% - {{ height }}px - 55px)">
+    <div class="flex items-center justify-between p-3">
+      <span class="font-bold" i18n>Messages</span>
+    </div>
+    <ul class="p-2 overflow-auto" style="height: calc(100% - 55px)">
+      <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
+        <div (click)="expandMessage(index)" class="flex flex-col w-full top-line">
+          <div *ngIf="item.type === 'send'" class="message-item">
+            <span class="flex items-center justify-center w-4 h-4 rounded shrink-0 send_icon">
+              <eo-iconpark-icon name="up-small" size="16"></eo-iconpark-icon>
+            </span>
+            <div class="px-2">{{ item.msg }}</div>
+          </div>
+          <div *ngIf="item.type === 'get'" class="message-item">
+            <eo-iconpark-icon
+              class="box-border flex items-center justify-center w-4 h-4 rounded-full get_icon"
+              name="down-small"
+              size="16"
+            ></eo-iconpark-icon>
+            <div class="px-2">{{ item.msg }}</div>
+          </div>
+          <div *ngIf="item.type === 'start'" class="message-item">
+            <eo-iconpark-icon
+              class="box-border flex items-center justify-center w-4 h-4 rounded-full start_icon"
+              name="check"
+              size="10"
+            ></eo-iconpark-icon>
+            <div class="px-2">{{ item.title }}</div>
+          </div>
+          <div *ngIf="item.type === 'end'" class="message-item">
+            <eo-iconpark-icon
+              class="box-border flex items-center justify-center w-4 h-4 rounded-full end_icon"
+              name="close"
+              size="10"
+            ></eo-iconpark-icon>
+            <div class="px-2">{{ item.title || item.msg }}</div>
+          </div>
+        </div>
+        <!-- 
+        <eo-monaco-editor
+          *ngIf="item.isExpand && item.type !== 'start'"
+          [code]="item.msg"
+          class="border-all"
+          [config]="{
+            language: 'json',
+            readOnly: true
+          }"
+          [eventList]="['type', 'format', 'copy', 'search']"
+          (codeChange)="rawDataChange($event)"
+        >
+        </eo-monaco-editor> -->
+        <ng-container *ngIf="item.isExpand && item.type === 'start'">
+          <div *ngFor="let key of Object.keys(item.msg)" class="headers">
+            <div class="font-bold bbd pb-[10px] pt-[8px]">{{ item.msg[key]?.label }}</div>
+            <eo-api-test-result-header [model]="item.msg[key]?.content || []"></eo-api-test-result-header>
+          </div>
+        </ng-container>
+      </li>
+    </ul>
+  </section>
+</div>

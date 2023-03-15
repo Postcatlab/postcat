@@ -1,0 +1,50 @@
+<div class="p-[20px]">
+  <header class="flex justify-between">
+    <div class="mb-[15px] flex">
+      <b class="mr-[14px] text-[18px] truncate max-w-[500px]">{{ title }}</b>
+    </div>
+    <div class="flex">
+      <button
+        *ngIf="feature.config.cloudFeature && isOwner"
+        class="!ml-[10px]"
+        trace
+        traceID="click_add_workspace_member"
+        eo-ng-button
+        (click)="invite()"
+      >
+        <eo-iconpark-icon class="mr-[5px]" name="add"></eo-iconpark-icon>
+        <span i18n>Invite Member</span>
+      </button>
+      <button class="!ml-[10px]" eo-ng-button nzType="primary" (click)="projectList.createProject()">
+        <eo-iconpark-icon class="mr-[5px]" name="add"></eo-iconpark-icon>
+        <span i18n>New Project</span>
+      </button>
+    </div>
+  </header>
+  <section>
+    <eo-ng-tabset [(nzSelectedIndex)]="nzSelectedIndex" nzLinkRouter class="mx-[5px]" [nzTabBarExtraContent]="extraTemplate">
+      <eo-ng-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['projects']" queryParamsHandling="merge" i18n>Project</a>
+      </eo-ng-tab>
+      <eo-ng-tab *ngIf="feature.config.cloudFeature">
+        <a *nzTabLink nz-tab-link [routerLink]="['member']" queryParamsHandling="merge" i18n>Members</a>
+      </eo-ng-tab>
+      <eo-ng-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['setting']" queryParamsHandling="merge" i18n>
+          <ng-container *ngIf="!store.isLocal && isOwner">Setting</ng-container></a
+        >
+      </eo-ng-tab>
+    </eo-ng-tabset>
+    <ng-template #extraTemplate>
+      <div class="list-type-switcher" *ngIf="nzSelectedIndex === 0">
+        <button eo-ng-button nzType="text" (click)="projectList.setListType('card')">
+          <eo-iconpark-icon [ngClass]="{ active: projectList.listType === 'card' }" name="page-template"></eo-iconpark-icon>
+        </button>
+        <button eo-ng-button nzType="text" (click)="projectList.setListType('list')">
+          <eo-iconpark-icon [ngClass]="{ active: projectList.listType === 'list' }" name="list"></eo-iconpark-icon>
+        </button>
+      </div>
+    </ng-template>
+    <router-outlet class="half-part-container"></router-outlet>
+  </section>
+</div>

@@ -1,0 +1,233 @@
+<nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
+</nz-skeleton>
+<div class="test_wrap" *ngIf="model?.request?.apiAttrInfo">
+  <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
+    <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
+      <eo-ng-input-group nzCompact>
+        <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.apiAttrInfo.requestMethod" formControlName="method">
+          <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
+        </eo-ng-select>
+        <div
+          *ngIf="store.getCurrentEnv.hostUri"
+          nz-typography
+          nzEllipsis
+          class="env-front-uri"
+          nzTooltipTitle="{{ store.getCurrentEnv.hostUri }}"
+          nzTooltipPlacement="bottom"
+          eoNgFeedbackTooltip
+        >
+          {{ store.getCurrentEnv.hostUri }}
+        </div>
+        <nz-form-item nz-col class="flex-1">
+          <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+            <input
+              type="text"
+              class="rounded-r main-bg"
+              i18n-placeholder
+              placeholder="Enter URL"
+              name="uri"
+              (blur)="blurUri()"
+              eo-ng-input
+              (input)="updateParamsbyUri()"
+              formControlName="uri"
+              [(ngModel)]="model.request.uri"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </eo-ng-input-group>
+      <button type="submit" id="btn-test" eo-ng-button nzType="primary" class="mx-[10px] w-[100px]" (click)="clickTest()">
+        <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
+        <span *ngIf="status === 'testing'" i18n>Abort</span>
+        <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
+      </button>
+      <button
+        type="button"
+        *ngIf="isEmptyTestPage"
+        eo-ng-button
+        nzType="default"
+        (click)="saveApi()"
+        trace
+        traceID="save_api_document_from_test"
+        i18n
+      >
+        Save as API
+      </button>
+    </form>
+    <!-- Request Info -->
+    <eo-ng-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzAnimated]="false"
+      (nzSelectedIndexChange)="handleSelectedIndexChange($event)"
+      [(nzSelectedIndex)]="model.requestTabIndex"
+    >
+      <!-- Request Headers -->
+      <eo-ng-tab [nzTitle]="headerTitleTmp" name="hhh">
+        <ng-template #headerTitleTmp>
+          <span i18n="@@RequestHeaders">Headers</span>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.headerParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <pc-api-test-form
+          module="header"
+          [(model)]="model.request.requestParams.headerParams"
+          (modelChange)="emitChangeFun('requestHeaders')"
+        ></pc-api-test-form>
+      </eo-ng-tab>
+      <!--Request Info -->
+      <eo-ng-tab [nzTitle]="bodyTitleTmp">
+        <ng-template #bodyTitleTmp>
+          <span i18n>Body</span>
+          <nz-badge
+            class="ml-1"
+            *ngIf="
+              [TYPE_API_BODY['FormData']].includes(model.request.apiAttrInfo.contentType)
+                ? bindGetApiParamNum(model.request.requestParams.bodyParams)
+                : model.request.requestParams.bodyParams?.length
+            "
+            nzStatus="success"
+          ></nz-badge>
+        </ng-template>
+        <eo-api-test-body
+          class=""
+          [(contentType)]="$$contentType"
+          [(autoSetContentType)]="model.autoSetContentType"
+          (contentTypeChange)="changeContentType($event)"
+          [(bodyType)]="model.request.apiAttrInfo.contentType"
+          (bodyTypeChange)="changeBodyType($event)"
+          [(model)]="model.request.requestParams.bodyParams"
+          (modelChange)="emitChangeFun('requestBody')"
+          [supportType]="[TYPE_API_BODY.FormData, TYPE_API_BODY.Raw, TYPE_API_BODY.Binary]"
+        >
+        </eo-api-test-body>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="queryTitleTmp">
+        <ng-template #queryTitleTmp>
+          <span i18n>Query</span>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.queryParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <pc-api-test-form
+          module="query"
+          class=""
+          [(model)]="model.request.requestParams.queryParams"
+          (modelChange)="emitChangeFun('queryParams')"
+        ></pc-api-test-form>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="restTitleTmp">
+        <ng-template #restTitleTmp>
+          <span i18n>REST</span>
+          <nz-badge *ngIf="bindGetApiParamNum(model.request.requestParams.restParams)" class="ml-1" nzStatus="success"></nz-badge>
+        </ng-template>
+        <pc-api-test-form
+          module="rest"
+          class=""
+          [(model)]="model.request.requestParams.restParams"
+          (modelChange)="emitChangeFun('restParams')"
+        ></pc-api-test-form>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="authorizationTitleTmp">
+        <ng-template #authorizationTitleTmp>
+          <span i18n>Authorization</span>
+          <nz-badge class="ml-1" *ngIf="model.request?.authInfo?.authType !== noAuth.name" nzStatus="success"></nz-badge>
+        </ng-template>
+        <div class="p-[20px] overflow-auto h-full">
+          <authorization-extension-form
+            #authExtForm
+            [(model)]="model.request.authInfo"
+            [type]="type"
+            type="api-test"
+            [inheritAuthType]="initialModel?.request?.authInfo?.authType"
+            [groupInfo]="{ parentId: model.request?.groupId }"
+            (modelChange)="emitChangeFun('authInfo')"
+          ></authorization-extension-form>
+        </div>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="preScriptTitleTmp">
+        <ng-template #preScriptTitleTmp>
+          <span i18n>Pre-request Script</span>
+          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.beforeInject?.trim()" nzStatus="success"></nz-badge>
+        </ng-template>
+        <eo-api-script
+          *ngIf="model.requestTabIndex === 5"
+          [(code)]="model.request.apiAttrInfo.beforeInject"
+          (codeChange)="emitChangeFun('beforeScript')"
+          [treeData]="BEFORE_DATA"
+          [completions]="beforeScriptCompletions"
+        ></eo-api-script>
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
+        <ng-template #suffixScriptTitleTmp>
+          <span i18n>After-response Script</span>
+          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.afterInject?.trim()" nzStatus="success"></nz-badge>
+        </ng-template>
+        <eo-api-script
+          *ngIf="model.requestTabIndex === 6"
+          [(code)]="model.request.apiAttrInfo.afterInject"
+          (codeChange)="emitChangeFun('afterScript')"
+          [treeData]="AFTER_DATA"
+          [completions]="afterScriptCompletions"
+        ></eo-api-script>
+      </eo-ng-tab>
+    </eo-ng-tabset>
+  </div>
+
+  <div
+    class="bottom_container scroll_container"
+    nz-resizable
+    [nzMinHeight]="50"
+    [style.height.px]="responseContainerHeight"
+    [style.--bottom-height]="responseContainerHeight - 15 + 'px'"
+    (nzResize)="onResize($event)"
+    (nzResizeEnd)="onResizeEnd()"
+  >
+    <nz-resize-handle class="z-10 horizontal container-draggable" [ngClass]="{ isDragging }" nzDirection="top">
+      <div class="top"></div>
+      <div class="bottom"></div>
+    </nz-resize-handle>
+    <!-- Response -->
+    <eo-ng-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [(nzSelectedIndex)]="model.responseTabIndex"
+      [nzTabBarExtraContent]="extraTemplate"
+      [nzAnimated]="false"
+      class="response_container"
+      (nzSelectChange)="handleBottomTabSelect($event)"
+    >
+      <eo-ng-tab i18n-nzTitle nzTitle="Response">
+        <eo-api-test-result-response [model]="model.testResult" [uri]="model.request.uri"> </eo-api-test-result-response>
+      </eo-ng-tab>
+      <div>
+        <eo-ng-tab *ngIf="model.testResult?.headers" i18n-nzTitle nzTitle="Response Headers">
+          <eo-api-test-result-header class="p-base" [model]="model.testResult?.headers"></eo-api-test-result-header>
+        </eo-ng-tab>
+      </div>
+      <eo-ng-tab *ngIf="model.testResult?.request?.body" i18n-nzTitle nzTitle="Body">
+        <!-- TODO use isRequestBodyLoaded -->
+        <eo-api-test-result-request-body
+          *ngIf="model.responseTabIndex === 2"
+          [model]="model.testResult.request.body"
+          [contentType]="model.testResult.request.contentType"
+        >
+        </eo-api-test-result-request-body>
+      </eo-ng-tab>
+      <eo-ng-tab *ngIf="model.testResult?.request?.headers" i18n-nzTitle nzTitle="Request Headers">
+        <eo-api-test-result-header class="p-base" [model]="model.testResult?.request?.headers"> </eo-api-test-result-header>
+      </eo-ng-tab>
+    </eo-ng-tabset>
+    <ng-template #extraTemplate>
+      <div *ngIf="model.responseTabIndex === 0" class="py-[6px] px-[12px] flex items-center">
+        <button eo-ng-button nzType="text">
+          <eo-iconpark-icon
+            name="download"
+            *ngIf="!isEmpty(model.testResult?.body)"
+            class="cursor-pointer"
+            i18n-nzTooltipTitle
+            eoNgFeedbackTooltip
+            nzTooltipTitle="Save As File"
+            (click)="downloadFile()"
+          >
+          </eo-iconpark-icon>
+        </button>
+      </div>
+    </ng-template>
+    <div id="test-response"></div>
+  </div>
+</div>
