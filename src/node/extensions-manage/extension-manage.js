@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 
 const installExtension = (extension, version = 'latest') => {
   return new Promise(resolve => {
-    const ls = spawn('npm', ['i', `${extension}@${version}`]);
+    const ls = spawn('npm', ['i', '--no-save', `${extension}@${version}`]);
     ls.on('close', function (code) {
       console.log('child process exited with code ' + code);
       return resolve(true);
@@ -17,6 +17,7 @@ const installExtension = (extension, version = 'latest') => {
     });
   });
 };
+const extensionMap = new Map();
 const loadExtension = async ({ name, version }) => {
   // * Is extension in Map cache ?
   // * If true, then get the function.
@@ -43,5 +44,4 @@ const loadExtension = async ({ name, version }) => {
   }
   return [cache, null];
 };
-const extensionMap = new Map();
 export { loadExtension };
