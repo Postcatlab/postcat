@@ -8,13 +8,10 @@
     "url": "git+git@github.com:Postcatlab/postcat.git"
   },
   "scripts": {
-    "dev": "node ./server/main.js",
-    "start": "pm2-runtime start ./server/main.js",
-    "start:io": "pm2-runtime start ./server/socketio.js",
-    "start:all": "yarn start && yarn start:io",
-    "start:all:pm2": "pm2 start ./server/main.js",
-    "watch": "pm2 list",
-    "stop": "pm2 stop all",
+    "dev": "node ./server/main.js&&node ./server/socketio.js",
+    "start": "pm2 start ecosystem.config.js",
+    "start:watch": "pm2-runtime start ecosystem.config.js",
+    "stop": "pm2 stop ecosystem.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Postcat",
@@ -35,6 +32,7 @@
     "postman-sandbox": "^4.2.3",
     "socket.io": "4.5.3",
     "ws": "8.8.1",
-    "xml2js": "0.4.23"
+    "xml2js": "0.4.23",
+    "axios":"1.3.4"
   }
 }

@@ -103,18 +103,19 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return this.schemaForm?.validateForm;
   }
 
-  get defaultAuthType() {
-    const isRootGroup =
-      this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
-    return isRootGroup && this.type !== 'api-test-history' ? inheritAuth : noAuth;
-  }
+  // get defaultAuthType() {
+
+  // }
 
   get isDefaultAuthType() {
     return [inheritAuth.name, noAuth.name].includes(this.authType);
   }
 
   get authTypeList() {
-    return [this.defaultAuthType, ...this.extensionList];
+    const isRootGroup =
+      this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
+    if (isRootGroup && this.type !== 'api-test-history') return [inheritAuth, noAuth, ...this.extensionList];
+    return [noAuth, ...this.extensionList];
   }
 
   constructor(

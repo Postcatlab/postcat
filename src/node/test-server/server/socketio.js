@@ -5,13 +5,12 @@ const grpcClient = require('./grpc_client.js');
 process.on('uncaughtException', err => {
   console.error('uncaughtException', err);
 });
-
 const _post = process.env.EOAPI_WEBSOCKET_PORT || 13928;
-
 const socket = (port = _post) => {
   const io = new IO.Server(port, {
     transports: ['websocket']
   });
+  console.log(`Websocket Server is running at port ${port} ...`);
   io.on('connection', socket => {
     // * send a message to the client
     socket.emit('ws-client', 'link success');
@@ -104,4 +103,5 @@ const socket = (port = _post) => {
   });
 };
 
+socket(_post);
 module.exports = socket;
