@@ -203,6 +203,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         uuid = uuid.replace('history_', '');
         const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
         console.log('history.request', history.request);
+        history.request.authInfo = {
+          authInfo: {},
+          authType: noAuth.name,
+          isInherited: 0,
+          ...history.request.authInfo
+        };
         this.model.request = history.request;
         this.model.testResult = history.response;
       } else {
