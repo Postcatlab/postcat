@@ -32,7 +32,8 @@
     "scripts/build.js",
     "test/e2e/test.ts",
     "test/e2e/test.ts",
-    "src/node/extensions-manage/extension-manage.js"
+    "src/node/extensions-manage/extension-manage.js",
+    "src/node/test-server/ecosystem.config.js"
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/browser/**/*.js", "**/browser/**/*.ts", "out"],
   "angularCompilerOptions": {
