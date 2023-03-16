@@ -12,6 +12,8 @@ export class ApiStoreService {
   @observable private rootGroup: Group;
   @observable private groupList: Group[] = [];
 
+  @observable private expandList: Array<string | number> = [];
+
   //? api
   @observable private apiList = [];
 
@@ -44,6 +46,9 @@ export class ApiStoreService {
   }
   @computed get getApiList() {
     return this.apiList;
+  }
+  @computed get getExpandList() {
+    return this.expandList;
   }
   @computed get getGroupList() {
     return this.groupList;
@@ -92,6 +97,10 @@ export class ApiStoreService {
 
   @action setGroupList(list = []) {
     this.groupList = hangGroupToApi(list);
+  }
+
+  @action setExpandsList(expandKey: string | number) {
+    this.expandList = [...this.expandList, expandKey];
   }
 
   @action setEnvUuid(data) {

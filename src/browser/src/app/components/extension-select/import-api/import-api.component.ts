@@ -119,6 +119,7 @@ export class ImportApiComponent implements OnInit {
       const [data, err] = module[action](content);
       console.log('import data', window.structuredClone?.(data));
       if (err) {
+        this.eoMessage.error(err.msg);
         console.error(err.msg);
         callback(false);
         return;
