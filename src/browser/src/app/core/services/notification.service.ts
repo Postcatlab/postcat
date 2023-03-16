@@ -22,11 +22,13 @@ export class NotificationService {
       return;
     }
 
-    this.modal.create({
-      stayWhenRouterChange: true,
-      nzTitle: $localize`Release Notes`,
-      nzContent: $localize`There will be downtime updates from ${logInfo.startTime.getHours()}\:00 to ${logInfo.endTime.getHours()}\:00 today, and may be temporarily inaccessible.`
-    });
-    StorageUtil.set('notification_has_show', true, 60 * 60 * 24);
+    //! safari may cause erro when the user first open page,it will show even if the time has passed
+
+    // this.modal.create({
+    //   stayWhenRouterChange: true,
+    //   nzTitle: $localize`Release Notes`,
+    //   nzContent: $localize`There will be downtime updates from ${logInfo.startTime.getHours()}\:00 to ${logInfo.endTime.getHours()}\:00 today, and may be temporarily inaccessible.`
+    // });
+    // StorageUtil.set('notification_has_show', true, 60 * 60 * 24);
   }
 }
