@@ -6,6 +6,7 @@ import { WebService } from 'pc/browser/src/app/core/services';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/index.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
@@ -96,15 +97,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.initExtensionExtra();
     this.watchInstalledExtensionsChange();
   }
+  @ExtensionChange('apiPreviewTab')
   watchInstalledExtensionsChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'extensionsChange') {
-        const name = inArg.data.name;
-        const extension: ExtensionInfo = inArg.data.installedMap.get(name);
-        if (!extension?.features?.apiPreviewTab) return;
-        this.initExtensionExtra();
-      }
-    });
+    this.initExtensionExtra();
   }
   async initExtensionExtra() {
     this.rightExtras = [];

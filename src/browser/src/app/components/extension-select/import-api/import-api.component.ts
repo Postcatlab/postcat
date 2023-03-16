@@ -6,6 +6,7 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { parseAndCheckCollections, parseAndCheckEnv } from 'pc/browser/src/app/services/storage/db/validate/validate';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { Subject } from 'rxjs';
@@ -73,16 +74,18 @@ export class ImportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.initData();
+    this.watchInstalledExtensionsChange();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData();
-        }
-      });
+      .subscribe((inArg: Message) => {});
   }
-  initData = () => {
+  @ExtensionChange('importAPI')
+  watchInstalledExtensionsChange() {
+    this.initData();
+  }
+
+  initData() {
     this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -96,7 +99,7 @@ export class ImportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  };
+  }
   uploadChange(data) {
     this.uploadData = data;
   }

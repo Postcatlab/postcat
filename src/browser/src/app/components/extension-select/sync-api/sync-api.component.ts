@@ -6,6 +6,7 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { EffectService } from 'pc/browser/src/app/store/effect.service';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -52,21 +53,11 @@ export class SyncApiComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.getSyncSettingList();
     this.initData();
+    this.watchInstalledExtensionsChange();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData(() => {
-            if (this.supportList?.length) {
-              const { key } = this.supportList.at(0);
-              this.model.__formater = key || '';
-            } else {
-              this.model.__formater = '';
-            }
-          });
-        }
-      });
+      .subscribe((inArg: Message) => {});
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,6 +65,18 @@ export class SyncApiComponent implements OnInit, OnChanges {
     if (changes.model.previousValue.__formater !== changes.model.currentValue.__formater) {
       this.updateExtensionModel();
     }
+  }
+
+  @ExtensionChange('pullAPI')
+  watchInstalledExtensionsChange() {
+    this.initData(() => {
+      if (this.supportList?.length) {
+        const { key } = this.supportList.at(0);
+        this.model.__formater = key || '';
+      } else {
+        this.model.__formater = '';
+      }
+    });
   }
 
   handleValueChanges(val) {

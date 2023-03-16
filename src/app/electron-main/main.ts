@@ -195,73 +195,65 @@ try {
     }
   });
   let loginWindow = null;
-  // 这里可以封装成类+方法匹配调用，不用多个if else
+
+  const action = {
+    getModules: () => Promise.resolve(moduleManager.getModules()),
+    getModule: arg => Promise.resolve(moduleManager.getModule(arg.data.id)),
+    installModule: async arg => {
+      const data = await moduleManager.installExt(arg.data);
+      return Object.assign(data, { modules: moduleManager.getModules() });
+    },
+    uninstallModule: async arg => {
+      const data = await moduleManager.installExt(arg.data);
+      return Object.assign(data, { modules: moduleManager.getModules() });
+    },
+    getExtensionPackage: async arg => await moduleManager.getExtensionPackage(arg.data.feature, arg.data.params),
+    getFeature: arg => Promise.resolve(moduleManager.getFeature(arg.data.featureKey)),
+    getMockUrl: () => Promise.resolve(mockServer.getMockUrl()),
+    getWebsocketPort: () => Promise.resolve(websocketPort),
+    getExtTabs: arg => Promise.resolve(moduleManager.getExtTabs(arg.data.extName)),
+    // * It is eletron, open a new window for login
+    loginWith: arg => {
+      if (loginWindow) {
+        loginWindow.destroy();
+        loginWindow = null;
+      }
+      loginWindow = new BrowserWindow({
+        width: 990,
+        height: 655,
+        autoHideMenuBar: true,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: false,
+          preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
+        }
+      });
+      loginWindow.loadURL(arg.data.url);
+
+      //* Watch the login result
+      loginWindow.webContents.on('did-navigate', ($event, url = '') => {
+        const isError = url.includes('request-errors');
+        const isSuccess = url.includes('code=');
+        if (isError || isSuccess) {
+          loginWindow?.destroy();
+          loginWindow = null;
+          const querys = new URLSearchParams(url.split('?')?.[1]);
+          eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
+            isSuccess: isSuccess,
+            code: querys?.get('code')
+          });
+        }
+      });
+
+      return Promise.resolve('');
+    },
+    getSidebarView: arg => Promise.resolve(moduleManager.getSidebarView(arg.data.extName)),
+    getSidebarViews: () => Promise.resolve(moduleManager.getSidebarViews())
+  };
+
   ['on', 'handle'].forEach(eventName =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
-      let returnValue: any;
-      if (arg.action === 'getModules') {
-        returnValue = moduleManager.getModules();
-      } else if (arg.action === 'getModule') {
-        returnValue = moduleManager.getModule(arg.data.id);
-      } else if (arg.action === 'installModule') {
-        const data = await moduleManager.installExt(arg.data);
-        returnValue = Object.assign(data, { modules: moduleManager.getModules() });
-      } else if (arg.action === 'uninstallModule') {
-        const data = await moduleManager.uninstall(arg.data);
-        returnValue = Object.assign(data, { modules: moduleManager.getModules() });
-      } else if (arg.action === 'getExtensionPackage') {
-        returnValue = await moduleManager.getExtensionPackage(arg.data.feature, arg.data.params);
-      } else if (arg.action === 'getFeature') {
-        returnValue = moduleManager.getFeature(arg.data.featureKey);
-      } else if (arg.action === 'getMockUrl') {
-        // 获取mock服务地址
-        returnValue = mockServer.getMockUrl();
-      } else if (arg.action === 'getWebsocketPort') {
-        // 获取websocket服务端口
-        returnValue = websocketPort;
-      } else if (arg.action === 'getExtTabs') {
-        returnValue = moduleManager.getExtTabs(arg.data.extName);
-      } else if (arg.action === 'loginWith') {
-        // * It is eletron, open a new window for login
-        if (loginWindow) {
-          loginWindow.destroy();
-          loginWindow = null;
-        }
-        loginWindow = new BrowserWindow({
-          width: 990,
-          height: 655,
-          autoHideMenuBar: true,
-          webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: false,
-            preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
-          }
-        });
-        loginWindow.loadURL(arg.data.url);
-
-        //* Watch the login result
-        loginWindow.webContents.on('did-navigate', ($event, url = '') => {
-          const isError = url.includes('request-errors');
-          const isSuccess = url.includes('code=');
-          if (isError || isSuccess) {
-            loginWindow?.destroy();
-            loginWindow = null;
-            const querys = new URLSearchParams(url.split('?')?.[1]);
-            eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
-              isSuccess: isSuccess,
-              code: querys?.get('code')
-            });
-          }
-        });
-
-        returnValue = '';
-      } else if (arg.action === 'getSidebarView') {
-        returnValue = moduleManager.getSidebarView(arg.data.extName);
-      } else if (arg.action === 'getSidebarViews') {
-        returnValue = moduleManager.getSidebarViews();
-      } else {
-        returnValue = 'Invalid data';
-      }
+      let returnValue = Object.keys(action).includes(arg.action) ? await action[arg.action](arg) : 'Invalid data';
       event.returnValue = returnValue;
       return returnValue;
     })

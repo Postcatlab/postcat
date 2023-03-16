@@ -4,6 +4,7 @@ import { has } from 'lodash-es';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -28,16 +29,18 @@ export class PushApiComponent implements OnInit {
 
   ngOnInit(): void {
     this.initData();
+    this.watchInstalledExtensionsChange();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData();
-        }
-      });
+      .subscribe((inArg: Message) => {});
+  }
+  @ExtensionChange('pushAPI')
+  watchInstalledExtensionsChange() {
+    this.initData();
   }
   initData = () => {
+    console.log('pushApi执行');
     this.featureMap = this.extensionService.getValidExtensionsByFature('pushAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -46,8 +49,13 @@ export class PushApiComponent implements OnInit {
         ...data
       });
     });
-    {
-      const { key } = this.supportList?.at(0);
+    // {
+    //   const { key } = this.supportList?.at(0);
+    //   this.currentExtension = key || '';
+    // }
+    if (!this.supportList.length) return;
+    const { key } = this.supportList.at(0);
+    if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
   };

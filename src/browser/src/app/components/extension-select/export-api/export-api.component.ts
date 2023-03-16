@@ -4,6 +4,7 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -32,16 +33,15 @@ export class ExportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.initData();
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData();
-        }
-      });
+    this.watchInstalledExtensionsChange();
+  }
+
+  @ExtensionChange('exportAPI')
+  watchInstalledExtensionsChange() {
+    this.initData();
   }
   initData = () => {
+    console.log('exportApi组件更新');
     this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
