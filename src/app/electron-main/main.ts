@@ -3,6 +3,19 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import { LanguageService } from 'pc/app/electron-main/language.service';
 import { MockServer } from 'pc/platform/node/mock-server';
+import {
+  GET_EXT_TABS,
+  GET_FEATURE,
+  GET_MOCK_URL,
+  GET_MODULE,
+  GET_MODULES,
+  GET_SIDEBAR_VIEW,
+  GET_SIDEBAR_VIEWS,
+  GET_WEBSOCKET_PORT,
+  INSTALL_MODULE,
+  LOGIN_WITH,
+  UNINSTALL_MODULE
+} from 'pc/shared/electron-main/constant';
 import portfinder from 'portfinder';
 
 import { UnitWorkerModule } from '../../node/test-server/electron/main';
@@ -196,59 +209,80 @@ try {
   });
   let loginWindow = null;
 
-  const action = {
-    getModules: () => Promise.resolve(moduleManager.getModules()),
-    getModule: arg => Promise.resolve(moduleManager.getModule(arg.data.id)),
-    installModule: async arg => {
-      const data = await moduleManager.installExt(arg.data);
-      return Object.assign(data, { modules: moduleManager.getModules() });
-    },
-    uninstallModule: async arg => {
-      const data = await moduleManager.installExt(arg.data);
-      return Object.assign(data, { modules: moduleManager.getModules() });
-    },
-    getExtensionPackage: async arg => await moduleManager.getExtensionPackage(arg.data.feature, arg.data.params),
-    getFeature: arg => Promise.resolve(moduleManager.getFeature(arg.data.featureKey)),
-    getMockUrl: () => Promise.resolve(mockServer.getMockUrl()),
-    getWebsocketPort: () => Promise.resolve(websocketPort),
-    getExtTabs: arg => Promise.resolve(moduleManager.getExtTabs(arg.data.extName)),
-    // * It is eletron, open a new window for login
-    loginWith: arg => {
-      if (loginWindow) {
-        loginWindow.destroy();
-        loginWindow = null;
+  const getModules = () => Promise.resolve(moduleManager.getModules());
+
+  const getModule = arg => Promise.resolve(moduleManager.getModule(arg.data.id));
+
+  const installModule = async arg => {
+    const data = await moduleManager.installExt(arg.data);
+    return Object.assign(data, { modules: moduleManager.getModules() });
+  };
+
+  const uninstallModule = async arg => {
+    const data = await moduleManager.uninstall(arg.data);
+    return Object.assign(data, { modules: moduleManager.getModules() });
+  };
+
+  const getFeature = arg => Promise.resolve(moduleManager.getFeature(arg.data.featureKey));
+
+  const getMockUrl = () => Promise.resolve(mockServer.getMockUrl());
+
+  const getWebsocketPort = () => Promise.resolve(websocketPort);
+
+  const getExtTabs = arg => Promise.resolve(moduleManager.getExtTabs(arg.data.extName));
+
+  const loginWith = arg => {
+    if (loginWindow) {
+      loginWindow.destroy();
+      loginWindow = null;
+    }
+    loginWindow = new BrowserWindow({
+      width: 990,
+      height: 655,
+      autoHideMenuBar: true,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: false,
+        preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
       }
-      loginWindow = new BrowserWindow({
-        width: 990,
-        height: 655,
-        autoHideMenuBar: true,
-        webPreferences: {
-          nodeIntegration: false,
-          contextIsolation: false,
-          preload: path.join(__dirname, '../../platform/electron-browser/preload.js')
-        }
-      });
-      loginWindow.loadURL(arg.data.url);
+    });
+    loginWindow.loadURL(arg.data.url);
 
-      //* Watch the login result
-      loginWindow.webContents.on('did-navigate', ($event, url = '') => {
-        const isError = url.includes('request-errors');
-        const isSuccess = url.includes('code=');
-        if (isError || isSuccess) {
-          loginWindow?.destroy();
-          loginWindow = null;
-          const querys = new URLSearchParams(url.split('?')?.[1]);
-          eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
-            isSuccess: isSuccess,
-            code: querys?.get('code')
-          });
-        }
-      });
+    //* Watch the login result
+    loginWindow.webContents.on('did-navigate', ($event, url = '') => {
+      const isError = url.includes('request-errors');
+      const isSuccess = url.includes('code=');
+      if (isError || isSuccess) {
+        loginWindow?.destroy();
+        loginWindow = null;
+        const querys = new URLSearchParams(url.split('?')?.[1]);
+        eoBrowserWindow.win.webContents.send('thirdLoginCallback', {
+          isSuccess: isSuccess,
+          code: querys?.get('code')
+        });
+      }
+    });
 
-      return Promise.resolve('');
-    },
-    getSidebarView: arg => Promise.resolve(moduleManager.getSidebarView(arg.data.extName)),
-    getSidebarViews: () => Promise.resolve(moduleManager.getSidebarViews())
+    return Promise.resolve('');
+  };
+
+  const getSidebarView = arg => Promise.resolve(moduleManager.getSidebarView(arg.data.extName));
+
+  const getSidebarViews = () => Promise.resolve(moduleManager.getSidebarViews());
+
+  const action = {
+    [GET_MODULES]: getModules,
+    [GET_MODULE]: getModule,
+    [INSTALL_MODULE]: installModule,
+    [UNINSTALL_MODULE]: uninstallModule,
+    [GET_FEATURE]: getFeature,
+    [GET_MOCK_URL]: getMockUrl,
+    [GET_WEBSOCKET_PORT]: getWebsocketPort,
+    [GET_EXT_TABS]: getExtTabs,
+    // * It is eletron, open a new window for login
+    [LOGIN_WITH]: loginWith,
+    [GET_SIDEBAR_VIEW]: getSidebarView,
+    [GET_SIDEBAR_VIEWS]: getSidebarViews
   };
 
   ['on', 'handle'].forEach(eventName =>

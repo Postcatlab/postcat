@@ -190,7 +190,6 @@ export class ApiGroupTreeComponent implements OnInit {
     });
   }
   addAPI(group?) {
-    console.log(group);
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
     // console.log(group?.key);
     // this.expandKeys = [...this.expandKeys, group.key];

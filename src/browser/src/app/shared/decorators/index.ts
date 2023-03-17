@@ -1,6 +1,12 @@
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { Observable, Subject } from 'rxjs';
-// import { Injectable } from '@angular/core';
+
+export interface DataType {
+  installedMap: Map<string, ExtensionInfo>;
+  extension: ExtensionInfo;
+  action: string;
+  name: string;
+}
 
 export type ExtensionMessage = {
   /**
@@ -8,7 +14,7 @@ export type ExtensionMessage = {
    *
    * @data {object}
    */
-  data: any;
+  data: DataType;
 };
 
 export const extensionMessageSubject = new Subject<ExtensionMessage>();
