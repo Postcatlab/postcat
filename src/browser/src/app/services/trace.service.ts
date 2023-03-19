@@ -4,6 +4,9 @@ import { ElectronService } from '../core/services/electron/electron.service';
 
 declare const gio;
 
+/**
+ * GrowingIO Event Tracking Service
+ */
 @Injectable({
   providedIn: 'root'
 })
