@@ -95,6 +95,10 @@ export class ApiStoreService {
     this.apiList = list;
   }
 
+  @action addApiSuccess(groupId: string | number) {
+    this.setExpandsList(groupId);
+  }
+
   @action setGroupList(list = []) {
     this.groupList = hangGroupToApi(list);
   }

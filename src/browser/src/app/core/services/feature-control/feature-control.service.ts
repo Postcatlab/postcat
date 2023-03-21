@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
+import { FEATURE_CONTROL } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 
 import featureJSON from './feature.json';
@@ -15,7 +16,7 @@ export class FeatureControlService {
   init() {
     this.watchExtensionChange();
   }
-  @ExtensionChange('featureControl')
+  @ExtensionChange(FEATURE_CONTROL)
   watchExtensionChange(inArg?: ExtensionMessage) {
     const extension = inArg.data.extension;
     let aciton = inArg.data.action;

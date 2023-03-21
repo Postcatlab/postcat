@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { autorun } from 'mobx';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
+import { SIDEBAR_VIEW } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -69,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     sidebarViews?.length && this.getIDFromRoute();
   }
 
-  @ExtensionChange('sidebarView')
+  @ExtensionChange(SIDEBAR_VIEW)
   watchInstalledExtensionsChange(inArg?: ExtensionMessage) {
     if (!this.sidebar.visible) return;
     const installedMap = inArg.data.installedMap;

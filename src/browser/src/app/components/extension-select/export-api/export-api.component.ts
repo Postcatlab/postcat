@@ -4,6 +4,7 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { EXPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -33,16 +34,11 @@ export class ExportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.initData();
-    this.watchInstalledExtensionsChange();
   }
-
-  @ExtensionChange('exportAPI')
-  watchInstalledExtensionsChange() {
-    this.initData();
-  }
-  initData = () => {
-    console.log('exportApi组件更新');
-    this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
+  @ExtensionChange(EXPORT_API, true)
+  initData() {
+    console.log('initData');
+    this.featureMap = this.extensionService.getValidExtensionsByFature(EXPORT_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
@@ -55,7 +51,7 @@ export class ExportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  };
+  }
   submit(callback: () => boolean) {
     this.export(callback);
   }

@@ -6,6 +6,7 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { parseAndCheckCollections, parseAndCheckEnv } from 'pc/browser/src/app/services/storage/db/validate/validate';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { IMPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -74,19 +75,15 @@ export class ImportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.initData();
-    this.watchInstalledExtensionsChange();
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {});
   }
-  @ExtensionChange('importAPI')
-  watchInstalledExtensionsChange() {
-    this.initData();
-  }
 
+  @ExtensionChange(IMPORT_API, true)
   initData() {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+    this.featureMap = this.extensionService.getValidExtensionsByFature(IMPORT_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({

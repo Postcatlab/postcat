@@ -172,7 +172,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     this.message.success(title);
 
     if (this.route.snapshot.queryParams.groupId) {
-      this.store.setExpandsList(this.route.snapshot.queryParams.groupId);
+      this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
     }
     busEvent === 'addApi' &&
       this.trace.report('add_api_document_success', {

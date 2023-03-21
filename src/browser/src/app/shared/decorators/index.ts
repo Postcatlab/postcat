@@ -10,9 +10,9 @@ export interface DataType {
 
 export type ExtensionMessage = {
   /**
-   * 消息数据
+   * Message data
    *
-   * @data {object}
+   * @data {DataType}
    */
   data: DataType;
 };
@@ -20,10 +20,21 @@ export type ExtensionMessage = {
 export const extensionMessageSubject = new Subject<ExtensionMessage>();
 
 const extensionsChangeObserve: Observable<ExtensionMessage> = extensionMessageSubject.asObservable();
-export function ExtensionChange(feature: string, isExecute: boolean = false) {
+
+/**
+ * @description Plug-in manipulates the decorator
+ * @param {string} feature feature
+ * @param {boolean} autoRun autoRun
+ * @return {(Object, string, PropertyDescriptor) => PropertyDescriptor} function
+ */
+export function ExtensionChange(feature: string, autoRun: boolean = false) {
   return function (target: Object, key: string, descriptor: PropertyDescriptor) {
     const original = descriptor.value;
     descriptor.value = function (...args: any[]) {
+      if (autoRun) {
+        // It is recommended to call the outer function directly only once
+        original.apply(this, args);
+      }
       extensionsChangeObserve.subscribe((inArg: ExtensionMessage) => {
         const extension: ExtensionInfo = inArg.data.extension;
         if (Object.keys(extension?.features).includes(feature)) {

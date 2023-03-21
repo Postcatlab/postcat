@@ -6,6 +6,7 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { PULL_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { EffectService } from 'pc/browser/src/app/store/effect.service';
@@ -54,10 +55,6 @@ export class SyncApiComponent implements OnInit, OnChanges {
     this.getSyncSettingList();
     this.initData();
     this.watchInstalledExtensionsChange();
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {});
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -67,7 +64,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     }
   }
 
-  @ExtensionChange('pullAPI')
+  @ExtensionChange(PULL_API)
   watchInstalledExtensionsChange() {
     this.initData(() => {
       if (this.supportList?.length) {
@@ -107,7 +104,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
   }
 
   initData = debounce((afterInitCallback?) => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
+    this.featureMap = this.extensionService.getValidExtensionsByFature(PULL_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({

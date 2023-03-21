@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { kebabCase } from 'lodash-es';
+import { THEME } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 
 import { SettingService } from '../../../components/system-setting/settings.service';
@@ -194,9 +195,10 @@ export class ThemeService {
       this.changeTheme(currentTheme);
     }
   }
-  @ExtensionChange('theme')
+  @ExtensionChange(THEME)
   watchInstalledExtensionsChange(inArg?: ExtensionMessage) {
     if (!inArg) return;
+    //Rest newest theme list
     this.themes = this.themes.filter(val => !val.isExtension);
     this.queryExtensionThemes();
     this.afterAllThemeLoad();
