@@ -253,6 +253,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
+
     this.eoOnInit.emit(this.model);
     this.cdRef.detectChanges();
   }

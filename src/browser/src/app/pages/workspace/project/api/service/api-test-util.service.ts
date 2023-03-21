@@ -14,36 +14,6 @@ import { ApiTestResData } from './test-server/test-server.model';
 export class ApiTestUtilService {
   globalStorageKey = 'EO_TEST_VAR_GLOBALS';
   constructor(private apiEditUtil: ApiEditUtilService) {}
-  getHTTPStatus(statusCode) {
-    const HTTP_CODE_STATUS = [
-      {
-        status: 'info',
-        cap: 199,
-        class: 'test-default'
-      },
-      {
-        status: 'success',
-        cap: 299,
-        class: 'test-success'
-      },
-      {
-        status: 'redirect',
-        cap: 399,
-        class: 'test-warning'
-      },
-      {
-        status: 'clientError',
-        cap: 499,
-        class: 'test-error'
-      },
-      {
-        status: 'serverError',
-        cap: 599,
-        class: 'test-error'
-      }
-    ];
-    return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);
-  }
   /**
    * Handle api data for judge page has edit
    * Unlike the saved data, the api data being edited is not as strict

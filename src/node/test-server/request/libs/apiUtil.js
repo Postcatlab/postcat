@@ -525,7 +525,6 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
               const config = (authInfo || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
               //Execute at runtime
               const code = await func(config);
-              console.log(code);
               const [authPmRes, err] = await pmRuntime.executeSync(ctx, code, {
                 context: pmRes
               });
