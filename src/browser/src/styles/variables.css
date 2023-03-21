@@ -23,7 +23,8 @@
 }
 /* System customer */
 :root {
-  --layout-sidebar-width: 90px;
+  --layout-sidebar-width: 85px;
+  --layout-sidebar-shrink-width: 40px;
   --layout-sidebar-item-height: auto;
   --edit-inside-bar-height: 53px;
 }
