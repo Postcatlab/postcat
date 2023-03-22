@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { MessageService } from 'pc/browser/src/app/services/message';
+import { extensionMessageSubject } from 'pc/browser/src/app/shared/decorators';
 import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'pc/browser/src/app/shared/models/extension-manager';
 import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/models/storageKeys.constant';
@@ -92,8 +93,7 @@ export class ExtensionService {
     });
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
-    this.messageService.send({
-      type: 'extensionsChange',
+    extensionMessageSubject.next({
       data: {
         installedMap: this.installedMap,
         extension: this.installedList.find(val => val.name === opts.name),

@@ -48,10 +48,14 @@ export class ExtensionSelectComponent {
         observer.complete();
         return;
       }
-      parserJsonFile(file).then((result: { name: string }) => {
-        this.filename = result.name;
-        this.uploadChange.emit(result);
-        observer.complete();
-      });
+      parserJsonFile(file)
+        .then((result: { name: string }) => {
+          this.filename = result.name;
+          this.uploadChange.emit(result);
+          observer.complete();
+        })
+        .catch(err => {
+          this.message.error(err);
+        });
     });
 }

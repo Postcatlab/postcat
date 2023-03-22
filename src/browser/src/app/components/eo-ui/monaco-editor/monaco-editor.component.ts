@@ -189,7 +189,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     if (val === this.$$code) {
       return;
     }
-
     let code = val;
     try {
       if (typeof val === 'object') {
