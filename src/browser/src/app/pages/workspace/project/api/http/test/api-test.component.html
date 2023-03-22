@@ -87,10 +87,9 @@
           ></nz-badge>
         </ng-template>
         <eo-api-test-body
-          class=""
           [(contentType)]="$$contentType"
           [(autoSetContentType)]="model.autoSetContentType"
-          (contentTypeChange)="changeContentType($event)"
+          (contentTypeChange)="setHeaderContentType()"
           [(bodyType)]="model.request.apiAttrInfo.contentType"
           (bodyTypeChange)="changeBodyType($event)"
           [(model)]="model.request.requestParams.bodyParams"

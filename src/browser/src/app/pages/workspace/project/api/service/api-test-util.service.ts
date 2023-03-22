@@ -202,7 +202,7 @@ export class ApiTestUtilService {
    * @param type content-type be added/replaced
    * @param headers
    */
-  addOrReplaceContentType(contentType: ContentType, headers: HeaderParam[] | any = []) {
+  addOrReplaceContentType(contentType: ContentType | string, headers: HeaderParam[] | any = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
       existHeader['paramAttr.example'] = contentType;

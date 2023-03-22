@@ -126,10 +126,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     const { uuid } = this.route.snapshot.queryParams;
     return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
   }
-  get contentType(): ContentType {
+  get monacoContentType(): ContentType {
     return contentTypeMap[this.model.request.apiAttrInfo.contentType];
   }
-  set contentType(value) {
+  set monacoContentType(value) {
     this.$$contentType = value;
   }
 
@@ -233,7 +233,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       } else {
         return;
       }
-      this.initContentType();
+      this.setMonacoContentType();
       this.waitSeconds = 0;
       this.status = 'start';
     } else {
@@ -340,15 +340,31 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     }
     return false;
   }
-
-  changeContentType(contentType) {
+  setHeaderContentType() {
+    let contentType: ContentType | string = this.monacoContentType;
+    switch (this.model.request?.apiAttrInfo?.contentType) {
+      case ApiBodyType.Raw: {
+        contentType = this.monacoContentType;
+        break;
+      }
+      case ApiBodyType.FormData: {
+        contentType = 'multiple/form-data';
+        break;
+      }
+      case ApiBodyType.Binary: {
+        contentType = 'multiple/form-data';
+        break;
+      }
+    }
     this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
       contentType,
       this.model.request.requestParams.headerParams
     );
   }
   changeBodyType($event) {
-    this.initContentType();
+    StorageUtil.set('api_test_body_type', $event);
+    this.setMonacoContentType();
+    this.setHeaderContentType();
   }
   handleBottomTabSelect(tab) {
     if (tab.index === 2) {
@@ -501,11 +517,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       }
     }
   }
-  private initContentType() {
+  setMonacoContentType($event = this.model.contentType) {
     const contentType = this.model.request?.apiAttrInfo?.contentType;
-    if (contentType === ApiBodyType.Raw) {
-      this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
-    }
+    if (contentType !== ApiBodyType.Raw) return;
+    this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
   }
   private watchEnvChange() {
     reaction(
