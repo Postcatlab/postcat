@@ -6,6 +6,8 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { FEATURE_CONTROL } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -200,18 +202,15 @@ export class ChatgptRobotComponent implements OnInit {
     }
     this.sendChatGPTMessage($event);
   }
-  watchExtensionChange() {
-    this.message.get().subscribe((inArg: Message) => {
-      if (inArg.type !== 'extensionsChange') return;
-      const extension: ExtensionInfo = inArg.data.extension;
-      if (!extension?.features?.featureControl?.length) return;
-      switch (inArg.data.action) {
-        case 'install':
-        case 'enable': {
-          this.chat.open();
-          break;
-        }
+  @ExtensionChange(FEATURE_CONTROL)
+  watchExtensionChange(inArg?: ExtensionMessage) {
+    switch (inArg.data.action) {
+      case 'install':
+      case 'enable': {
+        this.chat.open();
+        break;
       }
-    });
+    }
+    // });
   }
 }
