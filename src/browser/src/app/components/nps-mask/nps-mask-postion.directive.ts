@@ -32,7 +32,7 @@ export class NpsPositionDirective {
       width: `${rect.width - this.padding}px`
     });
   }
-  resettipsPostion(rect) {
+  resetTipsPostion(rect) {
     const tipsDom = this.el.nativeElement.querySelector('.tips');
     this.batchSetPropery(tipsDom, {
       right: `${24}px`,
@@ -43,7 +43,7 @@ export class NpsPositionDirective {
   resetMaskPostion(dom: HTMLIFrameElement) {
     const rect = dom.getBoundingClientRect();
     this.resetTitlePostion(rect);
-    this.resettipsPostion(rect);
+    this.resetTipsPostion(rect);
   }
   showMask(iframe: HTMLIFrameElement) {
     this.showTitle = true;
@@ -66,8 +66,8 @@ export class NpsPositionDirective {
     const callback = (mutationList, observer) => {
       for (const mutation of mutationList) {
         if (mutation.type !== 'childList' || !mutation.addedNodes.length) return;
-        const npsDom = mutation.addedNodes[0];
-        if (!npsDom.id.includes('howxmSDK')) return;
+        const npsDom = mutation.previousSibling || mutation.addedNodes[0];
+        if (!npsDom?.id?.includes('howxmSDK')) return;
 
         //* Reset status after update body,such as refresh page
         this.hideMask();
@@ -82,11 +82,10 @@ export class NpsPositionDirective {
           const npsSlideIn = className.includes('widget_SlideInRightBottom');
           const hasSubmit = className.includes('modal-widget_widgetTransition') && e[0].attributeName === 'style';
           const hasClose = className.includes('modal-widget_backdropBase') && !className.includes('modal-widget_backdropIn');
-          // console.log(step, className, npsSlideIn, hasSubmit, hasClose);
+          console.log(step, className, npsSlideIn, hasSubmit, hasClose);
           //* 1. Show mask
           if (iframe && npsSlideIn && step < 1) {
             step = 1;
-            // console.log('showMask');
             setTimeout(() => {
               this.showMask(iframe as HTMLIFrameElement);
             }, 150);

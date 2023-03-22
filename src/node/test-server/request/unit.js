@@ -715,7 +715,7 @@ const { resolve } = require('path');
                                 value:
                                   typeof tmpDecorateObj.history.body[key][childKey] == 'string'
                                     ? tmpDecorateObj.history.body[key][childKey]
-                                    : '[file]'
+                                    : '(binary)'
                               });
                               if (typeof tmpDecorateObj.history.body[key][childKey] != 'string') break;
                             }

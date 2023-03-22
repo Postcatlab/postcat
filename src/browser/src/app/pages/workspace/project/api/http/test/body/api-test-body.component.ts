@@ -73,7 +73,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
-    return this.contentType.replace(/.*\//, '');
+    return this.contentType?.replace(/.*\//, '');
   }
   constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {

@@ -4,6 +4,8 @@ import { has } from 'lodash-es';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { PUSH_API } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -31,14 +33,12 @@ export class PushApiComponent implements OnInit {
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData();
-        }
-      });
+      .subscribe((inArg: Message) => {});
   }
-  initData = () => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('pushAPI');
+
+  @ExtensionChange(PUSH_API, true)
+  initData() {
+    this.featureMap = this.extensionService.getValidExtensionsByFature(PUSH_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
@@ -46,11 +46,16 @@ export class PushApiComponent implements OnInit {
         ...data
       });
     });
-    {
-      const { key } = this.supportList?.at(0);
+    // {
+    //   const { key } = this.supportList?.at(0);
+    //   this.currentExtension = key || '';
+    // }
+    if (!this.supportList.length) return;
+    const { key } = this.supportList.at(0);
+    if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  };
+  }
   async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     if (!feature) {

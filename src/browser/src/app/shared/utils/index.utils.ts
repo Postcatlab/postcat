@@ -111,13 +111,17 @@ export const transferFileToDataUrl = file =>
     };
   });
 export const parserJsonFile = (file, type = 'UTF-8') =>
-  new Promise(resolve => {
+  new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsText(file, type);
     reader.onload = ev => {
-      const fileString: string = ev.target.result as string;
-      const json = JSON.parse(fileString);
-      resolve({ name: file.name, content: json });
+      try {
+        const fileString: string = ev.target.result as string;
+        const json = JSON.parse(fileString);
+        resolve({ name: file.name, content: json });
+      } catch (err) {
+        reject('This is not a json');
+      }
     };
   });
 

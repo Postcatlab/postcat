@@ -24,13 +24,19 @@ test.describe('Env Operate', () => {
     //Add first env will choose it
 
     //Edit env
-    await page.locator('body').press('Meta+c');
+    await page.getByRole('tablist').locator('div').filter({ hasText: 'DEV' }).nth(2).hover();
     await page.getByRole('button', { name: 'Close tab' }).click();
-    await page.locator('div').filter({ hasText: 'DEV' }).nth(2).click();
+    await page.locator('div').filter({ hasText: 'DEV' }).click();
     await page.getByLabel('Name').press('Meta+s');
     await ifTipsExist(page, 'Edited successfully');
 
     //Delete env
+  });
+
+  test('Env Delete', async ({ page }) => {
+    await page.locator('nz-tree-node-title div').first().hover();
+    await page.locator('nz-tree-node-title').getByRole('button').click();
+    await page.getByRole('button', { name: 'Delete' }).click();
   });
   // test('Use Env', async ({ page }) => {
   //   //Host uri
