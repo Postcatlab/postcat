@@ -151,7 +151,7 @@ export class ChatgptRobotComponent implements OnInit {
 
     //Get message by messageNumber,filter out the error message/official message
     const result = this.messages
-      .filter(val => !val.reply || (val.reply && (!val.text.includes('ChatGPT Error:') || val.user?.name === this.appName)))
+      .filter(val => !val.reply || (val.reply && (!val.text?.includes('ChatGPT Error') || val.user?.name === this.appName)))
       .slice(-messageNumber);
 
     //If last question is too long, we need to split it
