@@ -38,7 +38,7 @@ export class ApiGroupTreeComponent implements OnInit {
   /**
    * Expanded keys of tree.
    */
-  expandKeys: string[] = [];
+  expandKeys: Array<string | number> = [];
   requestMethodMap = requestMethodMap;
   nzSelectedKeys = [];
   searchValue = '';
@@ -118,7 +118,7 @@ export class ApiGroupTreeComponent implements OnInit {
       this.isLoading = false;
     });
     autorun(() => {
-      this.expandKeys = this.getExpandKeys();
+      this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
       this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
@@ -191,6 +191,8 @@ export class ApiGroupTreeComponent implements OnInit {
   }
   addAPI(group?) {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
+    // console.log(group?.key);
+    // this.expandKeys = [...this.expandKeys, group.key];
     this.router.navigate([`${prefix}/http/edit`], {
       queryParams: { groupId: group?.key, pageID: Date.now() }
     });
@@ -222,6 +224,7 @@ export class ApiGroupTreeComponent implements OnInit {
     if (node?.group) {
       node.group.isExpanded = true;
     }
+    this.message.success('Add Group successfully');
   }
   importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({
