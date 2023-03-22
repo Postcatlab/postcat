@@ -68,6 +68,8 @@ test.describe('Test API', () => {
     await page.getByPlaceholder('Enter URL').click();
     await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
     await page.getByText('Form-Data').click();
+
+    //String Value Test
     await page.getByPlaceholder('Name').click();
     await page.getByPlaceholder('Name').fill('test');
     await page.locator('.eo-table-default-td > div > .ant-input').first().click();
@@ -78,6 +80,8 @@ test.describe('Test API', () => {
     await page.locator('.eo-table-default-td > div > .ant-input').nth(1).fill('2');
     const res = await waitForResponse(page);
     expect(res.body).toEqual('test=1&test=2');
+
+    //File Test
   });
 
   /**
