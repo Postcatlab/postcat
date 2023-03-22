@@ -16,7 +16,6 @@ export class ApiTestResultResponseComponent implements OnChanges {
   @Input() model: ApiTestResData;
   @Input() uri: string;
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
-  codeStatus: { status: string; cap: number; class: string };
   size: string;
   blobUrl = '';
   responseBody = '';
@@ -28,21 +27,12 @@ export class ApiTestResultResponseComponent implements OnChanges {
 
   ngOnChanges(changes) {
     if (changes.model && this.model) {
-      this.codeStatus = this.apiTest.getHTTPStatus(this.model?.statusCode);
-      this.responseBody = this.decodeBody(changes.model.currentValue.body || '');
+      this.responseBody = changes.model.currentValue.body || '';
       if (!this.responseIsImg) {
         this.eoEditor?.formatCode();
       } else if (this.responseIsImg) {
         this.imgBlobUrl = this.uri;
       }
-    }
-  }
-
-  decodeBody(body: string) {
-    if (['longText', 'stream'].includes(this.model.responseType)) {
-      return decodeUnicode(b64DecodeUnicode(body));
-    } else {
-      return decodeUnicode(body);
     }
   }
 

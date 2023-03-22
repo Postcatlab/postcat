@@ -213,19 +213,24 @@
       </eo-ng-tab>
     </eo-ng-tabset>
     <ng-template #extraTemplate>
-      <div *ngIf="model.responseTabIndex === 0" class="py-[6px] px-[12px] flex items-center">
-        <button eo-ng-button nzType="text">
-          <eo-iconpark-icon
-            name="download"
-            *ngIf="!isEmpty(model.testResult?.body)"
-            class="cursor-pointer"
-            i18n-nzTooltipTitle
-            eoNgFeedbackTooltip
-            nzTooltipTitle="Save As File"
-            (click)="downloadFile()"
-          >
-          </eo-iconpark-icon>
-        </button>
+      <!-- Status Bar -->
+      <div class="flex items-center" *ngIf="model?.testResult?.statusCode">
+        <pc-test-status-bar [model]="model.testResult"></pc-test-status-bar>
+        <!-- Download -->
+        <div class="py-[6px] px-[12px] flex items-center">
+          <button eo-ng-button nzType="text">
+            <eo-iconpark-icon
+              name="download"
+              *ngIf="!isEmpty(model.testResult?.body)"
+              class="cursor-pointer"
+              i18n-nzTooltipTitle
+              eoNgFeedbackTooltip
+              nzTooltipTitle="Save As File"
+              (click)="downloadFile()"
+            >
+            </eo-iconpark-icon>
+          </button>
+        </div>
       </div>
     </ng-template>
     <div id="test-response"></div>
