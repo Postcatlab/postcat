@@ -18,6 +18,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
@@ -62,6 +63,7 @@ const SHARED_UI_MODULE = [
   NzEmptyModule,
   NzModalModule,
   NzListModule,
+  NzSelectModule,
   NzPopconfirmModule
 ];
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule];

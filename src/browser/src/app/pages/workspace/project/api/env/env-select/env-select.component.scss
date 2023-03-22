@@ -2,6 +2,30 @@
   --select-background-color: var(--background-color);
 
   border-bottom: 1px solid var(--border-color);
+
+  ::ng-deep .ant-select .clear-btn:hover eo-iconpark-icon {
+    background-color: var(--item-active-background-color);
+    color: var(--icon-color) !important;
+  }
+
+  .clear-btn eo-iconpark-icon {
+    padding: 3px;
+    vertical-align: middle;
+    border-radius: 50%;
+    transform: translateY(-25%);
+  }
+}
+
+// TODO: Modify component style
+
+::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: unset !important;
+  border: unset !important;
+}
+
+.ant-tabs-tab-remove {
+  padding: 0;
+  margin: 0;
 }
 
 nz-divider {
@@ -9,19 +33,6 @@ nz-divider {
 }
 
 :host ::ng-deep {
-  .env-select-componnet {
-    .ant-select-clear {
-      border: 1px solid var(--system-border-color);
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: -8px;
-    }
-  }
-
   eo-ng-select eo-ng-select-top-control {
     border: none !important;
   }
