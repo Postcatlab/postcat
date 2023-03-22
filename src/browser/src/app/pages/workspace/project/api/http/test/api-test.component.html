@@ -87,7 +87,7 @@
           ></nz-badge>
         </ng-template>
         <eo-api-test-body
-          [(contentType)]="$$contentType"
+          [(contentType)]="model.monacoContentType"
           [(autoSetContentType)]="model.autoSetContentType"
           (contentTypeChange)="setHeaderContentType()"
           [(bodyType)]="model.request.apiAttrInfo.contentType"

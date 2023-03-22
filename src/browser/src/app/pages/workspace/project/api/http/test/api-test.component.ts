@@ -62,7 +62,7 @@ const contentTypeMap = {
 
 interface testViewModel {
   testStartTime?: number;
-  contentType: ContentType;
+  monacoContentType: ContentType;
   autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
@@ -110,7 +110,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
-  $$contentType: ContentType = contentTypeMap[0];
 
   get uuid() {
     return this.route.snapshot.queryParams.uuid;
@@ -125,12 +124,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   get type(): AuthIn {
     const { uuid } = this.route.snapshot.queryParams;
     return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
-  }
-  get monacoContentType(): ContentType {
-    return contentTypeMap[this.model.request.apiAttrInfo.contentType];
-  }
-  set monacoContentType(value) {
-    this.$$contentType = value;
   }
 
   private initTimes = 0;
@@ -340,26 +333,45 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     }
     return false;
   }
-  setHeaderContentType() {
-    let contentType: ContentType | string = this.monacoContentType;
-    switch (this.model.request?.apiAttrInfo?.contentType) {
+
+  /**
+   * Return contentType header value by bodyType and monacoContentType
+   *
+   * @param bodyType
+   * @returns
+   */
+  getContentTypeByBodyType(bodyType: ApiBodyType = this.model.request?.apiAttrInfo?.contentType): ContentType | string {
+    switch (bodyType) {
       case ApiBodyType.Raw: {
-        contentType = this.monacoContentType;
-        break;
+        return this.model?.monacoContentType;
       }
       case ApiBodyType.FormData: {
-        contentType = 'multiple/form-data';
-        break;
+        return 'multiple/form-data';
       }
       case ApiBodyType.Binary: {
-        contentType = 'multiple/form-data';
-        break;
+        return '';
       }
     }
-    this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
-      contentType,
-      this.model.request.requestParams.headerParams
-    );
+  }
+  setHeaderContentType() {
+    const bodyType = this.model.request?.apiAttrInfo?.contentType;
+
+    if (bodyType !== ApiBodyType.Binary) {
+      const contentType = this.getContentTypeByBodyType();
+      this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
+        contentType,
+        this.model.request.requestParams.headerParams
+      );
+      return;
+    }
+
+    //Binary unset request header
+    const headerIndex = this.model.request.requestParams.headerParams.findIndex(val => val.name.toLowerCase() === 'content-type');
+    if (headerIndex === -1) return;
+    this.model.request.requestParams.headerParams.splice(headerIndex, 1);
+
+    //Angular change value by onPush
+    this.model.request.requestParams.headerParams = [...this.model.request.requestParams.headerParams];
   }
   changeBodyType($event) {
     StorageUtil.set('api_test_body_type', $event);
@@ -517,10 +529,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       }
     }
   }
-  setMonacoContentType($event = this.model.contentType) {
+  setMonacoContentType($event = this.model.monacoContentType) {
     const contentType = this.model.request?.apiAttrInfo?.contentType;
     if (contentType !== ApiBodyType.Raw) return;
-    this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
+    this.model.monacoContentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
   }
   private watchEnvChange() {
     reaction(
@@ -536,9 +548,24 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     );
   }
   private resetModel() {
+    const bodyType = typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
+
+    const headerParams = [];
+    const contentType = this.getContentTypeByBodyType(bodyType) || contentTypeMap[ApiBodyType.JSON];
+    if (bodyType !== ApiBodyType.Binary) {
+      headerParams.push({
+        isRequired: 1,
+        name: 'content-type',
+        paramAttr: {
+          example: contentType
+        }
+      });
+    }
+
     return {
       requestTabIndex: 1,
       responseTabIndex: 0,
+      monacoContentType: contentType,
       request: {
         authInfo: {
           authInfo: {},
@@ -546,22 +573,14 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
           isInherited: 0
         },
         apiAttrInfo: {
-          contentType: ContentTypeEnum.RAW,
+          contentType: bodyType,
           requestMethod: 0,
           beforeInject: '',
           afterInject: ''
         },
         requestParams: {
           queryParams: [],
-          headerParams: [
-            {
-              isRequired: 1,
-              name: 'content-type',
-              paramAttr: {
-                example: CONTENT_TYPE_BY_ABRIDGE[0].value
-              }
-            }
-          ],
+          headerParams: headerParams,
           restParams: [],
           bodyParams: [
             {

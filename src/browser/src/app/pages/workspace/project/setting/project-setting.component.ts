@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { autorun, toJS } from 'mobx';
+import { autorun, reaction, toJS } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -117,10 +117,17 @@ export class ProjectSettingComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    autorun(() => {
-      this.projectName = this.store.getCurrentProject.name;
-      this.isInit = true;
-    });
+    this.projectName = this.store.getCurrentProject?.name;
+    reaction(
+      () => this.store.getCurrentProject,
+      project => {
+        console.log(project);
+        if (project.name) {
+          this.projectName = project.name;
+        }
+        this.isInit = true;
+      }
+    );
   }
 
   startEditProjectName() {

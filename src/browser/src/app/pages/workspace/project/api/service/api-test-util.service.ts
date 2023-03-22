@@ -212,7 +212,10 @@ export class ApiTestUtilService {
       {
         isRequired: 1,
         name: 'content-type',
-        'paramAttr.example': contentType
+        'paramAttr.example': contentType,
+        paramAttr: {
+          example: contentType
+        }
       },
       ...headers
     ];
