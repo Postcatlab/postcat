@@ -1,14 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-import { addTextToEditor, ECHO_API_URL, ifTipsExist } from './commom.util';
-const waitForResponse = async page => {
-  const responsePromise = page.waitForResponse('**/api/unit');
-  await page.getByRole('button', { name: 'Send' }).click();
-  const request = await responsePromise;
-  const res = await request.json();
-  const result = JSON.parse(res.data.report.response.body);
-  return result;
-};
+import { addTextToEditor, ECHO_API_URL, ifTipsExist, waitForResponse } from './commom.util';
+
 test.describe('Test API', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');

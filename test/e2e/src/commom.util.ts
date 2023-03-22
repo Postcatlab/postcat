@@ -19,3 +19,12 @@ export const login = async page => {
   await page.getByPlaceholder('Enter password').press('Enter');
   await page.getByRole('button', { name: 'switch to the cloud workspace' }).click();
 };
+
+export const waitForResponse = async page => {
+  const responsePromise = page.waitForResponse('**/api/unit');
+  await page.getByRole('button', { name: 'Send' }).click();
+  const request = await responsePromise;
+  const res = await request.json();
+  const result = JSON.parse(res.data.report.response.body);
+  return result;
+};
