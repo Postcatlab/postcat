@@ -9,7 +9,12 @@ import { ApiTableService } from '../../service/api-table.service';
   selector: 'pc-api-test-form',
   template: `<fieldset [disabled]="disabled" *ngIf="module !== 'rest'">
       <div class="flex items-center h-10 param-box-header">
-        <params-import [disabled]="disabled" [(baseData)]="model" [contentType]="module"></params-import>
+        <params-import
+          [disabled]="disabled"
+          (baseDataChange)="changeFn($event)"
+          [(baseData)]="model"
+          [contentType]="module"
+        ></params-import>
       </div>
     </fieldset>
     <!-- {{ model | json }} -->
@@ -54,6 +59,9 @@ export class ApiTestFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  changeFn($event) {
+    this.modelChange.emit($event);
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({

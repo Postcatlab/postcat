@@ -320,7 +320,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    if (this.model.request.apiUuid) {
+    if (!this.isEmptyTestPage) {
       return false;
     }
     if (!this.initialModel?.request || !this.model.request) {
