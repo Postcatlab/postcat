@@ -17,6 +17,7 @@ const installExtension = (extension, version = 'latest') => {
     });
   });
 };
+const extensionMap = new Map();
 const loadExtension = async ({ name, version }) => {
   // * Is extension in Map cache ?
   // * If true, then get the function.
@@ -38,10 +39,8 @@ const loadExtension = async ({ name, version }) => {
       extension: extension.default,
       packageJson: extPkg
     };
-    console.log(cache);
     extensionMap.set(`${name}:${extPkg.version}`, cache);
   }
   return [cache, null];
 };
-const extensionMap = new Map();
 export { loadExtension };

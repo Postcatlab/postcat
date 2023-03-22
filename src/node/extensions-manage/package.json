@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "node tools/install.cjs",
     "dev": "nodemon main",
-    "start": "pm2 start main.js",
-    "stop": "pm2 stop main.js",
+    "start": "pm2 start ecosystem.config.cjs",
+    "stop": "pm2 stop ecosystem.config.cjs",
     "log": "pm2 logs"
   },
   "type": "module",
@@ -22,8 +22,7 @@
     "koa-router": "^12.0.0",
     "network-activity-viewer": "^1.0.8",
     "node-fetch": "^3.3.0",
-    "pm2": "^5.2.2",
-    "postcat-sync-swagger": "1.0.0"
+    "pm2": "^5.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

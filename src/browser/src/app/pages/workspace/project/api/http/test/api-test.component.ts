@@ -18,6 +18,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import {
+  AuthIn,
   AuthorizationExtensionFormComponent,
   noAuth
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
@@ -61,7 +62,7 @@ const contentTypeMap = {
 
 interface testViewModel {
   testStartTime?: number;
-  contentType: ContentType;
+  monacoContentType: ContentType;
   autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
@@ -109,7 +110,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
-  $$contentType: ContentType = contentTypeMap[0];
 
   get uuid() {
     return this.route.snapshot.queryParams.uuid;
@@ -121,11 +121,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     const { uuid } = this.route.snapshot.queryParams;
     return !this.globalStore.isShare && (!uuid || uuid.includes('history_'));
   }
-  get contentType(): ContentType {
-    return contentTypeMap[this.model.request.apiAttrInfo.contentType];
-  }
-  set contentType(value) {
-    this.$$contentType = value;
+  get type(): AuthIn {
+    const { uuid } = this.route.snapshot.queryParams;
+    return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
   }
 
   private initTimes = 0;
@@ -202,7 +200,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       if (uuid?.includes('history_')) {
         uuid = uuid.replace('history_', '');
         const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
-        console.log('history.request', history.request);
+        history.request.authInfo = {
+          authInfo: {},
+          authType: noAuth.name,
+          ...history.request.authInfo,
+          isInherited: 0
+        };
         this.model.request = history.request;
         this.model.testResult = history.response;
       } else {
@@ -223,7 +226,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       } else {
         return;
       }
-      this.initContentType();
+      this.setMonacoContentType();
       this.waitSeconds = 0;
       this.status = 'start';
     } else {
@@ -236,7 +239,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.status$.next('start');
       }
     }
-    console.log('request authInfo', this.model.request.authInfo);
     this.initBasicForm();
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
@@ -244,6 +246,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
+
     this.eoOnInit.emit(this.model);
     this.cdRef.detectChanges();
   }
@@ -310,7 +313,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    if (this.model.request.apiUuid) {
+    if (!this.isEmptyTestPage) {
       return false;
     }
     if (!this.initialModel?.request || !this.model.request) {
@@ -331,14 +334,49 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     return false;
   }
 
-  changeContentType(contentType) {
-    this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
-      contentType,
-      this.model.request.requestParams.headerParams
-    );
+  /**
+   * Return contentType header value by bodyType and monacoContentType
+   *
+   * @param bodyType
+   * @returns
+   */
+  getContentTypeByBodyType(bodyType: ApiBodyType = this.model.request?.apiAttrInfo?.contentType): ContentType | string {
+    switch (bodyType) {
+      case ApiBodyType.Raw: {
+        return this.model?.monacoContentType;
+      }
+      case ApiBodyType.FormData: {
+        return 'multiple/form-data';
+      }
+      case ApiBodyType.Binary: {
+        return '';
+      }
+    }
+  }
+  setHeaderContentType() {
+    const bodyType = this.model.request?.apiAttrInfo?.contentType;
+
+    if (bodyType !== ApiBodyType.Binary) {
+      const contentType = this.getContentTypeByBodyType();
+      this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
+        contentType,
+        this.model.request.requestParams.headerParams
+      );
+      return;
+    }
+
+    //Binary unset request header
+    const headerIndex = this.model.request.requestParams.headerParams.findIndex(val => val.name.toLowerCase() === 'content-type');
+    if (headerIndex === -1) return;
+    this.model.request.requestParams.headerParams.splice(headerIndex, 1);
+
+    //Angular change value by onPush
+    this.model.request.requestParams.headerParams = [...this.model.request.requestParams.headerParams];
   }
   changeBodyType($event) {
-    this.initContentType();
+    StorageUtil.set('api_test_body_type', $event);
+    this.setMonacoContentType();
+    this.setHeaderContentType();
   }
   handleBottomTabSelect(tab) {
     if (tab.index === 2) {
@@ -491,11 +529,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       }
     }
   }
-  private initContentType() {
+  setMonacoContentType($event = this.model.monacoContentType) {
     const contentType = this.model.request?.apiAttrInfo?.contentType;
-    if (contentType === ApiBodyType.Raw) {
-      this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
-    }
+    if (contentType !== ApiBodyType.Raw) return;
+    this.model.monacoContentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
   }
   private watchEnvChange() {
     reaction(
@@ -511,9 +548,24 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     );
   }
   private resetModel() {
+    const bodyType = typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
+
+    const headerParams = [];
+    const contentType = this.getContentTypeByBodyType(bodyType) || contentTypeMap[ApiBodyType.JSON];
+    if (bodyType !== ApiBodyType.Binary) {
+      headerParams.push({
+        isRequired: 1,
+        name: 'content-type',
+        paramAttr: {
+          example: contentType
+        }
+      });
+    }
+
     return {
       requestTabIndex: 1,
       responseTabIndex: 0,
+      monacoContentType: contentType,
       request: {
         authInfo: {
           authInfo: {},
@@ -521,22 +573,14 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
           isInherited: 0
         },
         apiAttrInfo: {
-          contentType: ContentTypeEnum.RAW,
+          contentType: bodyType,
           requestMethod: 0,
           beforeInject: '',
           afterInject: ''
         },
         requestParams: {
           queryParams: [],
-          headerParams: [
-            {
-              isRequired: 1,
-              name: 'content-type',
-              paramAttr: {
-                example: CONTENT_TYPE_BY_ABRIDGE[0].value
-              }
-            }
-          ],
+          headerParams: headerParams,
           restParams: [],
           bodyParams: [
             {
@@ -569,7 +613,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('EO_LOG[eo-api-test]: Ctrl + s');
           // 或者 return false;
           event.preventDefault();
           this.saveApi();

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NpsPositionDirective } from 'pc/browser/src/app/components/nps-mask/nps-mask-postion.directive';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import { StoreService } from '../../../store/state.service';
-import { NpsPositionDirective } from '../nps-mask-postion.directive';
 
 @Component({
   selector: 'pc-nps-mask',
@@ -10,8 +10,8 @@ import { NpsPositionDirective } from '../nps-mask-postion.directive';
     <!-- <div i18n class="title">How would you rate your experience with the Postcat</div> -->
     <div class="tips text-tips"></div>
   </ng-container> `,
-  styleUrls: ['./nps-mask.component.scss']
-  // hostDirectives: [NpsPositionDirective]
+  styleUrls: ['./nps-mask.component.scss'],
+  hostDirectives: [NpsPositionDirective]
 })
 export class NpsMaskComponent implements OnInit {
   /**

@@ -7,6 +7,8 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { Subject, takeUntil } from 'rxjs';
@@ -93,7 +95,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   authAPIMap: Map<string, FeatureInfo> = new Map();
   extensionList: Array<typeof noAuth> = [];
 
-  parentGroup: Group;
+  parentGroup: Partial<Group>;
 
   tipsText = $localize`Authorization`;
 
@@ -103,16 +105,19 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return this.schemaForm?.validateForm;
   }
 
-  get defaultAuthType() {
-    return this.parentGroup?.depth ? inheritAuth : noAuth;
-  }
+  // get defaultAuthType() {
+
+  // }
 
   get isDefaultAuthType() {
     return [inheritAuth.name, noAuth.name].includes(this.authType);
   }
 
   get authTypeList() {
-    return [this.defaultAuthType, ...this.extensionList];
+    const isRootGroup =
+      this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
+    if (isRootGroup && this.type !== 'api-test-history') return [inheritAuth, noAuth, ...this.extensionList];
+    return [noAuth, ...this.extensionList];
   }
 
   constructor(
@@ -124,23 +129,18 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
+    this.watchInstalledExtensionsChange();
+  }
 
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type !== 'extensionsChange') return;
-        const extension = inArg.data.extension;
-        if (!extension?.features?.authAPI) return;
-        this.initExtensions();
-        this.updateSchema(this.authType);
-      });
+  @ExtensionChange(AUTH_API)
+  watchInstalledExtensionsChange() {
+    this.initExtensions();
+    this.updateSchema(this.authType);
   }
 
   init() {
     this.authType = '';
     this.parentGroup = undefined;
-    console.log('ddd');
   }
 
   initAutorun() {

@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgButtonModule } from 'eo-ng-button';
+import GPT3Tokenizer from 'gpt3-tokenizer';
 import { FeatureControlService } from 'pc/browser/src/app/core/services/feature-control/feature-control.service';
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { FEATURE_CONTROL } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -81,13 +84,15 @@ export class ChatgptRobotComponent implements OnInit {
   title = $localize`ChatGPT Robot`;
   loading = false;
   MAX_LIMIT = 5;
+  MAX_TOKEN_LENTH_LIMIT = 4000;
+  appName = 'Postcat';
   nowUsage = StorageUtil.get('cr_usage');
   initMessage = {
     date: new Date(),
     reply: true,
     type: 'init',
     user: {
-      name: 'Postcat',
+      name: this.appName,
       avatar: './assets/images/logo.svg'
     }
   };
@@ -118,24 +123,63 @@ export class ChatgptRobotComponent implements OnInit {
       StorageUtil.set('cr_usage', this.nowUsage);
     }, 5000);
   }
+  private getTextLenth(text: string) {
+    const tokenizer = new GPT3Tokenizer({ type: 'gpt3' }); // or 'codex'
+    const encoded: { bpe: number[]; text: string[] } = tokenizer.encode(text);
+    return encoded.text ? encoded.text.length : text.length;
+  }
+  private getMessageLength(message: messageItem[]) {
+    const text = message.map(val => val.text).join();
+    return this.getTextLenth(text);
+  }
+  private transferMessage2Body(message: messageItem[]): string[] {
+    return message.map(val => {
+      if (val.reply) {
+        return `assistant: ${val.text}`;
+      }
+      return `user: ${val.text}`;
+    });
+  }
+  /**
+   * Get message object for send API
+   *
+   * @param messageNumber number of send/recieve message, 15 messages are kept by default
+   * @returns
+   */
+  private getMessage(messageNumber = 15): messageItem[] {
+    if (messageNumber <= 0) return [];
+
+    //Get message by messageNumber,filter out the error message/official message
+    const result = this.messages
+      .filter(val => !val.reply || (val.reply && (!val.text.includes('ChatGPT Error:') || val.user?.name === this.appName)))
+      .slice(-messageNumber);
+
+    //If last question is too long, we need to split it
+    if (this.getTextLenth(result.at(-1).text) >= this.MAX_TOKEN_LENTH_LIMIT) {
+      return [{ ...result.at(-1), text: result.at(-1).text.slice(0, this.MAX_TOKEN_LENTH_LIMIT) }];
+    }
+
+    //If all messages(ctx) are too long, we need to split it
+    if (this.getMessageLength(result) >= this.MAX_TOKEN_LENTH_LIMIT) {
+      const len = Math.floor(messageNumber / 2);
+      return this.getMessage(len);
+    }
+    return result;
+  }
   sendChatGPTMessage($event) {
     this.loading = true;
     this.trace.report('send_chatGPT');
     this.http
       .post(`${APP_CONFIG.EXTENSION_URL}/chatGPT`, {
-        message: this.messages.map(val => {
-          if (val.reply) {
-            return `assistant: ${val.text}`;
-          }
-          return `user: ${val.text}`;
-        })
+        message: this.transferMessage2Body(this.getMessage())
       })
       .subscribe({
         next: (res: any) => {
           this.loading = false;
           if (!res?.result) {
+            const error = res?.error || res?.msg || 'unknown error';
             this.messages.push({
-              text: `ChatGPT Error: ${res?.error || res?.msg || 'unknown error'}`,
+              text: `ChatGPT Error: ${error}`,
               date: new Date(),
               reply: true,
               type: 'text',
@@ -192,7 +236,7 @@ export class ChatgptRobotComponent implements OnInit {
         reply: true,
         type: 'text',
         user: {
-          name: 'Postcat',
+          name: this.appName,
           avatar: './assets/images/logo.svg'
         }
       });
@@ -200,18 +244,15 @@ export class ChatgptRobotComponent implements OnInit {
     }
     this.sendChatGPTMessage($event);
   }
-  watchExtensionChange() {
-    this.message.get().subscribe((inArg: Message) => {
-      if (inArg.type !== 'extensionsChange') return;
-      const extension: ExtensionInfo = inArg.data.extension;
-      if (!extension?.features?.featureControl?.length) return;
-      switch (inArg.data.action) {
-        case 'install':
-        case 'enable': {
-          this.chat.open();
-          break;
-        }
+  @ExtensionChange(FEATURE_CONTROL)
+  watchExtensionChange(inArg?: ExtensionMessage) {
+    switch (inArg.data.action) {
+      case 'install':
+      case 'enable': {
+        this.chat.open();
+        break;
       }
-    });
+    }
+    // });
   }
 }
