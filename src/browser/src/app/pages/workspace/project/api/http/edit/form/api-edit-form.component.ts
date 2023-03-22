@@ -42,7 +42,7 @@ export class ApiEditFormComponent implements OnInit {
     this.initListConf();
   }
   changeFn($event) {
-    this.modelChange.emit(this.model);
+    this.modelChange.emit($event);
   }
   private initListConf() {
     const config = this.apiTable.initTable(

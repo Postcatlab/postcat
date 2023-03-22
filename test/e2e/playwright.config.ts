@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+
 export default defineConfig({
   workers: process.env.CI ? 2 : 10,
   use: {

@@ -9,10 +9,10 @@
 }
 
 .eo-sidebar-shrink {
-  width: 50px;
+  width: var(--layout-sidebar-shrink-width);
 
   .sidebar-item {
-    height: 50px;
+    height: var(--layout-sidebar-shrink-width);
   }
 }
 
