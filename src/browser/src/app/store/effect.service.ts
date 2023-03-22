@@ -174,7 +174,8 @@ export class EffectService {
     }
     // * update project auth
     const [data, err]: any = await this.api.api_projectGetRole({});
-    if (err) {
+    if (err || !data.length) {
+      pcConsole.error('Get Project Role error');
       return;
     }
     const { permissions, roles } = data.at(0);

@@ -7,6 +7,8 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { Subject, takeUntil } from 'rxjs';
@@ -127,17 +129,13 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
+    this.watchInstalledExtensionsChange();
+  }
 
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type !== 'extensionsChange') return;
-        const extension = inArg.data.extension;
-        if (!extension?.features?.authAPI) return;
-        this.initExtensions();
-        this.updateSchema(this.authType);
-      });
+  @ExtensionChange(AUTH_API)
+  watchInstalledExtensionsChange() {
+    this.initExtensions();
+    this.updateSchema(this.authType);
   }
 
   init() {

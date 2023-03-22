@@ -69,7 +69,7 @@ export const form2json = tmpl =>
   tmpl
     .split('\n')
     .filter(it => it.trim())
-    .map(it => it.split(':'))
+    .map(it => [it.slice(0, it.indexOf(':')), it.slice(it.indexOf(':') + 1)])
     .map(it => {
       const [key, value] = it;
       return { key: key?.trim(), value: value?.trim() };

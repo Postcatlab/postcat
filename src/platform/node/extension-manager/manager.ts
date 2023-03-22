@@ -1,5 +1,6 @@
 import { createServer } from 'http-server/lib/http-server';
 import { LanguageService } from 'pc/app/electron-main/language.service';
+import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { ExtensionInfo, SidebarView, FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { isNotEmpty } from 'pc/shared/common/common';
 import { HOME_DIR } from 'pc/shared/electron-main/constant';
@@ -17,7 +18,6 @@ import path from 'node:path';
 const extServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
-const defaultExtension = [{ name: 'postcat-export-openapi' }, { name: 'postcat-import-openapi' }, { name: 'postcat-basic-auth' }];
 const isExists = async filePath =>
   await promises
     .access(filePath)
@@ -123,7 +123,7 @@ export class ModuleManager {
       const { extensions } = JSON.parse(debuggerExtension);
       debugExtension = extensions;
     }
-    const localExtensionName = [...new Set(list.map(it => it.name).concat(defaultExtension.map(it => it.name)))];
+    const localExtensionName = [...new Set(list.map(it => it.name).concat(defaultExtensions))];
     this.installExtension = remoteExtension
       .filter(it => localExtensionName.includes(it.name))
       .filter(it => !debugExtension.includes(it.name));
