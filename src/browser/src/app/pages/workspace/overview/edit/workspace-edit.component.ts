@@ -122,7 +122,7 @@ export class WorkspaceSettingComponent {
           this.message.error($localize`Delete failed !`);
           return;
         }
-        this.message.success($localize`Delete success !`);
+        this.message.success($localize`Delete Succeeded`);
         await this.effect.updateWorkspaceList();
         await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }

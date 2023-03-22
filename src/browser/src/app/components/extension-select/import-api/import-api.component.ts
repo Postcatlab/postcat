@@ -6,6 +6,8 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { parseAndCheckCollections, parseAndCheckEnv } from 'pc/browser/src/app/services/storage/db/validate/validate';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { IMPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { Subject } from 'rxjs';
@@ -76,14 +78,12 @@ export class ImportApiComponent implements OnInit {
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type === 'extensionsChange') {
-          this.initData();
-        }
-      });
+      .subscribe((inArg: Message) => {});
   }
-  initData = () => {
-    this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+
+  @ExtensionChange(IMPORT_API, true)
+  initData() {
+    this.featureMap = this.extensionService.getValidExtensionsByFature(IMPORT_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
@@ -96,7 +96,7 @@ export class ImportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
-  };
+  }
   uploadChange(data) {
     this.uploadData = data;
   }
@@ -116,6 +116,7 @@ export class ImportApiComponent implements OnInit {
       const [data, err] = module[action](content);
       console.log('import data', window.structuredClone?.(data));
       if (err) {
+        this.eoMessage.error(err.msg);
         console.error(err.msg);
         callback(false);
         return;

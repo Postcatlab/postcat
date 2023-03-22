@@ -8,7 +8,9 @@
     "url": "git+git@github.com:Postcatlab/postcat.git"
   },
   "scripts": {
-    "dev": "node ./server/main.js&&node ./server/socketio.js",
+    "dev": "npm-run-all -p dev:http dev:ws",
+    "dev:http":"node ./server/main.js",
+    "dev:ws":"node ./server/socketio.js",
     "start": "pm2 start ecosystem.config.js",
     "start:watch": "pm2-runtime start ecosystem.config.js",
     "stop": "pm2 stop ecosystem.config.js",

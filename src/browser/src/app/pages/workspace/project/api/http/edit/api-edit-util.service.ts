@@ -34,6 +34,7 @@ export class ApiEditUtilService {
         filterFn: item => {
           item.partType = mui[tableName];
           item.paramType = 0;
+          delete item['paramAttr.example'];
           return filterArrFun(item);
         }
       });
@@ -46,9 +47,11 @@ export class ApiEditUtilService {
     ['bodyParams', 'headerParams'].forEach(tableName => {
       if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(result.responseList[0].contentType)) {
         if (result.responseList[0].bodyParams?.[0]) {
-          result.responseList[0].bodyParams[0].orderNo = 0;
-          result.responseList[0].bodyParams[0].paramType = 1;
-          result.responseList[0].bodyParams[0].partType = mui['bodyParams'];
+          const item = result.responseList[0].bodyParams[0];
+          item.orderNo = 0;
+          item.paramType = 1;
+          item.partType = mui['bodyParams'];
+          delete item['paramAttr.example'];
         }
         return;
       }

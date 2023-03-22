@@ -27,6 +27,7 @@ import { ApiTestBodyComponent } from './body/api-test-body.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ByteToStringPipe } from './result-response/get-size.pipe';
+import { TestStatusBarComponent } from './test-status-bar/test-status-bar.component';
 
 const UI_COMPONETS = [
   NzTabsModule,
@@ -46,7 +47,7 @@ const COMPONENTS = [
   ApiScriptComponent
 ];
 @NgModule({
-  declarations: [...COMPONENTS, ByteToStringPipe],
+  declarations: [...COMPONENTS, ByteToStringPipe, TestStatusBarComponent],
   exports: [...COMPONENTS],
   imports: [
     RouterModule.forChild([
