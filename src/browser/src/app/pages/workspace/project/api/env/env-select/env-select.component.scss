@@ -3,8 +3,11 @@
 
   border-bottom: 1px solid var(--border-color);
 
-  ::ng-deep .ant-select .clear-btn:hover eo-iconpark-icon svg {
+  ::ng-deep .ant-select .clear-btn:hover eo-iconpark-icon {
     background-color: var(--item-active-background-color);
+  }
+
+  ::ng-deep .ant-select .clear-btn:hover eo-iconpark-icon svg {
     color: var(--icon-color) !important;
   }
 
@@ -39,6 +42,10 @@ nz-divider {
 
   .ant-select {
     width: 140px;
+  }
+
+  .ant-select-selector {
+    box-shadow: unset !important;
   }
 }
 
