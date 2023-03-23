@@ -2,10 +2,16 @@
   <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
     <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
   </eo-ng-radio-group>
-  <nz-divider *ngIf="[TYPE_API_BODY['FormData'], TYPE_API_BODY.Raw].includes(bodyType)" nzType="vertical"></nz-divider>
   <!--Select content-type-->
 
-  <div *ngIf="[TYPE_API_BODY.Raw].includes(bodyType)">
+  <!-- Import -->
+  <div *ngIf="[TYPE_API_BODY.FormData].includes(bodyType)" class="inline-flex items-center">
+    <nz-divider nzType="vertical"></nz-divider>
+    <params-import [baseData]="model" [contentType]="IMPORT_MUI[bodyType]" (baseDataChange)="handleParamsImport($event)"> </params-import>
+  </div>
+
+  <div *ngIf="[TYPE_API_BODY.Raw, TYPE_API_BODY.FormData].includes(bodyType)">
+    <nz-divider nzType="vertical"></nz-divider>
     <span class="text-[12px]">Content-Type：</span>
     <eo-ng-select
       class="text-[12px]"
@@ -14,13 +20,8 @@
       [(ngModel)]="contentType"
       nzBorderless
     >
-      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
+      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE[bodyType]" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
     </eo-ng-select>
-  </div>
-
-  <!-- Import -->
-  <div *ngIf="[TYPE_API_BODY['FormData']].includes(bodyType)" class="inline-flex items-center">
-    <params-import [baseData]="model" [contentType]="IMPORT_MUI[bodyType]" (baseDataChange)="handleParamsImport($event)"> </params-import>
   </div>
 </div>
 <!-- FormData -->
