@@ -64,7 +64,7 @@ import { ApiStoreService } from '../../store/api-state.service';
           </div>
         </div>
       </ng-template>
-      <eo-ng-select
+      <nz-select
         [nzDropdownMatchSelectWidth]="false"
         [(ngModel)]="envUuid"
         class="env-select-componnet"
@@ -76,13 +76,19 @@ import { ApiStoreService } from '../../store/api-state.service';
         i18n-nzPlaceHolder="Environment Dropdown placeholder"
         [nzOptions]="renderEnvList"
         nzPlaceHolder="Environment"
+        [nzClearIcon]="clearIconTemplate"
       >
-      </eo-ng-select>
+      </nz-select>
       <ng-template #renderTemplate>
         <ng-container *ngIf="!globalStore.isShare">
           <nz-divider></nz-divider>
           <a class="!flex text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n>Manage Environment</a>
         </ng-container>
+      </ng-template>
+      <ng-template #clearIconTemplate>
+        <div class="clear-btn">
+          <eo-iconpark-icon name="close"></eo-iconpark-icon>
+        </div>
       </ng-template>
     </div>
   `,
