@@ -29,7 +29,11 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions
 } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
-import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import {
+  ContentType,
+  CONTENT_TYPE_BY_ABRIDGE,
+  FORMDATA_CONTENT_TYPE_BY_ABRIDGE
+} from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
@@ -41,7 +45,7 @@ import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ApiBodyType, ContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
+import { ApiBodyType, ApiParamsType, ContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
 import { ProjectApiService } from '../../api.service';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
@@ -52,17 +56,25 @@ import { ApiTestService } from './api-test.service';
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
 
-const contentTypeMap = {
-  0: 'application/json',
-  1: 'text/plain',
-  2: 'application/json',
-  3: 'application/xml',
-  6: 'application/json'
+/**
+ * Default Content Type
+ */
+const contentTypeMap: { [key in ApiBodyType]: ContentType } = {
+  [ApiBodyType.FormData]: 'application/x-www-form-urlencoded',
+  [ApiBodyType.Raw]: 'text/plain',
+  [ApiBodyType.JSON]: 'application/json',
+  [ApiBodyType.JSONArray]: 'application/json',
+  [ApiBodyType.XML]: 'application/xml',
+  //Binary content type need generate from file type
+  [ApiBodyType.Binary]: '' as ContentType
 } as const;
 
 interface testViewModel {
   testStartTime?: number;
-  monacoContentType: ContentType;
+  /**
+   * User selected content type
+   */
+  userSelectedContentType: ContentType;
   autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
@@ -192,7 +204,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     this.authExtForm?.init?.();
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {
-        requestTabIndex: 1
+        requestTabIndex: 1,
+        responseTabIndex: 0
       } as testViewModel;
       let uuid = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
@@ -210,7 +223,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         this.model.testResult = history.response;
       } else {
         if (!uuid) {
-          requestInfo = this.resetModel().request;
+          const newModel = this.resetModel();
+          requestInfo = newModel.request;
         } else {
           requestInfo = await this.projectApi.get(uuid);
           requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
@@ -226,7 +240,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       } else {
         return;
       }
-      this.setMonacoContentType();
+      this.setUserSelectedContentType();
+      this.setHeaderContentType();
       this.waitSeconds = 0;
       this.status = 'start';
     } else {
@@ -335,7 +350,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
 
   /**
-   * Return contentType header value by bodyType and monacoContentType
+   * Return contentType header value by bodyType and userSelectedContentType
    *
    * @param bodyType
    * @returns
@@ -343,10 +358,15 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   getContentTypeByBodyType(bodyType: ApiBodyType = this.model.request?.apiAttrInfo?.contentType): ContentType | string {
     switch (bodyType) {
       case ApiBodyType.Raw: {
-        return this.model?.monacoContentType;
+        const isRawHeader = CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
+        return isRawHeader ? this.model?.userSelectedContentType : contentTypeMap[ApiBodyType.JSON];
       }
       case ApiBodyType.FormData: {
-        return 'multiple/form-data';
+        //If params has file，dataType must be multiple/form-data
+        if (this.model?.request?.requestParams?.bodyParams?.some(val => val.dataType === ApiParamsType.file)) return 'multiple/form-data';
+
+        const isFormHeader = FORMDATA_CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
+        return isFormHeader ? this.model?.userSelectedContentType : contentTypeMap[ApiBodyType.FormData];
       }
       case ApiBodyType.Binary: {
         return '';
@@ -362,6 +382,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         contentType,
         this.model.request.requestParams.headerParams
       );
+      this.model.userSelectedContentType = contentType as ContentType;
       return;
     }
 
@@ -375,8 +396,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
   changeBodyType($event) {
     StorageUtil.set('api_test_body_type', $event);
-    this.setMonacoContentType();
-    this.setHeaderContentType();
   }
   handleBottomTabSelect(tab) {
     if (tab.index === 2) {
@@ -384,8 +403,16 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     }
   }
   emitChangeFun(where) {
-    if (where === 'queryParams') {
-      this.changeQuery();
+    switch (where) {
+      case 'queryParams': {
+        this.changeQuery();
+        break;
+      }
+      case 'requestBody': {
+        //When bodyType or params change,change header and content-type
+        this.setHeaderContentType();
+        break;
+      }
     }
     console.log(where);
     this.modelChange.emit(this.model);
@@ -530,10 +557,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
       }
     }
   }
-  setMonacoContentType($event = this.model.monacoContentType) {
-    const contentType = this.model.request?.apiAttrInfo?.contentType;
-    if (contentType !== ApiBodyType.Raw) return;
-    this.model.monacoContentType = this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || 'text/plain';
+  setUserSelectedContentType($event = this.model.userSelectedContentType) {
+    const bodyType = this.model.request?.apiAttrInfo?.contentType;
+    if (bodyType === ApiBodyType.Binary) return;
+    this.model.userSelectedContentType =
+      this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || this.getContentTypeByBodyType(bodyType);
   }
   private watchEnvChange() {
     reaction(
@@ -552,7 +580,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     const bodyType = typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
 
     const headerParams = [];
-    const contentType = this.getContentTypeByBodyType(bodyType) || contentTypeMap[ApiBodyType.JSON];
+    const contentType = this.getContentTypeByBodyType(bodyType);
     if (bodyType !== ApiBodyType.Binary) {
       headerParams.push({
         isRequired: 1,
@@ -562,11 +590,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
         }
       });
     }
-
     return {
       requestTabIndex: 1,
       responseTabIndex: 0,
-      monacoContentType: contentType,
+      userSelectedContentType: contentType,
       request: {
         authInfo: {
           authInfo: {},
