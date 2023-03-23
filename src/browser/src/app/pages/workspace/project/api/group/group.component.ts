@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -22,7 +22,7 @@ import { ApiEffectService } from '../store/api-effect.service';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss']
 })
-export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponent {
+export class GroupComponent implements OnDestroy, TabViewComponent {
   @Input() model: Group;
   @Input() initialModel: Group;
   @Output() readonly modelChange = new EventEmitter<Group>();
@@ -34,7 +34,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     authInfo: {}
   };
   isEdit = false;
-  topSaveBar: HTMLDivElement;
 
   isSaving = false;
   validateForm: FormGroup;
@@ -42,7 +41,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   @ViewChild('groupNameInputRef') groupNameInputRef: ElementRef<HTMLInputElement>;
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
-  topSaveBarObserver: IntersectionObserver;
   constructor(
     private api: ApiService,
     private effect: ApiEffectService,
@@ -53,35 +51,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     private router: Router,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initForm();
-  }
-  ngAfterViewInit(): void {
-    // 目标元素
-    this.topSaveBar = document.querySelector('eo-group .top-save-bar');
-    this.topSaveBarObserver = new IntersectionObserver(
-      ([e]) => {
-        e.target.classList.toggle('is-pinned', e.intersectionRatio < 1);
-      },
-      {
-        threshold: [1]
-      }
-    );
-    // 监听
-    this.topSaveBarObserver.observe(this.topSaveBar);
-  }
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          // 或者 return false;
-          event.preventDefault();
-          this.saveGroupInfo('shortcut');
-        }
-      });
   }
   private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
@@ -95,8 +65,11 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     return true;
   }
-  async saveGroupInfo(ux = 'ui') {
-    if (!this.checkForm() || !this.authExtForm.checkForm() || this.isEdit) {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveGroupInfo($event?, ux = 'ui') {
+    $event?.preventDefault?.();
+    if (!(this.checkForm() && this.authExtForm.checkForm()) || this.isEdit) {
       return;
     }
     this.isSaving = true;
@@ -182,7 +155,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.topSaveBarObserver.unobserve(this.topSaveBar);
   }
 
   startEditGroupName() {

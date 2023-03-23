@@ -79,13 +79,18 @@ export class ApiTabService {
       this.afterContentChanged(inData);
     });
     this.messageService.get().subscribe((inArg: Message) => {
-      this.watchApiChange(inArg);
+      this.watchAPIChange(inArg);
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
     });
   }
-  watchApiChange(inArg: Message) {
+  /**
+   * Watch API change for handle tab status to fit content
+   *
+   * @param inArg
+   */
+  watchAPIChange(inArg: Message) {
     switch (inArg.type) {
       case 'deleteApiSuccess': {
         //Close those tab who has been deleted
@@ -232,7 +237,7 @@ export class ApiTabService {
       extends: {}
     };
     if (model && !isEmptyObj(model)) {
-      //Set title/method
+      //* Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
       if (currentTab.pathname.includes('test')) {
@@ -251,7 +256,8 @@ export class ApiTabService {
       } else if (!model.uuid) {
         replaceTab.title = replaceTab.title || this.BASIC_TABS.find(val => val.pathname === currentTab.pathname).title;
       }
-      //Only hasChanged edit page storage data
+
+      //* Set Edit page,such  as  tab title,storage data,check isFormChanges
       if (currentTab.type === 'edit') {
         let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
         switch (inData.when) {
@@ -283,7 +289,8 @@ export class ApiTabService {
           currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.id]);
         }
         replaceTab.hasChanged = currentHasChanged;
-        // Set storage
+
+        //Set storage
         //Set baseContent
         if (['init', 'saved'].includes(inData.when)) {
           const initialModel = this.componentRef.initialModel;
@@ -322,8 +329,9 @@ export class ApiTabService {
       pcConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
+
+    //Unit request is asynchronous,Update other tab test result
     if (inData?.when === 'afterTested') {
-      //Update other tab test result
       inData.url = `${inData.model.url}?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = { ...currentTab.content.test, ...inData.model.model };

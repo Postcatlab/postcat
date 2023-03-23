@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -60,21 +60,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     private router: Router,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initForm();
-  }
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          // 或者 return false;
-          event.preventDefault();
-          this.saveEnv('shortcut');
-        }
-      });
   }
   formatEnvData(data) {
     const result = eoDeepCopy(data);
@@ -110,7 +96,10 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     this.message.success($localize`Edited successfully`);
     return data;
   }
-  async saveEnv(ux = 'ui') {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveEnv($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     const isEdit = !!this.route.snapshot.queryParams.uuid;
     if (!this.checkForm()) {
       return;

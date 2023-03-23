@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy, Input, EventEmitter, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -78,20 +78,6 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
     this.initBasicForm();
-    this.initShortcutKey();
-  }
-
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'Enter') {
-          console.log('EO_LOG[postcat-websocket-test]: Ctrl + enter');
-          this.handleSendMsg();
-        }
-      });
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -232,7 +218,10 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     return new ApiParamsNumPipe().transform(params);
   }
 
-  handleSendMsg() {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  handleSendMsg($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     // * 通过 SocketIO 通知后端
     // send a message to the server
     if (!this.model.msg || this.wsStatus !== 'connected') {

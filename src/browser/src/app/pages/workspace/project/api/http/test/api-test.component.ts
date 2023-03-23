@@ -8,7 +8,8 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  HostListener
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -170,7 +171,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
   }
 
   ngAfterViewInit() {
-    this.initShortcutKey();
     queueMicrotask(() => {
       const height = this.elementRef.nativeElement.parentElement.offsetHeight;
       this.responseContainerHeight = Number.isNaN(localHeight) ? height / 2 : localHeight;
@@ -280,7 +280,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
    * Save api test data to api
    * ? Maybe support saving test case in future
    */
-  saveApi() {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  saveApi($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     if (!this.checkForm()) {
       return;
     }
@@ -493,6 +496,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     if (!message.response.statusCode || this.globalStore.isShare) {
       return;
     }
+
     //Add test history
     this.apiTest.addHistory({
       apiUuid: this.model.request.apiUuid || '-1',
@@ -632,19 +636,5 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy, TabVi
     controls['uri'] = [this.model.request.uri, [Validators.required]];
     controls['method'] = [this.model.request.apiAttrInfo?.requestMethod, [Validators.required]];
     this.validateForm = this.fb.group(controls);
-  }
-
-  private initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          // 或者 return false;
-          event.preventDefault();
-          this.saveApi();
-        }
-      });
   }
 }

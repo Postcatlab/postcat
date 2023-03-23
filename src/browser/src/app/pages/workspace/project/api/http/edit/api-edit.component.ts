@@ -1,4 +1,16 @@
-import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit, ViewChildren, TemplateRef, QueryList } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  ViewChildren,
+  TemplateRef,
+  QueryList,
+  HostListener
+} from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -67,7 +79,6 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     private store: ApiStoreService,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initBasicForm();
   }
   /**
@@ -109,24 +120,6 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
   }
-
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-
-        // Ctrl+s
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          event.preventDefault();
-
-          //Manualy call funciton in case on blur event not trigger
-          this.updateParamsbyUri();
-          this.saveApi('shortcut');
-        }
-      });
-  }
-
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
@@ -146,7 +139,10 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
-  async saveApi(ux = 'ui') {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveApi($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
