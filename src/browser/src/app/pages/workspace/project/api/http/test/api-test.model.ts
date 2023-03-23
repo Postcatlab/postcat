@@ -24,4 +24,14 @@ export const CONTENT_TYPE_BY_ABRIDGE = [
     value: 'application/javascript'
   }
 ] as const;
-export type ContentType = (typeof CONTENT_TYPE_BY_ABRIDGE)[number]['value'];
+export const FORMDATA_CONTENT_TYPE_BY_ABRIDGE = [
+  {
+    title: 'x-www-form-urlencoded',
+    value: 'application/x-www-form-urlencoded'
+  },
+  {
+    title: 'form-data',
+    value: 'multiple/form-data'
+  }
+] as const;
+export type ContentType = (typeof CONTENT_TYPE_BY_ABRIDGE)[number]['value'] | (typeof FORMDATA_CONTENT_TYPE_BY_ABRIDGE)[number]['value'];
