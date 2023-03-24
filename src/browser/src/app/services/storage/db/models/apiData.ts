@@ -170,8 +170,6 @@ export interface BodyParam {
   structureId?: number;
   structureParamId?: string;
   isRequired?: number;
-  //Use in test page
-  files?: any[];
   binaryRawData?: string;
   description?: string;
   orderNo?: number;

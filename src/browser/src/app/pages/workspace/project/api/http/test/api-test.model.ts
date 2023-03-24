@@ -1,3 +1,6 @@
+import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+
 export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file'
@@ -35,3 +38,16 @@ export const FORMDATA_CONTENT_TYPE_BY_ABRIDGE = [
   }
 ] as const;
 export type ContentType = (typeof CONTENT_TYPE_BY_ABRIDGE)[number]['value'] | (typeof FORMDATA_CONTENT_TYPE_BY_ABRIDGE)[number]['value'];
+
+export interface testViewModel {
+  testStartTime?: number;
+  /**
+   * User selected content type
+   */
+  userSelectedContentType: ContentType;
+  autoSetContentType: boolean;
+  requestTabIndex: number;
+  responseTabIndex: number;
+  request: Partial<ApiData>;
+  testResult: ApiTestResData;
+}

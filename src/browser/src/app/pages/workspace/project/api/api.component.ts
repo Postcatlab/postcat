@@ -4,7 +4,6 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/index.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
@@ -12,8 +11,7 @@ import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
-import { Message, MessageService } from '../../../../services/message';
-import { ExtensionInfo } from '../../../../shared/models/extension-manager';
+import { MessageService } from '../../../../services/message';
 import StorageUtil from '../../../../shared/utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
@@ -78,7 +76,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: 'Mock'
     }
   ];
-  originModel: ApiData | any;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
   tabsIndex = StorageUtil.get('eo_group_tab_select') || 0;

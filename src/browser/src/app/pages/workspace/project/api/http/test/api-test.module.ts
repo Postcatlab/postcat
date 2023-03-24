@@ -14,6 +14,7 @@ import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
 import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ApiScriptComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/api-script.component';
+import { ApiTestUiComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import { TestServerLocalNodeService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/local-node/test-connect.service';
 import { TestServerRemoteService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/remote-node/test-connect.service';
 import { TestServerServerlessService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/serverless-node/test-connect.service';
@@ -40,6 +41,7 @@ const UI_COMPONETS = [
   EoMonacoEditorModule
 ];
 const COMPONENTS = [
+  ApiTestUiComponent,
   ApiTestComponent,
   ApiTestBodyComponent,
   ApiTestResultResponseComponent,

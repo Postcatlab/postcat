@@ -2,9 +2,9 @@ import Ajv from 'ajv';
 import { safeStringify } from 'ajv/dist/compile/codegen/code';
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { CollectionTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
+import { ApiData, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 
-import { ApiData, Environment, Group } from '../../index.model';
 import apiDataSchema from '../schema/apiData.json';
 import envSchema from '../schema/env.json';
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
@@ -33,20 +33,6 @@ export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiDa
   }
 };
 
-export const parseAndCheckGroup = (group): { validate: boolean; data?: Group } => {
-  if (group.name) {
-    return {
-      validate: true,
-      data: {
-        projectID: group.projectID,
-        parentID: group.parentID,
-        name: group.name
-      }
-    };
-  } else {
-    return { validate: false };
-  }
-};
 export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; error?: any } => {
   const ajv = new Ajv({
     useDefaults: true,
@@ -57,6 +43,7 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
     return {
       validate: true,
       data: {
+        workSpaceUuid: env.workSpaceUuid,
         projectUuid: env.projectUuid,
         name: env.name,
         hostUri: env.hostUri,
