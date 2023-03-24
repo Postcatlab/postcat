@@ -74,6 +74,11 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'mock',
       id: 'api-http-mock',
       title: 'Mock'
+    },
+    {
+      routerLink: 'action',
+      id: 'api-http-action',
+      title: 'Action'
     }
   ];
   originModel: ApiData | any;

@@ -119,7 +119,9 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
           item.response = this.apiMock.getMockResponseByAPI(this.apiData);
         }
       });
+      console.log(this.apiData);
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
+      console.log(this.mockPrefix);
       this.setMocksUrl();
     }
   }
@@ -152,6 +154,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   }
 
   private getMockUrl(mock) {
+    console.log(mock);
     //Generate Mock URL
     //TODO Mock URL = API Path
     const url = new URL(

@@ -1,0 +1,93 @@
+<div class="p-[20px] mock">
+  <form nz-form nzLayout="inline" class="flex">
+    <nz-form-item class="flex">
+      <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
+        <ng-container>
+          <input
+            nz-input
+            [(ngModel)]="model.name"
+            name="required"
+            required
+            eo-ng-input
+            (ngModelChange)="nameChange($event)"
+            (blur)="changeName()"
+          />
+        </ng-container>
+      </nz-form-control>
+      <div class="flex items-center w-20px">
+        <ng-container *ngIf="!isEdit">
+          <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
+          <div
+            nz-popover
+            [nzPopoverContent]="hoverStr"
+            [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            nzPopoverOverlayClassName="mockPopover"
+          >
+            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
+              <eo-iconpark-icon name="edit" (click)="editClick()"></eo-iconpark-icon>
+            </button>
+          </div>
+
+          <div
+            nz-popover
+            [nzPopoverContent]="hoverStr"
+            [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            nzPopoverOverlayClassName="mockPopover"
+          >
+            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
+              <eo-iconpark-icon name="delete" (click)="editClick()"></eo-iconpark-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </nz-form-item>
+  </form>
+
+  <nz-divider></nz-divider>
+
+  <eo-ng-feedback-alert class="block my-[20px]" nzType="info" [nzMessage]="tipMessage" nzShowIcon></eo-ng-feedback-alert>
+  <ng-template #tipMessage>
+    <div i18n> Mock help you quickly simulate endpoints, generate custom resoonse data without actually setting up a back end. </div>
+  </ng-template>
+
+  <nz-form-label i18n nzFor="response" class="w-100">URL </nz-form-label>
+
+  <div>
+    <p class="flex-1" [nzContent]="'555'" nz-typography nzCopyable nzEllipsis [nzCopyText]="'555'" [nzCopyIcons]="[copedIcon, copedIcon]">
+    </p>
+    <ng-template #copedIcon>
+      <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+    </ng-template>
+
+    <form>
+      <nz-form-item class="mt-20px block">
+        <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
+        <nz-form-control>
+          <eo-monaco-editor
+            [(code)]="model.response"
+            id="response"
+            [autoType]="true"
+            class="h-[200px] border-all"
+            [config]="{ readOnly: model?.createWay === 'system' }"
+            [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+          >
+          </eo-monaco-editor>
+        </nz-form-control>
+      </nz-form-item>
+
+      <ng-container>
+        <div
+          nz-popover
+          [nzPopoverContent]="hoverStr"
+          [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
+          nzPopoverOverlayClassName="mockPopover"
+          nzPopoverPlacement="topLeft"
+        >
+          <button type="submit" eo-ng-button nzType="primary" i18n [disabled]="model?.createWay === 'system'"> Save </button>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+
+  <button (click)="btnClick()"></button>
+</div>

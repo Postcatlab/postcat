@@ -7,10 +7,8 @@ import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
 import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-transfer/data-transfer.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ApiMockService {
+@Injectable()
+export class MockService {
   constructor(private api: ApiService, private store: StoreService, private testUtils: ApiTestUtilService) {
     console.log('init api mock service');
   }

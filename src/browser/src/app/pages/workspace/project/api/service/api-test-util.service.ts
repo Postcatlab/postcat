@@ -10,7 +10,9 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { ContentType } from '../http/test/api-test.model';
 import { ApiTestResData } from './test-server/test-server.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiTestUtilService {
   globalStorageKey = 'EO_TEST_VAR_GLOBALS';
   constructor(private apiEditUtil: ApiEditUtilService) {}

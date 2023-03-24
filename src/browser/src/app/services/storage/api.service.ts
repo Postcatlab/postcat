@@ -43,7 +43,7 @@ export class ApiService {
     workSpaceUuid?: any;
     [key: string]: any;
   }) {
-    return this.store.isLocal ? this.local.api_mockCreate<T>(params) : this.remote.api_mockCreate<T>(params);
+    return this.remote.api_mockCreate<T>(params);
   }
 
   api_mockUpdate<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
@@ -55,7 +55,7 @@ export class ApiService {
   }
 
   api_mockDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
-    return this.store.isLocal ? this.local.api_mockDetail<T>(params) : this.remote.api_mockDetail<T>(params);
+    return this.remote.api_mockDetail<T>(params);
   }
 
   api_mockDelete<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {

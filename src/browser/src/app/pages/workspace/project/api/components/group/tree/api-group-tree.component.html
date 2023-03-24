@@ -51,6 +51,7 @@
     [nzTreeTemplate]="nzTreeTemplate"
   ></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="isLoading && !apiGroupTree.length" [nzActive]="true">
+    <div (click)="toMock()">to mock</div>
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <!-- Folder -->
