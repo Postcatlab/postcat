@@ -10,7 +10,7 @@
             required
             eo-ng-input
             (ngModelChange)="nameChange($event)"
-            (blur)="changeName()"
+            (blur)="saveName()"
           />
         </ng-container>
       </nz-form-control>
@@ -64,7 +64,7 @@
         <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
         <nz-form-control>
           <eo-monaco-editor
-            [(code)]="model.response"
+            [(code)]="model['response']"
             id="response"
             [autoType]="true"
             class="h-[200px] border-all"

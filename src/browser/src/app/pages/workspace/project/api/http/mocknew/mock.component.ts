@@ -52,6 +52,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     this.apiUuid = 'yd1qr8m51dq';
     // 'yd1qr8m51dq'
     this.mock_id = 5065;
+
     this.model = {
       name: '',
       createWay: '',
@@ -61,13 +62,20 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   }
 
   afterTabActivated(): void {
-    throw new Error('Method not implemented.');
+    // this.mockDetail(this.mock_id);
+    this.model = {
+      name: '',
+      createWay: '',
+      response: '',
+      url: ''
+    };
+    this.getApiDetail();
   }
 
   async ngOnInit() {
     //TODO: 需要换成是否有mockid判断
-    if (false) {
-      // this.getApiDetail();
+    if (true) {
+      this.getApiDetail();
     } else {
       this.mockDetail(this.mock_id);
     }
@@ -139,7 +147,5 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     return 'decodeURIComponent(url.toString())';
   }
 
-  changeName() {
-    console.log(666);
-  }
+  saveName() {}
 }

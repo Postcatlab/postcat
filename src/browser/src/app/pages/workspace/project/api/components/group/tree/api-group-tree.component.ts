@@ -329,6 +329,10 @@ export class ApiGroupTreeComponent implements OnInit {
 
   toMock() {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/mock`], {});
+    this.router.navigate([`${prefix}/http/mock`], {
+      queryParams: {
+        pageID: Date.now().toString()
+      }
+    });
   }
 }
