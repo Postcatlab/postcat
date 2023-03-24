@@ -53,27 +53,31 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     // 'yd1qr8m51dq'
     this.mock_id = 5065;
 
-    this.model = {
-      name: '',
-      createWay: '',
-      response: '',
-      url: ''
-    };
+    // this.model = {
+    //   name: '',
+    //   createWay: '',
+    //   response: '',
+    //   url: ''
+    // };
   }
 
   afterTabActivated(): void {
-    // this.mockDetail(this.mock_id);
-    this.model = {
-      name: '',
-      createWay: '',
-      response: '',
-      url: ''
-    };
-    this.getApiDetail();
+    if (this.model) {
+      // @ts-ignore
+      this.model = [...this.model];
+    } else {
+      //TODO: 需要换成是否有mockid判断
+      if (true) {
+        this.getApiDetail();
+      } else {
+        this.mockDetail(this.mock_id);
+      }
+    }
+    // console.log(this.model, 999);
   }
 
-  async ngOnInit() {
-    //TODO: 需要换成是否有mockid判断
+  ngOnInit() {
+    // //TODO: 需要换成是否有mockid判断
     if (true) {
       this.getApiDetail();
     } else {
@@ -98,6 +102,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   }
 
   async mockDetail(mock_id?: string | number) {
+    if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model.url = this.getMockUrl(res);
     this.model.createWay = res.createWay;
@@ -116,6 +121,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   }
 
   async getApiDetail() {
+    if (!this.model) this.model = {} as ModelType;
     this.apiData = await this.api.get(this.apiUuid);
     const data = {
       name: 'NEW MOCK',
