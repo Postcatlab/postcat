@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { MockService } from 'pc/browser/src/app/services/mock.service';
@@ -14,12 +14,13 @@ interface ModelType {
   url: string;
   createWay: string;
 }
+
 @Component({
   selector: 'pc-mock',
   templateUrl: './mock.component.html',
   styleUrls: ['./mock.component.scss']
 })
-export class MockComponent implements OnInit, TabViewComponent {
+export class MockComponent implements OnInit, EditTabViewComponent {
   @Input() model: ModelType;
   @Output() readonly eoOnInit = new EventEmitter<ModelType>();
 
@@ -38,6 +39,7 @@ export class MockComponent implements OnInit, TabViewComponent {
   hoverStr: string = 'The system creates a Mock that cannot be operated';
 
   sign: string;
+
   constructor(
     private apiHttp: ApiService,
     private mockService: MockService,
@@ -58,11 +60,16 @@ export class MockComponent implements OnInit, TabViewComponent {
     };
   }
 
+  afterTabActivated(): void {
+    throw new Error('Method not implemented.');
+  }
+
   async ngOnInit() {
-    // this.mockDetail(this.mock_id);
     //TODO: 需要换成是否有mockid判断
-    if (true) {
-      this.getApiDetail();
+    if (false) {
+      // this.getApiDetail();
+    } else {
+      this.mockDetail(this.mock_id);
     }
   }
 
