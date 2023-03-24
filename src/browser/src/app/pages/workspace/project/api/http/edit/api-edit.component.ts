@@ -139,6 +139,9 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
+  async beforeTabClose() {
+    await this.saveApi();
+  }
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])
   @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
   async saveApi($event?, ux = 'ui') {

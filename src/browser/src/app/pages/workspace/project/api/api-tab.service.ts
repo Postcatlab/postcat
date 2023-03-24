@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
-import { TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent, PreviewTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { Message } from 'pc/browser/src/app/services/message';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -13,7 +13,7 @@ import { isEmptyObj } from '../../../../shared/utils/index.utils';
 
 @Injectable()
 export class ApiTabService {
-  componentRef;
+  componentRef: EditTabViewComponent | any;
   apiTabComponent: EoTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentComponentTab(): Partial<TabItem> {
@@ -189,7 +189,7 @@ export class ApiTabService {
     if (!needSave) {
       return;
     }
-    this.componentRef.saveApi();
+    this.componentRef.beforeTabClose();
   }
   /**
    * Reflesh data after Tab init
@@ -204,7 +204,7 @@ export class ApiTabService {
     }
     this.bindChildComponentChangeEvent();
 
-    if (!this.componentRef?.init) {
+    if (!this.componentRef?.afterTabActivated) {
       this.changeContent$.next({ when: 'init', url });
       pcConsole.error(
         'Child componentRef need has init function for reflesh data when router change,Please add init function in child component'
@@ -229,7 +229,7 @@ export class ApiTabService {
       this.componentRef.initialModel = null;
     }
 
-    this.componentRef.init();
+    this.componentRef.afterTabActivated();
   }
 
   updateTab(currentTab, inData) {

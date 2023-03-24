@@ -311,15 +311,15 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
     this.socket.close();
     this.unListen();
   }
-  checkTabCanLeave = closeTarget => {
-    if (this.leaveModal) {
-      return false;
-    }
-    const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
-    if (this.wsStatus === 'disconnect' || isCloseOther) {
-      return true;
-    }
+  checkTabCanLeave = (closeTarget): Promise<boolean> => {
     return new Promise(resolve => {
+      if (this.leaveModal) {
+        resolve(false);
+      }
+      const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
+      if (this.wsStatus === 'disconnect' || isCloseOther) {
+        resolve(true);
+      }
       this.leaveModal = this.modal.create({
         nzTitle: $localize`Do you want to leave the page?`,
         nzContent: $localize`After leaving, the current long connection is no longer maintained, whether to confirm to leave?`,

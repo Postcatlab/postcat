@@ -16,6 +16,12 @@ declare interface TabViewComponent {
    * Emit view component data has init event for initial tab title data/loading..
    */
   eoOnInit: EventEmitter<any>;
+
+  /**
+   * Check the page can leave,if false will not switch tab
+   */
+  checkTabCanLeave?(closeTarget: TabItem): Promise<boolean>;
+  beforeTabClose?(): Promise<any>;
 }
 export declare interface PreviewTabViewComponent extends TabViewComponent {}
 export declare interface EditTabViewComponent extends TabViewComponent {
