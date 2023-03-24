@@ -156,19 +156,6 @@ export class EoTabComponent implements OnInit, OnDestroy {
     return this.tabStorage.tabsByID.get(uuid);
   }
 
-  /**
-   * Get tab by url with same content
-   *
-   * @param url
-   * @returns
-   */
-  getTabByUrl(url: string): TabItem | null {
-    const existTab = this.tabOperate.getSameTab(this.tabOperate.getBasicInfoFromUrl(url));
-    if (!existTab) {
-      return null;
-    }
-    return existTab;
-  }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
   }

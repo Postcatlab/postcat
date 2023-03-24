@@ -165,7 +165,6 @@ export class ApiTabService {
           pcConsole.warn('Tab will be recory from origin data prevent overwrited by previous tab');
           this.updateChildView(currentTab.uuid);
         }
-        console.log(1);
         this.afterContentChanged({ when: 'activated', currentTabID, model });
       }
     };
@@ -232,7 +231,6 @@ export class ApiTabService {
       return;
     }
     const contentID = currentTab.id;
-
     //Get tab from cache
     const hasCache = currentTab?.content?.[contentID];
     this.componentRef.model = currentTab?.content?.[contentID] || null;
@@ -252,7 +250,6 @@ export class ApiTabService {
       isLoading: false,
       extends: {}
     };
-
     //* Set title/method
     replaceTab.title = model.name;
     replaceTab.extends.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
@@ -286,6 +283,7 @@ export class ApiTabService {
                 `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
               );
             }
+
             currentHasChanged = this.componentRef.isFormChange();
           } else {
             currentHasChanged = false;
@@ -310,10 +308,12 @@ export class ApiTabService {
       //Set storage
       //Set baseContent
       if (['activated', 'saved'].includes(inData.when)) {
-        const initialModel = eoDeepCopy(this.componentRef.model);
+        const initialModel = eoDeepCopy(inData.model);
 
+        //Update tab by id,may not be the current selected tab
+        const isCurrentSelectedTab = currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid;
         //If is current tab,set initialModel automatically
-        if (currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid) {
+        if (isCurrentSelectedTab) {
           this.componentRef.initialModel = initialModel;
         }
         replaceTab.baseContent = inData.when === 'saved' ? {} : currentTab.baseContent || {};

@@ -59,7 +59,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   });
   isSaving = false;
   groups: NzTreeNode[];
-  initTimes = 0;
   expandKeys: string[] = [];
   REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
@@ -87,21 +86,17 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    * @param type Reset means force update apiData
    */
   async afterTabActivated() {
-    this.initTimes++;
     const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId);
+
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {} as ApiData;
-      const initTimes = this.initTimes;
-      const result = await this.apiEdit.getApi({
+      this.model = await this.apiEdit.getApi({
         id,
         groupId
       });
-      // ! Prevent await async, replace current api data
-      if (initTimes >= this.initTimes) {
-        this.model = result;
-      }
     }
+
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
 
@@ -109,6 +104,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
+
     this.eoOnInit.emit(this.model);
     waitNextTick().then(() => {
       this.editBody.init();
@@ -153,7 +149,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       return;
     }
     this.isSaving = true;
-    let formData: ApiData = this.getFormdata();
+    let formData: ApiData = this.model;
     const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
@@ -165,17 +161,16 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
     // Add success
     this.message.success(title);
-
     if (this.route.snapshot.queryParams.groupId) {
       this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
     }
-    busEvent === 'addApi' &&
+
+    if (busEvent === 'addApi') {
       this.trace.report('add_api_document_success', {
         trigger_way: ux,
         workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
         param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
       });
-    if (busEvent === 'addApi') {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
@@ -183,11 +178,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
         }
       });
     }
-    this.effect.getGroupList();
     this.afterSaved.emit(this.model);
+    this.effect.getGroupList();
   }
   emitChangeFun() {
-    this.modelChange.emit(this.getFormdata());
+    this.modelChange.emit(this.model);
   }
   /**
    * Judge has edit manualy
@@ -203,7 +198,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
     // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
-    const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.getFormdata()));
+    const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
     // console.log(`\n\n${originText}\n\n${afterText}`);
     if (originText !== afterText) {
       // console.log('api edit formChange true!', originText.split(afterText)[0]);
@@ -255,21 +250,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     });
     this.validateForm = this.fb.group(controls);
   }
-  private getFormdata(): ApiData {
-    const { name, uri, groupId } = this.validateForm.value;
-    const result = {
-      ...this.model,
-      name,
-      uri,
-      groupId
-    };
-    result.apiAttrInfo.requestMethod = this.validateForm.value.requestMethod;
-    return result;
-  }
   private watchBasicForm() {
     this.validateForm.valueChanges.subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       Promise.resolve().then(() => {
+        Object.assign(this.model, x);
         this.emitChangeFun();
       });
     });
