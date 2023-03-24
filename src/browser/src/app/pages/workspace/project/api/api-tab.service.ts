@@ -9,8 +9,13 @@ import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';
 import { MessageService } from '../../../../services/message';
-import { isEmptyObj } from '../../../../shared/utils/index.utils';
+import { eoDeepCopy, isEmptyObj } from '../../../../shared/utils/index.utils';
 
+interface TabEvent {
+  when: 'activated' | 'editing' | 'saved' | 'afterTested';
+  currentTabID: TabItem['uuid'];
+  model: any;
+}
 @Injectable()
 export class ApiTabService {
   componentRef: EditTabViewComponent | any;
@@ -19,7 +24,7 @@ export class ApiTabService {
   get currentComponentTab(): Partial<TabItem> {
     return this.BASIC_TABS.find(val => this.router.url.includes(val.pathname));
   }
-  private changeContent$: Subject<any> = new Subject();
+  private changeContent$: Subject<TabEvent> = new Subject();
   SHARE_TABS: Array<Partial<TabItem>> = [
     {
       pathname: '/share/http/test',
@@ -124,7 +129,7 @@ export class ApiTabService {
         break;
       }
       case 'tabContentInit': {
-        this.updateChildView(this.router.url);
+        this.updateChildView(inArg.data.uuid);
         break;
       }
     }
@@ -143,17 +148,25 @@ export class ApiTabService {
    * After tab component/child component  init
    */
   onAllComponentInit() {
-    const url = this.router.url;
-    this.updateChildView(url);
+    this.updateChildView();
   }
   private bindChildComponentChangeEvent() {
     if (!this.componentRef) {
       return;
     }
-    const url = this.router.url;
+    const currentTabID = this.apiTabComponent.getCurrentTab()?.uuid;
     this.componentRef.eoOnInit = {
       emit: model => {
-        this.afterContentChanged({ when: 'init', url, model });
+        //! The previous Tab's(bindTab) request may overwrite the current Tab's(currentTab) data.
+        //* When inconsistent, we need to manually reset the model
+        const currentTab = this.apiTabComponent.getCurrentTab();
+        if (currentTab.uuid !== currentTabID) {
+          //Reset currentTab view
+          pcConsole.warn('Tab will be recory from origin data prevent overwrited by previous tab');
+          this.updateChildView(currentTab.uuid);
+        }
+        console.log(1);
+        this.afterContentChanged({ when: 'activated', currentTabID, model });
       }
     };
 
@@ -161,12 +174,12 @@ export class ApiTabService {
     if (this.currentComponentTab.type === 'edit') {
       this.componentRef.afterSaved = {
         emit: model => {
-          this.afterContentChanged({ when: 'saved', url, model });
+          this.afterContentChanged({ when: 'saved', currentTabID, model });
         }
       };
       this.componentRef.modelChange = {
         emit: model => {
-          this.changeContent$.next({ when: 'editing', url, model });
+          this.changeContent$.next({ when: 'editing', currentTabID, model });
         }
       };
     }
@@ -175,7 +188,7 @@ export class ApiTabService {
     if (this.currentComponentTab.pathname.includes('test')) {
       this.componentRef.afterTested = {
         emit: model => {
-          this.afterContentChanged({ when: 'afterTested', url, model });
+          this.afterContentChanged({ when: 'afterTested', currentTabID, model });
         }
       };
     }
@@ -192,47 +205,43 @@ export class ApiTabService {
     this.componentRef.beforeTabClose();
   }
   /**
-   * Reflesh data after Tab init
+   * Reflesh data after Tab activated
    *
    * @param lastRouter
    * @param currentRouter
    * @returns
    */
-  updateChildView(url) {
+  updateChildView(uuid?) {
     if (!this.apiTabComponent) {
       return;
     }
     this.bindChildComponentChangeEvent();
 
+    const currentTab = !uuid ? this.apiTabComponent.getCurrentTab() : this.apiTabComponent.getTabByID(uuid);
     if (!this.componentRef?.afterTabActivated) {
-      this.changeContent$.next({ when: 'init', url });
+      // this.changeContent$.next({ when: 'activated', currentTab });
       pcConsole.error(
-        'Child componentRef need has init function for reflesh data when router change,Please add init function in child component'
+        'Child componentRef need has afterTabActivated function for reflesh data when router change,Please add afterTabActivated function in child component'
       );
       return;
     }
 
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
-    const currentTab = this.apiTabComponent.getExistTabByUrl(url);
     if (!currentTab) {
       return;
     }
     const contentID = currentTab.id;
 
     //Get tab from cache
-    if (!currentTab.disabledCache) {
-      this.componentRef.model = currentTab?.content?.[contentID] || null;
-      this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
-    } else {
-      this.componentRef.model = null;
-      this.componentRef.initialModel = null;
-    }
+    const hasCache = currentTab?.content?.[contentID];
+    this.componentRef.model = currentTab?.content?.[contentID] || null;
+    this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
 
     this.componentRef.afterTabActivated();
   }
 
-  updateTab(currentTab, inData) {
+  updateTab(currentTab, inData: TabEvent) {
     const model = inData.model;
     if (!model || isEmptyObj(model)) return;
 
@@ -285,6 +294,7 @@ export class ApiTabService {
         }
         case 'saved': {
           currentHasChanged = false;
+          break;
         }
       }
       //* Share change status within all content page
@@ -299,8 +309,13 @@ export class ApiTabService {
 
       //Set storage
       //Set baseContent
-      if (['init', 'saved'].includes(inData.when)) {
-        const initialModel = this.componentRef.initialModel;
+      if (['activated', 'saved'].includes(inData.when)) {
+        const initialModel = eoDeepCopy(this.componentRef.model);
+
+        //If is current tab,set initialModel automatically
+        if (currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid) {
+          this.componentRef.initialModel = initialModel;
+        }
         replaceTab.baseContent = inData.when === 'saved' ? {} : currentTab.baseContent || {};
         replaceTab.baseContent[contentID] = initialModel && !isEmptyObj(initialModel) ? initialModel : null;
       }
@@ -318,7 +333,7 @@ export class ApiTabService {
     if (currentTab.pathname.includes('test') && (model.testStartTime !== undefined || currentTab.params.uuid)) {
       replaceTab.isFixed = true;
     }
-    this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
+    this.apiTabComponent.updatePartialTab(currentTab.uuid, replaceTab);
   }
   /**
    * After content changed
@@ -326,21 +341,20 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
+  afterContentChanged(inData: TabEvent) {
     if (!this.apiTabComponent) {
       pcConsole.warn(`ING[api-tab]: apiTabComponent hasn't init yet!`);
       return;
     }
-    let currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
+
+    const currentTab = this.apiTabComponent.getTabByID(inData.currentTabID);
     if (!currentTab) {
-      pcConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
+      pcConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.currentTabID}`);
       return;
     }
 
     //Unit request is asynchronous,Update other tab test result
     if (inData?.when === 'afterTested') {
-      inData.url = `${inData.model.url}?pageID=${inData.model.id}`;
-      currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = { ...currentTab.content.test, ...inData.model.model };
     }
     this.updateTab(currentTab, inData);

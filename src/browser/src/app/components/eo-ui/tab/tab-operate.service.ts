@@ -445,7 +445,7 @@ export class TabOperateService {
     return result;
   }
   private updateChildView() {
-    this.messageService.send({ type: 'tabContentInit', data: {} });
+    this.messageService.send({ type: 'tabContentInit', data: { uuid: this.getCurrentTab().uuid } });
   }
   /**
    * Get valid tab item

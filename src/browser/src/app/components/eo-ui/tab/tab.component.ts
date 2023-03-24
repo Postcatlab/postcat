@@ -148,12 +148,21 @@ export class EoTabComponent implements OnInit, OnDestroy {
     return tabs;
   }
   /**
+   * Get tab by tab id
+   *
+   * @param uuid
+   */
+  getTabByID(uuid: TabItem['uuid']) {
+    return this.tabStorage.tabsByID.get(uuid);
+  }
+
+  /**
    * Get tab by url with same content
    *
    * @param url
    * @returns
    */
-  getExistTabByUrl(url: string): TabItem | null {
+  getTabByUrl(url: string): TabItem | null {
     const existTab = this.tabOperate.getSameTab(this.tabOperate.getBasicInfoFromUrl(url));
     if (!existTab) {
       return null;
@@ -169,14 +178,14 @@ export class EoTabComponent implements OnInit, OnDestroy {
   /**
    * update tab
    *
-   * @param url when url exist in tabs,replace
+   * @param uuid tab uuid
    * @param tabItem
    * @returns
    */
-  updatePartialTab(url: string, tabItem: Partial<TabItem>) {
-    const existTab = this.getExistTabByUrl(url);
+  updatePartialTab(uuid: string, tabItem: Partial<TabItem>) {
+    const existTab = this.getTabByID(uuid);
     if (!existTab) {
-      pcConsole.error(`:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
+      pcConsole.error(`:updatePartialTab fail,can't find exist tab to fixed uuid:${uuid}`);
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);

@@ -64,7 +64,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   }
   formatEnvData(data) {
     const result = eoDeepCopy(data);
-    const parameters = this.envParamsComponent.getPureNzData()?.filter(it => it.name || it.value);
+    const parameters = this.envParamsComponent?.getPureNzData()?.filter(it => it.name || it.value);
     return { ...result, parameters };
   }
   private checkForm(): boolean {
@@ -76,7 +76,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   private async createEnv(form, ux = 'ui') {
     const [data, err] = await this.effect.addEnv(form);
     if (err) {
-      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
+      this.message.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
       return;
     }
     this.trace.report('add_environment_success', { trigger_way: ux });
@@ -90,7 +90,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   private async editEnv(form) {
     const [data, err] = await this.effect.updateEnv(form);
     if (err) {
-      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
+      this.message.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
       return;
     }
     this.message.success($localize`Edited successfully`);
@@ -106,11 +106,10 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
     }
     this.isSaving = true;
     const formdata = this.formatEnvData(this.model);
-    this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
     const data = isEdit ? await this.editEnv(formdata) : await this.createEnv(formdata, ux);
     this.isSaving = false;
-    this.afterSaved.emit(this.initialModel);
+    this.afterSaved.emit(this.model);
     if (!this.store.getEnvUuid) {
       this.store.setEnvUuid(data.id || formdata.id);
     }
@@ -123,12 +122,10 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
         hostUri: '',
         parameters: []
       };
-      this.initialModel = eoDeepCopy(this.model);
     } else {
       if (!this.model) {
         const [res, err]: any = await this.getEnv(id);
         this.model = res;
-        this.initialModel = eoDeepCopy(this.model);
       }
     }
     this.initForm();
@@ -144,6 +141,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange() {
+    console.log(JSON.stringify(this.formatEnvData(this.model)), JSON.stringify(this.formatEnvData(this.initialModel)));
     const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
     return hasChanged;
   }

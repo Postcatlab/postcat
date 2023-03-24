@@ -22,12 +22,12 @@ interface ModelType {
 })
 export class MockComponent implements OnInit, EditTabViewComponent {
   @Input() model: ModelType;
+  @Input() initialModel: ModelType;
   @Output() readonly eoOnInit = new EventEmitter<ModelType>();
 
   @Output() readonly modelChange = new EventEmitter<ModelType>();
 
   apiData: ApiData;
-  initialModel: ModelType;
 
   apiUuid: number | string;
 
@@ -74,8 +74,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   }
 
   initTabModel() {
-    this.initialModel = eoDeepCopy(this.model);
-    this.eoOnInit.emit(this.initialModel);
+    this.eoOnInit.emit(this.model);
     this.modelChange.emit(this.model);
   }
 

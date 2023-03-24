@@ -73,11 +73,11 @@ export class WebExtensionService {
     if (!entry) return;
     const url = `${name}@${version}${entry ? `/${entry}` : ''}`;
     const fullPath = new URL(url, this.resourceUrl);
-    const res = await fetch(fullPath);
-    if (res.status === 200) {
-      const data = await res.text();
-      this.insertScript(data);
-    }
+    const data = await fetch(fullPath)
+      .then(res => res.text())
+      .catch(e => {});
+    if (!data) return;
+    this.insertScript(data);
   }
   getExtensionsByFeature(featureKey, installedList) {
     let extensions = new Map();

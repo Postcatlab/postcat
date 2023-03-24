@@ -51,7 +51,6 @@ export class ApiTestComponent implements EditTabViewComponent {
       case 'blankTest': {
         const bodyType =
           typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
-        const headerParams = [];
         const contentType = contentTypeMap[bodyType];
         this.model = {
           //Selet Body
@@ -73,7 +72,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             },
             requestParams: {
               queryParams: [],
-              headerParams: headerParams,
+              headerParams: [],
               restParams: [],
               bodyParams: [
                 {

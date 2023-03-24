@@ -56,7 +56,7 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
       return this.store.getCurrentEnv.hostUri + url;
     }
   }
-  async init() {
+  async afterTabActivated() {
     if (!this.model) {
       this.model = {} as ApiData;
       const { uuid } = this.route.snapshot.queryParams;

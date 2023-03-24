@@ -74,10 +74,6 @@ export type TabItem = {
    */
   isFixed?: boolean;
   /**
-   * If true,will not cache tab content
-   */
-  disabledCache?: boolean;
-  /**
    * Preview page or edit page
    */
   type: string | 'preview' | 'edit';

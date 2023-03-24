@@ -104,11 +104,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
-    // Storage origin api data
-    if (!this.initialModel) {
-      // New API/New API from other page such as test page
-      this.initialModel = !id ? this.apiEdit.getPureApi({ groupId }) : eoDeepCopy(this.model);
-    }
+
     this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
@@ -179,8 +175,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
         workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
         param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
       });
-    const data = this.getFormdata();
-    this.initialModel = this.apiEditUtil.formatEditingApiData(data);
     if (busEvent === 'addApi') {
       this.router.navigate(['/home/workspace/project/api/http/detail'], {
         queryParams: {
@@ -190,7 +184,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       });
     }
     this.effect.getGroupList();
-    this.afterSaved.emit(this.initialModel);
+    this.afterSaved.emit(this.model);
   }
   emitChangeFun() {
     this.modelChange.emit(this.getFormdata());
@@ -231,9 +225,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       this.groups = this.store.getGroupTree;
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
-        if (this.initialModel) {
-          this.initialModel.groupId = this.model.groupId;
-        }
       }
 
       /**

@@ -73,7 +73,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       return;
     }
     this.isSaving = true;
-    this.initialModel = eoDeepCopy(this.model);
     const params = {
       id: this.model.id,
       type: this.model.type,
@@ -86,7 +85,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       await this.effect.updateGroup(params);
       this.message.success($localize`Edit Group Info successfully`);
       this.isSaving = false;
-      this.afterSaved.emit(this.initialModel);
+      this.afterSaved.emit(this.model);
       this.trace.report('save_auth_success');
     } else {
       this.checkForm();
@@ -109,21 +108,16 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
         this.model = data;
         this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
       }
-      this.initialModel = eoDeepCopy(this.model);
       this.isEdit = true;
     } else {
       if (!this.model) {
         const [res, err]: any = await this.api.api_groupDetail({ id });
         console.log('res', structuredClone(res));
         this.model = res;
-        this.initialModel = eoDeepCopy(this.model);
       }
     }
     if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
       this.model.authInfo.authInfo = '';
-    }
-    if (this.initialModel.authInfo) {
-      this.initialModel.authInfo.authInfo = JSONParse(this.initialModel.authInfo.authInfo);
     }
     this.authInfoModel = {
       ...this.model.authInfo,
