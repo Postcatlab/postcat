@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewC
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import {
   AuthInfo,
   AuthorizationExtensionFormComponent,
-  inheritAuth
+  INHERIT_AUTH_OPTION
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
@@ -22,7 +22,7 @@ import { ApiEffectService } from '../store/api-effect.service';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss']
 })
-export class GroupComponent implements OnDestroy, TabViewComponent {
+export class GroupComponent implements OnDestroy, EditTabViewComponent {
   @Input() model: Group;
   @Input() initialModel: Group;
   @Output() readonly modelChange = new EventEmitter<Group>();
@@ -92,7 +92,7 @@ export class GroupComponent implements OnDestroy, TabViewComponent {
       this.checkForm();
     }
   }
-  async init() {
+  async afterTabActivated() {
     const queryParams = this.route.snapshot.queryParams;
     const { uuid, parentId } = queryParams;
     const id = Number(uuid);
@@ -119,7 +119,7 @@ export class GroupComponent implements OnDestroy, TabViewComponent {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    if (this.model?.authInfo?.authType === inheritAuth.name) {
+    if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
       this.model.authInfo.authInfo = '';
     }
     if (this.initialModel.authInfo) {

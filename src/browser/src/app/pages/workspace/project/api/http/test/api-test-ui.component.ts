@@ -9,19 +9,19 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  HostListener
+  HostListener,
+  OnChanges
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEmpty, isEqual } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import {
   AuthIn,
   AuthorizationExtensionFormComponent,
-  noAuth
+  NONE_AUTH_OPTION
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
@@ -47,7 +47,7 @@ import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ApiBodyType, ApiParamsType, ContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
+import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
 import { ProjectApiService } from '../../api.service';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
@@ -76,7 +76,7 @@ const contentTypeMap: { [key in ApiBodyType]: ContentType } = {
   templateUrl: './api-test-ui.component.html',
   styleUrls: ['./api-test-ui.component.scss']
 })
-export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, TabViewComponent {
+export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() model: testViewModel = this.resetModel();
   /**
    * Intial model from outside,check form is change
@@ -98,7 +98,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, Tab
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
-  noAuth = noAuth;
+  noAuth = NONE_AUTH_OPTION;
   isDragging = false;
   isEmpty = isEmpty;
   beforeScriptCompletions = beforeScriptCompletions;
@@ -186,73 +186,75 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, Tab
       this.updateAuthInfo();
     }
   }
-
-  async init() {
-    this.initTimes++;
-    this.authExtForm?.init?.();
-    if (!this.model || isEmptyObj(this.model)) {
-      this.model = {
-        requestTabIndex: 1,
-        responseTabIndex: 0
-      } as testViewModel;
-      let uuid = this.route.snapshot.queryParams.uuid;
-      const initTimes = this.initTimes;
-      let requestInfo: Partial<ApiData> = null;
-      if (uuid?.includes('history_')) {
-        uuid = uuid.replace('history_', '');
-        const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
-        history.request.authInfo = {
-          authInfo: {},
-          authType: noAuth.name,
-          ...history.request.authInfo,
-          isInherited: 0
-        };
-        this.model.request = history.request;
-        this.model.testResult = history.response;
-      } else {
-        if (!uuid) {
-          const newModel = this.resetModel();
-          requestInfo = newModel.request;
-        } else {
-          requestInfo = await this.projectApi.get(uuid);
-          requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
-        }
-      }
-      //!Prevent await async ,replace current  api data
-      if (initTimes >= this.initTimes) {
-        this.model.request = {
-          ...this.model.request,
-          ...requestInfo
-        };
-        this.model.request = this.apiTestUtil.getTestDataFromApi(this.model.request);
-      } else {
-        return;
-      }
-      this.setUserSelectedContentType();
-      this.setHeaderContentType();
-      this.waitSeconds = 0;
-      this.status = 'start';
-    } else {
-      this.updateAuthInfo();
-      if (this.timer$ && this.model.testStartTime) {
-        this.waitSeconds = Math.round((Date.now() - this.model.testStartTime) / 1000);
-        this.status$.next('testing');
-      } else {
-        this.waitSeconds = 0;
-        this.status$.next('start');
-      }
-    }
-    this.initBasicForm();
-    this.validateForm.patchValue(this.model.request);
-    this.watchBasicForm();
-    //Storage origin api data
-    if (!this.initialModel) {
-      this.initialModel = eoDeepCopy(this.model);
-    }
-
-    this.eoOnInit.emit(this.model);
-    this.cdRef.detectChanges();
+  ngOnChanges(changes) {
+    console.log(changes);
   }
+  // async init() {
+  //   this.initTimes++;
+  //   this.authExtForm?.init?.();
+  //   if (!this.model || isEmptyObj(this.model)) {
+  //     this.model = {
+  //       requestTabIndex: 1,
+  //       responseTabIndex: 0
+  //     } as testViewModel;
+  //     let uuid = this.route.snapshot.queryParams.uuid;
+  //     const initTimes = this.initTimes;
+  //     let requestInfo: Partial<ApiData> = null;
+  //     if (uuid?.includes('history_')) {
+  //       uuid = uuid.replace('history_', '');
+  //       const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
+  //       history.request.authInfo = {
+  //         authInfo: {},
+  //         authType: NONE_AUTH_OPTION.name,
+  //         ...history.request.authInfo,
+  //         isInherited: 0
+  //       };
+  //       this.model.request = history.request;
+  //       this.model.testResult = history.response;
+  //     } else {
+  //       if (!uuid) {
+  //         const newModel = this.resetModel();
+  //         requestInfo = newModel.request;
+  //       } else {
+  //         requestInfo = await this.projectApi.get(uuid);
+  //         requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
+  //       }
+  //     }
+  //     //!Prevent await async ,replace current  api data
+  //     if (initTimes >= this.initTimes) {
+  //       this.model.request = {
+  //         ...this.model.request,
+  //         ...requestInfo
+  //       };
+  //       this.model.request = this.apiTestUtil.getTestDataFromApi(this.model.request);
+  //     } else {
+  //       return;
+  //     }
+  //     this.setUserSelectedContentType();
+  //     this.setHeaderContentType();
+  //     this.waitSeconds = 0;
+  //     this.status = 'start';
+  //   } else {
+  //     this.updateAuthInfo();
+  //     if (this.timer$ && this.model.testStartTime) {
+  //       this.waitSeconds = Math.round((Date.now() - this.model.testStartTime) / 1000);
+  //       this.status$.next('testing');
+  //     } else {
+  //       this.waitSeconds = 0;
+  //       this.status$.next('start');
+  //     }
+  //   }
+  //   this.initBasicForm();
+  //   this.validateForm.patchValue(this.model.request);
+  //   this.watchBasicForm();
+  //   //Storage origin api data
+  //   if (!this.initialModel) {
+  //     this.initialModel = eoDeepCopy(this.model);
+  //   }
+
+  //   this.eoOnInit.emit(this.model);
+  //   this.cdRef.detectChanges();
+  // }
   clickTest() {
     if (!this.checkForm()) {
       return;
@@ -589,7 +591,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, Tab
       request: {
         authInfo: {
           authInfo: {},
-          authType: noAuth.name,
+          authType: NONE_AUTH_OPTION.name,
           isInherited: 0
         },
         apiAttrInfo: {

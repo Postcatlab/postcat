@@ -1,6 +1,6 @@
 import {
-  inheritAuth,
-  noAuth
+  INHERIT_AUTH_OPTION,
+  NONE_AUTH_OPTION
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import {
@@ -149,9 +149,9 @@ export class GroupService extends BaseService<Group> {
     //   group.authInfo.isInherited = group.depth > 1 ? 1 : 0;
     // }
     // 递归获取父级分组鉴权信息
-    if (group && (!groupAuthType || groupAuthType === inheritAuth.name)) {
+    if (group && (!groupAuthType || groupAuthType === INHERIT_AUTH_OPTION.name)) {
       group.authInfo = {
-        authType: noAuth.name,
+        authType: NONE_AUTH_OPTION.name,
         isInherited: 0,
         authInfo: {}
       };
@@ -160,7 +160,7 @@ export class GroupService extends BaseService<Group> {
         if (parentGroup.depth !== 0) {
           group.authInfo = parentGroup.authInfo;
         }
-        if (isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name) {
+        if (isCallByApiData || !groupAuthType || groupAuthType === INHERIT_AUTH_OPTION.name) {
           group.authInfo.isInherited = (isCallByApiData ? group : parentGroup).depth ? 1 : 0;
         } else {
           group.authInfo.isInherited = 0;

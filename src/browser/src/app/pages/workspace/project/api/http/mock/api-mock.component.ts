@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { PreviewTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-mock-table.component';
@@ -23,7 +23,7 @@ import { StoreService } from 'pc/browser/src/app/store/state.service';
     `
   ]
 })
-export class ApiMockComponent implements OnInit, TabViewComponent {
+export class ApiMockComponent implements OnInit, PreviewTabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   @Input() canEdit = true;
 

@@ -11,41 +11,43 @@ export type storageTab = {
   tabOrder: number[];
   tabsByID: { [key: number]: TabItem };
 };
-export declare interface TabViewComponent {
+declare interface TabViewComponent {
+  /**
+   * Emit view component data has init event for initial tab title data/loading..
+   */
+  eoOnInit: EventEmitter<any>;
+}
+export declare interface PreviewTabViewComponent extends TabViewComponent {}
+export declare interface EditTabViewComponent extends TabViewComponent {
   /**
    * View Component model
    * Usually restored model from tab cache
    */
-  model?: any;
+  model: any;
+  /**
+   * A callback method that performs custom init tab-ui, invoked immediately after tab has initialized.
+   */
+  afterTabActivated(): void;
+
+  /**
+   * Emit view component data has changed event
+   */
+  modelChange: EventEmitter<any>;
+
+  //*  If tab content can't not be saved,these value can be null
+  /**
+   * Edit page tab judge model has changed
+   */
+  isFormChange?(): boolean;
 
   /**
    * Initial model for check form is change
    */
   initialModel?: any;
-
-  /**
-   * Emit view component data has init event for initial tab title data/loading..
-   */
-  eoOnInit: EventEmitter<any>;
-
   /**
    * Emit view component data has been saved
    */
   afterSaved?: EventEmitter<any>;
-  /**
-   * Emit view component data has changed event
-   */
-  modelChange?: EventEmitter<any>;
-
-  /**
-   * A callback method that performs custom init tab-ui, invoked immediately after tab has initialized.
-   */
-  init?(): void;
-
-  /**
-   * Edit page tab judge model has changed
-   */
-  isFormChange?(): boolean;
 }
 /**
  * Tab item.
@@ -59,6 +61,11 @@ export type TabItem = {
    * Unique id,used for identify content
    */
   id: string;
+  /**
+   * If the tab is fixed, it will not be replaced by other tab
+   *
+   *  You can use double-click to fixed the tab prevent it from being replaced
+   */
   isFixed?: boolean;
   /**
    * If true,will not cache tab content

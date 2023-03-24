@@ -5,7 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-operate.service';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiParamsNumPipe } from 'pc/browser/src/app/pages/workspace/project/api/pipe/api-param-num.pipe';
@@ -33,7 +33,7 @@ const UIHash = new Map().set('requestHeaders', 'Request Headers').set('responseH
   templateUrl: './websocket.component.html',
   styleUrls: ['./websocket.component.scss']
 })
-export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
+export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewComponent {
   @Input() bodyType = 'json';
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
@@ -65,7 +65,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
   ) {
     this.initBasicForm();
   }
-  async init() {
+  async afterTabActivated() {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;

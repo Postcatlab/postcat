@@ -17,7 +17,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiEditService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
@@ -40,7 +40,7 @@ import { ApiEditBodyComponent } from './body/api-edit-body.component';
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy, TabViewComponent {
+export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   @ViewChild('editBody') editBody: ApiEditBodyComponent;
   @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
@@ -86,7 +86,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
    *
    * @param type Reset means force update apiData
    */
-  async init() {
+  async afterTabActivated() {
     this.initTimes++;
     const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId);

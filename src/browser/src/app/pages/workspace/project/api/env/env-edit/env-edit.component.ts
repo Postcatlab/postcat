@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, Input, OnDestroy, Output, ViewCh
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Environment } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -20,7 +20,7 @@ export type EnvironmentView = Partial<Environment>;
   templateUrl: './env-edit.component.html',
   styleUrls: ['./env-edit.component.scss']
 })
-export class EnvEditComponent implements OnDestroy, TabViewComponent {
+export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   @Input() model: EnvironmentView;
   @Input() initialModel: EnvironmentView;
   @Output() readonly modelChange = new EventEmitter<EnvironmentView>();
@@ -115,7 +115,7 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
       this.store.setEnvUuid(data.id || formdata.id);
     }
   }
-  async init() {
+  async afterTabActivated() {
     const id = Number(this.route.snapshot.queryParams.uuid);
     if (!id) {
       this.model = {

@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { reaction } from 'mobx';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { PreviewTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
@@ -16,7 +16,7 @@ import { ProjectApiService } from '../../api.service';
   templateUrl: './api-detail.component.html',
   styleUrls: ['./api-detail.component.scss']
 })
-export class ApiDetailComponent implements TabViewComponent {
+export class ApiDetailComponent implements PreviewTabViewComponent {
   @Input() model: ApiData | any;
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
