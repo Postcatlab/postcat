@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, AfterViewInit, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import {
   AuthInfo,
   AuthorizationExtensionFormComponent,
-  inheritAuth
+  INHERIT_AUTH_OPTION
 } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
@@ -22,7 +22,7 @@ import { ApiEffectService } from '../store/api-effect.service';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss']
 })
-export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponent {
+export class GroupComponent implements OnDestroy, EditTabViewComponent {
   @Input() model: Group;
   @Input() initialModel: Group;
   @Output() readonly modelChange = new EventEmitter<Group>();
@@ -34,7 +34,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     authInfo: {}
   };
   isEdit = false;
-  topSaveBar: HTMLDivElement;
 
   isSaving = false;
   validateForm: FormGroup;
@@ -42,7 +41,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   @ViewChild('groupNameInputRef') groupNameInputRef: ElementRef<HTMLInputElement>;
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
-  topSaveBarObserver: IntersectionObserver;
   constructor(
     private api: ApiService,
     private effect: ApiEffectService,
@@ -53,35 +51,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     private router: Router,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initForm();
-  }
-  ngAfterViewInit(): void {
-    // 目标元素
-    this.topSaveBar = document.querySelector('eo-group .top-save-bar');
-    this.topSaveBarObserver = new IntersectionObserver(
-      ([e]) => {
-        e.target.classList.toggle('is-pinned', e.intersectionRatio < 1);
-      },
-      {
-        threshold: [1]
-      }
-    );
-    // 监听
-    this.topSaveBarObserver.observe(this.topSaveBar);
-  }
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          // 或者 return false;
-          event.preventDefault();
-          this.saveGroupInfo('shortcut');
-        }
-      });
   }
   private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
@@ -95,8 +65,11 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
     }
     return true;
   }
-  async saveGroupInfo(ux = 'ui') {
-    if (!this.checkForm() || !this.authExtForm.checkForm() || this.isEdit) {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveGroupInfo($event?, ux = 'ui') {
+    $event?.preventDefault?.();
+    if (!(this.checkForm() && this.authExtForm.checkForm()) || this.isEdit) {
       return;
     }
     this.isSaving = true;
@@ -119,7 +92,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
       this.checkForm();
     }
   }
-  async init() {
+  async afterTabActivated() {
     const queryParams = this.route.snapshot.queryParams;
     const { uuid, parentId } = queryParams;
     const id = Number(uuid);
@@ -146,7 +119,7 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
         this.initialModel = eoDeepCopy(this.model);
       }
     }
-    if (this.model?.authInfo?.authType === inheritAuth.name) {
+    if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
       this.model.authInfo.authInfo = '';
     }
     if (this.initialModel.authInfo) {
@@ -182,7 +155,6 @@ export class GroupComponent implements OnDestroy, AfterViewInit, TabViewComponen
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.topSaveBarObserver.unobserve(this.topSaveBar);
   }
 
   startEditGroupName() {

@@ -15,7 +15,7 @@ import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData
 import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
-import { ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 const whatTextTypeMap = {
   xml: 'application/xml',
@@ -48,7 +48,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   };
   binaryFiles: NzUploadFile[] = [];
   CONST = {
-    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
+    CONTENT_TYPE: {
+      [ApiBodyType.Raw]: CONTENT_TYPE_BY_ABRIDGE,
+      [ApiBodyType.FormData]: FORMDATA_CONTENT_TYPE_BY_ABRIDGE
+    },
     API_BODY_TYPE: []
   };
   IMPORT_MUI = IMPORT_MUI;
@@ -73,7 +76,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   get editorType() {
-    return this.contentType.replace(/.*\//, '');
+    return this.contentType?.replace(/.*\//, '');
   }
   constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {

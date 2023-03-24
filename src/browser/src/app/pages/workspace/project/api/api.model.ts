@@ -45,7 +45,7 @@ export const DEFAULT_UNIT_TEST_RESULT: { response: ApiTestResData } = {
     }
   }
 };
-export enum ContentType {
+export enum BodyContentType {
   FROM_DATA = 0,
   RAW = 1,
   JSON_OBJECT = 2,

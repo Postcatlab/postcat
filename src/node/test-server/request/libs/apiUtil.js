@@ -419,7 +419,6 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
   let tmpEnviroments;
   let tmpBinary = inputData.binary;
   inputOpts.authInfo = inputOpts.authInfo || { authType: 'none', authInfo: {} };
-
   switch (scritEngines) {
     case 'pm': {
       tmpTargetTypeEnv = {
@@ -522,7 +521,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
               authInfo = JSON.parse(authInfoStr);
               const { action } = packageJson.features.authAPI;
               const func = extension[action];
-              const config = (authInfo || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
+              const config = (authInfo || []).reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {});
               //Execute at runtime
               const code = await func(config);
               const [authPmRes, err] = await pmRuntime.executeSync(ctx, code, {
@@ -547,11 +546,11 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
       tmpTargetTypeData = {
         apiUrl: apiUrl.toString(),
         bodyParam: pmRes.request.body.raw,
-        bodyParseParam: (pmRes.request.body.urlencoded || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {}),
-        queryParam: (pmRes.request.url.query || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {}),
-        headerParam: (pmRes.request.header || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {})
+        bodyParseParam: (pmRes.request.body.urlencoded || []).reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {}),
+        queryParam: (pmRes.request.url.query || []).reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {}),
+        headerParam: (pmRes.request.header || []).reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {})
       };
-      global.eoTestGlobals = (pmRes.globals.values || []).reduce((acc, cur) => ({ [cur.key]: cur.value, ...acc }), {});
+      global.eoTestGlobals = (pmRes.globals.values || []).reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {});
       //for fit eolink
       tmpOutput.url = apiUrl.toString().split('?')[0];
       break;

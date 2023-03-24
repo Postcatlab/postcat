@@ -7,16 +7,18 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
+import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { Subject, takeUntil } from 'rxjs';
 
-export const noAuth = {
+export const NONE_AUTH_OPTION = {
   name: 'none',
   label: $localize`No Auth`
 };
 
-export const inheritAuth = {
+export const INHERIT_AUTH_OPTION = {
   name: 'inherited',
   label: $localize`Inherit auth from parent`
 };
@@ -87,11 +89,11 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   @Output() readonly authTypeChange = new EventEmitter<string>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   authInMap = authInMap;
-  inheritAuth = inheritAuth;
-  noAuth = noAuth;
+  inheritAuth = INHERIT_AUTH_OPTION;
+  noAuth = NONE_AUTH_OPTION;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo> = new Map();
-  extensionList: Array<typeof noAuth> = [];
+  extensionList: Array<typeof NONE_AUTH_OPTION> = [];
 
   parentGroup: Partial<Group>;
 
@@ -108,14 +110,14 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   // }
 
   get isDefaultAuthType() {
-    return [inheritAuth.name, noAuth.name].includes(this.authType);
+    return [INHERIT_AUTH_OPTION.name, NONE_AUTH_OPTION.name].includes(this.authType);
   }
 
   get authTypeList() {
     const isRootGroup =
       this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
-    if (isRootGroup && this.type !== 'api-test-history') return [inheritAuth, noAuth, ...this.extensionList];
-    return [noAuth, ...this.extensionList];
+    if (isRootGroup && this.type !== 'api-test-history') return [INHERIT_AUTH_OPTION, NONE_AUTH_OPTION, ...this.extensionList];
+    return [NONE_AUTH_OPTION, ...this.extensionList];
   }
 
   constructor(
@@ -127,17 +129,13 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
+    this.watchInstalledExtensionsChange();
+  }
 
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        if (inArg.type !== 'extensionsChange') return;
-        const extension = inArg.data.extension;
-        if (!extension?.features?.authAPI) return;
-        this.initExtensions();
-        this.updateSchema(this.authType);
-      });
+  @ExtensionChange(AUTH_API)
+  watchInstalledExtensionsChange() {
+    this.initExtensions();
+    this.updateSchema(this.authType);
   }
 
   init() {
@@ -153,7 +151,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     });
     autorun(() => {
       if (!this.authType && this.model?.isInherited === 1) {
-        this.authType = inheritAuth.name;
+        this.authType = INHERIT_AUTH_OPTION.name;
       } else if (this.model?.isInherited === 0) {
         this.authType = this.model?.authType;
       }
@@ -173,7 +171,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     const { model } = changes;
     // console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
-      if (this.model.authType !== inheritAuth.name) {
+      if (this.model.authType !== INHERIT_AUTH_OPTION.name) {
         // console.log('this.authType', this.authType);
         this.updateSchema(this.authType);
       }

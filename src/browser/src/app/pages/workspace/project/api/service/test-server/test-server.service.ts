@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Inject, Injectable, Input, LOCALE_ID } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import {
@@ -42,10 +42,11 @@ export abstract class TestServerService implements TestServer {
             .map(val => ({
               listDepth: 0,
               paramKey: val.name,
-              //@ts-ignore
+              //@ts-ignore files only for view
               files: val.files?.map(file => file.content),
               paramType: val.dataType === ApiParamsType.file ? '1' : '0',
-              paramInfo: val.paramAttr?.example || ''
+              //@ts-ignore files only for view
+              paramInfo: val.dataType === ApiParamsType.file ? val.files?.map(val => val.name).join(',') : val.paramAttr?.example || ''
             }));
         }
       }

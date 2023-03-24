@@ -4,14 +4,14 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/index.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
+import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
-import { Message, MessageService } from '../../../../services/message';
-import { ExtensionInfo } from '../../../../shared/models/extension-manager';
+import { MessageService } from '../../../../services/message';
 import StorageUtil from '../../../../shared/utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
@@ -81,7 +81,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: 'Action'
     }
   ];
-  originModel: ApiData | any;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
   tabsIndex = StorageUtil.get('eo_group_tab_select') || 0;
@@ -99,22 +98,12 @@ export class ApiComponent implements OnInit, OnDestroy {
     private trace: TraceService
   ) {
     this.initExtensionExtra();
-    this.watchInstalledExtensionsChange();
   }
-  watchInstalledExtensionsChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'extensionsChange') {
-        const name = inArg.data.name;
-        const extension: ExtensionInfo = inArg.data.installedMap.get(name);
-        if (!extension?.features?.apiPreviewTab) return;
-        this.initExtensionExtra();
-      }
-    });
-  }
+  @ExtensionChange(API_PREVIEW_TAB, true)
   async initExtensionExtra() {
     this.rightExtras = [];
     if (!this.router.url.includes('home/workspace/project/api/http/detail')) return;
-    const apiPreviewTab = this.extensionService.getValidExtensionsByFature('apiPreviewTab');
+    const apiPreviewTab = this.extensionService.getValidExtensionsByFature(API_PREVIEW_TAB);
     apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);
       const rightExtra = value.rightExtra?.reduce((prev, curr) => {

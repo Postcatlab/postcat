@@ -1,11 +1,23 @@
-import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, OnInit, ViewChildren, TemplateRef, QueryList } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  ViewChildren,
+  TemplateRef,
+  QueryList,
+  HostListener
+} from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiEditService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
@@ -28,7 +40,7 @@ import { ApiEditBodyComponent } from './body/api-edit-body.component';
   templateUrl: './api-edit.component.html',
   styleUrls: ['./api-edit.component.scss']
 })
-export class ApiEditComponent implements OnDestroy, TabViewComponent {
+export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   @ViewChild('editBody') editBody: ApiEditBodyComponent;
   @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
@@ -67,7 +79,6 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     private store: ApiStoreService,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initBasicForm();
   }
   /**
@@ -75,7 +86,7 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
    *
    * @param type Reset means force update apiData
    */
-  async init() {
+  async afterTabActivated() {
     this.initTimes++;
     const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId);
@@ -109,24 +120,6 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
       this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
   }
-
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-
-        // Ctrl+s
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          event.preventDefault();
-
-          //Manualy call funciton in case on blur event not trigger
-          this.updateParamsbyUri();
-          this.saveApi('shortcut');
-        }
-      });
-  }
-
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
@@ -146,7 +139,13 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
-  async saveApi(ux = 'ui') {
+  async beforeTabClose() {
+    await this.saveApi();
+  }
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveApi($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -170,6 +169,10 @@ export class ApiEditComponent implements OnDestroy, TabViewComponent {
     }
     // Add success
     this.message.success(title);
+
+    if (this.route.snapshot.queryParams.groupId) {
+      this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
+    }
     busEvent === 'addApi' &&
       this.trace.report('add_api_document_success', {
         trigger_way: ux,

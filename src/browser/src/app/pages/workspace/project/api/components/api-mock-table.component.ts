@@ -3,10 +3,10 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { Mock } from 'pc/browser/src/app/services/storage/db/models';
 import { eoDeepCopy, copy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { ApiData } from '../../../../../services/storage/db/models/apiData';
-import { ApiMockEntity } from '../../../../../services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -36,7 +36,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
 
   mockListColumns = [];
   mockPrefix: string;
-  mockList: ApiMockEntity[] = [];
+  mockList: Array<{ url: string } & Mock> = [];
 
   constructor(private message: EoNgFeedbackMessageService, private modal: ModalService, private apiMock: ApiMockService) {}
 

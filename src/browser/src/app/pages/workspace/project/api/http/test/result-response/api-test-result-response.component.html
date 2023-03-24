@@ -6,17 +6,6 @@
   </nz-empty>
 </div>
 <div class="p-[20px]" *ngIf="model && (model | json) !== '{}'">
-  <!-- Status Bar -->
-  <div
-    *ngIf="model?.statusCode"
-    class="mb-[15px] basic_info_bar  flex justify-between {{ model.statusCode ? codeStatus.class : 'test-error' }}"
-  >
-    <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
-    <div class="flex items-center text-[12px]">
-      <span class="mr-[15px]" id="size">Size: {{ model.responseLength | byteToString }}</span>
-      <span id="time">Time: {{ model.time }}ms</span>
-    </div>
-  </div>
   <!-- Test Alert Tip -->
   <eo-ng-feedback-alert
     class="eo_alert_bar"
@@ -50,7 +39,7 @@
     </ng-template>
     <ng-template #other>
       <eo-monaco-editor
-        class="mt-[20px] border-all"
+        class="border-all"
         [autoFormat]="true"
         [autoHeight]="true"
         [autoType]="true"
