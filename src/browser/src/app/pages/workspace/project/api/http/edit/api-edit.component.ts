@@ -60,7 +60,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
     public globalStore: StoreService,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private effect: ApiEffectService,
     private apiEdit: ApiEditService,
     private store: ApiStoreService,
@@ -148,10 +148,10 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async addAPI(formData, ux) {
     const [result, err] = await this.apiEdit.addApi(formData);
     if (err) {
-      this.message.error($localize`Added Operation`);
+      this.feedback.error($localize`Added Operation`);
       return;
     }
-    this.message.success($localize`Added successfully`);
+    this.feedback.success($localize`Added successfully`);
     this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
     this.trace.report('add_api_document_success', {
       trigger_way: ux,
@@ -170,7 +170,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async editAPI(formData, ux) {
     const [result, err] = await this.apiEdit.editApi(formData);
     if (err) {
-      this.message.error($localize`Edited Operation`);
+      this.feedback.error($localize`Edited Operation`);
       return;
     }
     this.afterSaved.emit(this.model);

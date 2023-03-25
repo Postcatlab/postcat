@@ -5,7 +5,6 @@ import { autorun, reaction } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -104,8 +103,7 @@ export class ApiGroupTreeComponent implements OnInit {
     private modalService: ModalService,
     private router: Router,
     private route: ActivatedRoute,
-    private tab: ApiTabService,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {}
 
   ngOnInit(): void {
@@ -199,7 +197,7 @@ export class ApiGroupTreeComponent implements OnInit {
     if (node?.group) {
       node.group.isExpanded = true;
     }
-    this.message.success('Add Group successfully');
+    this.feedback.success('Add Group successfully');
   }
   importAPI(type: keyof typeof actionComponent, title) {
     const modal = this.modalService.create({
@@ -219,7 +217,7 @@ export class ApiGroupTreeComponent implements OnInit {
             return new Promise(resolve => {
               modal.componentInstance.submit(status => {
                 if (!status) {
-                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                  this.feedback.error($localize`Failed to ${title},Please upgrade extension or try again later`);
                   return resolve(true);
                 }
                 if (status === 'stayModal') {
@@ -227,7 +225,7 @@ export class ApiGroupTreeComponent implements OnInit {
                 }
                 // Import API
                 this.effect.getGroupList();
-                this.message.success($localize`${title} successfully`);
+                this.feedback.success($localize`${title} successfully`);
                 resolve(true);
                 modal.destroy();
               }, modal);

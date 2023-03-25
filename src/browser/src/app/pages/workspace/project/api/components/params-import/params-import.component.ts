@@ -55,7 +55,7 @@ export class ParamsImportComponent implements OnInit {
     return ['formData', 'header', 'json'].includes(this.contentType) ? 'text' : this.contentType;
   }
 
-  constructor(private message: EoNgFeedbackMessageService) {}
+  constructor(private feedback: EoNgFeedbackMessageService) {}
 
   ngOnInit() {
     makeObservable(this);
@@ -152,7 +152,7 @@ export class ParamsImportComponent implements OnInit {
 
     const [res, err] = func[this.contentType](this.paramCode);
     if (err && 'msg' in err) {
-      this.message.error(err.msg);
+      this.feedback.error(err.msg);
       return;
     }
 

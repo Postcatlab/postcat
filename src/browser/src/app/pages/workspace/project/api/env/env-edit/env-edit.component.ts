@@ -55,7 +55,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
     private store: ApiStoreService,
     public globalStore: StoreService,
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,
     private trace: TraceService
@@ -76,11 +76,11 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   private async createEnv(form, ux = 'ui') {
     const [data, err] = await this.effect.addEnv(form);
     if (err) {
-      this.message.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
+      this.feedback.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
       return;
     }
     this.trace.report('add_environment_success', { trigger_way: ux });
-    this.message.success($localize`Added successfully`);
+    this.feedback.success($localize`Added successfully`);
     // * Would not refresh page
     this.router.navigate(['home/workspace/project/api/env/edit'], {
       queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }
@@ -90,10 +90,10 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   private async editEnv(form) {
     const [data, err] = await this.effect.updateEnv(form);
     if (err) {
-      this.message.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
+      this.feedback.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
       return;
     }
-    this.message.success($localize`Edited successfully`);
+    this.feedback.success($localize`Edited successfully`);
     return data;
   }
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])

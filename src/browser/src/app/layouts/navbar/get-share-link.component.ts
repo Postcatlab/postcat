@@ -52,12 +52,12 @@ export class GetShareLinkComponent {
     private effect: EffectService,
     public store: StoreService,
     public dataSourceService: DataSourceService,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {}
   handleGetShareLink() {
     this.dataSourceService.checkRemoteCanOperate(async () => {
       if (this.store.isLocal) {
-        this.message.info($localize`If you want to share API,Please switch to cloud workspace`);
+        this.feedback.info($localize`If you want to share API,Please switch to cloud workspace`);
       }
       this.link = await this.effect.updateShareLink();
     });

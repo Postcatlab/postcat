@@ -34,7 +34,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
   @Output() readonly isShowChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   manualClose = StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'false';
   constructor(
-    private eoMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private message: MessageService,
     private store: StoreService,
     private effect: EffectService
@@ -54,7 +54,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
     const workspaces = this.store.getWorkspaceList;
     if (workspaces.length === 1) {
       // * only local workspace
-      this.eoMessage.warning($localize`You don't have cloud space yet, please new one`);
+      this.feedback.warning($localize`You don't have cloud space yet, please new one`);
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }

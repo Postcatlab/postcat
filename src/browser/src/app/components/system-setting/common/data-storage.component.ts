@@ -49,7 +49,7 @@ export class DataStorageComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private messageS: MessageService,
     private dataSource: DataSourceService,
     private settingService: SettingService
@@ -80,13 +80,13 @@ export class DataStorageComponent implements OnInit {
     };
     const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['backend.url']);
     if (isSuccess) {
-      this.message.success($localize`Successfully connect to cloud`);
+      this.feedback.success($localize`Successfully connect to cloud`);
       StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
       //Relogin to update user info
       this.messageS.send({ type: 'login', data: {} });
       this.saveConf();
     } else {
-      this.message.error($localize`Failed to connect`);
+      this.feedback.error($localize`Failed to connect`);
     }
   }
 

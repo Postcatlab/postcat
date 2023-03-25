@@ -15,7 +15,7 @@ export class ProjectMemberService {
     private api: ApiService,
     private store: StoreService,
     private effect: EffectService,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {
     autorun(async () => {
       this.role = this.store.getProjectRole;
@@ -72,10 +72,10 @@ export class ProjectMemberService {
       userId: members.id
     });
     if (err) {
-      this.message.error($localize`Quit Failed`);
+      this.feedback.error($localize`Quit Failed`);
       return [null, err];
     }
-    this.message.success($localize`Quit successfully`);
+    this.feedback.success($localize`Quit successfully`);
     const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
     this.effect.switchProject(project.uuid);
     return [data, err];

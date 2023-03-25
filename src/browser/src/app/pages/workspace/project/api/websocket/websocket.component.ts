@@ -59,7 +59,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
     private electron: ElectronService,
     private testService: ApiTestService,
     private modal: ModalService,
-    private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private store: StoreService,
     public tabOperate: TabOperateService
   ) {
@@ -103,7 +103,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
 
   handleTestQueryTableClick = () => {
     if (this.isConnecting) {
-      this.eoNgFeedbackMessageService.info('连接状态无法编辑');
+      this.feedback.info('连接状态无法编辑');
     }
   };
 

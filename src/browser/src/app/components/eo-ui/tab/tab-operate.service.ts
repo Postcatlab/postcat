@@ -39,7 +39,7 @@ export class TabOperateService {
     private tabStorage: TabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -363,7 +363,7 @@ export class TabOperateService {
     this.tabStorage.resetTabsByOrdr(tabsObj.left);
     this.selectedIndex = tabsObj.selectedIndex;
     if (tabsObj.needTips) {
-      this.message.warning($localize`Program will not close unsaved tabs`);
+      this.feedback.warning($localize`Program will not close unsaved tabs`);
     }
   }
   /**

@@ -67,7 +67,7 @@ export class ImportApiComponent implements OnInit {
   constructor(
     private router: Router,
     private trace: TraceService,
-    private eoMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
     private apiService: ApiService,
@@ -103,7 +103,7 @@ export class ImportApiComponent implements OnInit {
   async submit(callback) {
     StorageUtil.set('import_api_modal', this.currentExtension);
     if (!this.uploadData) {
-      this.eoMessage.error($localize`Please import the file first`);
+      this.feedback.error($localize`Please import the file first`);
       callback('stayModal');
       return;
     }
@@ -116,7 +116,7 @@ export class ImportApiComponent implements OnInit {
       const [data, err] = module[action](content);
       console.log('import data', window.structuredClone?.(data));
       if (err) {
-        this.eoMessage.error(err.msg);
+        this.feedback.error(err.msg);
         console.error(err.msg);
         callback(false);
         return;

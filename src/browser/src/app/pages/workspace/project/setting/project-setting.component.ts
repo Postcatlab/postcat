@@ -36,7 +36,7 @@ export class ProjectSettingComponent implements OnInit {
   syncLoading = false;
   constructor(
     private modalService: ModalService,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     public store: StoreService,
     private api: ApiService,
     private router: Router,
@@ -70,20 +70,20 @@ export class ProjectSettingComponent implements OnInit {
             const featureMap = this.extensionService.getValidExtensionsByFature('pullAPI');
 
             if (!featureMap.size) {
-              return this.message.info($localize`Please install extension first`);
+              return this.feedback.info($localize`Please install extension first`);
             }
 
             for (const [name, info] of featureMap) {
               const module = await this.extensionService.getExtensionPackage(name);
               const [, err] = await module[info.action]();
               if (err) {
-                this.message.error(err);
+                this.feedback.error(err);
                 this.syncLoading = false;
                 return Promise.reject(err);
               }
             }
             this.syncLoading = false;
-            this.message.success($localize`Sync successfully`);
+            this.feedback.success($localize`Sync successfully`);
             this.trace.report('sync_api_from_url_success');
           }
         },
@@ -167,14 +167,14 @@ export class ProjectSettingComponent implements OnInit {
   }
   async changeProjectName(name) {
     if (!name) {
-      return this.message.error($localize`Please input your projectName`);
+      return this.feedback.error($localize`Please input your projectName`);
     }
     const project = this.store.getCurrentProject;
     try {
       await this.effect.updateProject({ ...project, name });
-      this.message.success($localize`Edited successfully`);
+      this.feedback.success($localize`Edited successfully`);
     } catch (error) {
-      this.message.error($localize`Failed Operation`);
+      this.feedback.error($localize`Failed Operation`);
     }
     this.isEdit = false;
   }
@@ -197,13 +197,13 @@ export class ProjectSettingComponent implements OnInit {
             return new Promise(resolve => {
               modal.componentInstance.submit(status => {
                 if (!status) {
-                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+                  this.feedback.error($localize`Failed to ${title},Please upgrade extension or try again later`);
                   return resolve(true);
                 }
                 if (status === 'stayModal') {
                   return resolve(true);
                 }
-                this.message.success($localize`${title} successfully`);
+                this.feedback.success($localize`${title} successfully`);
                 resolve(true);
                 modal.destroy();
               });

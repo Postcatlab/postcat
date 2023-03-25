@@ -104,7 +104,7 @@ export class ProjectMemberComponent implements OnInit {
     public store: StoreService,
     public message: MessageService,
     public api: ApiService,
-    public eMessage: EoNgFeedbackMessageService,
+    public feedback: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
     private member: MemberService,
     private trace: TraceService
@@ -153,17 +153,17 @@ export class ProjectMemberComponent implements OnInit {
     const btnSelectRunning = async () => {
       const userIds = this.userCache;
       if (userIds.length === 0) {
-        this.eMessage.error($localize`Please select a member`);
+        this.feedback.error($localize`Please select a member`);
         return;
       }
 
       const [aData, aErr]: any = await this.member.addMember(userIds);
       if (aErr) {
-        this.eMessage.error($localize`Add member failed`);
+        this.feedback.error($localize`Add member failed`);
         return;
       }
       this.trace.report('project_add_member_success');
-      this.eMessage.success($localize`Add member successfully`);
+      this.feedback.success($localize`Add member successfully`);
 
       // * 关闭弹窗
       this.isInvateModalVisible = false;

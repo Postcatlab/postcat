@@ -23,7 +23,7 @@ export class EffectService {
     private lang: LanguageService,
     private web: WebService,
     private apiStore: ApiStoreService,
-    private eMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute
   ) {
     // * update title
@@ -225,7 +225,7 @@ export class EffectService {
       projectMsgs: [].concat(msg)
     });
     if (err) {
-      this.eMessage.error($localize`Create Project Failed !`);
+      this.feedback.error($localize`Create Project Failed !`);
       return [];
     }
     return data;

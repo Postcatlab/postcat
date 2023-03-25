@@ -78,7 +78,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   get editorType() {
     return this.contentType?.replace(/.*\//, '');
   }
-  constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
+  constructor(private apiTable: ApiTableService, private feedback: EoNgFeedbackMessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -131,7 +131,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.model = {};
       this.binaryFiles = [];
       if (file.size >= 5 * 1024 * 1024) {
-        this.message.error($localize`The file is too large and needs to be less than 5 MB`);
+        this.feedback.error($localize`The file is too large and needs to be less than 5 MB`);
         observer.complete();
         return;
       }
@@ -201,7 +201,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     const files = Array.from(target.files);
     const execeedSize = files.some((file: File) => {
       if (file.size >= 2 * 1024 * 1024) {
-        this.message.error($localize`The file is too large and needs to be less than 2 MB`);
+        this.feedback.error($localize`The file is too large and needs to be less than 2 MB`);
         return true;
       }
     });

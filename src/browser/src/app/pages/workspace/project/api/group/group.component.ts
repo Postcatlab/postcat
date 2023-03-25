@@ -46,7 +46,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     private effect: ApiEffectService,
     public globalStore: StoreService,
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,
     private trace: TraceService
@@ -83,7 +83,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     };
     if (params.id) {
       await this.effect.updateGroup(params);
-      this.message.success($localize`Edit Group Info successfully`);
+      this.feedback.success($localize`Edit Group Info successfully`);
       this.isSaving = false;
       this.afterSaved.emit(this.model);
       this.trace.report('save_auth_success');
@@ -170,13 +170,13 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
       this.model.name = name;
-      this.message.success($localize`Edit Group Name successfully`);
+      this.feedback.success($localize`Edit Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ ...this.model, name }]);
       if (data) {
         this.model = data;
       }
-      this.message.success($localize`Create Group successfully`);
+      this.feedback.success($localize`Create Group successfully`);
     }
 
     this.isEdit = false;
