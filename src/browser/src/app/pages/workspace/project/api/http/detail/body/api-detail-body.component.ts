@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ApiBodyType, ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiBodyType, ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { Subject } from 'rxjs';

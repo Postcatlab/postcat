@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { protocalMap, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { protocalMap, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 
 type FormatType = keyof typeof formatMap;
 

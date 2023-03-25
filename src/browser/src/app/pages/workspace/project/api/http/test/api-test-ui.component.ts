@@ -18,11 +18,8 @@ import { isEmpty, isEqual } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
-import {
-  AuthIn,
-  AuthorizationExtensionFormComponent,
-  NONE_AUTH_OPTION
-} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { AuthIn, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
@@ -47,8 +44,8 @@ import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../api.model';
 import { ProjectApiService } from '../../api.service';
+import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../constants/api.model';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
@@ -592,7 +589,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
         authInfo: {
           authInfo: {},
           authType: NONE_AUTH_OPTION.name,
-          isInherited: 0
+          isInherited: isInherited.notInherit
         },
         apiAttrInfo: {
           contentType: bodyType,

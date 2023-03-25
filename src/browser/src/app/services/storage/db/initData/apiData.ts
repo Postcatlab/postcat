@@ -1,4 +1,4 @@
-import { ApiBodyType, BodyContentType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiBodyType, BodyContentType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 
 export const genSimpleApiData = ({ projectUuid, workSpaceUuid, groupId }) => {
   return {

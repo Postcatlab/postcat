@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { BodyParam } from '../../../../../../services/storage/db/models/apiData';
-import { ApiTableConf } from '../../api.model';
+import { ApiTableConf } from '../../constants/api.model';
 import { ApiTableService } from '../../service/api-table.service';
 @Component({
   selector: 'pc-api-test-form',

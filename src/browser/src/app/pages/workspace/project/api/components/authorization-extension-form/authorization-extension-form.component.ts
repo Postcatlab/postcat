@@ -2,6 +2,13 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmi
 import { Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
+import {
+  AuthIn,
+  AuthInfo,
+  INHERIT_AUTH_OPTION,
+  isInherited,
+  NONE_AUTH_OPTION
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { MessageService } from 'pc/browser/src/app/services/message';
@@ -12,24 +19,6 @@ import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { Subject } from 'rxjs';
-
-export const NONE_AUTH_OPTION = {
-  name: 'none',
-  label: $localize`No Auth`
-};
-
-export const INHERIT_AUTH_OPTION = {
-  name: 'inherited',
-  label: $localize`Inherit auth from parent`
-};
-
-export type AuthInfo = {
-  authType: string;
-  isInherited?: 0 | 1;
-  authInfo: Record<string, any>;
-};
-
-export type AuthIn = 'group' | 'api-test' | 'api-test-history';
 
 const authInMap = {
   group: $localize`API Group`,
@@ -150,9 +139,11 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
       this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
     });
     autorun(() => {
-      if (!this.authType && this.model?.isInherited === 1) {
+      if (!this.authType && this.model?.isInherited === isInherited.inherit) {
         this.authType = INHERIT_AUTH_OPTION.name;
-      } else if (this.model?.isInherited === 0) {
+        return;
+      }
+      if (this.model?.isInherited === isInherited.notInherit) {
         this.authType = this.model?.authType;
       }
     });

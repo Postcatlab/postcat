@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
-import { Protocol, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { Protocol, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 

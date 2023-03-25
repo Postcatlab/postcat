@@ -18,11 +18,11 @@ export interface GroupCreateDto {
 export enum GroupType {
   system = 0,
   /**
-   * folder group
+   * Folder group,created by user
    */
   userCreated = 1,
   /**
-   * case/mock/api
+   * Case/mock/api, virtual group
    */
   virtual = 2
 }

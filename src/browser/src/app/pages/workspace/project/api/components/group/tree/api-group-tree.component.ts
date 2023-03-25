@@ -5,7 +5,7 @@ import { autorun, reaction } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 import { genApiGroupTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';

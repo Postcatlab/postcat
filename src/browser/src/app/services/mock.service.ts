@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { toJS } from 'mobx';
 import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
-import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { uniqueSlash } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import type { ApiData, Mock } from 'pc/browser/src/app/services/storage/db/models';

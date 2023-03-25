@@ -9,7 +9,7 @@ import {
   ApiTableConf,
   API_BODY_TYPE,
   IMPORT_MUI
-} from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';

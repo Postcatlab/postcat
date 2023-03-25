@@ -1,6 +1,11 @@
 import { formatDate } from '@angular/common';
 import { Inject, Injectable, Input, LOCALE_ID } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  JsonRootType,
+  requestMethodMap
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import {
   ApiTestResData,

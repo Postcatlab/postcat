@@ -7,7 +7,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-operate.service';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiParamsNumPipe } from 'pc/browser/src/app/pages/workspace/project/api/pipe/api-param-num.pipe';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models';

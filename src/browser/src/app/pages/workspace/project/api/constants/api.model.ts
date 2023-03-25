@@ -1,6 +1,6 @@
-import { ColumnItem, TableProSetting } from '../../../../components/eo-ui/table-pro/table-pro.model';
-import { enumsToArr, enumsToObject } from '../../../../shared/utils/index.utils';
-import { ApiTestResData } from './service/test-server/test-server.model';
+import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
+import { enumsToArr, enumsToObject } from '../../../../../shared/utils/index.utils';
+import { ApiTestResData } from '../service/test-server/test-server.model';
 /**
  * API body FormData param type
  */

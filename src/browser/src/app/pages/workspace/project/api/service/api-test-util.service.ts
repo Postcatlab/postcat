@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 
 import { ApiData } from '../../../../../services/storage/db/models';

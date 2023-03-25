@@ -1,4 +1,4 @@
-import { ApiBodyType, RequestMethod } from '../../../../pages/workspace/project/api/api.model';
+import { ApiBodyType, RequestMethod } from '../../../../pages/workspace/project/api/constants/api.model';
 
 export interface ApiData {
   id?: number;

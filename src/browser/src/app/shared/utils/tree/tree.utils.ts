@@ -1,8 +1,9 @@
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
-import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { GroupModuleType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group/group.module';
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
 import { eoDeepCopy, whatType } from '../index.utils';
@@ -192,8 +193,8 @@ export const getPureGroup = groupList => {
   return [
     ...groupList.filter(group => {
       if (!group) return;
-      const isApi = group._group?.type === 2;
-      if (isApi) return false;
+      const isGroup = group._group?.type === GroupType.userCreated;
+      if (!isGroup) return false;
       Object.assign(group, {
         title: group.name || '',
         key: group.id,
@@ -277,7 +278,8 @@ export const getSubGroupIds = (groups: Group[] = [], defaultIds = []) => {
  */
 export const parseGroupDataToViewTree = list => {
   return list.map(it => {
-    if (it.module === GroupModuleType.api) {
+    const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
+    if (isAPI) {
       return {
         ...it.relationInfo,
         id: it.relationInfo.apiUuid,

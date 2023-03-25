@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { bind } from 'lodash-es';
 import { autorun, reaction } from 'mobx';
 import { EditTabViewComponent, PreviewTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -108,6 +108,7 @@ export class ApiTabService {
     reaction(
       () => this.store.getGroupList,
       () => {
+        //check tab id is exist in groupList
         console.log(1);
       }
     );

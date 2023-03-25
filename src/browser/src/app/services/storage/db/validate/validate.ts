@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 import { safeStringify } from 'ajv/dist/compile/codegen/code';
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiData, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 
