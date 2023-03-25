@@ -60,15 +60,13 @@ export class ThirdLoginComponent implements OnInit {
   isLoginBtnBtnLoading = false;
   constructor(private api: ApiService, private web: WebService, public lang: LanguageService) {}
   ngOnInit() {
-    autorun(() => {
-      this.renderList =
-        this.lang.langHash === 'zh'
-          ? [
-              // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
-              { logo: 'github.png', label: 'Github', type: 'github' }
-            ]
-          : [];
-    });
+    this.renderList =
+      this.lang.langHash === 'zh'
+        ? [
+            // { logo: 'feishu.png', label: '飞书', type: 'feishu' },
+            { logo: 'github.png', label: 'Github', type: 'github' }
+          ]
+        : [];
   }
   logoLink(name) {
     return `url('./assets/images/${name}')`;

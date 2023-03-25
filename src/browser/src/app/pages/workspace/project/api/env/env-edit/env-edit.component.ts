@@ -126,6 +126,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
       if (!this.model) {
         const [res, err]: any = await this.getEnv(id);
         this.model = res;
+        console.log(`request finish ${this.model.name}`);
       }
     }
     this.initForm();
@@ -141,7 +142,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange() {
-    console.log(JSON.stringify(this.formatEnvData(this.model)), JSON.stringify(this.formatEnvData(this.initialModel)));
+    // console.log(JSON.stringify(this.formatEnvData(this.model)), JSON.stringify(this.formatEnvData(this.initialModel)));
     const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
     return hasChanged;
   }

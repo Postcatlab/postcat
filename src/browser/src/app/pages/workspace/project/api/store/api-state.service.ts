@@ -4,12 +4,15 @@ import { action, computed, makeObservable, observable, toJS } from 'mobx';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { genApiGroupTree, getPureGroup, hangGroupToApi } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { getPureGroup, parseGroupDataToViewTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 @Injectable({ providedIn: 'root' })
 export class ApiStoreService {
   // ? group
   @observable private rootGroup: Group;
+  /**
+   * Poject Group Tree
+   */
   @observable private groupList: Group[] = [];
 
   @observable private expandList: Array<string | number> = [];
@@ -44,16 +47,13 @@ export class ApiStoreService {
   @computed get getRootGroup() {
     return this.rootGroup;
   }
-  @computed get getApiList() {
-    return this.apiList;
-  }
   @computed get getExpandList() {
     return this.expandList;
   }
   @computed get getGroupList() {
     return this.groupList;
   }
-  @computed get getGroupTree() {
+  @computed get getFolderList() {
     return getPureGroup(
       eoDeepCopy([
         {
@@ -62,9 +62,6 @@ export class ApiStoreService {
         }
       ])
     );
-  }
-  @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList);
   }
 
   @computed get getTestHistory() {
@@ -100,7 +97,7 @@ export class ApiStoreService {
   }
 
   @action setGroupList(list = []) {
-    this.groupList = hangGroupToApi(list);
+    this.groupList = parseGroupDataToViewTree(list);
   }
 
   @action setExpandsList(expandKey: string | number) {

@@ -60,8 +60,10 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     if (!this.model) {
       this.model = {} as ApiData;
       const { uuid } = this.route.snapshot.queryParams;
+      console.log('request', uuid);
       if (uuid) {
         this.model = await this.projectApi.get(uuid);
+        console.log('requestFinish', uuid);
         this.originModel = cloneDeep(this.model);
       } else {
         console.error(`Can't no find api`);

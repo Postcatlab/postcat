@@ -1,8 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { autorun, reaction, values } from 'mobx';
-import { waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject } from 'rxjs';
 

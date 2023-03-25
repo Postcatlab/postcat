@@ -112,7 +112,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     } else {
       if (!this.model) {
         const [res, err]: any = await this.api.api_groupDetail({ id });
-        console.log('res', structuredClone(res));
         this.model = res;
       }
     }

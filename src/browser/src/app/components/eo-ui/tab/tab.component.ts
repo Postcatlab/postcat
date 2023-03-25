@@ -155,7 +155,16 @@ export class EoTabComponent implements OnInit, OnDestroy {
   getTabByID(uuid: TabItem['uuid']) {
     return this.tabStorage.tabsByID.get(uuid);
   }
-
+  /**
+   * Get Tab id by child component resource id
+   *
+   * @param uuid queryparams uuid
+   * @returns
+   */
+  getTabByParamsID(uuid: TabItem['params']['uuid']) {
+    const tabID = this.tabStorage.tabOrder.find(tabID => this.tabStorage.tabsByID.get(tabID)?.params?.uuid === uuid);
+    return this.tabStorage.tabsByID.get(tabID);
+  }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
   }

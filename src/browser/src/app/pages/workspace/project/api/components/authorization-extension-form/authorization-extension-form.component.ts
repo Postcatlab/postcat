@@ -146,7 +146,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   initAutorun() {
     autorun(() => {
       if (!this.groupInfo?.parentId) return;
-      const groupObj = new PCTree(this.store.getGroupTree);
+      const groupObj = new PCTree(this.store.getFolderList);
       this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
     });
     autorun(() => {

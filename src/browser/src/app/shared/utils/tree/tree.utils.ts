@@ -252,7 +252,23 @@ export class PCTree {
   }
   sort() {}
 }
-export const hangGroupToApi = list => {
+
+export const getSubGroupIds = (groups: Group[] = [], defaultIds = []) => {
+  return groups.reduce((prev, curr) => {
+    if (curr.children?.length) {
+      getSubGroupIds(curr.children, prev);
+    }
+    prev.push(curr.id);
+    return prev;
+  }, defaultIds);
+};
+/**
+ * Parse group data from database to view tree
+ *
+ * @param list P
+ * @returns
+ */
+export const parseGroupDataToViewTree = list => {
   return list.map(it => {
     if (it.type === 2) {
       return {
@@ -270,7 +286,7 @@ export const hangGroupToApi = list => {
     }
     return {
       ...it,
-      children: hangGroupToApi(it.children || [])
+      children: parseGroupDataToViewTree(it.children || [])
     };
   });
 };

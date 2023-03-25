@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouteReuseStrategy, DetachedRouteHandle, ActivatedRouteSnapshot } from '@angular/router';
 import { EoNgLayoutModule } from 'eo-ng-layout';
 import { EoNgTabsModule } from 'eo-ng-tabs';
 import { EoNgTreeModule } from 'eo-ng-tree';
@@ -18,12 +17,11 @@ import { ExtensionSelectModule } from '../../../../components/extension-select/e
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
 import { ProjectApiService } from './api.service';
-import { ApiGroupEditComponent } from './components/group/edit/api-group-edit.component';
 import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
 import { ApiTestUtilService } from './service/api-test-util.service';
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
+const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
   imports: [
     ExtensionSelectModule,

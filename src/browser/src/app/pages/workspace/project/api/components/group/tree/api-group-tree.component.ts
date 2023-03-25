@@ -1,18 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { autorun, reaction } from 'mobx';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { autorun, computed, reaction } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
 import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { ApiGroupEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
-import { GroupCreateDto, GroupUpdateDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { genApiGroupTree, getExpandGroupByKey, getSubGroupIds, PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ElectronService } from '../../../../../../../core/services';
@@ -50,6 +47,7 @@ export class ApiGroupTreeComponent implements OnInit {
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];
+  // apiGroupTree = [];
   apiItemsMenu = [
     {
       title: $localize`Edit`,
@@ -82,7 +80,6 @@ export class ApiGroupTreeComponent implements OnInit {
       click: inArg => this.deleteGroup(inArg.group?.origin)
     }
   ];
-
   extensionActions = [
     {
       title: $localize`:@@ImportAPI:Import API`,
@@ -118,8 +115,10 @@ export class ApiGroupTreeComponent implements OnInit {
       this.isLoading = false;
     });
     autorun(() => {
+      this.apiGroupTree = genApiGroupTree(this.store.getGroupList);
+
+      //Set expand/selecte key
       this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
-      this.apiGroupTree = this.store.getApiGroupTree;
       waitNextTick().then(() => {
         this.initSelectKeys();
       });
@@ -151,42 +150,19 @@ export class ApiGroupTreeComponent implements OnInit {
   renderRequestMethodText(node) {
     return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);
   }
-  /**
-   * Group edit modal.
-   *
-   * @param title
-   * @param group
-   */
-  groupModal(
-    title: string,
-    params: {
-      group: GroupCreateDto | GroupUpdateDto;
-      action: GroupAction;
-    }
-  ) {
-    const modal: NzModalRef = this.modalService.create({
-      nzTitle: title,
-      nzContent: ApiGroupEditComponent,
-      nzComponentParams: params,
-      nzOnOk: () => {
-        if (params.action === 'delete') {
-          const idList = [...new Set(getAllAPIId(params.group).flat(Infinity))];
-          this.tab.batchCloseTabById(idList);
-        }
-        return modal.componentInstance.submit().then(data => {
-          if (params.action !== 'new') return;
-          this.expandKeys = [...(this.expandKeys || []), modal.componentInstance.group.parentId];
-        });
-      }
-    });
-  }
   editGroup(group) {
     this.navigate2group({ uuid: group.id });
   }
   deleteGroup(group) {
-    this.groupModal($localize`Delete Group`, {
-      group,
-      action: 'delete'
+    const modelRef = this.modalService.confirm({
+      nzTitle: $localize`Deletion Confirmation?`,
+      nzContent: $localize`Are you sure you want to delete the data <strong title="${group.name}">${
+        group.name.length > 50 ? `${group.name.slice(0, 50)}...` : group.name
+      }</strong>`,
+      nzOnOk: async () => {
+        await this.effect.deleteGroup(group);
+        modelRef.destroy();
+      }
     });
   }
   addAPI(group?) {
@@ -220,7 +196,6 @@ export class ApiGroupTreeComponent implements OnInit {
   addGroup(node?) {
     const group = node?.group?.origin || this.store.getRootGroup;
     this.navigate2group({ parentId: group.id });
-    console.log('node', node);
     if (node?.group) {
       node.group.isExpanded = true;
     }

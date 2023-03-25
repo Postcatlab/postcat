@@ -85,10 +85,9 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    *
    * @param type Reset means force update apiData
    */
-  async afterTabActivated() {
+  public async afterTabActivated() {
     const id = this.route.snapshot.queryParams.uuid;
     const groupId = Number(this.route.snapshot.queryParams.groupId);
-
     if (!this.model || isEmptyObj(this.model)) {
       this.model = {} as ApiData;
       this.model = await this.apiEdit.getApi({
@@ -217,7 +216,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   getApiGroup() {
     autorun(() => {
       if (!this.store.getRootGroup) return;
-      this.groups = this.store.getGroupTree;
+      this.groups = this.store.getFolderList;
       if (!this.model.groupId) {
         this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
       }
