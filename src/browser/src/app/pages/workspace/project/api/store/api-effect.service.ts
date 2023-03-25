@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -11,7 +12,12 @@ import { ApiStoreService } from './api-state.service';
   providedIn: 'root'
 })
 export class ApiEffectService {
-  constructor(private store: ApiStoreService, private globalStore: StoreService, private api: ApiService) {}
+  constructor(
+    private store: ApiStoreService,
+    private globalStore: StoreService,
+    private api: ApiService,
+    private feedback: EoNgFeedbackMessageService
+  ) {}
   async deleteMock(id) {
     // * delete mock
     const [, err] = await this.api.api_mockDelete({
@@ -53,11 +59,11 @@ export class ApiEffectService {
       ids: this.store.getTestHistory.map(it => it.id)
     });
     if (err) {
+      this.feedback.error($localize`Delete history failed`);
       return;
     }
     this.store.setHistory([]);
   }
-
   //? Group
   async getGroupList(params = {}) {
     // * get group list data

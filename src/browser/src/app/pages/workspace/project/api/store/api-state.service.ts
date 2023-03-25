@@ -17,9 +17,6 @@ export class ApiStoreService {
 
   @observable private expandList: Array<string | number> = [];
 
-  //? api
-  @observable private apiList = [];
-
   // ? history
   @observable private testHistory = [];
 
@@ -72,7 +69,6 @@ export class ApiStoreService {
     pcConsole.log('init ApiStoreService');
     makeObservable(this); // don't forget to add this if the class has observable fields
   }
-
   // * actions
   // ? history
   @action setHistory(data = []) {
@@ -86,10 +82,6 @@ export class ApiStoreService {
   // ? group
   @action setRootGroup(group: Group) {
     this.rootGroup = group;
-  }
-
-  @action setApiList(list = []) {
-    this.apiList = list;
   }
 
   @action addApiSuccess(groupId: string | number) {

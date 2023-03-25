@@ -1,16 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  OnDestroy,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  ViewChildren,
-  TemplateRef,
-  QueryList,
-  HostListener
-} from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -79,6 +67,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     private trace: TraceService
   ) {
     this.initBasicForm();
+    //Get group list
+    autorun(() => {
+      if (!this.store.getRootGroup) return;
+      this.groups = this.store.getFolderList;
+    });
   }
   /**
    * Init Api Data
@@ -98,8 +91,8 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
     //* Rest need generate from url from initial model
     this.resetRestFromUrl(this.model.uri);
+    this.setGroupInfo();
 
-    this.getApiGroup();
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
@@ -131,11 +124,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
   async beforeTabClose() {
-    await this.saveApi();
+    await this.saveAPI();
   }
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])
   @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
-  async saveApi($event?, ux = 'ui') {
+  async saveAPI($event?, ux = 'ui') {
     $event?.preventDefault?.();
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
@@ -148,34 +141,37 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       return;
     }
     this.isSaving = true;
-    let formData: ApiData = this.model;
-    const busEvent = formData.apiUuid ? 'editApi' : 'addApi';
-    const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
-    formData = this.apiEditUtil.formatUIApiDataToStorage(formData);
-    const [result, err] = await (busEvent === 'editApi' ? this.apiEdit.editApi(formData) : this.apiEdit.addApi(formData));
+    let formData: ApiData = this.apiEditUtil.formatUIApiDataToStorage(this.model);
+    await (formData.apiUuid ? this.editAPI(formData, ux) : this.addAPI(formData, ux));
     this.isSaving = false;
+  }
+  async addAPI(formData, ux) {
+    const [result, err] = await this.apiEdit.addApi(formData);
     if (err) {
-      this.message.error($localize`Failed Operation`);
+      this.message.error($localize`Added Operation`);
       return;
     }
-    // Add success
-    this.message.success(title);
-    if (this.route.snapshot.queryParams.groupId) {
-      this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
-    }
-
-    if (busEvent === 'addApi') {
-      this.trace.report('add_api_document_success', {
-        trigger_way: ux,
-        workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
-        param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
-      });
-      this.router.navigate(['/home/workspace/project/api/http/detail'], {
-        queryParams: {
-          pageID: Number(this.route.snapshot.queryParams.pageID),
-          uuid: result?.apiUuid
-        }
-      });
+    this.message.success($localize`Added successfully`);
+    this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
+    this.trace.report('add_api_document_success', {
+      trigger_way: ux,
+      workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
+      param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
+    });
+    this.router.navigate(['/home/workspace/project/api/http/detail'], {
+      queryParams: {
+        pageID: Number(this.route.snapshot.queryParams.pageID),
+        uuid: result?.apiUuid
+      }
+    });
+    this.afterSaved.emit(this.model);
+    this.effect.getGroupList();
+  }
+  async editAPI(formData, ux) {
+    const [result, err] = await this.apiEdit.editApi(formData);
+    if (err) {
+      this.message.error($localize`Edited Operation`);
+      return;
     }
     this.afterSaved.emit(this.model);
     this.effect.getGroupList();
@@ -213,24 +209,29 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     //Need On push reset params
     this.model.requestParams.restParams = [...generateRestFromUrl(url, this.model.requestParams.restParams)];
   }
-  getApiGroup() {
-    autorun(() => {
-      if (!this.store.getRootGroup) return;
-      this.groups = this.store.getFolderList;
-      if (!this.model.groupId) {
-        this.model.groupId = this.model.groupId || this.store.getRootGroup.id;
-      }
+  /**
+   *
+   * Get valid group id
+   *
+   * @returns valid group id
+   */
+  getValidGroupID() {
+    //Default root group id
+    if (!this.model.groupId) {
+      return this.store.getRootGroup.id;
+    }
 
-      /**
-       * If group has be deleted,reset to root group
-       */
-      const groupObj = new PCTree(this.groups);
-      const existGroup = groupObj.findGroupByID(this.model.groupId);
-      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
-      if (!existGroup) {
-        this.model.groupId = this.store.getRootGroup.id;
-      }
-    });
+    //If group has be deleted,reset to root group
+    const groupObj = new PCTree(this.groups);
+    const existGroup = groupObj.findGroupByID(this.model.groupId);
+    if (!existGroup) {
+      return this.store.getRootGroup.id;
+    }
+  }
+  setGroupInfo() {
+    if (!this.store.getRootGroup) return;
+    this.model.groupId = this.getValidGroupID();
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
   /**
    * Init basic form,such as url,method

@@ -272,7 +272,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
    */
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])
   @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
-  saveApi($event?, ux = 'ui') {
+  saveAPI($event?, ux = 'ui') {
     $event?.preventDefault?.();
     if (!this.checkForm()) {
       return;
