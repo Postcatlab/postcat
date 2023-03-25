@@ -169,8 +169,8 @@ export class GroupService extends BaseService<Group> {
 
   async bulkRead(params) {
     const result = await this.baseService.bulkRead(params);
+    //! Warning  case/mock/group id may dupublicate in local
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
-
     const genGroupTree = (groups: Group[], paranId) => {
       const apiFilters = apiDataList.filter(n => n.groupId === paranId);
       const groupFilters = groups.filter(n => n.parentId === paranId);
@@ -191,9 +191,8 @@ export class GroupService extends BaseService<Group> {
         .sort((a, b) => a.sort - b.sort);
     };
     const rootGroup = result.data?.find(n => n.depth === 0);
-    rootGroup['children'] = genGroupTree(result.data, rootGroup?.id);
+    rootGroup.children = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
-    // console.log('result', result);
     return result;
   }
 

@@ -445,7 +445,7 @@ export class TabOperateService {
     return result;
   }
   private updateChildView() {
-    this.messageService.send({ type: 'tabContentInit', data: { uuid: this.getCurrentTab().uuid } });
+    this.messageService.send({ type: 'tabContentInit', data: { uuid: this.getCurrentTab()?.uuid } });
   }
   /**
    * Get valid tab item
@@ -463,7 +463,7 @@ export class TabOperateService {
       if (!tabItem) {
         return false;
       }
-      const validTab = this.BASIC_TABS.find(val => val.id === tabItem.id);
+      const validTab = this.BASIC_TABS.find(val => val.uniqueName === tabItem.uniqueName);
       if (!validTab) {
         delete cache.tabsByID[id];
       } else {

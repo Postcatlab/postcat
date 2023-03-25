@@ -15,7 +15,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEmpty, isEqual } from 'lodash-es';
-import { reaction } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
@@ -36,11 +36,10 @@ import {
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ApiData, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
-import { interval, Subscription, Subject, fromEvent } from 'rxjs';
+import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
@@ -109,6 +108,8 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
 
+  currentEnv;
+  private reactions = [];
   get uuid() {
     return this.route.snapshot.queryParams.uuid;
   }
@@ -131,7 +132,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
 
   constructor(
     private globalStore: StoreService,
-    public store: ApiStoreService,
+    private store: ApiStoreService,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
@@ -153,6 +154,17 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
       this.changeStatus(status);
     });
+    this.reactions.push(
+      reaction(
+        () => this.store.getCurrentEnv,
+        value => {
+          this.currentEnv = this.store.getCurrentEnv;
+        },
+        {
+          fireImmediately: true
+        }
+      )
+    );
   }
 
   ngAfterViewInit() {
@@ -414,6 +426,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();
+    this.reactions.forEach(dispose => dispose());
   }
   private checkForm(): boolean {
     for (const i in this.validateForm.controls) {

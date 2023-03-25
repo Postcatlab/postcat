@@ -4,7 +4,7 @@ import { action, computed, makeObservable, observable, toJS } from 'mobx';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { getPureGroup, parseGroupDataToViewTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { getPureGroup } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 @Injectable({ providedIn: 'root' })
 export class ApiStoreService {
@@ -89,7 +89,7 @@ export class ApiStoreService {
   }
 
   @action setGroupList(list = []) {
-    this.groupList = parseGroupDataToViewTree(list);
+    this.groupList = list;
   }
 
   @action setExpandsList(expandKey: string | number) {

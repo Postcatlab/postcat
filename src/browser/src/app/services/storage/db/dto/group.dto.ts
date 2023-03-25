@@ -16,6 +16,9 @@ export interface GroupCreateDto {
   workSpaceUuid?: string;
 }
 export enum GroupType {
+  /**
+   * System default group,such as root group
+   */
   system = 0,
   /**
    * Folder group,created by user

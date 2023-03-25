@@ -62,7 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'group',
-        loadChildren: () => import('./group/group.module').then(m => m.GroupModule)
+        loadChildren: () => import('./group-edit/group.module').then(m => m.GroupModule)
       }
       // {
       //   path: 'grpc',

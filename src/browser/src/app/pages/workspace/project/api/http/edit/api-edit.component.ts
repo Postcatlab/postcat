@@ -13,10 +13,9 @@ import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { getExpandGroupByKey, PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
-import { eoDeepCopy, isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../shared/utils/index.utils';
+import { isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../shared/utils/index.utils';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
@@ -71,6 +70,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     autorun(() => {
       if (!this.store.getRootGroup) return;
       this.groups = this.store.getFolderList;
+      this.setGroupInfo();
     });
   }
   /**
@@ -186,12 +186,12 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    // console.log(
-    //   'api edit origin:',
-    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiEditUtil.formatEditingApiData(this.getFormdata())
-    // );
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.model)
+    );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
     // console.log(`\n\n${originText}\n\n${afterText}`);
@@ -223,14 +223,18 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
     //If group has be deleted,reset to root group
     const groupObj = new PCTree(this.groups);
-    const existGroup = groupObj.findGroupByID(this.model.groupId);
+    const existGroup = groupObj.findTreeNodeByID(this.model.groupId);
     if (!existGroup) {
       return this.store.getRootGroup.id;
     }
+    return this.model.groupId;
   }
   setGroupInfo() {
     if (!this.store.getRootGroup) return;
     this.model.groupId = this.getValidGroupID();
+    this.validateForm.patchValue({
+      groupId: this.model.groupId
+    });
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
   }
   /**
@@ -254,7 +258,14 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     this.validateForm.valueChanges.subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       Promise.resolve().then(() => {
-        Object.assign(this.model, x);
+        //Reset model
+        Object.assign(this.model, {
+          uri: x.uri,
+          name: x.name,
+          groupId: x.groupId
+        });
+        this.model.apiAttrInfo.requestMethod = x.requestMethod;
+
         this.emitChangeFun();
       });
     });

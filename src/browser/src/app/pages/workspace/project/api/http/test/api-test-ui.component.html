@@ -8,15 +8,15 @@
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <div
-          *ngIf="store.getCurrentEnv.hostUri"
+          *ngIf="currentEnv.hostUri"
           nz-typography
           nzEllipsis
           class="env-front-uri"
-          nzTooltipTitle="{{ store.getCurrentEnv.hostUri }}"
+          nzTooltipTitle="{{ currentEnv.hostUri }}"
           nzTooltipPlacement="bottom"
           eoNgFeedbackTooltip
         >
-          {{ store.getCurrentEnv.hostUri }}
+          {{ currentEnv.hostUri }}
         </div>
         <nz-form-item nz-col class="flex-1">
           <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">

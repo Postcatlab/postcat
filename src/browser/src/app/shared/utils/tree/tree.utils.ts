@@ -1,8 +1,8 @@
+import { flatten, map, union } from 'lodash';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group/group.module';
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
@@ -83,16 +83,6 @@ export const filterTableData = (
   opts.childKey = opts.childKey || 'childList';
   opts.omitBy = opts.omitBy || ['eoKey'];
   const result = inData.map(val => omitDeep(val, opts.omitBy));
-  //Omit useless fieild
-  // const result = JSON.parse(
-  //   JSON.stringify(inData, (key, value) => {
-  //     if (typeof key === 'string' && opts.omitBy.includes(key)) {
-  //       return undefined;
-  //     } else {
-  //       return value;
-  //     }
-  //   })
-  // );
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
       pcConsole.error('filterTableData need primaryKey');
@@ -104,13 +94,13 @@ export const filterTableData = (
     childKey: opts.childKey
   });
 };
-export const flatData = data => {
+export const flatTree = trees => {
   // * DFS
   const arr = [];
-  data.forEach(item => {
-    const loop = ({ childList = [], ...it }) => {
+  trees.forEach(item => {
+    const loop = ({ children = [], ...it }) => {
       arr.push(it);
-      childList.forEach(x => loop(x));
+      children?.forEach(x => loop(x));
     };
     loop(item);
   });
@@ -168,7 +158,36 @@ export const fieldTypeMap = new Map<number, any>([
   [ApiParamsType.null, null],
   [ApiParamsType.string, 'default_value']
 ]);
-
+/**
+ * Parse group data from database to view tree
+ *
+ * @param list P
+ * @returns
+ */
+export const parseGroupDataToViewTree = list => {
+  return list.map(it => {
+    const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
+    if (isAPI) {
+      return {
+        ...it.relationInfo,
+        id: it.relationInfo?.apiUuid,
+        isLeaf: true,
+        parentId: it.parentId,
+        type: it.type,
+        module: it.module,
+        _group: {
+          id: it.id,
+          parentId: it.parentId,
+          sort: it.sort
+        }
+      };
+    }
+    return {
+      ...it,
+      children: parseGroupDataToViewTree(it.children || [])
+    };
+  });
+};
 /**
  * Generate Group for tree view
  *
@@ -176,9 +195,10 @@ export const fieldTypeMap = new Map<number, any>([
  * @param groupId
  * @returns
  */
-export const genApiGroupTree = (apiGroups: Group[] = []) => {
+export const genApiGroupTree = (groups: Group[] = []) => {
+  groups = parseGroupDataToViewTree(groups);
   return [
-    ...apiGroups.map(group => ({
+    ...groups.map(group => ({
       ...group,
       title: group.name || '',
       key: group.id,
@@ -193,7 +213,7 @@ export const getPureGroup = groupList => {
   return [
     ...groupList.filter(group => {
       if (!group) return;
-      const isGroup = group._group?.type === GroupType.userCreated;
+      const isGroup = group?.type !== GroupType.virtual;
       if (!isGroup) return false;
       Object.assign(group, {
         title: group.name || '',
@@ -203,6 +223,19 @@ export const getPureGroup = groupList => {
       return true;
     })
   ];
+};
+
+const loopFindTreeID = (list, id): Group => {
+  let result;
+  list.find(group => {
+    if (group.id === id) {
+      return (result = group);
+    }
+    if (group.children) {
+      return (result = loopFindTreeID(group.children, id));
+    }
+  });
+  return result;
 };
 export class PCTree {
   private list: Group[];
@@ -214,28 +247,10 @@ export class PCTree {
   getList() {
     return this.list;
   }
-  findGroupByID(id): Group {
-    return this.loopFindGroupByID(this.list, id);
+  findTreeNodeByID(id): Group {
+    return loopFindTreeID(this.list, id);
   }
-  checkGroupStatus(ids) {
-    const result = [];
-    // this.list.forEach(group => {
-    //   if (ids.includes(group.id)) {
-    //   }
-    // });
-  }
-  private loopFindGroupByID(list, id): Group {
-    let result;
-    list.find(group => {
-      if (group.id === id) {
-        return (result = group);
-      }
-      if (group.children) {
-        return (result = this.loopFindGroupByID(group.children, id));
-      }
-    });
-    return result;
-  }
+
   add(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;
     if (isRootDir) {
@@ -243,16 +258,16 @@ export class PCTree {
       return;
     }
 
-    const parent = this.findGroupByID(group.parentId);
+    const parent = this.findTreeNodeByID(group.parentId);
     parent?.children.push(group);
   }
   update(group: Group) {
-    const origin = this.findGroupByID(group.id);
+    const origin = this.findTreeNodeByID(group.id);
     Object.assign(origin, group);
   }
   delete(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;
-    const list = isRootDir ? this.list : this.findGroupByID(group.parentId).children;
+    const list = isRootDir ? this.list : this.findTreeNodeByID(group.parentId).children;
     list.splice(
       list.findIndex(val => val.id === group.id),
       1
@@ -269,33 +284,4 @@ export const getSubGroupIds = (groups: Group[] = [], defaultIds = []) => {
     prev.push(curr.id);
     return prev;
   }, defaultIds);
-};
-/**
- * Parse group data from database to view tree
- *
- * @param list P
- * @returns
- */
-export const parseGroupDataToViewTree = list => {
-  return list.map(it => {
-    const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
-    if (isAPI) {
-      return {
-        ...it.relationInfo,
-        id: it.relationInfo.apiUuid,
-        isLeaf: true,
-        parentId: it.parentId,
-        _group: {
-          id: it.id,
-          type: it.type,
-          parentId: it.parentId,
-          sort: it.sort
-        }
-      };
-    }
-    return {
-      ...it,
-      children: parseGroupDataToViewTree(it.children || [])
-    };
-  });
 };

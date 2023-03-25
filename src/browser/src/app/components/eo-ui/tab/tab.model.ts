@@ -66,7 +66,7 @@ export type TabItem = {
   /**
    * Unique id,used for identify content
    */
-  id: string;
+  uniqueName: string;
   /**
    * If the tab is fixed, it will not be replaced by other tab
    *

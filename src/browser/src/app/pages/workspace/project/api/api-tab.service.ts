@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { bind } from 'lodash-es';
-import { autorun, reaction } from 'mobx';
-import { EditTabViewComponent, PreviewTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { autorun, reaction, toJS } from 'mobx';
+import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { flatTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { debounceTime, Subject } from 'rxjs';
 
@@ -30,16 +31,16 @@ export class ApiTabService {
   SHARE_TABS: Array<Partial<TabItem>> = [
     {
       pathname: '/share/http/test',
-      id: 'share-api-test',
+      uniqueName: 'share-api-test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
-    { pathname: '/share/http/detail', id: 'share-api-detail', type: 'preview', title: $localize`Preview` },
-    { pathname: '/share/group/edit', id: 'share-group-edit', type: 'preview', title: $localize`Preview` },
+    { pathname: '/share/http/detail', uniqueName: 'share-api-detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/share/group/edit', uniqueName: 'share-group-edit', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/share/ws/test',
-      id: 'share-api-test',
+      uniqueName: 'share-api-test',
       isFixed: true,
       type: 'preview',
       extends: { method: 'WS' },
@@ -49,36 +50,43 @@ export class ApiTabService {
   API_TABS: Array<Partial<TabItem>> = [
     {
       pathname: '/home/workspace/project/api/http/test',
-      id: 'api-http-test',
+      uniqueName: 'api-http-test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
     {
       pathname: '/home/workspace/project/api/env/edit',
-      id: 'project-env',
+      uniqueName: 'project-env',
       type: 'edit',
       icon: 'application',
       title: $localize`New Environment`
     },
     {
       pathname: '/home/workspace/project/api/group/edit',
-      id: 'project-group',
+      uniqueName: 'project-group',
       type: 'edit',
       icon: 'folder-close',
       title: $localize`:@@AddGroup:New Group`
     },
-    { pathname: '/home/workspace/project/api/http/edit', id: 'api-http-edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/workspace/project/api/http/detail', id: 'api-http-detail', type: 'preview', title: $localize`Preview` },
+    {
+      pathname: '/home/workspace/project/api/http/edit',
+      uniqueName: 'api-http-edit',
+      isFixed: true,
+      type: 'edit',
+      title: $localize`New API`
+    },
+    { pathname: '/home/workspace/project/api/http/detail', uniqueName: 'api-http-detail', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/home/workspace/project/api/ws/test',
-      id: 'api-ws-test',
+      uniqueName: 'api-ws-test',
       isFixed: true,
       type: 'edit',
       extends: { method: 'WS' },
       title: $localize`New Websocket`
     },
-    { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'edit', title: 'Mock', isFixed: true }
+    { pathname: '/home/workspace/project/api/http/case', uniqueName: 'api-http-case', type: 'edit', title: 'Case', isFixed: true },
+    { pathname: '/home/workspace/project/api/http/mock', uniqueName: 'api-http-mock', type: 'edit', title: 'Mock', isFixed: true }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
   constructor(
@@ -105,11 +113,62 @@ export class ApiTabService {
    * @param inArg
    */
   closeTabAfterResourceRemove() {
+    const checkTabIsExist = (groups, tab: TabItem) => {
+      const isExist = groups.some(group => {
+        //TODO check group.id is same as resource id
+        if (!tab.params.uuid || tab.params.uuid !== group.id.toString()) return false;
+
+        if (group.type === GroupType.userCreated && tab.uniqueName === 'project-group') {
+          return true;
+        }
+        if (group.module === GroupModuleType.api && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
+          return true;
+        }
+        if (group.module === GroupModuleType.case && tab.uniqueName === 'api-http-case') {
+          return true;
+        }
+        if (group.module === GroupModuleType.mock && tab.uniqueName === 'api-http-mock') {
+          return true;
+        }
+        return false;
+      });
+      return isExist;
+    };
+
+    //Delete group/api/case/mock
     reaction(
       () => this.store.getGroupList,
-      () => {
-        //check tab id is exist in groupList
-        console.log(1);
+      (value, previousValue) => {
+        //TODO use event to handle closeTab
+        const currentFlatTree = flatTree(value);
+        const previousFlatTres = flatTree(previousValue);
+        const hasDeleted = currentFlatTree.length < previousFlatTres.length;
+        if (!hasDeleted) return;
+
+        //Close them
+        const closeTabIDs = this.apiTabComponent
+          .getTabs()
+          .filter((tab: TabItem) => !checkTabIsExist(currentFlatTree, tab))
+          .map(val => val.uuid);
+        this.apiTabComponent.batchCloseTab(closeTabIDs);
+      }
+    );
+
+    //Delete env
+    reaction(
+      () => this.store.getEnvList,
+      (value, previousValue) => {
+        const hasDeleted = value.length < previousValue.length;
+        if (!hasDeleted) return;
+
+        const closeTabIDs = this.apiTabComponent
+          .getTabs()
+          .filter(
+            (tab: TabItem) =>
+              tab.params?.uuid && value.every(env => env.id.toString() !== tab.params.uuid) && tab.uniqueName === 'project-env'
+          )
+          .map(val => val.uuid);
+        this.apiTabComponent.batchCloseTab(closeTabIDs);
       }
     );
   }
@@ -140,7 +199,9 @@ export class ApiTabService {
       emit: model => {
         //Current is current selected tab
         const currentTab = this.apiTabComponent.getCurrentTab();
-        const modelID: number = model.uuid || model.id;
+
+        //resourceID
+        const modelID: number = model.apiUuid || model.uuid || model.id;
 
         //1. The currently active tab is not the one that initiated the request
         //2. the request response is not what the current active tab needs
@@ -156,11 +217,14 @@ export class ApiTabService {
             previous tab:${model.name}
             current tab:${currentTab.title}`
         );
+
         //* When data inconsistent, we need to manually reset the model from cache
-        if (!currentTab.isLoading) {
+        const hasCache = !!currentTab?.content?.[currentTab.uniqueName];
+        if (!currentTab.isLoading && hasCache) {
           //If the current tab is not the one that initiated the request, we need to restore the data from the cache
           this.afterTabActivated(currentTab);
         }
+
         const actuallyID = this.apiTabComponent.getTabByParamsID(modelID.toString())?.uuid || bindTabID;
         this.afterTabContentChanged({ when: 'activated', currentTabID: actuallyID, model });
       }
@@ -200,17 +264,24 @@ export class ApiTabService {
     }
     this.componentRef.beforeTabClose();
   }
+  getCurrentTabCache(currentTab: TabItem) {
+    const contentID = currentTab.uniqueName;
+    //Get tab from cache
+    return {
+      hasCache: !!currentTab?.content?.[contentID],
+      model: currentTab?.content?.[contentID] || null,
+      initialModel: currentTab?.baseContent?.[contentID] || null
+    };
+  }
   /**
    * Call tab component  afterTabActivated
    *
    * @param currentTab
    */
   afterTabActivated(currentTab: TabItem) {
-    const contentID = currentTab.id;
-    //Get tab from cache
-    const hasCache = currentTab?.content?.[contentID];
-    this.componentRef.model = currentTab?.content?.[contentID] || null;
-    this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
+    const cacheResult = this.getCurrentTabCache(currentTab);
+    this.componentRef.model = cacheResult.model;
+    this.componentRef.initialModel = cacheResult.initialModel;
 
     this.componentRef.afterTabActivated();
   }
@@ -287,11 +358,11 @@ export class ApiTabService {
     return result;
   }
 
-  updateTab(currentTab, inData: TabEvent) {
+  updateTab(currentTab: TabItem, inData: TabEvent) {
     const model = inData.model;
     if (!model || isEmptyObj(model)) return;
 
-    const contentID = currentTab.id;
+    const contentID = currentTab.uniqueName;
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
@@ -309,7 +380,7 @@ export class ApiTabService {
       switch (inData.when) {
         case 'editing': {
           // Saved APIs do not need to verify changes
-          if (currentTab.module !== 'test' || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
+          if (!currentTab.uniqueName.includes('test') || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
             //Set hasChange
             if (!this.componentRef?.isFormChange) {
               throw new Error(
@@ -335,8 +406,8 @@ export class ApiTabService {
 
       // Editiable tab  share hasChanged data
       if (!currentHasChanged && currentTab.extends?.hasChanged) {
-        const otherEditableTabs = this.BASIC_TABS.filter(val => val.type === 'edit' && val.id !== contentID);
-        currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.id]);
+        const otherEditableTabs = this.BASIC_TABS.filter(val => val.type === 'edit' && val.uniqueName !== contentID);
+        currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.uniqueName]);
       }
       replaceTab.hasChanged = currentHasChanged;
 

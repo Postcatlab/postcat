@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { reaction } from 'mobx';
@@ -16,7 +16,7 @@ import { ProjectApiService } from '../../api.service';
   templateUrl: './api-detail.component.html',
   styleUrls: ['./api-detail.component.scss']
 })
-export class ApiDetailComponent implements PreviewTabViewComponent {
+export class ApiDetailComponent implements PreviewTabViewComponent, OnDestroy {
   @Input() model: ApiData | any;
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
@@ -24,6 +24,7 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     BODY_TYPE: enumsToObject(ApiBodyType)
   };
   url: string = '';
+  private reactions = [];
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
@@ -37,11 +38,13 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     this.watchEnvChange();
   }
   watchEnvChange() {
-    reaction(
-      () => this.store.getCurrentEnv,
-      (env: any) => {
-        this.url = this.getEnvUrl(this.model.uri);
-      }
+    this.reactions.push(
+      reaction(
+        () => this.store.getCurrentEnv,
+        (env: any) => {
+          this.url = this.getEnvUrl(this.model.uri);
+        }
+      )
     );
   }
   private getEnvUrl(url) {
@@ -60,10 +63,8 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     if (!this.model) {
       this.model = {} as ApiData;
       const { uuid } = this.route.snapshot.queryParams;
-      console.log('request', uuid);
       if (uuid) {
         this.model = await this.projectApi.get(uuid);
-        console.log('requestFinish', uuid);
         this.originModel = cloneDeep(this.model);
       } else {
         console.error(`Can't no find api`);
@@ -72,5 +73,8 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
 
     this.url = this.getEnvUrl(this.model.uri);
     this.eoOnInit.emit(this.model);
+  }
+  ngOnDestroy(): void {
+    this.reactions.forEach(val => val());
   }
 }

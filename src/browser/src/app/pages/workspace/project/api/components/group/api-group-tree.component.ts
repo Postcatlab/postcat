@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction } from 'mobx';
@@ -8,13 +8,13 @@ import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { genApiGroupTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { genApiGroupTree as genComponentTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 
-import { ElectronService } from '../../../../../../../core/services';
-import { ProjectApiService } from '../../../api.service';
-import { ApiEffectService } from '../../../store/api-effect.service';
-import { ApiStoreService } from '../../../store/api-state.service';
+import { ElectronService } from '../../../../../../core/services';
+import { ProjectApiService } from '../../api.service';
+import { ApiEffectService } from '../../store/api-effect.service';
+import { ApiStoreService } from '../../store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
@@ -29,7 +29,7 @@ const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllA
   templateUrl: './api-group-tree.component.html',
   styleUrls: ['./api-group-tree.component.scss']
 })
-export class ApiGroupTreeComponent implements OnInit {
+export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeComponent;
   /**
    * Expanded keys of tree.
@@ -93,7 +93,7 @@ export class ApiGroupTreeComponent implements OnInit {
       click: title => this.importAPI('sync', title)
     }
   ];
-
+  private reactions = [];
   constructor(
     public electron: ElectronService,
     public globalStore: StoreService,
@@ -112,20 +112,24 @@ export class ApiGroupTreeComponent implements OnInit {
     this.effect.getGroupList().then(() => {
       this.isLoading = false;
     });
-    autorun(() => {
-      this.apiGroupTree = genApiGroupTree(this.store.getGroupList);
+    this.reactions.push(
+      autorun(() => {
+        this.apiGroupTree = genComponentTree(this.store.getGroupList);
 
-      //Set expand/selecte key
-      this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
-      waitNextTick().then(() => {
-        this.initSelectKeys();
-      });
-    });
-    reaction(
-      () => this.globalStore.getUrl,
-      () => {
-        this.initSelectKeys();
-      }
+        //Set expand/selecte key
+        this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
+        waitNextTick().then(() => {
+          this.initSelectKeys();
+        });
+      })
+    );
+    this.reactions.push(
+      reaction(
+        () => this.globalStore.getUrl,
+        () => {
+          this.initSelectKeys();
+        }
+      )
     );
   }
   initSelectKeys() {
@@ -254,7 +258,7 @@ export class ApiGroupTreeComponent implements OnInit {
       dragNode.isLeaf
         ? {
             id: node._group.id,
-            type: node._group.type,
+            type: node.type,
             sort,
             //@ts-ignore
             parentId: parentNode?.key || this.store.getRootGroup.id
@@ -307,5 +311,8 @@ export class ApiGroupTreeComponent implements OnInit {
         pageID: Date.now().toString()
       }
     });
+  }
+  ngOnDestroy(): void {
+    this.reactions.forEach(reaction => reaction());
   }
 }
