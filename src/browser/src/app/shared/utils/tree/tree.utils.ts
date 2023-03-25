@@ -1,9 +1,9 @@
-import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
-import { ApiParamsType, ApiParamsTypeByNumber } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { Group, ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { GroupModuleType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
 import { eoDeepCopy, whatType } from '../index.utils';
 
@@ -216,6 +216,13 @@ export class PCTree {
   findGroupByID(id): Group {
     return this.loopFindGroupByID(this.list, id);
   }
+  checkGroupStatus(ids) {
+    const result = [];
+    // this.list.forEach(group => {
+    //   if (ids.includes(group.id)) {
+    //   }
+    // });
+  }
   private loopFindGroupByID(list, id): Group {
     let result;
     list.find(group => {
@@ -270,7 +277,7 @@ export const getSubGroupIds = (groups: Group[] = [], defaultIds = []) => {
  */
 export const parseGroupDataToViewTree = list => {
   return list.map(it => {
-    if (it.type === 2) {
+    if (it.module === GroupModuleType.api) {
       return {
         ...it.relationInfo,
         id: it.relationInfo.apiUuid,

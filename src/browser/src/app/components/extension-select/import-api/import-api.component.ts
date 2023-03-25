@@ -123,7 +123,6 @@ export class ImportApiComponent implements OnInit {
       }
 
       try {
-        console.log('content', content);
         data.collections = parseAndCheckCollections(data.collections);
         data.environmentList = data.environmentList.filter(n => {
           const { validate, data } = parseAndCheckEnv(n);

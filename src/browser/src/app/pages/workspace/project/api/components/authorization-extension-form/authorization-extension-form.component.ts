@@ -4,14 +4,14 @@ import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/services/message';
+import { MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export const NONE_AUTH_OPTION = {
   name: 'none',

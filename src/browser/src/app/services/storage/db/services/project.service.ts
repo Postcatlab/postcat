@@ -7,8 +7,7 @@ import {
   ProjectDeleteDto,
   ProjectUpdateDto,
   ImportProjectDto,
-  Collection,
-  CollectionTypeEnum
+  Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
 import { Group, Project } from 'pc/browser/src/app/services/storage/db/models';
@@ -45,7 +44,8 @@ export class ProjectService extends BaseService<Project> {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
     const promises = collections.map(async (item, sort) => {
-      if (item.collectionType === CollectionTypeEnum.GROUP) {
+      const isAPI = !!item.uri;
+      if (!isAPI) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
           depth: depth + 1,
@@ -67,31 +67,32 @@ export class ProjectService extends BaseService<Project> {
             await this.deepIncreUpdateGroup(item.children, group);
           }
         }
-      } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
-        const { data: apiData } = await this.apiDataService.read({
+        return;
+      }
+
+      const { data: apiData } = await this.apiDataService.read({
+        projectUuid,
+        uri: item.uri,
+        'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
+      });
+      if (apiData) {
+        // @ts-ignore
+        await this.apiDataTable.update(apiData.id, {
+          ...apiData,
+          ...item,
+          sort,
+          groupId: parentId,
           projectUuid,
-          uri: item.uri,
-          'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
+          workSpaceUuid
         });
-        if (apiData) {
-          // @ts-ignore
-          await this.apiDataTable.update(apiData.id, {
-            ...apiData,
-            ...item,
-            sort,
-            groupId: parentId,
-            projectUuid,
-            workSpaceUuid
-          });
-        } else {
-          await this.apiDataTable.add({
-            ...item,
-            sort,
-            groupId: parentId,
-            projectUuid,
-            workSpaceUuid
-          });
-        }
+      } else {
+        await this.apiDataTable.add({
+          ...item,
+          sort,
+          groupId: parentId,
+          projectUuid,
+          workSpaceUuid
+        });
       }
     });
     await Promise.all(promises);
@@ -199,11 +200,9 @@ export class ProjectService extends BaseService<Project> {
       return arr.map(item => {
         if (item.type === 2) {
           return {
-            ...item.relationInfo,
-            collectionType: CollectionTypeEnum.API_DATA
+            ...item.relationInfo
           };
         } else {
-          item.collectionType = CollectionTypeEnum.GROUP;
           // ...
           if (item.children?.length) {
             item.children = formatTree(item.children);
@@ -317,12 +316,13 @@ export class ProjectService extends BaseService<Project> {
       .group((item, index) => {
         // 排序号根据原始数组索引来
         item.sort = index;
-        if (item.collectionType === CollectionTypeEnum.GROUP) {
+        const isAPI = item.uri;
+        if (!isAPI) {
           return 'groupList';
-        } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
+        } else if (isAPI) {
           return 'apiDataList';
         } else {
-          return '垃圾数据分类';
+          return 'uselessData';
         }
       });
     return { groupList, apiDataList };
