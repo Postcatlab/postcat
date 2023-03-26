@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
-import { MessageService } from '../../../../services/message';
 import { ApiService } from '../../../../services/storage/api.service';
 import { ApiData } from '../../../../services/storage/db/models/apiData';
 import { StoreService } from '../../../../store/state.service';
@@ -12,7 +11,6 @@ import { ApiEffectService } from './store/api-effect.service';
 export class ProjectApiService {
   constructor(
     private message: EoNgFeedbackMessageService,
-    private messageService: MessageService,
     private router: Router,
     private effect: ApiEffectService,
     private api: ApiService,
@@ -73,7 +71,6 @@ export class ProjectApiService {
       this.message.error($localize`Delete API failed`);
       return;
     }
-    this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: [apiUuid] } });
     this.message.success($localize`Deleted API Successfully`);
     this.effect.getGroupList();
   }

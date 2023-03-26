@@ -4,7 +4,6 @@ import { autorun, reaction, values } from 'mobx';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { filter, Subject } from 'rxjs';
 
-import { MessageService } from '../../../../../../services/message';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
 @Component({
@@ -23,8 +22,7 @@ export class EnvListComponent implements OnDestroy {
     private globalStore: StoreService,
     private router: Router,
     private route: ActivatedRoute,
-    private effect: ApiEffectService,
-    private message: MessageService
+    private effect: ApiEffectService
   ) {
     autorun(() => {
       if (this.store.getEnvList) {
@@ -55,12 +53,6 @@ export class EnvListComponent implements OnDestroy {
     $event?.stopPropagation();
     // * delete localstrage
     this.effect.deleteEnv(id);
-    this.message.send({
-      type: 'deleteEnvSuccess',
-      data: {
-        uuids: [id]
-      }
-    });
   }
   editEnv($event) {
     this.router.navigate(['/home/workspace/project/api/env/edit'], {

@@ -11,7 +11,6 @@ import {
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
@@ -109,12 +108,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return [NONE_AUTH_OPTION, ...this.extensionList];
   }
 
-  constructor(
-    private router: Router,
-    private extensionService: ExtensionService,
-    private store: ApiStoreService,
-    private messageService: MessageService
-  ) {
+  constructor(private router: Router, private extensionService: ExtensionService, private store: ApiStoreService) {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
