@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { autorun } from 'mobx';
 
-import { StoreService } from '../../../store/state.service';
+import { StoreService } from '../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-nav-breadcrumb',

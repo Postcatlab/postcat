@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';

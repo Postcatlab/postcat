@@ -7,8 +7,8 @@ import { extensionMessageSubject } from 'pc/browser/src/app/shared/decorators';
 import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'pc/browser/src/app/shared/models/extension-manager';
 import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/models/storageKeys.constant';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 import { lastValueFrom, Subscription } from 'rxjs';
 

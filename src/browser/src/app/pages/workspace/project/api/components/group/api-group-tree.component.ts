@@ -7,9 +7,9 @@ import { ImportApiComponent } from 'pc/browser/src/app/components/extension-sele
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 import { genComponentTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ElectronService } from '../../../../../../core/services';
 import { ProjectApiService } from '../../api.service';

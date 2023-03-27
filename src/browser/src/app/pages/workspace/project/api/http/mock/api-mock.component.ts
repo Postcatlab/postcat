@@ -7,10 +7,10 @@ import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/projec
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-api-mock',

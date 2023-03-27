@@ -3,10 +3,9 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { Mock } from 'pc/browser/src/app/services/storage/db/models';
 import { eoDeepCopy, copy } from 'pc/browser/src/app/shared/utils/index.utils';
-
-import { ApiData } from '../../../../../services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-mock-table',

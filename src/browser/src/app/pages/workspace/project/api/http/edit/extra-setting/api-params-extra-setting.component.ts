@@ -5,8 +5,6 @@ import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { REQURIED_ENUMS } from 'pc/browser/src/app/shared/models/shared.model';
 
-import { cpSync } from 'fs';
-
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
   templateUrl: './api-params-extra-setting.component.html',
@@ -141,7 +139,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       } else {
         this.showLengthTable = !isNil(this.model.paramAttr.minLength || this.model.paramAttr.maxLength);
         this.showValueTable = !isNil(this.model.paramAttr.minValue || this.model.paramAttr.maxValue);
-        this.showEnums = this.model.paramAttr?.paramValueList?.length;
+        this.showEnums = !!this.model.paramAttr?.paramValueList?.length;
       }
     }
   }

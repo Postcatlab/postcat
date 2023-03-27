@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { Role, ROLE_TITLE_BY_ID } from '../../../../shared/models/member.model';
 

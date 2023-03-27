@@ -7,7 +7,7 @@ import { Project } from 'pc/browser/src/app/services/storage/db/models';
 import { StorageUtil } from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { filter } from 'rxjs/operators';
 
-import { Role } from '../shared/models/member.model';
+import { Role } from '../models/member.model';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';

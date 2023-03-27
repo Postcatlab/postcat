@@ -7,7 +7,7 @@ import {
   ApiDataPageDto,
   ApiDataUpdateDto
 } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
-import type { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import type { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { GroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { LocalService } from './local.service';
 import { RemoteService } from './remote.service';
@@ -43,7 +43,7 @@ export class ApiService {
     workSpaceUuid?: any;
     [key: string]: any;
   }) {
-    return this.remote.api_mockCreate<T>(params);
+    return this.store.isLocal ? this.local.api_mockCreate<T>(params) : this.remote.api_mockCreate<T>(params);
   }
 
   api_mockUpdate<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
@@ -55,7 +55,7 @@ export class ApiService {
   }
 
   api_mockDetail<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {
-    return this.remote.api_mockDetail<T>(params);
+    return this.store.isLocal ? this.local.api_mockDetail<T>(params) : this.remote.api_mockDetail<T>(params);
   }
 
   api_mockDelete<T = any>(params: { id: any; projectUuid?: any; workSpaceUuid?: any }) {

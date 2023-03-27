@@ -3,7 +3,7 @@ import { autorun, reaction } from 'mobx';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 // * type(0=wechat, 1=qq, 2=github, 3=feishu, 4=corp_wechat, 5=ding_talk, 6=oauth2)

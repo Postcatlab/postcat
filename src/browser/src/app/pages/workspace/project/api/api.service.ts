@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 
 import { ApiService } from '../../../../services/storage/api.service';
-import { ApiData } from '../../../../services/storage/db/models/apiData';
-import { StoreService } from '../../../../store/state.service';
+import { StoreService } from '../../../../shared/store/state.service';
 import { ApiEffectService } from './store/api-effect.service';
 
 @Injectable()

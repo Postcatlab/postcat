@@ -9,7 +9,7 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { IMPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

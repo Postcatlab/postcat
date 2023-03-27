@@ -1,9 +1,6 @@
 import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
-
-import { ApiData } from './apiData';
-
-export type { ApiData } from './apiData';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 
 interface Base {
   id?: number;

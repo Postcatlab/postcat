@@ -1,7 +1,8 @@
 import Ajv from 'ajv';
 import { safeStringify } from 'ajv/dist/compile/codegen/code';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { CollectionTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
-import { ApiData, Environment } from 'pc/browser/src/app/services/storage/db/models';
+import { Environment } from 'pc/browser/src/app/services/storage/db/models';
 
 import apiDataSchema from '../schema/apiData.schema.json';
 import envSchema from '../schema/env.schema.json';

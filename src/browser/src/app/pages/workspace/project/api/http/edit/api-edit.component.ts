@@ -9,10 +9,10 @@ import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/ta
 import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiEditService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { getExpandGroupByKey, PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { Subject } from 'rxjs';
 
 import { isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../shared/utils/index.utils';

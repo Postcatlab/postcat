@@ -6,8 +6,8 @@ import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { flatTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';

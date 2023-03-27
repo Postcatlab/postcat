@@ -1,4 +1,4 @@
-import { ApiList } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { PageDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
 import { Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
 
@@ -32,7 +32,8 @@ export interface ImportProjectDto {
   projectUuid?: string;
   workSpaceUuid?: string;
 }
-export type Collection = (ApiList | Group) & {
+export type Collection = ApiData | Group;
+export type ImportCollection = Collection & {
   /**
    * 0：group
    * 1: apiData

@@ -1,7 +1,7 @@
 import isXml from 'is-xml';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 
 import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/constants/api.model';
-import { BodyParam } from '../../../services/storage/db/models/apiData';
 import { whatType, whatTextType, JSONParse } from '../index.utils';
 
 export const isXML = data => isXml(data);

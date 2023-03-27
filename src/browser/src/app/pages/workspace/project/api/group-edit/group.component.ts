@@ -8,7 +8,7 @@ import { AuthInfo, INHERIT_AUTH_OPTION } from 'pc/browser/src/app/pages/workspac
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';

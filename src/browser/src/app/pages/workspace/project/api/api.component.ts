@@ -7,7 +7,7 @@ import { ExtensionService } from 'pc/browser/src/app/services/extensions/extensi
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';

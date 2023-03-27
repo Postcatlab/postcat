@@ -37,8 +37,8 @@ import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspa
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 

@@ -7,7 +7,7 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
 import { MemberListComponent } from '../../../../components/member-list/member-list.component';
 import { MessageService } from '../../../../services/message/message.service';
-import { StoreService } from '../../../../store/state.service';
+import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',

@@ -6,7 +6,7 @@ import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/ta
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Environment } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../components/eo-ui/table-pro/table-pro.model';

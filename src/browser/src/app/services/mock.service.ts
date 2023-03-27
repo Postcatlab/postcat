@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { toJS } from 'mobx';
 import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { uniqueSlash } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import type { ApiData, Mock } from 'pc/browser/src/app/services/storage/db/models';
-import { ApiDataFromList, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import type { Mock } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiDataFromList } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ElectronService } from '../core/services';
 import { ApiStoreService } from '../pages/workspace/project/api/store/api-state.service';

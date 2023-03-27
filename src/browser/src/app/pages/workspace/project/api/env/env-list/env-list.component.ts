@@ -1,7 +1,7 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { autorun, reaction, values } from 'mobx';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject } from 'rxjs';
 
 import { ApiEffectService } from '../../store/api-effect.service';

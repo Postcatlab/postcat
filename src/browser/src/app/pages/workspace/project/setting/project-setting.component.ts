@@ -5,8 +5,8 @@ import { autorun, reaction, toJS } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { ExportApiComponent } from '../../../../components/extension-select/export-api/export-api.component';
 import { ImportApiComponent } from '../../../../components/extension-select/import-api/import-api.component';

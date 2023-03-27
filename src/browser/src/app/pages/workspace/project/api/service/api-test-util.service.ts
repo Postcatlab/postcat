@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { ApiData, BodyParam, HeaderParam, RestParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 
-import { ApiData } from '../../../../../services/storage/db/models';
-import { BodyParam, HeaderParam, RestParam } from '../../../../../services/storage/db/models/apiData';
 import { table2json, text2table, json2xml } from '../../../../../shared/utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
 import { ApiEditUtilService } from '../http/edit/api-edit-util.service';

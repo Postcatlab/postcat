@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { BodyParam, ParamTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { BodyParam, ApiData, ParamTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { filterTableData } from '../../../../../../shared/utils/tree/tree.utils';

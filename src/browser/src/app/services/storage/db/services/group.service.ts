@@ -35,6 +35,7 @@ const genFileGroup = apiData => {
 export class GroupService extends BaseService<Group> {
   baseService = new BaseService(dataSource.group);
   apiDataService = new BaseService(dataSource.apiData);
+  mockDataService = new BaseService(dataSource.mock);
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
@@ -171,6 +172,7 @@ export class GroupService extends BaseService<Group> {
     const result = await this.baseService.bulkRead(params);
     //! Warning  case/mock/group id may dupublicate in local
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
+    const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });
     const genGroupTree = (groups: Group[], paranId) => {
       const apiFilters = apiDataList.filter(n => n.groupId === paranId);
       const groupFilters = groups.filter(n => n.parentId === paranId);
@@ -193,6 +195,7 @@ export class GroupService extends BaseService<Group> {
     const rootGroup = result.data?.find(n => n.depth === 0);
     rootGroup.children = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
+    console.log(rootGroup.children);
     return result;
   }
 

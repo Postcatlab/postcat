@@ -9,8 +9,8 @@ import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { LocalService } from 'pc/browser/src/app/services/storage/local.service';
 import { RemoteService } from 'pc/browser/src/app/services/storage/remote.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 

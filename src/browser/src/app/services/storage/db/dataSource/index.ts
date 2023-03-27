@@ -1,11 +1,11 @@
 import Dexie, { Table } from 'dexie';
 import { merge } from 'lodash-es';
 import { setupVersions } from 'pc/browser/src/app/services/storage/db/dataSource/versions';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import {
   Workspace,
   Project,
   Group,
-  ApiData,
   Environment,
   ApiTestHistory,
   Mock,

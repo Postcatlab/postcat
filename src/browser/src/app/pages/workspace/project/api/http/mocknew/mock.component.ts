@@ -5,7 +5,7 @@ import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/ap
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 interface ModelType {

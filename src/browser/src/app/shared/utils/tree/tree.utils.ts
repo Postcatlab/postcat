@@ -5,6 +5,7 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { Collection } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 
 import { eoDeepCopy, whatType } from '../index.utils';
@@ -167,26 +168,37 @@ export const fieldTypeMap = new Map<number, any>([
  */
 export const parseGroupDataToViewTree = list => {
   return list.map(it => {
-    const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
-    if (isAPI) {
-      const apiItem = it.relationInfo || it;
+    //* Group
+    if (it.type === GroupType.userCreated) {
       return {
-        ...apiItem,
-        id: apiItem.apiUuid,
-        isLeaf: true,
-        parentId: it.parentId,
-        type: it.type,
-        module: it.module,
-        _group: {
-          id: it.id,
-          parentId: it.parentId,
-          sort: it.sort
-        }
+        ...it,
+        children: parseGroupDataToViewTree(it.children || [])
       };
     }
+    if (it.type !== GroupType.virtual) return;
+    //* Resource
+    //it.type===GroupType.virtual
+    let resouceItem: Collection;
+    switch (it.module) {
+      case GroupModuleType.mock:
+      case GroupModuleType.case:
+      case GroupModuleType.api: {
+        resouceItem = it.relationInfo || it;
+        // resouceItem.id = resouceItem.apiUuid;
+      }
+    }
     return {
-      ...it,
-      children: parseGroupDataToViewTree(it.children || [])
+      ...resouceItem,
+      id: resouceItem.id,
+      isLeaf: true,
+      parentId: it.parentId,
+      type: it.type,
+      module: it.module,
+      _group: {
+        id: it.id,
+        parentId: it.parentId,
+        sort: it.sort
+      }
     };
   });
 };

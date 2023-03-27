@@ -1,5 +1,5 @@
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 
 export enum ApiTestParamsTypeFormData {
   text = 'string',

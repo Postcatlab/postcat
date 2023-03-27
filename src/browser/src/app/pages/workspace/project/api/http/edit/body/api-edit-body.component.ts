@@ -9,7 +9,7 @@ import {
   JsonRootType
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { enumsToArr, eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, pairwise } from 'rxjs/operators';

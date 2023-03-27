@@ -7,9 +7,9 @@ import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import packageJson from '../../../../../../../package.json';
+import { StoreService } from '../../../shared/store/state.service';
 import { getBrowserType } from '../../../shared/utils/browser-type';
 import StorageUtil from '../../../shared/utils/storage/storage.utils';
-import { StoreService } from '../../../store/state.service';
 
 type DescriptionsItem = {
   readonly id: string;
