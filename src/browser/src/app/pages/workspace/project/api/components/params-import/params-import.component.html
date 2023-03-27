@@ -2,26 +2,26 @@
   <eo-iconpark-icon name="import" size="14px"></eo-iconpark-icon>
   <span class="ml-[5px]" i18n>Import</span>
 </button>
-<nz-modal [(nzVisible)]="isVisible" i18n-nzTitle [nzTitle]="importTitle" [nzStyle]="{ width: '800px' }" (nzOnCancel)="handleCancel()">
-  <div *nzModalContent>
-    <eo-ng-feedback-alert nzType="default" [nzMessage]="egMsg" i18n-nzMessage nzShowIcon></eo-ng-feedback-alert>
-    <ng-template i18n #egMsg>
-      Import like this:<br />
-      <pre class="mb-0">{{ eg }} </pre>
-    </ng-template>
-    <eo-monaco-editor
-      class="mt-[15px] border-all"
-      [(code)]="paramCode"
-      [maxHeight]="400"
-      [minHeight]="150"
-      [editorType]="contentTypeEditor"
-      [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-    ></eo-monaco-editor>
-  </div>
-  <div *nzModalFooter>
-    <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
-    <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
-    <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
-    <button eo-ng-button nzType="primary" (click)="handleImport('mixin')" i18n>Replace Changed</button>
-  </div>
-</nz-modal>
+<!--<nz-modal [(nzVisible)]="isVisible" i18n-nzTitle [nzTitle]="importTitle" [nzStyle]="{ width: '800px' }" (nzOnCancel)="handleCancel()">-->
+<!--  <div *nzModalContent>-->
+<!--    <eo-ng-feedback-alert nzType="default" [nzMessage]="egMsg" i18n-nzMessage nzShowIcon></eo-ng-feedback-alert>-->
+<!--    <ng-template i18n #egMsg>-->
+<!--      Import like this:<br />-->
+<!--      <pre class="mb-0">{{ eg }} </pre>-->
+<!--    </ng-template>-->
+<!--    <eo-monaco-editor-->
+<!--      class="mt-[15px] border-all"-->
+<!--      [(code)]="paramCode"-->
+<!--      [maxHeight]="400"-->
+<!--      [minHeight]="150"-->
+<!--      [editorType]="contentTypeEditor"-->
+<!--      [eventList]="['type', 'format', 'copy', 'search', 'replace']"-->
+<!--    ></eo-monaco-editor>-->
+<!--  </div>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>-->
+<!--    <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>-->
+<!--    <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>-->
+<!--    <button eo-ng-button nzType="primary" (click)="handleImport('mixin')" i18n>Replace Changed</button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

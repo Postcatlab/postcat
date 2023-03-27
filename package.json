@@ -61,13 +61,14 @@
     "npm": "6.14.17",
     "pm2": "5.2.2",
     "portfinder": "1.0.32",
+    "postman-sandbox": "^4.2.3",
     "qiniu": "^6.0.0",
     "resolve": "^1.22.1",
+    "showdown": "2.1.0",
     "socket.io": "4.5.4",
     "ws": "8.12.0",
     "xml2js": "0.4.23",
-    "yaml": "2.2.1",
-    "postman-sandbox": "^4.2.3"
+    "yaml": "2.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "~17.3.0",

@@ -6,9 +6,11 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
+import { NewPeopleGuideComponent } from 'pc/browser/src/app/pages/new-people-guide/new-people-guide.component';
 import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
 import { ApiGroupEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/group/edit/api-group-edit.component';
+import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { GroupCreateDto, GroupUpdateDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -108,7 +110,9 @@ export class ApiGroupTreeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tab: ApiTabService,
-    private message: EoNgFeedbackMessageService
+    private message: EoNgFeedbackMessageService,
+    //TODO: REMEMBER DELETE
+    private modal: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -329,10 +333,17 @@ export class ApiGroupTreeComponent implements OnInit {
 
   toMock() {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/mock`], {
+    this.router.navigate([`${prefix}/http/newMock`], {
       queryParams: {
         pageID: Date.now().toString()
       }
+    });
+  }
+  toGuide() {
+    const modal = this.modal.create({
+      nzTitle: $localize`New Mock`,
+      nzWidth: '70%',
+      nzContent: NewPeopleGuideComponent
     });
   }
 }

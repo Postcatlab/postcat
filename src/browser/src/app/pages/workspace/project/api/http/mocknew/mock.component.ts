@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { WebService } from 'pc/browser/src/app/core/services';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 interface ModelType {
@@ -14,6 +17,8 @@ interface ModelType {
   url: string;
   createWay: string;
 }
+
+let itemData: any = {};
 
 @Component({
   selector: 'pc-mock',
@@ -26,7 +31,10 @@ export class MockComponent implements OnInit, EditTabViewComponent {
 
   @Output() readonly modelChange = new EventEmitter<ModelType>();
 
+  @Output() readonly afterSaved = new EventEmitter<ModelType>();
+
   apiData: ApiData;
+
   initialModel: ModelType;
 
   apiUuid: number | string;
@@ -38,15 +46,17 @@ export class MockComponent implements OnInit, EditTabViewComponent {
 
   hoverStr: string = 'The system creates a Mock that cannot be operated';
 
-  sign: string;
+  titleTips = $localize`Postcat Client is required to use local mock.`;
+  btnTitle = $localize`Use Client`;
+  isInstalledClient: boolean = true;
 
   constructor(
     private apiHttp: ApiService,
     private mockService: MockService,
-    private fb: FormBuilder,
     private api: ProjectApiService,
     private apiMock: ApiMockService,
-    private ref: ChangeDetectorRef
+    private message: EoNgFeedbackMessageService,
+    public web: WebService
   ) {
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = 'yd1qr8m51dq';
@@ -67,22 +77,22 @@ export class MockComponent implements OnInit, EditTabViewComponent {
       this.model = [...this.model];
     } else {
       //TODO: 需要换成是否有mockid判断
-      if (true) {
-        this.getApiDetail();
-      } else {
-        this.mockDetail(this.mock_id);
-      }
+      // if (false) {
+      //   this.getApiDetail();
+      // } else {
+      this.mockDetail(this.mock_id);
+      // }
     }
     // console.log(this.model, 999);
   }
 
   ngOnInit() {
     // //TODO: 需要换成是否有mockid判断
-    if (true) {
-      this.getApiDetail();
-    } else {
-      this.mockDetail(this.mock_id);
-    }
+    // if (false) {
+    //   this.getApiDetail();
+    // } else {
+    this.mockDetail(this.mock_id);
+    // }
   }
 
   initTabModel() {
@@ -91,7 +101,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
 
-  nameChange($event) {
+  valueChange($event) {
     console.log(this.model);
     this.modelChange.emit(this.model);
   }
@@ -104,6 +114,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   async mockDetail(mock_id?: string | number) {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
+    itemData = res;
     this.model.url = this.getMockUrl(res);
     this.model.createWay = res.createWay;
     this.model.response = res.response;
@@ -112,7 +123,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   }
 
   isFormChange() {
-    return this.model.response !== this.initialModel.response;
+    return this.model.response !== this.initialModel.response || this.model.name !== this.initialModel.name;
   }
 
   btnClick() {
@@ -153,5 +164,88 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     return 'decodeURIComponent(url.toString())';
   }
 
-  saveName() {}
+  // name edit no focus
+  // async saveName() {
+  //   const requestData = {
+  //     ...itemData,
+  //     name: this.model.name
+  //   };
+  //   await this.addOrEditModal(requestData);
+  // }
+
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  keyDownSave($event) {
+    $event?.preventDefault?.();
+    if (!this.isEdit) this.saveInfo('response');
+  }
+
+  async saveInfo(key: string) {
+    if (key === 'response' && !this.model.response) {
+      this.message.error($localize`response cannot be empty`);
+      return;
+    }
+    if (this.model[key] === itemData[key]) {
+      if (key === 'name') {
+        this.isEdit = false;
+      }
+      if (key === 'response') {
+        this.message.info($localize`No change in data`);
+      }
+      return;
+    }
+
+    const requestData = {
+      ...itemData,
+      [key]: this.model[key]
+    };
+    await this.addOrEditModal(requestData);
+    this.isEdit = false;
+    itemData = requestData;
+    this.initialModel = eoDeepCopy(this.model);
+    this.afterSaved.emit(this.initialModel);
+  }
+  // async saveResponse() {
+  //   if(!this.model.response) {
+  //     this.message.error($localize`response cannot be empty`);
+  //     return
+  //   }
+  //   const requestData = {
+  //     ...itemData,
+  //     response: this.model.response
+  //   };
+  //   await this.addOrEditModal(requestData);
+  // }
+
+  async addOrEditModal(item, index?) {
+    if (item.id) {
+      await this.apiMock.updateMock(item);
+      this.message.success($localize`Edited successfully`);
+    } else {
+      item.apiUuid = this.apiUuid;
+      item.createWay = 'custom';
+      const [data, err] = await this.apiMock.createMock(item);
+      if (err) {
+        this.message.error($localize`Failed to add`);
+        return;
+      }
+      this.message.success($localize`Added successfully`);
+    }
+    // item.url = this.getMockUrl(item);
+  }
+
+  async jumpToClient() {
+    const isInstalled = await this.web.protocolCheck();
+    if (!isInstalled) {
+      this.isInstalledClient = false;
+    } else {
+      this.isInstalledClient = true;
+      window.location.href = PROTOCOL;
+    }
+  }
+
+  async handleDeleteMockItem() {
+    await this.apiMock.deleteMock(itemData.id);
+    this.message.success($localize`Delete Succeeded`);
+  }
 }

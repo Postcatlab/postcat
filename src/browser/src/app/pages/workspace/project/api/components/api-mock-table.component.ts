@@ -93,6 +93,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                   model: eoDeepCopy(item.data)
                 },
                 nzOnOk: async () => {
+                  console.log(modal.componentInstance.model, index);
                   await this.addOrEditModal(modal.componentInstance.model, index);
                   modal.destroy();
                 }

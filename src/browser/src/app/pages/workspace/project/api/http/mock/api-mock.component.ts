@@ -75,6 +75,7 @@ export class ApiMockComponent implements OnInit, PreviewTabViewComponent {
         }
       },
       nzOnOk: async () => {
+        console.log(modal.componentInstance.model);
         await this.mockTable.addOrEditModal(modal.componentInstance.model);
         const workspace_type = this.store.isLocal ? 'local' : 'cloud';
         this.trace.report('add_mock_success', { workspace_type });

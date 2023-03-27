@@ -1,4 +1,12 @@
-<div class="p-[20px] mock">
+<nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
+  <div nz-result-extra>
+    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" trace traceID="open_client">{{
+      btnTitle
+    }}</button>
+    <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>
+  </div>
+</nz-result>
+<div class="p-[20px] mock" *ngIf="!web.isWeb">
   <form nz-form nzLayout="inline" class="flex">
     <nz-form-item class="flex">
       <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
@@ -9,8 +17,9 @@
             name="required"
             required
             eo-ng-input
-            (ngModelChange)="nameChange($event)"
-            (blur)="saveName()"
+            autofocus
+            (ngModelChange)="valueChange($event)"
+            (blur)="saveInfo('name')"
           />
         </ng-container>
       </nz-form-control>
@@ -22,9 +31,10 @@
             [nzPopoverContent]="hoverStr"
             [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
             nzPopoverOverlayClassName="mockPopover"
+            (click)="editClick()"
           >
             <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
-              <eo-iconpark-icon name="edit" (click)="editClick()"></eo-iconpark-icon>
+              <eo-iconpark-icon name="edit"></eo-iconpark-icon>
             </button>
           </div>
 
@@ -33,6 +43,7 @@
             [nzPopoverContent]="hoverStr"
             [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
             nzPopoverOverlayClassName="mockPopover"
+            (click)="editClick()"
           >
             <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
               <eo-iconpark-icon name="delete" (click)="editClick()"></eo-iconpark-icon>
@@ -64,12 +75,13 @@
         <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
         <nz-form-control>
           <eo-monaco-editor
-            [(code)]="model['response']"
+            [(code)]="model.response"
             id="response"
             [autoType]="true"
             class="h-[200px] border-all"
             [config]="{ readOnly: model?.createWay === 'system' }"
             [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+            (codeChange)="valueChange($event)"
           >
           </eo-monaco-editor>
         </nz-form-control>
@@ -83,7 +95,16 @@
           nzPopoverOverlayClassName="mockPopover"
           nzPopoverPlacement="topLeft"
         >
-          <button type="submit" eo-ng-button nzType="primary" i18n [disabled]="model?.createWay === 'system'"> Save </button>
+          <button
+            type="submit"
+            eo-ng-button
+            nzType="primary"
+            i18n
+            [disabled]="model?.createWay === 'system'"
+            (click)="saveInfo('response')"
+          >
+            Save
+          </button>
         </div>
       </ng-container>
     </form>

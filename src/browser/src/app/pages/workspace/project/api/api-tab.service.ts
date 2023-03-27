@@ -71,7 +71,8 @@ export class ApiTabService {
       extends: { method: 'WS' },
       title: $localize`New Websocket`
     },
-    { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'edit', title: 'Mock', isFixed: true }
+    { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'edit', title: 'Mock', isFixed: true },
+    { pathname: '/home/workspace/project/api/http/newMock', id: 'api-http-mock', type: 'edit', title: 'Mock', isFixed: true }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
