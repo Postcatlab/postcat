@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 @Pipe({
   name: 'apiParamsNum'

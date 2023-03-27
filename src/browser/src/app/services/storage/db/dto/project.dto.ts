@@ -1,6 +1,6 @@
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { PageDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
-import { Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { CollectionTypeEnum, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 export interface ProjectBulkCreateDto {
   projectMsgs: ProjectMsg[];
@@ -40,7 +40,3 @@ export type ImportCollection = Collection & {
    */
   collectionType: CollectionTypeEnum;
 };
-export enum CollectionTypeEnum {
-  GROUP = 0,
-  API = 1
-}

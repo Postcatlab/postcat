@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { ColumnItem } from 'pc/browser/src/app/components/eo-ui/table-pro/table-pro.model';
 import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { BodyParam, ViewParamAttr } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { REQURIED_ENUMS } from 'pc/browser/src/app/shared/models/shared.model';
 
 @Component({
@@ -11,7 +11,7 @@ import { REQURIED_ENUMS } from 'pc/browser/src/app/shared/models/shared.model';
   styleUrls: ['./api-params-extra-setting.component.scss']
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
-  @Input() model: BodyParam;
+  @Input() model: BodyParam & { paramAttr: ViewParamAttr };
   @Input() isEdit = true;
   @Input() in: 'body' | 'header' | 'query' | 'rest';
   showValueTable = false;

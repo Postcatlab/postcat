@@ -1,5 +1,5 @@
 import isXml from 'is-xml';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/constants/api.model';
 import { whatType, whatTextType, JSONParse } from '../index.utils';

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { Router } from '@angular/router';
+import { ApiBodyType, API_ROOT_PATH } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-transfer/data-transfer.utils';
 
@@ -11,12 +12,12 @@ import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-trans
   providedIn: 'root'
 })
 export class ApiMockService {
-  constructor(private api: ApiService, private store: StoreService, private testUtils: ApiTestUtilService) {
+  constructor(private api: ApiService, private globalStore: StoreService, private testUtils: ApiTestUtilService, private router: Router) {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
     const uri = syncUrlAndQuery(this.testUtils.formatUri(apiData.uri, apiData.restParams), apiData.queryParams).url;
-    return `${this.store.mockUrl}/${uri}`;
+    return `${this.globalStore.mockUrl}/${uri}`;
   }
 
   /**
@@ -73,5 +74,45 @@ export class ApiMockService {
         return json2xml(table2json(body));
       }
     }
+  }
+  toDetail(mockID) {}
+  toEdit(mockID) {
+    // const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
+    // this.router.navigate([`${prefix}/http/mock`], {
+    //   queryParams: {
+    //     apiUuid: apiID,
+    //     pageID: Date.now().toString()
+    //   }
+    // });
+  }
+  toAdd(groupID?) {
+    this.router.navigate([`${API_ROOT_PATH}/http/edit`], {
+      queryParams: { groupId: groupID, pageID: Date.now() }
+    });
+  }
+  toDelete(apiInfo: ApiData) {
+    // this.modalService.confirm({
+    //   nzTitle: $localize`Deletion Confirmation?`,
+    //   nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
+    //     apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
+    //   }</strong> ? You cannot restore it once deleted!`,
+    //   nzOnOk: () => {
+    //     this.delete(apiInfo.apiUuid);
+    //   }
+    // });
+  }
+  async copy(inMockUuid: string) {
+    // const { apiUuid, id, ...apiData } = await this.get(inMockUuid);
+    // apiData.name += ' Copy';
+    // const [result, err] = await this.add(apiData);
+    // if (err) {
+    //   console.log(err);
+    //   this.feedback.error($localize`Copy API failed`);
+    //   return;
+    // }
+    // this.router.navigate(['/home/workspace/project/api/http/edit'], {
+    //   queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
+    // });
+    // this.effect.getGroupList();
   }
 }

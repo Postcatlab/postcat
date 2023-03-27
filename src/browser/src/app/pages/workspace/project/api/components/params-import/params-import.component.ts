@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { cloneDeep, isEmpty } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { pcMerge } from 'pc/browser/src/app/shared/utils/pc-merge';
 import qs from 'qs';
 

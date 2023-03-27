@@ -1,7 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { merge } from 'lodash-es';
 import { setupVersions } from 'pc/browser/src/app/services/storage/db/dataSource/versions';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import {
   Workspace,
   Project,
@@ -11,6 +10,7 @@ import {
   Mock,
   ProjectSyncSetting
 } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { ProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
 import { WorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
 

@@ -1,8 +1,8 @@
 import { INHERIT_AUTH_OPTION, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
-import { GroupDeleteDto, GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
-import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { GroupDeleteDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { serializeObj } from 'pc/browser/src/app/services/storage/db/utils';
 
@@ -16,20 +16,34 @@ const formatSort = (arr: any[] = []) => {
     });
 };
 
-const genFileGroup = apiData => {
+const genFileGroup = (module, relationInfo): ViewGroup | any => {
   // 不能直接返回 apiData, 要返回符合分组的格式
-  return {
-    ...apiData,
-    type: GroupType.virtual,
-    module: GroupModuleType.api,
-    id: apiData.apiUuid,
-    uuid: apiData.apiUuid,
-    parentId: apiData.groupId,
-    relationInfo: {
-      ...apiData,
-      ...apiData?.apiAttrInfo
+  switch (module) {
+    case GroupModuleType.API: {
+      return {
+        type: GroupType.Virtual,
+        module: GroupModuleType.API,
+        id: `api_${relationInfo.apiUuid}`,
+        parentId: relationInfo.groupId,
+        relationInfo: {
+          ...relationInfo,
+          ...relationInfo?.apiAttrInfo
+        }
+      };
     }
-  };
+    case GroupModuleType.Mock: {
+      return {
+        type: GroupType.Virtual,
+        module: GroupModuleType.Mock,
+        id: `mock_${relationInfo.id}`,
+        parentId: `api_${relationInfo.apiUuid}`,
+        relationInfo: {
+          ...relationInfo,
+          ...relationInfo?.apiAttrInfo
+        }
+      };
+    }
+  }
 };
 
 export class GroupService extends BaseService<Group> {
@@ -77,7 +91,7 @@ export class GroupService extends BaseService<Group> {
     };
 
     // 拖动的是 API
-    if (type === GroupType.virtual) {
+    if (type === GroupType.Virtual) {
       const apiParams = serializeObj({
         uuid: id,
         groupId: parentId,
@@ -86,7 +100,7 @@ export class GroupService extends BaseService<Group> {
       const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
       const { data: groupList } = await this.baseService.bulkRead({
         parentId: parentId ?? oldApiData.groupId,
-        type: GroupType.userCreated
+        type: GroupType.UserCreated
       });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
 
@@ -98,20 +112,20 @@ export class GroupService extends BaseService<Group> {
           { ...oldApiData, groupId: parentId }
         );
         const { data: newApiData } = await this.apiDataService.read({ uuid: id });
-        return genFileGroup(newApiData);
+        return genFileGroup(GroupModuleType.API, newApiData);
       }
       // 如果 parentId 变了，则需要将其 sort = parent.children.length
       if (parentId && oldApiData.groupId !== parentId) {
         // 没有指定 sort，则默认排在最后
         apiParams.sort = groupList.length + apiDataList.length + 1;
         const { data: newApiData } = await this.apiDataService.update(apiParams);
-        return genFileGroup(newApiData);
+        return genFileGroup(GroupModuleType.API, newApiData);
       }
     }
     // 修改分组
     else {
       const { data: oldGroup } = await this.baseService.read({ id });
-      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: GroupType.userCreated });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: GroupType.UserCreated });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
 
       // 如果指定了 sort，则需要重新排序
@@ -174,28 +188,34 @@ export class GroupService extends BaseService<Group> {
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
     const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });
     const genGroupTree = (groups: Group[], paranId) => {
-      const apiFilters = apiDataList.filter(n => n.groupId === paranId);
       const groupFilters = groups.filter(n => n.parentId === paranId);
-      return [...apiFilters, ...groupFilters]
-        .map(m => {
-          // API
-          if ('uri' in m) {
-            return genFileGroup(m);
-          }
-          // group
-          else {
+      const apiFilters = apiDataList.filter(n => n.groupId === paranId).map(val => genFileGroup(GroupModuleType.API, val));
+      return [...groupFilters, ...apiFilters]
+        .map((m: any) => {
+          // Resource:api/case/mock
+          if (m.module === GroupModuleType.API) {
+            const mockFilters = mockDataList
+              .filter(n => n.apiUuid === m.relationInfo.apiUuid)
+              .map(val => genFileGroup(GroupModuleType.Mock, val));
+            // const caseFilters = caseDataList.filter(n => n.apiUuid === m.relationInfo.apiUuid).map(val => genFileGroup(GroupModuleType.Case, val));
             return {
               ...m,
-              children: genGroupTree(groups, m.id)
+              children: [...mockFilters].sort((a, b) => a.sort - b.sort)
             };
           }
+          // Group
+          return {
+            ...m,
+            type: GroupType.UserCreated,
+            children: genGroupTree(groups, m.id)
+          };
         })
         .sort((a, b) => a.sort - b.sort);
     };
     const rootGroup = result.data?.find(n => n.depth === 0);
     rootGroup.children = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
-    console.log(rootGroup.children);
+    console.log('fromRequest', rootGroup.children);
     return result;
   }
 

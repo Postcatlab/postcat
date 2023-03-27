@@ -1,18 +1,16 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse, ApiResponsePromise } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { QueryAllDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
-import { GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import {
   ProjectBulkCreateDto,
   ProjectPageDto,
   ProjectDeleteDto,
   ProjectUpdateDto,
   ImportProjectDto,
-  Collection,
-  CollectionTypeEnum
+  Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
-import { Group, Project } from 'pc/browser/src/app/services/storage/db/models';
+import { CollectionTypeEnum, Group, GroupType, Project } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
 import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { EnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
@@ -46,7 +44,7 @@ export class ProjectService extends BaseService<Project> {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
     const promises = collections.map(async (item, sort) => {
-      if (item.collectionType === CollectionTypeEnum.GROUP) {
+      if (item.collectionType === CollectionTypeEnum.Group) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
           depth: depth + 1,
@@ -200,13 +198,13 @@ export class ProjectService extends BaseService<Project> {
 
     const formatTree = (arr = []) => {
       return arr.map(item => {
-        if (item.type === GroupType.virtual) {
+        if (item.type === GroupType.Virtual) {
           return {
             ...item.relationInfo,
             collectionType: CollectionTypeEnum.API
           };
         } else {
-          item.collectionType = CollectionTypeEnum.GROUP;
+          item.collectionType = CollectionTypeEnum.Group;
           if (item.children?.length) {
             item.children = formatTree(item.children);
           }

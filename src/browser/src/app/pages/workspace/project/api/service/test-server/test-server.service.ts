@@ -13,7 +13,7 @@ import {
   TestServer,
   TestServerRes
 } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
-import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { TestLocalNodeData } from './local-node/api-server-data.model';

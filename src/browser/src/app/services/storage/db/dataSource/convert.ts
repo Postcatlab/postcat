@@ -1,6 +1,6 @@
 import { ApiParamsType, BodyContentType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { mui } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
-import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { OldApiData, Environment as OldEnvironment, ApiEditBody } from './oldApiData';
 

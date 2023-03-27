@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { ActivatedRoute } from '@angular/router';
 import { PreviewTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-mock-table.component';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';

@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
 import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 interface ModelType {

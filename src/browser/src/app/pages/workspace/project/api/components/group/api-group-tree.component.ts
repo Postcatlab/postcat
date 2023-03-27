@@ -1,27 +1,22 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
-import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
+import { API_ROOT_PATH, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { genComponentTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 import { ElectronService } from '../../../../../../core/services';
-import { ProjectApiService } from '../../api.service';
+import { ProjectApiService } from '../../project-api.service';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
-
-const actionComponent = {
-  sync: SyncApiComponent,
-  import: ImportApiComponent
-};
 
 const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllAPIId)];
 @Component({
@@ -46,65 +41,39 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];
-  // apiGroupTree = [];
-  apiItemsMenu = [
-    {
-      title: $localize`Edit`,
-      click: node => this.editAPI(node.origin)
-    },
-    {
-      title: $localize`:@Copy:Copy`,
-      click: node => this.copyAPI(node.origin)
-    },
-    {
-      title: $localize`:@Delete:Delete`,
-      click: node => this.deleteAPI(node.origin)
-    }
-  ];
-  groupItemsMenu = [
-    {
-      title: $localize`Add API`,
-      click: inArg => this.addAPI(inArg.group.origin)
-    },
-    {
-      title: $localize`Add Subgroup`,
-      click: inArg => this.addGroup(inArg)
-    },
-    {
-      title: $localize`Edit`,
-      click: inArg => this.editGroup(inArg.group?.origin)
-    },
-    {
-      title: $localize`:@@Delete:Delete`,
-      click: inArg => this.deleteGroup(inArg.group?.origin)
-    }
-  ];
+  operateByModule = {};
   extensionActions = [
     {
       title: $localize`:@@ImportAPI:Import API`,
       menuTitle: $localize`Import From File`,
       traceID: 'click_import_project',
-      click: title => this.importAPI('import', title)
+      click: title => this.projectApi.importProject('import', title)
     },
     {
       title: $localize`Sync API from URL`,
       menuTitle: $localize`Sync API from URL`,
       traceID: 'sync_api_from_url',
-      click: title => this.importAPI('sync', title)
+      click: title => this.projectApi.importProject('sync', title)
     }
   ];
+  get TYPE_GEROUP_MODULE(): typeof GroupModuleType {
+    return GroupModuleType;
+  }
   private reactions = [];
   constructor(
     public electron: ElectronService,
+    public projectApi: ProjectApiService,
+    public groupService: ApiGroupService,
     public globalStore: StoreService,
     private store: ApiStoreService,
     private effect: ApiEffectService,
-    private projectApi: ProjectApiService,
+    private mockService: ApiMockService,
     private modalService: ModalService,
     private router: Router,
-    private route: ActivatedRoute,
-    private feedback: EoNgFeedbackMessageService
-  ) {}
+    private route: ActivatedRoute
+  ) {
+    this.operateByModule = this.getGroupOperate();
+  }
 
   ngOnInit(): void {
     this.isEdit = !this.globalStore.isShare;
@@ -114,7 +83,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
     this.reactions.push(
       autorun(() => {
-        this.apiGroupTree = genComponentTree(this.store.getGroupList);
+        this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
+        console.log('apiGroupTree', toJS(this.apiGroupTree));
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
         waitNextTick().then(() => {
@@ -132,11 +102,69 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     );
   }
   initSelectKeys() {
-    const isApiPage = ['/home/workspace/project/api/http', '/home/workspace/project/api/ws', 'home/workspace/project/api/group/edit'].some(
-      path => this.router.url.includes(path)
-    );
+    //Such as Env group tree
+    const isOtherPage = [`${API_ROOT_PATH}/env`].some(path => this.router.url.includes(path));
     const { uuid } = this.route.snapshot.queryParams;
-    this.nzSelectedKeys = uuid && isApiPage ? [Number(uuid) || uuid] : [];
+    this.nzSelectedKeys = uuid && !isOtherPage ? [Number(uuid) || uuid] : [];
+  }
+  /**
+   * Parse group data from database to view tree
+   *
+   * @param list P
+   * @returns
+   */
+  parseGroupDataToViewTree(list) {
+    return list.map((it: ViewGroup) => {
+      //* Group
+      if (it.type === GroupType.UserCreated) {
+        return {
+          ...it,
+          children: this.parseGroupDataToViewTree(it.children || [])
+        };
+      }
+      // console.log(toJS(it), it.type);
+      if (it.type !== GroupType.Virtual) return;
+      //* Resource
+      const result = {
+        ...(it.relationInfo || it),
+        //virtual group id
+        id: it.id,
+        isLeaf: true,
+        parentId: it.parentId,
+        type: it.type,
+        module: it.module,
+        _group: {
+          id: it.id,
+          parentId: it.parentId,
+          sort: it.sort
+        },
+        children: this.parseGroupDataToViewTree(it.children || [])
+      };
+      if (it.module === GroupModuleType.API) {
+        result.isLeaf = false;
+        result.method = this.requestMethodMap[result.requestMethod];
+        result.methodText = result.method.length > 5 ? result.method.slice(0, 3) : result.method;
+      }
+      return result;
+    });
+  }
+  /**
+   * Generate Group for tree view
+   *
+   * @param apiGroups
+   * @param groupId
+   * @returns
+   */
+  genComponentTree(groups: Group[] = []) {
+    groups = this.parseGroupDataToViewTree(groups);
+    return [
+      ...groups.map(group => ({
+        ...group,
+        title: group.name || '',
+        key: group.id,
+        children: this.genComponentTree([...(group?.children || [])])
+      }))
+    ];
   }
   getExpandKeys() {
     this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
@@ -145,100 +173,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     }
     return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
-  getRequestMethodText(node) {
-    return this.requestMethodMap[node.origin?.requestMethod];
-  }
-  renderRequestMethodText(node) {
-    return this.getRequestMethodText(node).length > 5 ? this.getRequestMethodText(node).slice(0, 3) : this.getRequestMethodText(node);
-  }
-  editGroup(group) {
-    this.navigate2group({ uuid: group.id });
-  }
-  deleteGroup(group) {
-    const modelRef = this.modalService.confirm({
-      nzTitle: $localize`Deletion Confirmation?`,
-      nzContent: $localize`Are you sure you want to delete the data <strong title="${group.name}">${
-        group.name.length > 50 ? `${group.name.slice(0, 50)}...` : group.name
-      }</strong>`,
-      nzOnOk: async () => {
-        await this.effect.deleteGroup(group);
-        modelRef.destroy();
-      }
-    });
-  }
-  addAPI(group?) {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    // console.log(group?.key);
-    // this.expandKeys = [...this.expandKeys, group.key];
-    this.router.navigate([`${prefix}/http/edit`], {
-      queryParams: { groupId: group?.key, pageID: Date.now() }
-    });
-  }
-  deleteAPI(apiInfo) {
-    this.modalService.confirm({
-      nzTitle: $localize`Deletion Confirmation?`,
-      nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
-        apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
-      }</strong> ? You cannot restore it once deleted!`,
-      nzOnOk: () => {
-        this.projectApi.delete(apiInfo.apiUuid);
-      }
-    });
-  }
-  copyAPI(api) {
-    this.projectApi.copy(api.key);
-  }
-  editAPI(api) {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/edit`], {
-      queryParams: { uuid: api.key }
-    });
-  }
-  addGroup(node?) {
-    const group = node?.group?.origin || this.store.getRootGroup;
-    this.navigate2group({ parentId: group.id });
-    if (node?.group) {
-      node.group.isExpanded = true;
-    }
-    this.feedback.success('Add Group successfully');
-  }
-  importAPI(type: keyof typeof actionComponent, title) {
-    const modal = this.modalService.create({
-      nzTitle: title,
-      nzContent: actionComponent[type],
-      nzComponentParams: {},
-      nzFooter: [
-        {
-          label: $localize`Cancel`,
-          onClick: () => modal.destroy()
-        },
-        {
-          label: actionComponent[type] === SyncApiComponent ? $localize`Save and Sync` : $localize`Confirm`,
-          disabled: () => !modal.componentInstance?.isValid,
-          type: 'primary',
-          onClick: () => {
-            return new Promise(resolve => {
-              modal.componentInstance.submit(status => {
-                if (!status) {
-                  this.feedback.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-                  return resolve(true);
-                }
-                if (status === 'stayModal') {
-                  return resolve(true);
-                }
-                // Import API
-                this.effect.getGroupList();
-                this.feedback.success($localize`${title} successfully`);
-                resolve(true);
-                modal.destroy();
-              }, modal);
-            });
-          }
-        }
-      ]
-    });
-  }
-
   /**
    * Drag & drop tree item.
    *
@@ -272,47 +206,85 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
-    switch (eventName) {
-      case 'clickFolder': {
-        //* Open Folder
-        if (this.nzSelectedKeys.includes(event.node.key)) {
-          event.node.isExpanded = true;
-          break;
-        }
-
-        // * jump to group detail page
-        this.navigate2group({ uuid: event.node.key });
+    const origin = event.node.origin;
+    console.log(origin);
+    //* Open Folder
+    if (!event.node.isLeaf && this.nzSelectedKeys.includes(event.node.key)) {
+      event.node.isExpanded = true;
+    }
+    switch (origin.module) {
+      case GroupModuleType.API: {
+        this.projectApi.toDetail(origin.apiUuid);
         break;
       }
-      case 'clickItem': {
-        console.log(toJS(event.node));
-        // * jump to api detail page
-        const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-        this.router.navigate([`${prefix}/http/detail`], {
-          queryParams: { uuid: event.node.key }
-        });
+      case GroupModuleType.Mock: {
+        this.mockService.toDetail(origin.id);
         break;
+      }
+      default: {
+        // * jump to group detail page
+        this.groupService.toDetail(event.node.key);
       }
     }
   }
 
-  navigate2group(queryParams) {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/group/edit`], {
-      queryParams
-    });
-  }
-
-  toMock() {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/mock`], {
-      queryParams: {
-        pageID: Date.now().toString()
-      }
-    });
-  }
+  private getGroupOperate = () => {
+    return {
+      [GroupModuleType.API]: [
+        {
+          title: $localize`Edit`,
+          click: item => this.projectApi.toEdit(item.uuid)
+        },
+        {
+          title: $localize`Add Mock`,
+          click: item => this.mockService.toEdit(item.uuid)
+        },
+        {
+          title: $localize`:@Copy:Copy`,
+          click: item => this.projectApi.copy(item.uuid)
+        },
+        {
+          title: $localize`:@Delete:Delete`,
+          click: item => this.projectApi.toDelete(item)
+        }
+      ],
+      [GroupModuleType.Mock]: [
+        {
+          title: $localize`Edit`,
+          click: item => this.mockService.toEdit(item.uuid)
+        },
+        {
+          title: $localize`:@Copy:Copy`,
+          click: item => this.mockService.copy(item.uuid)
+        },
+        {
+          title: $localize`:@Delete:Delete`,
+          click: item => this.mockService.toDelete(item)
+        }
+      ],
+      [GroupModuleType.Case]: [],
+      API_GROUP: [
+        {
+          title: $localize`Add API`,
+          click: item => this.projectApi.toAdd(item.id)
+        },
+        {
+          title: $localize`Add Subgroup`,
+          click: item => this.groupService.toAdd(item.id)
+        },
+        {
+          title: $localize`Edit`,
+          click: item => this.groupService.toEdit(item.uuid)
+        },
+        {
+          title: $localize`:@@Delete:Delete`,
+          click: item => this.groupService.toDelete(item)
+        }
+      ]
+    };
+  };
   ngOnDestroy(): void {
+    //Clear all subscriptions
     this.reactions.forEach(reaction => reaction());
   }
 }

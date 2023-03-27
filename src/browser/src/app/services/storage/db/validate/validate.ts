@@ -1,17 +1,18 @@
 import Ajv from 'ajv';
 import { safeStringify } from 'ajv/dist/compile/codegen/code';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
-import { CollectionTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
-import { Environment } from 'pc/browser/src/app/services/storage/db/models';
+import { CollectionTypeEnum, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import apiDataSchema from '../schema/apiData.schema.json';
 import envSchema from '../schema/env.schema.json';
+import groupSchema from '../schema/group.schema.json';
 /**
  * cache jsv
  */
 const ajvHandler = {
   api: null,
-  env: null
+  env: null,
+  group: null
 };
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
   let validate = ajvHandler.api;
@@ -30,7 +31,22 @@ export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiDa
     return { validate: false, error: validate.errors };
   }
 };
-
+const parseAndCheckGroup = (group): { validate: boolean; data?: Group; error?: any } => {
+  let validate = ajvHandler.group;
+  if (!validate) {
+    const ajv = new Ajv({
+      useDefaults: true,
+      removeAdditional: true
+    });
+    validate = ajv.compile<Group>(groupSchema);
+  }
+  if (validate(group)) {
+    return { validate: true, data: group };
+  } else {
+    console.error(validate.errors, group);
+    return { validate: false, error: validate.errors };
+  }
+};
 export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; error?: any } => {
   let validate = ajvHandler.env;
   if (!validate) {
@@ -61,7 +77,11 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
 export const parseAndCheckCollections = (collections = []) => {
   return collections.reduce((prev, curr) => {
     //Group
-    if (curr.collectionType === CollectionTypeEnum.GROUP) {
+    if (curr.collectionType === CollectionTypeEnum.Group) {
+      const res = parseAndCheckGroup(curr);
+      if (!res.validate) {
+        return prev;
+      }
       prev.push(curr);
       if (curr.children?.length) {
         curr.children = parseAndCheckCollections(curr.children);
@@ -70,9 +90,9 @@ export const parseAndCheckCollections = (collections = []) => {
     }
 
     const res = parseAndCheckApiData(curr);
-    if (res.validate) {
-      prev.push(res.data);
-    }
+    if (!res.validate) return prev;
+
+    prev.push(res.data);
     return prev;
   }, []);
 };

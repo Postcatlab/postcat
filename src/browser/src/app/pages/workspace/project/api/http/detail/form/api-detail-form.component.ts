@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
-import { HeaderParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 @Component({
   selector: 'eo-api-detail-form',

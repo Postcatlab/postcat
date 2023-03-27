@@ -5,7 +5,7 @@ import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
-import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { flatTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { debounceTime, Subject } from 'rxjs';
@@ -120,16 +120,16 @@ export class ApiTabService {
         //TODO check group.id is same as resource id
         if (!tab.params.uuid || tab.params.uuid !== group.id.toString()) return false;
 
-        if (group.type === GroupType.userCreated && tab.uniqueName === 'project-group') {
+        if (group.type === GroupType.UserCreated && tab.uniqueName === 'project-group') {
           return true;
         }
-        if (group.module === GroupModuleType.api && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
+        if (group.module === GroupModuleType.API && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
           return true;
         }
-        if (group.module === GroupModuleType.case && tab.uniqueName === 'api-http-case') {
+        if (group.module === GroupModuleType.Case && tab.uniqueName === 'api-http-case') {
           return true;
         }
-        if (group.module === GroupModuleType.mock && tab.uniqueName === 'api-http-mock') {
+        if (group.module === GroupModuleType.Mock && tab.uniqueName === 'api-http-mock') {
           return true;
         }
         return false;

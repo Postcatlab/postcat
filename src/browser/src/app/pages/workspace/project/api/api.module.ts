@@ -16,10 +16,10 @@ import { EoTabModule } from '../../../../components/eo-ui/tab/tab.module';
 import { ExtensionSelectModule } from '../../../../components/extension-select/extension-select.module';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
-import { ProjectApiService } from './api.service';
 import { ApiGroupTreeComponent } from './components/group/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
+import { ProjectApiService } from './project-api.service';
 import { ApiTestUtilService } from './service/api-test-util.service';
 const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({

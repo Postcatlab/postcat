@@ -43,9 +43,9 @@ import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ProjectApiService } from '../../api.service';
 import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../constants/api.model';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
+import { ProjectApiService } from '../../project-api.service';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiStoreService } from '../../store/api-state.service';
@@ -596,6 +596,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     return {
       requestTabIndex: 1,
       responseTabIndex: 0,
+      autoSetContentType: true,
       userSelectedContentType: contentType,
       request: {
         authInfo: {
@@ -605,7 +606,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
         },
         apiAttrInfo: {
           contentType: bodyType,
-          requestMethod: 0,
+          requestMethod: RequestMethod.POST,
           beforeInject: '',
           afterInject: ''
         },
