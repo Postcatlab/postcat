@@ -204,7 +204,7 @@ export interface MaxValue {}
 export interface BodyParam {
   responseUuid: string;
   name: string;
-  paramType: number;
+  paramType: ParamTypeEnum;
   partType: number;
   dataType: number;
   dataTypeValue: string;
@@ -220,7 +220,10 @@ export interface BodyParam {
   paramAttr: ParamAttr;
   childList: any[];
 }
-
+export enum ParamTypeEnum {
+  REQUEST = 0,
+  RESPONSE = 1
+}
 export interface QueryParam {
   responseUuid: string;
   name: string;

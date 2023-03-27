@@ -1,5 +1,5 @@
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
-import { CollectionTypeEnum, ImportProjectDto } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
+import { ImportProjectDto } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 
 import { convertApiData } from '../../../services/storage/db/dataSource/convert';
 

@@ -110,6 +110,8 @@ export class ApiTabService {
   /**
    * Watch API/Group/Case/Env/Mock change for handle tab status to fit content
    *
+   * ？It is optimal to control Tab closing through a specific event transmission ID, but this event will always be ignored in use
+   *
    * @param inArg
    */
   closeTabAfterResourceRemove() {
@@ -134,12 +136,10 @@ export class ApiTabService {
       });
       return isExist;
     };
-
     //Delete group/api/case/mock
     reaction(
       () => this.store.getGroupList,
       (value, previousValue) => {
-        //TODO use event to handle closeTab
         const currentFlatTree = flatTree(value);
         const previousFlatTres = flatTree(previousValue);
         const hasDeleted = currentFlatTree.length < previousFlatTres.length;

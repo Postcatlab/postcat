@@ -1,4 +1,5 @@
 import { flatten, map, union } from 'lodash';
+import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
@@ -168,9 +169,10 @@ export const parseGroupDataToViewTree = list => {
   return list.map(it => {
     const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
     if (isAPI) {
+      const apiItem = it.relationInfo || it;
       return {
-        ...it.relationInfo,
-        id: it.relationInfo?.apiUuid,
+        ...apiItem,
+        id: apiItem.apiUuid,
         isLeaf: true,
         parentId: it.parentId,
         type: it.type,
@@ -195,14 +197,14 @@ export const parseGroupDataToViewTree = list => {
  * @param groupId
  * @returns
  */
-export const genApiGroupTree = (groups: Group[] = []) => {
+export const genComponentTree = (groups: Group[] = []) => {
   groups = parseGroupDataToViewTree(groups);
   return [
     ...groups.map(group => ({
       ...group,
       title: group.name || '',
       key: group.id,
-      children: genApiGroupTree([...(group?.children || [])])
+      children: genComponentTree([...(group?.children || [])])
     }))
   ];
 };

@@ -63,6 +63,10 @@ export class PushApiComponent implements OnInit {
     }
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
+    if (!module) {
+      callback(false);
+      return;
+    }
     if (module?.[action] && typeof module[action] === 'function') {
       const [data] = await this.apiService.api_projectExportProject({});
 

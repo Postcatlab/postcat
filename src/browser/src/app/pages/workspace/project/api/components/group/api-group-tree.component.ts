@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { autorun, reaction } from 'mobx';
+import { autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { genApiGroupTree as genComponentTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { genComponentTree, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ElectronService } from '../../../../../../core/services';
@@ -115,7 +115,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.reactions.push(
       autorun(() => {
         this.apiGroupTree = genComponentTree(this.store.getGroupList);
-
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
         waitNextTick().then(() => {
@@ -287,6 +286,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'clickItem': {
+        console.log(toJS(event.node));
         // * jump to api detail page
         const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
         this.router.navigate([`${prefix}/http/detail`], {

@@ -1,5 +1,11 @@
 import { ApiBodyType, RequestMethod } from '../../../../pages/workspace/project/api/constants/api.model';
 
+/**
+ * Group list api data
+ */
+export interface ApiDataFromList extends ApiData {
+  requestMethod?: number;
+}
 export interface ApiData {
   id?: number;
   apiUuid?: string;
@@ -12,7 +18,6 @@ export interface ApiData {
   name: string;
   uri: string;
   protocol: number;
-  requestMethod?: number;
   status?: number;
   starred?: number;
   encoding?: string;

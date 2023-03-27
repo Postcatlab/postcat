@@ -416,7 +416,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
         break;
       }
     }
-    console.log(where);
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {

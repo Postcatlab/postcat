@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { BodyParam, ParamTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
@@ -31,9 +31,10 @@ export class ApiEditUtilService {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
-        filterFn: item => {
+        filterFn: (item: BodyParam) => {
           item.partType = mui[tableName];
-          item.paramType = 0;
+          // 0: request, 1: response
+          item.paramType = ParamTypeEnum.REQUEST;
           delete item['paramAttr.example'];
           return filterArrFun(item);
         }
@@ -49,7 +50,7 @@ export class ApiEditUtilService {
         if (result.responseList[0].bodyParams?.[0]) {
           const item = result.responseList[0].bodyParams[0];
           item.orderNo = 0;
-          item.paramType = 1;
+          item.paramType = ParamTypeEnum.RESPONSE;
           item.partType = mui['bodyParams'];
           delete item['paramAttr.example'];
         }

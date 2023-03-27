@@ -10,7 +10,7 @@ import { ApiEffectService } from './store/api-effect.service';
 @Injectable()
 export class ProjectApiService {
   constructor(
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private router: Router,
     private effect: ApiEffectService,
     private api: ApiService,
@@ -21,7 +21,8 @@ export class ProjectApiService {
       ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
       : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
     if (err || !result?.[0]) {
-      this.message.error($localize`Can't find this API`);
+      console.error(err);
+      this.feedback.error($localize`Can't find this API`);
       return;
     }
     const apiData = result[0];
@@ -54,7 +55,7 @@ export class ProjectApiService {
     const [result, err] = await this.add(apiData);
     if (err) {
       console.log(err);
-      this.message.error($localize`Copy API failed`);
+      this.feedback.error($localize`Copy API failed`);
       return;
     }
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
@@ -68,10 +69,10 @@ export class ProjectApiService {
       apiUuids: [apiUuid]
     });
     if (err) {
-      this.message.error($localize`Delete API failed`);
+      this.feedback.error($localize`Delete API failed`);
       return;
     }
-    this.message.success($localize`Deleted API Successfully`);
+    this.feedback.success($localize`Deleted API Successfully`);
     this.effect.getGroupList();
   }
 }

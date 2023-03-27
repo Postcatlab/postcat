@@ -59,7 +59,7 @@ export class WebService {
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     } else {
-      this.settingService.putSettings({ 'backend.url': APP_CONFIG.serverUrl });
+      this.settingService.putSettings({ 'backend.url': !APP_CONFIG.production ? window.location.origin : APP_CONFIG.serverUrl });
     }
     this.getClientResource();
   }

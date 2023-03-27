@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/models/storageKeys.constant';
-import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
-import { TranslateService } from 'pc/platform/common/i18n';
 
 import { WebService } from '../../core/services';
 import { LanguageService } from '../../core/services/language/language.service';

@@ -5,7 +5,7 @@ import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/co
 import { uniqueSlash } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import type { ApiData, Mock } from 'pc/browser/src/app/services/storage/db/models';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiDataFromList, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ElectronService } from '../core/services';
 import { ApiStoreService } from '../pages/workspace/project/api/store/api-state.service';
@@ -109,7 +109,7 @@ export class MockService {
    * @param req
    * @returns
    */
-  async matchApiData(apiData: ApiData, req?) {
+  async matchApiData(apiData: ApiDataFromList, req?) {
     const { requestMethod, apiUuid } = apiData;
     const { pathname } = new URL(req.url, 'http://localhost:3040');
 

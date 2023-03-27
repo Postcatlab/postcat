@@ -1,13 +1,15 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse, ApiResponsePromise } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { QueryAllDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
+import { GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import {
   ProjectBulkCreateDto,
   ProjectPageDto,
   ProjectDeleteDto,
   ProjectUpdateDto,
   ImportProjectDto,
-  Collection
+  Collection,
+  CollectionTypeEnum
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
 import { Group, Project } from 'pc/browser/src/app/services/storage/db/models';
@@ -44,8 +46,7 @@ export class ProjectService extends BaseService<Project> {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
     const promises = collections.map(async (item, sort) => {
-      const isAPI = !!item.uri;
-      if (!isAPI) {
+      if (item.collectionType === CollectionTypeEnum.GROUP) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
           depth: depth + 1,
@@ -70,6 +71,7 @@ export class ProjectService extends BaseService<Project> {
         return;
       }
 
+      if (item.collectionType !== CollectionTypeEnum.API) return;
       const { data: apiData } = await this.apiDataService.read({
         projectUuid,
         uri: item.uri,
@@ -198,12 +200,13 @@ export class ProjectService extends BaseService<Project> {
 
     const formatTree = (arr = []) => {
       return arr.map(item => {
-        if (item.type === 2) {
+        if (item.type === GroupType.virtual) {
           return {
-            ...item.relationInfo
+            ...item.relationInfo,
+            collectionType: CollectionTypeEnum.API
           };
         } else {
-          // ...
+          item.collectionType = CollectionTypeEnum.GROUP;
           if (item.children?.length) {
             item.children = formatTree(item.children);
           }
@@ -316,7 +319,7 @@ export class ProjectService extends BaseService<Project> {
       .group((item, index) => {
         // 排序号根据原始数组索引来
         item.sort = index;
-        const isAPI = item.uri;
+        const isAPI = item.collectionType == CollectionTypeEnum.API;
         if (!isAPI) {
           return 'groupList';
         } else if (isAPI) {
