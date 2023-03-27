@@ -45,7 +45,6 @@ export interface testViewModel {
    * User selected content type
    */
   userSelectedContentType: ContentType;
-  autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
   request: Partial<ApiData>;

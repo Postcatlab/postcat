@@ -23,14 +23,17 @@ export class TabStorageService {
       throw new Error(`EO_ERROR: can't add same id tab`);
     }
     this.tabOrder.push(tabItem.uuid);
-    this.tabsByID.set(tabItem.uuid, tabItem);
+    this.setTabByID(tabItem);
   }
   updateTab(index, tabItem) {
     this.tabsByID.delete(this.tabOrder[index]);
     this.tabOrder[index] = tabItem.uuid;
+    this.setTabByID(tabItem);
+  }
+  setTabByID(tabItem) {
     this.tabsByID.set(tabItem.uuid, tabItem);
   }
-  resetTabsByOrdr(order) {
+  resetTabsByOrder(order) {
     const tabs = new Map();
     this.tabsByID.forEach((value, key) => {
       if (!order.includes(key)) {

@@ -83,7 +83,7 @@ export class TabOperateService {
         tabCache.selectedIndex = 0;
         return;
       }
-      tabsByID.set(tabItem.uuid, tabItem);
+      this.tabStorage.setTabByID(tabItem);
     });
     this.tabStorage.tabsByID = tabsByID;
     //After filter unvalid tab,Still no tab item can be selected
@@ -140,7 +140,7 @@ export class TabOperateService {
    * */
   batchClose(ids) {
     const tabOrder = this.tabStorage.tabOrder.filter(uuid => !ids.includes(uuid));
-    this.tabStorage.resetTabsByOrdr(tabOrder);
+    this.tabStorage.resetTabsByOrder(tabOrder);
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
     }
@@ -283,7 +283,9 @@ export class TabOperateService {
       this.updateChildView();
 
       //* Update tab info,maybe params changed
-      this.tabStorage.tabsByID.set(existTab.uuid, { ...existTab, params: { ...existTab.params, ...nextTab.params } });
+      //!Get newest tab content,If the initialization is too fast, the baseContent content will be overwritten here
+      const newData = this.getSameTab(routeTab);
+      this.tabStorage.setTabByID({ ...newData, params: { ...newData.params, ...nextTab.params } });
       return;
     }
     //!Same params.uuid can only open one Tab
@@ -360,7 +362,7 @@ export class TabOperateService {
         break;
       }
     }
-    this.tabStorage.resetTabsByOrdr(tabsObj.left);
+    this.tabStorage.resetTabsByOrder(tabsObj.left);
     this.selectedIndex = tabsObj.selectedIndex;
     if (tabsObj.needTips) {
       this.feedback.warning($localize`Program will not close unsaved tabs`);

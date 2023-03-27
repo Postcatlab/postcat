@@ -132,6 +132,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
         return;
       }
       tabs.push({
+        baseContent: tab.baseContent,
         uuid: tab.uuid,
         type: tab.type,
         title: tab.title,
@@ -139,7 +140,6 @@ export class EoTabComponent implements OnInit, OnDestroy {
         params: tab.params
       });
     });
-    console.log(tabs);
     return tabs;
   }
   getTabs() {
