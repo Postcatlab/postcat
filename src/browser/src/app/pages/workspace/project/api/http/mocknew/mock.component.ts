@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
@@ -58,12 +59,14 @@ export class MockComponent implements EditTabViewComponent {
     private apiMock: ApiMockService,
     private message: EoNgFeedbackMessageService,
     public web: WebService,
-    private apiEffect: ApiEffectService
+    private apiEffect: ApiEffectService,
+    private route: ActivatedRoute
   ) {
     //TODO: 需要换成路由拿apiuuid和mockid
-    this.apiUuid = 'yd1qr8m51dq';
+    this.apiUuid = this.route.snapshot.queryParams.apiUuid;
     // 'yd1qr8m51dq'
-    this.mock_id = 5067;
+    this.mock_id = this.route.snapshot.queryParams.mockId;
+    // this.mock_id = null
   }
 
   afterTabActivated(): void {
@@ -71,12 +74,12 @@ export class MockComponent implements EditTabViewComponent {
       this.model = { ...this.model };
     } else {
       // TODO: 需要换成是否有mockid判断
-      // if (false) {
-      this.isEdit = true;
-      this.getApiDetail();
-      // } else {
-      //   this.mockDetail(this.mock_id);
-      // }
+      if (!this.mock_id) {
+        this.isEdit = true;
+        this.getApiDetail();
+      } else {
+        this.mockDetail(this.mock_id);
+      }
     }
   }
   initTabModel() {
@@ -122,6 +125,7 @@ export class MockComponent implements EditTabViewComponent {
     };
     this.setValidateFormValue(data);
     this.initTabModel();
+    this.addOrEditModal(data);
   }
 
   setValidateFormValue(res) {
@@ -211,6 +215,7 @@ export class MockComponent implements EditTabViewComponent {
         return;
       }
       this.message.success($localize`Added successfully`);
+      this.apiEffect.createMock();
     }
     // item.url = this.getMockUrl(item);
   }
