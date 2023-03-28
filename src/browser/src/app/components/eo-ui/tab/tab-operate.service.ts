@@ -50,7 +50,6 @@ export class TabOperateService {
       : this.tabStorage.getPersistenceStorage({
           handleDataBeforeGetCache: inArg.handleDataBeforeGetCache
         });
-
     //parse result for router change
     const tabCache = this.filterValidTab(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);
@@ -83,7 +82,7 @@ export class TabOperateService {
         tabCache.selectedIndex = 0;
         return;
       }
-      this.tabStorage.setTabByID(tabItem);
+      tabsByID.set(tabItem.uuid, tabItem);
     });
     this.tabStorage.tabsByID = tabsByID;
     //After filter unvalid tab,Still no tab item can be selected
@@ -284,8 +283,8 @@ export class TabOperateService {
 
       //* Update tab info,maybe params changed
       //!Get newest tab content,If the initialization is too fast, the baseContent content will be overwritten here
-      const newData = this.getSameTab(routeTab);
-      this.tabStorage.setTabByID({ ...newData, params: { ...newData.params, ...nextTab.params } });
+      const newestData = this.getSameTab(routeTab);
+      this.tabStorage.setTabByID({ ...newestData, params: { ...newestData.params, ...nextTab.params } });
       return;
     }
     //!Same params.uuid can only open one Tab

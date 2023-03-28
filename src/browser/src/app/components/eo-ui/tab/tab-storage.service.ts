@@ -19,7 +19,7 @@ export class TabStorageService {
     this.tabStorageKey = inArg.tabStorageKey;
   }
   addTab(tabItem) {
-    if (this.tabsByID.has(tabItem.uuid)) {
+    if (this.tabsByID.has(tabItem.uuid) && this.tabOrder.some(uuid => uuid === tabItem.uuid)) {
       throw new Error(`EO_ERROR: can't add same id tab`);
     }
     this.tabOrder.push(tabItem.uuid);
