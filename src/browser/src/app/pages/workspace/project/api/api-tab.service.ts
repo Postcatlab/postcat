@@ -138,9 +138,20 @@ export class ApiTabService {
       emit: model => {
         //Current is current selected tab
         const currentTab = this.apiTabComponent.getCurrentTab();
-
         //resourceID
-        const modelID: number = model.apiUuid || model.uuid || model.id;
+        let modelID: number;
+        switch (currentTab.uniqueName) {
+          case 'api-http-detail':
+          case 'api-http-test':
+          case 'api-http-edit': {
+            modelID = model.apiUuid;
+            break;
+          }
+          default: {
+            modelID = model.uuid || model.id;
+            break;
+          }
+        }
 
         //1. The currently active tab is not the one that initiated the request
         //2. the request response is not what the current active tab needs

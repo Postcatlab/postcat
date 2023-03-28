@@ -5,6 +5,7 @@ import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { parseAndCheckCollections } from 'pc/browser/src/app/services/storage/db/validate/validate';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
+import pkgInfo from '../../../../../package.json';
 import { MessageService } from './message';
 import { ApiService } from './storage/api.service';
 import { convertApiData } from './storage/db/dataSource/convert';
@@ -29,7 +30,11 @@ export class GlobalProvider {
   }
 
   injectGlobalData() {
-    window.pc = {};
+    window.pc = {
+      app: {
+        version: pkgInfo.version
+      }
+    };
     window.pc.modalService = this.modalService;
     window.pc.getExtensionSettings = this.setting.getConfiguration;
     window.pc.getProjectSettings = async name => {

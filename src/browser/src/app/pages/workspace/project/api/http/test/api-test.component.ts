@@ -11,7 +11,7 @@ import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/ap
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 type TestPage = 'blankTest' | 'historyTest' | 'caseTest' | 'apiTest';
@@ -47,26 +47,25 @@ export class ApiTestComponent implements EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange(): boolean {
-    console.log('isFormChange');
     if (!(this.initialModel?.request && this.model?.request)) {
       return false;
     }
-    console.log(
-      'api test origin:',
-      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-      'after:',
-      this.apiTestUtil.formatEditingApiData(this.model.request)
-    );
-    const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
-    const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
-    if (originText !== afterText) {
-      // console.log('api test formChange true!', originText.split(afterText));
+    const origin = this.apiTestUtil.formatEditingApiData(this.initialModel.request);
+    const after = this.apiTestUtil.formatEditingApiData(this.model.request);
+    // console.log(
+    //   'api test origin:',
+    //   origin,
+    //   'after:',
+    //   after
+    // );
+    if (JSON.stringify(origin) !== JSON.stringify(after)) {
+      // console.log('api test formChange true!', getDifference(origin, after));
       return true;
     }
     return false;
   }
   async afterTabActivated() {
-    console.log('afterTabActivated', this.model, this.initialModel);
+    // console.log('afterTabActivated', this.model, this.initialModel);
     const isFromCache: boolean = this.model && !isEmptyObj(this.model);
     if (isFromCache) {
       return;

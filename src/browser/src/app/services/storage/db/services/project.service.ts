@@ -9,7 +9,7 @@ import {
   ImportProjectDto,
   Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
-import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
+import { SampleCollection } from 'pc/browser/src/app/services/storage/db/initData/apiData';
 import { CollectionTypeEnum, Group, GroupType, Project } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
 import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
@@ -24,7 +24,6 @@ export class ProjectService extends BaseService<Project> {
   groupService = new GroupService();
   environmentService = new EnvironmentService();
 
-  apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
 
   constructor() {
@@ -53,15 +52,13 @@ export class ProjectService extends BaseService<Project> {
           workSpaceUuid
         });
         if (targetGroup) {
-          // @ts-ignore
+          //@ts-ignore
           this.apiGroupTable.update(targetGroup.id, { sort });
           if (item.children?.length) {
             await this.deepIncreUpdateGroup(item.children, targetGroup);
           }
         } else {
-          const groupID = await this.apiGroupTable.add({ ...item, parentId, sort, depth: depth + 1, projectUuid, workSpaceUuid });
-          const group = await this.apiGroupTable.get(groupID);
-
+          const { data: group } = await this.groupService.create({ ...item, parentId, sort, depth: depth + 1, projectUuid, workSpaceUuid });
           if (item.children?.length) {
             await this.deepIncreUpdateGroup(item.children, group);
           }
@@ -76,20 +73,29 @@ export class ProjectService extends BaseService<Project> {
         'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
       });
       if (apiData) {
-        // @ts-ignore
-        await this.apiDataTable.update(apiData.id, {
-          ...apiData,
-          ...item,
-          sort,
-          groupId: parentId,
+        await this.apiDataService.update({
+          api: {
+            ...apiData,
+            ...item,
+            sort,
+            groupId: parentId,
+            projectUuid,
+            workSpaceUuid
+          },
           projectUuid,
           workSpaceUuid
         });
       } else {
-        await this.apiDataTable.add({
-          ...item,
-          sort,
-          groupId: parentId,
+        await this.apiDataService.bulkCreate({
+          apiList: [
+            {
+              ...item,
+              sort,
+              groupId: parentId,
+              projectUuid,
+              workSpaceUuid
+            }
+          ],
           projectUuid,
           workSpaceUuid
         });
@@ -144,9 +150,15 @@ export class ProjectService extends BaseService<Project> {
     this.groupService.bulkCreate(groups).then(({ data }) => {
       if (isInitApiData) {
         data.forEach(group => {
-          const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
+          this.import({
+            //@ts-ignore
+            collections: SampleCollection.collections,
+            workSpaceUuid,
+            projectUuid: group.projectUuid
+          });
+          // const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
           // @ts-ignore
-          this.apiDataService.bulkCreate(sampleApiData);
+          // this.apiDataService.bulkCreate(sampleApiData);
         });
       }
     });

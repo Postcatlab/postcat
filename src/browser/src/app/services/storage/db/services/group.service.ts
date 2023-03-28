@@ -151,6 +151,13 @@ export class GroupService extends BaseService<Group> {
 
   async read(params, isCallByApiData = false) {
     const result = await this.baseService.read(params);
+    if (!result.data) {
+      return {
+        success: false,
+        code: 1,
+        data: null
+      };
+    }
     const group = result.data;
     const groupAuthType = group.authInfo?.authType;
 
