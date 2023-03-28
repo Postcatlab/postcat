@@ -178,14 +178,14 @@ export const getPureGroup = groupList => {
   ];
 };
 
-const loopFindTreeID = (list, id): Group => {
+export const findTreeNode = (list, func): Group => {
   let result;
-  list.find(group => {
-    if (group.id === id) {
+  list.some(group => {
+    if (func(group)) {
       return (result = group);
     }
     if (group.children) {
-      return (result = loopFindTreeID(group.children, id));
+      return (result = findTreeNode(group.children, func));
     }
   });
   return result;
@@ -201,7 +201,7 @@ export class PCTree {
     return this.list;
   }
   findTreeNodeByID(id): Group {
-    return loopFindTreeID(this.list, id);
+    return findTreeNode(this.list, val => val.id === id);
   }
 
   add(group: Group) {

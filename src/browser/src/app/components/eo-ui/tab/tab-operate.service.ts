@@ -411,7 +411,7 @@ export class TabOperateService {
         if (keepID && uuid === keepID) {
           return true;
         }
-        if (this.tabStorage.tabsByID.get(uuid).hasChanged) {
+        if (this.tabStorage.tabsByID.get(uuid)?.hasChanged) {
           tabsObj.needTips = true;
           return true;
         }

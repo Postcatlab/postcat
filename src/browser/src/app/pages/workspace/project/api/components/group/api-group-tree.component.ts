@@ -10,12 +10,14 @@ import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
-import { getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { findTreeNode, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 import { ElectronService } from '../../../../../../core/services';
 import { ProjectApiService } from '../../project-api.service';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
+
+import { group } from 'console';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
@@ -42,6 +44,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];
+  groupModuleName = 'API_GROUP';
   operateByModule = {};
   extensionActions = [
     {
@@ -86,28 +89,32 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.reactions.push(
       autorun(() => {
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
-        console.log('apiGroupTree', toJS(this.apiGroupTree));
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
-        this.initSelectKeys();
+        waitNextTick().then(() => {
+          this.initSelectKeys();
+        });
       })
     );
-    // this.reactions.push(
-    //   reaction(
-    //     () => this.globalStore.getUrl,
-    //     () => {
-    //       this.initSelectKeys();
-    //     }
-    //   )
-    // );
+    this.reactions.push(
+      reaction(
+        () => this.globalStore.getUrl,
+        () => {
+          this.initSelectKeys();
+        }
+      )
+    );
   }
   initSelectKeys() {
     //Such as Env group tree
     const isOtherPage = [this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'project-env-edit').pathname].some(path =>
       this.router.url.includes(path)
     );
-    const { gid } = this.route.snapshot.queryParams;
-    this.nzSelectedKeys = gid && !isOtherPage ? [Number(gid) || gid] : [];
+    const { uuid } = this.route.snapshot.queryParams;
+    const groupId = findTreeNode(this.store.getGroupList, val => val.id === (Number(uuid) || uuid))?.id;
+    // console.log(groupId, this.store.getGroupList, uuid);
+    if (!groupId) return;
+    this.nzSelectedKeys = !isOtherPage ? [groupId] : [];
   }
   /**
    * Parse group data from database to view tree
@@ -121,10 +128,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       if (it.type === GroupType.UserCreated) {
         return {
           ...it,
+          module: this.groupModuleName,
           children: this.parseGroupDataToViewTree(it.children || [])
         };
       }
-      // console.log(toJS(it), it.type);
       if (it.type !== GroupType.Virtual) return;
       //* Resource
       const result = {
@@ -209,10 +216,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
     const origin = event.node.origin;
-    console.log(origin);
-    //* Open Folder
+    //* If the group is selected, click again to expand the group
     if (!event.node.isLeaf && this.nzSelectedKeys.includes(event.node.key)) {
       event.node.isExpanded = true;
+    }
+    if (origin.type === GroupType.UserCreated) {
+      // * jump to group detail page
+      this.groupService.toDetail(event.node.key);
+      return;
     }
     switch (origin.module) {
       case GroupModuleType.API: {
@@ -223,10 +234,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.mockService.toDetail(origin.id);
         break;
       }
-      default: {
-        // * jump to group detail page
-        this.groupService.toDetail(event.node.key);
-      }
     }
   }
 
@@ -235,15 +242,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       [GroupModuleType.API]: [
         {
           title: $localize`Edit`,
-          click: item => this.projectApi.toEdit(item.uuid)
+          click: item => this.projectApi.toEdit(item.apiUuid)
         },
         {
           title: $localize`Add Mock`,
-          click: item => this.mockService.toEdit(item.uuid)
+          click: item => this.mockService.toAdd(item.apiUuid)
         },
         {
           title: $localize`:@Copy:Copy`,
-          click: item => this.projectApi.copy(item.uuid)
+          click: item => this.projectApi.copy(item.apiUuid)
         },
         {
           title: $localize`:@Delete:Delete`,
@@ -265,7 +272,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       ],
       [GroupModuleType.Case]: [],
-      API_GROUP: [
+      [this.groupModuleName]: [
         {
           title: $localize`Add API`,
           click: item => this.projectApi.toAdd(item.id)

@@ -12,7 +12,7 @@ import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/ap
 import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group-tree.directive';
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { API_TABS, BASIC_TABS_INFO } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { ApiMockModule } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.module';
+import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
 import { EoTabModule } from '../../../../components/eo-ui/tab/tab.module';
@@ -56,7 +56,7 @@ const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
     ApiTestUtilService,
     NzResizableService,
     ApiTabService,
-    ApiMockModule
+    ApiMockService
   ]
 })
 export class ApiModule {}
