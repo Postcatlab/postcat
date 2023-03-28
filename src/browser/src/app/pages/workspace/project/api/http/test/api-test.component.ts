@@ -51,12 +51,12 @@ export class ApiTestComponent implements EditTabViewComponent {
     if (!(this.initialModel?.request && this.model?.request)) {
       return false;
     }
-    console.log(
-      'api test origin:',
-      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-      'after:',
-      this.apiTestUtil.formatEditingApiData(this.model.request)
-    );
+    // console.log(
+    //   'api test origin:',
+    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+    //   'after:',
+    //   this.apiTestUtil.formatEditingApiData(this.model.request)
+    // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {
@@ -66,7 +66,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     return false;
   }
   async afterTabActivated() {
-    console.log('afterTabActivated', this.model, this.initialModel);
+    // console.log('afterTabActivated', this.model, this.initialModel);
     const isFromCache: boolean = this.model && !isEmptyObj(this.model);
     if (isFromCache) {
       return;

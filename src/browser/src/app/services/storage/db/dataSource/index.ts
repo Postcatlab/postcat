@@ -7,7 +7,8 @@ import {
   Environment,
   ApiTestHistory,
   Mock,
-  ProjectSyncSetting
+  ProjectSyncSetting,
+  ApiCase
 } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { ProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
@@ -20,7 +21,7 @@ class DataSource extends Dexie {
   group!: Table<Group, number>;
   environment!: Table<Environment, number>;
   apiData!: Table<ApiData, number>;
-  apiCase!: Table<Mock, number>;
+  apiCase!: Table<ApiCase, number>;
   apiTestHistory!: Table<ApiTestHistory, number>;
   mock!: Table<Mock, number>;
   constructor() {

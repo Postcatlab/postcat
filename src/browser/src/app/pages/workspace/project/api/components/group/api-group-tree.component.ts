@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { NewPeopleGuideComponent } from 'pc/browser/src/app/pages/new-people-guide/new-people-guide.component';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
@@ -16,8 +15,6 @@ import { ElectronService } from '../../../../../../core/services';
 import { ProjectApiService } from '../../project-api.service';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
-
-import { group } from 'console';
 
 export type GroupAction = 'new' | 'edit' | 'delete';
 
@@ -295,22 +292,5 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Clear all subscriptions
     this.reactions.forEach(reaction => reaction());
-  }
-
-  toGuide() {
-    const modal = this.modal.create({
-      nzTitle: $localize`New Mock`,
-      nzWidth: '70%',
-      nzContent: NewPeopleGuideComponent
-    });
-  }
-
-  toMock() {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/mock`], {
-      queryParams: {
-        pageID: Date.now().toString()
-      }
-    });
   }
 }

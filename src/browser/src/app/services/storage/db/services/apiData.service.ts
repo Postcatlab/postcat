@@ -19,7 +19,6 @@ export class ApiDataService extends BaseService<ApiData> {
   constructor() {
     super(dataSource.apiData);
   }
-
   async bulkCreate(params: ApiDataBulkCreateDto) {
     const { apiList, workSpaceUuid, projectUuid } = params;
     const items = apiList.map(item => {
@@ -94,6 +93,7 @@ export class ApiDataService extends BaseService<ApiData> {
 
   async update(params: ApiDataUpdateDto) {
     const { api, projectUuid, workSpaceUuid } = params;
+    console.log(api);
     const { data } = await this.baseService.read({ uuid: api.apiUuid });
     api['id'] = data.id;
     return this.baseService.update({
