@@ -1,6 +1,7 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, Output, EventEmitter, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { autorun, reaction, values } from 'mobx';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject } from 'rxjs';
 
@@ -16,13 +17,15 @@ export class EnvListComponent implements OnDestroy {
   modalTitle = $localize`:@@New Environment:New Environment`;
   nzTreeSelect = [];
   envList = [];
+  envRoute;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public store: ApiStoreService,
     private globalStore: StoreService,
     private router: Router,
     private route: ActivatedRoute,
-    private effect: ApiEffectService
+    private effect: ApiEffectService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     autorun(() => {
       if (this.store.getEnvList) {
@@ -30,6 +33,7 @@ export class EnvListComponent implements OnDestroy {
         this.setSelectKeys();
       }
     });
+    this.envRoute = this.tabsConfig.basic_tabs.find(n => n.uniqueName === 'project-env-edit').pathname;
     this.setSelectKeys();
     reaction(
       () => this.globalStore.getUrl,
@@ -40,8 +44,7 @@ export class EnvListComponent implements OnDestroy {
   }
   setSelectKeys() {
     const uuid = this.route.snapshot.queryParams.uuid;
-    const id =
-      this.router.url.includes('home/workspace/project/api/env/edit') && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
+    const id = this.router.url.includes(this.envRoute) && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
     this.nzTreeSelect = [id];
   }
   ngOnDestroy() {
@@ -55,12 +58,12 @@ export class EnvListComponent implements OnDestroy {
     this.effect.deleteEnv(id);
   }
   editEnv($event) {
-    this.router.navigate(['/home/workspace/project/api/env/edit'], {
+    this.router.navigate([this.envRoute], {
       queryParams: { uuid: $event.node.key }
     });
   }
   addEnv(pid = 1) {
-    this.router.navigate(['/home/workspace/project/api/env/edit'], {
+    this.router.navigate([this.envRoute], {
       queryParams: { pageID: Date.now() }
     });
   }

@@ -8,6 +8,7 @@ import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/projec
 import { ApiTestFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-test-form/api-test-form.component';
 import { ApiTestResultHeaderComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-test-result-header/api-test-result-header.component';
 import { ParamsImportComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/params-import/params-import.component';
+import { API_TABS, BASIC_TABS_INFO } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiTestService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.service';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';

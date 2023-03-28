@@ -1,4 +1,5 @@
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { RequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
 
 /**
@@ -13,7 +14,12 @@ export interface ViewParamAttr extends ParamAttr {
   paramValueList?: any;
 }
 
-export interface ApiData {
+export interface ApiBaseRequest {
+  apiAttrInfo: ApiAttrInfo;
+  requestParams: RequestParams;
+  authInfo?: AuthInfo;
+}
+export interface ApiData extends ApiBaseRequest {
   id?: number;
   apiUuid?: string;
   projectUuid?: string;
@@ -44,16 +50,13 @@ export interface ApiData {
   updateTime?: number;
   introduction?: Introduction;
   relation?: Relation;
-  apiAttrInfo: ApiAttrInfo;
   dubboApiAttrInfo?: DubboApiAttrInfo;
   soapApiAttrInfo?: SoapApiAttrInfo;
   grpcApiAttrInfo?: GrpcApiAttrInfo;
-  requestParams: RequestParams;
   responseList: ResponseList[];
   resultList?: ResultList[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
-  authInfo?: any;
   script?: {
     beforeScript: '';
     afterScript: '';
@@ -83,7 +86,7 @@ export interface ApiAttrInfo {
   requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
-  authInfo?: string;
+  authInfo?: AuthInfo;
   createTime?: number;
   updateTime?: number;
 }

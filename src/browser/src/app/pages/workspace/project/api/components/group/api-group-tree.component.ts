@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NewPeopleGuideComponent } from 'pc/browser/src/app/pages/new-people-guide/new-people-guide.component';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
-import { API_ROOT_PATH, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
@@ -69,10 +69,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private store: ApiStoreService,
     private effect: ApiEffectService,
     private mockService: ApiMockService,
-    private modalService: ModalService,
     private router: Router,
     private route: ActivatedRoute,
-    private modal: ModalService
+    private modal: ModalService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.operateByModule = this.getGroupOperate();
   }
@@ -89,25 +89,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         console.log('apiGroupTree', toJS(this.apiGroupTree));
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
-        waitNextTick().then(() => {
-          this.initSelectKeys();
-        });
+        this.initSelectKeys();
       })
     );
-    this.reactions.push(
-      reaction(
-        () => this.globalStore.getUrl,
-        () => {
-          this.initSelectKeys();
-        }
-      )
-    );
+    // this.reactions.push(
+    //   reaction(
+    //     () => this.globalStore.getUrl,
+    //     () => {
+    //       this.initSelectKeys();
+    //     }
+    //   )
+    // );
   }
   initSelectKeys() {
     //Such as Env group tree
-    const isOtherPage = [`${API_ROOT_PATH}/env`].some(path => this.router.url.includes(path));
-    const { uuid } = this.route.snapshot.queryParams;
-    this.nzSelectedKeys = uuid && !isOtherPage ? [Number(uuid) || uuid] : [];
+    const isOtherPage = [this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'project-env-edit').pathname].some(path =>
+      this.router.url.includes(path)
+    );
+    const { gid } = this.route.snapshot.queryParams;
+    this.nzSelectedKeys = gid && !isOtherPage ? [Number(gid) || gid] : [];
   }
   /**
    * Parse group data from database to view tree

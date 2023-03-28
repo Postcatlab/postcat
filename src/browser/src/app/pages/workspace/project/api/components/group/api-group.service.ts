@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { API_ROOT_PATH } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
-import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 @Injectable({
   providedIn: 'any'
@@ -17,13 +16,12 @@ export class ApiGroupService {
     private router: Router,
     private effect: ApiEffectService,
     private store: ApiStoreService,
-    private globalStore: StoreService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
 
   navigate2group(queryParams) {
-    const prefix = this.globalStore.isShare ? 'share' : API_ROOT_PATH;
-    this.router.navigate([`${prefix}/group/edit`], {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'project-group').pathname], {
       queryParams
     });
   }
