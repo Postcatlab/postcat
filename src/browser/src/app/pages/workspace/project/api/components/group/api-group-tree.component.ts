@@ -300,7 +300,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
 
   toMock() {
     const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/newMock`], {
+    this.router.navigate([`${prefix}/http/mock`], {
       queryParams: {
         pageID: Date.now().toString()
       }
