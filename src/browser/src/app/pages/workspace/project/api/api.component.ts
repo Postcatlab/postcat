@@ -69,17 +69,17 @@ export class ApiComponent implements OnInit, OnDestroy {
       isShare: true,
       id: 'api-http-test',
       title: $localize`Test`
-    },
-    {
-      routerLink: 'mock',
-      id: 'api-http-mock',
-      title: 'Mock'
-    },
-    {
-      routerLink: 'action',
-      id: 'api-http-action',
-      title: 'Action'
     }
+    // {
+    //   routerLink: 'mock',
+    //   id: 'api-http-mock',
+    //   title: 'Mock'
+    // },
+    // {
+    //   routerLink: 'action',
+    //   id: 'api-http-action',
+    //   title: 'Action'
+    // }
   ];
   rightSiderWidth = this.getLocalRightSiderWidth();
 
@@ -135,8 +135,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   initChildBarShowStatus() {
     const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
     const isGroupPage = ['share/group/edit', 'home/workspace/project/api/group/edit'].some(n => this.router.url.includes(n));
+    const isMockPage = ['home/workspace/project/api/http/mock'].some(n => this.router.url.includes(n));
     const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');
-    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage && !isGroupPage;
+    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage && !isGroupPage && !isMockPage;
   }
   onGroupTabSelectChange($event) {
     StorageUtil.set('eo_group_tab_select', this.tabsIndex);

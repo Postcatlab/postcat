@@ -81,7 +81,11 @@ export class ApiMockService {
       }
     }
   }
-  toDetail(mockID) {}
+  toDetail(mockID) {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
+      queryParams: { uuid: mockID, pageID: Date.now() }
+    });
+  }
   toEdit(mockID) {
     this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
       queryParams: { uuid: mockID }

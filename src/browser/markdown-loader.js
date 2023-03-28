@@ -1,7 +1,7 @@
-const showdown = require('showdown');
+const markdownIt = require('markdown-it');
 
 module.exports = source => {
-  let converter = new showdown.Converter();
-  const html = converter.makeHtml(source);
+  let md = new markdownIt();
+  const html = md.render(source);
   return html;
 };
