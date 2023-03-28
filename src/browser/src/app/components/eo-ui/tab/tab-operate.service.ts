@@ -39,7 +39,7 @@ export class TabOperateService {
     private tabStorage: TabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -363,7 +363,7 @@ export class TabOperateService {
     this.tabStorage.resetTabsByOrdr(tabsObj.left);
     this.selectedIndex = tabsObj.selectedIndex;
     if (tabsObj.needTips) {
-      this.message.warning($localize`Program will not close unsaved tabs`);
+      this.feedback.warning($localize`Program will not close unsaved tabs`);
     }
   }
   /**
@@ -445,7 +445,7 @@ export class TabOperateService {
     return result;
   }
   private updateChildView() {
-    this.messageService.send({ type: 'tabContentInit', data: {} });
+    this.messageService.send({ type: 'tabContentInit', data: { uuid: this.getCurrentTab()?.uuid } });
   }
   /**
    * Get valid tab item
@@ -463,7 +463,7 @@ export class TabOperateService {
       if (!tabItem) {
         return false;
       }
-      const validTab = this.BASIC_TABS.find(val => val.id === tabItem.id);
+      const validTab = this.BASIC_TABS.find(val => val.uniqueName === tabItem.uniqueName);
       if (!validTab) {
         delete cache.tabsByID[id];
       } else {

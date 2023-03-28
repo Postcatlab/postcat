@@ -60,7 +60,7 @@ export class MemberListComponent implements OnInit {
   constructor(
     public store: StoreService,
     private trace: TraceService,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     public member: MemberService
   ) {}
 
@@ -94,20 +94,20 @@ export class MemberListComponent implements OnInit {
   async changeRole(item) {
     const isOK: boolean = await this.member.changeRole(item);
     if (isOK) {
-      this.message.success($localize`Change role successfully`);
+      this.feedback.success($localize`Change role successfully`);
       this.trace.report('switch_member_permission');
       this.queryList();
       return;
     }
-    this.message.error($localize`Change role Failed`);
+    this.feedback.error($localize`Change role Failed`);
   }
   async removeMember(item) {
     const [data, err]: any = await this.member.removeMember(item);
     if (err) {
-      this.message.error($localize`Change role error`);
+      this.feedback.error($localize`Change role error`);
       return;
     }
-    this.message.success($localize`Remove Member successfully`);
+    this.feedback.success($localize`Remove Member successfully`);
     this.queryList();
   }
 }

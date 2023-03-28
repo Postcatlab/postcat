@@ -78,7 +78,7 @@ export class WorkspaceSettingComponent {
   ];
   constructor(
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private api: ApiService,
     private store: StoreService,
     private modal: ModalService,
@@ -119,10 +119,10 @@ export class WorkspaceSettingComponent {
           workSpaceUuids: [wid]
         });
         if (err) {
-          this.message.error($localize`Delete failed !`);
+          this.feedback.error($localize`Delete failed !`);
           return;
         }
-        this.message.success($localize`Delete Succeeded`);
+        this.feedback.success($localize`Delete Succeeded`);
         await this.effect.updateWorkspaceList();
         await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }
@@ -146,10 +146,10 @@ export class WorkspaceSettingComponent {
       title
     });
     if (err) {
-      this.message.error($localize`Edit workspace failed`);
+      this.feedback.error($localize`Edit workspace failed`);
       return;
     }
-    this.message.success($localize`Edit workspace successfully !`);
+    this.feedback.success($localize`Edit workspace successfully !`);
 
     //Rest Current Workspace
     await this.effect.updateWorkspaceList();

@@ -9,7 +9,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
-import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/tree/api-group-tree.directive';
+import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group-tree.directive';
+import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
 import { EoTabModule } from '../../../../components/eo-ui/tab/tab.module';
@@ -17,13 +18,11 @@ import { ExtensionSelectModule } from '../../../../components/extension-select/e
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
 import { ProjectApiService } from './api.service';
-import { ApiGroupEditComponent } from './components/group/edit/api-group-edit.component';
-import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.component';
+import { ApiGroupTreeComponent } from './components/group/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
 import { ApiTestUtilService } from './service/api-test-util.service';
-
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
+const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
   imports: [
     ExtensionSelectModule,
@@ -39,7 +38,8 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     NzBadgeModule,
     EoNgLayoutModule,
     EoNgTabsModule,
-    EoNgTreeModule
+    EoNgTreeModule,
+    ResponseStepsComponent
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],

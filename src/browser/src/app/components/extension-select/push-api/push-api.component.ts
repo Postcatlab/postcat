@@ -23,7 +23,7 @@ export class PushApiComponent implements OnInit {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private extensionService: ExtensionService,
-    private eoMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private apiService: ApiService,
     private messageService: MessageService
   ) {}
@@ -70,7 +70,7 @@ export class PushApiComponent implements OnInit {
       try {
         const output = await module[action](data);
         if (has(output, 'status') && output.status !== 0) {
-          this.eoMessage.error(output.message);
+          this.feedback.error(output.message);
           callback('stayModal');
           return;
         }

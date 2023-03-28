@@ -5,6 +5,7 @@ import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-
 import { WebService } from 'pc/browser/src/app/core/services';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -25,7 +26,7 @@ let itemData: any = {};
   templateUrl: './mock.component.html',
   styleUrls: ['./mock.component.scss']
 })
-export class MockComponent implements OnInit, EditTabViewComponent {
+export class MockComponent implements EditTabViewComponent {
   @Input() model: ModelType;
   @Output() readonly eoOnInit = new EventEmitter<ModelType>();
 
@@ -35,7 +36,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
 
   apiData: ApiData;
 
-  initialModel: ModelType;
+  @Input() initialModel: ModelType;
 
   apiUuid: number | string;
 
@@ -56,53 +57,34 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     private api: ProjectApiService,
     private apiMock: ApiMockService,
     private message: EoNgFeedbackMessageService,
-    public web: WebService
+    public web: WebService,
+    private apiEffect: ApiEffectService
   ) {
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = 'yd1qr8m51dq';
     // 'yd1qr8m51dq'
-    this.mock_id = 5065;
-
-    // this.model = {
-    //   name: '',
-    //   createWay: '',
-    //   response: '',
-    //   url: ''
-    // };
+    this.mock_id = 5067;
   }
 
   afterTabActivated(): void {
     if (this.model) {
-      // @ts-ignore
-      this.model = [...this.model];
+      this.model = { ...this.model };
     } else {
-      //TODO: 需要换成是否有mockid判断
+      // TODO: 需要换成是否有mockid判断
       // if (false) {
-      //   this.getApiDetail();
+      this.isEdit = true;
+      this.getApiDetail();
       // } else {
-      this.mockDetail(this.mock_id);
+      //   this.mockDetail(this.mock_id);
       // }
     }
-    // console.log(this.model, 999);
   }
-
-  ngOnInit() {
-    // //TODO: 需要换成是否有mockid判断
-    // if (false) {
-    //   this.getApiDetail();
-    // } else {
-    this.mockDetail(this.mock_id);
-    // }
-  }
-
   initTabModel() {
-    this.initialModel = eoDeepCopy(this.model);
-    this.eoOnInit.emit(this.initialModel);
+    this.eoOnInit.emit(this.model);
     this.modelChange.emit(this.model);
   }
 
   valueChange($event) {
-    console.log(this.model);
     this.modelChange.emit(this.model);
   }
 
@@ -202,8 +184,7 @@ export class MockComponent implements OnInit, EditTabViewComponent {
     await this.addOrEditModal(requestData);
     this.isEdit = false;
     itemData = requestData;
-    this.initialModel = eoDeepCopy(this.model);
-    this.afterSaved.emit(this.initialModel);
+    this.afterSaved.emit(this.model);
   }
   // async saveResponse() {
   //   if(!this.model.response) {
@@ -247,5 +228,6 @@ export class MockComponent implements OnInit, EditTabViewComponent {
   async handleDeleteMockItem() {
     await this.apiMock.deleteMock(itemData.id);
     this.message.success($localize`Delete Succeeded`);
+    this.apiEffect.deleteMockDetail();
   }
 }

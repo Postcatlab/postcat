@@ -3,11 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import {
-  AuthInfo,
-  AuthorizationExtensionFormComponent,
-  INHERIT_AUTH_OPTION
-} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { AuthInfo, INHERIT_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -46,7 +43,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     private effect: ApiEffectService,
     public globalStore: StoreService,
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,
     private trace: TraceService
@@ -73,7 +70,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       return;
     }
     this.isSaving = true;
-    this.initialModel = eoDeepCopy(this.model);
     const params = {
       id: this.model.id,
       type: this.model.type,
@@ -84,9 +80,9 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     };
     if (params.id) {
       await this.effect.updateGroup(params);
-      this.message.success($localize`Edit Group Info successfully`);
+      this.feedback.success($localize`Edit Group Info successfully`);
       this.isSaving = false;
-      this.afterSaved.emit(this.initialModel);
+      this.afterSaved.emit(this.model);
       this.trace.report('save_auth_success');
     } else {
       this.checkForm();
@@ -109,21 +105,15 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
         this.model = data;
         this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
       }
-      this.initialModel = eoDeepCopy(this.model);
       this.isEdit = true;
     } else {
       if (!this.model) {
-        const [res, err]: any = await this.api.api_groupDetail({ id });
-        console.log('res', structuredClone(res));
+        const [res, err] = await this.api.api_groupDetail({ id });
         this.model = res;
-        this.initialModel = eoDeepCopy(this.model);
       }
     }
     if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
-      this.model.authInfo.authInfo = '';
-    }
-    if (this.initialModel.authInfo) {
-      this.initialModel.authInfo.authInfo = JSONParse(this.initialModel.authInfo.authInfo);
+      this.model.authInfo.authInfo = {};
     }
     this.authInfoModel = {
       ...this.model.authInfo,
@@ -177,13 +167,13 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
       this.model.name = name;
-      this.message.success($localize`Edit Group Name successfully`);
+      this.feedback.success($localize`Edit Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ ...this.model, name }]);
       if (data) {
         this.model = data;
       }
-      this.message.success($localize`Create Group successfully`);
+      this.feedback.success($localize`Create Group successfully`);
     }
 
     this.isEdit = false;

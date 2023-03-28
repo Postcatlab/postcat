@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group/group.component';
+import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.component';
 
 import { ShareComponent } from './view/share-project.component';
 

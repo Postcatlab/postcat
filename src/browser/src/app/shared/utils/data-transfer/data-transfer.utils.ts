@@ -1,6 +1,6 @@
 import isXml from 'is-xml';
 
-import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/api.model';
+import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/constants/api.model';
 import { BodyParam } from '../../../services/storage/db/models/apiData';
 import { whatType, whatTextType, JSONParse } from '../index.utils';
 

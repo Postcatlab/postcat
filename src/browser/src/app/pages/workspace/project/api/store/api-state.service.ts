@@ -4,18 +4,18 @@ import { action, computed, makeObservable, observable, toJS } from 'mobx';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { genApiGroupTree, getPureGroup, hangGroupToApi } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { getPureGroup } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 @Injectable({ providedIn: 'root' })
 export class ApiStoreService {
   // ? group
   @observable private rootGroup: Group;
+  /**
+   * Poject Group Tree
+   */
   @observable private groupList: Group[] = [];
 
   @observable private expandList: Array<string | number> = [];
-
-  //? api
-  @observable private apiList = [];
 
   // ? history
   @observable private testHistory = [];
@@ -44,16 +44,13 @@ export class ApiStoreService {
   @computed get getRootGroup() {
     return this.rootGroup;
   }
-  @computed get getApiList() {
-    return this.apiList;
-  }
   @computed get getExpandList() {
     return this.expandList;
   }
   @computed get getGroupList() {
     return this.groupList;
   }
-  @computed get getGroupTree() {
+  @computed get getFolderList() {
     return getPureGroup(
       eoDeepCopy([
         {
@@ -62,9 +59,6 @@ export class ApiStoreService {
         }
       ])
     );
-  }
-  @computed get getApiGroupTree() {
-    return genApiGroupTree(this.groupList);
   }
 
   @computed get getTestHistory() {
@@ -75,7 +69,6 @@ export class ApiStoreService {
     pcConsole.log('init ApiStoreService');
     makeObservable(this); // don't forget to add this if the class has observable fields
   }
-
   // * actions
   // ? history
   @action setHistory(data = []) {
@@ -91,16 +84,12 @@ export class ApiStoreService {
     this.rootGroup = group;
   }
 
-  @action setApiList(list = []) {
-    this.apiList = list;
-  }
-
   @action addApiSuccess(groupId: string | number) {
     this.setExpandsList(groupId);
   }
 
   @action setGroupList(list = []) {
-    this.groupList = hangGroupToApi(list);
+    this.groupList = list;
   }
 
   @action setExpandsList(expandKey: string | number) {

@@ -32,16 +32,4 @@ export interface ImportProjectDto {
   projectUuid?: string;
   workSpaceUuid?: string;
 }
-
-export type Collection = (ApiList | Group) & {
-  /**
-   * 0：group
-   * 1: apiData
-   */
-  collectionType: CollectionTypeEnum;
-};
-
-export enum CollectionTypeEnum {
-  GROUP = 0,
-  API_DATA = 1
-}
+export type Collection = ApiList | Group;

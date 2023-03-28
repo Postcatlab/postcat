@@ -1,3 +1,4 @@
+import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 
 import { ApiData } from './apiData';
@@ -37,11 +38,7 @@ export interface Group extends Base {
   depth?: number;
   parentId?: number;
   sort?: number;
-  authInfo?: {
-    authType: string;
-    authInfo: string | Record<string, any>;
-    isInherited?: 0 | 1;
-  };
+  authInfo?: AuthInfo;
   projectUuid?: string;
   workSpaceUuid?: string;
   children?: Group[];

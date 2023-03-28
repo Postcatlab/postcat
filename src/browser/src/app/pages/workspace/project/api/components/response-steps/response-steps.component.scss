@@ -1,0 +1,17 @@
+.icon-contain-success {
+  border: 1px solid lawngreen;
+  border-radius: 50%;
+
+  ::ng-deep eo-iconpark-icon svg {
+    color: lawngreen !important;
+  }
+}
+
+.icon-contain-fail {
+  border: 1px solid darkred;
+  border-radius: 50%;
+
+  ::ng-deep eo-iconpark-icon svg {
+    color: darkred !important;
+  }
+}

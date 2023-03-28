@@ -1,10 +1,10 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'lodash-es';
 import { reaction } from 'mobx';
 import { PreviewTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/store/state.service';
@@ -16,7 +16,7 @@ import { ProjectApiService } from '../../api.service';
   templateUrl: './api-detail.component.html',
   styleUrls: ['./api-detail.component.scss']
 })
-export class ApiDetailComponent implements PreviewTabViewComponent {
+export class ApiDetailComponent implements PreviewTabViewComponent, OnDestroy {
   @Input() model: ApiData | any;
   @Output() readonly eoOnInit = new EventEmitter<ApiData>();
   originModel: ApiData | any;
@@ -24,6 +24,7 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     BODY_TYPE: enumsToObject(ApiBodyType)
   };
   url: string = '';
+  private reactions = [];
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
   }
@@ -37,11 +38,13 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
     this.watchEnvChange();
   }
   watchEnvChange() {
-    reaction(
-      () => this.store.getCurrentEnv,
-      (env: any) => {
-        this.url = this.getEnvUrl(this.model.uri);
-      }
+    this.reactions.push(
+      reaction(
+        () => this.store.getCurrentEnv,
+        (env: any) => {
+          this.url = this.getEnvUrl(this.model.uri);
+        }
+      )
     );
   }
   private getEnvUrl(url) {
@@ -56,7 +59,7 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
       return this.store.getCurrentEnv.hostUri + url;
     }
   }
-  async init() {
+  async afterTabActivated() {
     if (!this.model) {
       this.model = {} as ApiData;
       const { uuid } = this.route.snapshot.queryParams;
@@ -70,5 +73,8 @@ export class ApiDetailComponent implements PreviewTabViewComponent {
 
     this.url = this.getEnvUrl(this.model.uri);
     this.eoOnInit.emit(this.model);
+  }
+  ngOnDestroy(): void {
+    this.reactions.forEach(val => val());
   }
 }

@@ -7,7 +7,7 @@ import {
   API_BODY_TYPE,
   IMPORT_MUI,
   JsonRootType
-} from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { enumsToArr, eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -56,7 +56,7 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
   private bodyType$: Subject<number> = new Subject<number>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<BodyParam[]> = new Subject<BodyParam[]>();
-  constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
+  constructor(private feedback: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -195,7 +195,7 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
       };
       this.nzDragCheck = (current, next) => {
         if (next.level === 0) {
-          this.message.warning($localize`XML can have only one root node`);
+          this.feedback.warning($localize`XML can have only one root node`);
           return false;
         }
         return true;

@@ -8,15 +8,15 @@
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <div
-          *ngIf="store.getCurrentEnv.hostUri"
+          *ngIf="currentEnv.hostUri"
           nz-typography
           nzEllipsis
           class="env-front-uri"
-          nzTooltipTitle="{{ store.getCurrentEnv.hostUri }}"
+          nzTooltipTitle="{{ currentEnv.hostUri }}"
           nzTooltipPlacement="bottom"
           eoNgFeedbackTooltip
         >
-          {{ store.getCurrentEnv.hostUri }}
+          {{ currentEnv.hostUri }}
         </div>
         <nz-form-item nz-col class="flex-1">
           <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
@@ -45,7 +45,7 @@
         *ngIf="isEmptyTestPage"
         eo-ng-button
         nzType="default"
-        (click)="saveApi()"
+        (click)="saveAPI()"
         trace
         traceID="save_api_document_from_test"
         i18n
@@ -141,29 +141,38 @@
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
-          <span i18n>Pre-request Script</span>
-          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.beforeInject?.trim()" nzStatus="success"></nz-badge>
+          <span i18n>Action</span>
+          <nz-badge
+            class="ml-1"
+            *ngIf="model.request.apiAttrInfo?.beforeInject?.trim() || model.request.apiAttrInfo?.afterInject?.trim()"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
-        <eo-api-script
-          *ngIf="model.requestTabIndex === 5"
-          [(code)]="model.request.apiAttrInfo.beforeInject"
-          (codeChange)="emitChangeFun('beforeScript')"
-          [treeData]="BEFORE_DATA"
-          [completions]="beforeScriptCompletions"
-        ></eo-api-script>
-      </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
-        <ng-template #suffixScriptTitleTmp>
-          <span i18n>After-response Script</span>
-          <nz-badge class="ml-1" *ngIf="model.request.apiAttrInfo?.afterInject?.trim()" nzStatus="success"></nz-badge>
-        </ng-template>
-        <eo-api-script
-          *ngIf="model.requestTabIndex === 6"
-          [(code)]="model.request.apiAttrInfo.afterInject"
-          (codeChange)="emitChangeFun('afterScript')"
-          [treeData]="AFTER_DATA"
-          [completions]="afterScriptCompletions"
-        ></eo-api-script>
+        <pc-action>
+          <eo-api-script
+            [(code)]="model.request.apiAttrInfo.beforeInject"
+            (codeChange)="emitChangeFun('beforeScript')"
+            [treeData]="BEFORE_DATA"
+            [completions]="beforeScriptCompletions"
+            name="pre"
+            class="h-[100%]"
+          ></eo-api-script>
+          <eo-api-script
+            [(code)]="model.request.apiAttrInfo.afterInject"
+            (codeChange)="emitChangeFun('afterScript')"
+            [treeData]="AFTER_DATA"
+            [completions]="afterScriptCompletions"
+            name="after"
+            class="h-[100%]"
+          ></eo-api-script>
+        </pc-action>
+        <!--        <eo-api-script-->
+        <!--          *ngIf="model.requestTabIndex === 5"-->
+        <!--          [(code)]="model.request.apiAttrInfo.beforeInject"-->
+        <!--          (codeChange)="emitChangeFun('beforeScript')"-->
+        <!--          [treeData]="BEFORE_DATA"-->
+        <!--          [completions]="beforeScriptCompletions"-->
+        <!--        ></eo-api-script>-->
       </eo-ng-tab>
     </eo-ng-tabset>
   </div>

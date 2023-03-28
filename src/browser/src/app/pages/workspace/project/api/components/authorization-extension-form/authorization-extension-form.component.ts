@@ -2,34 +2,22 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmi
 import { Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
+import {
+  AuthIn,
+  AuthInfo,
+  INHERIT_AUTH_OPTION,
+  isInherited,
+  NONE_AUTH_OPTION
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { Subject, takeUntil } from 'rxjs';
-
-export const NONE_AUTH_OPTION = {
-  name: 'none',
-  label: $localize`No Auth`
-};
-
-export const INHERIT_AUTH_OPTION = {
-  name: 'inherited',
-  label: $localize`Inherit auth from parent`
-};
-
-export type AuthInfo = {
-  authType: string;
-  isInherited?: 0 | 1;
-  authInfo: Record<string, any>;
-};
-
-export type AuthIn = 'group' | 'api-test' | 'api-test-history';
+import { Subject } from 'rxjs';
 
 const authInMap = {
   group: $localize`API Group`,
@@ -120,12 +108,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return [NONE_AUTH_OPTION, ...this.extensionList];
   }
 
-  constructor(
-    private router: Router,
-    private extensionService: ExtensionService,
-    private store: ApiStoreService,
-    private messageService: MessageService
-  ) {
+  constructor(private router: Router, private extensionService: ExtensionService, private store: ApiStoreService) {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
@@ -146,13 +129,15 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   initAutorun() {
     autorun(() => {
       if (!this.groupInfo?.parentId) return;
-      const groupObj = new PCTree(this.store.getGroupTree);
-      this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
+      const groupObj = new PCTree(this.store.getFolderList);
+      this.parentGroup = groupObj.findTreeNodeByID(this.groupInfo.parentId);
     });
     autorun(() => {
-      if (!this.authType && this.model?.isInherited === 1) {
+      if (!this.authType && this.model?.isInherited === isInherited.inherit) {
         this.authType = INHERIT_AUTH_OPTION.name;
-      } else if (this.model?.isInherited === 0) {
+        return;
+      }
+      if (this.model?.isInherited === isInherited.notInherit) {
         this.authType = this.model?.authType;
       }
     });

@@ -25,9 +25,9 @@ import { PagesComponent } from './pages.component';
     ThirdLoginComponent,
     NewPeopleGuideComponent
   ],
-  exports: [],
   providers: [],
   schemas: [],
+  exports: [],
   imports: [
     ChatgptRobotComponent,
     PagesRoutingModule,

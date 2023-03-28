@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 

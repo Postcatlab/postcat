@@ -66,17 +66,13 @@ export type TabItem = {
   /**
    * Unique id,used for identify content
    */
-  id: string;
+  uniqueName: string;
   /**
    * If the tab is fixed, it will not be replaced by other tab
    *
    *  You can use double-click to fixed the tab prevent it from being replaced
    */
   isFixed?: boolean;
-  /**
-   * If true,will not cache tab content
-   */
-  disabledCache?: boolean;
   /**
    * Preview page or edit page
    */

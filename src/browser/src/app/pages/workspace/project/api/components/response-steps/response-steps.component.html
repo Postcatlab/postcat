@@ -1,0 +1,13 @@
+<nz-steps [nzCurrent]="1" nzDirection="vertical">
+  <nz-step *ngFor="let item of stepArr" [nzTitle]="item.title" [nzDescription]="item.description" [nzIcon]="iconTemplate">
+    <ng-template #iconTemplate>
+      <nz-spin nzSimple *ngIf="item.status === 'loading' || item.status === 'non-execution'"></nz-spin>
+      <div class="icon-contain-success w-[32px] h-[32px] leading-[32px] flex justify-center items-center" *ngIf="item.status === 'success'">
+        <eo-iconpark-icon name="check"></eo-iconpark-icon>
+      </div>
+      <div class="icon-contain-fail w-[32px] h-[32px] leading-[32px] flex justify-center items-center" *ngIf="item.status === 'fail'">
+        <eo-iconpark-icon name="close"></eo-iconpark-icon>
+      </div>
+    </ng-template>
+  </nz-step>
+</nz-steps>

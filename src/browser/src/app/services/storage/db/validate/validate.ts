@@ -1,7 +1,6 @@
 import Ajv from 'ajv';
 import { safeStringify } from 'ajv/dist/compile/codegen/code';
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { CollectionTypeEnum } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiData, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 
@@ -58,17 +57,19 @@ export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; 
 
 export const parseAndCheckCollections = (collections = []) => {
   return collections.reduce((prev, curr) => {
-    if (curr.collectionType === CollectionTypeEnum.GROUP) {
+    const isAPI = !!curr.uri;
+    //Group
+    if (!isAPI) {
       prev.push(curr);
       if (curr.children?.length) {
         curr.children = parseAndCheckCollections(curr.children);
       }
-    } else if (curr.collectionType === CollectionTypeEnum.API_DATA) {
-      const res = parseAndCheckApiData(curr);
-      if (res.validate) {
-        prev.push(res.data);
-      }
+      return prev;
     }
-    return prev;
+
+    const res = parseAndCheckApiData(curr);
+    if (res.validate) {
+      prev.push(res.data);
+    }
   }, []);
 };

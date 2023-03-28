@@ -1,14 +1,9 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { ApiBodyType, ApiParamsType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import {
-  ContentType,
-  CONTENT_TYPE_BY_ABRIDGE,
-  FORMDATA_CONTENT_TYPE_BY_ABRIDGE,
-  testViewModel
-} from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import { ApiBodyType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { isEmptyObj } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
@@ -51,7 +46,6 @@ export class ApiTestComponent implements EditTabViewComponent {
       case 'blankTest': {
         const bodyType =
           typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
-        const headerParams = [];
         const contentType = contentTypeMap[bodyType];
         this.model = {
           //Selet Body
@@ -63,7 +57,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             authInfo: {
               authInfo: {},
               authType: NONE_AUTH_OPTION.name,
-              isInherited: 0
+              isInherited: isInherited.notInherit
             },
             apiAttrInfo: {
               contentType: bodyType,
@@ -73,7 +67,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             },
             requestParams: {
               queryParams: [],
-              headerParams: headerParams,
+              headerParams: [],
               restParams: [],
               bodyParams: [
                 {

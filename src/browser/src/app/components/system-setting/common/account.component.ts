@@ -63,7 +63,7 @@ export class AccountComponent implements OnInit {
     public store: StoreService,
     public message: MessageService,
     public api: ApiService,
-    public eMessage: EoNgFeedbackMessageService
+    public feedback: EoNgFeedbackMessageService
   ) {
     this.isSaveUsernameBtnLoading = false;
     this.validatePasswordForm = UntypedFormGroup;
@@ -92,10 +92,10 @@ export class AccountComponent implements OnInit {
         password
       });
       if (err) {
-        this.eMessage.error($localize`Validation failed`);
+        this.feedback.error($localize`Validation failed`);
         return;
       }
-      this.eMessage.success($localize`Password reset success !`);
+      this.feedback.success($localize`Password reset success !`);
 
       // * Clear password form
       this.validatePasswordForm.reset();

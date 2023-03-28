@@ -44,7 +44,7 @@ export class BtnUserComponent {
     private message: MessageService,
     private api: ApiService,
     public feature: FeatureControlService,
-    private eMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     public store: StoreService,
     private dataSourceService: DataSourceService,
     private setting: SettingService
@@ -57,7 +57,7 @@ export class BtnUserComponent {
   }
   async loginOut() {
     this.store.clearAuth();
-    this.eMessage.success($localize`Successfully logged out !`);
+    this.feedback.success($localize`Successfully logged out !`);
     const [, err]: any = await this.api.api_userLogout({});
     if (err) {
       return;

@@ -8,7 +8,7 @@ import qs from 'qs';
 import { BodyParam } from '../../../../../../services/storage/db/models/apiData';
 import { form2json, xml2json, isXML, json2Table } from '../../../../../../shared/utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy, whatType } from '../../../../../../shared/utils/index.utils';
-import { ApiParamsTypeJsonOrXml } from '../../api.model';
+import { ApiParamsTypeJsonOrXml } from '../../constants/api.model';
 
 const titleHash = new Map()
   .set('xml', $localize`Import XML`)
@@ -55,7 +55,7 @@ export class ParamsImportComponent implements OnInit {
     return ['formData', 'header', 'json'].includes(this.contentType) ? 'text' : this.contentType;
   }
 
-  constructor(private message: EoNgFeedbackMessageService) {}
+  constructor(private feedback: EoNgFeedbackMessageService) {}
 
   ngOnInit() {
     makeObservable(this);
@@ -152,7 +152,7 @@ export class ParamsImportComponent implements OnInit {
 
     const [res, err] = func[this.contentType](this.paramCode);
     if (err && 'msg' in err) {
-      this.message.error(err.msg);
+      this.feedback.error(err.msg);
       return;
     }
 

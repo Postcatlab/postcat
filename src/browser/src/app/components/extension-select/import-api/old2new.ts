@@ -1,3 +1,4 @@
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { CollectionTypeEnum, ImportProjectDto } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 
 import { convertApiData } from '../../../services/storage/db/dataSource/convert';
@@ -18,12 +19,12 @@ export const old2new = (params, projectUuid, workSpaceUuid): ImportProjectDto =>
       if (item.uri) {
         const newApiData = convertApiData(item);
         Object.assign(item, newApiData);
-        item.collectionType = CollectionTypeEnum.API_DATA;
+        item.type = GroupType.virtual;
+        item.module = GroupModuleType.API;
       }
       // 分组
       else {
-        item.collectionType = CollectionTypeEnum.GROUP;
-
+        item.type = GroupType.USER_CREATED;
         if (item.children?.length) {
           formatData(item.children);
         }

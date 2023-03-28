@@ -40,10 +40,6 @@ const routes: Routes = [
           {
             path: 'newMock',
             loadChildren: () => import('./http/mocknew/mock.module').then(m => m.MockModule)
-          },
-          {
-            path: 'action',
-            loadChildren: () => import('./http/action/action.module').then(m => m.ActionModule)
           }
         ]
       },
@@ -62,7 +58,7 @@ const routes: Routes = [
       },
       {
         path: 'group',
-        loadChildren: () => import('./group/group.module').then(m => m.GroupModule)
+        loadChildren: () => import('./group-edit/group.module').then(m => m.GroupModule)
       }
       // {
       //   path: 'grpc',
