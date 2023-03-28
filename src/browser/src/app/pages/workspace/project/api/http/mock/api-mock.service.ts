@@ -83,13 +83,13 @@ export class ApiMockService {
   }
   toDetail(mockID) {}
   toEdit(mockID) {
-    this.router.navigate([[this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname]], {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
       queryParams: { uuid: mockID }
     });
   }
-  toAdd(groupID?) {
-    this.router.navigate([[this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname]], {
-      queryParams: { groupId: groupID, pageID: Date.now() }
+  toAdd(apiID?) {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
+      queryParams: { apiUuid: apiID, pageID: Date.now() }
     });
   }
   toDelete(apiInfo: ApiData) {
