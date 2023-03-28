@@ -59,6 +59,7 @@
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <div class="flex items-center justify-between tree-node" [ngSwitch]="origin.module">
           <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
+            <!-- {{ node.key }} -->
             <!-- Folder -->
             <ng-container *ngSwitchDefault>
               <eo-iconpark-icon

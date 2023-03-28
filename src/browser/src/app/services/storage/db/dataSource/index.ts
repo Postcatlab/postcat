@@ -1,5 +1,4 @@
 import Dexie, { Table } from 'dexie';
-import { merge } from 'lodash-es';
 import { setupVersions } from 'pc/browser/src/app/services/storage/db/dataSource/versions';
 import {
   Workspace,
@@ -21,6 +20,7 @@ class DataSource extends Dexie {
   group!: Table<Group, number>;
   environment!: Table<Environment, number>;
   apiData!: Table<ApiData, number>;
+  apiCase!: Table<Mock, number>;
   apiTestHistory!: Table<ApiTestHistory, number>;
   mock!: Table<Mock, number>;
   constructor() {

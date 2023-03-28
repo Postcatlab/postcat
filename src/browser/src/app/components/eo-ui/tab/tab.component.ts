@@ -85,7 +85,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
       return;
     }
     $event.stopPropagation();
-    if (!tab.hasChanged) {
+    if (!tab?.hasChanged) {
       this.tabOperate.closeTab(index);
       return;
     }

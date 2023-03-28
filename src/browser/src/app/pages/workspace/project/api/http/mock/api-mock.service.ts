@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiBodyType, API_ROOT_PATH } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiBodyType, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
@@ -12,7 +12,13 @@ import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-trans
   providedIn: 'root'
 })
 export class ApiMockService {
-  constructor(private api: ApiService, private globalStore: StoreService, private testUtils: ApiTestUtilService, private router: Router) {
+  constructor(
+    private api: ApiService,
+    private globalStore: StoreService,
+    private testUtils: ApiTestUtilService,
+    private router: Router,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
+  ) {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
@@ -76,17 +82,13 @@ export class ApiMockService {
     }
   }
   toDetail(mockID) {}
-  toEdit(apiID) {
-    const prefix = this.globalStore.isShare ? 'share' : '/home/workspace/project/api';
-    this.router.navigate([`${prefix}/http/newMock`], {
-      queryParams: {
-        apiUuid: apiID,
-        pageID: Date.now().toString()
-      }
+  toEdit(mockID) {
+    this.router.navigate([[this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname]], {
+      queryParams: { uuid: mockID }
     });
   }
   toAdd(groupID?) {
-    this.router.navigate([`${API_ROOT_PATH}/http/edit`], {
+    this.router.navigate([[this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname]], {
       queryParams: { groupId: groupID, pageID: Date.now() }
     });
   }

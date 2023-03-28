@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { API_ROOT_PATH } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
@@ -24,7 +24,8 @@ export class ProjectApiService {
     private effect: ApiEffectService,
     private api: ApiService,
     private globalStore: StoreService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
   async get(uuid): Promise<ApiData> {
     const [result, err] = await (this.globalStore.isShare
@@ -73,14 +74,18 @@ export class ProjectApiService {
   }
   toDetail(id) {
     // * jump to api detail page
-    const prefix = this.globalStore.isShare ? 'share' : API_ROOT_PATH;
-    this.router.navigate([`${prefix}/http/detail`], {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-detail').pathname], {
       queryParams: { uuid: id }
     });
   }
   toAdd(groupID?) {
-    this.router.navigate([`${API_ROOT_PATH}/http/edit`], {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-edit').pathname], {
       queryParams: { groupId: groupID, pageID: Date.now() }
+    });
+  }
+  toEdit(id) {
+    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-edit').pathname], {
+      queryParams: { uuid: id }
     });
   }
   toDelete(apiInfo: ApiData) {
@@ -108,11 +113,7 @@ export class ProjectApiService {
     });
     this.effect.getGroupList();
   }
-  toEdit(id) {
-    this.router.navigate([`${API_ROOT_PATH}/http/edit`], {
-      queryParams: { uuid: id }
-    });
-  }
+
   importProject(type: keyof typeof this.actionComponent, title) {
     const modal = this.modalService.create({
       nzTitle: title,

@@ -74,6 +74,12 @@ export interface ApiTestHistory extends Base {
   projectUuid?: string;
   workSpaceUuid?: string;
 }
+export interface ApiCase extends ApiData, Base {
+  apiCaseUuid: number;
+  apiUuid: string;
+  projectUuid: string;
+  workSpaceUuid: string;
+}
 export interface Group extends Base {
   type: number;
   name?: string;

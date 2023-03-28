@@ -1,7 +1,60 @@
+import { InjectionToken } from '@angular/core';
+import { TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+
 import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
 import { enumsToArr, enumsToObject } from '../../../../../shared/utils/index.utils';
 import { ApiTestResData } from '../service/test-server/test-server.model';
-export const API_ROOT_PATH = '/home/workspace/project/api';
+export const API_TABS: Array<Partial<TabItem>> = [
+  {
+    pathname: '/http/test',
+    uniqueName: 'api-http-test',
+    type: 'edit',
+    title: $localize`New Request`,
+    extends: { method: 'POST' }
+  },
+  {
+    pathname: '/env/edit',
+    uniqueName: 'project-env-edit',
+    type: 'edit',
+    icon: 'application',
+    title: $localize`New Environment`
+  },
+  {
+    pathname: '/group/edit',
+    uniqueName: 'project-group',
+    type: 'edit',
+    icon: 'folder-close',
+    title: $localize`:@@AddGroup:New Group`
+  },
+  {
+    pathname: '/http/edit',
+    uniqueName: 'api-http-edit',
+    isFixed: true,
+    type: 'edit',
+    title: $localize`New API`
+  },
+  { pathname: '/http/detail', uniqueName: 'api-http-detail', type: 'preview', title: $localize`Preview` },
+  {
+    pathname: '/ws/test',
+    uniqueName: 'api-ws-test',
+    isFixed: true,
+    type: 'edit',
+    extends: { method: 'WS' },
+    title: $localize`New Websocket`
+  },
+  { pathname: '/http/case', uniqueName: 'api-http-case-edit', type: 'edit', title: 'Case', isFixed: true },
+  { pathname: '/http/mock', uniqueName: 'api-http-mock-edit', type: 'edit', title: 'Mock', isFixed: true }
+];
+export interface TabsConfig {
+  basic_tabs: Array<Partial<TabItem>>;
+}
+export const BASIC_TABS_INFO = new InjectionToken<TabsConfig>('basic-tab-info', {
+  providedIn: 'root',
+  factory: () => ({
+    basic_tabs: []
+  })
+});
+
 /**
  * API body FormData param type
  */

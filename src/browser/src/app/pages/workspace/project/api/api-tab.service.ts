@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
-import { NZ_ICON_DEFAULT_TWOTONE_COLOR } from 'ng-zorro-antd/icon';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
@@ -29,79 +28,13 @@ export class ApiTabService {
     return this.BASIC_TABS.find(val => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<TabEvent> = new Subject();
-  SHARE_TABS: Array<Partial<TabItem>> = [
-    {
-      pathname: '/share/http/test',
-      uniqueName: 'share-api-test',
-      type: 'edit',
-      title: $localize`New Request`,
-      extends: { method: 'POST' }
-    },
-    { pathname: '/share/http/detail', uniqueName: 'share-api-detail', type: 'preview', title: $localize`Preview` },
-    { pathname: '/share/group/edit', uniqueName: 'share-group-edit', type: 'preview', title: $localize`Preview` },
-    {
-      pathname: '/share/ws/test',
-      uniqueName: 'share-api-test',
-      isFixed: true,
-      type: 'preview',
-      extends: { method: 'WS' },
-      title: $localize`New Websocket`
-    }
-  ];
-  API_TABS: Array<Partial<TabItem>> = [
-    {
-      pathname: '/home/workspace/project/api/http/test',
-      uniqueName: 'api-http-test',
-      type: 'edit',
-      title: $localize`New Request`,
-      extends: { method: 'POST' }
-    },
-    {
-      pathname: '/home/workspace/project/api/env/edit',
-      uniqueName: 'project-env',
-      type: 'edit',
-      icon: 'application',
-      title: $localize`New Environment`
-    },
-    {
-      pathname: '/home/workspace/project/api/group/edit',
-      uniqueName: 'project-group',
-      type: 'edit',
-      icon: 'folder-close',
-      title: $localize`:@@AddGroup:New Group`
-    },
-    {
-      pathname: '/home/workspace/project/api/http/edit',
-      uniqueName: 'api-http-edit',
-      isFixed: true,
-      type: 'edit',
-      title: $localize`New API`
-    },
-    { pathname: '/home/workspace/project/api/http/detail', uniqueName: 'api-http-detail', type: 'preview', title: $localize`Preview` },
-    {
-      pathname: '/home/workspace/project/api/ws/test',
-      uniqueName: 'api-ws-test',
-      isFixed: true,
-      type: 'edit',
-      extends: { method: 'WS' },
-      title: $localize`New Websocket`
-    },
-    { pathname: '/home/workspace/project/api/http/case', uniqueName: 'api-http-case', type: 'edit', title: 'Case', isFixed: true },
-    //TODO: rename
-    {
-      pathname: '/home/workspace/project/api/http/newMock',
-      uniqueName: 'api-http-newMock-edit',
-      type: 'edit',
-      title: 'Mock',
-      isFixed: true
-    }
-  ];
   BASIC_TABS: Array<Partial<TabItem>>;
   constructor(
     private messageService: MessageService,
     private router: Router,
     private globalStore: StoreService,
-    private store: ApiStoreService
+    private store: ApiStoreService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterTabContentChanged(inData);
@@ -110,10 +43,8 @@ export class ApiTabService {
       if (inArg.type !== 'tabContentInit') return;
       this.updateTabContent(inArg.data.uuid);
     });
+    this.BASIC_TABS = this.tabsConfig.basic_tabs;
     this.closeTabAfterResourceRemove();
-    autorun(() => {
-      this.BASIC_TABS = this.globalStore.isShare ? this.SHARE_TABS : this.API_TABS;
-    });
   }
   /**
    * Watch API/Group/Case/Env/Mock change for handle tab status to fit content
