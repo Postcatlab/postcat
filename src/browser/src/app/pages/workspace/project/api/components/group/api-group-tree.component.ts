@@ -3,9 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
-import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  requestMethodMap,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
-import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -71,7 +75,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private mockService: ApiMockService,
     private router: Router,
     private route: ActivatedRoute,
-    private modal: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.operateByModule = this.getGroupOperate();
@@ -86,6 +89,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.reactions.push(
       autorun(() => {
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
+        console.log(toJS(this.apiGroupTree));
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
         waitNextTick().then(() => {
@@ -104,9 +108,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   initSelectKeys() {
     //Such as Env group tree
-    const isOtherPage = [this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'project-env-edit').pathname].some(path =>
-      this.router.url.includes(path)
-    );
+    const isOtherPage = [this.tabsConfig.pathByName[ApiTabsUniqueName.EnvEdit]].some(path => this.router.url.includes(path));
     const { uuid } = this.route.snapshot.queryParams;
     const groupId = findTreeNode(this.store.getGroupList, val => val.id === (Number(uuid) || uuid))?.id;
     // console.log(groupId, this.store.getGroupList, uuid);
@@ -132,24 +134,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       if (it.type !== GroupType.Virtual) return;
       //* Resource
       const result = {
-        ...(it.relationInfo || it),
         //virtual group id
-        id: it.id,
         isLeaf: true,
-        parentId: it.parentId,
-        type: it.type,
-        module: it.module,
-        _group: {
-          id: it.id,
-          parentId: it.parentId,
-          sort: it.sort
-        },
+        ...it,
+        relationInfo: it.relationInfo,
         children: this.parseGroupDataToViewTree(it.children || [])
       };
       if (it.module === GroupModuleType.API) {
         result.isLeaf = false;
-        result.method = this.requestMethodMap[result.requestMethod];
-        result.methodText = result.method.length > 5 ? result.method.slice(0, 3) : result.method;
+        result.relationInfo.method = this.requestMethodMap[result.relationInfo.requestMethod];
+        result.relationInfo.methodText =
+          result.relationInfo.method.length > 5 ? result.relationInfo.method.slice(0, 3) : result.relationInfo.method;
       }
       return result;
     });
@@ -161,12 +156,12 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param groupId
    * @returns
    */
-  genComponentTree(groups: Group[] = []) {
+  genComponentTree(groups: Group[] = []): ViewGroup[] {
     groups = this.parseGroupDataToViewTree(groups);
     return [
-      ...groups.map(group => ({
+      ...groups.map((group: ViewGroup) => ({
         ...group,
-        title: group.name || '',
+        title: group.relationInfo?.name || group.name || '',
         key: group.id,
         children: this.genComponentTree([...(group?.children || [])])
       }))
@@ -196,7 +191,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.effect.sortGroup(
       dragNode.isLeaf
         ? {
-            id: node._group.id,
+            id: node.id,
             type: node.type,
             sort,
             //@ts-ignore
@@ -224,11 +219,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     }
     switch (origin.module) {
       case GroupModuleType.API: {
-        this.projectApi.toDetail(origin.apiUuid);
+        this.projectApi.toDetail(origin.relationInfo.apiUuid);
         break;
       }
       case GroupModuleType.Mock: {
-        this.mockService.toDetail(origin.id);
+        this.mockService.toDetail(origin.relationInfo);
         break;
       }
     }
@@ -239,33 +234,33 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       [GroupModuleType.API]: [
         {
           title: $localize`Edit`,
-          click: item => this.projectApi.toEdit(item.apiUuid)
+          click: ({ relationInfo: item }) => this.projectApi.toEdit(item.apiUuid)
         },
         {
           title: $localize`Add Mock`,
-          click: item => this.mockService.toAdd(item.apiUuid)
+          click: ({ relationInfo: item }) => this.mockService.toAdd(item.apiUuid)
         },
         {
           title: $localize`:@Copy:Copy`,
-          click: item => this.projectApi.copy(item.apiUuid)
+          click: ({ relationInfo: item }) => this.projectApi.copy(item.apiUuid)
         },
         {
           title: $localize`:@Delete:Delete`,
-          click: item => this.projectApi.toDelete(item)
+          click: ({ relationInfo: item }) => this.projectApi.toDelete(item)
         }
       ],
       [GroupModuleType.Mock]: [
         {
           title: $localize`Edit`,
-          click: item => this.mockService.toEdit(item.uuid)
+          click: ({ relationInfo: item }) => this.mockService.toEdit(item.uuid)
         },
         {
           title: $localize`:@Copy:Copy`,
-          click: item => this.mockService.copy(item.uuid)
+          click: ({ relationInfo: item }) => this.mockService.copy(item.uuid)
         },
         {
           title: $localize`:@Delete:Delete`,
-          click: item => this.mockService.toDelete(item)
+          click: ({ relationInfo: item }) => this.mockService.toDelete(item)
         }
       ],
       [GroupModuleType.Case]: [],

@@ -123,14 +123,14 @@
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
           <!-- [inheritAuthType]="initialModel?.request?.authInfo?.authType" -->
-          <!-- <authorization-extension-form
+          <authorization-extension-form
             #authExtForm
             [(model)]="model.request.authInfo"
             [type]="type"
             type="api-test"
             [groupInfo]="{ parentId: model.request?.groupId }"
             (modelChange)="emitChangeFun('authInfo')"
-          ></authorization-extension-form> -->
+          ></authorization-extension-form>
         </div>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">

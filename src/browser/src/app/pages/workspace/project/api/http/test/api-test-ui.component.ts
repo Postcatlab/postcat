@@ -10,7 +10,8 @@ import {
   ElementRef,
   AfterViewInit,
   HostListener,
-  OnChanges
+  OnChanges,
+  Inject
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,7 +45,15 @@ import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 
 import { enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../constants/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  BodyContentType as ContentTypeEnum,
+  RequestMethod,
+  TabsConfig
+} from '../../constants/api.model';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
@@ -137,7 +146,8 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     private lang: LanguageService,
     private elementRef: ElementRef,
     private apiEdit: ApiEditUtilService,
-    private trace: TraceService
+    private trace: TraceService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.testServer.init(message => {
       this.receiveMessage(message);
@@ -260,7 +270,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       response: this.model.testResult
     });
     StorageUtil.set('apiDataWillbeSave', apiData);
-    this.router.navigate(['/home/workspace/project/api/http/edit'], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)
       }
@@ -409,7 +419,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       //* Update Test Result
       this.afterTested.emit({
         id: queryParams.pageID,
-        url: '/home/workspace/project/api/http/test',
+        url: this.tabsConfig.pathByName[ApiTabsUniqueName.HttpTest],
         model: {
           testStartTime: 0,
           testResult: message.response

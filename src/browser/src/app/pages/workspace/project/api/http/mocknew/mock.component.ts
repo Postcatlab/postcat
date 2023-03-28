@@ -11,7 +11,6 @@ import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
-import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 interface ModelType {
   id: number;
@@ -72,11 +71,11 @@ export class MockComponent implements EditTabViewComponent {
   ) {}
 
   async afterTabActivated(): Promise<any> {
-    console.log('55555555555555555555555555555555555');
+    console.log('55555555555555555555555555555555555', this.model);
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = this.route.snapshot.queryParams.apiUuid;
     // this.apiUuid = 'yd1qr8m51dq';
-    this.mock_id = this.route.snapshot.queryParams.uuid;
+    this.mock_id = Number(this.route.snapshot.queryParams.uuid);
     // this.mock_id = null
     if (this.model) return;
     if (!this.mock_id) {
@@ -92,10 +91,6 @@ export class MockComponent implements EditTabViewComponent {
       this.mockDetail(this.mock_id);
     }
   }
-  initTabModel() {
-    this.eoOnInit.emit(this.model);
-    this.modelChange.emit(this.model);
-  }
 
   valueChange($event) {
     this.modelChange.emit(this.model);
@@ -106,13 +101,13 @@ export class MockComponent implements EditTabViewComponent {
     // this.getApiDetail();
   }
 
-  async mockDetail(mock_id?: string | number) {
+  async mockDetail(mock_id?: number) {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
     this.apiData = await this.getApiDetail();
     this.model.url = this.getMockUrl(res);
-    this.initTabModel();
+    this.eoOnInit.emit(this.model);
   }
 
   isFormChange() {
@@ -135,7 +130,6 @@ export class MockComponent implements EditTabViewComponent {
   //   });
   // }
   private getMockUrl(mock) {
-    console.log(mock);
     //Generate Mock URL
     //TODO Mock URL = API Path
     const url = new URL(
@@ -195,6 +189,7 @@ export class MockComponent implements EditTabViewComponent {
     if (item.id) {
       await this.apiMock.updateMock(item);
       this.model = item;
+      this.afterSaved.emit(this.model);
       this.message.success($localize`Edited successfully`);
     } else {
       item.apiUuid = this.apiUuid;
@@ -206,11 +201,14 @@ export class MockComponent implements EditTabViewComponent {
       }
       this.message.success($localize`Added successfully`);
       const queryParams = this.route.snapshot.queryParams;
-      console.log(data);
       this.model = data;
       this.model.url = this.getMockUrl(data);
-      this.initTabModel();
-      this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
+      this.eoOnInit.emit(this.model);
+      console.log('request finish', this.model);
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: { ...queryParams, uuid: data.id }
+      });
       this.apiEffect.createMock();
     }
     // item.url = this.getMockUrl(item);

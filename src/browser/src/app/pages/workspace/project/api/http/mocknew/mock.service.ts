@@ -51,7 +51,6 @@ export class MockService {
     return data;
   }
   async deleteMock(id: number) {
-    console.log(id);
     const [data, err] = await this.api.api_mockDelete({ id });
     return data;
   }

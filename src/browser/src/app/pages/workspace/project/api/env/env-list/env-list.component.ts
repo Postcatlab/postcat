@@ -1,7 +1,7 @@
 import { Component, OnDestroy, Output, EventEmitter, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { autorun, reaction, values } from 'mobx';
-import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject } from 'rxjs';
 
@@ -33,7 +33,7 @@ export class EnvListComponent implements OnDestroy {
         this.setSelectKeys();
       }
     });
-    this.envRoute = this.tabsConfig.basic_tabs.find(n => n.uniqueName === 'project-env-edit').pathname;
+    this.envRoute = this.tabsConfig.pathByName[ApiTabsUniqueName.EnvEdit];
     this.setSelectKeys();
     reaction(
       () => this.globalStore.getUrl,

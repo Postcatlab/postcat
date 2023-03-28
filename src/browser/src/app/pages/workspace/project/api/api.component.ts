@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
+import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
@@ -11,7 +12,6 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
-import { MessageService } from '../../../../services/message';
 import StorageUtil from '../../../../shared/utils/storage/storage.utils';
 import { ApiTabService } from './api-tab.service';
 
@@ -56,30 +56,20 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'detail',
       isShare: true,
       //ID fit to the routerLink
-      id: 'api-http-detail',
+      id: ApiTabsUniqueName.HttpDetail,
       title: $localize`:@@API Detail:Preview`
     },
     {
       routerLink: 'edit',
-      id: 'api-http-edit',
+      id: ApiTabsUniqueName.HttpEdit,
       title: $localize`Edit`
     },
     {
       routerLink: 'test',
       isShare: true,
-      id: 'api-http-test',
+      id: ApiTabsUniqueName.HttpTest,
       title: $localize`Test`
     }
-    // {
-    //   routerLink: 'mock',
-    //   id: 'api-http-mock',
-    //   title: 'Mock'
-    // },
-    // {
-    //   routerLink: 'action',
-    //   id: 'api-http-action',
-    //   title: 'Action'
-    // }
   ];
   rightSiderWidth = this.getLocalRightSiderWidth();
 
@@ -92,17 +82,17 @@ export class ApiComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private router: Router,
     public web: WebService,
-    private messageService: MessageService,
     private extensionService: ExtensionService,
     public store: StoreService,
-    private trace: TraceService
+    private trace: TraceService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.initExtensionExtra();
   }
   @ExtensionChange(API_PREVIEW_TAB, true)
   async initExtensionExtra() {
     this.rightExtras = [];
-    if (!this.router.url.includes('home/workspace/project/api/http/detail')) return;
+    if (!this.router.url.includes(this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail])) return;
     const apiPreviewTab = this.extensionService.getValidExtensionsByFature(API_PREVIEW_TAB);
     apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);
@@ -133,11 +123,14 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   initChildBarShowStatus() {
-    const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
-    const isGroupPage = ['share/group/edit', 'home/workspace/project/api/group/edit'].some(n => this.router.url.includes(n));
-    const isMockPage = ['home/workspace/project/api/http/mock'].some(n => this.router.url.includes(n));
+    const pathArr = [
+      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail],
+      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit],
+      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpTest]
+    ];
+    const isApiPage = pathArr.some(path => this.router.url.includes(path));
     const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');
-    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage && !isGroupPage && !isMockPage;
+    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && isApiPage;
   }
   onGroupTabSelectChange($event) {
     StorageUtil.set('eo_group_tab_select', this.tabsIndex);

@@ -154,8 +154,11 @@ export class TabOperateService {
     if (!tab) {
       return;
     }
-    const queryParams = { pageID: tab.params?.pageID, ...tab.params };
-    if (!queryParams.pageID) Reflect.deleteProperty(queryParams, 'pageID');
+    const queryParams = { ...tab.params };
+    //Reset params ID
+    if (tab.params?.pageID) {
+      queryParams.pageID = tab.params.pageID;
+    }
     this.router.navigate([tab.pathname], {
       queryParams
     });
@@ -167,31 +170,29 @@ export class TabOperateService {
    *
    * @param tab
    */
-  getSameTab(
-    tab: Partial<TabItem>,
-    opts: {
-      match: 'all' | 'uuid';
-    } = { match: 'all' }
-  ): TabItem | null {
+  getSameTab(tab: Partial<TabItem>): TabItem | null {
     let result = null;
-    if (!tab.params.uuid) {
-      const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
-      if (sameTabIDTab && sameTabIDTab.pathname === tab.pathname) {
-        return sameTabIDTab;
-      }
-      return result;
-    }
-    //Get exist params.uuid content tab,same pathname and uuid match
-    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
-    for (const key in mapObj) {
-      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
-        const tabInfo = mapObj[key];
-        if (tabInfo.pathname !== tab.pathname && opts.match === 'all') continue;
-        if (tabInfo.params.uuid === tab.params.uuid) {
-          result = tabInfo;
-          break;
-        }
-      }
+    //Uuid match first
+    // if (tab.params.uuid) {
+    //   //Get exist params.uuid content tab,same pathname and uuid match
+    //   const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    //   for (const key in mapObj) {
+    //     if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
+    //       const tabInfo = mapObj[key];
+    //       if (tabInfo.pathname !== tab.pathname) continue;
+    //       if (tabInfo.params.uuid === tab.params.uuid) {
+    //         result = tabInfo;
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return result;
+    // }
+
+    //PageID match second
+    const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
+    if (sameTabIDTab && sameTabIDTab.pathname === tab.pathname) {
+      return sameTabIDTab;
     }
     return result;
   }
@@ -279,11 +280,13 @@ export class TabOperateService {
      */
     if (existTab) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);
-      this.updateChildView();
-
       //* Update tab info,maybe params changed
       //!Get newest tab content,If the initialization is too fast, the baseContent content will be overwritten here
       const newestData = this.getSameTab(routeTab);
+
+      //Reload childView when reselected it
+      this.updateChildView();
+
       this.tabStorage.setTabByID({ ...newestData, params: { ...newestData.params, ...nextTab.params } });
       return;
     }

@@ -190,6 +190,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
       ...tabItem,
       extends: { ...existTab.extends, ...tabItem.extends }
     });
+    // console.log('updatePartialTabSuccess', this.tabStorage.tabsByID.get(uuid));
   }
   /**
    * Cache tab header/tabs content for restore when page close or component destroy

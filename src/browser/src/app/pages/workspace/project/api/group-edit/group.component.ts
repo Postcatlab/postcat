@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { AuthInfo, INHERIT_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { INHERIT_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
+import { JSONParse } from '../../../../../shared/utils/index.utils';
 import { ApiEffectService } from '../store/api-effect.service';
 
 @Component({
@@ -26,10 +26,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<Group>();
   @Output() readonly afterSaved = new EventEmitter<Group>();
 
-  authInfoModel: AuthInfo = {
-    authType: '',
-    authInfo: {}
-  };
   isEdit = false;
 
   isSaving = false;
@@ -74,7 +70,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       id: this.model.id,
       type: this.model.type,
       authInfo: {
-        authType: this.authInfoModel.authType,
+        authType: this.model.authInfo.authType,
         authInfo: this.authExtForm.validateForm?.value ? JSON.stringify(this.authExtForm.validateForm.value) : {}
       }
     };
@@ -106,19 +102,14 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
         this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
       }
       this.isEdit = true;
-    } else {
-      if (!this.model) {
-        const [res, err] = await this.api.api_groupDetail({ id });
-        this.model = res;
-      }
+    } else if (!this.model) {
+      const [res, err] = await this.api.api_groupDetail({ id });
+      this.model = res;
     }
     if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
       this.model.authInfo.authInfo = {};
     }
-    this.authInfoModel = {
-      ...this.model.authInfo,
-      authInfo: JSONParse(this.model.authInfo?.authInfo) || {}
-    };
+    this.model.authInfo.authInfo = JSONParse(this.model.authInfo?.authInfo) || {};
     this.initForm();
     this.eoOnInit.emit(this.model);
   }
@@ -130,8 +121,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
   emitChange($event?) {
     this.modelChange.emit({
       ...this.model,
-      name: this.validateForm.value.name,
-      authInfo: this.authInfoModel
+      name: this.validateForm.value.name
     });
   }
   isFormChange() {
@@ -139,8 +129,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     const authInfoChanged =
       formData && Object.entries<any>(formData).some(([key, value]) => value !== this.initialModel.authInfo?.authInfo?.[key]);
     const authTypeChanged = this.model.authInfo?.authType !== this.initialModel.authInfo?.authType;
-    const nameIsChange = this.model.name !== this.validateForm.value.name;
-    return authInfoChanged || authTypeChanged || nameIsChange;
+    return authInfoChanged || authTypeChanged;
   }
   ngOnDestroy() {
     this.destroy$.next();

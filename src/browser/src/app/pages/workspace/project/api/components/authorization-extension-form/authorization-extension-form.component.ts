@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import {
   AuthIn,
   AuthInfo,
@@ -108,7 +109,12 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     return [NONE_AUTH_OPTION, ...this.extensionList];
   }
 
-  constructor(private router: Router, private extensionService: ExtensionService, private store: ApiStoreService) {
+  constructor(
+    private router: Router,
+    private extensionService: ExtensionService,
+    private store: ApiStoreService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
+  ) {
     makeObservable(this);
     this.initExtensions();
     this.initAutorun();
@@ -181,8 +187,8 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   nav2group() {
-    this.router.navigate([`/home/workspace/project/api/group/edit`], {
-      queryParams: { uuid: this.parentGroup.id, pageID: Date.now().toString() }
+    this.router.navigate([this.tabsConfig.pathByName['project-group']], {
+      queryParams: { uuid: this.parentGroup.id, pageID: Date.now() }
     });
   }
 

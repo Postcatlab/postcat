@@ -4,54 +4,67 @@ import { TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
 import { enumsToArr, enumsToObject } from '../../../../../shared/utils/index.utils';
 import { ApiTestResData } from '../service/test-server/test-server.model';
+export enum ApiTabsUniqueName {
+  HttpTest = 'api-http-test',
+  HttpDetail = 'api-http-detail',
+  HttpEdit = 'api-http-edit',
+  HttpCase = 'api-http-case-edit',
+  HttpMock = 'api-http-mock-edit',
+  WsTest = 'api-ws-test',
+  EnvEdit = 'project-env-edit',
+  GroupEdit = 'project-group'
+}
 export const API_TABS: Array<Partial<TabItem>> = [
   {
     pathname: '/http/test',
-    uniqueName: 'api-http-test',
+    uniqueName: ApiTabsUniqueName.HttpTest,
     type: 'edit',
     title: $localize`New Request`,
     extends: { method: 'POST' }
   },
   {
     pathname: '/env/edit',
-    uniqueName: 'project-env-edit',
+    uniqueName: ApiTabsUniqueName.EnvEdit,
     type: 'edit',
     icon: 'application',
     title: $localize`New Environment`
   },
   {
     pathname: '/group/edit',
-    uniqueName: 'project-group',
+    uniqueName: ApiTabsUniqueName.GroupEdit,
     type: 'edit',
     icon: 'folder-close',
     title: $localize`:@@AddGroup:New Group`
   },
   {
     pathname: '/http/edit',
-    uniqueName: 'api-http-edit',
+    uniqueName: ApiTabsUniqueName.HttpEdit,
     isFixed: true,
     type: 'edit',
     title: $localize`New API`
   },
-  { pathname: '/http/detail', uniqueName: 'api-http-detail', type: 'preview', title: $localize`Preview` },
+  { pathname: '/http/detail', uniqueName: ApiTabsUniqueName.HttpDetail, type: 'preview', title: $localize`Preview` },
   {
     pathname: '/ws/test',
-    uniqueName: 'api-ws-test',
+    uniqueName: ApiTabsUniqueName.WsTest,
     isFixed: true,
     type: 'edit',
     extends: { method: 'WS' },
     title: $localize`New Websocket`
   },
-  { pathname: '/http/case', uniqueName: 'api-http-case-edit', type: 'edit', title: 'Case', isFixed: true },
-  { pathname: '/http/mock', uniqueName: 'api-http-mock-edit', type: 'edit', title: 'Mock', isFixed: true }
+  { pathname: '/http/case', uniqueName: ApiTabsUniqueName.HttpCase, type: 'edit', title: 'Case', isFixed: true },
+  { pathname: '/http/mock', uniqueName: ApiTabsUniqueName.HttpMock, type: 'edit', title: 'Mock', isFixed: true }
 ];
+
 export interface TabsConfig {
-  basic_tabs: Array<Partial<TabItem>>;
+  pathByName: { [key in ApiTabsUniqueName]?: string };
+  BASIC_TABS: Array<Partial<TabItem>>;
 }
 export const BASIC_TABS_INFO = new InjectionToken<TabsConfig>('basic-tab-info', {
   providedIn: 'root',
   factory: () => ({
-    basic_tabs: []
+    BASIC_TABS: [],
+    pathByName: {}
   })
 });
 

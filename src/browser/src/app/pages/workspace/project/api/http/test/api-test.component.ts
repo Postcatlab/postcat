@@ -124,9 +124,8 @@ export class ApiTestComponent implements EditTabViewComponent {
       }
       case 'apiTest': {
         const uuid = this.route.snapshot.queryParams.uuid;
-        const model = await this.projectApi.get(uuid);
-        model.authInfo.authInfo = JSONParse(model.authInfo.authInfo);
-        Object.assign(result, model);
+        const request = await this.projectApi.get(uuid);
+        result.request = this.apiTestUtil.getTestDataFromApi(request);
         break;
       }
     }

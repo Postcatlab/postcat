@@ -10,7 +10,7 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../components/eo-ui/table-pro/table-pro.model';
-import { eoDeepCopy, JSONParse } from '../../../../../../shared/utils/index.utils';
+import { eoDeepCopy, isEmptyObj, JSONParse } from '../../../../../../shared/utils/index.utils';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
 
@@ -115,19 +115,23 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
     }
   }
   async afterTabActivated() {
+    console.log('afterTabActivated');
+    const isFromCache: boolean = this.model && !isEmptyObj(this.model);
+    if (isFromCache) {
+      return;
+    }
     const id = Number(this.route.snapshot.queryParams.uuid);
     if (!id) {
+      //Add env
       this.model = {
         name: '',
         hostUri: '',
         parameters: []
       };
     } else {
-      if (!this.model) {
-        const [res, err]: any = await this.getEnv(id);
-        this.model = res;
-        console.log(`request finish ${this.model.name}`);
-      }
+      //Edit env
+      const [res, err]: any = await this.getEnv(id);
+      this.model = res;
     }
     this.initForm();
     this.eoOnInit.emit(this.model);

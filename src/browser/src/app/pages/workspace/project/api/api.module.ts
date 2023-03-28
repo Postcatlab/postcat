@@ -11,7 +11,7 @@ import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { ApiTabService } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group-tree.directive';
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
-import { API_TABS, BASIC_TABS_INFO } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { API_TABS, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
@@ -25,6 +25,7 @@ import { EnvModule } from './env/env.module';
 import { ProjectApiService } from './project-api.service';
 import { ApiTestUtilService } from './service/api-test-util.service';
 const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
+const tabs = API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/api${val.pathname}` }));
 @NgModule({
   imports: [
     ExtensionSelectModule,
@@ -49,8 +50,9 @@ const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
     {
       provide: BASIC_TABS_INFO,
       useValue: {
-        basic_tabs: API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/api${val.pathname}` }))
-      }
+        BASIC_TABS: tabs,
+        pathByName: tabs.reduce((acc, curr) => ({ ...acc, [curr.uniqueName]: curr.pathname }), {})
+      } as TabsConfig
     },
     ProjectApiService,
     ApiTestUtilService,

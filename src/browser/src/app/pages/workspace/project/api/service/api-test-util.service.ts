@@ -142,6 +142,9 @@ export class ApiTestUtilService {
     result.uri = tmpResult.url;
     result.requestParams.queryParams = tmpResult.query;
 
+    //Handle Auth
+    result.authInfo.authInfo = JSONParse(result.authInfo.authInfo);
+
     //parse body
     const requestBodyType = result.apiAttrInfo.contentType;
     let binaryRawData = '';

@@ -66,6 +66,7 @@ export interface Mock extends Base {
   response: string;
   projectUuid: string;
   workSpaceUuid: string;
+  uri: string;
 }
 export interface ApiTestHistory extends Base {
   apiUuid?: string;
@@ -93,7 +94,13 @@ export interface Group extends Base {
   children?: Group[];
 }
 
-export interface ViewGroup extends Group {
+export interface ViewGroup {
+  id: number;
+  type: number;
+  name?: string;
+  depth?: number;
+  parentId?: number;
   module: GroupModuleType;
-  relationInfo: any;
+  relationInfo?: any;
+  children?: ViewGroup[];
 }

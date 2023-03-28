@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
@@ -74,17 +74,17 @@ export class ProjectApiService {
   }
   toDetail(id) {
     // * jump to api detail page
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-detail').pathname], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail]], {
       queryParams: { uuid: id }
     });
   }
   toAdd(groupID?) {
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-edit').pathname], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
       queryParams: { groupId: groupID, pageID: Date.now() }
     });
   }
   toEdit(id) {
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-edit').pathname], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
       queryParams: { uuid: id }
     });
   }
@@ -108,7 +108,7 @@ export class ProjectApiService {
       this.feedback.error($localize`Copy API failed`);
       return;
     }
-    this.router.navigate(['/home/workspace/project/api/http/edit'], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
       queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
     });
     this.effect.getGroupList();

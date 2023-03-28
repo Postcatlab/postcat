@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListener, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -6,7 +6,14 @@ import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { ApiBodyType, IMPORT_MUI, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiBodyType,
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  IMPORT_MUI,
+  RequestMethod,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiEditService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -63,7 +70,8 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     private effect: ApiEffectService,
     private apiEdit: ApiEditService,
     private store: ApiStoreService,
-    private trace: TraceService
+    private trace: TraceService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.initBasicForm();
     //Get group list
@@ -158,7 +166,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
       param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
     });
-    this.router.navigate(['/home/workspace/project/api/http/detail'], {
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID),
         uuid: result?.apiUuid

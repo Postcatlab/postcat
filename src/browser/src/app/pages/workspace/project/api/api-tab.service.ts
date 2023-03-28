@@ -2,7 +2,12 @@ import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  requestMethodMap,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
 import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
@@ -17,7 +22,7 @@ import { eoDeepCopy, isEmptyObj } from '../../../../shared/utils/index.utils';
 interface TabEvent {
   when: 'activated' | 'editing' | 'saved' | 'afterTested';
   currentTabID: TabItem['uuid'];
-  model: any;
+  model?: any;
 }
 @Injectable()
 export class ApiTabService {
@@ -43,7 +48,7 @@ export class ApiTabService {
       if (inArg.type !== 'tabContentInit') return;
       this.updateTabContent(inArg.data.uuid);
     });
-    this.BASIC_TABS = this.tabsConfig.basic_tabs;
+    this.BASIC_TABS = this.tabsConfig.BASIC_TABS;
     this.closeTabAfterResourceRemove();
   }
   /**
@@ -136,6 +141,10 @@ export class ApiTabService {
     const bindTabID = this.apiTabComponent.getCurrentTab()?.uuid;
     this.componentRef.eoOnInit = {
       emit: model => {
+        if (!model) {
+          pcConsole.warn("[api-tab] OnInit can't pass null model");
+          return;
+        }
         //Current is current selected tab
         const currentTab = this.apiTabComponent.getCurrentTab();
         //resourceID
@@ -154,8 +163,10 @@ export class ApiTabService {
         }
 
         //1. The currently active tab is not the one that initiated the request
+        const notCurrentTab = currentTab.uuid !== bindTabID;
         //2. the request response is not what the current active tab needs
-        const modelFromOtherTab = currentTab.uuid !== bindTabID || (modelID && currentTab.params?.uuid !== modelID.toString());
+        const notCurrentResource = modelID && currentTab.params?.uuid && currentTab.params?.uuid !== modelID.toString();
+        const modelFromOtherTab = notCurrentTab || notCurrentResource;
         if (!modelFromOtherTab) {
           this.afterTabContentChanged({ when: 'activated', currentTabID: bindTabID, model });
           return;
@@ -172,7 +183,7 @@ export class ApiTabService {
         const hasCache = !!currentTab?.content?.[currentTab.uniqueName];
         if (!currentTab.isLoading && hasCache) {
           //If the current tab is not the one that initiated the request, we need to restore the data from the cache
-          this.afterTabActivated(currentTab);
+          // this.afterTabActivated(currentTab);
         }
 
         const actuallyID = this.apiTabComponent.getTabByParamsID(modelID.toString())?.uuid || bindTabID;
@@ -249,21 +260,20 @@ export class ApiTabService {
     }
     this.bindChildComponentChangeEvent();
 
-    const currentTab = !uuid ? this.apiTabComponent.getCurrentTab() : this.apiTabComponent.getTabByID(uuid);
+    //?Why should use getCurrentTab() directly
+    //Because maybe current tab  has't  finish init
+    const currentTab = uuid ? this.apiTabComponent.getTabByID(uuid) : this.apiTabComponent.getCurrentTab();
+
+    if (!currentTab) {
+      return;
+    }
     if (!this.componentRef?.afterTabActivated) {
-      // this.changeContent$.next({ when: 'activated', currentTab });
+      this.changeContent$.next({ when: 'activated', currentTabID: currentTab.uuid });
       pcConsole.error(
         'Child componentRef need has afterTabActivated function for reflesh data when router change,Please add afterTabActivated function in child component'
       );
       return;
     }
-
-    //?Why should use getCurrentTab()?
-    //Because maybe current tab  has't  finish init
-    if (!currentTab) {
-      return;
-    }
-
     this.afterTabActivated(currentTab);
   }
   /**
@@ -281,7 +291,7 @@ export class ApiTabService {
     result.title = model.name;
     result.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
 
-    const isTestPage = currentTab.pathname.includes('test');
+    const isTestPage = [ApiTabsUniqueName.HttpCase, ApiTabsUniqueName.HttpTest, ApiTabsUniqueName.WsTest].includes(currentTab.uniqueName);
     const isEmptyPage = !model.uuid;
 
     if (!isTestPage) {
@@ -292,14 +302,14 @@ export class ApiTabService {
     }
 
     //Test page,generate title and method from model.url
-    if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
+    if (currentTab.uniqueName === ApiTabsUniqueName.WsTest) {
       result.method = 'WS';
     } else {
       result.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
     }
     //Only Untitle request need set url to tab title
     const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;
-    const isHistoryPage = currentTab.params.uuid && currentTab.params.uuid.includes('history_');
+    const isHistoryPage = currentTab.params?.uuid?.includes('history_');
     if (!model.request.uuid || isHistoryPage) {
       result.title = model.request.uri || originTitle;
     } else {
@@ -347,11 +357,14 @@ export class ApiTabService {
       replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
       replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
 
-      let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
+      let currentHasChanged = currentTab.extends?.hasChanged?.[contentID];
       switch (inData.when) {
         case 'editing': {
           // Saved APIs do not need to verify changes
-          if (!currentTab.uniqueName.includes('test') || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
+          const isTestPage = [ApiTabsUniqueName.HttpCase, ApiTabsUniqueName.HttpTest, ApiTabsUniqueName.WsTest].includes(
+            currentTab.uniqueName as ApiTabsUniqueName
+          );
+          if (isTestPage || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
             //Set hasChange
             if (!this.componentRef?.isFormChange) {
               throw new Error(
@@ -391,6 +404,7 @@ export class ApiTabService {
     if (currentTab.pathname.includes('test') && (model.testStartTime !== undefined || currentTab.params.uuid)) {
       replaceTab.isFixed = true;
     }
+    // console.log('updatePartialTab', currentTab.uuid, replaceTab);
     this.apiTabComponent.updatePartialTab(currentTab.uuid, replaceTab);
   }
   /**

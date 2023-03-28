@@ -1,6 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiBodyType, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiBodyType,
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
@@ -12,6 +17,7 @@ import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-trans
   providedIn: 'root'
 })
 export class ApiMockService {
+  mockOperateUrl;
   constructor(
     private api: ApiService,
     private globalStore: StoreService,
@@ -19,6 +25,7 @@ export class ApiMockService {
     private router: Router,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
+    this.mockOperateUrl = this.tabsConfig.pathByName[ApiTabsUniqueName.HttpMock];
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
@@ -81,18 +88,19 @@ export class ApiMockService {
       }
     }
   }
-  toDetail(mockID) {
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
-      queryParams: { uuid: mockID, pageID: Date.now() }
+  toDetail(model) {
+    console.log(model);
+    this.router.navigate([this.mockOperateUrl], {
+      queryParams: { uuid: model.id, apiUuid: model.apiUuid, pageID: Date.now() }
     });
   }
   toEdit(mockID) {
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
+    this.router.navigate([this.mockOperateUrl], {
       queryParams: { uuid: mockID }
     });
   }
   toAdd(apiID?) {
-    this.router.navigate([this.tabsConfig.basic_tabs.find(val => val.uniqueName === 'api-http-mock-edit').pathname], {
+    this.router.navigate([this.mockOperateUrl], {
       queryParams: { apiUuid: apiID, pageID: Date.now() }
     });
   }
