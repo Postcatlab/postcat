@@ -33,12 +33,12 @@ const routes: Routes = [
             path: 'test',
             loadChildren: () => import('./http/test/api-test.module').then(m => m.ApiTestModule)
           },
+          // {
+          //   path: 'mock',
+          //   loadChildren: () => import('./http/mock/api-mock.module').then(m => m.ApiMockModule)
+          // },
           {
             path: 'mock',
-            loadChildren: () => import('./http/mock/api-mock.module').then(m => m.ApiMockModule)
-          },
-          {
-            path: 'newMock',
             loadChildren: () => import('./http/mocknew/mock.module').then(m => m.MockModule)
           }
         ]
