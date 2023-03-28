@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { FeatureControlService } from '../../../../core/services/feature-control/feature-control.service';
 import { DataSourceService } from '../../../../services/data-source/data-source.service';

@@ -4,8 +4,8 @@ import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/a
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-transfer/data-transfer.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 @Injectable()
 export class MockService {

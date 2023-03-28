@@ -5,12 +5,12 @@ import {
   Workspace,
   Project,
   Group,
-  ApiData,
   Environment,
   ApiTestHistory,
   Mock,
   ProjectSyncSetting
 } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { ProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
 import { WorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
 

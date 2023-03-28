@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
+import { NZ_ICON_DEFAULT_TWOTONE_COLOR } from 'ng-zorro-antd/icon';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
-import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { flatTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';
@@ -111,6 +112,8 @@ export class ApiTabService {
   /**
    * Watch API/Group/Case/Env/Mock change for handle tab status to fit content
    *
+   * ？It is optimal to control Tab closing through a specific event transmission ID, but this event will always be ignored in use
+   *
    * @param inArg
    */
   closeTabAfterResourceRemove() {
@@ -119,28 +122,26 @@ export class ApiTabService {
         //TODO check group.id is same as resource id
         if (!tab.params.uuid || tab.params.uuid !== group.id.toString()) return false;
 
-        if (group.type === GroupType.userCreated && tab.uniqueName === 'project-group') {
+        if (group.type === GroupType.UserCreated && tab.uniqueName === 'project-group') {
           return true;
         }
-        if (group.module === GroupModuleType.api && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
+        if (group.module === GroupModuleType.API && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
           return true;
         }
-        if (group.module === GroupModuleType.case && tab.uniqueName === 'api-http-case') {
+        if (group.module === GroupModuleType.Case && tab.uniqueName === 'api-http-case') {
           return true;
         }
-        if (group.module === GroupModuleType.mock && tab.uniqueName === 'api-http-mock') {
+        if (group.module === GroupModuleType.Mock && tab.uniqueName === 'api-http-mock') {
           return true;
         }
         return false;
       });
       return isExist;
     };
-
     //Delete group/api/case/mock
     reaction(
       () => this.store.getGroupList,
       (value, previousValue) => {
-        //TODO use event to handle closeTab
         const currentFlatTree = flatTree(value);
         const previousFlatTres = flatTree(previousValue);
         const hasDeleted = currentFlatTree.length < previousFlatTres.length;
@@ -364,6 +365,9 @@ export class ApiTabService {
     if (!model || isEmptyObj(model)) return;
 
     const contentID = currentTab.uniqueName;
+    // if (!currentTab.baseContent) {
+    //   console.error('nononononnononononnononononnononononnononononnononononnonononon baseContent lose', inData.when, currentTab.uuid);
+    // }
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
@@ -377,6 +381,24 @@ export class ApiTabService {
 
     //* Set Edit page,such  as  tab title,storage data,unsaved status by check model change
     if (currentTab.type === 'edit') {
+      //Set tab storage
+      //Set baseContent
+      if (['activated', 'saved'].includes(inData.when)) {
+        const initialModel = eoDeepCopy(inData.model);
+        //Update tab by id,may not be the current selected tab
+        const isCurrentSelectedTab = currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid;
+        //If is current tab,set initialModel automatically
+        if (isCurrentSelectedTab) {
+          this.componentRef.initialModel = initialModel;
+        }
+        //Saved data may update all IntialData
+        replaceTab.baseContent = inData.when === 'saved' ? {} : currentTab.baseContent || {};
+        replaceTab.baseContent[contentID] = initialModel && !isEmptyObj(initialModel) ? initialModel : null;
+      }
+      //Set content
+      replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
+      replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
+
       let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
       switch (inData.when) {
         case 'editing': {
@@ -400,7 +422,6 @@ export class ApiTabService {
           break;
         }
       }
-
       //* Share change status within all content page
       replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
       replaceTab.extends.hasChanged[contentID] = currentHasChanged;
@@ -411,24 +432,6 @@ export class ApiTabService {
         currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.uniqueName]);
       }
       replaceTab.hasChanged = currentHasChanged;
-
-      //Set storage
-      //Set baseContent
-      if (['activated', 'saved'].includes(inData.when)) {
-        const initialModel = eoDeepCopy(inData.model);
-
-        //Update tab by id,may not be the current selected tab
-        const isCurrentSelectedTab = currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid;
-        //If is current tab,set initialModel automatically
-        if (isCurrentSelectedTab) {
-          this.componentRef.initialModel = initialModel;
-        }
-        replaceTab.baseContent = inData.when === 'saved' ? {} : currentTab.baseContent || {};
-        replaceTab.baseContent[contentID] = initialModel && !isEmptyObj(initialModel) ? initialModel : null;
-      }
-      //Set content
-      replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
-      replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
     }
 
     //Set isFixed

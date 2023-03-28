@@ -38,13 +38,12 @@ import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspa
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { interval, Subscription, Subject } from 'rxjs';
-import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 
-import { eoDeepCopy, isEmptyObj, enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import { ProjectApiService } from '../../api.service';
+import { enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
 import { ApiBodyType, ApiParamsType, BodyContentType as ContentTypeEnum, RequestMethod } from '../../constants/api.model';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
@@ -58,7 +57,7 @@ const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGH
 /**
  * Default Content Type
  */
-const contentTypeMap: { [key in ApiBodyType]: ContentType } = {
+export const ContentTypeMap: { [key in ApiBodyType]: ContentType } = {
   [ApiBodyType.FormData]: 'application/x-www-form-urlencoded',
   [ApiBodyType.Raw]: 'text/plain',
   [ApiBodyType.JSON]: 'application/json',
@@ -74,12 +73,8 @@ const contentTypeMap: { [key in ApiBodyType]: ContentType } = {
   styleUrls: ['./api-test-ui.component.scss']
 })
 export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
-  @Input() model: testViewModel = this.resetModel();
-  /**
-   * Intial model from outside,check form is change
-   * * Usually restored from tab
-   */
-  @Input() initialModel: testViewModel;
+  @Input() model: testViewModel;
+
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly afterTested = new EventEmitter<{
     id: string;
@@ -89,7 +84,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       testResult: ApiTestResData;
     };
   }>();
-  @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @ViewChild('authExtForm') authExtForm: AuthorizationExtensionFormComponent;
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
   validateForm!: FormGroup;
@@ -126,7 +120,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
   }
 
-  private initTimes = 0;
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
@@ -134,7 +127,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   constructor(
     private globalStore: StoreService,
     private store: ApiStoreService,
-    private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
     private router: Router,
@@ -142,13 +134,11 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     private apiTest: ApiTestService,
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
-    private projectApi: ProjectApiService,
     private lang: LanguageService,
     private elementRef: ElementRef,
     private apiEdit: ApiEditUtilService,
     private trace: TraceService
   ) {
-    this.initBasicForm();
     this.testServer.init(message => {
       this.receiveMessage(message);
     });
@@ -158,12 +148,8 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     this.reactions.push(
       reaction(
         () => this.store.getCurrentEnv,
-        value => {
-          this.currentEnv = this.store.getCurrentEnv;
-        },
-        {
-          fireImmediately: true
-        }
+        value => (this.currentEnv = value),
+        { fireImmediately: true }
       )
     );
   }
@@ -175,29 +161,12 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     });
   }
 
-  async updateAuthInfo() {
-    if (this.isEmptyTestPage) {
-      return;
-    }
-    const result = await this.projectApi.get(this.uuid);
-    if (!result) return;
-    const newAuthInfo = {
-      ...result.authInfo,
-      authInfo: JSONParse(result.authInfo.authInfo)
-    };
-    if (!isEqual(this.model.request?.authInfo, newAuthInfo)) {
-      this.model.request.authInfo = newAuthInfo;
-    }
-  }
-
-  async handleSelectedIndexChange(index) {
-    // update auth info when tab index change
-    if (index === 4) {
-      this.updateAuthInfo();
-    }
-  }
   ngOnChanges(changes) {
-    console.log(changes);
+    if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
+    this.initBasicForm();
+    //initAuthInfo
+    //initHeader/contentType
+    //rest test status
   }
   // async init() {
   //   this.initTimes++;
@@ -262,7 +231,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   //     this.initialModel = eoDeepCopy(this.model);
   //   }
 
-  //   this.eoOnInit.emit(this.model);
   //   this.cdRef.detectChanges();
   // }
   clickTest() {
@@ -304,12 +272,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       method: 'replace'
     }).url;
   }
-  watchBasicForm() {
-    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
-      //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      this.modelChange.emit(this.model);
-    });
-  }
   updateParamsbyUri() {
     this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
@@ -326,33 +288,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
 
   /**
-   * Judge has edit manualy
-   */
-  isFormChange(): boolean {
-    //Has exist api can't save
-    //TODO If has test case,test data will be saved to test case
-    // if (!this.isEmptyTestPage) {
-    //   return false;
-    // }
-    if (!this.initialModel?.request || !this.model.request) {
-      return false;
-    }
-    // console.log(
-    //   'api test origin:',
-    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-    //   'after:',
-    //   this.apiTestUtil.formatEditingApiData(this.model.request)
-    // );
-    const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
-    const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
-    if (originText !== afterText) {
-      // console.log('api test formChange true!', originText.split(afterText));
-      return true;
-    }
-    return false;
-  }
-
-  /**
    * Return contentType header value by bodyType and userSelectedContentType
    *
    * @param bodyType
@@ -362,14 +297,14 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     switch (bodyType) {
       case ApiBodyType.Raw: {
         const isRawHeader = CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
-        return isRawHeader ? this.model?.userSelectedContentType : contentTypeMap[ApiBodyType.JSON];
+        return isRawHeader ? this.model?.userSelectedContentType : ContentTypeMap[ApiBodyType.JSON];
       }
       case ApiBodyType.FormData: {
         //If params has file，dataType must be multiple/form-data
         if (this.model?.request?.requestParams?.bodyParams?.some(val => val.dataType === ApiParamsType.file)) return 'multiple/form-data';
 
         const isFormHeader = FORMDATA_CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
-        return isFormHeader ? this.model?.userSelectedContentType : contentTypeMap[ApiBodyType.FormData];
+        return isFormHeader ? this.model?.userSelectedContentType : ContentTypeMap[ApiBodyType.FormData];
       }
       case ApiBodyType.Binary: {
         return '';
@@ -417,7 +352,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
         break;
       }
     }
-    console.log(where);
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
@@ -569,73 +503,32 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || this.getContentTypeByBodyType(bodyType);
   }
   private watchEnvChange() {
-    reaction(
-      () => this.store.getCurrentEnv,
-      (env: any) => {
-        if (env.uuid) {
-          this.validateForm.controls.uri.setValidators([]);
-          this.validateForm.controls.uri.updateValueAndValidity();
-        } else {
-          this.validateForm.controls.uri.setValidators([Validators.required]);
-        }
-      }
-    );
-  }
-  private resetModel() {
-    const bodyType = typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
-
-    const headerParams = [];
-    const contentType = this.getContentTypeByBodyType(bodyType);
-    if (bodyType !== ApiBodyType.Binary) {
-      headerParams.push({
-        isRequired: 1,
-        name: 'content-type',
-        paramAttr: {
-          example: contentType
-        }
-      });
-    }
-    return {
-      requestTabIndex: 1,
-      responseTabIndex: 0,
-      userSelectedContentType: contentType,
-      request: {
-        authInfo: {
-          authInfo: {},
-          authType: NONE_AUTH_OPTION.name,
-          isInherited: isInherited.notInherit
-        },
-        apiAttrInfo: {
-          contentType: bodyType,
-          requestMethod: 0,
-          beforeInject: '',
-          afterInject: ''
-        },
-        requestParams: {
-          queryParams: [],
-          headerParams: headerParams,
-          restParams: [],
-          bodyParams: [
-            {
-              binaryRawData: ''
-            }
-          ]
-        }
-      },
-      testResult: {}
-    } as testViewModel;
+    // reaction(
+    //   () => this.store.getCurrentEnv,
+    //   (env: any) => {
+    //     if (env.uuid) {
+    //       this.validateForm.controls.uri.setValidators([]);
+    //       this.validateForm.controls.uri.updateValueAndValidity();
+    //     } else {
+    //       this.validateForm.controls.uri.setValidators([Validators.required]);
+    //     }
+    //   }
+    // );
   }
   /**
    * Init basic form,such as url,protocol,method
    */
   private initBasicForm() {
-    //Prevent init error
-    if (!this.model) {
-      this.model = this.resetModel();
-    }
+    //Init form by model data
     const controls = {};
     controls['uri'] = [this.model.request.uri, [Validators.required]];
     controls['method'] = [this.model.request.apiAttrInfo?.requestMethod, [Validators.required]];
     this.validateForm = this.fb.group(controls);
+
+    //Watch uri changes
+    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
+      //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      this.modelChange.emit(this.model);
+    });
   }
 }

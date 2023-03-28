@@ -1,6 +1,4 @@
-import { method } from 'lodash-es';
-
-import { QueryParam, RestParam } from '../../../../../services/storage/db/models/apiData';
+import { QueryParam, RestParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 /**
  * get rest param from url,format like {restName}

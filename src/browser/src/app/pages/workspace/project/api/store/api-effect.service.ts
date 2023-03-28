@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ApiStoreService } from './api-state.service';
 
@@ -198,6 +198,10 @@ export class ApiEffectService {
   }
 
   async deleteMockDetail() {
+    this.getGroupList();
+  }
+
+  async createMock() {
     this.getGroupList();
   }
 }

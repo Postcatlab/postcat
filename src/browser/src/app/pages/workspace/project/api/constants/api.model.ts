@@ -1,6 +1,7 @@
 import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
 import { enumsToArr, enumsToObject } from '../../../../../shared/utils/index.utils';
 import { ApiTestResData } from '../service/test-server/test-server.model';
+export const API_ROOT_PATH = '/home/workspace/project/api';
 /**
  * API body FormData param type
  */

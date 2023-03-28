@@ -7,8 +7,8 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { EXPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { Subject, takeUntil } from 'rxjs';
 
 // shit angular-cli 配不明白

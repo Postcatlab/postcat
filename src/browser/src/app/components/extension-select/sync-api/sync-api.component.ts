@@ -8,8 +8,8 @@ import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/sche
 import { PULL_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
 
 import { eoDeepCopy } from '../../../shared/utils/index.utils';

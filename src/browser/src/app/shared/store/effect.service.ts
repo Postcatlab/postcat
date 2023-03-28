@@ -5,12 +5,12 @@ import { reaction } from 'mobx';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
-import { ApiStoreService } from '../pages/workspace/project/api/store/api-state.service';
-import { db } from '../services/storage/db';
-import { waitNextTick } from '../shared/utils/index.utils';
+import { ApiStoreService } from '../../pages/workspace/project/api/store/api-state.service';
+import { db } from '../../services/storage/db';
+import { waitNextTick } from '../utils/index.utils';
 
 @Injectable({
   providedIn: 'root'

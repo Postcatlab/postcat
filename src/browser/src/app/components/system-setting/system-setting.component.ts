@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AccountComponent } from 'pc/browser/src/app/components/system-setting/common/account.component';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { SettingItem } from '../eo-ui/setting/setting.component';
 import { AboutComponent, LanguageSwticherComponent, SelectThemeComponent, TokenComponent } from './common';

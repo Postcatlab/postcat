@@ -7,10 +7,10 @@ import { ElectronService } from 'pc/browser/src/app/core/services';
 import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { enumsToObject } from '../../../../../../shared/utils/index.utils';
-import { ProjectApiService } from '../../api.service';
+import { ProjectApiService } from '../../project-api.service';
 @Component({
   selector: 'pc-api-http-detail',
   templateUrl: './api-detail.component.html',

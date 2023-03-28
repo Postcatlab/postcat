@@ -1,4 +1,17 @@
-import { ApiBodyType, RequestMethod } from '../../../../pages/workspace/project/api/constants/api.model';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { RequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
+
+/**
+ * Group list api data
+ */
+export interface ApiDataFromList extends ApiData {
+  requestMethod?: number;
+}
+
+export interface ViewParamAttr extends ParamAttr {
+  //string[]
+  paramValueList?: any;
+}
 
 export interface ApiData {
   id?: number;
@@ -12,7 +25,6 @@ export interface ApiData {
   name: string;
   uri: string;
   protocol: number;
-  requestMethod?: number;
   status?: number;
   starred?: number;
   encoding?: string;
@@ -143,7 +155,7 @@ export interface HeaderParam {
   paramAttr?: ParamAttr;
 }
 
-export interface ParamAttr {
+interface ParamAttr {
   minLength?: number;
   maxLength?: number;
   minValue?: number;
@@ -160,10 +172,15 @@ export interface ParamAttr {
   paramNote?: string;
 }
 
+export enum ParamTypeEnum {
+  REQUEST = 0,
+  RESPONSE = 1
+}
+
 export interface BodyParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
   dataType?: number;
   dataTypeValue?: string;
@@ -182,7 +199,7 @@ export interface BodyParam {
 export interface QueryParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
   structureId?: number;
   structureParamId?: string;
@@ -200,7 +217,7 @@ export interface QueryParam {
 export interface RestParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
   dataTypeValue?: string;
   structureId?: number;

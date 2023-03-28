@@ -4,8 +4,8 @@ import { OperateProjectFormComponent } from 'pc/browser/src/app/pages/workspace/
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 
-import { EffectService } from '../../../../store/effect.service';
-import { StoreService } from '../../../../store/state.service';
+import { EffectService } from '../../../../shared/store/effect.service';
+import { StoreService } from '../../../../shared/store/state.service';
 import { ProjectListService } from './project-list.service';
 
 @Component({

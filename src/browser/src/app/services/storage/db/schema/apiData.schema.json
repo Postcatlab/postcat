@@ -15,17 +15,12 @@
         "contentType": {
           "type": "number"
         },
-        "createTime": {
-          "type": "number"
-        },
         "requestMethod": {
           "$ref": "#/definitions/RequestMethod"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
-      "type": "object"
+      "type": "object",
+      "required": ["requestMethod", "contentType"]
     },
     "BodyParam": {
       "properties": {
@@ -38,9 +33,6 @@
           },
           "type": "array"
         },
-        "createTime": {
-          "type": "number"
-        },
         "dataType": {
           "type": "number"
         },
@@ -51,7 +43,9 @@
           "type": "string"
         },
         "isRequired": {
-          "type": "number"
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
         },
         "name": {
           "type": "string"
@@ -66,7 +60,9 @@
           "type": "number"
         },
         "partType": {
-          "type": "number"
+          "type": "number",
+          "const": 1,
+          "default": 1
         },
         "responseUuid": {
           "type": "string"
@@ -76,12 +72,17 @@
         },
         "structureParamId": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
-      "type": "object"
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["name", "dataType"]
+        },
+        {
+          "required": ["binaryRawData"]
+        }
+      ]
     },
     "DubboApiAttrInfo": {
       "properties": {
@@ -90,9 +91,6 @@
         },
         "appName": {
           "type": "string"
-        },
-        "createTime": {
-          "type": "number"
         },
         "group": {
           "type": "string"
@@ -105,9 +103,6 @@
         },
         "serverHost": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         },
         "version": {
           "type": "string"
@@ -125,9 +120,6 @@
         },
         "authInfo": {
           "type": "string"
-        },
-        "createTime": {
-          "type": "number"
         },
         "group": {
           "type": "string"
@@ -150,9 +142,7 @@
         "serverHost": {
           "type": "string"
         },
-        "updateTime": {
-          "type": "number"
-        },
+
         "version": {
           "type": "string"
         }
@@ -167,14 +157,13 @@
         "contentType": {
           "type": "string"
         },
-        "createTime": {
-          "type": "number"
-        },
         "description": {
           "type": "string"
         },
         "isRequired": {
-          "type": "number"
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
         },
         "name": {
           "type": "string"
@@ -186,7 +175,9 @@
           "$ref": "#/definitions/ParamAttr"
         },
         "partType": {
-          "type": "number"
+          "type": "number",
+          "const": 0,
+          "default": 0
         },
         "responseUuid": {
           "type": "string"
@@ -196,9 +187,6 @@
         },
         "structureParamId": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
       "type": "object"
@@ -225,9 +213,6 @@
         "apiUuid": {
           "type": "string"
         },
-        "createTime": {
-          "type": "number"
-        },
         "note": {
           "type": "string"
         },
@@ -235,9 +220,6 @@
           "type": "string"
         },
         "noteType": {
-          "type": "number"
-        },
-        "updateTime": {
           "type": "number"
         }
       },
@@ -247,9 +229,6 @@
       "properties": {
         "attr": {
           "type": "string"
-        },
-        "createTime": {
-          "type": "number"
         },
         "dbArr": {
           "type": "string"
@@ -283,9 +262,6 @@
         },
         "structureIsHide": {
           "type": "number"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
       "type": "object"
@@ -304,14 +280,13 @@
         "contentType": {
           "type": "string"
         },
-        "createTime": {
-          "type": "number"
-        },
         "description": {
           "type": "string"
         },
         "isRequired": {
-          "type": "number"
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
         },
         "name": {
           "type": "string"
@@ -326,7 +301,9 @@
           "type": "number"
         },
         "partType": {
-          "type": "number"
+          "type": "number",
+          "const": 2,
+          "default": 2
         },
         "responseUuid": {
           "type": "string"
@@ -336,9 +313,6 @@
         },
         "structureParamId": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
       "type": "object"
@@ -407,9 +381,6 @@
         "contentType": {
           "type": "number"
         },
-        "createTime": {
-          "type": "number"
-        },
         "httpCode": {
           "type": "string"
         },
@@ -424,9 +395,6 @@
         },
         "responseUuid": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
       "type": "object"
@@ -462,9 +430,6 @@
         "contentType": {
           "type": "string"
         },
-        "createTime": {
-          "type": "number"
-        },
         "dataTypeValue": {
           "type": "string"
         },
@@ -472,7 +437,9 @@
           "type": "string"
         },
         "isRequired": {
-          "type": "number"
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
         },
         "name": {
           "type": "string"
@@ -487,7 +454,9 @@
           "type": "number"
         },
         "partType": {
-          "type": "number"
+          "type": "number",
+          "const": 3,
+          "default": 3
         },
         "responseUuid": {
           "type": "string"
@@ -497,9 +466,6 @@
         },
         "structureParamId": {
           "type": "string"
-        },
-        "updateTime": {
-          "type": "number"
         }
       },
       "type": "object"
@@ -508,9 +474,6 @@
       "properties": {
         "content": {
           "type": "string"
-        },
-        "createTime": {
-          "type": "number"
         },
         "httpCode": {
           "type": "string"
@@ -525,9 +488,6 @@
           "type": "string"
         },
         "type": {
-          "type": "number"
-        },
-        "updateTime": {
           "type": "number"
         }
       },
@@ -545,9 +505,6 @@
           "type": "string"
         },
         "contentType": {
-          "type": "number"
-        },
-        "createTime": {
           "type": "number"
         },
         "requestMethod": {
@@ -568,9 +525,7 @@
         "testData": {
           "type": "string"
         },
-        "updateTime": {
-          "type": "number"
-        },
+
         "wsdlContent": {
           "type": "string"
         }
@@ -579,19 +534,15 @@
     }
   },
   "properties": {
+    "collectionType": {
+      "type": "number",
+      "const": 1,
+      "default": 1
+    },
     "apiAttrInfo": {
       "$ref": "#/definitions/ApiAttrInfo"
     },
     "apiUuid": {
-      "type": "string"
-    },
-    "createTime": {
-      "type": "number"
-    },
-    "createUserId": {
-      "type": "number"
-    },
-    "createUserName": {
       "type": "string"
     },
     "dubboApiAttrInfo": {
@@ -609,9 +560,6 @@
     "grpcApiAttrInfo": {
       "$ref": "#/definitions/GrpcApiAttrInfo"
     },
-    "hashkey": {
-      "type": "string"
-    },
     "historyInfo": {
       "$ref": "#/definitions/HistoryInfo"
     },
@@ -623,15 +571,6 @@
     },
     "isShared": {
       "type": "number"
-    },
-    "lifecycle": {
-      "type": "number"
-    },
-    "managerId": {
-      "type": "number"
-    },
-    "managerName": {
-      "type": "string"
     },
     "name": {
       "type": "string"
@@ -650,9 +589,6 @@
     },
     "relation": {
       "$ref": "#/definitions/Relation"
-    },
-    "requestMethod": {
-      "type": "number"
     },
     "requestParams": {
       "$ref": "#/definitions/RequestParams"
@@ -685,10 +621,6 @@
     "soapApiAttrInfo": {
       "$ref": "#/definitions/SoapApiAttrInfo"
     },
-    "sort": {
-      "description": "这个仅用于分组排序",
-      "type": "number"
-    },
     "starred": {
       "type": "number"
     },
@@ -698,17 +630,9 @@
     "tag": {
       "type": "string"
     },
-    "updateTime": {
-      "type": "number"
-    },
-    "updateUserId": {
-      "type": "number"
-    },
-    "updateUserName": {
-      "type": "string"
-    },
     "uri": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "workSpaceUuid": {
       "type": "string"
@@ -717,5 +641,7 @@
       "type": "number"
     }
   },
+  "required": ["apiAttrInfo", "uri", "protocol", "name", "requestParams", "responseList", "collectionType"],
+  "additionalProperties": false,
   "type": "object"
 }

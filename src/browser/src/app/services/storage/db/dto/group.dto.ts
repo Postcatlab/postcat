@@ -1,3 +1,5 @@
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
+
 export interface GroupDeleteDto {
   id?: number;
   projectUuid: string;
@@ -14,25 +16,6 @@ export interface GroupCreateDto {
   sort?: number;
   projectUuid?: string;
   workSpaceUuid?: string;
-}
-export enum GroupType {
-  /**
-   * System default group,such as root group
-   */
-  system = 0,
-  /**
-   * Folder group,created by user
-   */
-  userCreated = 1,
-  /**
-   * Case/mock/api, virtual group
-   */
-  virtual = 2
-}
-export enum GroupModuleType {
-  api = 'API_DOC',
-  case = 'API_CASE',
-  mock = 'API_MOCK'
 }
 export interface GroupUpdateDto extends GroupCreateDto {
   id: number;

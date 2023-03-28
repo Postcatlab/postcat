@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { BodyParam } from '../../../../../../services/storage/db/models/apiData';
 import { ApiTableConf } from '../../constants/api.model';
 import { ApiTableService } from '../../service/api-table.service';
 @Component({

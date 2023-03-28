@@ -10,8 +10,8 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { FEATURE_CONTROL } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import { ChatRobotModule } from '../../../components/chat-robot/chat-robot.module';

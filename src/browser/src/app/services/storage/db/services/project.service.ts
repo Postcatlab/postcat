@@ -10,7 +10,7 @@ import {
   Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
-import { Group, Project } from 'pc/browser/src/app/services/storage/db/models';
+import { CollectionTypeEnum, Group, GroupType, Project } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
 import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { EnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
@@ -44,8 +44,7 @@ export class ProjectService extends BaseService<Project> {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
     const promises = collections.map(async (item, sort) => {
-      const isAPI = !!item.uri;
-      if (!isAPI) {
+      if (item.collectionType === CollectionTypeEnum.Group) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
           depth: depth + 1,
@@ -70,6 +69,7 @@ export class ProjectService extends BaseService<Project> {
         return;
       }
 
+      if (item.collectionType !== CollectionTypeEnum.API) return;
       const { data: apiData } = await this.apiDataService.read({
         projectUuid,
         uri: item.uri,
@@ -198,12 +198,13 @@ export class ProjectService extends BaseService<Project> {
 
     const formatTree = (arr = []) => {
       return arr.map(item => {
-        if (item.type === 2) {
+        if (item.type === GroupType.Virtual) {
           return {
-            ...item.relationInfo
+            ...item.relationInfo,
+            collectionType: CollectionTypeEnum.API
           };
         } else {
-          // ...
+          item.collectionType = CollectionTypeEnum.Group;
           if (item.children?.length) {
             item.children = formatTree(item.children);
           }
@@ -316,7 +317,7 @@ export class ProjectService extends BaseService<Project> {
       .group((item, index) => {
         // 排序号根据原始数组索引来
         item.sort = index;
-        const isAPI = item.uri;
+        const isAPI = item.collectionType == CollectionTypeEnum.API;
         if (!isAPI) {
           return 'groupList';
         } else if (isAPI) {

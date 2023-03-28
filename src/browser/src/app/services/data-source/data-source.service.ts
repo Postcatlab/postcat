@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { MessageService } from 'pc/browser/src/app/services/message/message.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 /**
  * Client need min fontend version

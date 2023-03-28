@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "id": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "number",
+      "const": 1,
+      "default": 1
+    },
+    "collectionType": {
+      "type": "number",
+      "const": 0,
+      "default": 0
+    },
+    "children": {
+      "type": "array"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false,
+  "type": "object"
+}

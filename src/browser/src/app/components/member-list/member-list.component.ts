@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun, reaction } from 'mobx';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
-import { StoreService } from '../../store/state.service';
+import { StoreService } from '../../shared/store/state.service';
 import { MemberService } from './member.service';
 
 @Component({

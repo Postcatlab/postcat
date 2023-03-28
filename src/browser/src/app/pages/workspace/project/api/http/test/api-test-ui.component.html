@@ -1,6 +1,6 @@
 <nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
 </nz-skeleton>
-<div class="test_wrap" *ngIf="model?.request?.apiAttrInfo">
+<div class="test_wrap" *ngIf="model?.request?.apiAttrInfo && validateForm">
   <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
       <eo-ng-input-group nzCompact>
@@ -19,7 +19,7 @@
           {{ currentEnv.hostUri }}
         </div>
         <nz-form-item nz-col class="flex-1">
-          <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+          <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
             <input
               type="text"
               class="rounded-r main-bg"
@@ -54,12 +54,7 @@
       </button>
     </form>
     <!-- Request Info -->
-    <eo-ng-tabset
-      [nzTabBarStyle]="{ 'padding-left': '10px' }"
-      [nzAnimated]="false"
-      (nzSelectedIndexChange)="handleSelectedIndexChange($event)"
-      [(nzSelectedIndex)]="model.requestTabIndex"
-    >
+    <eo-ng-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [(nzSelectedIndex)]="model.requestTabIndex">
       <!-- Request Headers -->
       <eo-ng-tab [nzTitle]="headerTitleTmp" name="hhh">
         <ng-template #headerTitleTmp>
@@ -88,7 +83,6 @@
         </ng-template>
         <eo-api-test-body
           [(contentType)]="model.userSelectedContentType"
-          [(autoSetContentType)]="model.autoSetContentType"
           (contentTypeChange)="setHeaderContentType()"
           [(bodyType)]="model.request.apiAttrInfo.contentType"
           (bodyTypeChange)="changeBodyType($event)"
@@ -128,15 +122,15 @@
           <nz-badge class="ml-1" *ngIf="model.request?.authInfo?.authType !== noAuth.name" nzStatus="success"></nz-badge>
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
-          <authorization-extension-form
+          <!-- [inheritAuthType]="initialModel?.request?.authInfo?.authType" -->
+          <!-- <authorization-extension-form
             #authExtForm
             [(model)]="model.request.authInfo"
             [type]="type"
             type="api-test"
-            [inheritAuthType]="initialModel?.request?.authInfo?.authType"
             [groupInfo]="{ parentId: model.request?.groupId }"
             (modelChange)="emitChangeFun('authInfo')"
-          ></authorization-extension-form>
+          ></authorization-extension-form> -->
         </div>
       </eo-ng-tab>
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">

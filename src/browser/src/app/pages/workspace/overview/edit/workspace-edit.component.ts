@@ -5,8 +5,8 @@ import { autorun } from 'mobx';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 
 import { ModalService } from '../../../../services/modal.service';
-import { EffectService } from '../../../../store/effect.service';
-import { StoreService } from '../../../../store/state.service';
+import { EffectService } from '../../../../shared/store/effect.service';
+import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-setting',

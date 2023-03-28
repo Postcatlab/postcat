@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'pc/browser/src/app/services/message/message.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-account',

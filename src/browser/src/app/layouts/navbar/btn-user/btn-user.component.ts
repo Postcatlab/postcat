@@ -6,7 +6,7 @@ import { FeatureControlService } from '../../../core/services/feature-control/fe
 import { DataSourceService } from '../../../services/data-source/data-source.service';
 import { MessageService } from '../../../services/message';
 import { ApiService } from '../../../services/storage/api.service';
-import { StoreService } from '../../../store/state.service';
+import { StoreService } from '../../../shared/store/state.service';
 
 @Component({
   selector: 'pc-btn-user',

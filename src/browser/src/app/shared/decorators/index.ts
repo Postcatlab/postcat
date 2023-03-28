@@ -37,7 +37,7 @@ export function ExtensionChange(feature: string, autoRun: boolean = false) {
       }
       extensionsChangeObserve.subscribe((inArg: ExtensionMessage) => {
         const extension: ExtensionInfo = inArg.data.extension;
-        if (Object.keys(extension?.features).includes(feature)) {
+        if (extension?.features && Object.keys(extension.features).includes(feature)) {
           const result = original.apply(this, [...args, inArg]);
           return result;
         } else {

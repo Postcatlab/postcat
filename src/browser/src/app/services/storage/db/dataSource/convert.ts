@@ -2,7 +2,7 @@ import { ApiParamsType, BodyContentType, RequestMethod } from 'pc/browser/src/ap
 import { mui } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { ApiData as OldApiData, Environment as OldEnvironment, BasiApiEditParams, ApiEditBody } from './oldApiData';
+import { OldApiData, Environment as OldEnvironment, ApiEditBody } from './oldApiData';
 
 export const convertApiData = (apiData: OldApiData): ApiData => {
   const {

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { has, omit } from 'lodash-es';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
 import { EoModalOptions, ModalService } from '../../../../../services/modal.service';
-import { BodyParam } from '../../../../../services/storage/db/models/apiData';
 import { REQURIED_ENUMS } from '../../../../../shared/models/shared.model';
 import { enumsToArr, eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
 import { filterTableData } from '../../../../../shared/utils/tree/tree.utils';

@@ -1,10 +1,10 @@
 import { flatten, map, union } from 'lodash';
+import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
 import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
-import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 
 import { eoDeepCopy, whatType } from '../index.utils';
 
@@ -158,54 +158,7 @@ export const fieldTypeMap = new Map<number, any>([
   [ApiParamsType.null, null],
   [ApiParamsType.string, 'default_value']
 ]);
-/**
- * Parse group data from database to view tree
- *
- * @param list P
- * @returns
- */
-export const parseGroupDataToViewTree = list => {
-  return list.map(it => {
-    const isAPI = it.type === GroupType.virtual && it.module === GroupModuleType.api;
-    if (isAPI) {
-      return {
-        ...it.relationInfo,
-        id: it.relationInfo?.apiUuid,
-        isLeaf: true,
-        parentId: it.parentId,
-        type: it.type,
-        module: it.module,
-        _group: {
-          id: it.id,
-          parentId: it.parentId,
-          sort: it.sort
-        }
-      };
-    }
-    return {
-      ...it,
-      children: parseGroupDataToViewTree(it.children || [])
-    };
-  });
-};
-/**
- * Generate Group for tree view
- *
- * @param apiGroups
- * @param groupId
- * @returns
- */
-export const genApiGroupTree = (groups: Group[] = []) => {
-  groups = parseGroupDataToViewTree(groups);
-  return [
-    ...groups.map(group => ({
-      ...group,
-      title: group.name || '',
-      key: group.id,
-      children: genApiGroupTree([...(group?.children || [])])
-    }))
-  ];
-};
+
 /**
  * Get group after shrink api data
  */
@@ -213,7 +166,7 @@ export const getPureGroup = groupList => {
   return [
     ...groupList.filter(group => {
       if (!group) return;
-      const isGroup = group?.type !== GroupType.virtual;
+      const isGroup = group?.type !== GroupType.Virtual;
       if (!isGroup) return false;
       Object.assign(group, {
         title: group.name || '',

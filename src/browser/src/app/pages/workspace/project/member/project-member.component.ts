@@ -7,7 +7,7 @@ import { DataSourceService } from 'pc/browser/src/app/services/data-source/data-
 import { MessageService } from 'pc/browser/src/app/services/message/message.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { MemberListComponent } from '../../../../components/member-list/member-list.component';
 

@@ -7,7 +7,7 @@ import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-o
 import { TabStorageService } from 'pc/browser/src/app/components/eo-ui/tab/tab-storage.service';
 import { TabItem, TabOperate } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subscription } from 'rxjs';
 
 import { ModalService } from '../../../services/modal.service';
@@ -132,6 +132,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
         return;
       }
       tabs.push({
+        baseContent: tab.baseContent,
         uuid: tab.uuid,
         type: tab.type,
         title: tab.title,
@@ -139,7 +140,6 @@ export class EoTabComponent implements OnInit, OnDestroy {
         params: tab.params
       });
     });
-    console.log(tabs);
     return tabs;
   }
   getTabs() {

@@ -3,7 +3,7 @@ export type eoAPIType = {
   environment: string;
   group: Array<{ name: string; uuid: number }>;
   project: { name: string };
-  apiData: ApiData[];
+  apiData: OldApiData[];
 };
 
 export type ValueOf<T> = T[keyof T];
@@ -15,7 +15,7 @@ export type ApiGroup = {
   children?: Child[];
 };
 
-export type Child = ApiGroup | ApiData;
+export type Child = ApiGroup | OldApiData;
 
 export type EnvParameters = {
   name: string;
@@ -184,7 +184,7 @@ export type ApiEditHeaders = BasiApiEditParams;
 export type ApiEditQuery = BasiApiEditParams;
 export type ApiEditRest = BasiApiEditParams;
 
-export interface ApiData {
+export interface OldApiData {
   groupID?: number;
   /**
    * name
