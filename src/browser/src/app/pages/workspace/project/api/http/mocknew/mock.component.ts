@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
@@ -60,12 +60,13 @@ export class MockComponent implements EditTabViewComponent {
     private message: EoNgFeedbackMessageService,
     public web: WebService,
     private apiEffect: ApiEffectService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     //TODO: 需要换成路由拿apiuuid和mockid
     // this.apiUuid = this.route.snapshot.queryParams.apiUuid;
     this.apiUuid = 'yd1qr8m51dq';
-    // this.mock_id = this.route.snapshot.queryParams.mockId;
+    this.mock_id = this.route.snapshot.queryParams.uuid;
     // this.mock_id = null
   }
 
@@ -205,11 +206,6 @@ export class MockComponent implements EditTabViewComponent {
   async addOrEditModal(item, index?) {
     if (item.id) {
       const [data, err] = await this.apiMock.updateMock(item);
-      console.log(err);
-      if (err) {
-        this.message.error($localize`Failed to update`);
-        return;
-      }
       itemData = data;
       this.message.success($localize`Edited successfully`);
     } else {
@@ -221,6 +217,8 @@ export class MockComponent implements EditTabViewComponent {
         return;
       }
       this.message.success($localize`Added successfully`);
+      const queryParams = this.route.snapshot.queryParams;
+      this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
       itemData = data;
       this.apiEffect.createMock();
     }
