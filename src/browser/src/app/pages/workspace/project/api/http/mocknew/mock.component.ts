@@ -14,13 +14,18 @@ import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 interface ModelType {
+  id: number;
   name: string;
-  response: any;
-  url: string;
+  uri: string;
+  description: string;
+  createTime: number;
+  updateTime: number;
+  projectUuid: string;
+  apiUuid: string;
   createWay: string;
+  response: string;
+  url: string;
 }
-
-let itemData: any = {};
 
 @Component({
   selector: 'pc-mock',
@@ -62,15 +67,15 @@ export class MockComponent implements EditTabViewComponent {
     private apiEffect: ApiEffectService,
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    //TODO: 需要换成路由拿apiuuid和mockid
-    // this.apiUuid = this.route.snapshot.queryParams.apiUuid;
-    this.apiUuid = 'yd1qr8m51dq';
-    this.mock_id = this.route.snapshot.queryParams.uuid;
-    // this.mock_id = null
-  }
+  ) {}
 
   afterTabActivated(): void {
+    console.log('55555555555555555555555555555555555');
+    //TODO: 需要换成路由拿apiuuid和mockid
+    this.apiUuid = this.route.snapshot.queryParams.apiUuid;
+    // this.apiUuid = 'yd1qr8m51dq';
+    this.mock_id = this.route.snapshot.queryParams.uuid;
+    // this.mock_id = null
     if (this.model) {
       this.model = { ...this.model };
     } else {
@@ -100,11 +105,8 @@ export class MockComponent implements EditTabViewComponent {
   async mockDetail(mock_id?: string | number) {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
-    itemData = res;
+    this.model = res;
     this.model.url = this.getMockUrl(res);
-    this.model.createWay = res.createWay;
-    this.model.response = res.response;
-    this.model.name = res.name;
     this.initTabModel();
   }
 
@@ -124,16 +126,16 @@ export class MockComponent implements EditTabViewComponent {
       name: 'NEW MOCK',
       response: this.apiMock.getMockResponseByAPI(this.apiData)
     };
-    this.setValidateFormValue(data);
-    this.initTabModel();
+    // this.setValidateFormValue(data);
+    // this.initTabModel();
     this.addOrEditModal(data);
   }
 
-  setValidateFormValue(res) {
-    Object.keys(res).forEach(key => {
-      this.model[key] = res[key] || '';
-    });
-  }
+  // setValidateFormValue(res) {
+  //   Object.keys(res).forEach(key => {
+  //     this.model[key] = res[key] || '';
+  //   });
+  // }
   private getMockUrl(mock) {
     // console.log(mock);
     // //Generate Mock URL
@@ -172,7 +174,7 @@ export class MockComponent implements EditTabViewComponent {
       this.message.error($localize`response cannot be empty`);
       return;
     }
-    if (this.model[key] === itemData[key]) {
+    if (this.model[key] === this.initialModel[key]) {
       if (key === 'name') {
         this.isEdit = false;
       }
@@ -183,12 +185,11 @@ export class MockComponent implements EditTabViewComponent {
     }
 
     const requestData = {
-      ...itemData,
+      ...this.initialModel,
       [key]: this.model[key]
     };
     await this.addOrEditModal(requestData);
     this.isEdit = false;
-    itemData = requestData;
     this.afterSaved.emit(this.model);
   }
   // async saveResponse() {
@@ -205,8 +206,8 @@ export class MockComponent implements EditTabViewComponent {
 
   async addOrEditModal(item, index?) {
     if (item.id) {
-      const [data, err] = await this.apiMock.updateMock(item);
-      itemData = data;
+      await this.apiMock.updateMock(item);
+      this.model = item;
       this.message.success($localize`Edited successfully`);
     } else {
       item.apiUuid = this.apiUuid;
@@ -218,8 +219,8 @@ export class MockComponent implements EditTabViewComponent {
       }
       this.message.success($localize`Added successfully`);
       const queryParams = this.route.snapshot.queryParams;
+      console.log(data);
       this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
-      itemData = data;
       this.apiEffect.createMock();
     }
     // item.url = this.getMockUrl(item);
@@ -236,7 +237,7 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   async handleDeleteMockItem() {
-    await this.apiMock.deleteMock(itemData.id);
+    await this.apiMock.deleteMock(this.model.id);
     this.message.success($localize`Delete Succeeded`);
     this.apiEffect.deleteMockDetail();
   }
