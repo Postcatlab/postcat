@@ -63,9 +63,9 @@ export class MockComponent implements EditTabViewComponent {
     private route: ActivatedRoute
   ) {
     //TODO: 需要换成路由拿apiuuid和mockid
-    this.apiUuid = this.route.snapshot.queryParams.apiUuid;
-    // 'yd1qr8m51dq'
-    this.mock_id = this.route.snapshot.queryParams.mockId;
+    // this.apiUuid = this.route.snapshot.queryParams.apiUuid;
+    this.apiUuid = 'yd1qr8m51dq';
+    // this.mock_id = this.route.snapshot.queryParams.mockId;
     // this.mock_id = null
   }
 
@@ -204,7 +204,13 @@ export class MockComponent implements EditTabViewComponent {
 
   async addOrEditModal(item, index?) {
     if (item.id) {
-      await this.apiMock.updateMock(item);
+      const [data, err] = await this.apiMock.updateMock(item);
+      console.log(err);
+      if (err) {
+        this.message.error($localize`Failed to update`);
+        return;
+      }
+      itemData = data;
       this.message.success($localize`Edited successfully`);
     } else {
       item.apiUuid = this.apiUuid;
@@ -215,6 +221,7 @@ export class MockComponent implements EditTabViewComponent {
         return;
       }
       this.message.success($localize`Added successfully`);
+      itemData = data;
       this.apiEffect.createMock();
     }
     // item.url = this.getMockUrl(item);
