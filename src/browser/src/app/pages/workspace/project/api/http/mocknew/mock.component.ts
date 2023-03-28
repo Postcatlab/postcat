@@ -57,6 +57,8 @@ export class MockComponent implements EditTabViewComponent {
   btnTitle = $localize`Use Client`;
   isInstalledClient: boolean = true;
 
+  mockPrefix: string;
+
   constructor(
     private apiHttp: ApiService,
     private mockService: MockService,
@@ -69,23 +71,25 @@ export class MockComponent implements EditTabViewComponent {
     private router: Router
   ) {}
 
-  afterTabActivated(): void {
+  async afterTabActivated(): Promise<any> {
     console.log('55555555555555555555555555555555555');
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = this.route.snapshot.queryParams.apiUuid;
     // this.apiUuid = 'yd1qr8m51dq';
     this.mock_id = this.route.snapshot.queryParams.uuid;
     // this.mock_id = null
-    if (this.model) {
-      this.model = { ...this.model };
+    if (this.model) return;
+    if (!this.mock_id) {
+      this.isEdit = true;
+      this.apiData = await this.getApiDetail();
+      this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
+      const data = {
+        name: 'NEW MOCK',
+        response: this.apiMock.getMockResponseByAPI(this.apiData)
+      };
+      this.addOrEditModal(data);
     } else {
-      // TODO: 需要换成是否有mockid判断
-      if (!this.mock_id) {
-        this.isEdit = true;
-        this.getApiDetail();
-      } else {
-        this.mockDetail(this.mock_id);
-      }
+      this.mockDetail(this.mock_id);
     }
   }
   initTabModel() {
@@ -106,6 +110,7 @@ export class MockComponent implements EditTabViewComponent {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
+    this.apiData = await this.getApiDetail();
     this.model.url = this.getMockUrl(res);
     this.initTabModel();
   }
@@ -121,14 +126,7 @@ export class MockComponent implements EditTabViewComponent {
 
   async getApiDetail() {
     if (!this.model) this.model = {} as ModelType;
-    this.apiData = await this.api.get(this.apiUuid);
-    const data = {
-      name: 'NEW MOCK',
-      response: this.apiMock.getMockResponseByAPI(this.apiData)
-    };
-    // this.setValidateFormValue(data);
-    // this.initTabModel();
-    this.addOrEditModal(data);
+    return await this.api.get(this.apiUuid);
   }
 
   // setValidateFormValue(res) {
@@ -137,20 +135,20 @@ export class MockComponent implements EditTabViewComponent {
   //   });
   // }
   private getMockUrl(mock) {
-    // console.log(mock);
-    // //Generate Mock URL
-    // //TODO Mock URL = API Path
-    // const url = new URL(
-    //   this.mockPrefix
-    //     .replace(/:\/{2,}/g, ':::')
-    //     .replace(/\/{2,}/g, '/')
-    //     .replace(/:{3}/g, '://'),
-    //   'https://github.com/'
-    // );
-    // if (mock?.createWay === 'custom' && mock.id) {
-    //   url.searchParams.set('mockID', `${mock.id}`);
-    // }
-    return 'decodeURIComponent(url.toString())';
+    console.log(mock);
+    //Generate Mock URL
+    //TODO Mock URL = API Path
+    const url = new URL(
+      this.mockPrefix
+        .replace(/:\/{2,}/g, ':::')
+        .replace(/\/{2,}/g, '/')
+        .replace(/:{3}/g, '://'),
+      'https://github.com/'
+    );
+    if (mock?.createWay === 'custom' && mock.id) {
+      url.searchParams.set('mockID', `${mock.id}`);
+    }
+    return decodeURIComponent(url.toString());
   }
 
   // name edit no focus
@@ -192,17 +190,6 @@ export class MockComponent implements EditTabViewComponent {
     this.isEdit = false;
     this.afterSaved.emit(this.model);
   }
-  // async saveResponse() {
-  //   if(!this.model.response) {
-  //     this.message.error($localize`response cannot be empty`);
-  //     return
-  //   }
-  //   const requestData = {
-  //     ...itemData,
-  //     response: this.model.response
-  //   };
-  //   await this.addOrEditModal(requestData);
-  // }
 
   async addOrEditModal(item, index?) {
     if (item.id) {
@@ -220,6 +207,9 @@ export class MockComponent implements EditTabViewComponent {
       this.message.success($localize`Added successfully`);
       const queryParams = this.route.snapshot.queryParams;
       console.log(data);
+      this.model = data;
+      this.model.url = this.getMockUrl(data);
+      this.initTabModel();
       this.router.navigate(['.'], { relativeTo: this.route, queryParams: { ...queryParams, uuid: data.id } });
       this.apiEffect.createMock();
     }
