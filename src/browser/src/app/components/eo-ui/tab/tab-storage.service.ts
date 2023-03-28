@@ -58,7 +58,8 @@ export class TabStorageService {
   setPersistenceStorage(selectedIndex, opts) {
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach(val => {
-      if (val.type === 'preview') {
+      //Remove cache when no change
+      if (val.type === 'preview' || (val.type === 'edit' && !val.hasChanged)) {
         ['baseContent', 'content'].forEach(keyName => {
           val[keyName] = null;
         });

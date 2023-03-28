@@ -15,7 +15,7 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { getExpandGroupByKey, PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { Subject } from 'rxjs';
 
-import { isEmptyObj, enumsToArr, waitNextTick } from '../../../../../../shared/utils/index.utils';
+import { isEmptyObj, enumsToArr, waitNextTick, getDifference } from '../../../../../../shared/utils/index.utils';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
@@ -186,17 +186,16 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     if (!(this.initialModel && this.model)) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.model)
-    );
-    const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
-    const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
-    // console.log(`\n\n${originText}\n\n${afterText}`);
-    if (originText !== afterText) {
-      // console.log('api edit formChange true!', originText.split(afterText)[0]);
+    const origin = this.apiEditUtil.formatEditingApiData(this.initialModel);
+    const after = this.apiEditUtil.formatEditingApiData(this.model);
+    // console.log(
+    //   'api edit origin:',
+    //   origin,
+    //   'after:',
+    //   after
+    // );
+    if (JSON.stringify(origin) !== JSON.stringify(after)) {
+      console.log('api edit formChange true!', getDifference(origin, after));
       return true;
     }
     return false;

@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash-es';
+import { isNumber, isObject } from 'lodash-es';
 
 window.pcConsole = {
   log(...args) {
@@ -320,4 +320,9 @@ export const getUrlParams = url => {
   const obj = {};
   s.forEach((v, k) => (obj[k] = v));
   return obj;
+};
+export const getDifference = (a, b) => {
+  return Array.from(new Set([...Object.keys(a), ...Object.keys(b)]), k => ({
+    [k]: isObject(a[k]) && isObject(b[k]) ? getDifference(a[k], b[k]) : a[k] === b[k]
+  }));
 };

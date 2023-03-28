@@ -70,7 +70,7 @@ export class MockComponent implements EditTabViewComponent {
   ) {}
 
   afterTabActivated(): void {
-    console.log('55555555555555555555555555555555555');
+    console.log('5555555555555555555555555555555555', this.model);
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = this.route.snapshot.queryParams.apiUuid;
     // this.apiUuid = 'yd1qr8m51dq';
@@ -90,7 +90,6 @@ export class MockComponent implements EditTabViewComponent {
   }
   initTabModel() {
     this.eoOnInit.emit(this.model);
-    this.modelChange.emit(this.model);
   }
 
   valueChange($event) {
