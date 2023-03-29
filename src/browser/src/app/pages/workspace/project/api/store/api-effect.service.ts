@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiCase, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -32,6 +32,9 @@ export class ApiEffectService {
 
   //? History
   async createHistory(params) {
+    params.request = JSON.stringify(params.request);
+    params.response = JSON.stringify(params.response);
+    params.general = '{}';
     const [data] = await this.api.api_apiTestHistoryCreate(params);
     this.store.setHistory([...this.store.getTestHistory, data]);
     return data;
@@ -155,6 +158,9 @@ export class ApiEffectService {
 
   //? API
   async addAPI(apiData: ApiData) {
+    // * Unsaved auth Info
+    Reflect.deleteProperty(apiData, 'authInfo');
+
     const [result, err] = await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
     if (err) {
       return [null, err];
@@ -170,6 +176,9 @@ export class ApiEffectService {
       console.error(err);
       return [null, `cant'find this api:${err}`];
     }
+    //Handle Auth
+    result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+
     return [result[0], err];
   }
   async updateAPI(apiData) {
@@ -191,16 +200,22 @@ export class ApiEffectService {
     return [result, err];
   }
   //? Case
-  async addCase(env) {
-    const [data, err] = await this.api.api_environmentCreate(env);
-    if (err) {
-      return [null, err];
+  async addCase(model: ApiCase) {
+    // * Unsaved auth Info
+    Reflect.deleteProperty(model, 'authInfo');
+    const [data, err] = await this.api.api_apiCaseCreate({
+      apiCaseList: [model]
+    });
+    if (err || !data?.[0]) {
+      return [null, `cant'find this api:${err}`];
     }
     this.getGroupList();
-    return [data, err];
+    return [data[0], err];
   }
-  async updateCase(env) {
-    const [data, err] = await this.api.api_environmentUpdate(env);
+  async updateCase(model: ApiCase) {
+    // * Unsaved auth Info
+    Reflect.deleteProperty(model, 'authInfo');
+    const [data, err] = await this.api.api_apiCaseUpdate(model);
     if (err) {
       return [null, err];
     }
@@ -208,10 +223,10 @@ export class ApiEffectService {
     return [data, err];
   }
 
-  async deleteCase(id) {
-    const [, err] = await this.api.api_environmentDelete({ id });
+  async deleteCase(apiCaseUuid) {
+    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuid });
     if (err) {
-      return;
+      return [null, err];
     }
     this.getGroupList();
   }

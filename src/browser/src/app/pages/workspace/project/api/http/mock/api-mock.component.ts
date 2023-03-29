@@ -5,7 +5,7 @@ import { WebService } from 'pc/browser/src/app/core/services';
 import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-mock-table.component';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';

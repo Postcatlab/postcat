@@ -37,6 +37,7 @@ import {
 } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ScriptType } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -59,7 +60,6 @@ import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiStoreService } from '../../store/api-state.service';
-import { ApiTestService } from './api-test.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -139,9 +139,8 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     private store: ApiStoreService,
     private fb: FormBuilder,
     public route: ActivatedRoute,
-    private router: Router,
+    private effect: ApiEffectService,
     private ref: ChangeDetectorRef,
-    private apiTest: ApiTestService,
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
     private lang: LanguageService,
@@ -389,8 +388,8 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     }
 
     //Add test history
-    this.apiTest.addHistory({
-      apiUuid: this.model.request.apiUuid || '-1',
+    this.effect.createHistory({
+      apiUuid: this.model.request.apiUuid,
       request: this.apiEdit.formatUIApiDataToStorage(this.model.request),
       response: message.response
     });

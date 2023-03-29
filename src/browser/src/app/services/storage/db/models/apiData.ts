@@ -75,6 +75,7 @@ export interface ApiData extends ApiBaseRequest {
   resultList?: ResultList[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
+  //Use for view
   script?: {
     beforeScript: '';
     afterScript: '';

@@ -156,9 +156,6 @@ export class DbProjectService extends DbBaseService<Project> {
             workSpaceUuid,
             projectUuid: group.projectUuid
           });
-          // const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
-          // @ts-ignore
-          // this.DbApiDataService.bulkCreate(sampleApiData);
         });
       }
     });

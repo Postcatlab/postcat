@@ -9,6 +9,7 @@ import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/ta
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiParamsNumPipe } from 'pc/browser/src/app/pages/workspace/project/api/pipe/api-param-num.pipe';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
@@ -18,7 +19,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
 import { ModalService } from '../../../../../services/modal.service';
-import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {
   requestTabIndex: number;
@@ -57,8 +57,8 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
     public route: ActivatedRoute,
     private fb: FormBuilder,
     private electron: ElectronService,
-    private testService: ApiTestService,
     private modal: ModalService,
+    private effect: ApiEffectService,
     private feedback: EoNgFeedbackMessageService,
     private store: StoreService,
     public tabOperate: TabOperateService
@@ -69,8 +69,8 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;
-      if (id && id.includes('history_')) {
-        const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
+      if (id?.includes('history_')) {
+        const historyData: unknown = await this.effect.getHistory(Number(id.replace('history_', '')));
         this.model = historyData as testViewModel;
         this.model.requestTabIndex = 2;
       }
@@ -175,7 +175,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
       if (this.store.isShare) {
         return;
       }
-      await this.testService.addHistory(data);
+      await this.effect.createHistory(data);
       return;
     }
     // * connecting

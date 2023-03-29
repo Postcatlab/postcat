@@ -178,29 +178,14 @@ export class LocalService {
   }
 
   api_apiCaseCreate<T = any>({
-    name,
-    apiUuid,
-    uri,
-    protocol,
+    apiCaseList,
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid,
     ...items
   }) {
-    if (name == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 name' }];
-    }
-    if (apiUuid == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 apiUuid' }];
-    }
-    if (uri == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 uri %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 uri' }];
-    }
-    if (protocol == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 protocol %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 protocol' }];
+    if (apiCaseList == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 apiCaseList %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 apiCaseList' }];
     }
     if (projectUuid == null) {
       console.log('%c Error: apiCase - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
@@ -213,15 +198,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiCase
-        .create({
-          name,
-          apiUuid,
-          uri,
-          protocol,
-          projectUuid,
-          workSpaceUuid,
-          ...items
-        })
+        .bulkCreate({ apiCaseList, projectUuid, workSpaceUuid, ...items })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiCase - create 接口调用成功 %c', SuccessStyle, '');

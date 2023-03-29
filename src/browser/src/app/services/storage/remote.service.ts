@@ -222,32 +222,12 @@ export class RemoteService {
   }
 
   api_apiCaseCreate<T = any>(
-    {
-      name,
-      apiUuid,
-      uri,
-      protocol,
-      projectUuid = this.store.getCurrentProjectID,
-      workSpaceUuid = this.store.getCurrentWorkspaceUuid,
-      ...items
-    },
+    { apiCaseList, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
     prefix = ''
   ) {
-    if (name == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 name %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 name' }];
-    }
-    if (apiUuid == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 apiUuid' }];
-    }
-    if (uri == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 uri %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 uri' }];
-    }
-    if (protocol == null) {
-      console.log('%c Error: apiCase - create 接口 缺失参数 protocol %c', ErrorStyle, '');
-      return [null, { message: 'create 接口 缺失参数 protocol' }];
+    if (apiCaseList == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 apiCaseList %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 apiCaseList' }];
     }
     if (projectUuid == null) {
       console.log('%c Error: apiCase - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
@@ -261,10 +241,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .post(`${prefix}/api/api-case`, {
-          name,
-          apiUuid,
-          uri,
-          protocol,
+          apiCaseList,
           projectUuid,
           workSpaceUuid,
           ...items

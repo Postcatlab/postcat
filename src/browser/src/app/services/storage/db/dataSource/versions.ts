@@ -47,7 +47,7 @@ export const setupVersions = (db: DataSourceInstance) => {
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
       apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
       apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
-      mock: '++id, name, projectUuid, workSpaceUuid'
+      mock: '++id, name, projectUuid,apiUuid, workSpaceUuid'
     })
     .upgrade(migrationToV4);
 
@@ -64,6 +64,6 @@ export const setupVersions = (db: DataSourceInstance) => {
    * Add apiCase
    */
   db.version(6).stores({
-    apiData: '++id, &uuid, projectUuid, workSpaceUuid, name'
+    apiCase: '++id, apiUuid, projectUuid, workSpaceUuid, name'
   });
 };
