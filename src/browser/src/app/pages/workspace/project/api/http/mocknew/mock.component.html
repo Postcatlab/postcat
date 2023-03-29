@@ -27,9 +27,10 @@
         <ng-container *ngIf="!isEdit">
           <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
           <div
-            nz-popover
-            [nzPopoverContent]="hoverStr"
-            [nzPopoverTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            nz-tooltip
+            [nzTooltipTitle]="hoverStr"
+            [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            nzTooltipOverlayClassName="mockPopover"
             (click)="editClick()"
           >
             <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
@@ -69,7 +70,7 @@
       nz-typography
       nzCopyable
       nzEllipsis
-      [nzCopyText]="'555'"
+      [nzCopyText]="model && model.url"
       [nzCopyIcons]="[copedIcon, copedIcon]"
     >
     </p>

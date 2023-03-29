@@ -93,6 +93,8 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   valueChange($event) {
+    console.log(this.model.name, this.initialModel.name);
+    console.log(this.model.response, this.initialModel.response);
     this.modelChange.emit(this.model);
   }
 
@@ -105,9 +107,9 @@ export class MockComponent implements EditTabViewComponent {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
-    this.apiData = await this.getApiDetail();
     this.model.url = this.getMockUrl(res);
     this.eoOnInit.emit(this.model);
+    this.modelChange.emit(this.model);
   }
 
   isFormChange() {
@@ -204,7 +206,6 @@ export class MockComponent implements EditTabViewComponent {
       this.model = data;
       this.model.url = this.getMockUrl(data);
       this.eoOnInit.emit(this.model);
-      console.log('request finish', this.model);
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: { ...queryParams, uuid: data.id }
@@ -227,6 +228,6 @@ export class MockComponent implements EditTabViewComponent {
   async handleDeleteMockItem() {
     await this.apiMock.deleteMock(this.model.id);
     this.message.success($localize`Delete Succeeded`);
-    this.apiEffect.deleteMockDetail();
+    // this.apiEffect.deleteMockDetail();
   }
 }
