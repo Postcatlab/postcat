@@ -44,6 +44,8 @@ export class PagesComponent implements OnInit {
     // }
   }
   ngAfterViewInit() {
+    // TODO: first use
+    if (true) return;
     const modal = this.modal.create({
       nzTitle: $localize`New Mock`,
       nzWidth: '650px',
