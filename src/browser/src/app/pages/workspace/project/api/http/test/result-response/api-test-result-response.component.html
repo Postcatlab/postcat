@@ -1,9 +1,10 @@
 <div class="pb15" *ngIf="(model | json) === '{}'">
-  <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
-    <ng-template #contentTpl>
-      <span i18n>Click the send button to get a test report</span>
-    </ng-template>
-  </nz-empty>
+  <!--  <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">-->
+  <!--    <ng-template #contentTpl>-->
+  <!--      <span i18n>Click the send button to get a test report</span>-->
+  <!--    </ng-template>-->
+  <!--  </nz-empty>-->
+  <pc-response-steps></pc-response-steps>
 </div>
 <div class="p-[20px]" *ngIf="model && (model | json) !== '{}'">
   <!-- Test Alert Tip -->

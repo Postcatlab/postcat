@@ -13,6 +13,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
 import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
+import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { ActionComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/action/action.component';
 import { ApiScriptComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/api-script.component';
 import { ApiTestUiComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
@@ -66,7 +67,8 @@ const COMPONENTS = [
     ...UI_COMPONETS,
     SharedModule,
     ApiSharedModule,
-    NzResizableModule
+    NzResizableModule,
+    ResponseStepsComponent
   ],
   providers: [
     ApiTestService,

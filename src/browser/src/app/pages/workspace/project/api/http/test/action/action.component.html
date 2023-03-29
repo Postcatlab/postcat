@@ -1,6 +1,6 @@
 <div class="flex justify-between h-[100%]">
   <div class="w-[25%] action-contain flex items-center flex-col">
-    <div *ngFor="let item of operationArr" class="p-[15px]">
+    <div *ngFor="let item of operationArr" class="p-[10px]">
       <button eo-ng-button nzType="primary" class="w-[200px]" (click)="typeChange(item.type)">
         <eo-iconpark-icon name="add-child"></eo-iconpark-icon>
         <span class="ml-[10px]" i18n>{{ item.title }}</span>
