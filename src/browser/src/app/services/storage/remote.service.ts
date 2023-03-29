@@ -221,6 +221,191 @@ export class RemoteService {
     });
   }
 
+  api_apiCaseCreate<T = any>(
+    {
+      name,
+      apiUuid,
+      uri,
+      protocol,
+      projectUuid = this.store.getCurrentProjectID,
+      workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+      ...items
+    },
+    prefix = ''
+  ) {
+    if (name == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 name' }];
+    }
+    if (apiUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 apiUuid' }];
+    }
+    if (uri == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 uri %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 uri' }];
+    }
+    if (protocol == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 protocol %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 protocol' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .post(`${prefix}/api/api-case`, {
+          name,
+          apiUuid,
+          uri,
+          protocol,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:create - api_apiCaseCreate 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:create - api_apiCaseCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseUpdate<T = any>(
+    { apiCaseUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
+    prefix = ''
+  ) {
+    if (apiCaseUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 apiCaseUuid' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .put(`${prefix}/api/api-case`, {
+          apiCaseUuid,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:update - api_apiCaseUpdate 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:update - api_apiCaseUpdate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseDetail<T = any>(
+    { apiCaseUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (apiCaseUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 apiCaseUuid' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/api-case`, {
+          params: { apiCaseUuid, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:detail - api_apiCaseDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:detail - api_apiCaseDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseDelete<T = any>(
+    { apiCaseUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (apiCaseUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 apiCaseUuid' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .delete(`${prefix}/api/api-case`, {
+          params: { apiCaseUuid, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:delete - api_apiCaseDelete 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:delete - api_apiCaseDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
   api_mockCreate<T = any>(
     {
       name,

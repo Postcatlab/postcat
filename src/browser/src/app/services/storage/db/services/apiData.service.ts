@@ -8,13 +8,13 @@ import {
   ApiDataUpdateDto
 } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import type { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
-import { GroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbGroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
 
-export class ApiDataService extends BaseService<ApiData> {
-  baseService = new BaseService(dataSource.apiData);
-  mockService = new BaseService(dataSource.mock);
-  groupService = new GroupService();
+export class DbApiDataService extends DbBaseService<ApiData> {
+  baseService = new DbBaseService(dataSource.apiData);
+  mockService = new DbBaseService(dataSource.mock);
+  groupService = new DbGroupService();
 
   constructor() {
     super(dataSource.apiData);

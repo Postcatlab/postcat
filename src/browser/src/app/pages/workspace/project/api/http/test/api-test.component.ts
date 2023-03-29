@@ -47,17 +47,15 @@ export class ApiTestComponent implements EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange(): boolean {
+    console.log('isFormChange');
     if (!(this.initialModel?.request && this.model?.request)) {
       return false;
     }
     const origin = this.apiTestUtil.formatEditingApiData(this.initialModel.request);
     const after = this.apiTestUtil.formatEditingApiData(this.model.request);
-    // console.log(
-    //   'api test origin:',
-    //   origin,
-    //   'after:',
-    //   after
-    // );
+
+    console.log('api test origin:', origin, 'after:', after);
+
     if (JSON.stringify(origin) !== JSON.stringify(after)) {
       // console.log('api test formChange true!', getDifference(origin, after));
       return true;

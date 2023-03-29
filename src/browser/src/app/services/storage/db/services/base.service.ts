@@ -4,7 +4,7 @@ import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../deco
 
 type PageCallback<T> = (collection: Collection<T, IndexableType>) => Collection | Promise<T[]>;
 
-export class BaseService<T extends object> {
+export class DbBaseService<T extends object> {
   constructor(readonly db: Table<T>) {}
 
   private filterData(params: Record<string, any> = {}) {

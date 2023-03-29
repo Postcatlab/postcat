@@ -11,8 +11,8 @@ import {
   ApiCase
 } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { ProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
-import { WorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
+import { DbProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
+import { DbWorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
 
 class DataSource extends Dexie {
   workspace!: Table<Workspace, number>;
@@ -33,8 +33,8 @@ class DataSource extends Dexie {
   }
 
   private async populate() {
-    const workspaceService = new WorkspaceService();
-    const projectService = new ProjectService();
+    const workspaceService = new DbWorkspaceService();
+    const projectService = new DbProjectService();
 
     const {
       data: { uuid: workSpaceUuid }
