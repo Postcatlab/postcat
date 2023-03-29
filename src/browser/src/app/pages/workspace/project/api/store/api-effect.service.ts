@@ -177,7 +177,9 @@ export class ApiEffectService {
       return [null, `cant'find this api:${err}`];
     }
     //Handle Auth
-    result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+    if (result[0]?.authInfo?.authInfo) {
+      result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+    }
 
     return [result[0], err];
   }

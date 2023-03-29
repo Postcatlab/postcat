@@ -17,6 +17,7 @@ import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/p
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -76,6 +77,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     private effect: ApiEffectService,
     private projectApi: ProjectApiService,
     private feedback: EoNgFeedbackMessageService,
+    private api: ApiService,
     private apiTestUtil: ApiTestUtilService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
@@ -228,6 +230,8 @@ export class ApiTestComponent implements EditTabViewComponent {
               return viewModel;
             } else {
               //* Edit Case
+              const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [apiCaseUuid] });
+              return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(res[0]) };
             }
           }
         };

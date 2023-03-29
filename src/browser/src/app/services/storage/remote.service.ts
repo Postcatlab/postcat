@@ -306,12 +306,12 @@ export class RemoteService {
   }
 
   api_apiCaseDetail<T = any>(
-    { apiCaseUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    { apiCaseUuids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
     prefix = ''
   ) {
-    if (apiCaseUuid == null) {
-      console.log('%c Error: apiCase - detail 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
-      return [null, { message: 'detail 接口 缺失参数 apiCaseUuid' }];
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 apiCaseUuids' }];
     }
     if (projectUuid == null) {
       console.log('%c Error: apiCase - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
@@ -325,7 +325,7 @@ export class RemoteService {
     return new Promise<[T, null] | [null, any]>(resolve => {
       this.http
         .get(`${prefix}/api/api-case`, {
-          params: { apiCaseUuid, projectUuid, workSpaceUuid }
+          params: { apiCaseUuids, projectUuid, workSpaceUuid }
         })
         .subscribe({
           next: ({ code, data, message }: any) => {

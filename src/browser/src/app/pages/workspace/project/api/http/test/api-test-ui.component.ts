@@ -357,7 +357,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
 
     //Add test history
     this.effect.createHistory({
-      apiUuid: this.model.request.apiUuid,
+      apiUuid: this.model.request.apiUuid || -1,
       request: this.apiEdit.formatUIApiDataToStorage(this.model.request),
       response: message.response
     });
