@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
@@ -150,6 +151,69 @@ export class ApiEffectService {
     this.store.setGroupList(tree.getList());
 
     return [data, err];
+  }
+
+  //? API
+  async addAPI(apiData: ApiData) {
+    const [result, err] = await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [result[0], err];
+  }
+  async getAPI(uuid) {
+    const [result, err] = await (this.globalStore.isShare
+      ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
+      : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
+    if (err || !result?.[0]) {
+      console.error(err);
+      return [null, `cant'find this api:${err}`];
+    }
+    return [result[0], err];
+  }
+  async updateAPI(apiData) {
+    const [result, err] = await this.api.api_apiDataUpdate({ api: apiData });
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [result, err];
+  }
+  async deleteAPI(uuid) {
+    const [result, err] = await this.api.api_apiDataDelete({ apiUuids: [uuid] });
+    if (err) {
+      this.feedback.error($localize`Delete API failed`);
+      return [null, err];
+    }
+    this.feedback.success($localize`Successfully deleted`);
+    this.getGroupList();
+    return [result, err];
+  }
+  //? Case
+  async addCase(env) {
+    const [data, err] = await this.api.api_environmentCreate(env);
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [data, err];
+  }
+  async updateCase(env) {
+    const [data, err] = await this.api.api_environmentUpdate(env);
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [data, err];
+  }
+
+  async deleteCase(id) {
+    const [, err] = await this.api.api_environmentDelete({ id });
+    if (err) {
+      return;
+    }
+    this.getGroupList();
   }
 
   //? Env

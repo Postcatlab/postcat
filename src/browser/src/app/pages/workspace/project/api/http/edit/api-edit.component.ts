@@ -87,30 +87,33 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    * @param type Reset means force update apiData
    */
   public async afterTabActivated() {
+    const isFromCache: boolean = this.model && !isEmptyObj(this.model);
     const id = this.route.snapshot.queryParams.uuid;
-    const groupId = Number(this.route.snapshot.queryParams.groupId);
-    if (!this.model || isEmptyObj(this.model)) {
-      this.model = {} as ApiData;
+
+    //Get api data from request
+    if (!isFromCache) {
+      const groupId = Number(this.route.snapshot.queryParams.groupId);
       this.model = await this.apiEdit.getApi({
         id,
         groupId
       });
+      this.resetRestFromUrl(this.model.uri);
     }
 
-    //* Rest need generate from url from initial model
-    this.resetRestFromUrl(this.model.uri);
+    //Reset ui form
     this.setGroupInfo();
-
     this.initBasicForm();
     this.watchBasicForm();
     this.validateForm.patchValue(this.model);
-
-    this.eoOnInit.emit(this.model);
     waitNextTick().then(() => {
       this.editBody?.init();
       this.resEditBody?.init();
       this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
+
+    //Only trigger onInit when first time
+    if (isFromCache) return;
+    this.eoOnInit.emit(this.model);
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
@@ -154,7 +157,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     this.isSaving = false;
   }
   async addAPI(formData, ux) {
-    const [result, err] = await this.apiEdit.addApi(formData);
+    const [result, err] = await this.effect.addAPI(formData);
     if (err) {
       this.feedback.error($localize`Added Operation`);
       return;
@@ -173,7 +176,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       }
     });
     this.afterSaved.emit(this.model);
-    this.effect.getGroupList();
   }
   async editAPI(formData, ux) {
     const [result, err] = await this.apiEdit.editApi(formData);
@@ -181,8 +183,8 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       this.feedback.error($localize`Edited Operation`);
       return;
     }
+    this.feedback.success($localize`Edit API successfully`);
     this.afterSaved.emit(this.model);
-    this.effect.getGroupList();
   }
   emitChangeFun() {
     this.modelChange.emit(this.model);
@@ -209,6 +211,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  /**
+   * Rest need generate from url from initial model
+   *
+   * @param url
+   */
   private resetRestFromUrl(url: string) {
     //Need On push reset params
     this.model.requestParams.restParams = [...generateRestFromUrl(url, this.model.requestParams.restParams)];

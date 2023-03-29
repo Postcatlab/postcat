@@ -222,7 +222,6 @@ export class DbGroupService extends DbBaseService<Group> {
     const rootGroup = result.data?.find(n => n.depth === 0);
     rootGroup.children = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
-    console.log('fromRequest', rootGroup.children);
     return result;
   }
 

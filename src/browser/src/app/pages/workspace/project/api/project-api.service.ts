@@ -7,8 +7,6 @@ import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/a
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { ApiService } from '../../../../services/storage/api.service';
-import { StoreService } from '../../../../shared/store/state.service';
 import { ApiEffectService } from './store/api-effect.service';
 
 @Injectable()
@@ -22,23 +20,17 @@ export class ProjectApiService {
     private feedback: EoNgFeedbackMessageService,
     private router: Router,
     private effect: ApiEffectService,
-    private api: ApiService,
-    private globalStore: StoreService,
     private modalService: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
   async get(uuid): Promise<ApiData> {
-    const [result, err] = await (this.globalStore.isShare
-      ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
-      : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
-    if (err || !result?.[0]) {
-      console.error(err);
+    const [result, err] = await this.effect.getAPI(uuid);
+    if (err) {
       this.feedback.error($localize`Can't find this API`);
       return;
     }
-    const apiData = result[0];
-    apiData.apiAttrInfo ??= {};
-    apiData.responseList ??= [
+    result.apiAttrInfo ??= {};
+    result.responseList ??= [
       {
         responseParams: {
           headerParams: [],
@@ -46,31 +38,13 @@ export class ProjectApiService {
         }
       }
     ];
-    apiData.responseList[0].responseParams ??= {
+    result.responseList[0].responseParams ??= {
       responseParams: {
         headerParams: [],
         bodyParams: []
       }
     };
-    return apiData;
-  }
-  async edit(apiData: ApiData) {
-    return await this.api.api_apiDataUpdate({ api: apiData });
-  }
-  async add(apiData: ApiData) {
-    return await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
-  }
-  async delete(id) {
-    // * delete API
-    const [, err] = await this.api.api_apiDataDelete({
-      apiUuids: [id]
-    });
-    if (err) {
-      this.feedback.error($localize`Delete API failed`);
-      return;
-    }
-    this.feedback.success($localize`Deleted API Successfully`);
-    this.effect.getGroupList();
+    return result;
   }
   toDetail(id) {
     // * jump to api detail page
@@ -95,23 +69,31 @@ export class ProjectApiService {
         apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
       }</strong> ? You cannot restore it once deleted!`,
       nzOnOk: () => {
-        this.delete(apiInfo.apiUuid);
+        this.effect.deleteAPI(apiInfo.apiUuid);
       }
     });
   }
   async copy(inApiUuid: string) {
-    const { apiUuid, id, ...apiData } = await this.get(inApiUuid);
+    //Get API
+    const [data, readErr] = await this.effect.getAPI(inApiUuid);
+    if (readErr) {
+      console.error(readErr);
+      this.feedback.error($localize`Copy API failed`);
+      return;
+    }
+
+    //Copy API
+    const { apiUuid, id, ...apiData } = data;
     apiData.name += ' Copy';
-    const [result, err] = await this.add(apiData);
+    const [result, err] = await this.effect.addAPI(apiData);
     if (err) {
-      console.log(err);
+      console.error(err);
       this.feedback.error($localize`Copy API failed`);
       return;
     }
     this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
-      queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
+      queryParams: { pageID: Date.now(), uuid: result.apiUuid }
     });
-    this.effect.getGroupList();
   }
 
   importProject(type: keyof typeof this.actionComponent, title) {
@@ -138,7 +120,7 @@ export class ProjectApiService {
                 if (status === 'stayModal') {
                   return resolve(true);
                 }
-                // Import API
+                // After Import API
                 this.effect.getGroupList();
                 this.feedback.success($localize`${title} successfully`);
                 resolve(true);

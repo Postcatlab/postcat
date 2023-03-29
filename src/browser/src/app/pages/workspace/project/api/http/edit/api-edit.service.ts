@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
@@ -8,7 +9,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
 
 @Injectable()
 export class ApiEditService {
-  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService) {}
+  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService, private effect: ApiEffectService) {}
   getPureApi({ groupId }): ApiData {
     return {
       name: '',
@@ -61,17 +62,10 @@ export class ApiEditService {
     }
     return this.apiEditUtil.formatStorageApiDataToUI(result);
   }
-  async addApi(apiData): Promise<[ApiData, any]> {
-    const [result, err] = await this.projectApi.add(apiData);
-    if (err) {
-      return [result, err];
-    }
-    return [result[0], err];
-  }
   async editApi(apiData) {
     apiData.updateApiAttr = 1;
     apiData.updateRequestParams = 1;
     apiData.updateResponseList = 1;
-    return await this.projectApi.edit(apiData);
+    return await this.effect.updateAPI(apiData);
   }
 }
