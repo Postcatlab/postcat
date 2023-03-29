@@ -168,7 +168,7 @@ export class ApiEffectService {
       : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
     if (err || !result?.[0]) {
       console.error(err);
-      return [null, err];
+      return [null, `cant'find this api:${err}`];
     }
     return [result[0], err];
   }

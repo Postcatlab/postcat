@@ -10,7 +10,7 @@ import {
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
-import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
+import { GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { flatTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 import { debounceTime, Subject } from 'rxjs';
@@ -59,21 +59,31 @@ export class ApiTabService {
    * @param inArg
    */
   closeTabAfterResourceRemove() {
-    const checkTabIsExist = (groups, tab: TabItem) => {
+    const checkTabIsExist = (groups: ViewGroup[], tab: TabItem) => {
       const isExist = groups.some(group => {
         //TODO check group.id is same as resource id
-        if (!tab.params.uuid || tab.params.uuid !== group.id.toString()) return false;
-
-        if (group.type === GroupType.UserCreated && tab.uniqueName === 'project-group') {
+        if (!tab.params?.uuid) return true;
+        const modelID = Number(tab.params.uuid) || tab.params.uuid;
+        if (modelID === group.id && group.type === GroupType.UserCreated && tab.uniqueName === ApiTabsUniqueName.GroupEdit) {
           return true;
         }
-        if (group.module === GroupModuleType.API && ['api-http-edit', 'api-http-detail', 'api-http-test'].includes(tab.uniqueName)) {
+        if (
+          modelID === group.relationInfo?.apiUuid &&
+          group.module === GroupModuleType.API &&
+          [ApiTabsUniqueName.HttpEdit, ApiTabsUniqueName.HttpDetail, ApiTabsUniqueName.HttpTest].includes(
+            tab.uniqueName as ApiTabsUniqueName
+          )
+        ) {
           return true;
         }
-        if (group.module === GroupModuleType.Case && tab.uniqueName === 'api-http-case') {
+        if (
+          modelID === group.relationInfo?.apiCaseUuid &&
+          group.module === GroupModuleType.Case &&
+          tab.uniqueName === ApiTabsUniqueName.HttpCase
+        ) {
           return true;
         }
-        if (group.module === GroupModuleType.Mock && tab.uniqueName === 'api-http-mock') {
+        if (modelID === group.relationInfo?.id && group.module === GroupModuleType.Mock && tab.uniqueName === ApiTabsUniqueName.HttpMock) {
           return true;
         }
         return false;
@@ -109,7 +119,7 @@ export class ApiTabService {
           .getTabs()
           .filter(
             (tab: TabItem) =>
-              tab.params?.uuid && value.every(env => env.id.toString() !== tab.params.uuid) && tab.uniqueName === 'project-env'
+              tab.params?.uuid && value.every(env => env.id.toString() !== tab.params.uuid) && tab.uniqueName === ApiTabsUniqueName.EnvEdit
           )
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
@@ -150,9 +160,9 @@ export class ApiTabService {
         //resourceID
         let modelID: number;
         switch (currentTab.uniqueName) {
-          case 'api-http-detail':
-          case 'api-http-test':
-          case 'api-http-edit': {
+          case ApiTabsUniqueName.HttpEdit:
+          case ApiTabsUniqueName.HttpTest:
+          case ApiTabsUniqueName.HttpEdit: {
             modelID = model.apiUuid;
             break;
           }
