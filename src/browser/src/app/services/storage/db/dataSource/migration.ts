@@ -1,5 +1,5 @@
 import type { PromiseExtended, Transaction } from 'dexie';
-import { WorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
+import { DbWorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
 
 import { convertApiData } from './convert';
 
@@ -29,7 +29,7 @@ export const migrationToV3 = async (trans: Transaction) => {
 
 /** indexedDB 升级到 v4  */
 export const migrationToV4 = async (trans: Transaction) => {
-  const workspaceService = new WorkspaceService();
+  const workspaceService = new DbWorkspaceService();
   const { data: workspace } = await workspaceService.create({ title: $localize`Personal Workspace` });
 
   const projects = await trans.table('projectTemp').toArray();

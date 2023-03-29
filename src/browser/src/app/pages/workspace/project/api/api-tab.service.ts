@@ -360,22 +360,13 @@ export class ApiTabService {
       let currentHasChanged = currentTab.extends?.hasChanged?.[contentID];
       switch (inData.when) {
         case 'editing': {
-          // Saved APIs do not need to verify changes
-          const isTestPage = [ApiTabsUniqueName.HttpCase, ApiTabsUniqueName.HttpTest, ApiTabsUniqueName.WsTest].includes(
-            currentTab.uniqueName as ApiTabsUniqueName
-          );
-          if (isTestPage || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
-            //Set hasChange
-            if (!this.componentRef?.isFormChange) {
-              throw new Error(
-                `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
-              );
-            }
-
-            currentHasChanged = this.componentRef.isFormChange();
-          } else {
-            currentHasChanged = false;
+          //Set hasChange
+          if (!this.componentRef?.isFormChange) {
+            throw new Error(
+              `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
+            );
           }
+          currentHasChanged = this.componentRef.isFormChange();
           break;
         }
         case 'saved': {

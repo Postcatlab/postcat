@@ -1,19 +1,22 @@
-import { ApiDataService } from './services/apiData.service';
-import { ApiTestHistoryService } from './services/apiTestHistory.service';
-import { EnvironmentService } from './services/environment.service';
-import { GroupService } from './services/group.service';
-import { MockService } from './services/mock.service';
-import { ProjectService } from './services/project.service';
-import { WorkspaceService } from './services/workspace.service';
+import { DbApiCaseService } from 'pc/browser/src/app/services/storage/db/services/apiCase.service';
+
+import { DbApiDataService } from './services/apiData.service';
+import { DbApiTestHistoryService } from './services/apiTestHistory.service';
+import { DbEnvironmentService } from './services/environment.service';
+import { DbGroupService } from './services/group.service';
+import { DbMockService } from './services/mock.service';
+import { DbProjectService } from './services/project.service';
+import { DbWorkspaceService } from './services/workspace.service';
 
 export const db = {
-  apiData: new ApiDataService(),
-  group: new GroupService(),
-  environment: new EnvironmentService(),
-  project: new ProjectService(),
-  workspace: new WorkspaceService(),
-  mock: new MockService(),
-  apiTestHistory: new ApiTestHistoryService()
+  apiData: new DbApiDataService(),
+  group: new DbGroupService(),
+  environment: new DbEnvironmentService(),
+  project: new DbProjectService(),
+  workspace: new DbWorkspaceService(),
+  mock: new DbMockService(),
+  apiCase: new DbApiCaseService(),
+  apiTestHistory: new DbApiTestHistoryService()
 } as const;
 
 if (process.env.NODE_ENV === 'development') {

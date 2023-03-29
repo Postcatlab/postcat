@@ -3,7 +3,7 @@ import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { GroupDeleteDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
 import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { serializeObj } from 'pc/browser/src/app/services/storage/db/utils';
 
 // 对数据重新进行升序编排
@@ -46,10 +46,10 @@ const genFileGroup = (module, relationInfo): ViewGroup | any => {
   }
 };
 
-export class GroupService extends BaseService<Group> {
-  baseService = new BaseService(dataSource.group);
-  apiDataService = new BaseService(dataSource.apiData);
-  mockDataService = new BaseService(dataSource.mock);
+export class DbGroupService extends DbBaseService<Group> {
+  baseService = new DbBaseService(dataSource.group);
+  DbApiDataService = new DbBaseService(dataSource.apiData);
+  mockDataService = new DbBaseService(dataSource.mock);
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
@@ -87,7 +87,7 @@ export class GroupService extends BaseService<Group> {
 
       const { groups, apis } = arr.group(item => (item.uri ? 'apis' : 'groups'));
       groups && (await this.baseService.bulkUpdate(groups));
-      apis && (await this.apiDataService.bulkUpdate(apis));
+      apis && (await this.DbApiDataService.bulkUpdate(apis));
     };
 
     // 拖动的是 API
@@ -97,12 +97,12 @@ export class GroupService extends BaseService<Group> {
         groupId: parentId,
         sort
       });
-      const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
+      const { data: oldApiData } = await this.DbApiDataService.read({ uuid: id });
       const { data: groupList } = await this.baseService.bulkRead({
         parentId: parentId ?? oldApiData.groupId,
         type: GroupType.UserCreated
       });
-      const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
+      const { data: apiDataList } = await this.DbApiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
 
       // 如果指定了 sort，则需要重新排序
       if (hasSort) {
@@ -111,14 +111,14 @@ export class GroupService extends BaseService<Group> {
           apiDataList.filter(n => n.id !== oldApiData.id),
           { ...oldApiData, groupId: parentId }
         );
-        const { data: newApiData } = await this.apiDataService.read({ uuid: id });
+        const { data: newApiData } = await this.DbApiDataService.read({ uuid: id });
         return genFileGroup(GroupModuleType.API, newApiData);
       }
       // 如果 parentId 变了，则需要将其 sort = parent.children.length
       if (parentId && oldApiData.groupId !== parentId) {
         // 没有指定 sort，则默认排在最后
         apiParams.sort = groupList.length + apiDataList.length + 1;
-        const { data: newApiData } = await this.apiDataService.update(apiParams);
+        const { data: newApiData } = await this.DbApiDataService.update(apiParams);
         return genFileGroup(GroupModuleType.API, newApiData);
       }
     }
@@ -126,7 +126,7 @@ export class GroupService extends BaseService<Group> {
     else {
       const { data: oldGroup } = await this.baseService.read({ id });
       const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: GroupType.UserCreated });
-      const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
+      const { data: apiDataList } = await this.DbApiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
 
       // 如果指定了 sort，则需要重新排序
       if (hasSort) {
@@ -192,7 +192,7 @@ export class GroupService extends BaseService<Group> {
   async bulkRead(params) {
     const result = await this.baseService.bulkRead(params);
     //! Warning  case/mock/group id may dupublicate in local
-    const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
+    const { data: apiDataList } = await this.DbApiDataService.bulkRead({ projectUuid: params.projectUuid });
     const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });
     const genGroupTree = (groups: Group[], paranId) => {
       const groupFilters = groups.filter(n => n.parentId === paranId);

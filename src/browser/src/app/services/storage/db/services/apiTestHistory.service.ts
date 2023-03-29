@@ -1,9 +1,9 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 
-export class ApiTestHistoryService extends BaseService<ApiTestHistory> {
-  baseService = new BaseService(dataSource.apiTestHistory);
+export class DbApiTestHistoryService extends DbBaseService<ApiTestHistory> {
+  baseService = new DbBaseService(dataSource.apiTestHistory);
 
   constructor() {
     super(dataSource.apiTestHistory);

@@ -60,7 +60,7 @@ export const setupVersions = (db: DataSourceInstance) => {
   });
 
   /**
-   *
+   * 0.5.0
    * Add apiCase
    */
   db.version(6).stores({

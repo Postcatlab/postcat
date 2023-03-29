@@ -1,25 +1,19 @@
 import { Injectable } from '@angular/core';
-import { toJS } from 'mobx';
-import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import type { Mock } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData, BodyParam, ApiDataFromList } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ElectronService } from '../core/services';
-import { ApiStoreService } from '../pages/workspace/project/api/store/api-state.service';
 import { tree2obj } from '../shared/utils/tree/tree.utils';
 
-const mockReg = /\/mock-(\d+)/;
-
+/**
+ *  Mock Server service
+ *  Generate response from api data
+ */
 @Injectable({ providedIn: 'root' })
 export class MockService {
-  constructor(
-    private store: ApiStoreService,
-    private settingService: SettingService,
-    private electron: ElectronService,
-    private apiServiece: ApiService
-  ) {}
+  constructor(private electron: ElectronService, private apiServiece: ApiService) {}
   init() {
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.on('getMockApiList', async (event, req: any = {}) => {

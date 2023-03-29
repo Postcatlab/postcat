@@ -107,8 +107,8 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
     this.eoOnInit.emit(this.model);
     waitNextTick().then(() => {
-      this.editBody.init();
-      this.resEditBody.init();
+      this.editBody?.init();
+      this.resEditBody?.init();
       this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
   }
@@ -196,12 +196,9 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
     const origin = this.apiEditUtil.formatEditingApiData(this.initialModel);
     const after = this.apiEditUtil.formatEditingApiData(this.model);
-    // console.log(
-    //   'api edit origin:',
-    //   origin,
-    //   'after:',
-    //   after
-    // );
+
+    console.log('api edit origin:', origin, 'after:', after);
+
     if (JSON.stringify(origin) !== JSON.stringify(after)) {
       console.log('api edit formChange true!', getDifference(origin, after));
       return true;

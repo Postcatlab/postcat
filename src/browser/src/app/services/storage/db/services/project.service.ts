@@ -11,18 +11,18 @@ import {
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
 import { SampleCollection } from 'pc/browser/src/app/services/storage/db/initData/apiData';
 import { CollectionTypeEnum, Group, GroupType, Project } from 'pc/browser/src/app/services/storage/db/models';
-import { ApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
-import { EnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
-import { GroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
+import { DbApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbEnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
+import { DbGroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
 import { parseAndCheckApiData } from 'pc/browser/src/app/services/storage/db/validate/validate';
 
-export class ProjectService extends BaseService<Project> {
-  baseService = new BaseService(dataSource.project);
-  projectSyncSettingService = new BaseService(dataSource.projectSyncSetting);
-  apiDataService = new ApiDataService();
-  groupService = new GroupService();
-  environmentService = new EnvironmentService();
+export class DbProjectService extends DbBaseService<Project> {
+  baseService = new DbBaseService(dataSource.project);
+  projectSyncSettingService = new DbBaseService(dataSource.projectSyncSetting);
+  DbApiDataService = new DbApiDataService();
+  groupService = new DbGroupService();
+  DbEnvironmentService = new DbEnvironmentService();
 
   apiGroupTable = dataSource.group;
 
@@ -67,13 +67,13 @@ export class ProjectService extends BaseService<Project> {
       }
 
       if (item.collectionType !== CollectionTypeEnum.API) return;
-      const { data: apiData } = await this.apiDataService.read({
+      const { data: apiData } = await this.DbApiDataService.read({
         projectUuid,
         uri: item.uri,
         'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
       });
       if (apiData) {
-        await this.apiDataService.update({
+        await this.DbApiDataService.update({
           api: {
             ...apiData,
             ...item,
@@ -86,7 +86,7 @@ export class ProjectService extends BaseService<Project> {
           workSpaceUuid
         });
       } else {
-        await this.apiDataService.bulkCreate({
+        await this.DbApiDataService.bulkCreate({
           apiList: [
             {
               ...item,
@@ -158,7 +158,7 @@ export class ProjectService extends BaseService<Project> {
           });
           // const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
           // @ts-ignore
-          // this.apiDataService.bulkCreate(sampleApiData);
+          // this.DbApiDataService.bulkCreate(sampleApiData);
         });
       }
     });
@@ -205,7 +205,7 @@ export class ProjectService extends BaseService<Project> {
   @ApiResponse()
   async exports(params: QueryAllDto) {
     const { data: projectInfo } = await this.baseService.read({ uuid: params.projectUuid });
-    const { data: environmentList } = await this.environmentService.bulkRead(params);
+    const { data: environmentList } = await this.DbEnvironmentService.bulkRead(params);
     const { data: apiGroupTree } = await this.groupService.bulkRead({ projectUuid: params.projectUuid });
 
     const formatTree = (arr = []) => {
@@ -239,7 +239,7 @@ export class ProjectService extends BaseService<Project> {
     const { collections, environmentList = [], workSpaceUuid, projectUuid } = params;
 
     if (environmentList.length) {
-      this.environmentService.bulkCreate(
+      this.DbEnvironmentService.bulkCreate(
         environmentList.map(e => ({
           ...e,
           workSpaceUuid,
@@ -287,7 +287,7 @@ export class ProjectService extends BaseService<Project> {
       });
 
     if (apiFilters.length) {
-      const createResult = await this.apiDataService.bulkCreate({
+      const createResult = await this.DbApiDataService.bulkCreate({
         apiList: apiFilters,
         projectUuid,
         workSpaceUuid

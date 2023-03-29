@@ -34,6 +34,30 @@ export class ApiService {
     return this.remote.api_apiDataGetGroup<T>(params);
   }
 
+  api_apiCaseCreate<T = any>(params: {
+    name: any;
+    apiUuid: any;
+    uri: any;
+    protocol: any;
+    projectUuid?: any;
+    workSpaceUuid?: any;
+    [key: string]: any;
+  }) {
+    return this.store.isLocal ? this.local.api_apiCaseCreate<T>(params) : this.remote.api_apiCaseCreate<T>(params);
+  }
+
+  api_apiCaseUpdate<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseUpdate<T>(params) : this.remote.api_apiCaseUpdate<T>(params);
+  }
+
+  api_apiCaseDetail<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseDetail<T>(params) : this.remote.api_apiCaseDetail<T>(params);
+  }
+
+  api_apiCaseDelete<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseDelete<T>(params) : this.remote.api_apiCaseDelete<T>(params);
+  }
+
   api_mockCreate<T = any>(params: {
     name: any;
     apiUuid: any;

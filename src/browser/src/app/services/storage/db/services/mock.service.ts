@@ -1,10 +1,10 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { Mock } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 
-export class MockService extends BaseService<Mock> {
-  baseService = new BaseService(dataSource.mock);
-  apiDataService = new BaseService(dataSource.apiData);
+export class DbMockService extends DbBaseService<Mock> {
+  baseService = new DbBaseService(dataSource.mock);
+  DbApiDataService = new DbBaseService(dataSource.apiData);
   constructor() {
     super(dataSource.mock);
   }
@@ -17,7 +17,7 @@ export class MockService extends BaseService<Mock> {
         data: null
       };
     }
-    const { data: apiItem } = await this.apiDataService.read({
+    const { data: apiItem } = await this.DbApiDataService.read({
       apiUuid: result.data.apiUuid
     });
     result.data.uri = apiItem.uri;
