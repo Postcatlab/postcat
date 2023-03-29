@@ -19,6 +19,24 @@ export interface ApiBaseRequest {
   requestParams: RequestParams;
   authInfo?: AuthInfo;
 }
+
+export interface ScriptType {
+  id?: number;
+  scriptUuid?: string;
+  scriptType: number;
+  type?: number;
+  data: any;
+  sort?: any;
+  status?: number;
+  name?: string;
+  targetId?: string;
+  targetType?: number;
+  workSpaceUuid?: string;
+  projectUuid?: string;
+  createUserId?: number | string;
+  createTime?: number | string;
+  updateTime?: number | string;
+}
 export interface ApiData extends ApiBaseRequest {
   id?: number;
   apiUuid?: string;
@@ -61,6 +79,7 @@ export interface ApiData extends ApiBaseRequest {
     beforeScript: '';
     afterScript: '';
   };
+  scriptList?: ScriptType[];
 }
 
 export interface Introduction {

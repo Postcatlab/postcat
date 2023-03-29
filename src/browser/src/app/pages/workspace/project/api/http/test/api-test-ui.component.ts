@@ -38,6 +38,7 @@ import {
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { ScriptType } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -163,6 +164,36 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       )
     );
   }
+  get beforeInject() {
+    return this.getScript(1);
+  }
+
+  set beforeInject(value) {
+    this.setScript(1, value);
+  }
+
+  get afterInject() {
+    return this.getScript(2);
+  }
+
+  set afterInject(value) {
+    this.setScript(2, value);
+  }
+
+  getScript(scriptType: number) {
+    return this.model?.request?.scriptList?.find(item => item.scriptType === scriptType)?.data;
+  }
+  setScript(scriptType: number, value: string) {
+    if (this.model?.request?.scriptList) {
+      const scriptList = this.model.request.scriptList;
+      const item = scriptList.find(item => item.scriptType === scriptType);
+      item ? (item.data = value) : this.model.request.scriptList.push({ scriptType: scriptType, data: value });
+    } else {
+      const valueObj: ScriptType = { scriptType: scriptType, data: value };
+      this.model.request.scriptList = [valueObj];
+    }
+    console.log(this.model.request);
+  }
 
   ngAfterViewInit() {
     queueMicrotask(() => {
@@ -172,6 +203,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
 
   ngOnChanges(changes) {
+    console.log(changes.model?.currentValue?.request?.apiAttrInfo);
     if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
     console.log('api-test-ui ngOnChanges', changes.model.currentValue);
     this.initBasicForm();

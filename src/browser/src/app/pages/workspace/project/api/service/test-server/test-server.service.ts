@@ -74,8 +74,8 @@ export abstract class TestServerService implements TestServer {
         frontURI: opts.env.hostUri
       },
       authInfo: data.authInfo || {},
-      beforeInject: data.apiAttrInfo.beforeInject || '',
-      afterInject: data.apiAttrInfo.afterInject || '',
+      beforeInject: data.scriptList?.find(item => item.scriptType === 1)?.data || '',
+      afterInject: data.scriptList?.find(item => item.scriptType === 2)?.data || '',
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale)
     };
     const rootType = [JsonRootType.Object, JsonRootType.Array].indexOf(data.apiAttrInfo.contentType);

@@ -268,4 +268,8 @@ export class ApiEffectService {
   async createMock() {
     this.getGroupList();
   }
+
+  async editMock() {
+    this.getGroupList();
+  }
 }
