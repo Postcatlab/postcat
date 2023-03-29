@@ -53,7 +53,7 @@ export const API_TABS: Array<Partial<TabItem>> = [
     title: $localize`New Websocket`
   },
   { pathname: '/http/case', uniqueName: ApiTabsUniqueName.HttpCase, type: 'edit', title: $localize`New Case`, isFixed: true },
-  { pathname: '/http/mock', uniqueName: ApiTabsUniqueName.HttpMock, type: 'edit', title: $localize`New Mock`, isFixed: true }
+  { pathname: '/http/mock', icon: 'mock', uniqueName: ApiTabsUniqueName.HttpMock, type: 'edit', title: $localize`New Mock`, isFixed: true }
 ];
 
 export interface TabsConfig {

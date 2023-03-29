@@ -12,19 +12,11 @@ import { SharedModule } from '../shared/shared.module';
 import { ChatgptRobotComponent } from './components/chatgpt-robot/chatgpt-robot.component';
 import { ThirdLoginComponent } from './components/third-login/third-login.component';
 import { UserModalComponent } from './components/user-modal/user-modal.component';
-import { NewPeopleGuideComponent } from './new-people-guide/new-people-guide.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
 
 @NgModule({
-  declarations: [
-    PagesComponent,
-    SidebarComponent,
-    LocalWorkspaceTipComponent,
-    UserModalComponent,
-    ThirdLoginComponent,
-    NewPeopleGuideComponent
-  ],
+  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ThirdLoginComponent],
   providers: [],
   schemas: [],
   exports: [],

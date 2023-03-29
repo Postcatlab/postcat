@@ -1,4 +1,4 @@
-<nz-steps [nzCurrent]="1" nzDirection="vertical">
+<nz-steps [nzCurrent]="currentIndex" nzDirection="vertical">
   <nz-step *ngFor="let item of stepArr" [nzTitle]="item.title" [nzDescription]="item.description" [nzIcon]="iconTemplate">
     <ng-template #iconTemplate>
       <nz-spin nzSimple *ngIf="item.status === 'loading' || item.status === 'non-execution'"></nz-spin>

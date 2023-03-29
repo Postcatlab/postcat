@@ -78,10 +78,10 @@ export class MockComponent implements EditTabViewComponent {
     this.mock_id = Number(this.route.snapshot.queryParams.uuid);
     // this.mock_id = null
     if (this.model) return;
+    this.apiData = await this.getApiDetail();
+    this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
     if (!this.mock_id) {
       this.isEdit = true;
-      this.apiData = await this.getApiDetail();
-      this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
       const data = {
         name: 'NEW MOCK',
         response: this.apiMock.getMockResponseByAPI(this.apiData)
@@ -98,14 +98,12 @@ export class MockComponent implements EditTabViewComponent {
 
   editClick() {
     this.isEdit = !this.isEdit;
-    // this.getApiDetail();
   }
 
   async mockDetail(mock_id?: number) {
     if (!this.model) this.model = {} as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
-    this.apiData = await this.getApiDetail();
     this.model.url = this.getMockUrl(res);
     this.eoOnInit.emit(this.model);
   }
@@ -114,21 +112,11 @@ export class MockComponent implements EditTabViewComponent {
     return this.model.response !== this.initialModel.response || this.model.name !== this.initialModel.name;
   }
 
-  btnClick() {
-    // this.mockDetail(5067);
-    this.getApiDetail();
-  }
-
   async getApiDetail() {
     if (!this.model) this.model = {} as ModelType;
     return await this.api.get(this.apiUuid);
   }
 
-  // setValidateFormValue(res) {
-  //   Object.keys(res).forEach(key => {
-  //     this.model[key] = res[key] || '';
-  //   });
-  // }
   private getMockUrl(mock) {
     //Generate Mock URL
     //TODO Mock URL = API Path
@@ -144,15 +132,6 @@ export class MockComponent implements EditTabViewComponent {
     }
     return decodeURIComponent(url.toString());
   }
-
-  // name edit no focus
-  // async saveName() {
-  //   const requestData = {
-  //     ...itemData,
-  //     name: this.model.name
-  //   };
-  //   await this.addOrEditModal(requestData);
-  // }
 
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])
   @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
@@ -204,14 +183,12 @@ export class MockComponent implements EditTabViewComponent {
       this.model = data;
       this.model.url = this.getMockUrl(data);
       this.eoOnInit.emit(this.model);
-      console.log('request finish', this.model);
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: { ...queryParams, uuid: data.id }
       });
       this.apiEffect.createMock();
     }
-    // item.url = this.getMockUrl(item);
   }
 
   async jumpToClient() {

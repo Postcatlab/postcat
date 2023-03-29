@@ -1,17 +1,25 @@
-.icon-contain-success {
-  border: 1px solid lawngreen;
-  border-radius: 50%;
-
-  ::ng-deep eo-iconpark-icon svg {
-    color: lawngreen !important;
+:host {
+  .ant-steps-item-active {
+    ::ng-deep .ant-steps-item-container .ant-steps-item-content .ant-steps-item-title {
+      color: var(--primary-color);
+    }
   }
-}
 
-.icon-contain-fail {
-  border: 1px solid darkred;
-  border-radius: 50%;
+  .icon-contain-success {
+    border: 1px solid lawngreen;
+    border-radius: 50%;
 
-  ::ng-deep eo-iconpark-icon svg {
-    color: darkred !important;
+    ::ng-deep eo-iconpark-icon svg {
+      color: lawngreen !important;
+    }
+  }
+
+  .icon-contain-fail {
+    border: 1px solid darkred;
+    border-radius: 50%;
+
+    ::ng-deep eo-iconpark-icon svg {
+      color: darkred !important;
+    }
   }
 }
