@@ -264,15 +264,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       [GroupModuleType.Mock]: [
         {
           title: $localize`Edit`,
-          click: ({ relationInfo: item }) => this.mockService.toEdit(item.uuid)
+          click: ({ relationInfo: item }) => this.mockService.toEdit(item.id)
         },
         {
           title: $localize`:@Copy:Copy`,
-          click: ({ relationInfo: item }) => this.mockService.copy(item.uuid)
+          click: ({ relationInfo: item }) => this.mockService.copy(item.id)
         },
         {
           title: $localize`:@Delete:Delete`,
-          click: ({ relationInfo: item }) => this.mockService.toDelete(item)
+          click: ({ relationInfo: item }) => this.mockService.toDelete(item.id)
         }
       ],
       [GroupModuleType.Case]: [

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import {
   ApiBodyType,
   ApiTabsUniqueName,
@@ -7,11 +8,14 @@ import {
   TabsConfig
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-transfer/data-transfer.utils';
+import storageUtils from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +27,9 @@ export class ApiMockService {
     private globalStore: StoreService,
     private testUtils: ApiTestUtilService,
     private router: Router,
+    private message: EoNgFeedbackMessageService,
+    private apiEffect: ApiEffectService,
+    private projectApi: ProjectApiService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.mockOperateUrl = this.tabsConfig.pathByName[ApiTabsUniqueName.HttpMock];
@@ -95,38 +102,50 @@ export class ApiMockService {
     });
   }
   toEdit(mockID) {
+    storageUtils.set('mock-edit', true);
     this.router.navigate([this.mockOperateUrl], {
       queryParams: { uuid: mockID }
     });
   }
-  toAdd(apiID?) {
+  async toAdd(apiUuid?) {
+    // this.router.navigate([this.mockOperateUrl], {
+    //   queryParams: { apiUuid: apiID, pageID: Date.now() }
+    // });
+    const apiData = await this.projectApi.get(apiUuid);
+    const data = {
+      name: 'NEW MOCK',
+      response: this.getMockResponseByAPI(apiData),
+      apiUuid: apiUuid
+    };
+    this.addNewMock(data);
+  }
+
+  async addNewMock(mockItem) {
+    mockItem.createWay = 'custom';
+    const [data, err] = await this.createMock(mockItem);
+    if (err) {
+      this.message.error($localize`Failed to add`);
+      return;
+    }
+    this.message.success($localize`Added successfully`);
+    storageUtils.set('mock-edit', true);
+    this.apiEffect.createMock();
     this.router.navigate([this.mockOperateUrl], {
-      queryParams: { apiUuid: apiID, pageID: Date.now() }
+      queryParams: { uuid: data.id, pageID: Date.now().toString() }
     });
   }
-  toDelete(apiInfo: ApiData) {
-    // this.modalService.confirm({
-    //   nzTitle: $localize`Deletion Confirmation?`,
-    //   nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
-    //     apiInfo.name.length > 50 ? `${apiInfo.name.slice(0, 50)}...` : apiInfo.name
-    //   }</strong> ? You cannot restore it once deleted!`,
-    //   nzOnOk: () => {
-    //     this.delete(apiInfo.apiUuid);
-    //   }
-    // });
+  async toDelete(id: number) {
+    await this.deleteMock(id);
+    this.message.success($localize`Delete Succeeded`);
+    this.apiEffect.deleteMockDetail();
   }
-  async copy(inMockUuid: string) {
-    // const { apiUuid, id, ...apiData } = await this.get(inMockUuid);
-    // apiData.name += ' Copy';
-    // const [result, err] = await this.add(apiData);
-    // if (err) {
-    //   console.log(err);
-    //   this.feedback.error($localize`Copy API failed`);
-    //   return;
-    // }
-    // this.router.navigate(['/home/workspace/project/api/http/edit'], {
-    //   queryParams: { pageID: Date.now(), uuid: result[0].apiUuid }
-    // });
-    // this.effect.getGroupList();
+  async copy(mock_id: string) {
+    const [res] = await this.api.api_mockDetail({ id: mock_id });
+    const data = {
+      name: res.name,
+      response: res.response,
+      apiUuid: res.apiUuid
+    };
+    this.addNewMock(data);
   }
 }

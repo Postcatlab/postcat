@@ -133,7 +133,7 @@
         </ng-template>
         <pc-action>
           <eo-api-script
-            [(code)]="model.request.apiAttrInfo.beforeInject"
+            [(code)]="beforeInject"
             (codeChange)="emitChangeFun('beforeScript')"
             [treeData]="BEFORE_DATA"
             [completions]="beforeScriptCompletions"
@@ -141,7 +141,7 @@
             class="h-[100%]"
           ></eo-api-script>
           <eo-api-script
-            [(code)]="model.request.apiAttrInfo.afterInject"
+            [(code)]="afterInject"
             (codeChange)="emitChangeFun('afterScript')"
             [treeData]="AFTER_DATA"
             [completions]="afterScriptCompletions"
