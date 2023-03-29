@@ -7,8 +7,8 @@ import {
   BASIC_TABS_INFO,
   TabsConfig
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
