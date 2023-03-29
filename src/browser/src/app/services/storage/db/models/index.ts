@@ -21,6 +21,11 @@ export enum GroupModuleType {
   Case = 'API_CASE',
   Mock = 'API_MOCK'
 }
+export const GroupModelIDByModule = {
+  [GroupModuleType.API]: 'apiUuid',
+  [GroupModuleType.Case]: 'apiCaseUuuid',
+  [GroupModuleType.Mock]: 'id'
+};
 export enum CollectionTypeEnum {
   Group = 0,
   API = 1

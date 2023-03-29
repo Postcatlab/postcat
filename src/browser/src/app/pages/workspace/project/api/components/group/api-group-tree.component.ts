@@ -10,13 +10,14 @@ import {
   TabsConfig
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
-import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
+import { Group, GroupModelIDByModule, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 import { findTreeNode, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 import { ElectronService } from '../../../../../../core/services';
-import { ProjectApiService } from '../../project-api.service';
+import { ProjectApiService } from '../../service/project-api.service';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
 
@@ -73,6 +74,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private store: ApiStoreService,
     private effect: ApiEffectService,
     private mockService: ApiMockService,
+    private caseService: ApiCaseService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
@@ -89,9 +91,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.reactions.push(
       autorun(() => {
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
-        //Set expand/selecte key
-        this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
         waitNextTick().then(() => {
+          //* Set expand/selecte key
+          //Wait for the tree component to be rendered
+          this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
           this.initSelectKeys();
         });
       })
@@ -109,8 +112,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     //Such as Env group tree
     const isOtherPage = [this.tabsConfig.pathByName[ApiTabsUniqueName.EnvEdit]].some(path => this.router.url.includes(path));
     const { uuid } = this.route.snapshot.queryParams;
-    const groupId = findTreeNode(this.store.getGroupList, val => val.id === (Number(uuid) || uuid))?.id;
-    // console.log(groupId, this.store.getGroupList, uuid);
+    const groupId = findTreeNode(this.apiGroupTree, val => val.modelID === (Number(uuid) || uuid))?.id;
     if (!groupId) return;
     this.nzSelectedKeys = !isOtherPage ? [groupId] : [];
   }
@@ -126,6 +128,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       if (it.type === GroupType.UserCreated) {
         return {
           ...it,
+          modelID: it.id,
           module: this.groupModuleName,
           children: this.parseGroupDataToViewTree(it.children || [])
         };
@@ -136,6 +139,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         //virtual group id
         isLeaf: true,
         ...it,
+        modelID: it.relationInfo[GroupModelIDByModule[it.module]],
         relationInfo: it.relationInfo,
         children: this.parseGroupDataToViewTree(it.children || [])
       };
@@ -170,7 +174,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     if (!this.route.snapshot.queryParams.uuid) {
       return this.expandKeys;
     }
-    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
+    const uuid = this.route.snapshot.queryParams.uuid;
+    const groupId = findTreeNode(this.apiGroupTree, val => val?.modelID === (Number(uuid) || uuid))?.id;
+    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])];
   }
   /**
    * Drag & drop tree item.
@@ -224,6 +230,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.mockService.toDetail(origin.relationInfo);
         break;
       }
+      case GroupModuleType.Case: {
+        this.caseService.toDetail(origin.relationInfo);
+        break;
+      }
     }
   }
 
@@ -237,6 +247,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         {
           title: $localize`Add Mock`,
           click: ({ relationInfo: item }) => this.mockService.toAdd(item.apiUuid)
+        },
+        {
+          title: $localize`Add Case`,
+          click: ({ relationInfo: item }) => this.caseService.toAdd(item.apiUuid)
         },
         {
           title: $localize`:@Copy:Copy`,
@@ -261,7 +275,20 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           click: ({ relationInfo: item }) => this.mockService.toDelete(item)
         }
       ],
-      [GroupModuleType.Case]: [],
+      [GroupModuleType.Case]: [
+        {
+          title: $localize`Edit`,
+          click: ({ relationInfo: item }) => this.caseService.toEdit(item.apiCaseUuid)
+        },
+        {
+          title: $localize`:@Copy:Copy`,
+          click: ({ relationInfo: item }) => this.caseService.copy(item.apiCaseUuid)
+        },
+        {
+          title: $localize`:@Delete:Delete`,
+          click: ({ relationInfo: item }) => this.caseService.toDelete(item)
+        }
+      ],
       [this.groupModuleName]: [
         {
           title: $localize`Add API`,

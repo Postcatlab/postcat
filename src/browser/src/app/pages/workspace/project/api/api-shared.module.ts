@@ -8,7 +8,6 @@ import { ApiMockTableComponent } from 'pc/browser/src/app/pages/workspace/projec
 import { ApiTestFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-test-form/api-test-form.component';
 import { ApiTestResultHeaderComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/api-test-result-header/api-test-result-header.component';
 import { ParamsImportComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/params-import/params-import.component';
-import { ApiTestService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.service';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
@@ -21,7 +20,7 @@ const SHARE_PIPE = [ApiFormaterPipe, ApiParamsNumPipe];
 @NgModule({
   imports: [SharedModule, EoMonacoEditorModule, EoNgTreeModule, NzEmptyModule, ...SHARE_UI],
   declarations: [...COMPONENTS, ...SHARE_PIPE],
-  providers: [ApiTableService, ApiTestService],
+  providers: [ApiTableService],
   exports: [...COMPONENTS, ...SHARE_PIPE, ...SHARE_UI]
 })
 export class ApiSharedModule {}

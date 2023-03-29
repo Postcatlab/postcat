@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -44,11 +44,11 @@ export class ApiEditService {
     let result = this.getPureApi({ groupId }) as ApiData;
     if (!id) {
       // From test page/copy api data;
-      let tmpApiData = StorageUtil.get('apiDataWillbeSave');
+      let tmpApiData = StorageUtil.get('api_data_will_be_save');
       const pureApi = this.getPureApi({ groupId });
       if (tmpApiData) {
         //Add From Test
-        StorageUtil.remove('apiDataWillbeSave');
+        StorageUtil.remove('api_data_will_be_save');
         Object.keys(pureApi).forEach(keyName => {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];

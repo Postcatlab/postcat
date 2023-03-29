@@ -126,13 +126,6 @@ export class ApiTabService {
       }
     );
   }
-  batchCloseTabById(uuidList) {
-    const result = this.apiTabComponent
-      .getTabs()
-      .filter(it => uuidList.includes(it.params.uuid))
-      .map(it => it.uuid);
-    this.apiTabComponent.batchCloseTab(result);
-  }
   onChildComponentInit(componentRef) {
     this.componentRef = componentRef;
   }
@@ -151,12 +144,13 @@ export class ApiTabService {
     const bindTabID = this.apiTabComponent.getCurrentTab()?.uuid;
     this.componentRef.eoOnInit = {
       emit: model => {
-        if (!model) {
-          pcConsole.warn("[api-tab] OnInit can't pass null model");
-          return;
-        }
         //Current is current selected tab
         const currentTab = this.apiTabComponent.getCurrentTab();
+        if (!model) {
+          pcConsole.warn('[api-tab] eoOnInit cannot pass in null value, this tab will be closed automatically');
+          this.apiTabComponent.batchCloseTab([currentTab.uuid]);
+          return;
+        }
         //resourceID
         let modelID: number;
         switch (currentTab.uniqueName) {

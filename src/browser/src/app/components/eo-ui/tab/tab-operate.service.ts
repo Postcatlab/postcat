@@ -142,7 +142,11 @@ export class TabOperateService {
     this.tabStorage.resetTabsByOrder(tabOrder);
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
+      return;
     }
+
+    //Update childView
+    this.navigateByTab(this.getCurrentTab());
   }
 
   /**

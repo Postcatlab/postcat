@@ -14,6 +14,7 @@ import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
 import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ActionComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/action/action.component';
+import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
 import { ApiScriptComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/api-script.component';
 import { ApiTestUiComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import { TestServerLocalNodeService } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/local-node/test-connect.service';
@@ -24,7 +25,6 @@ import { SharedModule } from '../../../../../../shared/shared.module';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiTestComponent } from './api-test.component';
-import { ApiTestService } from './api-test.service';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
@@ -69,8 +69,8 @@ const COMPONENTS = [
     NzResizableModule
   ],
   providers: [
-    ApiTestService,
     NzResizableService,
+    ApiCaseService,
     {
       provide: TestServerService,
       useFactory: (electron: ElectronService, web: WebService, locale, test: ApiTestUtilService) => {

@@ -34,15 +34,7 @@ export class ApiService {
     return this.remote.api_apiDataGetGroup<T>(params);
   }
 
-  api_apiCaseCreate<T = any>(params: {
-    name: any;
-    apiUuid: any;
-    uri: any;
-    protocol: any;
-    projectUuid?: any;
-    workSpaceUuid?: any;
-    [key: string]: any;
-  }) {
+  api_apiCaseCreate<T = any>(params: { apiCaseList: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
     return this.store.isLocal ? this.local.api_apiCaseCreate<T>(params) : this.remote.api_apiCaseCreate<T>(params);
   }
 

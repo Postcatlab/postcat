@@ -1,16 +1,6 @@
-import {
-  Component,
-  Output,
-  EventEmitter,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-  HostListener,
-  Inject
-} from '@angular/core';
+import { Component, Output, EventEmitter, Input, TemplateRef, ViewChild, HostListener, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { isEqual } from 'lodash-es';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import {
@@ -24,10 +14,10 @@ import {
 import { isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiTestUiComponent, ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
-import { ApiTestService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.service';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
-import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
+import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -83,8 +73,9 @@ export class ApiTestComponent implements EditTabViewComponent {
   constructor(
     public route: ActivatedRoute,
     private router: Router,
+    private effect: ApiEffectService,
     private projectApi: ProjectApiService,
-    private apiTest: ApiTestService,
+    private feedback: EoNgFeedbackMessageService,
     private apiTestUtil: ApiTestUtilService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
@@ -176,7 +167,7 @@ export class ApiTestComponent implements EditTabViewComponent {
           saveTips: $localize`Save as API`,
           getModel: async () => {
             const uuid = this.route.snapshot.queryParams.uuid.replace('history_', '');
-            const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
+            const history: ApiTestHistory = await this.effect.getHistory(uuid);
             return { ...defaultModel, request: history.request, testResult: history.response };
           },
           save: () => {
@@ -190,12 +181,13 @@ export class ApiTestComponent implements EditTabViewComponent {
           saveTips: $localize`Save as Case`,
           getModel: async () => {
             const uuid = this.route.snapshot.queryParams.uuid;
-            const request = await this.projectApi.get(uuid);
-            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(request) };
+            const apiData = await this.projectApi.get(uuid);
+            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(apiData) };
           },
           save: () => {
+            StorageUtil.set('test_data_will_be_save', this.model.request, 2000);
             this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
-              queryParams: { apiUuid: this.model.request.apiUuid }
+              queryParams: { apiUuid: this.model.request.apiUuid, pageID: this.route.snapshot.queryParams.pageID }
             });
           }
         };
@@ -205,9 +197,38 @@ export class ApiTestComponent implements EditTabViewComponent {
         result = {
           saveTips: $localize`Save`,
           getModel: async () => {
-            const uuid = this.route.snapshot.queryParams.uuid;
-            const request = await this.projectApi.get(uuid);
-            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(request) };
+            const apiUuid = this.route.snapshot.queryParams.apiUuid;
+            const apiCaseUuid = this.route.snapshot.queryParams.uuid;
+            let viewModel: testViewModel;
+            if (!apiCaseUuid) {
+              //* Add Case
+              let caseData = StorageUtil.get('test_data_will_be_save');
+              if (caseData) {
+                //Add Case from Test page
+                StorageUtil.remove('test_data_will_be_save');
+                viewModel = { ...defaultModel, request: caseData };
+              } else {
+                //Add directly
+                caseData = await this.projectApi.get(apiUuid);
+                if (!caseData) return;
+                viewModel = { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(caseData) };
+              }
+
+              const [res, err] = await this.effect.addCase(caseData);
+              if (err) {
+                this.feedback.error($localize`New Case Failed`);
+                return;
+              }
+              //Add successfully
+              this.feedback.success($localize`New Case successfully`);
+              this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+                queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
+              });
+
+              return viewModel;
+            } else {
+              //* Edit Case
+            }
           }
         };
         break;
@@ -226,6 +247,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     }
 
     const result = await this.instance.getModel();
+    if (!result) this.eoOnInit.emit(null);
     //Set contentType
     const contentResult = this.getContentTypeInfo(result as Partial<testViewModel>);
     result.request.requestParams.headerParams = contentResult.headers;
@@ -246,7 +268,7 @@ export class ApiTestComponent implements EditTabViewComponent {
       request: this.model.request,
       response: this.model.testResult
     });
-    StorageUtil.set('apiDataWillbeSave', apiData);
+    StorageUtil.set('api_data_will_be_save', apiData, 2000);
     this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)

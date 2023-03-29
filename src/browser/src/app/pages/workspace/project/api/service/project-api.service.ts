@@ -7,7 +7,7 @@ import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/a
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { ApiEffectService } from './store/api-effect.service';
+import { ApiEffectService } from '../store/api-effect.service';
 
 @Injectable()
 export class ProjectApiService {

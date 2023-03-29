@@ -14,7 +14,7 @@ const http = {
     {
       name: 'apiCase',
       data: [
-        { 'create @post @create': '/api/api-case', json: 'name, apiUuid, uri,protocol, projectUuid, workSpaceUuid, ...' },
+        { 'create @post @bulkCreate': '/api/api-case', json: 'apiCaseList, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/api/api-case', json: 'apiCaseUuid, projectUuid, workSpaceUuid, ...' },
         { 'detail @get @read': '/api/api-case', query: 'apiCaseUuid, projectUuid, workSpaceUuid' },
         { 'delete @delete @delete': '/api/api-case', query: 'apiCaseUuid, projectUuid, workSpaceUuid' }

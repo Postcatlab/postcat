@@ -13,6 +13,7 @@ import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/projec
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { API_TABS, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
+import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
 import { EoTabModule } from '../../../../components/eo-ui/tab/tab.module';
@@ -22,8 +23,8 @@ import { ApiComponent } from './api.component';
 import { ApiGroupTreeComponent } from './components/group/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
 import { EnvModule } from './env/env.module';
-import { ProjectApiService } from './project-api.service';
 import { ApiTestUtilService } from './service/api-test-util.service';
+import { ProjectApiService } from './service/project-api.service';
 const COMPONENTS = [ApiComponent, ApiGroupTreeComponent, HistoryComponent];
 const tabs = API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/api${val.pathname}` }));
 @NgModule({
@@ -54,6 +55,7 @@ const tabs = API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/a
         pathByName: tabs.reduce((acc, curr) => ({ ...acc, [curr.uniqueName]: curr.pathname }), {})
       } as TabsConfig
     },
+    ApiCaseService,
     ProjectApiService,
     ApiTestUtilService,
     NzResizableService,

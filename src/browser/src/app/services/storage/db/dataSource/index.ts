@@ -44,12 +44,6 @@ class DataSource extends Dexie {
   }
 
   initHooks() {
-    // 表字段映射
-    const uuidMap = {
-      workspace: 'workSpaceUuid',
-      project: 'projectUuid',
-      apiData: 'apiUuid'
-    };
     this.tables.forEach(table => {
       const isDefUuid = table.schema.idxByName.uuid?.keyPath;
       table.hook('creating', (primKey, obj) => {
@@ -64,6 +58,13 @@ class DataSource extends Dexie {
       });
       // https://dexie.org/docs/Table/Table.hook('reading')
       table.hook('reading', obj => {
+        // 表字段映射
+        const uuidMap = {
+          workspace: 'workSpaceUuid',
+          project: 'projectUuid',
+          apiData: 'apiUuid',
+          apiCase: 'apiCaseUuid'
+        };
         const uuidName = uuidMap[table.name];
         if (uuidName) {
           // 在数据返回到前端之前，将数据库中的 uuid 字段转为特定名称的 xxxUuid，这里主要是为了对齐后端返回的字段

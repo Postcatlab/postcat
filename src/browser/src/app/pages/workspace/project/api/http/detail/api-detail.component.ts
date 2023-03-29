@@ -10,7 +10,7 @@ import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { enumsToObject } from '../../../../../../shared/utils/index.utils';
-import { ProjectApiService } from '../../project-api.service';
+import { ProjectApiService } from '../../service/project-api.service';
 @Component({
   selector: 'pc-api-http-detail',
   templateUrl: './api-detail.component.html',
@@ -65,6 +65,10 @@ export class ApiDetailComponent implements PreviewTabViewComponent, OnDestroy {
       const { uuid } = this.route.snapshot.queryParams;
       if (uuid) {
         this.model = await this.projectApi.get(uuid);
+        if (!this.model) {
+          this.eoOnInit.emit(null);
+          return;
+        }
         this.originModel = cloneDeep(this.model);
       } else {
         console.error(`Can't no find api`);
