@@ -103,4 +103,7 @@ export interface ViewGroup {
   module: GroupModuleType;
   relationInfo?: any;
   children?: ViewGroup[];
+  //For API
+  method?: string;
+  methodText?: string;
 }

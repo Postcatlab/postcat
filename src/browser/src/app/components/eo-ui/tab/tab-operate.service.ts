@@ -381,16 +381,16 @@ export class TabOperateService {
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tab = mapObj[key];
-        if (tab.params.uuid && tab.params.uuid === inTab.params.uuid) {
-          const mergeTab = this.preventBlankTab(tab, inTab);
-          mergeTab.content = tab.content;
-          mergeTab.baseContent = tab.baseContent;
-          mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
-          this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === tab.uuid);
-          this.tabStorage.updateTab(this.selectedIndex, mergeTab);
-          this.updateChildView();
-          return true;
-        }
+        if (tab.params?.uuid !== inTab.params.uuid) continue;
+
+        const mergeTab = this.preventBlankTab(tab, inTab);
+        mergeTab.content = tab.content;
+        mergeTab.baseContent = tab.baseContent;
+        mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
+        this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === tab.uuid);
+        this.tabStorage.updateTab(this.selectedIndex, mergeTab);
+        this.updateChildView();
+        return true;
       }
     }
     return false;
@@ -469,7 +469,7 @@ export class TabOperateService {
       }
       const validTab = this.BASIC_TABS.find(val => val.uniqueName === tabItem.uniqueName);
       if (!validTab) {
-        delete cache.tabsByID[id];
+        Reflect.deleteProperty(cache.tabsByID, id);
       } else {
         tabItem.pathname = validTab.pathname;
       }

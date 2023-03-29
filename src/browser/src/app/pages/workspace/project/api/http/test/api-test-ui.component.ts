@@ -11,7 +11,8 @@ import {
   AfterViewInit,
   HostListener,
   OnChanges,
-  Inject
+  Inject,
+  TemplateRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,9 +21,8 @@ import { autorun, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { AuthIn, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { AuthIn, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
-import { ActionComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/action/action.component';
 import {
   BEFORE_DATA,
   AFTER_DATA,
@@ -83,7 +83,7 @@ export const ContentTypeMap: { [key in ApiBodyType]: ContentType } = {
 })
 export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() model: testViewModel;
-
+  @Input() extraButtonTmp: TemplateRef<HTMLDivElement>;
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly afterTested = new EventEmitter<{
     id: string;
@@ -173,76 +173,12 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
 
   ngOnChanges(changes) {
     if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
+    console.log('api-test-ui ngOnChanges', changes.model.currentValue);
     this.initBasicForm();
     //initAuthInfo
     //initHeader/contentType
     //rest test status
   }
-  // async init() {
-  //   this.initTimes++;
-  //   this.authExtForm?.init?.();
-  //   if (!this.model || isEmptyObj(this.model)) {
-  //     this.model = {
-  //       requestTabIndex: 1,
-  //       responseTabIndex: 0
-  //     } as testViewModel;
-  //     let uuid = this.route.snapshot.queryParams.uuid;
-  //     const initTimes = this.initTimes;
-  //     let requestInfo: Partial<ApiData> = null;
-  //     if (uuid?.includes('history_')) {
-  //       uuid = uuid.replace('history_', '');
-  //       const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
-  //       history.request.authInfo = {
-  //         authInfo: {},
-  //         authType: NONE_AUTH_OPTION.name,
-  //         ...history.request.authInfo,
-  //         isInherited: 0
-  //       };
-  //       this.model.request = history.request;
-  //       this.model.testResult = history.response;
-  //     } else {
-  //       if (!uuid) {
-  //         const newModel = this.resetModel();
-  //         requestInfo = newModel.request;
-  //       } else {
-  //         requestInfo = await this.projectApi.get(uuid);
-  //         requestInfo.authInfo.authInfo = JSONParse(requestInfo.authInfo.authInfo);
-  //       }
-  //     }
-  //     //!Prevent await async ,replace current  api data
-  //     if (initTimes >= this.initTimes) {
-  //       this.model.request = {
-  //         ...this.model.request,
-  //         ...requestInfo
-  //       };
-  //       this.model.request = this.apiTestUtil.getTestDataFromApi(this.model.request);
-  //     } else {
-  //       return;
-  //     }
-  //     this.setUserSelectedContentType();
-  //     this.setHeaderContentType();
-  //     this.waitSeconds = 0;
-  //     this.status = 'start';
-  //   } else {
-  //     this.updateAuthInfo();
-  //     if (this.timer$ && this.model.testStartTime) {
-  //       this.waitSeconds = Math.round((Date.now() - this.model.testStartTime) / 1000);
-  //       this.status$.next('testing');
-  //     } else {
-  //       this.waitSeconds = 0;
-  //       this.status$.next('start');
-  //     }
-  //   }
-  //   this.initBasicForm();
-  //   this.validateForm.patchValue(this.model.request);
-  //   this.watchBasicForm();
-  //   //Storage origin api data
-  //   if (!this.initialModel) {
-  //     this.initialModel = eoDeepCopy(this.model);
-  //   }
-
-  //   this.cdRef.detectChanges();
-  // }
   clickTest() {
     if (!this.checkForm()) {
       return;
@@ -253,28 +189,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     }
     this.test();
     this.trace.report('click_api_test');
-  }
-  /**
-   * Save api test data to api
-   * ? Maybe support saving test case in future
-   */
-  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
-  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
-  saveAPI($event?, ux = 'ui') {
-    $event?.preventDefault?.();
-    if (!this.checkForm()) {
-      return;
-    }
-    const apiData = this.apiTestUtil.formatUIApiDataToStorage({
-      request: this.model.request,
-      response: this.model.testResult
-    });
-    StorageUtil.set('apiDataWillbeSave', apiData);
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
-      queryParams: {
-        pageID: Number(this.route.snapshot.queryParams.pageID)
-      }
-    });
   }
   changeQuery() {
     this.model.request.uri = syncUrlAndQuery(this.model.request.uri, this.model.request.requestParams.queryParams, {
@@ -373,7 +287,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     this.testServer.close();
     this.reactions.forEach(dispose => dispose());
   }
-  private checkForm(): boolean {
+  public checkForm(): boolean {
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
         this.validateForm.controls[i].markAsDirty();

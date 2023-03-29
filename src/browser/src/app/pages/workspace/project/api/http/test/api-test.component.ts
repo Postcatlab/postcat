@@ -1,10 +1,28 @@
-import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+  HostListener,
+  Inject
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import { ApiBodyType, ApiParamsType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  ApiTabsUniqueName,
+  BASIC_TABS_INFO,
+  RequestMethod,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
-import { ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
+import { ApiTestUiComponent, ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/project-api.service';
@@ -14,11 +32,30 @@ import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiDa
 import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
-type TestPage = 'blankTest' | 'historyTest' | 'caseTest' | 'apiTest';
-
+enum TestPage {
+  Blank = 'blankTest',
+  History = 'historyTest',
+  Case = 'caseTest',
+  API = 'apiTest'
+}
+interface TestInstance {
+  saveTips: string;
+  getModel: () => Promise<testViewModel>;
+  save: () => void;
+}
 @Component({
   selector: 'eo-api-http-test',
-  template: `<eo-api-http-test-ui [model]="model" (modelChange)="uiModelChanges()"></eo-api-http-test-ui>`
+  template: `<eo-api-http-test-ui
+      #testUIComponent
+      [model]="model"
+      (modelChange)="uiModelChanges()"
+      [extraButtonTmp]="saveButtonTmp"
+    ></eo-api-http-test-ui>
+    <ng-template #saveButtonTmp>
+      <button type="button" eo-ng-button nzType="default" (click)="save($event)" trace traceID="save_api_document_from_test">
+        {{ instance.saveTips }}
+      </button>
+    </ng-template>`
 })
 export class ApiTestComponent implements EditTabViewComponent {
   @Input() model: testViewModel;
@@ -29,104 +66,166 @@ export class ApiTestComponent implements EditTabViewComponent {
   @Input() initialModel: testViewModel;
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
-
+  @ViewChild('saveButtonTmp', { read: TemplateRef, static: true }) saveButtonTmp: TemplateRef<HTMLDivElement>;
+  @ViewChild('testUIComponent') testUIComponent: ApiTestUiComponent;
   /**
    * Page is used to switch between different test pages
    */
-  currentPage: TestPage = 'blankTest';
-
+  currentPage = TestPage.Blank;
+  /**
+   * Context is used to generate current page
+   */
+  instance: TestInstance = {
+    saveTips: $localize`Save`,
+    getModel: () => new Promise<testViewModel>(resolve => {}),
+    save: () => {}
+  };
   constructor(
     public route: ActivatedRoute,
     private router: Router,
     private projectApi: ProjectApiService,
     private apiTest: ApiTestService,
-    private apiTestUtil: ApiTestUtilService
+    private apiTestUtil: ApiTestUtilService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
   uiModelChanges() {
-    console.log('uiModelChanges');
     this.modelChange.emit(this.model);
   }
   isFormChange(): boolean {
-    console.log('isFormChange');
     if (!(this.initialModel?.request && this.model?.request)) {
       return false;
     }
     const origin = this.apiTestUtil.formatEditingApiData(this.initialModel.request);
     const after = this.apiTestUtil.formatEditingApiData(this.model.request);
 
-    console.log('api test origin:', origin, 'after:', after);
+    // console.log('api test origin:', origin, 'after:', after);
 
-    if (JSON.stringify(origin) !== JSON.stringify(after)) {
+    if (!isEqual(origin, after)) {
       // console.log('api test formChange true!', getDifference(origin, after));
       return true;
     }
     return false;
   }
-  async afterTabActivated() {
-    // console.log('afterTabActivated', this.model, this.initialModel);
-    const isFromCache: boolean = this.model && !isEmptyObj(this.model);
-    if (isFromCache) {
+  /**
+   * Save api test data to api
+   * ? Maybe support saving test case in future
+   */
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  save($event?, ux = 'ui') {
+    $event?.preventDefault?.();
+    if (!this.testUIComponent.checkForm()) {
       return;
     }
-
-    const result = {
+    this.instance.save();
+  }
+  private getCurrentInstance(currentPage): TestInstance {
+    let result;
+    const defaultModel = {
       //Selet` Body
       requestTabIndex: 1,
       //Select Response
       responseTabIndex: 0,
       testResult: {}
     } as testViewModel;
-    this.currentPage = this.getCurrentPage();
-    switch (this.currentPage) {
-      case 'blankTest': {
-        const bodyType =
-          typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
-        Object.assign(result, {
-          userSelectedContentType: ContentTypeMap[bodyType],
-          request: {
-            uri: '',
-            authInfo: {
-              authInfo: {},
-              authType: NONE_AUTH_OPTION.name,
-              isInherited: isInherited.notInherit
-            },
-            apiAttrInfo: {
-              contentType: bodyType,
-              requestMethod: RequestMethod.POST,
-              beforeInject: '',
-              afterInject: ''
-            },
-            requestParams: {
-              queryParams: [],
-              headerParams: [],
-              restParams: [],
-              bodyParams: [
-                {
-                  binaryRawData: ''
+    switch (currentPage) {
+      case TestPage.Blank: {
+        result = {
+          saveTips: $localize`Save as API`,
+          getModel: () => {
+            const bodyType =
+              typeof StorageUtil.get('api_test_body_type') === 'number' ? StorageUtil.get('api_test_body_type') : ApiBodyType.Raw;
+            return {
+              ...defaultModel,
+              userSelectedContentType: ContentTypeMap[bodyType],
+              request: {
+                uri: '',
+                authInfo: {
+                  authInfo: {},
+                  authType: NONE_AUTH_OPTION.name,
+                  isInherited: isInherited.notInherit
+                },
+                apiAttrInfo: {
+                  contentType: bodyType,
+                  requestMethod: RequestMethod.POST,
+                  beforeInject: '',
+                  afterInject: ''
+                },
+                requestParams: {
+                  queryParams: [],
+                  headerParams: [],
+                  restParams: [],
+                  bodyParams: [
+                    {
+                      binaryRawData: ''
+                    }
+                  ]
                 }
-              ]
-            }
+              },
+              testResult: {}
+            };
           },
-          testResult: {}
-        });
+          save: () => {
+            this.saveAsAPI();
+          }
+        };
         break;
       }
-      case 'historyTest': {
-        const uuid = this.route.snapshot.queryParams.uuid.replace('history_', '');
-        const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
-        Object.assign(result, {
-          request: history.request,
-          testResult: history.response
-        });
+      case TestPage.History: {
+        result = {
+          saveTips: $localize`Save as API`,
+          getModel: async () => {
+            const uuid = this.route.snapshot.queryParams.uuid.replace('history_', '');
+            const history: ApiTestHistory = await this.apiTest.getHistory(uuid);
+            return { ...defaultModel, request: history.request, testResult: history.response };
+          },
+          save: () => {
+            this.saveAsAPI();
+          }
+        };
         break;
       }
-      case 'apiTest': {
-        const uuid = this.route.snapshot.queryParams.uuid;
-        const request = await this.projectApi.get(uuid);
-        result.request = this.apiTestUtil.getTestDataFromApi(request);
+      case TestPage.API: {
+        result = {
+          saveTips: $localize`Save as Case`,
+          getModel: async () => {
+            const uuid = this.route.snapshot.queryParams.uuid;
+            const request = await this.projectApi.get(uuid);
+            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(request) };
+          },
+          save: () => {
+            this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+              queryParams: { apiUuid: this.model.request.apiUuid }
+            });
+          }
+        };
+        break;
+      }
+      case TestPage.Case: {
+        result = {
+          saveTips: $localize`Save`,
+          getModel: async () => {
+            const uuid = this.route.snapshot.queryParams.uuid;
+            const request = await this.projectApi.get(uuid);
+            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(request) };
+          }
+        };
         break;
       }
     }
+    return result;
+  }
+  async afterTabActivated() {
+    // console.log('afterTabActivated', this.model, this.initialModel);
+    this.currentPage = this.getCurrentPage();
+    this.instance = this.getCurrentInstance(this.currentPage);
+
+    const isFromCache: boolean = this.model && !isEmptyObj(this.model);
+    if (isFromCache) {
+      return;
+    }
+
+    const result = await this.instance.getModel();
     //Set contentType
     const contentResult = this.getContentTypeInfo(result as Partial<testViewModel>);
     result.request.requestParams.headerParams = contentResult.headers;
@@ -134,27 +233,25 @@ export class ApiTestComponent implements EditTabViewComponent {
     this.model = result as testViewModel;
     this.eoOnInit.emit(this.model);
   }
-  async updateAuthInfo() {
-    if (['blankTest', 'historyTest'].includes(this.currentPage)) {
-      return;
-    }
-    const uuid = this.route.snapshot.queryParams.uuid;
-    const result = await this.projectApi.get(uuid);
-    if (!result) return;
-    const newAuthInfo = {
-      ...result.authInfo,
-      authInfo: JSONParse(result.authInfo.authInfo)
-    };
-    if (!isEqual(this.model.request?.authInfo, newAuthInfo)) {
-      this.model.request.authInfo = newAuthInfo;
-    }
-  }
   private getCurrentPage(): TestPage {
     const uuid = this.route.snapshot.queryParams.uuid;
-    if (!uuid) return 'blankTest';
-    if (this.router.url.includes('/case')) return 'caseTest';
-    if (uuid?.includes('history_')) return 'historyTest';
-    return 'apiTest';
+    if (this.router.url.includes(this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase])) return TestPage.Case;
+
+    if (!uuid) return TestPage.Blank;
+    if (uuid?.includes('history_')) return TestPage.History;
+    return TestPage.API;
+  }
+  private saveAsAPI() {
+    const apiData = this.apiTestUtil.formatUIApiDataToStorage({
+      request: this.model.request,
+      response: this.model.testResult
+    });
+    StorageUtil.set('apiDataWillbeSave', apiData);
+    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+      queryParams: {
+        pageID: Number(this.route.snapshot.queryParams.pageID)
+      }
+    });
   }
   private getContentTypeInfo(model: Partial<testViewModel>): { contentType: ContentType; headers: HeaderParam[] } {
     const result = {

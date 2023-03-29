@@ -17,7 +17,7 @@ import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';
 import { MessageService } from '../../../../services/message';
-import { eoDeepCopy, isEmptyObj } from '../../../../shared/utils/index.utils';
+import { eoDeepCopy as pcDeepCopy, isEmptyObj } from '../../../../shared/utils/index.utils';
 
 interface TabEvent {
   when: 'activated' | 'editing' | 'saved' | 'afterTested';
@@ -342,7 +342,7 @@ export class ApiTabService {
       //Set tab storage
       //Set baseContent
       if (['activated', 'saved'].includes(inData.when)) {
-        const initialModel = eoDeepCopy(inData.model);
+        const initialModel = pcDeepCopy(inData.model);
         //Update tab by id,may not be the current selected tab
         const isCurrentSelectedTab = currentTab.uuid === this.apiTabComponent.getCurrentTab().uuid;
         //If is current tab,set initialModel automatically

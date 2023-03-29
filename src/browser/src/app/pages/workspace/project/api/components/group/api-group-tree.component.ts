@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { autorun, reaction, toJS } from 'mobx';
+import { action, autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import {
@@ -89,7 +89,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.reactions.push(
       autorun(() => {
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
-        console.log(toJS(this.apiGroupTree));
         //Set expand/selecte key
         this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
         waitNextTick().then(() => {
@@ -142,9 +141,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       };
       if (it.module === GroupModuleType.API) {
         result.isLeaf = false;
-        result.relationInfo.method = this.requestMethodMap[result.relationInfo.requestMethod];
-        result.relationInfo.methodText =
-          result.relationInfo.method.length > 5 ? result.relationInfo.method.slice(0, 3) : result.relationInfo.method;
+        result.method = this.requestMethodMap[result.relationInfo.requestMethod];
+        result.methodText = result.method.length > 5 ? result.method.slice(0, 3) : result.method;
       }
       return result;
     });

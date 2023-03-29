@@ -65,8 +65,8 @@
             </ng-container>
             <!-- API -->
             <ng-container *ngSwitchCase="TYPE_GEROUP_MODULE.API">
-              <b class="method-text method-text-{{ origin.relationInfo?.method }} mr-[5px]" *ngIf="origin.relationInfo?.method">
-                {{ origin.relationInfo?.methodText }}
+              <b class="method-text method-text-{{ origin?.method }} mr-[5px]" *ngIf="origin?.method">
+                {{ origin?.methodText }}
               </b>
               <span class="text-[12px] truncate">{{ origin.title }}</span>
             </ng-container>
