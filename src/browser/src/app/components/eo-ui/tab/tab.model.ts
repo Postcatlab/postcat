@@ -1,4 +1,5 @@
 import type { EventEmitter } from '@angular/core';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 
 export enum TabOperate {
   closeOther = 'closeOther',
@@ -66,7 +67,7 @@ export type TabItem = {
   /**
    * Unique id,used for identify content
    */
-  uniqueName: string;
+  uniqueName: string | PageUniqueName;
   /**
    * If the tab is fixed, it will not be replaced by other tab
    *

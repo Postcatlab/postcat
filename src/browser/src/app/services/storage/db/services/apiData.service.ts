@@ -7,6 +7,7 @@ import {
   ApiDataPageDto,
   ApiDataUpdateDto
 } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import type { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { DbGroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
@@ -31,10 +32,10 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     });
     const result = await this.baseService.bulkCreate(items);
     const systemMocks = result.data?.map(n => ({
-      name: '默认 Mock',
+      name: $localize`默认 Mock`,
       description: '',
       apiUuid: n.apiUuid,
-      createWay: 'system',
+      createWay: MockCreateWay.System,
       response: '',
       projectUuid: n.projectUuid,
       workSpaceUuid: n.workSpaceUuid

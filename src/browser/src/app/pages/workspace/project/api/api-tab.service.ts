@@ -2,12 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, reaction, toJS } from 'mobx';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
-import {
-  ApiTabsUniqueName,
-  BASIC_TABS_INFO,
-  requestMethodMap,
-  TabsConfig
-} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { Message } from 'pc/browser/src/app/services/message';
 import { GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
@@ -18,7 +13,57 @@ import { debounceTime, Subject } from 'rxjs';
 import { EoTabComponent } from '../../../../components/eo-ui/tab/tab.component';
 import { MessageService } from '../../../../services/message';
 import { eoDeepCopy as pcDeepCopy, isEmptyObj } from '../../../../shared/utils/index.utils';
-
+export enum PageUniqueName {
+  HttpTest = 'api-http-test',
+  HttpDetail = 'api-http-detail',
+  HttpEdit = 'api-http-edit',
+  HttpCase = 'api-http-case-edit',
+  HttpMock = 'api-http-mock-edit',
+  WsTest = 'api-ws-test',
+  EnvEdit = 'project-env-edit',
+  GroupEdit = 'project-group'
+}
+export const API_TABS: Array<Partial<TabItem>> = [
+  {
+    pathname: '/http/test',
+    uniqueName: PageUniqueName.HttpTest,
+    type: 'edit',
+    title: $localize`New Request`,
+    extends: { method: 'POST' }
+  },
+  {
+    pathname: '/env/edit',
+    uniqueName: PageUniqueName.EnvEdit,
+    type: 'edit',
+    icon: 'application',
+    title: $localize`New Environment`
+  },
+  {
+    pathname: '/group/edit',
+    uniqueName: PageUniqueName.GroupEdit,
+    type: 'edit',
+    icon: 'folder-close',
+    title: $localize`:@@AddGroup:New Group`
+  },
+  {
+    pathname: '/http/edit',
+    uniqueName: PageUniqueName.HttpEdit,
+    isFixed: true,
+    type: 'edit',
+    title: $localize`New API`
+  },
+  { pathname: '/http/detail', uniqueName: PageUniqueName.HttpDetail, type: 'preview', title: $localize`Preview` },
+  {
+    pathname: '/ws/test',
+    uniqueName: PageUniqueName.WsTest,
+    isFixed: true,
+    type: 'edit',
+    extends: { method: 'WS' },
+    title: $localize`New Websocket`
+  },
+  { pathname: '/http/case', uniqueName: PageUniqueName.HttpCase, type: 'edit', title: $localize`New Case` },
+  { pathname: '/http/mock', icon: 'mock', uniqueName: PageUniqueName.HttpMock, type: 'edit', title: $localize`New Mock`, isFixed: true }
+];
 interface TabEvent {
   when: 'activated' | 'editing' | 'saved' | 'afterTested';
   currentTabID: TabItem['uuid'];
@@ -64,26 +109,24 @@ export class ApiTabService {
         //TODO check group.id is same as resource id
         if (!tab.params?.uuid) return true;
         const modelID = Number(tab.params.uuid) || tab.params.uuid;
-        if (modelID === group.id && group.type === GroupType.UserCreated && tab.uniqueName === ApiTabsUniqueName.GroupEdit) {
+        if (modelID === group.id && group.type === GroupType.UserCreated && tab.uniqueName === PageUniqueName.GroupEdit) {
           return true;
         }
         if (
           modelID === group.relationInfo?.apiUuid &&
           group.module === GroupModuleType.API &&
-          [ApiTabsUniqueName.HttpEdit, ApiTabsUniqueName.HttpDetail, ApiTabsUniqueName.HttpTest].includes(
-            tab.uniqueName as ApiTabsUniqueName
-          )
+          [PageUniqueName.HttpEdit, PageUniqueName.HttpDetail, PageUniqueName.HttpTest].includes(tab.uniqueName as PageUniqueName)
         ) {
           return true;
         }
         if (
           modelID === group.relationInfo?.apiCaseUuid &&
           group.module === GroupModuleType.Case &&
-          tab.uniqueName === ApiTabsUniqueName.HttpCase
+          tab.uniqueName === PageUniqueName.HttpCase
         ) {
           return true;
         }
-        if (modelID === group.relationInfo?.id && group.module === GroupModuleType.Mock && tab.uniqueName === ApiTabsUniqueName.HttpMock) {
+        if (modelID === group.relationInfo?.id && group.module === GroupModuleType.Mock && tab.uniqueName === PageUniqueName.HttpMock) {
           return true;
         }
         return false;
@@ -119,7 +162,7 @@ export class ApiTabService {
           .getTabs()
           .filter(
             (tab: TabItem) =>
-              tab.params?.uuid && value.every(env => env.id.toString() !== tab.params.uuid) && tab.uniqueName === ApiTabsUniqueName.EnvEdit
+              tab.params?.uuid && value.every(env => env.id.toString() !== tab.params.uuid) && tab.uniqueName === PageUniqueName.EnvEdit
           )
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
@@ -154,9 +197,9 @@ export class ApiTabService {
         //resourceID
         let modelID: number;
         switch (currentTab.uniqueName) {
-          case ApiTabsUniqueName.HttpEdit:
-          case ApiTabsUniqueName.HttpTest:
-          case ApiTabsUniqueName.HttpEdit: {
+          case PageUniqueName.HttpEdit:
+          case PageUniqueName.HttpTest:
+          case PageUniqueName.HttpEdit: {
             modelID = model.apiUuid;
             break;
           }
@@ -187,7 +230,7 @@ export class ApiTabService {
         const hasCache = !!currentTab?.content?.[currentTab.uniqueName];
         if (!currentTab.isLoading && hasCache) {
           //If the current tab is not the one that initiated the request, we need to restore the data from the cache
-          // this.afterTabActivated(currentTab);
+          this.afterTabActivated(currentTab);
         }
 
         const actuallyID = this.apiTabComponent.getTabByParamsID(modelID.toString())?.uuid || bindTabID;
@@ -295,7 +338,7 @@ export class ApiTabService {
     result.title = model.name;
     result.method = requestMethodMap[model.apiAttrInfo?.requestMethod];
 
-    const isTestPage = [ApiTabsUniqueName.HttpCase, ApiTabsUniqueName.HttpTest, ApiTabsUniqueName.WsTest].includes(currentTab.uniqueName);
+    const isTestPage = [PageUniqueName.HttpCase, PageUniqueName.HttpTest, PageUniqueName.WsTest].includes(currentTab.uniqueName);
     const isEmptyPage = !model.uuid;
 
     if (!isTestPage) {
@@ -306,7 +349,7 @@ export class ApiTabService {
     }
 
     //Test page,generate title and method from model.url
-    if (currentTab.uniqueName === ApiTabsUniqueName.WsTest) {
+    if (currentTab.uniqueName === PageUniqueName.WsTest) {
       result.method = 'WS';
     } else {
       result.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
@@ -396,7 +439,10 @@ export class ApiTabService {
     }
 
     //Has tested/exsix api set fixed
-    if (currentTab.pathname.includes('test') && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+    const isTestPage = [PageUniqueName.HttpCase, PageUniqueName.HttpTest, PageUniqueName.WsTest].includes(
+      currentTab.uniqueName as PageUniqueName
+    );
+    if (isTestPage && model.testStartTime !== undefined) {
       replaceTab.isFixed = true;
     }
     // console.log('updatePartialTab', currentTab.uuid, replaceTab);

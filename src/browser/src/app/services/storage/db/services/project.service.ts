@@ -140,7 +140,7 @@ export class DbProjectService extends DbBaseService<Project> {
       }))
     );
     const groups = result.data?.map(item => ({
-      type: 0,
+      type: GroupType.System,
       name: $localize`Root Group`,
       depth: 0,
       projectUuid: item.projectUuid,

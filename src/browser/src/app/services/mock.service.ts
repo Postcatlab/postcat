@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import type { Mock } from 'pc/browser/src/app/services/storage/db/models';
+import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData, BodyParam, ApiDataFromList } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ElectronService } from '../core/services';
@@ -60,7 +60,7 @@ export class MockService {
             if (apiData === null) {
               return replyMsg({ statusCode: 404 });
             }
-            if (mock?.createWay === 'system') {
+            if (mock?.createWay === MockCreateWay.System) {
               // console.log('apiData.responseBody', apiData.responseBody);
               return replyMsg(await this.matchApiData(apiData, req));
             } else {

@@ -20,6 +20,7 @@ import { isEmpty, isEqual } from 'lodash-es';
 import { autorun, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
 import { AuthIn, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
@@ -50,7 +51,6 @@ import { enumsToArr, JSONParse } from '../../../../../../shared/utils/index.util
 import {
   ApiBodyType,
   ApiParamsType,
-  ApiTabsUniqueName,
   BASIC_TABS_INFO,
   BodyContentType as ContentTypeEnum,
   RequestMethod,
@@ -364,7 +364,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       //* Update Test Result
       this.afterTested.emit({
         id: queryParams.pageID,
-        url: this.tabsConfig.pathByName[ApiTabsUniqueName.HttpTest],
+        url: this.tabsConfig.pathByName[PageUniqueName.HttpTest],
         model: {
           testStartTime: 0,
           testResult: message.response

@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
-import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
@@ -13,7 +13,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
 import StorageUtil from '../../../../shared/utils/storage/storage.utils';
-import { ApiTabService } from './api-tab.service';
+import { ApiTabService, PageUniqueName } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -56,18 +56,18 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'detail',
       isShare: true,
       //ID fit to the routerLink
-      id: ApiTabsUniqueName.HttpDetail,
+      id: PageUniqueName.HttpDetail,
       title: $localize`:@@API Detail:Preview`
     },
     {
       routerLink: 'edit',
-      id: ApiTabsUniqueName.HttpEdit,
+      id: PageUniqueName.HttpEdit,
       title: $localize`Edit`
     },
     {
       routerLink: 'test',
       isShare: true,
-      id: ApiTabsUniqueName.HttpTest,
+      id: PageUniqueName.HttpTest,
       title: $localize`Test`
     }
   ];
@@ -92,7 +92,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   @ExtensionChange(API_PREVIEW_TAB, true)
   async initExtensionExtra() {
     this.rightExtras = [];
-    if (!this.router.url.includes(this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail])) return;
+    if (!this.router.url.includes(this.tabsConfig.pathByName[PageUniqueName.HttpDetail])) return;
     const apiPreviewTab = this.extensionService.getValidExtensionsByFature(API_PREVIEW_TAB);
     apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);
@@ -124,9 +124,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   initChildBarShowStatus() {
     const pathArr = [
-      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail],
-      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit],
-      this.tabsConfig.pathByName[ApiTabsUniqueName.HttpTest]
+      this.tabsConfig.pathByName[PageUniqueName.HttpDetail],
+      this.tabsConfig.pathByName[PageUniqueName.HttpEdit],
+      this.tabsConfig.pathByName[PageUniqueName.HttpTest]
     ];
     const isApiPage = pathArr.some(path => this.router.url.includes(path));
     const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');

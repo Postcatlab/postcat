@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ImportApiComponent } from 'pc/browser/src/app/components/extension-select/import-api/import-api.component';
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
-import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
@@ -48,17 +49,17 @@ export class ProjectApiService {
   }
   toDetail(id) {
     // * jump to api detail page
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
       queryParams: { uuid: id }
     });
   }
   toAdd(groupID?) {
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: { groupId: groupID, pageID: Date.now() }
     });
   }
   toEdit(id) {
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: { uuid: id }
     });
   }
@@ -91,7 +92,7 @@ export class ProjectApiService {
       this.feedback.error($localize`Copy API failed`);
       return;
     }
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: { pageID: Date.now(), uuid: result.apiUuid }
     });
   }

@@ -1,5 +1,5 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
-import { Mock } from 'pc/browser/src/app/services/storage/db/models';
+import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 
 export class DbMockService extends DbBaseService<Mock> {
@@ -21,6 +21,18 @@ export class DbMockService extends DbBaseService<Mock> {
       apiUuid: result.data.apiUuid
     });
     result.data.uri = apiItem.uri;
+    return result;
+  }
+  async delete(uuid) {
+    const { data: mock } = await this.baseService.read(uuid);
+    if (mock.createWay === MockCreateWay.System) {
+      return {
+        success: false,
+        code: 1,
+        data: null
+      };
+    }
+    const result = await this.baseService.delete(uuid);
     return result;
   }
 }

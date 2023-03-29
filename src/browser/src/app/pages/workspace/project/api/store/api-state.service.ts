@@ -83,17 +83,8 @@ export class ApiStoreService {
   @action setRootGroup(group: Group) {
     this.rootGroup = group;
   }
-
-  @action addApiSuccess(groupId: string | number) {
-    this.setExpandsList(groupId);
-  }
-
   @action setGroupList(list = []) {
     this.groupList = list;
-  }
-
-  @action setExpandsList(expandKey: string | number) {
-    this.expandList = [...this.expandList, expandKey];
   }
 
   @action setEnvUuid(data) {

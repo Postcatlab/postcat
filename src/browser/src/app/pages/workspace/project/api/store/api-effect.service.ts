@@ -226,7 +226,7 @@ export class ApiEffectService {
   }
 
   async deleteCase(apiCaseUuid) {
-    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuid });
+    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuids: [apiCaseUuid] });
     if (err) {
       return [null, err];
     }

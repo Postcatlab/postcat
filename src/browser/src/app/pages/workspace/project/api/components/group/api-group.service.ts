@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
@@ -21,7 +22,7 @@ export class ApiGroupService {
   ) {}
 
   navigate2group(queryParams) {
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.GroupEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.GroupEdit]], {
       queryParams
     });
   }
@@ -30,7 +31,6 @@ export class ApiGroupService {
   }
   toAdd(groupID = this.store.getRootGroup.id) {
     this.navigate2group({ parentId: groupID });
-    this.store.setExpandsList(groupID);
     this.feedback.success('Add Group successfully');
   }
   toDelete(group: Group) {

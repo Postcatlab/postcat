@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
-import { Mock } from 'pc/browser/src/app/services/storage/db/models';
+import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy, copy } from 'pc/browser/src/app/shared/utils/index.utils';
 
@@ -57,8 +57,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         key: 'createWay',
         width: 150,
         enums: [
-          { title: $localize`System creation`, value: 'system' },
-          { title: $localize`Manual creation`, value: 'custom' }
+          { title: $localize`System creation`, value: MockCreateWay.System },
+          { title: $localize`Manual creation`, value: MockCreateWay.Custom }
         ]
       },
       { title: 'URL', slot: this.urlCell },

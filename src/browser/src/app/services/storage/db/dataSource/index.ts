@@ -59,16 +59,23 @@ class DataSource extends Dexie {
       // https://dexie.org/docs/Table/Table.hook('reading')
       table.hook('reading', obj => {
         // 表字段映射
-        const uuidMap = {
-          workspace: 'workSpaceUuid',
-          project: 'projectUuid',
-          apiData: 'apiUuid',
-          apiCase: 'apiCaseUuid'
-        };
-        const uuidName = uuidMap[table.name];
-        if (uuidName) {
-          // 在数据返回到前端之前，将数据库中的 uuid 字段转为特定名称的 xxxUuid，这里主要是为了对齐后端返回的字段
-          obj[uuidName] = obj.uuid;
+        switch (table.name) {
+          case 'apiCase': {
+            obj['apiCaseUuid'] = obj.id;
+            break;
+          }
+          default: {
+            const uuidMap = {
+              workspace: 'workSpaceUuid',
+              project: 'projectUuid',
+              apiData: 'apiUuid'
+            };
+            const uuidName = uuidMap[table.name];
+            if (!uuidName) break;
+            // 在数据返回到前端之前，将数据库中的 uuid 字段转为特定名称的 xxxUuid，这里主要是为了对齐后端返回的字段
+            obj[uuidName] = obj.uuid;
+            break;
+          }
         }
         if (table.name === 'workspace') {
           // 主要用于区分本地空间和远程空间

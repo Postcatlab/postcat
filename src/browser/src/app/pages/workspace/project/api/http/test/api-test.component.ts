@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { isEqual } from 'lodash-es';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import {
   ApiBodyType,
   ApiParamsType,
-  ApiTabsUniqueName,
   BASIC_TABS_INFO,
   RequestMethod,
   TabsConfig
@@ -188,7 +188,7 @@ export class ApiTestComponent implements EditTabViewComponent {
           },
           save: () => {
             StorageUtil.set('test_data_will_be_save', this.model.request, 2000);
-            this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+            this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
               queryParams: { apiUuid: this.model.request.apiUuid, pageID: this.route.snapshot.queryParams.pageID }
             });
           }
@@ -223,7 +223,7 @@ export class ApiTestComponent implements EditTabViewComponent {
               }
               //Add successfully
               this.feedback.success($localize`New Case successfully`);
-              this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+              this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
               });
 
@@ -261,7 +261,7 @@ export class ApiTestComponent implements EditTabViewComponent {
   }
   private getCurrentPage(): TestPage {
     const uuid = this.route.snapshot.queryParams.uuid;
-    if (this.router.url.includes(this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase])) return TestPage.Case;
+    if (this.router.url.includes(this.tabsConfig.pathByName[PageUniqueName.HttpCase])) return TestPage.Case;
 
     if (!uuid) return TestPage.Blank;
     if (uuid?.includes('history_')) return TestPage.History;
@@ -273,7 +273,7 @@ export class ApiTestComponent implements EditTabViewComponent {
       response: this.model.testResult
     });
     StorageUtil.set('api_data_will_be_save', apiData, 2000);
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)
       }

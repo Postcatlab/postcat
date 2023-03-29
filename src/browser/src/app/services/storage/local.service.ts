@@ -269,7 +269,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiCase
-        .bulkReadDetail({ apiCaseUuids, projectUuid, workSpaceUuid })
+        .bulkRead({ apiCaseUuids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiCase - detail 接口调用成功 %c', SuccessStyle, '');
@@ -285,13 +285,13 @@ export class LocalService {
   }
 
   api_apiCaseDelete<T = any>({
-    apiCaseUuid,
+    apiCaseUuids,
     projectUuid = this.store.getCurrentProjectID,
     workSpaceUuid = this.store.getCurrentWorkspaceUuid
   }) {
-    if (apiCaseUuid == null) {
-      console.log('%c Error: apiCase - delete 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
-      return [null, { message: 'delete 接口 缺失参数 apiCaseUuid' }];
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 apiCaseUuids' }];
     }
     if (projectUuid == null) {
       console.log('%c Error: apiCase - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
@@ -304,7 +304,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiCase
-        .delete({ apiCaseUuid, projectUuid, workSpaceUuid })
+        .bulkDelete({ apiCaseUuids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiCase - delete 接口调用成功 %c', SuccessStyle, '');
