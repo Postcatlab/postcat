@@ -204,14 +204,17 @@ export class ApiEffectService {
   //? Case
   async detailCase(uuid) {
     const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [uuid] });
+    console.log(res);
     if (err) {
       return [null, `cant'find this case:${err}`];
     }
     return [res[0], err];
   }
   async addCase(model: ApiCase) {
-    // * Unsaved auth Info
+    // * Unsaved auth Info/response
     Reflect.deleteProperty(model, 'authInfo');
+    Reflect.deleteProperty(model, 'responseList');
+
     const [data, err] = await this.api.api_apiCaseCreate({
       apiCaseList: [model]
     });

@@ -108,8 +108,9 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     }
     if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
       this.model.authInfo.authInfo = {};
+    } else if (this.model.authInfo) {
+      this.model.authInfo.authInfo = JSONParse(this.model.authInfo?.authInfo) || {};
     }
-    this.model.authInfo.authInfo = JSONParse(this.model.authInfo?.authInfo) || {};
     this.initForm();
     this.eoOnInit.emit(this.model);
   }

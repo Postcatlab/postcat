@@ -269,7 +269,7 @@ export class LocalService {
 
     return new Promise<[T, null] | [null, any]>(resolve => {
       db.apiCase
-        .bulkRead({ apiCaseUuids, projectUuid, workSpaceUuid })
+        .bulkReadDetail({ apiCaseUuids, projectUuid, workSpaceUuid })
         .then(({ code, data }: any) => {
           if (code === 0) {
             console.log('%c apiCase - detail 接口调用成功 %c', SuccessStyle, '');
@@ -671,7 +671,6 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
-          console.log(error);
           console.log('%c group - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });

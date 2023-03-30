@@ -65,7 +65,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       click: title => this.projectApi.importProject('sync', title)
     }
   ];
-  groupModuleByUnqueName = {
+  groupModuleByUniqueName = {
     [PageUniqueName.GroupEdit]: this.groupModuleName,
     [PageUniqueName.HttpCase]: GroupModuleType.Case,
     [PageUniqueName.HttpMock]: GroupModuleType.Mock,
@@ -130,7 +130,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const { uuid } = this.route.snapshot.queryParams;
     if (!uuid) return;
     const currentModule =
-      this.groupModuleByUnqueName[this.tabsConfig.BASIC_TABS.find(val => this.router.url.includes(val.pathname)).uniqueName];
+      this.groupModuleByUniqueName[this.tabsConfig.BASIC_TABS.find(val => this.router.url.includes(val.pathname)).uniqueName];
     return findTreeNode(this.apiGroupTree, val => val.module === currentModule && val.modelID === (Number(uuid) || uuid))?.id;
   }
   initSelectKeys() {
@@ -263,80 +263,85 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
 
   private getGroupOperate = () => {
     return {
-      [GroupModuleType.API]: [
-        {
-          title: $localize`Edit`,
-          click: ({ relationInfo: item }) => this.projectApi.toEdit(item.apiUuid)
-        },
-        {
-          title: $localize`Add Mock`,
-          click: ({ relationInfo: item }) => this.mockService.toAdd(item.apiUuid)
-        },
-        {
-          title: $localize`Add Case`,
-          click: ({ relationInfo: item }) => this.caseService.toAdd(item.apiUuid)
-        },
-        {
-          title: $localize`:@Copy:Copy`,
-          click: ({ relationInfo: item }) => this.projectApi.copy(item.apiUuid)
-        },
-        {
-          title: $localize`:@Delete:Delete`,
-          click: ({ relationInfo: item }) => this.projectApi.toDelete(item)
-        }
-      ],
-      [GroupModuleType.Mock]: [
-        {
-          title: $localize`Edit`,
-          showFn: ({ relationInfo: item }) => {
-            return item.createWay === MockCreateWay.Custom;
+      [GroupModuleType.API]: {
+        list: [
+          {
+            title: $localize`Edit`,
+            click: ({ relationInfo: item }) => this.projectApi.toEdit(item.apiUuid)
           },
-          click: ({ relationInfo: item }) => this.mockService.toEdit(item.id)
-        },
-        {
-          title: $localize`:@Copy:Copy`,
-          click: ({ relationInfo: item }) => this.mockService.copy(item.id)
-        },
-        {
-          title: $localize`:@Delete:Delete`,
-          showFn: ({ relationInfo: item }) => {
-            return item.createWay === MockCreateWay.Custom;
+          {
+            title: $localize`Add Mock`,
+            click: ({ relationInfo: item }) => this.mockService.toAdd(item.apiUuid)
           },
-          click: ({ relationInfo: item }) => this.mockService.toDelete(item.id)
-        }
-      ],
-      [GroupModuleType.Case]: [
-        {
-          title: $localize`Edit`,
-          click: ({ relationInfo: item }) => this.caseService.toEdit(item.apiCaseUuid)
+          {
+            title: $localize`Add Case`,
+            click: ({ relationInfo: item }) => this.caseService.toAdd(item.apiUuid)
+          },
+          {
+            title: $localize`:@Copy:Copy`,
+            click: ({ relationInfo: item }) => this.projectApi.copy(item.apiUuid)
+          },
+          {
+            title: $localize`:@Delete:Delete`,
+            click: ({ relationInfo: item }) => this.projectApi.toDelete(item)
+          }
+        ]
+      },
+      [GroupModuleType.Mock]: {
+        showFn: ({ relationInfo: item }) => {
+          return item.createWay === MockCreateWay.Custom;
         },
-        {
-          title: $localize`:@Copy:Copy`,
-          click: ({ relationInfo: item }) => this.caseService.copy(item.apiCaseUuid)
-        },
-        {
-          title: $localize`:@Delete:Delete`,
-          click: ({ relationInfo: item }) => this.caseService.toDelete(item)
-        }
-      ],
-      [this.groupModuleName]: [
-        {
-          title: $localize`Add API`,
-          click: item => this.projectApi.toAdd(item.id)
-        },
-        {
-          title: $localize`Add Subgroup`,
-          click: item => this.groupService.toAdd(item.id)
-        },
-        {
-          title: $localize`Edit`,
-          click: item => this.groupService.toEdit(item.uuid)
-        },
-        {
-          title: $localize`:@@Delete:Delete`,
-          click: item => this.groupService.toDelete(item)
-        }
-      ]
+        list: [
+          {
+            title: $localize`Edit`,
+            click: ({ relationInfo: item }) => this.mockService.toEdit(item.id)
+          },
+          {
+            title: $localize`:@Copy:Copy`,
+            click: ({ relationInfo: item }) => this.mockService.copy(item.id)
+          },
+          {
+            title: $localize`:@Delete:Delete`,
+            click: ({ relationInfo: item }) => this.mockService.toDelete(item.id)
+          }
+        ]
+      },
+      [GroupModuleType.Case]: {
+        list: [
+          {
+            title: $localize`Edit`,
+            click: ({ relationInfo: item }) => this.caseService.toEdit(item.apiCaseUuid)
+          },
+          {
+            title: $localize`:@Copy:Copy`,
+            click: ({ relationInfo: item }) => this.caseService.copy(item.apiCaseUuid)
+          },
+          {
+            title: $localize`:@Delete:Delete`,
+            click: ({ relationInfo: item }) => this.caseService.toDelete(item)
+          }
+        ]
+      },
+      [this.groupModuleName]: {
+        list: [
+          {
+            title: $localize`Add API`,
+            click: item => this.projectApi.toAdd(item.id)
+          },
+          {
+            title: $localize`Add Subgroup`,
+            click: item => this.groupService.toAdd(item.id)
+          },
+          {
+            title: $localize`Edit`,
+            click: item => this.groupService.toEdit(item.uuid)
+          },
+          {
+            title: $localize`:@@Delete:Delete`,
+            click: item => this.groupService.toDelete(item)
+          }
+        ]
+      }
     };
   };
   ngOnDestroy(): void {

@@ -11,6 +11,6 @@ export interface ApiCaseCreateDto {
   projectUuid: string;
   workSpaceUuid: string;
 }
-export interface ApiCaseUpdateDto extends ApiCaseCreateDto {
-  id: number;
+export interface ApiCaseUpdateDto extends ApiCase {
+  apiCaseUuid: number;
 }

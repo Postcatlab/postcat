@@ -12,6 +12,5 @@
     "playwright": "^1.32.1"
   },
   "dependencies": {
-    "ark-pkg": "0.5.4"
   }
 }

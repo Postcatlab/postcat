@@ -82,14 +82,18 @@
               <span class="text-[12px] truncate">{{ origin.title }}</span>
             </ng-container>
           </div>
-          <span class="flex tree-node-operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
+          <span
+            class="flex tree-node-operate"
+            *ngIf="isEdit&&(!operateByModule[origin.module || groupModuleName].showFn||operateByModule[origin.module || groupModuleName].showFn?.(origin))"
+            (click)="$event.stopPropagation()"
+          >
             <button eo-ng-button nzType="text" class="tree-item-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
               <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
             </button>
             <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
               <ul nz-menu>
-                <ng-container *ngFor="let item of operateByModule[origin.module || groupModuleName]">
-                  <li nz-menu-item *ngIf="!item.showFn||item.showFn?.(origin)" (click)="item.click(origin)">
+                <ng-container *ngFor="let item of operateByModule[origin.module || groupModuleName].list">
+                  <li nz-menu-item (click)="item.click(origin)">
                     {{ item.title }}
                   </li>
                 </ng-container>

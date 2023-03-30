@@ -76,7 +76,17 @@ interface TestInstance {
       [extraButtonTmp]="saveButtonTmp"
     ></eo-api-http-test-ui>
     <ng-template #saveButtonTmp>
-      <button type="button" eo-ng-button nzType="default" (click)="save($event)" trace traceID="save_api_document_from_test">
+      <!-- Disabled when testing -->
+      <button
+        type="button"
+        [nzLoading]="isSaving"
+        eo-ng-button
+        nzType="default"
+        [disabled]="!!model?.testStartTime"
+        (click)="save($event)"
+        trace
+        traceID="save_api_document_from_test"
+      >
         {{ instance.saveTips }}
       </button>
     </ng-template></div
@@ -96,6 +106,7 @@ export class ApiTestComponent implements EditTabViewComponent {
   @ViewChild('saveButtonTmp', { read: TemplateRef, static: true }) saveButtonTmp: TemplateRef<HTMLDivElement>;
   @ViewChild('testUIComponent') testUIComponent: ApiTestUiComponent;
   isNameEdit = false;
+  isSaving = false;
   name: string;
   /**
    * Page is used to switch between different test pages
@@ -143,12 +154,14 @@ export class ApiTestComponent implements EditTabViewComponent {
    */
   @HostListener('keydown.control.s', ['$event', "'shortcut'"])
   @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
-  save($event?, ux = 'ui') {
+  async save($event?, ux = 'ui') {
     $event?.preventDefault?.();
-    if (!this.testUIComponent.checkForm()) {
+    if (!this.testUIComponent.checkForm() || this.isNameEdit) {
       return;
     }
-    this.instance.save();
+    this.isSaving = true;
+    await this.instance.save();
+    this.isSaving = false;
   }
   delete() {
     this.instance.delete();
@@ -214,6 +227,9 @@ export class ApiTestComponent implements EditTabViewComponent {
           getModel: async () => {
             const uuid = this.route.snapshot.queryParams.uuid.replace('history_', '');
             const history: ApiTestHistory = await this.effect.getHistory(uuid);
+            if (history.request.authInfo) {
+              history.request.authInfo.isInherited = isInherited.notInherit;
+            }
             return { ...defaultModel, request: history.request, testResult: history.response };
           },
           save: () => {
@@ -240,7 +256,7 @@ export class ApiTestComponent implements EditTabViewComponent {
         break;
       }
       case TestPage.Case: {
-        const apiCaseUuid = this.route.snapshot.queryParams.uuid;
+        const apiCaseUuid = Number(this.route.snapshot.queryParams.uuid);
         result = {
           saveTips: $localize`Save`,
           getModel: async () => {
@@ -249,17 +265,18 @@ export class ApiTestComponent implements EditTabViewComponent {
             if (!apiCaseUuid) {
               //* Add Case
               let caseData = StorageUtil.get('test_data_will_be_save');
+              let isFromTestPage = false;
               if (caseData) {
+                isFromTestPage = true;
                 //Add Case from Test page
                 StorageUtil.remove('test_data_will_be_save');
-                viewModel = { ...defaultModel, request: caseData };
+                caseData.name = $localize`New Case`;
               } else {
                 //Add directly
                 caseData = await this.projectApi.get(apiUuid);
                 if (!caseData) return;
-                viewModel = { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(caseData) };
               }
-
+              caseData.name = $localize`New Case`;
               const [res, err] = await this.effect.addCase(caseData);
               if (err) {
                 this.feedback.error($localize`Failed to create Case`);
@@ -271,6 +288,11 @@ export class ApiTestComponent implements EditTabViewComponent {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
               });
 
+              if (isFromTestPage) {
+                viewModel = { ...defaultModel, request: caseData };
+              } else {
+                viewModel = { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(caseData) };
+              }
               return viewModel;
             } else {
               //* Edit Case

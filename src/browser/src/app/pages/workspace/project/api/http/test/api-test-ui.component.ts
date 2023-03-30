@@ -22,7 +22,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { AuthIn, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
@@ -82,7 +82,7 @@ export const ContentTypeMap: { [key in ApiBodyType]: ContentType } = {
   templateUrl: './api-test-ui.component.html',
   styleUrls: ['./api-test-ui.component.scss']
 })
-export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() model: testViewModel;
   @Input() extraButtonTmp: TemplateRef<HTMLDivElement>;
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
@@ -95,7 +95,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     };
   }>();
   @ViewChild('authExtForm') authExtForm: AuthorizationExtensionFormComponent;
-  @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
+  @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent;
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
@@ -112,7 +112,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   isRequestBodyLoaded = false;
   REQUEST_METHOD = enumsToArr(RequestMethod);
   MAX_TEST_SECONDS = 60;
-
+  initialModelAuthType;
   currentEnv;
   private reactions = [];
   get uuid() {
@@ -120,14 +120,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
-  }
-  get isEmptyTestPage(): boolean {
-    const { uuid } = this.route.snapshot.queryParams;
-    return !this.globalStore.isShare && (!uuid || uuid.includes('history_'));
-  }
-  get type(): AuthIn {
-    const { uuid } = this.route.snapshot.queryParams;
-    return uuid?.includes?.('history_') ? 'api-test-history' : 'api-test';
   }
 
   private status$: Subject<string> = new Subject<string>();
@@ -204,7 +196,7 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
     console.log('api-test-ui ngOnChanges', changes.model.currentValue);
     this.initBasicForm();
-    //initAuthInfo
+    this.initialModelAuthType = this.model.request.authInfo?.authType;
     //initHeader/contentType
     //rest test status
   }
@@ -306,9 +298,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       }
     }
     this.modelChange.emit(this.model);
-  }
-  ngOnInit(): void {
-    this.watchEnvChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -454,19 +443,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     if (bodyType === ApiBodyType.Binary) return;
     this.model.userSelectedContentType =
       this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || this.getContentTypeByBodyType(bodyType);
-  }
-  private watchEnvChange() {
-    // reaction(
-    //   () => this.store.getCurrentEnv,
-    //   (env: any) => {
-    //     if (env.uuid) {
-    //       this.validateForm.controls.uri.setValidators([]);
-    //       this.validateForm.controls.uri.updateValueAndValidity();
-    //     } else {
-    //       this.validateForm.controls.uri.setValidators([Validators.required]);
-    //     }
-    //   }
-    // );
   }
   /**
    * Init basic form,such as url,protocol,method

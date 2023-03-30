@@ -17,5 +17,3 @@ export enum isInherited {
   inherit = 1,
   notInherit = 0
 }
-
-export type AuthIn = 'group' | 'api-test' | 'api-test-history';

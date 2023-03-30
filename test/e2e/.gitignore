@@ -1,2 +1,3 @@
 /images/*.png
 /test-results/**/*.png
+/playwright-report/**/*

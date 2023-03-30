@@ -35,7 +35,7 @@
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
-      <button type="submit" id="btn-test" eo-ng-button nzType="primary" class="mx-[10px] w-[100px]" (click)="clickTest()">
+      <button type="submit" eo-ng-button nzType="primary" class="mx-[10px] w-[100px]" (click)="clickTest()">
         <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
         <span *ngIf="status === 'testing'" i18n>Abort</span>
         <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
@@ -100,7 +100,6 @@
         </ng-template>
         <pc-api-test-form
           module="rest"
-          class=""
           [(model)]="model.request.requestParams.restParams"
           (modelChange)="emitChangeFun('restParams')"
         ></pc-api-test-form>
@@ -111,13 +110,12 @@
           <nz-badge class="ml-1" *ngIf="model.request?.authInfo?.authType !== noAuth.name" nzStatus="success"></nz-badge>
         </ng-template>
         <div class="p-[20px] overflow-auto h-full">
-          <!-- [inheritAuthType]="initialModel?.request?.authInfo?.authType" -->
           <authorization-extension-form
             #authExtForm
             [(model)]="model.request.authInfo"
-            [type]="type"
+            [inheritAuthType]="initialModelAuthType"
             type="api-test"
-            [groupInfo]="{ parentId: model.request?.groupId }"
+            [parentInfo]="{ parentId: model.request?.groupId }"
             (modelChange)="emitChangeFun('authInfo')"
           ></authorization-extension-form>
         </div>

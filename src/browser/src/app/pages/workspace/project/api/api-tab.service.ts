@@ -61,7 +61,7 @@ export const API_TABS: Array<Partial<TabItem>> = [
     extends: { method: 'WS' },
     title: $localize`New Websocket`
   },
-  { pathname: '/http/case', uniqueName: PageUniqueName.HttpCase, type: 'edit', title: $localize`New Case` },
+  { pathname: '/http/case', icon: 'diy-test', uniqueName: PageUniqueName.HttpCase, type: 'edit', title: $localize`New Case` },
   { pathname: '/http/mock', icon: 'mock', uniqueName: PageUniqueName.HttpMock, type: 'edit', title: $localize`New Mock`, isFixed: true }
 ];
 interface TabEvent {
@@ -349,10 +349,15 @@ export class ApiTabService {
     }
 
     //Test page,generate title and method from model.url
-    if (currentTab.uniqueName === PageUniqueName.WsTest) {
-      result.method = 'WS';
-    } else {
-      result.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
+    switch (currentTab.uniqueName) {
+      case PageUniqueName.WsTest: {
+        result.method = 'WS';
+        break;
+      }
+      case PageUniqueName.HttpTest: {
+        result.method = requestMethodMap[model.request.apiAttrInfo?.requestMethod];
+        break;
+      }
     }
     //Only Untitle request need set url to tab title
     const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;
