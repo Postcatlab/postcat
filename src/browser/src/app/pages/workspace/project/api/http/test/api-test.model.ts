@@ -34,7 +34,7 @@ export const FORMDATA_CONTENT_TYPE_BY_ABRIDGE = [
     value: 'application/x-www-form-urlencoded'
   },
   {
-    title: 'form-data',
+    title: 'multiple/form-data',
     value: 'multiple/form-data'
   }
 ] as const;

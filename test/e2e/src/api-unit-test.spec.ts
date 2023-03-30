@@ -42,8 +42,11 @@ test.describe('Test API', () => {
 
     //Rest will auto generate from url when url input:blur
     await page.getByText('REST', { exact: true }).click();
-    await page.getByPlaceholder('Value').first().click();
-    await page.getByPlaceholder('Value').first().fill('all');
+    await adaTabledRow(page, {
+      valueByKey: {
+        Value: 'all'
+      }
+    });
 
     //Asset test result
     const res = await testAndWaitForResponse(page);
@@ -121,7 +124,7 @@ test.describe('Test API', () => {
     await page.getByRole('button', { name: 'Send' }).click();
   });
   /**
-   * XML
+   * Formdata Test
    */
   test('Formdata Test', async ({ page }) => {
     await page.getByPlaceholder('Enter URL').click();

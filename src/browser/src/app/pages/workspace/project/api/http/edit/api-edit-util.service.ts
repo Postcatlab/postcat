@@ -34,7 +34,6 @@ export class ApiEditUtilService {
           item.partType = mui[tableName];
           // 0: request, 1: response
           item.paramType = ParamTypeEnum.REQUEST;
-          delete item['paramAttr.example'];
           return filterArrFun(item);
         }
       });
@@ -51,7 +50,7 @@ export class ApiEditUtilService {
           item.orderNo = 0;
           item.paramType = ParamTypeEnum.RESPONSE;
           item.partType = mui['bodyParams'];
-          delete item['paramAttr.example'];
+          Reflect.deleteProperty(item, 'paramAttr.example');
         }
         return;
       }
@@ -85,10 +84,11 @@ export class ApiEditUtilService {
     const result = this.parseApiUI2Storage(formData, val => {
       val.orderNo = 0;
       val.paramAttr ??= {};
-      val.paramAttr.example = val['paramAttr.example'];
-      delete val['paramAttr.example'];
+      val.paramAttr.example = val['paramAttr.example'] || val.paramAttr?.example;
+      Reflect.deleteProperty(val, 'paramAttr.example');
       return val?.name;
     });
+    console.log(result);
     return result;
   }
   /**

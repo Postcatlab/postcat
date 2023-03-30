@@ -31,8 +31,8 @@ export const addTableParams = async (dom, value) => {
  * @param opts.index row index
  * @param opts.valueByKey input placeholder and value
  */
-export const adaTabledRow = async (page, opts: { index: number; valueByKey: { [key: string]: string } }) => {
-  const index = opts.index;
+export const adaTabledRow = async (page, opts: { index?: number; valueByKey: { [key: string]: string } }) => {
+  const index = opts.index || 0;
   for (const name in opts.valueByKey) {
     const value = opts.valueByKey[name];
     await addTableParams(page.getByPlaceholder(name).nth(index), value);

@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter, Input, TemplateRef, ViewChild, HostListener, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { isEqual } from 'lodash-es';
@@ -21,7 +20,7 @@ import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { eoDeepCopy, getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 enum TestPage {
@@ -230,7 +229,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             if (history.request.authInfo) {
               history.request.authInfo.isInherited = isInherited.notInherit;
             }
-            return { ...defaultModel, request: history.request, testResult: history.response };
+            return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(history.request), testResult: history.response };
           },
           save: () => {
             this.saveAsAPI();
@@ -362,6 +361,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     }
 
     const result = await this.instance.getModel();
+    console.log(eoDeepCopy(result.request.requestParams.headerParams));
     if (!result) this.eoOnInit.emit(null);
     //Set contentType
     const contentResult = this.getContentTypeInfo(result as Partial<testViewModel>);
@@ -413,7 +413,7 @@ export class ApiTestComponent implements EditTabViewComponent {
           break;
         }
       }
-      result.headers = this.apiTestUtil.addOrReplaceContentType(result.contentType, result.headers);
+      result.headers = this.apiTestUtil.addOrReplaceContentType(result.contentType, model.request?.requestParams?.headerParams);
       return result;
     }
 
