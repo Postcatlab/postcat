@@ -39,7 +39,7 @@ interface TestInstance {
 }
 @Component({
   selector: 'eo-api-http-test',
-  template: `<div class="test-page-{{ currentPage }}"
+  template: `<div class="test-page-container test-page-{{ currentPage }}"
     ><ng-container *ngIf="currentPage === 'caseTest'">
       <form nz-form nzLayout="inline" class="flex px-[15px] py-[8px]" *ngIf="model?.request" (ngSubmit)="saveName()">
         <nz-form-item class="flex items-center h-[30px]">
