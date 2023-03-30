@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, HostListener, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { EoMonacoEditorComponent } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco-editor.component';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
@@ -33,6 +34,7 @@ interface ModelType {
   styleUrls: ['./mock.component.scss']
 })
 export class MockComponent implements EditTabViewComponent {
+  @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   @Input() model: ModelType;
   @Output() readonly eoOnInit = new EventEmitter<ModelType>();
 
@@ -71,6 +73,30 @@ export class MockComponent implements EditTabViewComponent {
     private router: Router
   ) {}
 
+  get response() {
+    return this.model?.response || '';
+  }
+
+  set response(value) {
+    this.model.response = value;
+  }
+
+  get name() {
+    return this.model?.name || '';
+  }
+
+  get url() {
+    return this.model?.url || '';
+  }
+
+  get isHover(): 'hover' | null {
+    return this.model?.createWay === 'system' ? 'hover' : null;
+  }
+
+  get creatWayIsSystem() {
+    return this.model?.createWay === 'system';
+  }
+
   async afterTabActivated(): Promise<any> {
     //TODO: 需要换成路由拿apiuuid和mockid
     this.apiUuid = this.route.snapshot.queryParams.apiUuid;
@@ -86,6 +112,8 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   valueChange($event) {
+    console.log(this.model);
+
     this.modelChange.emit(this.model);
   }
 
@@ -100,6 +128,7 @@ export class MockComponent implements EditTabViewComponent {
     const apiData = await this.getApiDetail(res.apiUuid);
     this.mockPrefix = this.apiMock.getMockPrefix(apiData);
     this.model.url = this.getMockUrl(res);
+    this.eoEditor?.formatCode();
     this.eoOnInit.emit(this.model);
   }
 

@@ -46,7 +46,7 @@ export class PagesComponent implements OnInit {
     // }
 
     // TODO: first use
-    // if (this.store.getAppHasInitial) return;
+    if (this.store.getAppHasInitial) return;
     const modal = this.modal.create({
       nzTitle: $localize`Hello，欢迎使用Postcat~`,
       nzWidth: '650px',

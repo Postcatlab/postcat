@@ -7,33 +7,31 @@
 <!--  </div>-->
 <!--</nz-result>-->
 <div class="mock">
-  <form nz-form nzLayout="inline" class="flex px-[20px] pt-[15px]">
+  <form nz-form nzLayout="inline" class="flex px-[20px] pt-[15px]" (ngSubmit)="saveInfo('name')">
     <nz-form-item class="flex">
       <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
-        <ng-container>
-          <input
-            nz-input
-            [(ngModel)]="model.name"
-            name="required"
-            required
-            eo-ng-input
-            autofocus
-            (ngModelChange)="valueChange($event)"
-            (blur)="saveInfo('name')"
-          />
-        </ng-container>
+        <input
+          nz-input
+          [(ngModel)]="model.name"
+          name="required"
+          required
+          eo-ng-input
+          autofocus
+          (ngModelChange)="valueChange($event)"
+          (blur)="saveInfo('name')"
+        />
       </nz-form-control>
       <div class="flex items-center">
         <ng-container *ngIf="!isEdit">
-          <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
+          <h4 nz-typography class="!mb-[0px]">{{ name }}</h4>
           <div
             nz-tooltip
             [nzTooltipTitle]="hoverStr"
-            [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            [nzTooltipTrigger]="isHover"
             nzTooltipOverlayClassName="mockPopover"
             (click)="editClick()"
           >
-            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
+            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="creatWayIsSystem">
               <eo-iconpark-icon name="edit"></eo-iconpark-icon>
             </button>
           </div>
@@ -41,11 +39,11 @@
           <div
             nz-tooltip
             [nzTooltipTitle]="hoverStr"
-            [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            [nzTooltipTrigger]="isHover"
             nzTooltipOverlayClassName="mockPopover"
             (click)="handleDeleteMockItem()"
           >
-            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="model?.createWay === 'system'">
+            <button eo-ng-button nzType="text" class="ml-[5px]" [disabled]="creatWayIsSystem">
               <eo-iconpark-icon name="delete"></eo-iconpark-icon>
             </button>
           </div>
@@ -65,15 +63,7 @@
     <nz-form-label i18n nzFor="response" class="w-100">URL </nz-form-label>
 
     <div>
-      <p
-        class="flex-1"
-        [nzContent]="model && model.url"
-        nz-typography
-        nzCopyable
-        nzEllipsis
-        [nzCopyText]="model && model.url"
-        [nzCopyIcons]="[copedIcon, copedIcon]"
-      >
+      <p class="flex-1" [nzContent]="url" nz-typography nzCopyable nzEllipsis [nzCopyText]="url" [nzCopyIcons]="[copedIcon, copedIcon]">
       </p>
       <ng-template #copedIcon>
         <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
@@ -84,11 +74,11 @@
           <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
           <nz-form-control>
             <eo-monaco-editor
-              [(code)]="model && model.response"
+              [(code)]="response"
               id="response"
               [autoType]="true"
               class="h-[200px] border-all"
-              [config]="{ readOnly: model?.createWay === 'system' }"
+              [config]="{ readOnly: creatWayIsSystem }"
               [eventList]="['type', 'format', 'copy', 'search', 'replace']"
               (codeChange)="valueChange($event)"
             >
@@ -100,7 +90,7 @@
           <div
             nz-tooltip
             [nzTooltipTitle]="hoverStr"
-            [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            [nzTooltipTrigger]="isHover"
             nzToolTipOverlayClassName="mockPopover"
             nzTooltipPlacement="topLeft"
           >

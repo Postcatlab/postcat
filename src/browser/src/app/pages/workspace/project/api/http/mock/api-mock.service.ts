@@ -113,7 +113,7 @@ export class ApiMockService {
     // });
     const apiData = await this.projectApi.get(apiUuid);
     const data = {
-      name: 'NEW MOCK',
+      name: 'Dynamic Mock',
       response: this.getMockResponseByAPI(apiData),
       apiUuid: apiUuid
     };
