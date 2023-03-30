@@ -273,7 +273,15 @@ export const copy = text => {
   return !!flag;
 };
 
-export const compareVersion = (v1, v2) => {
+/**
+ * Returns the difference between two versions
+ * If v1 is greater than v2, return greater than 0
+ *
+ * @param v1
+ * @param v2
+ * @returns difference
+ */
+export const compareVersion = (v1, v2): number => {
   const _v1 = v1.split('.');
   const _v2 = v2.split('.');
   const _r = parseInt(_v1[0] || 0, 10) - parseInt(_v2[0] || 0, 10);

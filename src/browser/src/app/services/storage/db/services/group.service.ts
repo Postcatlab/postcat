@@ -211,7 +211,6 @@ export class DbGroupService extends DbBaseService<Group> {
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
     const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });
     const { data: caseDataList } = await this.caseDataService.bulkRead({ projectUuid: params.projectUuid });
-    console.log(caseDataList);
     const genGroupTree = (groups: Group[], paranId) => {
       const groupFilters = groups.filter(n => n.parentId === paranId);
       const apiFilters = apiDataList.filter(n => n.groupId === paranId).map(val => genFileGroup(GroupModuleType.API, val));

@@ -214,10 +214,10 @@ export class ApiEffectService {
     this.getGroupList();
     return [data[0], err];
   }
-  async updateCase(model: ApiCase) {
+  async updateCase(model: Partial<ApiCase>) {
     // * Unsaved auth Info
     Reflect.deleteProperty(model, 'authInfo');
-    const [data, err] = await this.api.api_apiCaseUpdate(model);
+    const [data, err] = await this.api.api_apiCaseUpdate(model as ApiCase);
     if (err) {
       return [null, err];
     }

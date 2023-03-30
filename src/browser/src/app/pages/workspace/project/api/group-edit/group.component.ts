@@ -146,9 +146,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
   async changeGroupName() {
     const name = this.validateForm.value.name;
     const { id, ...rest } = this.model;
-    if (!this.checkForm()) {
-      return;
-    }
     if (name === this.model.name) {
       this.isEdit = false;
       return;
