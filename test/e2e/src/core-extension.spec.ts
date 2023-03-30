@@ -5,3 +5,10 @@ test('Export API', async ({ page }) => {
   await page.getByRole('button', { name: 'Export' }).click();
   await page.getByRole('button', { name: 'Confirm' }).click();
 });
+
+test('Sync Swagger URL', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('a:has-text("Setting")').click();
+  await page.getByRole('button', { name: 'Export' }).click();
+  await page.getByRole('button', { name: 'Confirm' }).click();
+});
