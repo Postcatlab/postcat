@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
-import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
+import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mocknew/api-mock.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -42,12 +41,6 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.initTable();
   }
-  async handleDeleteMockItem(item, index) {
-    await this.apiMock.deleteMock(item.id);
-    this.mockList.splice(index, 1)[0];
-    this.mockList = [...this.mockList];
-    this.message.success($localize`Delete Succeeded`);
-  }
 
   private initTable() {
     this.mockListColumns = [
@@ -66,37 +59,10 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         type: 'btnList',
         btns: [
           {
-            title: $localize`:@@MockPreview:Preview`,
-            icon: 'preview-open',
-            click: item => {
-              const modal = this.modal.create({
-                nzTitle: $localize`Preview Mock`,
-                nzWidth: '70%',
-                nzContent: ApiMockEditComponent,
-                nzComponentParams: {
-                  model: item.data,
-                  isEdit: false
-                }
-              });
-            }
-          },
-          {
             action: 'edit',
             showFn: item => item.data.createWay !== 'system',
             click: (item, index) => {
-              const modal = this.modal.create({
-                nzTitle: $localize`Edit Mock`,
-                nzWidth: '70%',
-                nzContent: ApiMockEditComponent,
-                nzComponentParams: {
-                  model: eoDeepCopy(item.data)
-                },
-                nzOnOk: async () => {
-                  console.log(modal.componentInstance.model, index);
-                  await this.addOrEditModal(modal.componentInstance.model, index);
-                  modal.destroy();
-                }
-              });
+              this.apiMock.toEdit(item.data);
             }
           },
           {
@@ -104,7 +70,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
             showFn: item => item.data.createWay !== 'system',
             confirm: true,
             confirmFn: (item, index) => {
-              this.handleDeleteMockItem(item.data, index);
+              this.apiMock.toDelete(item.data.id);
             }
           }
         ]

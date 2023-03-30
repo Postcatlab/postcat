@@ -31,29 +31,6 @@ export class MockService {
     });
     return data?.items || [];
   }
-  /**
-   * create mock
-   *
-   * @param mock
-   * @returns
-   */
-  async createMock(mock) {
-    return await this.api.api_mockCreate(mock);
-  }
-  /**
-   * update mock
-   *
-   * @param mock
-   * @returns
-   */
-  async updateMock(mockData) {
-    const [data, err] = await this.api.api_mockUpdate(mockData);
-    return data;
-  }
-  async deleteMock(id: number) {
-    const [data, err] = await this.api.api_mockDelete({ id });
-    return data;
-  }
   getMockResponseByAPI(apiData: ApiData) {
     switch (apiData.responseList?.[0].contentType) {
       case ApiBodyType.Raw:
