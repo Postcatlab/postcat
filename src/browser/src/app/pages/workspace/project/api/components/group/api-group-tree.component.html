@@ -22,7 +22,7 @@
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <a>
-        <li nz-menu-item i18n="@@AddAPI" (click)="(projectApi.toAdd)"> New API </li>
+        <li nz-menu-item i18n="@@AddAPI" (click)="projectApi.toAdd()"> New API </li>
       </a>
       <a>
         <li nz-menu-item (click)="groupService.toAdd()" i18n>New Group</li>

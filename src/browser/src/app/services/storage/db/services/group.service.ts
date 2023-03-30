@@ -64,14 +64,6 @@ export class DbGroupService extends DbBaseService<Group> {
 
   constructor() {
     super(dataSource.group);
-    this.baseService
-      .bulkRead({
-        parentId: 1,
-        type: GroupType.UserCreated
-      })
-      .then(res => {
-        console.log(res);
-      });
   }
 
   async bulkCreate(params = []) {
@@ -177,10 +169,6 @@ export class DbGroupService extends DbBaseService<Group> {
     const group = result.data;
     const groupAuthType = group.authInfo?.authType;
 
-    // if (groupAuthType === inheritAuth.name) {
-    //   group.authInfo.authType = inheritAuth.name;
-    //   group.authInfo.isInherited = group.depth > 1 ? 1 : 0;
-    // }
     // 递归获取父级分组鉴权信息
     if (group && (!groupAuthType || groupAuthType === INHERIT_AUTH_OPTION.name)) {
       group.authInfo = {
