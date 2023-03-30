@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { cloneDeep, isEmpty } from 'lodash-es';
-import { computed, observable, makeObservable, reaction } from 'mobx';
+import { computed, observable, makeObservable, reaction, action } from 'mobx';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { pcMerge } from 'pc/browser/src/app/shared/utils/pc-merge';
 import qs from 'qs';
@@ -92,10 +92,10 @@ export class ParamsImportComponent implements OnInit {
     }
   }
 
-  showModal(type): void {
+  @action showModal(type): void {
     this.isVisible = true;
   }
-  handleCancel(): void {
+  @action handleCancel(): void {
     this.isVisible = false;
   }
 

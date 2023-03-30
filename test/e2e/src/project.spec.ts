@@ -9,8 +9,4 @@ test.describe('Project Operate', () => {
     //Edit project
     //Delete project
   });
-  test('Use Env', async ({ page }) => {
-    //Host uri
-    //Global variable
-  });
 });

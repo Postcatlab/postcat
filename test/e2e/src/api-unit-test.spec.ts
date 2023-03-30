@@ -55,6 +55,11 @@ test.describe('Test API', () => {
     //Restore api test from history
     await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
     await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
+    const reRes = await testAndWaitForResponse(page);
+    expect(reRes.path).toEqual('/Web/Test/all/print');
+    expect(reRes.method).toEqual('POST');
+    expect(reRes.query.query[0]).toEqual('queryvalue');
+    expect(reRes.header.Header[0]).toEqual('headervalue');
 
     //Save API from test
     await page.getByRole('button', { name: 'Save as API' }).click();
@@ -98,7 +103,7 @@ test.describe('Test API', () => {
 
     //Asset test result
     const res = await testAndWaitForResponse(page);
-    expect(res.body).toEqual('age=18&name=Jack');
+    expect(res.body).toEqual('name=Jack\u0026age=18');
 
     expect(res.query.age[0]).toEqual('18');
     expect(res.query.age[0]).toEqual('18');
@@ -132,6 +137,12 @@ test.describe('Test API', () => {
     await page.locator('.eo-table-default-td > div > .ant-input').nth(1).fill('2');
     const res = await testAndWaitForResponse(page);
     expect(res.body).toEqual('test=1&test=2');
+
+    //restore from history
+    await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
+    await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
+    const res1 = await testAndWaitForResponse(page);
+    expect(res1.body).toEqual('test=1&test=2');
   });
 
   /**
@@ -145,6 +156,12 @@ test.describe('Test API', () => {
     await page.getByText('XML').click();
     await addTextToEditor(page, `{"test":1,"test1":2}`);
     const res = await testAndWaitForResponse(page);
+    expect(res.body).toEqual(`{"test":1,"test1":2}`);
+
+    //restore from history
+    await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
+    await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
+    const res1 = await testAndWaitForResponse(page);
     expect(res.body).toEqual(`{"test":1,"test1":2}`);
   });
 });

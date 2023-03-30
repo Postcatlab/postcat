@@ -16,4 +16,10 @@ test.describe('Extension Operate', () => {
   test('Sync URL From TEST', async ({ page }) => {});
   test('Import Swagger', async ({ page }) => {});
   test('APISpace Extension', async ({ page }) => {});
+  test('Export API', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('a:has-text("Setting")').click();
+    await page.getByRole('button', { name: 'Export' }).click();
+    await page.getByRole('button', { name: 'Confirm' }).click();
+  });
 });
