@@ -8,9 +8,10 @@ export default defineConfig({
     headless: true,
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
-    video: 'on-first-retry',
-    screenshot: 'only-on-failure'
+    trace: 'on-first-retry'
   },
+  retries: process.env.CI ? 2 : 0,
+  reporter: 'html',
   projects: [
     {
       name: 'chromium',
@@ -25,4 +26,9 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] }
     }
   ]
+  // webServer: {
+  //   command: 'yarn start:web',
+  //   url: 'http://localhost:4200',
+  //   reuseExistingServer: !process.env.CI
+  // }
 });

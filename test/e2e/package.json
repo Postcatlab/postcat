@@ -5,11 +5,11 @@
   "scripts": {
     "codegen": "playwright codegen localhost:4200",
     "test": "playwright test",
-    "test:watch": "playwright test --headed"
+    "test:watch": "playwright test --ui"
   },
   "devDependencies": {
-    "@playwright/test": "^1.31.2",
-    "playwright": "^1.31.1"
+    "@playwright/test": "^1.32.1",
+    "playwright": "^1.32.1"
   },
   "dependencies": {
     "ark-pkg": "0.5.4"

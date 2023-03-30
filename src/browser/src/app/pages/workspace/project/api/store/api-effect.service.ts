@@ -202,6 +202,13 @@ export class ApiEffectService {
     return [result, err];
   }
   //? Case
+  async detailCase(uuid) {
+    const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [uuid] });
+    if (err) {
+      return [null, `cant'find this case:${err}`];
+    }
+    return [res[0], err];
+  }
   async addCase(model: ApiCase) {
     // * Unsaved auth Info
     Reflect.deleteProperty(model, 'authInfo');
@@ -209,7 +216,7 @@ export class ApiEffectService {
       apiCaseList: [model]
     });
     if (err || !data?.[0]) {
-      return [null, `cant'find this api:${err}`];
+      return [null, `cant'find this case:${err}`];
     }
     this.getGroupList();
     return [data[0], err];

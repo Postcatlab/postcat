@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { toJS } from 'mobx';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase } from 'pc/browser/src/app/services/storage/db/models';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ApiEffectService } from '../../store/api-effect.service';
 
@@ -14,6 +15,8 @@ export class ApiCaseService {
   constructor(
     private router: Router,
     private effect: ApiEffectService,
+    private api: ApiService,
+    private feedback: EoNgFeedbackMessageService,
     private modalService: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
@@ -44,5 +47,21 @@ export class ApiCaseService {
       }
     });
   }
-  copy(id) {}
+  async copy(id) {
+    const [res, err] = await this.effect.detailCase(id);
+    if (err) {
+      this.feedback.error(`${$localize`Failed to copy`} ${err.message}`);
+      return;
+    }
+    res.name = `${res.name} Copy`;
+    const [addRes, addErr] = await this.effect.addCase(res);
+    if (addErr) {
+      this.feedback.error(`${$localize`Failed to copy`} ${addErr.message}`);
+      return;
+    }
+    if (addRes) {
+      this.feedback.success(`${$localize`Copied successfully`}`);
+      this.toEdit(addRes.apiCaseUuid);
+    }
+  }
 }

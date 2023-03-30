@@ -2,8 +2,7 @@ import { test, expect } from '@playwright/test';
 
 import { ifTipsExist, login } from './commom.util';
 test('User Opeate', async ({ page }) => {
-  await page.goto('/');
-
+  // await page.goto('/');
   //Login
   await login(page);
 

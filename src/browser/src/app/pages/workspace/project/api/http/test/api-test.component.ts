@@ -274,8 +274,12 @@ export class ApiTestComponent implements EditTabViewComponent {
               return viewModel;
             } else {
               //* Edit Case
-              const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [apiCaseUuid] });
-              return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(res[0]) };
+              const [res, err] = await this.effect.detailCase(apiCaseUuid);
+              if (err) {
+                this.feedback.success($localize`Can't find the Case`);
+                return;
+              }
+              return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(res) };
             }
           },
           save: async () => {
