@@ -1,5 +1,9 @@
 ::ng-deep {
   .model-article {
+    .ant-modal-footer {
+      text-align: center;
+    }
+
     h3 {
       margin-top: 20px;
       font-weight: bold;

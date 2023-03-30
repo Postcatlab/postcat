@@ -1,8 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NzNotificationRef, NzNotificationService } from 'ng-zorro-antd/notification';
-import { ElectronService } from 'pc/browser/src/app/core/services';
+import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
 import { NewbieGuideComponent } from 'pc/browser/src/app/pages/components/model-article/newbie-guide/newbie-guide.component';
+import { UpdateLogComponent } from 'pc/browser/src/app/pages/components/model-article/update-log/update-log.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter } from 'rxjs';
@@ -29,7 +30,8 @@ export class PagesComponent implements OnInit {
     private sidebar: SidebarService,
     private notification: NzNotificationService,
     private modal: ModalService,
-    private store: StoreService
+    private store: StoreService,
+    private web: WebService
   ) {}
   ngOnInit(): void {
     // * 通过 socketIO 告知 Node 端，建立 grpc 连接
@@ -44,21 +46,42 @@ export class PagesComponent implements OnInit {
     //   StorageUtil.set('has_show_cookie_tips', true);
     //   this.showCookiesTips();
     // }
+  }
 
+  ngAfterContentInit() {
     // TODO: first use
-    if (this.store.getAppHasInitial) return;
-    const modal = this.modal.create({
-      nzTitle: $localize`Hello，欢迎使用Postcat~`,
-      nzWidth: '650px',
-      nzContent: NewbieGuideComponent,
-      nzCancelText: $localize`我了解了`,
-      nzBodyStyle: {
-        height: '450px',
-        'overflow-y': 'scroll'
-      },
-      nzCentered: true,
-      nzClassName: 'model-article'
-    });
+    const result = this.web.getSystemInfo();
+    const version = result.shift().value;
+    if (!this.store.getAppHasInitial) {
+      this.modal.create({
+        nzTitle: $localize`Hello，欢迎使用Postcat~`,
+        nzWidth: '650px',
+        nzContent: NewbieGuideComponent,
+        nzCancelText: $localize`我了解了`,
+        nzBodyStyle: {
+          height: '450px',
+          'overflow-y': 'scroll'
+        },
+        nzCentered: true,
+        nzClassName: 'model-article'
+      });
+      StorageUtil.set('version', version);
+    } else {
+      if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
+      this.modal.create({
+        nzTitle: $localize`更新日志~`,
+        nzWidth: '650px',
+        nzContent: UpdateLogComponent,
+        nzCancelText: $localize`我了解了`,
+        nzBodyStyle: {
+          height: '450px',
+          'overflow-y': 'scroll'
+        },
+        nzCentered: true,
+        nzClassName: 'model-article'
+      });
+      StorageUtil.set('version', version);
+    }
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);
