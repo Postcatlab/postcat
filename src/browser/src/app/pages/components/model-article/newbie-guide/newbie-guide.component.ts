@@ -16,6 +16,10 @@ import newPeopleGuide from './newPeopleGuide.md';
 })
 export class NewbieGuideComponent {
   async ngAfterViewInit() {
-    document.getElementById('newbie-guide-markdown').innerHTML = newPeopleGuide;
+    console.log(newPeopleGuide);
+    const newPeopleGuideHtml = newPeopleGuide.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, match =>
+      match.replace(/<img /gi, '<img style="width: 100%" ')
+    );
+    document.getElementById('newbie-guide-markdown').innerHTML = newPeopleGuideHtml;
   }
 }

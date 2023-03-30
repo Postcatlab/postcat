@@ -6,8 +6,8 @@
 <!--    <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>-->
 <!--  </div>-->
 <!--</nz-result>-->
-<div class="p-[20px] mock">
-  <form nz-form nzLayout="inline" class="flex">
+<div class="mock">
+  <form nz-form nzLayout="inline" class="flex px-[20px] pt-[15px]">
     <nz-form-item class="flex">
       <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
         <ng-container>
@@ -23,7 +23,7 @@
           />
         </ng-container>
       </nz-form-control>
-      <div class="flex items-center w-20px">
+      <div class="flex items-center">
         <ng-container *ngIf="!isEdit">
           <h4 nz-typography class="!mb-[0px]">{{ model?.name }}</h4>
           <div
@@ -56,65 +56,67 @@
 
   <nz-divider></nz-divider>
 
-  <eo-ng-feedback-alert class="block my-[20px]" nzType="info" [nzMessage]="tipMessage" nzShowIcon></eo-ng-feedback-alert>
-  <ng-template #tipMessage>
-    <div i18n> Mock help you quickly simulate endpoints, generate custom resoonse data without actually setting up a back end. </div>
-  </ng-template>
-
-  <nz-form-label i18n nzFor="response" class="w-100">URL </nz-form-label>
-
-  <div>
-    <p
-      class="flex-1"
-      [nzContent]="model && model.url"
-      nz-typography
-      nzCopyable
-      nzEllipsis
-      [nzCopyText]="model && model.url"
-      [nzCopyIcons]="[copedIcon, copedIcon]"
-    >
-    </p>
-    <ng-template #copedIcon>
-      <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+  <div class="px-[20px]">
+    <eo-ng-feedback-alert class="block my-[20px]" nzType="info" [nzMessage]="tipMessage" nzShowIcon></eo-ng-feedback-alert>
+    <ng-template #tipMessage>
+      <div i18n> Mock help you quickly simulate endpoints, generate custom resoonse data without actually setting up a back end. </div>
     </ng-template>
 
-    <form>
-      <nz-form-item class="mt-20px block">
-        <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
-        <nz-form-control>
-          <eo-monaco-editor
-            [(code)]="model && model.response"
-            id="response"
-            [autoType]="true"
-            class="h-[200px] border-all"
-            [config]="{ readOnly: model?.createWay === 'system' }"
-            [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-            (codeChange)="valueChange($event)"
-          >
-          </eo-monaco-editor>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-label i18n nzFor="response" class="w-100">URL </nz-form-label>
 
-      <ng-container>
-        <div
-          nz-tooltip
-          [nzTooltipTitle]="hoverStr"
-          [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
-          nzToolTipOverlayClassName="mockPopover"
-          nzTooltipPlacement="topLeft"
-        >
-          <button
-            type="submit"
-            eo-ng-button
-            nzType="primary"
-            i18n
-            [disabled]="model?.createWay === 'system'"
-            (click)="saveInfo('response')"
+    <div>
+      <p
+        class="flex-1"
+        [nzContent]="model && model.url"
+        nz-typography
+        nzCopyable
+        nzEllipsis
+        [nzCopyText]="model && model.url"
+        [nzCopyIcons]="[copedIcon, copedIcon]"
+      >
+      </p>
+      <ng-template #copedIcon>
+        <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+      </ng-template>
+
+      <form>
+        <nz-form-item class="mt-20px block">
+          <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
+          <nz-form-control>
+            <eo-monaco-editor
+              [(code)]="model && model.response"
+              id="response"
+              [autoType]="true"
+              class="h-[200px] border-all"
+              [config]="{ readOnly: model?.createWay === 'system' }"
+              [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+              (codeChange)="valueChange($event)"
+            >
+            </eo-monaco-editor>
+          </nz-form-control>
+        </nz-form-item>
+
+        <ng-container>
+          <div
+            nz-tooltip
+            [nzTooltipTitle]="hoverStr"
+            [nzTooltipTrigger]="model?.createWay === 'system' ? 'hover' : null"
+            nzToolTipOverlayClassName="mockPopover"
+            nzTooltipPlacement="topLeft"
           >
-            Save
-          </button>
-        </div>
-      </ng-container>
-    </form>
+            <button
+              type="submit"
+              eo-ng-button
+              nzType="primary"
+              i18n
+              [disabled]="model?.createWay === 'system'"
+              (click)="saveInfo('response')"
+            >
+              Save
+            </button>
+          </div>
+        </ng-container>
+      </form>
+    </div>
   </div>
 </div>

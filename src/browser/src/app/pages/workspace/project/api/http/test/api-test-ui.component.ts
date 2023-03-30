@@ -191,7 +191,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
       const valueObj: ScriptType = { scriptType: scriptType, data: value };
       this.model.request.scriptList = [valueObj];
     }
-    console.log(this.model.request);
   }
 
   ngAfterViewInit() {

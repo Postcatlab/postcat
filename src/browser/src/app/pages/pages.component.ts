@@ -2,8 +2,9 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NzNotificationRef, NzNotificationService } from 'ng-zorro-antd/notification';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { NewbieGuideComponent } from 'pc/browser/src/app/pages/model-article/newbie-guide/newbie-guide.component';
+import { NewbieGuideComponent } from 'pc/browser/src/app/pages/components/model-article/newbie-guide/newbie-guide.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter } from 'rxjs';
 
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
@@ -27,7 +28,8 @@ export class PagesComponent implements OnInit {
     private router: Router,
     private sidebar: SidebarService,
     private notification: NzNotificationService,
-    private modal: ModalService
+    private modal: ModalService,
+    private store: StoreService
   ) {}
   ngOnInit(): void {
     // * 通过 socketIO 告知 Node 端，建立 grpc 连接
@@ -42,15 +44,20 @@ export class PagesComponent implements OnInit {
     //   StorageUtil.set('has_show_cookie_tips', true);
     //   this.showCookiesTips();
     // }
-  }
-  ngAfterViewInit() {
+
     // TODO: first use
-    if (true) return;
+    // if (this.store.getAppHasInitial) return;
     const modal = this.modal.create({
-      nzTitle: $localize`New Mock`,
+      nzTitle: $localize`Hello，欢迎使用Postcat~`,
       nzWidth: '650px',
       nzContent: NewbieGuideComponent,
-      nzCancelText: '我了解了'
+      nzCancelText: $localize`我了解了`,
+      nzBodyStyle: {
+        height: '450px',
+        'overflow-y': 'scroll'
+      },
+      nzCentered: true,
+      nzClassName: 'model-article'
     });
   }
   closeNotification() {

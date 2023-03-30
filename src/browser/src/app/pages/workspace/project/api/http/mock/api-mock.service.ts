@@ -135,7 +135,11 @@ export class ApiMockService {
     });
   }
   async toDelete(id: number) {
-    await this.deleteMock(id);
+    const data = await this.deleteMock(id);
+    if (!data) {
+      this.message.error($localize`Failed to delete`);
+      return;
+    }
     this.message.success($localize`Delete Succeeded`);
     this.apiEffect.deleteMockDetail();
   }
