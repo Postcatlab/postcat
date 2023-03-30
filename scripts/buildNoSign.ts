@@ -5,11 +5,10 @@ import minimist from 'minimist';
 import YAML from 'yaml';
 
 import pkgInfo from '../package.json';
-import { ELETRON_APP_CONFIG } from '../src/environment';
+import { ELECTRON_BUILD_CONFIG } from './build';
 
-import { execSync, exec, spawn } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { copyFileSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
+import { exec, spawn } from 'node:child_process';
+import { writeFileSync } from 'node:fs';
 import path, { resolve } from 'node:path';
 import { exit, platform } from 'node:process';
 
@@ -39,81 +38,10 @@ if (process.platform === 'win32') {
 }
 
 const config: Configuration = {
-  appId: '.postcat.io',
-  productName: 'Postcat',
-  asar: true,
-  directories: {
-    output: 'release/'
-  },
-  files: [
-    'out/app/**/*.js*',
-    'out/platform/**/*.js*',
-    'out/environment.js',
-    'out/shared/**/*.js*',
-    'src/browser/dist/**/*',
-    'out/browser/src/**/*.js*',
-    'out/node/test-server/**/*.js*',
-    'out/app/common/**/*',
-    '!**/*.ts'
-  ],
-  publish: [
-    'github',
-    {
-      provider: 'generic',
-      url: ELETRON_APP_CONFIG.BASE_DOWNLOAD_URL
-    }
-  ],
-  generateUpdatesFilesForAllChannels: true,
-  nsis: {
-    guid: 'Postcat',
-    oneClick: false,
-    allowElevation: true,
-    allowToChangeInstallationDirectory: true,
-    // for win - 将协议写入主机的脚本
-    include: 'scripts/urlProtoco.nsh'
-  },
-  protocols: [
-    // for macOS - 用于在主机注册指定协议
-    {
-      name: 'eoapi',
-      schemes: ['eoapi']
-    }
-  ],
+  ...ELECTRON_BUILD_CONFIG,
   win: {
     icon: 'src/app/common/images/logo.ico',
     target: ['nsis', 'portable']
-    // extraFiles: [
-    //   {
-    //     from: './build/Uninstall Postcat.exe',
-    //     to: '.'
-    //   }
-    // ]
-  },
-  portable: {
-    splashImage: 'src/app/common/images/postcat.bmp'
-  },
-  mac: {
-    icon: 'src/app/common/images/512x512.png',
-    hardenedRuntime: true,
-    category: 'public.app-category.productivity',
-    gatekeeperAssess: false,
-    entitlements: 'scripts/entitlements.mac.plist',
-    entitlementsInherit: 'scripts/entitlements.mac.plist',
-    // target: ['dmg', 'zip']
-    target: [
-      {
-        target: 'default',
-        arch: ['x64', 'arm64']
-      }
-    ]
-  },
-  dmg: {
-    sign: false
-  },
-  afterSign: 'scripts/notarize.js',
-  linux: {
-    icon: 'src/app/common/images/',
-    target: ['AppImage']
   }
 };
 

@@ -671,6 +671,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });

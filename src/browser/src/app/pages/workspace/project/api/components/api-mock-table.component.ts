@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mocknew/api-mock.service';
+import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';

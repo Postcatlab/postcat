@@ -201,7 +201,6 @@ export class ApiTestUiComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
 
   ngOnChanges(changes) {
-    console.log(changes.model?.currentValue?.request?.apiAttrInfo);
     if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
     console.log('api-test-ui ngOnChanges', changes.model.currentValue);
     this.initBasicForm();

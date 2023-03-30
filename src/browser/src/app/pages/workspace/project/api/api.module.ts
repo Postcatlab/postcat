@@ -12,7 +12,7 @@ import { ApiTabService, API_TABS } from 'pc/browser/src/app/pages/workspace/proj
 import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group-tree.directive';
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
-import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mocknew/api-mock.service';
+import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
