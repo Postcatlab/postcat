@@ -159,7 +159,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async addAPI(formData, ux) {
     const [result, err] = await this.effect.addAPI(formData);
     if (err) {
-      this.feedback.error($localize`Added Operation`);
+      this.feedback.error($localize`Added failed`);
       return;
     }
     this.feedback.success($localize`Added successfully`);
@@ -179,10 +179,10 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async editAPI(formData, ux) {
     const [result, err] = await this.apiEdit.editApi(formData);
     if (err) {
-      this.feedback.error($localize`Edited Operation`);
+      this.feedback.error($localize`Edited failed`);
       return;
     }
-    this.feedback.success($localize`Edit API successfully`);
+    this.feedback.success($localize`Edited API successfully`);
     this.afterSaved.emit(this.model);
   }
   emitChangeFun() {

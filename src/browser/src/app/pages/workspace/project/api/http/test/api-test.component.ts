@@ -43,7 +43,7 @@ interface TestInstance {
     ><ng-container *ngIf="currentPage === 'caseTest'">
       <form nz-form nzLayout="inline" class="flex px-[15px] py-[8px]" *ngIf="model?.request" (ngSubmit)="saveName()">
         <nz-form-item class="flex items-center h-[30px]">
-          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isNameEdit">
+          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input case name" *ngIf="isNameEdit">
             <input
               nz-input
               [(ngModel)]="name"
@@ -240,11 +240,11 @@ export class ApiTestComponent implements EditTabViewComponent {
         break;
       }
       case TestPage.Case: {
+        const apiCaseUuid = this.route.snapshot.queryParams.uuid;
         result = {
           saveTips: $localize`Save`,
           getModel: async () => {
             const apiUuid = this.route.snapshot.queryParams.apiUuid;
-            const apiCaseUuid = this.route.snapshot.queryParams.uuid;
             let viewModel: testViewModel;
             if (!apiCaseUuid) {
               //* Add Case
@@ -262,11 +262,11 @@ export class ApiTestComponent implements EditTabViewComponent {
 
               const [res, err] = await this.effect.addCase(caseData);
               if (err) {
-                this.feedback.error($localize`New Case Failed`);
+                this.feedback.error($localize`Failed to create Case`);
                 return;
               }
               //Add successfully
-              this.feedback.success($localize`New Case successfully`);
+              this.feedback.success($localize`Created Case successfully`);
               this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
               });
@@ -285,7 +285,7 @@ export class ApiTestComponent implements EditTabViewComponent {
               return;
             }
             this.afterSaved.emit(this.model);
-            this.feedback.success($localize`Edit Case successfully`);
+            this.feedback.success($localize`Edited Case successfully`);
           },
           saveName: async () => {
             if (!this.name) return;
@@ -297,28 +297,27 @@ export class ApiTestComponent implements EditTabViewComponent {
 
             const [data, err] = await this.effect.updateCase({
               name: this.name,
-              //@ts-ignore
-              apiCaseUuid: this.model.request.apiCaseUuid
+              apiCaseUuid: apiCaseUuid
             });
 
             if (err) {
-              this.feedback.error($localize`Edit Case Name Failed`);
+              this.feedback.error($localize`Edited Case Name Failed`);
+              this.isNameEdit = false;
               return;
             }
 
-            this.feedback.success($localize`Edit Case Name successfully`);
+            this.feedback.success($localize`Edited Case Name successfully`);
             this.model.request.name = this.name;
             this.afterSaved.emit(this.model);
             this.isNameEdit = false;
           },
           delete: async () => {
-            //@ts-ignore
-            const [data, err] = await this.effect.deleteCase(this.model.request.apiCaseUuid);
+            const [data, err] = await this.effect.deleteCase(apiCaseUuid);
             if (err) {
               this.feedback.error($localize`Delete failed`);
               return;
             }
-            this.feedback.success($localize`Deleted successfully`);
+            this.feedback.success($localize`Successfully deleted`);
           }
         };
         break;

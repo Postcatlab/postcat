@@ -119,10 +119,10 @@ export class WorkspaceSettingComponent {
           workSpaceUuids: [wid]
         });
         if (err) {
-          this.feedback.error($localize`Delete failed !`);
+          this.feedback.error($localize`Delete failed`);
           return;
         }
-        this.feedback.success($localize`Delete Succeeded`);
+        this.feedback.success($localize`Successfully deleted`);
         await this.effect.updateWorkspaceList();
         await this.effect.switchWorkspace(this.store.getLocalWorkspace.workSpaceUuid);
       }

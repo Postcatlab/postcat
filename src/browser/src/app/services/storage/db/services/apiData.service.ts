@@ -32,7 +32,7 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     });
     const result = await this.baseService.bulkCreate(items);
     const systemMocks = result.data?.map(n => ({
-      name: $localize`默认 Mock`,
+      name: $localize`Dynamic Mock`,
       description: '',
       apiUuid: n.apiUuid,
       createWay: MockCreateWay.System,

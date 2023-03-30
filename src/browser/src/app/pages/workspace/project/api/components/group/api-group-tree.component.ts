@@ -102,11 +102,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
     this.reactions.push(
       autorun(() => {
+        // * Get previous expandKeys before apiGroupComponent init
+        this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
+
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
+
+        //Wait for the tree component to be rendered
         waitNextTick().then(() => {
+          //Reset expandKeys
+          this.expandKeys = this.getExpandKeys();
+
           //* Set expand/selecte key
-          //Wait for the tree component to be rendered
-          this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList];
           this.initSelectKeys();
         });
       })
@@ -191,7 +197,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       return this.expandKeys;
     }
     const groupId = this.getCurrentGroupIDByModelID();
-    if (!groupId) return [];
+    if (!groupId) return this.expandKeys;
+    //Get tree node by group id
     return [...new Set([...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])])];
   }
   /**
@@ -228,6 +235,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
     const origin = event.node.origin;
+
     //* If the group is selected, click again to expand the group
     if (!event.node.isLeaf && this.nzSelectedKeys.includes(event.node.key)) {
       event.node.isExpanded = true;

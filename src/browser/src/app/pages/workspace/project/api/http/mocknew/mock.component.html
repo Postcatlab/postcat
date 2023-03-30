@@ -9,7 +9,7 @@
 <div class="p-[20px] mock">
   <form nz-form nzLayout="inline" class="flex">
     <nz-form-item class="flex">
-      <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
+      <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mock name" *ngIf="isEdit" class="flex">
         <ng-container>
           <input
             nz-input
@@ -58,10 +58,10 @@
 
   <eo-ng-feedback-alert class="block my-[20px]" nzType="info" [nzMessage]="tipMessage" nzShowIcon></eo-ng-feedback-alert>
   <ng-template #tipMessage>
-    <div i18n> Mock help you quickly simulate endpoints, generate custom response data without actually setting up a back end. </div>
+    <div i18n> Mock help you quickly simulate API, generate custom response data without actually setting up a back end. </div>
   </ng-template>
 
-  <nz-form-label i18n nzFor="response" class="w-100">URL </nz-form-label>
+  <nz-form-label nzFor="response" class="w-100">URL</nz-form-label>
 
   <div>
     <p
@@ -80,7 +80,7 @@
 
     <form>
       <nz-form-item class="block mt-20px">
-        <nz-form-label i18n nzFor="response" class="w-100">Response </nz-form-label>
+        <nz-form-label i18n nzFor="response" class="w-100">Response</nz-form-label>
         <nz-form-control>
           <eo-monaco-editor
             [(code)]="model && model.response"

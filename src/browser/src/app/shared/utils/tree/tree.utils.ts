@@ -107,7 +107,7 @@ export const flatTree = trees => {
   return arr;
 };
 
-export const getExpandGroupByKey: (component: NzTreeComponent | NzTreeSelectComponent, key) => string[] = (component, key) => {
+export const getExpandGroupByKey: (tree: NzTreeComponent | NzTreeSelectComponent, key) => string[] = (component, key) => {
   if (!component) {
     return [];
   }

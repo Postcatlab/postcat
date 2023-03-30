@@ -3,7 +3,7 @@
     <div *ngFor="let item of operationArr" class="p-[10px]">
       <button eo-ng-button nzType="primary" class="w-[200px]" (click)="typeChange(item.type)">
         <eo-iconpark-icon name="add-child"></eo-iconpark-icon>
-        <span class="ml-[10px]" i18n>{{ item.title }}</span>
+        <span class="ml-[10px]">{{ item.title }}</span>
       </button>
     </div>
   </div>

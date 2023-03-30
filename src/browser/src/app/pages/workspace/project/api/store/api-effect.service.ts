@@ -194,7 +194,7 @@ export class ApiEffectService {
   async deleteAPI(uuid) {
     const [result, err] = await this.api.api_apiDataDelete({ apiUuids: [uuid] });
     if (err) {
-      this.feedback.error($localize`Delete API failed`);
+      this.feedback.error($localize`Failed to delete API`);
       return [null, err];
     }
     this.feedback.success($localize`Successfully deleted`);

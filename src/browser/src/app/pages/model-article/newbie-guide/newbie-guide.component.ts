@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 // @ts-ignore
-import newPeopleGuide from './newPeopleGuide.md';
+// import newPeopleGuide from './newPeopleGuide.md';
 
 @Component({
   standalone: true,
@@ -15,7 +15,7 @@ import newPeopleGuide from './newPeopleGuide.md';
   styleUrls: ['./newbie-guide.component.scss']
 })
 export class NewbieGuideComponent {
-  async ngAfterViewInit() {
-    document.getElementById('newbie-guide-markdown').innerHTML = newPeopleGuide;
-  }
+  // async ngAfterViewInit() {
+  // document.getElementById('newbie-guide-markdown').innerHTML = newPeopleGuide;
+  // }
 }

@@ -36,6 +36,7 @@
 </header>
 <!-- Custom Group -->
 <div class="group-tree">
+  {{ expandKeys | json }}
   <eo-ng-tree-default
     [nzData]="apiGroupTree"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -43,7 +44,7 @@
     [nzSearchValue]="searchValue"
     [nzSearchFunc]="searchFunc"
     [nzHideUnMatched]="true"
-    [(nzExpandedKeys)]="expandKeys"
+    [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)"
     [nzDraggable]="isEdit"
     nzBlockNode

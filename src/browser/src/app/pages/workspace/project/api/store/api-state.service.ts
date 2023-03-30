@@ -15,8 +15,6 @@ export class ApiStoreService {
    */
   @observable private groupList: Group[] = [];
 
-  @observable private expandList: Array<string | number> = [];
-
   // ? history
   @observable private testHistory = [];
 
@@ -43,9 +41,6 @@ export class ApiStoreService {
   }
   @computed get getRootGroup() {
     return this.rootGroup;
-  }
-  @computed get getExpandList() {
-    return this.expandList;
   }
   @computed get getGroupList() {
     return this.groupList;
