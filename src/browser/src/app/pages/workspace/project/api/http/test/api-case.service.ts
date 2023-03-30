@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiTabsUniqueName, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { toJS } from 'mobx';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiCase } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -17,17 +19,17 @@ export class ApiCaseService {
   ) {}
   toDetail(model: ApiCase) {
     // * jump to api detail page
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
       queryParams: { uuid: model.apiCaseUuid, apiUuid: model.apiUuid }
     });
   }
   toAdd(apiUuid) {
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
       queryParams: { apiUuid, pageID: Date.now() }
     });
   }
   toEdit(id) {
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
       queryParams: { uuid: id }
     });
   }

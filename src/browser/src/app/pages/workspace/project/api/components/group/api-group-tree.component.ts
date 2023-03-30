@@ -2,16 +2,19 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { action, autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
-import {
-  ApiTabsUniqueName,
-  BASIC_TABS_INFO,
-  requestMethodMap,
-  TabsConfig
-} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
-import { Group, GroupModelIDByModule, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
+import {
+  Group,
+  GroupModelIDByModule,
+  GroupModuleType,
+  GroupType,
+  MockCreateWay,
+  ViewGroup
+} from 'pc/browser/src/app/services/storage/db/models';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 import { findTreeNode, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
@@ -62,6 +65,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       click: title => this.projectApi.importProject('sync', title)
     }
   ];
+  groupModuleByUnqueName = {
+    [PageUniqueName.GroupEdit]: this.groupModuleName,
+    [PageUniqueName.HttpCase]: GroupModuleType.Case,
+    [PageUniqueName.HttpMock]: GroupModuleType.Mock,
+    [PageUniqueName.EnvEdit]: '',
+    [PageUniqueName.HttpTest]: GroupModuleType.API,
+    [PageUniqueName.HttpDetail]: GroupModuleType.API,
+    [PageUniqueName.HttpEdit]: GroupModuleType.API
+  };
   get TYPE_GEROUP_MODULE(): typeof GroupModuleType {
     return GroupModuleType;
   }
@@ -90,11 +102,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
     this.reactions.push(
       autorun(() => {
+        // * Get previous expandKeys before apiGroupComponent init
+        this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
+
         this.apiGroupTree = this.genComponentTree(this.store.getGroupList);
+
+        //Wait for the tree component to be rendered
         waitNextTick().then(() => {
+          //Reset expandKeys
+          this.expandKeys = this.getExpandKeys();
+
           //* Set expand/selecte key
-          //Wait for the tree component to be rendered
-          this.expandKeys = [...this.getExpandKeys(), ...this.store.getExpandList].map(Number);
           this.initSelectKeys();
         });
       })
@@ -108,13 +126,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       )
     );
   }
+  private getCurrentGroupIDByModelID() {
+    const { uuid } = this.route.snapshot.queryParams;
+    if (!uuid) return;
+    const currentModule =
+      this.groupModuleByUnqueName[this.tabsConfig.BASIC_TABS.find(val => this.router.url.includes(val.pathname)).uniqueName];
+    return findTreeNode(this.apiGroupTree, val => val.module === currentModule && val.modelID === (Number(uuid) || uuid))?.id;
+  }
   initSelectKeys() {
     //Such as Env group tree
-    const isOtherPage = [this.tabsConfig.pathByName[ApiTabsUniqueName.EnvEdit]].some(path => this.router.url.includes(path));
-    const { uuid } = this.route.snapshot.queryParams;
-    const groupId = findTreeNode(this.apiGroupTree, val => val.modelID === (Number(uuid) || uuid))?.id;
+    const groupId = this.getCurrentGroupIDByModelID();
     if (!groupId) return;
-    this.nzSelectedKeys = !isOtherPage ? [groupId] : [];
+    this.nzSelectedKeys = [groupId];
   }
   /**
    * Parse group data from database to view tree
@@ -170,13 +193,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     ];
   }
   getExpandKeys() {
-    this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
     if (!this.route.snapshot.queryParams.uuid) {
       return this.expandKeys;
     }
-    const uuid = this.route.snapshot.queryParams.uuid;
-    const groupId = findTreeNode(this.apiGroupTree, val => val?.modelID === (Number(uuid) || uuid))?.id;
-    return [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])];
+    const groupId = this.getCurrentGroupIDByModelID();
+    if (!groupId) return this.expandKeys;
+    //Get tree node by group id
+    return [...new Set([...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])])];
   }
   /**
    * Drag & drop tree item.
@@ -212,6 +235,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
     const origin = event.node.origin;
+
     //* If the group is selected, click again to expand the group
     if (!event.node.isLeaf && this.nzSelectedKeys.includes(event.node.key)) {
       event.node.isExpanded = true;
@@ -264,6 +288,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       [GroupModuleType.Mock]: [
         {
           title: $localize`Edit`,
+          showFn: ({ relationInfo: item }) => {
+            return item.createWay === MockCreateWay.Custom;
+          },
           click: ({ relationInfo: item }) => this.mockService.toEdit(item.id)
         },
         {
@@ -272,6 +299,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         },
         {
           title: $localize`:@Delete:Delete`,
+          showFn: ({ relationInfo: item }) => {
+            return item.createWay === MockCreateWay.Custom;
+          },
           click: ({ relationInfo: item }) => this.mockService.toDelete(item.id)
         }
       ],

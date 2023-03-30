@@ -56,7 +56,7 @@ export const setupVersions = (db: DataSourceInstance) => {
    * Add projectSetting
    */
   db.version(5).stores({
-    projectSyncSetting: '++id, &uuid, pluginId, pluginSettingJson, projectUuid, workSpaceUuid'
+    projectSyncSetting: '++id, projectUuid'
   });
 
   /**
@@ -64,6 +64,12 @@ export const setupVersions = (db: DataSourceInstance) => {
    * Add apiCase
    */
   db.version(6).stores({
-    apiCase: '++id, apiUuid, projectUuid, workSpaceUuid, name'
+    workspace: '++id, &uuid',
+    project: '++id, &uuid, workSpaceUuid',
+    group: '++id,projectUuid',
+    environment: '++id, projectUuid',
+    apiData: '++id, &uuid, projectUuid ',
+    mock: '++id, projectUuid,apiUuid',
+    apiCase: '++id,projectUuid,apiUuid '
   });
 };

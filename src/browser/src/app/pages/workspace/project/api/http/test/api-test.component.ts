@@ -1,12 +1,13 @@
 import { Component, Output, EventEmitter, Input, TemplateRef, ViewChild, HostListener, Inject } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { isEqual } from 'lodash-es';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import {
   ApiBodyType,
   ApiParamsType,
-  ApiTabsUniqueName,
   BASIC_TABS_INFO,
   RequestMethod,
   TabsConfig
@@ -17,6 +18,7 @@ import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/p
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
+import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
@@ -32,20 +34,54 @@ interface TestInstance {
   saveTips: string;
   getModel: () => Promise<testViewModel>;
   save: () => void;
+  saveName?: () => void;
+  delete?: () => {};
 }
 @Component({
   selector: 'eo-api-http-test',
-  template: `<eo-api-http-test-ui
+  template: `<div class="test-page-container test-page-{{ currentPage }}"
+    ><ng-container *ngIf="currentPage === 'caseTest'">
+      <form nz-form nzLayout="inline" class="flex px-[15px] py-[8px]" *ngIf="model?.request" (ngSubmit)="saveName()">
+        <nz-form-item class="flex items-center h-[30px]">
+          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input case name" *ngIf="isNameEdit">
+            <input
+              nz-input
+              [(ngModel)]="name"
+              name="required"
+              required
+              nzSize="small"
+              eo-ng-input
+              autofocus
+              (ngModelChange)="valueChange()"
+              (blur)="saveName()"
+            />
+          </nz-form-control>
+          <ng-container *ngIf="!isNameEdit">
+            <h5 nz-typography class="!mb-[0px]">{{ this.model.request.name }}</h5>
+            <button nzSize="small" (click)="this.isNameEdit = !this.isNameEdit" eo-ng-button nzType="text" class="ml-[5px]">
+              <eo-iconpark-icon size="12px" name="edit"></eo-iconpark-icon>
+            </button>
+            <button nzSize="small" (click)="delete()" eo-ng-button nzType="text" class="ml-[5px]">
+              <eo-iconpark-icon size="12px" name="delete"></eo-iconpark-icon>
+            </button>
+          </ng-container>
+        </nz-form-item>
+      </form>
+      <nz-divider class="my-0"></nz-divider>
+    </ng-container>
+    <eo-api-http-test-ui
       #testUIComponent
       [model]="model"
-      (modelChange)="uiModelChanges()"
+      (modelChange)="valueChange()"
       [extraButtonTmp]="saveButtonTmp"
     ></eo-api-http-test-ui>
     <ng-template #saveButtonTmp>
       <button type="button" eo-ng-button nzType="default" (click)="save($event)" trace traceID="save_api_document_from_test">
         {{ instance.saveTips }}
       </button>
-    </ng-template>`
+    </ng-template></div
+  >`,
+  styleUrls: ['./api-test.component.scss']
 })
 export class ApiTestComponent implements EditTabViewComponent {
   @Input() model: testViewModel;
@@ -56,8 +92,11 @@ export class ApiTestComponent implements EditTabViewComponent {
   @Input() initialModel: testViewModel;
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
+  @Output() readonly afterSaved = new EventEmitter<testViewModel>();
   @ViewChild('saveButtonTmp', { read: TemplateRef, static: true }) saveButtonTmp: TemplateRef<HTMLDivElement>;
   @ViewChild('testUIComponent') testUIComponent: ApiTestUiComponent;
+  isNameEdit = false;
+  name: string;
   /**
    * Page is used to switch between different test pages
    */
@@ -76,10 +115,11 @@ export class ApiTestComponent implements EditTabViewComponent {
     private effect: ApiEffectService,
     private projectApi: ProjectApiService,
     private feedback: EoNgFeedbackMessageService,
+    private api: ApiService,
     private apiTestUtil: ApiTestUtilService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
-  uiModelChanges() {
+  valueChange() {
     this.modelChange.emit(this.model);
   }
   isFormChange(): boolean {
@@ -109,6 +149,12 @@ export class ApiTestComponent implements EditTabViewComponent {
       return;
     }
     this.instance.save();
+  }
+  delete() {
+    this.instance.delete();
+  }
+  saveName() {
+    this.instance.saveName();
   }
   private getCurrentInstance(currentPage): TestInstance {
     let result;
@@ -186,7 +232,7 @@ export class ApiTestComponent implements EditTabViewComponent {
           },
           save: () => {
             StorageUtil.set('test_data_will_be_save', this.model.request, 2000);
-            this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+            this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
               queryParams: { apiUuid: this.model.request.apiUuid, pageID: this.route.snapshot.queryParams.pageID }
             });
           }
@@ -194,11 +240,11 @@ export class ApiTestComponent implements EditTabViewComponent {
         break;
       }
       case TestPage.Case: {
+        const apiCaseUuid = this.route.snapshot.queryParams.uuid;
         result = {
           saveTips: $localize`Save`,
           getModel: async () => {
             const apiUuid = this.route.snapshot.queryParams.apiUuid;
-            const apiCaseUuid = this.route.snapshot.queryParams.uuid;
             let viewModel: testViewModel;
             if (!apiCaseUuid) {
               //* Add Case
@@ -216,19 +262,62 @@ export class ApiTestComponent implements EditTabViewComponent {
 
               const [res, err] = await this.effect.addCase(caseData);
               if (err) {
-                this.feedback.error($localize`New Case Failed`);
+                this.feedback.error($localize`Failed to create Case`);
                 return;
               }
               //Add successfully
-              this.feedback.success($localize`New Case successfully`);
-              this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase]], {
+              this.feedback.success($localize`Created Case successfully`);
+              this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
               });
 
               return viewModel;
             } else {
               //* Edit Case
+              const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [apiCaseUuid] });
+              return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(res[0]) };
             }
+          },
+          save: async () => {
+            const [data, err] = await this.effect.updateCase(this.model.request);
+            if (err) {
+              this.feedback.error($localize`Edit Case Failed`);
+              return;
+            }
+            this.afterSaved.emit(this.model);
+            this.feedback.success($localize`Edited Case successfully`);
+          },
+          saveName: async () => {
+            if (!this.name) return;
+            //No change
+            if (this.name === this.model.request.name) {
+              this.isNameEdit = false;
+              return;
+            }
+
+            const [data, err] = await this.effect.updateCase({
+              name: this.name,
+              apiCaseUuid: apiCaseUuid
+            });
+
+            if (err) {
+              this.feedback.error($localize`Edited Case Name Failed`);
+              this.isNameEdit = false;
+              return;
+            }
+
+            this.feedback.success($localize`Edited Case Name successfully`);
+            this.model.request.name = this.name;
+            this.afterSaved.emit(this.model);
+            this.isNameEdit = false;
+          },
+          delete: async () => {
+            const [data, err] = await this.effect.deleteCase(apiCaseUuid);
+            if (err) {
+              this.feedback.error($localize`Delete failed`);
+              return;
+            }
+            this.feedback.success($localize`Successfully deleted`);
           }
         };
         break;
@@ -253,11 +342,12 @@ export class ApiTestComponent implements EditTabViewComponent {
     result.request.requestParams.headerParams = contentResult.headers;
     result.userSelectedContentType = contentResult.contentType;
     this.model = result as testViewModel;
+    this.name = this.model.request.name;
     this.eoOnInit.emit(this.model);
   }
   private getCurrentPage(): TestPage {
     const uuid = this.route.snapshot.queryParams.uuid;
-    if (this.router.url.includes(this.tabsConfig.pathByName[ApiTabsUniqueName.HttpCase])) return TestPage.Case;
+    if (this.router.url.includes(this.tabsConfig.pathByName[PageUniqueName.HttpCase])) return TestPage.Case;
 
     if (!uuid) return TestPage.Blank;
     if (uuid?.includes('history_')) return TestPage.History;
@@ -269,7 +359,7 @@ export class ApiTestComponent implements EditTabViewComponent {
       response: this.model.testResult
     });
     StorageUtil.set('api_data_will_be_save', apiData, 2000);
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpEdit]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)
       }

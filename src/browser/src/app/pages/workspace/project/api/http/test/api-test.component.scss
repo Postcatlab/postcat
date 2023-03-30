@@ -1,0 +1,10 @@
+.test-page-container {
+  height: 100%;
+}
+
+.test-page-caseTest {
+  eo-api-http-test-ui {
+    display: block;
+    height: calc(100% - 47px);
+  }
+}

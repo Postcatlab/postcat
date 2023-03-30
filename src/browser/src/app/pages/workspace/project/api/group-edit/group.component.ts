@@ -76,7 +76,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     };
     if (params.id) {
       await this.effect.updateGroup(params);
-      this.feedback.success($localize`Edit Group Info successfully`);
+      this.feedback.success($localize`Edited Group Info successfully`);
       this.isSaving = false;
       this.afterSaved.emit(this.model);
       this.trace.report('save_auth_success');
@@ -146,9 +146,6 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
   async changeGroupName() {
     const name = this.validateForm.value.name;
     const { id, ...rest } = this.model;
-    if (!this.checkForm()) {
-      return;
-    }
     if (name === this.model.name) {
       this.isEdit = false;
       return;
@@ -156,13 +153,13 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     if (this.model.id) {
       await this.effect.updateGroup({ name, id });
       this.model.name = name;
-      this.feedback.success($localize`Edit Group Name successfully`);
+      this.feedback.success($localize`Edited Group Name successfully`);
     } else {
       const [data] = await this.effect.createGroup([{ ...this.model, name }]);
       if (data) {
         this.model = data;
       }
-      this.feedback.success($localize`Create Group successfully`);
+      this.feedback.success($localize`Created Group successfully`);
     }
 
     this.isEdit = false;

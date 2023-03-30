@@ -1,4 +1,4 @@
-<form nz-form nzLayout="inline" [formGroup]="validateForm" (ngSubmit)="changeGroupName()">
+<form class="px-[20px] pt-[15px]" nz-form nzLayout="inline" [formGroup]="validateForm" (ngSubmit)="changeGroupName()">
   <nz-form-item>
     <nz-form-control nzErrorTip="Please input groupName" [nzValidateStatus]="validateForm.controls['name']">
       <div class="flex items-center">
@@ -26,7 +26,8 @@
   </nz-form-item>
 </form>
 
-<eo-ng-tabset class="overflow-auto">
+<nz-divider></nz-divider>
+<eo-ng-tabset class="block px-[20px] overflow-auto">
   <eo-ng-tab i18n-nzTitle nzTitle="Authorization">
     <div class="text-tips mt-[15px] mb-[13px]" i18n>
       Authorzation will take effect for each API under the group during testing, and you can also override the authorization in the API.

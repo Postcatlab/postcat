@@ -42,11 +42,11 @@ export class ApiService {
     return this.store.isLocal ? this.local.api_apiCaseUpdate<T>(params) : this.remote.api_apiCaseUpdate<T>(params);
   }
 
-  api_apiCaseDetail<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiCaseDetail<T = any>(params: { apiCaseUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
     return this.store.isLocal ? this.local.api_apiCaseDetail<T>(params) : this.remote.api_apiCaseDetail<T>(params);
   }
 
-  api_apiCaseDelete<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any }) {
+  api_apiCaseDelete<T = any>(params: { apiCaseUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
     return this.store.isLocal ? this.local.api_apiCaseDelete<T>(params) : this.remote.api_apiCaseDelete<T>(params);
   }
 

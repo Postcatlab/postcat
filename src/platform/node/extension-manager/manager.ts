@@ -350,19 +350,6 @@ export class ModuleManager {
     }
   }
 
-  async getExtTabs(extName: string): Promise<SidebarView[]> {
-    try {
-      const features = this.getExtFeatures(extName);
-      const list = features.extensionTabView.map(item => {
-        return this.getExtPageInfo(extName, item, `${extName}-extensionTabView-${item.name}`);
-      });
-      const result = await Promise.all(list);
-      return result;
-    } catch (error) {
-      return [];
-    }
-  }
-
   async getSidebarView(extName: string): Promise<SidebarView> {
     try {
       const feature = this.getExtFeatures(extName);

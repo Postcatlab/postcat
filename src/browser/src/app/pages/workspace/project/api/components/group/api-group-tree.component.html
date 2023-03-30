@@ -36,6 +36,7 @@
 </header>
 <!-- Custom Group -->
 <div class="group-tree">
+  <!-- {{ expandKeys | json }} -->
   <eo-ng-tree-default
     [nzData]="apiGroupTree"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -43,7 +44,7 @@
     [nzSearchValue]="searchValue"
     [nzSearchFunc]="searchFunc"
     [nzHideUnMatched]="true"
-    [(nzExpandedKeys)]="expandKeys"
+    [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)"
     [nzDraggable]="isEdit"
     nzBlockNode
@@ -87,9 +88,11 @@
             </button>
             <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item *ngFor="let item of operateByModule[origin.module || groupModuleName]" (click)="item.click(origin)">
-                  {{ item.title }}
-                </li>
+                <ng-container *ngFor="let item of operateByModule[origin.module || groupModuleName]">
+                  <li nz-menu-item *ngIf="!item.showFn||item.showFn?.(origin)" (click)="item.click(origin)">
+                    {{ item.title }}
+                  </li>
+                </ng-container>
               </ul>
             </eo-ng-dropdown-menu>
           </span>

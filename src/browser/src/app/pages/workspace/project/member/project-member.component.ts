@@ -163,7 +163,7 @@ export class ProjectMemberComponent implements OnInit {
         return;
       }
       this.trace.report('project_add_member_success');
-      this.feedback.success($localize`Add member successfully`);
+      this.feedback.success($localize`Added member successfully`);
 
       // * 关闭弹窗
       this.isInvateModalVisible = false;

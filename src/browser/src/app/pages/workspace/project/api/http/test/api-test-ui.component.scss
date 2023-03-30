@@ -24,14 +24,14 @@ eo-api-test-body {
   overflow-y: auto;
 }
 
-.test_wrap {
+.test-wrap {
   height: 100%;
 
-  .scroll_container {
+  .scroll-container {
     overflow-y: auto;
   }
 
-  .bottom_container {
+  .bottom-container {
     height: 100%;
   }
 }
@@ -92,7 +92,7 @@ div.ant-typography {
     @apply h-full overflow-hidden;
   }
 
-  .top_container {
+  .stop-container {
     height: 100%;
 
     > form {

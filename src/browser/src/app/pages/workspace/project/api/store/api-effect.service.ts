@@ -177,7 +177,9 @@ export class ApiEffectService {
       return [null, `cant'find this api:${err}`];
     }
     //Handle Auth
-    result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+    if (result[0]?.authInfo?.authInfo) {
+      result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+    }
 
     return [result[0], err];
   }
@@ -192,7 +194,7 @@ export class ApiEffectService {
   async deleteAPI(uuid) {
     const [result, err] = await this.api.api_apiDataDelete({ apiUuids: [uuid] });
     if (err) {
-      this.feedback.error($localize`Delete API failed`);
+      this.feedback.error($localize`Failed to delete API`);
       return [null, err];
     }
     this.feedback.success($localize`Successfully deleted`);
@@ -212,10 +214,10 @@ export class ApiEffectService {
     this.getGroupList();
     return [data[0], err];
   }
-  async updateCase(model: ApiCase) {
+  async updateCase(model: Partial<ApiCase>) {
     // * Unsaved auth Info
     Reflect.deleteProperty(model, 'authInfo');
-    const [data, err] = await this.api.api_apiCaseUpdate(model);
+    const [data, err] = await this.api.api_apiCaseUpdate(model as ApiCase);
     if (err) {
       return [null, err];
     }
@@ -224,7 +226,7 @@ export class ApiEffectService {
   }
 
   async deleteCase(apiCaseUuid) {
-    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuid });
+    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuids: [apiCaseUuid] });
     if (err) {
       return [null, err];
     }

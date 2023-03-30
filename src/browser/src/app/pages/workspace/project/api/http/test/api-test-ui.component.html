@@ -1,7 +1,7 @@
 <nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
 </nz-skeleton>
-<div class="test_wrap" *ngIf="model?.request?.apiAttrInfo && validateForm">
-  <div class="top_container scroll_container" style.height="calc(100% - {{ responseContainerHeight }}px)">
+<div class="test-wrap" *ngIf="model?.request?.apiAttrInfo && validateForm">
+  <div class="stop-container scroll-container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
       <eo-ng-input-group nzCompact>
         <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.apiAttrInfo.requestMethod" formControlName="method">
@@ -159,9 +159,8 @@
       </eo-ng-tab>
     </eo-ng-tabset>
   </div>
-
   <div
-    class="bottom_container scroll_container"
+    class="bottom-container scroll-container"
     nz-resizable
     [nzMinHeight]="50"
     [style.height.px]="responseContainerHeight"

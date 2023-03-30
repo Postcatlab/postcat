@@ -6,9 +6,9 @@ import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import {
   ApiBodyType,
-  ApiTabsUniqueName,
   BASIC_TABS_INFO,
   IMPORT_MUI,
   RequestMethod,
@@ -159,17 +159,16 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async addAPI(formData, ux) {
     const [result, err] = await this.effect.addAPI(formData);
     if (err) {
-      this.feedback.error($localize`Added Operation`);
+      this.feedback.error($localize`Added failed`);
       return;
     }
     this.feedback.success($localize`Added successfully`);
-    this.store.addApiSuccess(this.route.snapshot.queryParams.groupId);
     this.trace.report('add_api_document_success', {
       trigger_way: ux,
       workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
       param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
     });
-    this.router.navigate([this.tabsConfig.pathByName[ApiTabsUniqueName.HttpDetail]], {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID),
         uuid: result?.apiUuid
@@ -180,10 +179,10 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   async editAPI(formData, ux) {
     const [result, err] = await this.apiEdit.editApi(formData);
     if (err) {
-      this.feedback.error($localize`Edited Operation`);
+      this.feedback.error($localize`Edited failed`);
       return;
     }
-    this.feedback.success($localize`Edit API successfully`);
+    this.feedback.success($localize`Edited API successfully`);
     this.afterSaved.emit(this.model);
   }
   emitChangeFun() {

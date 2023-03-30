@@ -23,7 +23,7 @@ export enum GroupModuleType {
 }
 export const GroupModelIDByModule = {
   [GroupModuleType.API]: 'apiUuid',
-  [GroupModuleType.Case]: 'apiCaseUuuid',
+  [GroupModuleType.Case]: 'apiCaseUuid',
   [GroupModuleType.Mock]: 'id'
 };
 export enum CollectionTypeEnum {
@@ -63,11 +63,15 @@ export interface Environment extends Base {
   projectUuid: string;
   workSpaceUuid: string;
 }
+export enum MockCreateWay {
+  System = 'system',
+  Custom = 'custom'
+}
 export interface Mock extends Base {
   name: string;
   apiUuid: string;
   description: string;
-  createWay: 'system' | 'custom';
+  createWay: MockCreateWay;
   response: string;
   projectUuid: string;
   workSpaceUuid: string;
@@ -108,6 +112,8 @@ export interface ViewGroup {
   module: GroupModuleType;
   relationInfo?: any;
   children?: ViewGroup[];
+
+  modelID: string;
   //For API
   method?: string;
   methodText?: string;

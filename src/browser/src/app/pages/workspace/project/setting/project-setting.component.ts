@@ -15,8 +15,6 @@ import { SyncApiComponent } from '../../../../components/extension-select/sync-a
 import { ModalService } from '../../../../services/modal.service';
 import { ApiService } from '../../../../services/storage/api.service';
 
-import { resolve } from 'path';
-
 const actionComponent = {
   push: PushApiComponent,
   sync: SyncApiComponent,
@@ -190,7 +188,6 @@ export class ProjectSettingComponent implements OnInit {
           label: $localize`Cancel`,
           onClick: () => {
             modal.destroy();
-            resolve();
           }
         },
         {

@@ -1,4 +1,5 @@
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
+import { ApiCase } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 export enum ApiTestParamsTypeFormData {
@@ -47,6 +48,6 @@ export interface testViewModel {
   userSelectedContentType: ContentType;
   requestTabIndex: number;
   responseTabIndex: number;
-  request: Partial<ApiData>;
+  request: Partial<ApiData | ApiCase>;
   testResult: ApiTestResData;
 }

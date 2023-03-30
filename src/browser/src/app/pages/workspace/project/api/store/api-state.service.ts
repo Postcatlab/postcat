@@ -15,8 +15,6 @@ export class ApiStoreService {
    */
   @observable private groupList: Group[] = [];
 
-  @observable private expandList: Array<string | number> = [];
-
   // ? history
   @observable private testHistory = [];
 
@@ -43,9 +41,6 @@ export class ApiStoreService {
   }
   @computed get getRootGroup() {
     return this.rootGroup;
-  }
-  @computed get getExpandList() {
-    return this.expandList;
   }
   @computed get getGroupList() {
     return this.groupList;
@@ -83,17 +78,8 @@ export class ApiStoreService {
   @action setRootGroup(group: Group) {
     this.rootGroup = group;
   }
-
-  @action addApiSuccess(groupId: string | number) {
-    this.setExpandsList(groupId);
-  }
-
   @action setGroupList(list = []) {
     this.groupList = list;
-  }
-
-  @action setExpandsList(expandKey: string | number) {
-    this.expandList = [...this.expandList, expandKey];
   }
 
   @action setEnvUuid(data) {

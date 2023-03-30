@@ -1,12 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import {
-  ApiBodyType,
-  ApiTabsUniqueName,
-  BASIC_TABS_INFO,
-  TabsConfig
-} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { ApiBodyType, BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
@@ -32,7 +28,7 @@ export class ApiMockService {
     private projectApi: ProjectApiService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
-    this.mockOperateUrl = this.tabsConfig.pathByName[ApiTabsUniqueName.HttpMock];
+    this.mockOperateUrl = this.tabsConfig.pathByName[PageUniqueName.HttpMock];
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {

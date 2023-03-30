@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import {
-  ApiTabsUniqueName,
   BASIC_TABS_INFO,
   Protocol,
   requestMethodMap,
@@ -55,8 +55,8 @@ export class HistoryComponent implements OnInit {
     const origin = e.node.origin;
     const path =
       origin.request?.protocol === Protocol.WEBSOCKET
-        ? this.tabsConfig.pathByName[ApiTabsUniqueName.WsTest]
-        : this.tabsConfig.pathByName[ApiTabsUniqueName.HttpTest];
+        ? this.tabsConfig.pathByName[PageUniqueName.WsTest]
+        : this.tabsConfig.pathByName[PageUniqueName.HttpTest];
     this.router.navigate([path], {
       queryParams: {
         uuid: `history_${origin.id}`
