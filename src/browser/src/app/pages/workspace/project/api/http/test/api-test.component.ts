@@ -365,9 +365,9 @@ export class ApiTestComponent implements EditTabViewComponent {
 
     const isFromCache: boolean = this.model && !isEmptyObj(this.model);
     if (isFromCache) {
+      this.name ??= this.model.request.name;
       return;
     }
-
     const result = await this.instance.getModel();
     if (!result) this.eoOnInit.emit(null);
     //Set contentType
@@ -375,7 +375,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     result.request.requestParams.headerParams = contentResult.headers;
     result.userSelectedContentType = contentResult.contentType;
     this.model = result as testViewModel;
-    this.name = this.model.request.name;
+    this.name ??= this.model.request.name;
     this.eoOnInit.emit(this.model);
   }
   private getCurrentPage(): TestPage {

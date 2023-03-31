@@ -38,6 +38,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
+  @ViewChild('rawEditor') eoEditor: EoMonacoEditorComponent;
 
   isReload = true;
   listConf: ApiTableConf = {
@@ -96,6 +97,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.setModel();
     if (type === 'init') {
       return;
+    }
+    if (this.bodyType === 1) {
+      console.log(555);
+      this.eoEditor?.formatCode();
     }
     this.modelChange.emit(this.model);
   }

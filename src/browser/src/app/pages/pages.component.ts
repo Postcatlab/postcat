@@ -55,12 +55,12 @@ export class PagesComponent implements OnInit {
     const version = result.shift().value;
     if (!this.store.getAppHasInitial && !StorageUtil.get('version')) {
       this.modal.create({
-        nzTitle: $localize`Hello，欢迎使用Postcat~`,
+        nzTitle: $localize`Welcome to Postcat～`,
         nzWidth: '650px',
         nzContent: NewbieGuideComponent,
-        nzCancelText: $localize`我了解了`,
+        nzCancelText: $localize`Got it`,
         nzBodyStyle: {
-          height: '450px',
+          height: 'calc(100vh* 0.7)',
           'overflow-y': 'scroll'
         },
         nzCentered: true,
@@ -70,20 +70,21 @@ export class PagesComponent implements OnInit {
       StorageUtil.set('version', version);
       return;
     }
-    if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
-    this.modal.create({
-      nzTitle: $localize`更新日志~`,
-      nzWidth: '650px',
-      nzContent: UpdateLogComponent,
-      nzCancelText: $localize`我了解了`,
-      nzBodyStyle: {
-        height: '450px',
-        'overflow-y': 'scroll'
-      },
-      nzCentered: true,
-      nzClassName: 'model-article'
-    });
-    StorageUtil.set('version', version);
+    // if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
+    // this.modal.create({
+    //   nzTitle: $localize`Release Log`,
+    //   nzWidth: '650px',
+    //   nzContent: UpdateLogComponent,
+    //   nzCancelText: $localize`Got it`,
+    //   nzBodyStyle: {
+    //     height: 'calc(100vh* 0.7)',
+    //     'overflow-y': 'scroll'
+    //   },
+    //   nzCentered: true,
+    //   nzClassName: 'model-article',
+    //   stayWhenRouterChange: true
+    // });
+    // StorageUtil.set('version', version);
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);

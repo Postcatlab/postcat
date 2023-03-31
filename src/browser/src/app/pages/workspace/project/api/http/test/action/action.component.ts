@@ -14,11 +14,11 @@ export class ActionComponent {
   selectedIndex: number;
   operationArr: OperationType[] = [
     {
-      title: 'Pre-request Script',
+      title: $localize`Pre-request Script`,
       type: 'pre'
     },
     {
-      title: 'After-response Script',
+      title: $localize`After-response Script`,
       type: 'after'
     }
   ];

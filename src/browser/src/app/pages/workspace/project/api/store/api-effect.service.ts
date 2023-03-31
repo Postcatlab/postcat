@@ -5,7 +5,7 @@ import { ApiCase, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
 
 import { ApiStoreService } from './api-state.service';
@@ -213,6 +213,7 @@ export class ApiEffectService {
   }
   async addCase(model: ApiCase) {
     // * Unsaved auth Info/response
+    model = eoDeepCopy(model);
     Reflect.deleteProperty(model, 'authInfo');
     Reflect.deleteProperty(model, 'responseList');
 
@@ -228,6 +229,7 @@ export class ApiEffectService {
   }
   async updateCase(model: Partial<ApiCase>) {
     // * Unsaved auth Info
+    model = eoDeepCopy(model);
     Reflect.deleteProperty(model, 'authInfo');
     const [data, err] = await this.api.api_apiCaseUpdate(model as ApiCase);
     if (err) {

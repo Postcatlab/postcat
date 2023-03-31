@@ -168,10 +168,10 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   async saveInfo(key: string) {
-    if (key === 'response' && !this.model.response) {
-      this.message.error($localize`response cannot be empty`);
-      return;
-    }
+    // if (key === 'response' && !this.model.response) {
+    //   this.message.error($localize`response cannot be empty`);
+    //   return;
+    // }
     if (this.model[key] === this.initialModel[key]) {
       if (key === 'name') {
         this.isEdit = false;
