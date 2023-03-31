@@ -15,6 +15,7 @@ export type EoModalOptions = {
 export class ModalService {
   constructor(private modal: NzModalService, private router: Router) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
+      console.log(this.modal.openModals);
       this.modal.openModals.forEach((val: any) => {
         if (!val?.config?.stayWhenRouterChange) val.close();
       });

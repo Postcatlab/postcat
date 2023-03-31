@@ -11,6 +11,7 @@ interface OperationType {
   styleUrls: ['./action.component.scss']
 })
 export class ActionComponent {
+  selectedIndex: number;
   operationArr: OperationType[] = [
     {
       title: 'Pre-request Script',

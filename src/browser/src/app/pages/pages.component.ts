@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzNotificationRef, NzNotificationService } from 'ng-zorro-antd/notification';
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
 import { NewbieGuideComponent } from 'pc/browser/src/app/pages/components/model-article/newbie-guide/newbie-guide.component';
@@ -23,6 +23,7 @@ export class PagesComponent implements OnInit {
   hasShowCookieTips = StorageUtil.get('has_show_cookie_tips');
   isShowNotification;
   sidebarViews: any[] = [];
+
   constructor(
     private socket: SocketService,
     public electron: ElectronService,
@@ -52,7 +53,7 @@ export class PagesComponent implements OnInit {
     // TODO: first use
     const result = this.web.getSystemInfo();
     const version = result.shift().value;
-    if (!this.store.getAppHasInitial) {
+    if (!this.store.getAppHasInitial && !StorageUtil.get('version')) {
       this.modal.create({
         nzTitle: $localize`Hello，欢迎使用Postcat~`,
         nzWidth: '650px',
@@ -63,25 +64,26 @@ export class PagesComponent implements OnInit {
           'overflow-y': 'scroll'
         },
         nzCentered: true,
-        nzClassName: 'model-article'
+        nzClassName: 'model-article',
+        stayWhenRouterChange: true
       });
       StorageUtil.set('version', version);
-    } else {
-      if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
-      this.modal.create({
-        nzTitle: $localize`更新日志~`,
-        nzWidth: '650px',
-        nzContent: UpdateLogComponent,
-        nzCancelText: $localize`我了解了`,
-        nzBodyStyle: {
-          height: '450px',
-          'overflow-y': 'scroll'
-        },
-        nzCentered: true,
-        nzClassName: 'model-article'
-      });
-      StorageUtil.set('version', version);
+      return;
     }
+    if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
+    this.modal.create({
+      nzTitle: $localize`更新日志~`,
+      nzWidth: '650px',
+      nzContent: UpdateLogComponent,
+      nzCancelText: $localize`我了解了`,
+      nzBodyStyle: {
+        height: '450px',
+        'overflow-y': 'scroll'
+      },
+      nzCentered: true,
+      nzClassName: 'model-article'
+    });
+    StorageUtil.set('version', version);
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);
