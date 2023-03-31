@@ -109,7 +109,7 @@ export class ApiMockService {
     // });
     const apiData = await this.projectApi.get(apiUuid);
     const data = {
-      name: 'Dynamic Mock',
+      name: 'New Mock',
       response: this.getMockResponseByAPI(apiData),
       apiUuid: apiUuid
     };
@@ -142,7 +142,7 @@ export class ApiMockService {
   async copy(mock_id: string) {
     const [res] = await this.api.api_mockDetail({ id: mock_id });
     const data = {
-      name: res.name,
+      name: `${res.name} Copy`,
       response: res.response,
       apiUuid: res.apiUuid
     };

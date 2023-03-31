@@ -1,3 +1,6 @@
 .action-contain {
-  border-right: 1px solid var(--border-color);
+  ::ng-deep .ant-tabs-tabpane {
+    padding-left: unset !important;
+    border-left: 1px solid var(--border-color);
+  }
 }

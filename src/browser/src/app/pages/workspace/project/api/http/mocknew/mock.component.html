@@ -1,12 +1,12 @@
-<nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
-  <div nz-result-extra>
-    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" trace traceID="open_client">{{
-      btnTitle
-    }}</button>
-    <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>
-  </div>
-</nz-result>
-<div class="mock" *ngIf="!web.isWeb">
+<!--<nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">-->
+<!--  <div nz-result-extra>-->
+<!--    <button eo-ng-button *ngIf="isInstalledClient" nzType="primary" (click)="jumpToClient()" trace traceID="open_client">{{-->
+<!--      btnTitle-->
+<!--    }}</button>-->
+<!--    <pc-download-client btnType="button" *ngIf="!isInstalledClient"></pc-download-client>-->
+<!--  </div>-->
+<!--</nz-result>-->
+<div class="mock">
   <form nz-form nzLayout="inline" class="flex px-[20px] pt-[15px]" (ngSubmit)="saveInfo('name')">
     <nz-form-item class="flex">
       <nz-form-control i18n-nzErrorTip nzErrorTip="Please input mockName" *ngIf="isEdit" class="flex">
