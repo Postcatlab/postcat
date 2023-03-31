@@ -54,37 +54,11 @@ export class PagesComponent implements OnInit {
     const result = this.web.getSystemInfo();
     const version = result.shift().value;
     if (!this.store.getAppHasInitial && !StorageUtil.get('version')) {
-      this.modal.create({
-        nzTitle: $localize`Welcome to Postcat～`,
-        nzWidth: '650px',
-        nzContent: NewbieGuideComponent,
-        nzCancelText: $localize`Got it`,
-        nzBodyStyle: {
-          height: 'calc(100vh* 0.7)',
-          'overflow-y': 'scroll'
-        },
-        nzCentered: true,
-        nzClassName: 'model-article',
-        stayWhenRouterChange: true
-      });
-      StorageUtil.set('version', version);
+      this.newbieGuide(version);
       return;
     }
-    // if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
-    // this.modal.create({
-    //   nzTitle: $localize`Release Log`,
-    //   nzWidth: '650px',
-    //   nzContent: UpdateLogComponent,
-    //   nzCancelText: $localize`Got it`,
-    //   nzBodyStyle: {
-    //     height: 'calc(100vh* 0.7)',
-    //     'overflow-y': 'scroll'
-    //   },
-    //   nzCentered: true,
-    //   nzClassName: 'model-article',
-    //   stayWhenRouterChange: true
-    // });
-    // StorageUtil.set('version', version);
+    if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
+    this.updateLog(version);
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);
@@ -96,11 +70,46 @@ export class PagesComponent implements OnInit {
       nzPauseOnHover: true
     });
   }
+
   initSidebarVisible(url: string) {
     if (['home/workspace/overview'].find(val => url.includes(val))) {
       this.sidebar.visible = false;
     } else {
       this.sidebar.visible = true;
     }
+  }
+
+  newbieGuide(version: string) {
+    this.modal.create({
+      nzTitle: $localize`Welcome to Postcat～`,
+      nzWidth: '650px',
+      nzContent: NewbieGuideComponent,
+      nzCancelText: $localize`Got it`,
+      nzBodyStyle: {
+        height: 'calc(100vh* 0.7)',
+        'overflow-y': 'scroll'
+      },
+      nzCentered: true,
+      nzClassName: 'model-article',
+      stayWhenRouterChange: true
+    });
+    StorageUtil.set('version', version);
+  }
+
+  updateLog(version: string) {
+    this.modal.create({
+      nzTitle: $localize`Release Log`,
+      nzWidth: '650px',
+      nzContent: UpdateLogComponent,
+      nzCancelText: $localize`Got it`,
+      nzBodyStyle: {
+        height: 'calc(100vh* 0.7)',
+        'overflow-y': 'scroll'
+      },
+      nzCentered: true,
+      nzClassName: 'model-article',
+      stayWhenRouterChange: true
+    });
+    StorageUtil.set('version', version);
   }
 }

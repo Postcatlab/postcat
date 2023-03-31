@@ -1,12 +1,4 @@
 <div class="action-contain h-[100%]">
-  <!--  <div class="px-[15px] action-contain flex items-center flex-col">-->
-  <!--    <div *ngFor="let item of operationArr" class="p-[10px]">-->
-  <!--      <button eo-ng-button nzType="default" class="w-[180px]" (click)="typeChange(item.type)">-->
-  <!--        <span class="ml-[10px]">{{ item.title }}</span>-->
-  <!--      </button>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
   <eo-ng-tabset [(nzSelectedIndex)]="selectedIndex" nzTabPosition="left" class="h-[100%]">
     <eo-ng-tab *ngFor="let item of operationArr" [nzTitle]="item.title" class="h-[100%]">
       <ng-container *ngIf="item.type === 'pre'">
@@ -18,12 +10,4 @@
       </ng-container>
     </eo-ng-tab>
   </eo-ng-tabset>
-
-  <!--  <div class="h-[100%] flex-1" *ngIf="type === 'pre'">-->
-  <!--    <ng-content select="[name=pre]"></ng-content>-->
-  <!--  </div>-->
-
-  <!--  <div class="flex-1 h-[100%]" *ngIf="type === 'after'">-->
-  <!--    <ng-content select="[name=after]"></ng-content>-->
-  <!--  </div>-->
 </div>
