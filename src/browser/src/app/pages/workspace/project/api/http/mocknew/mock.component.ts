@@ -127,6 +127,9 @@ export class MockComponent implements EditTabViewComponent {
     this.model = res;
     const apiData = await this.getApiDetail(res.apiUuid);
     this.mockPrefix = this.apiMock.getMockPrefix(apiData);
+    if (res.createWay === 'system') {
+      this.model.response = this.apiMock.getMockResponseByAPI(apiData);
+    }
     this.model.url = this.getMockUrl(res);
     this.eoEditor?.formatCode();
     this.eoOnInit.emit(this.model);
