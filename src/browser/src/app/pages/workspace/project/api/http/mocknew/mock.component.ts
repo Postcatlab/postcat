@@ -5,6 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EoMonacoEditorComponent } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco-editor.component';
 import { EditTabViewComponent, TabItem } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { WebService } from 'pc/browser/src/app/core/services';
+import { SYSTEM_MOCK_NAME } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
@@ -128,6 +129,7 @@ export class MockComponent implements EditTabViewComponent {
     const apiData = await this.getApiDetail(res.apiUuid);
     this.mockPrefix = this.apiMock.getMockPrefix(apiData);
     if (res.createWay === 'system') {
+      this.model.name = SYSTEM_MOCK_NAME;
       this.model.response = this.apiMock.getMockResponseByAPI(apiData);
     }
     this.model.url = this.getMockUrl(res);

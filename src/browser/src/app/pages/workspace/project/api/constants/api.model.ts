@@ -17,7 +17,7 @@ export const BASIC_TABS_INFO = new InjectionToken<TabsConfig>('basic-tab-info', 
     pathByName: {}
   })
 });
-
+export const SYSTEM_MOCK_NAME = $localize`System Mock`;
 /**
  * API body FormData param type
  */

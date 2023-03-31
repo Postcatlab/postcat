@@ -760,7 +760,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
         delete tmp_query_param_obj[tmp_query_param_key];
         tmp_query_param_obj[_LibsCommon.replaceAll('{{' + key + '}}', val || '', tmp_query_param_key)] = tmp_query_param_val;
       }
-      tmpOutput.url = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmpTargetTypeData.apiUrl);
+      tmpOutput.url = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmpTargetTypeData.apiUrl.split('?')[0]);
       for (let childKey in tmpHeaders) {
         tmpHeaders[childKey] = _LibsCommon.replaceAll('{{' + key + '}}', val, tmpHeaders[childKey]);
         if (childKey.indexOf('{{' + key + '}}') > -1) {

@@ -32,10 +32,24 @@ export class TestServerRemoteService extends TestServerService {
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = e => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));
-        } else {
-          this.receiveMessage({ id: message.id, ...DEFAULT_UNIT_TEST_RESULT });
+        console.log(xhr.status);
+        switch (xhr.status) {
+          case 200: {
+            this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));
+            break;
+          }
+          case 413: {
+            const resInfo = {
+              id: message.id,
+              ...DEFAULT_UNIT_TEST_RESULT
+            };
+            resInfo.response.body = $localize`The test service connection failed, Request Body Too Large`;
+            this.receiveMessage(resInfo);
+          }
+          default: {
+            this.receiveMessage({ id: message.id, ...DEFAULT_UNIT_TEST_RESULT });
+            break;
+          }
         }
       }
     };

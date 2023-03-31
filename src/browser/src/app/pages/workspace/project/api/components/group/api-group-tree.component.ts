@@ -4,7 +4,12 @@ import { action, autorun, reaction, toJS } from 'mobx';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
-import { BASIC_TABS_INFO, requestMethodMap, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  BASIC_TABS_INFO,
+  requestMethodMap,
+  SYSTEM_MOCK_NAME,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
 import {
@@ -41,11 +46,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   requestMethodMap = requestMethodMap;
   nzSelectedKeys = [];
   searchValue = '';
-  searchFunc = (node: NzTreeNodeOptions) => {
-    const { uri, name, title } = node;
-    // console.log('node', uri, name, title);
-    return [uri, name, title].some(n => n?.includes?.(this.searchValue));
-  };
+
   isLoading = true;
   isEdit: boolean;
   apiGroupTree = [];
@@ -94,6 +95,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.operateByModule = this.getGroupOperate();
   }
 
+  searchFunc = (node: NzTreeNodeOptions) => {
+    const { uri, name, title } = node;
+    const searchVal = this.searchValue.toLowerCase();
+    // console.log('node', uri, name, title);
+    return [uri, name, title].some(n => n?.toLowerCase()?.includes?.(searchVal));
+  };
+  searchValueChange($event) {
+    console.log(this.searchValue);
+  }
   ngOnInit(): void {
     this.isEdit = !this.globalStore.isShare;
     // * get group data from store
@@ -166,10 +176,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         relationInfo: it.relationInfo,
         children: this.parseGroupDataToViewTree(it.children || [])
       };
-      if (it.module === GroupModuleType.API) {
-        result.isLeaf = false;
-        result.method = this.requestMethodMap[result.relationInfo.requestMethod];
-        result.methodText = result.method.length > 5 ? result.method.slice(0, 3) : result.method;
+      switch (it.module) {
+        case GroupModuleType.API: {
+          result.isLeaf = false;
+          result.method = this.requestMethodMap[result.relationInfo.requestMethod];
+          result.methodText = result.method.length > 5 ? result.method.slice(0, 3) : result.method;
+          break;
+        }
+        case GroupModuleType.Mock: {
+          result.relationInfo.name = SYSTEM_MOCK_NAME;
+          break;
+        }
       }
       return result;
     });
@@ -236,11 +253,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   clickTreeItem(event: NzFormatEmitEvent): void {
     const origin = event.node.origin;
 
-    //* If the group is selected, click again to expand the group
-    if (!event.node.isLeaf && this.nzSelectedKeys.includes(event.node.key)) {
-      event.node.isExpanded = true;
-    }
     if (origin.type === GroupType.UserCreated) {
+      event.node.isExpanded = true;
       // * jump to group detail page
       this.groupService.toDetail(event.node.key);
       return;

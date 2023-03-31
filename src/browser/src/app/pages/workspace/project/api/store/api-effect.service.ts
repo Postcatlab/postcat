@@ -3,6 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase, Group } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
@@ -17,6 +18,7 @@ export class ApiEffectService {
     private store: ApiStoreService,
     private globalStore: StoreService,
     private api: ApiService,
+    private trace: TraceService,
     private feedback: EoNgFeedbackMessageService
   ) {}
   async deleteMock(id) {
@@ -221,6 +223,7 @@ export class ApiEffectService {
     if (err || !data?.[0]) {
       return [null, `cant'find this case:${err}`];
     }
+    this.trace.report('add_case_success');
     this.getGroupList();
     return [data[0], err];
   }

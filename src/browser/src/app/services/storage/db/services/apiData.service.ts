@@ -1,3 +1,4 @@
+import { SYSTEM_MOCK_NAME } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import {
   ApiDataBulkCreateDto,
@@ -32,7 +33,7 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     });
     const result = await this.baseService.bulkCreate(items);
     const systemMocks = result.data?.map(n => ({
-      name: $localize`Dynamic Mock`,
+      name: SYSTEM_MOCK_NAME,
       description: '',
       apiUuid: n.apiUuid,
       createWay: MockCreateWay.System,

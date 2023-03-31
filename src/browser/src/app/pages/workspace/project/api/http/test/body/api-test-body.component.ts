@@ -202,6 +202,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   formdataSelectFiles(target, item) {
     const files = Array.from(target.files);
+
+    //? Clear the input file prevent the same file not trigger change event
+    target.value = null;
+
     const execeedSize = files.some((file: File) => {
       if (file.size >= 2 * 1024 * 1024) {
         this.feedback.error($localize`The file is too large and needs to be less than 2 MB`);

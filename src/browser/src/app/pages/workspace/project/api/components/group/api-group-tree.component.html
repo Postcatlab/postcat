@@ -42,6 +42,7 @@
     [nzSelectedKeys]="nzSelectedKeys"
     #apiGroup
     [nzSearchValue]="searchValue"
+    (nzSearchValueChange)="searchValueChange($event)"
     [nzSearchFunc]="searchFunc"
     [nzHideUnMatched]="true"
     [nzExpandedKeys]="expandKeys"

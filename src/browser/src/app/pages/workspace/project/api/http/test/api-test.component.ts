@@ -361,7 +361,6 @@ export class ApiTestComponent implements EditTabViewComponent {
     }
 
     const result = await this.instance.getModel();
-    console.log(eoDeepCopy(result.request.requestParams.headerParams));
     if (!result) this.eoOnInit.emit(null);
     //Set contentType
     const contentResult = this.getContentTypeInfo(result as Partial<testViewModel>);

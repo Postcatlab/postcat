@@ -36,7 +36,7 @@ export class ApiTestUtilService {
    */
   formatUIApiDataToStorage(inData: { request: Partial<ApiData>; response: ApiTestResData }): ApiData {
     inData = eoDeepCopy(inData);
-    // pcConsole.log('formatUIApiDataToStorage', inData);
+    pcConsole.log('formatUIApiDataToStorage', inData);
     const result = {
       ...inData.request,
       protocol: Protocol.HTTP,
@@ -63,15 +63,7 @@ export class ApiTestUtilService {
     if (result.apiAttrInfo.contentType === ApiBodyType.Raw) {
       const rawData = result.requestParams.bodyParams[0].binaryRawData;
       const tableData = text2table(rawData);
-      if (tableData.contentType === ApiBodyType.Raw) {
-        result.requestParams.bodyParams = [
-          {
-            binaryRawData: rawData
-          }
-        ];
-      } else {
-        result.requestParams.bodyParams = tableData.data;
-      }
+      result.requestParams.bodyParams = tableData.data;
       result.apiAttrInfo.contentType = tableData.contentType;
     }
 
@@ -79,15 +71,7 @@ export class ApiTestUtilService {
     if (inData?.response?.responseType === 'text') {
       const tableData = text2table(inData.response.body);
       result.responseList[0].contentType = tableData.contentType;
-      if (tableData.contentType === ApiBodyType.Raw) {
-        result.responseList[0].responseParams.bodyParams = [
-          {
-            binaryRawData: tableData.data
-          }
-        ];
-      } else {
-        result.responseList[0].responseParams.bodyParams = tableData.data;
-      }
+      result.responseList[0].responseParams.bodyParams = tableData.data;
     }
     // pcConsole.log('formatUIApiDataToStorage', result);
     return result as ApiData;

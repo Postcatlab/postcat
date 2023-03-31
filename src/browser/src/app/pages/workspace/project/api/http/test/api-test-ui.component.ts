@@ -194,11 +194,11 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes) {
     if (!changes.model?.currentValue?.request?.apiAttrInfo) return;
-    console.log('api-test-ui ngOnChanges', changes.model.currentValue);
+    // console.log('api-test-ui ngOnChanges', changes.model.currentValue);
     this.initBasicForm();
-    this.initialModelAuthType = this.model.request.authInfo?.authType;
+
     //initHeader/contentType
-    //rest test status
+    this.initialModelAuthType = this.model.request.authInfo?.authType;
   }
   clickTest() {
     if (!this.checkForm()) {
@@ -429,7 +429,8 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
         this.model.responseTabIndex = 0;
         this.ref.detectChanges();
         this.trace.report('api_test_finish');
-        // 测试完自动帮用户将返回高度调到 40%
+
+        // After test finished, set the response container height to the height of the response content
         const height = this.elementRef.nativeElement.parentElement.offsetHeight * 0.5;
         if (this.responseContainerHeight < height) {
           this.responseContainerHeight = height;

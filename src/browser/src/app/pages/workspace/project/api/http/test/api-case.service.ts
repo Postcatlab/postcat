@@ -5,8 +5,8 @@ import { toJS } from 'mobx';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
-import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase } from 'pc/browser/src/app/services/storage/db/models';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
 import { ApiEffectService } from '../../store/api-effect.service';
 
@@ -15,7 +15,7 @@ export class ApiCaseService {
   constructor(
     private router: Router,
     private effect: ApiEffectService,
-    private api: ApiService,
+    private trace: TraceService,
     private feedback: EoNgFeedbackMessageService,
     private modalService: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
@@ -27,6 +27,7 @@ export class ApiCaseService {
     });
   }
   toAdd(apiUuid) {
+    this.trace.report('add_case');
     this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
       queryParams: { apiUuid, pageID: Date.now() }
     });
