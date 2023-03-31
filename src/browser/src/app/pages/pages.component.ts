@@ -81,7 +81,8 @@ export class PagesComponent implements OnInit {
         'overflow-y': 'scroll'
       },
       nzCentered: true,
-      nzClassName: 'model-article'
+      nzClassName: 'model-article',
+      stayWhenRouterChange: true
     });
     StorageUtil.set('version', version);
   }

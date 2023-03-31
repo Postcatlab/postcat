@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { $localize } from '@angular/localize/init';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
@@ -109,7 +110,7 @@ export class ApiMockService {
     // });
     const apiData = await this.projectApi.get(apiUuid);
     const data = {
-      name: 'New Mock',
+      name: $localize`New Mock`,
       response: this.getMockResponseByAPI(apiData),
       apiUuid: apiUuid
     };

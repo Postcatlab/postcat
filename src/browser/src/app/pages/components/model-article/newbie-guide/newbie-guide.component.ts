@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import NEWBIE_GUIDE from 'pc/browser/src/app/shared/constans/newbie-guide';
 
-// @ts-ignore
-import newPeopleGuide from './newPeopleGuide.md';
+const markdownIt = require('markdown-it');
 
 @Component({
   standalone: true,
@@ -16,6 +16,9 @@ import newPeopleGuide from './newPeopleGuide.md';
 })
 export class NewbieGuideComponent {
   async ngAfterViewInit() {
-    document.getElementById('newbie-guide-markdown').innerHTML = newPeopleGuide;
+    let md = new markdownIt();
+    const newbieGuideHtml = md.render(NEWBIE_GUIDE);
+
+    document.getElementById('newbie-guide-markdown').innerHTML = newbieGuideHtml;
   }
 }

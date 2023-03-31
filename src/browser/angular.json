@@ -6,10 +6,7 @@
   "projects": {
     "postcat": {
       "root": "",
-      "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
-        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
-      },
+      "i18n": { "sourceLocale": { "code": "en" }, "locales": { "zh": { "translation": "locale/messages.zh.xlf" } } },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": { "@schematics/angular:application": { "strict": true } },
@@ -93,7 +90,10 @@
             "production": { "browserTarget": "postcat:build:production" }
           }
         },
-        "extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n", "options": { "browserTarget": "postcat:build" } },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": { "browserTarget": "postcat:build" }
+        },
         "test": {
           "inlineStyleLanguage": "scss",
           "builder": "@angular-builders/custom-webpack:karma",

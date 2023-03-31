@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import UPDATE_LOG from 'pc/browser/src/app/shared/constans/update-log';
 
-// @ts-ignore
-import updateLog from './update-log.md';
+const markdownIt = require('markdown-it');
 
 @Component({
   selector: 'pc-update-log',
@@ -14,7 +14,10 @@ import updateLog from './update-log.md';
 })
 export class UpdateLogComponent {
   async ngAfterViewInit() {
-    const updateLogHtml = updateLog.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, match =>
+    let md = new markdownIt();
+    const html = md.render(UPDATE_LOG);
+
+    const updateLogHtml = html.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, match =>
       match.replace(/<img /gi, '<img style="width: 100%" ')
     );
     document.getElementById('update-log-markdown').innerHTML = updateLogHtml;
