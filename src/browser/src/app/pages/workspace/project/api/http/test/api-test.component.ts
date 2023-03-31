@@ -291,7 +291,9 @@ export class ApiTestComponent implements EditTabViewComponent {
                 this.feedback.error($localize`Failed to create Case`);
                 return;
               }
+
               //Add successfully
+              caseData = res;
               this.feedback.success($localize`Created Case successfully`);
               this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
