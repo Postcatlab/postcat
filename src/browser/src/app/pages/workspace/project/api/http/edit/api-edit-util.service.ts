@@ -21,7 +21,7 @@ export class ApiEditUtilService {
 
     //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
-      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo?.contentType)) {
         if (result.requestParams.bodyParams?.[0]) {
           result.requestParams.bodyParams[0].orderNo = 0;
           result.requestParams.bodyParams[0].paramType = 0;

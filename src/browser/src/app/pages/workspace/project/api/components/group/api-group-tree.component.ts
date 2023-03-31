@@ -184,7 +184,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           break;
         }
         case GroupModuleType.Mock: {
-          result.relationInfo.name = SYSTEM_MOCK_NAME;
+          if (it.relationInfo.createWay === MockCreateWay.System) {
+            result.relationInfo.name = SYSTEM_MOCK_NAME;
+          }
           break;
         }
       }

@@ -37,7 +37,6 @@ export class DbApiCaseService extends DbBaseService<ApiCase> {
   bulkDelete(params: ApiCaseDeleteDto) {
     const { apiCaseUuids, ...rest } = params;
     rest['id'] = apiCaseUuids.map(uuid => uuid);
-    console.log(rest);
     return this.baseService.bulkDelete(rest);
   }
 }

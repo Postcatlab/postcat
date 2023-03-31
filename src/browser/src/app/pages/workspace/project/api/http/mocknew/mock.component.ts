@@ -113,8 +113,6 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   valueChange($event) {
-    console.log(this.model);
-
     this.modelChange.emit(this.model);
   }
 

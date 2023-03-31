@@ -56,8 +56,8 @@ interface TestInstance {
             />
           </nz-form-control>
           <ng-container *ngIf="!isNameEdit">
-            <h5 nz-typography class="!mb-[0px]">{{ this.model.request.name }}</h5>
-            <button nzSize="small" (click)="this.isNameEdit = !this.isNameEdit" eo-ng-button nzType="text" class="ml-[5px]">
+            <h5 nz-typography class="!mb-[0px]">{{ model.request.name }}</h5>
+            <button nzSize="small" (click)="isNameEdit = !isNameEdit" eo-ng-button nzType="text" class="ml-[5px]">
               <eo-iconpark-icon size="12px" name="edit"></eo-iconpark-icon>
             </button>
             <button nzSize="small" (click)="delete()" eo-ng-button nzType="text" class="ml-[5px]">
@@ -286,6 +286,9 @@ export class ApiTestComponent implements EditTabViewComponent {
               this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
                 queryParams: { apiUuid, uuid: res.apiCaseUuid, pageID: this.route.snapshot.queryParams.pageID }
               });
+              setTimeout(() => {
+                this.isNameEdit = true;
+              }, 200);
 
               if (isFromTestPage) {
                 viewModel = { ...defaultModel, request: caseData };
@@ -337,12 +340,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             this.isNameEdit = false;
           },
           delete: async () => {
-            const [data, err] = await this.effect.deleteCase(apiCaseUuid);
-            if (err) {
-              this.feedback.error($localize`Delete failed`);
-              return;
-            }
-            this.feedback.success($localize`Successfully deleted`);
+            await this.effect.deleteCase(apiCaseUuid);
           }
         };
         break;
