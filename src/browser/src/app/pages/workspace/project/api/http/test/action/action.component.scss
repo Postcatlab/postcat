@@ -1,6 +1,20 @@
-.action-contain {
+:host .action-contain {
   ::ng-deep .ant-tabs-tabpane {
     padding-left: unset !important;
     border-left: 1px solid var(--border-color);
+  }
+
+  ::ng-deep .ant-tabs-content-holder {
+    height: 100% !important;
+  }
+
+  ::ng-deep .ant-tabs-tab {
+    text-align: left !important;
+    margin: 5px !important;
+    padding: 5px 20px !important;
+  }
+
+  ::ng-deep .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
+    align-items: unset;
   }
 }

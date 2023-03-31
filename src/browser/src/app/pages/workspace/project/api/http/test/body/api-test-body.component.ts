@@ -12,7 +12,7 @@ import {
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
+import { transferFileToDataUrl, waitNextTick, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
 import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
@@ -38,7 +38,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
-  @ViewChild('rawEditor') eoEditor: EoMonacoEditorComponent;
+  @ViewChild('rawEditor') eoEditor?: EoMonacoEditorComponent;
 
   isReload = true;
   listConf: ApiTableConf = {
@@ -98,14 +98,20 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     if (type === 'init') {
       return;
     }
-    if (this.bodyType === 1) {
-      console.log(555);
-      this.eoEditor?.formatCode();
-    }
     this.modelChange.emit(this.model);
+    if (this.bodyType === 1) {
+      waitNextTick().then(() => {
+        this.eoEditor?.formatCode();
+      });
+    }
   }
 
   ngOnInit(): void {
+    if (this.bodyType === 1) {
+      waitNextTick().then(() => {
+        this.eoEditor?.formatCode();
+      });
+    }
     this.CONST.API_BODY_TYPE = API_BODY_TYPE.filter(val => this.supportType.includes(val.value));
   }
   ngOnDestroy() {
@@ -169,6 +175,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Add last row| RestoreData From cache
    */
   private setModel() {
+    console.log(666);
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {

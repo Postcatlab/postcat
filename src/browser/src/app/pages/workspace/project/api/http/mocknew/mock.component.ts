@@ -15,14 +15,14 @@ import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import storageUtils from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 interface ModelType {
-  id: number;
+  id?: number;
   name: string;
-  uri: string;
-  description: string;
-  createTime: number;
-  updateTime: number;
-  projectUuid: string;
-  apiUuid: string;
+  uri?: string;
+  description?: string;
+  createTime?: number;
+  updateTime?: number;
+  projectUuid?: string;
+  apiUuid?: string;
   createWay: string;
   response: string;
   url: string;
@@ -61,6 +61,10 @@ export class MockComponent implements EditTabViewComponent {
 
   mockPrefix: string;
 
+  creatWayIsSystem: boolean;
+
+  isHover: 'hover' | null;
+
   constructor(
     private apiHttp: ApiService,
     private mockService: MockService,
@@ -71,30 +75,13 @@ export class MockComponent implements EditTabViewComponent {
     private apiEffect: ApiEffectService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
-
-  get response() {
-    return this.model?.response || '';
-  }
-
-  set response(value) {
-    this.model.response = value;
-  }
-
-  get name() {
-    return this.model?.name || '';
-  }
-
-  get url() {
-    return this.model?.url || '';
-  }
-
-  get isHover(): 'hover' | null {
-    return this.model?.createWay === 'system' ? 'hover' : null;
-  }
-
-  get creatWayIsSystem() {
-    return this.model?.createWay === 'system';
+  ) {
+    this.model = {
+      createWay: '',
+      name: '',
+      response: '',
+      url: ''
+    };
   }
 
   async afterTabActivated(): Promise<any> {
@@ -122,7 +109,12 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   async mockDetail(mock_id?: number) {
-    if (!this.model) this.model = {} as ModelType;
+    if (!this.model)
+      this.model = {
+        name: '',
+        url: '',
+        response: ''
+      } as ModelType;
     const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
     const apiData = await this.getApiDetail(res.apiUuid);
@@ -132,6 +124,8 @@ export class MockComponent implements EditTabViewComponent {
     }
     this.model.url = this.getMockUrl(res);
     this.eoEditor?.formatCode();
+    this.creatWayIsSystem = this.model.createWay === 'system';
+    this.isHover = this.model?.createWay === 'system' ? 'hover' : null;
     this.eoOnInit.emit(this.model);
   }
 
