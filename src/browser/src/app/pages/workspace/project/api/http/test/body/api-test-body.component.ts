@@ -175,7 +175,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
    * Add last row| RestoreData From cache
    */
   private setModel() {
-    console.log(666);
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {

@@ -88,7 +88,6 @@ export class ApiEditUtilService {
       Reflect.deleteProperty(val, 'paramAttr.example');
       return val?.name;
     });
-    console.log(result);
     return result;
   }
   /**

@@ -116,7 +116,6 @@ export class ApiTestUtilService {
   };
   getTestDataFromApi(inData: Partial<ApiData>): Partial<ApiData> {
     const result = this.apiEditUtil.formatStorageApiDataToUI(inData);
-
     //handle query and url
     const tmpResult = syncUrlAndQuery(result.uri, result.requestParams.queryParams, {
       method: 'replace',

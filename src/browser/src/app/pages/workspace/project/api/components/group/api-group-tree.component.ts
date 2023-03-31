@@ -104,7 +104,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   };
   onSearchFocus($event) {
     this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
-    console.log(this.expandKeys);
   }
   searchValueChange($event) {
     if (!this.searchValue) {

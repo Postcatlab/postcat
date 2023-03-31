@@ -300,8 +300,7 @@ export class ApiTestComponent implements EditTabViewComponent {
               });
               setTimeout(() => {
                 this.isNameEdit = true;
-              }, 200);
-
+              }, 300);
               if (isFromTestPage) {
                 viewModel = { ...defaultModel, request: caseData };
               } else {

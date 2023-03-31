@@ -17,7 +17,6 @@ export class DbApiCaseService extends DbBaseService<ApiCase> {
       workSpaceUuid,
       projectUuid
     });
-    console.log(result, apiCaseUuids);
     const promiseArr = result.data.map(async (item: ApiCase) => {
       const {
         data: [apiDataInfo]
@@ -28,7 +27,16 @@ export class DbApiCaseService extends DbBaseService<ApiCase> {
     return result;
   }
   async bulkCreate(params: ApiCaseCreateDto) {
-    return this.baseService.bulkCreate(params.apiCaseList);
+    const { workSpaceUuid, projectUuid } = params;
+    const result = await this.baseService.bulkCreate(params.apiCaseList);
+    const promiseArr = result.data.map(async (item: ApiCase) => {
+      const {
+        data: [apiDataInfo]
+      } = await this.apiDataService.bulkReadDetail({ apiUuids: [item.apiUuid], workSpaceUuid, projectUuid });
+      item.authInfo = apiDataInfo.authInfo;
+    });
+    await Promise.all(promiseArr);
+    return result;
   }
   async update(params: ApiCaseUpdateDto | any) {
     params['id'] = params.apiCaseUuid;
