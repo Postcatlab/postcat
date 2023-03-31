@@ -1,6 +1,14 @@
 <header class="flex items-center py-[10px] px-[10px]">
   <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-    <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
+    <input
+      eo-ng-input
+      (focus)="onSearchFocus($event)"
+      type="text"
+      class="flex-1 px-3"
+      i18n-placeholder="@@Search"
+      placeholder="Search"
+      [(ngModel)]="searchValue"
+    />
   </eo-ng-input-group>
   <ng-template #prefixTemplateUser>
     <eo-iconpark-icon name="search"></eo-iconpark-icon>
@@ -36,7 +44,6 @@
 </header>
 <!-- Custom Group -->
 <div class="group-tree">
-  <!-- {{ expandKeys | json }} -->
   <eo-ng-tree-default
     [nzData]="apiGroupTree"
     [nzSelectedKeys]="nzSelectedKeys"

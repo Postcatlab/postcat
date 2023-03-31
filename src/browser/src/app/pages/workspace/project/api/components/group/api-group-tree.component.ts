@@ -96,13 +96,24 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   searchFunc = (node: NzTreeNodeOptions) => {
+    console.log('searchFunc');
     const { uri, name, title } = node;
     const searchVal = this.searchValue.toLowerCase();
     // console.log('node', uri, name, title);
     return [uri, name, title].some(n => n?.toLowerCase()?.includes?.(searchVal));
   };
+  onSearchFocus($event) {
+    this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
+    console.log(this.expandKeys);
+  }
   searchValueChange($event) {
-    console.log(this.searchValue);
+    if (!this.searchValue) {
+      //? All set false
+      this.apiGroup.getTreeNodes().forEach(node => {
+        node.isExpanded = false;
+      });
+      this.expandKeys = [...this.expandKeys];
+    }
   }
   ngOnInit(): void {
     this.isEdit = !this.globalStore.isShare;

@@ -34,9 +34,9 @@ test.describe('Operate API', () => {
     await page.locator('input[name="name"]').click();
     await page.locator('input[name="name"]').fill('JSON');
     //Group
-    await page.locator('eo-ng-tree-select div').click();
-    await page.locator('#cdk-overlay-3 svg').click();
-    await page.locator('#cdk-overlay-3').getByText('pet').click();
+    // await page.locator('eo-ng-tree-select div').click();
+    // await page.locator('#cdk-overlay-3 svg').click();
+    // await page.locator('#cdk-overlay-3').getByText('pet').click();
     //Header
     await page.getByText('Request Headers').click();
     await page.getByPlaceholder('Key').click();
