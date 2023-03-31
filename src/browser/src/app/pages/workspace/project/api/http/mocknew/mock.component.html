@@ -109,6 +109,7 @@
               i18n
               [disabled]="model?.createWay === 'system'"
               (click)="saveInfo('response')"
+              [nzLoading]="isSaving"
             >
               Save
             </button>

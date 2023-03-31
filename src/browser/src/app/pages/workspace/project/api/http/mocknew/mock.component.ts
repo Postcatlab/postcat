@@ -66,6 +66,8 @@ export class MockComponent implements EditTabViewComponent {
 
   isHover: 'hover' | null;
 
+  isSaving: boolean;
+
   constructor(
     private apiHttp: ApiService,
     private mockService: MockService,
@@ -166,6 +168,7 @@ export class MockComponent implements EditTabViewComponent {
     //   this.message.error($localize`response cannot be empty`);
     //   return;
     // }
+    this.isSaving = true;
     if (this.model[key] === this.initialModel[key]) {
       if (key === 'name') {
         this.isEdit = false;
@@ -182,6 +185,7 @@ export class MockComponent implements EditTabViewComponent {
     };
     await this.addOrEditModal(requestData);
     this.isEdit = false;
+    this.isSaving = false;
     this.afterSaved.emit(this.model);
     if (key === 'name') {
       this.apiEffect.editMock();
