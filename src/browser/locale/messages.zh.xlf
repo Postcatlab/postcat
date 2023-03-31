@@ -1806,19 +1806,7 @@
           <context context-type="sourcefile">src/app/pages/pages.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pages.component.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
         <target state="translated">我了解了</target>
-      </trans-unit>
-      <trans-unit id="7273789550555113752" datatype="html">
-        <source>Release Log</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pages.component.ts</context>
-          <context context-type="linenumber">75</context>
-        </context-group>
-        <target state="translated">更新日志</target>
       </trans-unit>
       <trans-unit id="3193976279273491157" datatype="html">
         <source>Actions</source>
@@ -1856,7 +1844,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/store/api-effect.service.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">245</context>
         </context-group>
         <target state="translated">删除失败</target>
       </trans-unit>
@@ -1872,7 +1860,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/store/api-effect.service.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">248</context>
         </context-group>
         <target state="translated">删除成功</target>
       </trans-unit>
@@ -2260,7 +2248,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mocknew/mock.component.ts</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">195</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -2833,7 +2821,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mocknew/mock.component.html</context>
-          <context context-type="linenumber">105,106</context>
+          <context context-type="linenumber">113,114</context>
         </context-group>
         <target state="translated"> 保存 </target>
       </trans-unit>
@@ -3185,7 +3173,7 @@
         <source>Response </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mocknew/mock.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target state="translated">返回结果 </target>
       </trans-unit>
@@ -3209,7 +3197,7 @@
         <source>No change in data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mocknew/mock.component.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">174</context>
         </context-group>
         <target state="translated">数据无变化</target>
       </trans-unit>
@@ -3633,7 +3621,7 @@
         <source>The file is too large and needs to be less than 5 MB</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.ts</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">133</context>
         </context-group>
         <target state="translated">上传文件太大，需小于 5 MB</target>
       </trans-unit>
@@ -3641,7 +3629,7 @@
         <source>The file is too large and needs to be less than 2 MB</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">223</context>
         </context-group>
         <target state="translated">上传文件太大，需小于 2 MB</target>
       </trans-unit>
@@ -4115,16 +4103,15 @@ If the current test URL is a local API, please download the desktop and re-initi
         </context-group>
         <target state="translated">请输入 </target>
       </trans-unit>
-      <trans-unit id="1939029949221183872" datatype="html">
-        <source>### Postcat is a powerful free, cross-platform, extensible API tool!
+      <trans-unit id="8246619971129925918" datatype="html">
+        <source>
+### Postcat is a powerful free, cross-platform, extensible API tool
 
 **Compared to products like Postman, it has the following much-loved features:**
 
-1. ❤️ Free teamwork: Good products should be used by more people, we do not limit the number of free people!
+1.❤️ Free teamwork: Good products should be used by more people, we do not limit the number of free people!
 
-
-2. 🚀Extensible plug-in system: One-click installation of various plug-ins such as ChatGPT and themes to customize your own API development tools~
-
+2.🚀 Extensible extension system: One-click installation of various extensions such as ChatGPT and themes to customize your own API development tools~
 
 3.😊 Excellent user experience: everything can be simpler and make our work more efficient~
 
@@ -4136,7 +4123,7 @@ If the current test URL is a local API, please download the desktop and re-initi
 
 3.⚡ API testing
 
-4. 🎭 Mock Service
+4.🎭 Mock Service
 
 5.🙌 Environmental management
 
@@ -4145,9 +4132,10 @@ If the current test URL is a local API, please download the desktop and re-initi
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/constans/newbie-guide.ts</context>
-          <context context-type="linenumber">1,27</context>
+          <context context-type="linenumber">1,26</context>
         </context-group>
-        <target state="translated">### Postcat 是一个强大的免费、跨平台、可扩展的 API 工具！
+        <target state="translated">
+### Postcat 是一个强大的免费、跨平台、可扩展的 API 工具！
 
 **和 Postman 等产品相比，它拥有以下备受喜爱的特性：**
 
@@ -4167,7 +4155,7 @@ If the current test URL is a local API, please download the desktop and re-initi
 
 3.⚡ API 测试
 
-4.🎭 Mock Service
+4.🎭 Mock Server
 
 5.🙌 环境管理
 

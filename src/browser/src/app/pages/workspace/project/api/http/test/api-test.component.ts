@@ -265,7 +265,7 @@ export class ApiTestComponent implements EditTabViewComponent {
         break;
       }
       case TestPage.Case: {
-        const apiCaseUuid = Number(this.route.snapshot.queryParams.uuid);
+        const apiCaseUuid = Number(this.route.snapshot.queryParams.uuid) || this.route.snapshot.queryParams.uuid;
         result = {
           saveTips: $localize`Save`,
           getModel: async () => {
@@ -310,7 +310,7 @@ export class ApiTestComponent implements EditTabViewComponent {
               //* Edit Case
               const [res, err] = await this.effect.detailCase(apiCaseUuid);
               if (err) {
-                this.feedback.success($localize`Can't find the Case`);
+                this.feedback.error($localize`Can't find the Case`);
                 return;
               }
               return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(res) };

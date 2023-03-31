@@ -149,6 +149,14 @@
           </eo-ng-tabset>
         </nz-collapse-panel>
       </nz-collapse>
+      <nz-collapse class="eo_collapse mt-[20px]">
+        <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
+          <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
+            <eo-ng-tab i18-nzTitle nzTitle="Pre-request Script"> </eo-ng-tab>
+            <eo-ng-tab i18-nzTitle nzTitle="After-response Script "> </eo-ng-tab>
+          </eo-ng-tabset>
+        </nz-collapse-panel>
+      </nz-collapse>
     </div>
   </div>
 </form>
