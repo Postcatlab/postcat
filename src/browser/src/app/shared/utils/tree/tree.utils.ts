@@ -212,7 +212,7 @@ export class PCTree {
     }
 
     const parent = this.findTreeNodeByID(group.parentId);
-    parent?.children.push(group);
+    parent?.children?.push(group);
   }
   update(group: Group) {
     const origin = this.findTreeNodeByID(group.id);
