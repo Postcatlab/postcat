@@ -39,7 +39,7 @@ const routes: Routes = [
           },
           {
             path: 'mock',
-            loadChildren: () => import('./http/mocknew/mock.module').then(m => m.MockModule)
+            loadChildren: () => import('./http/mock/mock.module').then(m => m.MockModule)
           }
         ]
       },

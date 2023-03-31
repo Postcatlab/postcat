@@ -176,6 +176,7 @@ export class MockComponent implements EditTabViewComponent {
       if (key === 'response') {
         this.message.info($localize`No change in data`);
       }
+      this.isSaving = false;
       return;
     }
 
