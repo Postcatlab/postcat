@@ -57,8 +57,8 @@ export class PagesComponent implements OnInit {
       this.newbieGuide(version);
       return;
     }
-    if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
-    this.updateLog(version);
+    // if (StorageUtil.get('version') && StorageUtil.get('version') === version) return;
+    // this.updateLog(version);
   }
   closeNotification() {
     this.notification.remove(this.cookieNotification.messageId);

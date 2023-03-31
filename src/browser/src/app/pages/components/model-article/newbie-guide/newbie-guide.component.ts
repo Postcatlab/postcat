@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
+import markdownIt from 'markdown-it/dist/markdown-it';
 import NEWBIE_GUIDE from 'pc/browser/src/app/shared/constans/newbie-guide';
-
-const markdownIt = require('markdown-it');
 
 @Component({
   standalone: true,

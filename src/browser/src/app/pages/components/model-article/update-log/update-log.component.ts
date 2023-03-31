@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
+import markdownIt from 'markdown-it/dist/markdown-it';
 import UPDATE_LOG from 'pc/browser/src/app/shared/constans/update-log';
-
-const markdownIt = require('markdown-it');
 
 @Component({
   selector: 'pc-update-log',

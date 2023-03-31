@@ -90,10 +90,7 @@
             "production": { "browserTarget": "postcat:build:production" }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": { "browserTarget": "postcat:build" }
-        },
+        "extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n", "options": { "browserTarget": "postcat:build" } },
         "test": {
           "inlineStyleLanguage": "scss",
           "builder": "@angular-builders/custom-webpack:karma",
