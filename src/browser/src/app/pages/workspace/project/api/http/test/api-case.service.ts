@@ -27,7 +27,6 @@ export class ApiCaseService {
     });
   }
   toAdd(apiUuid) {
-    this.trace.report('add_case');
     this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
       queryParams: { apiUuid, pageID: Date.now() }
     });
