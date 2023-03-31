@@ -16,6 +16,7 @@ import { ApiTestUiComponent, ContentTypeMap } from 'pc/browser/src/app/pages/wor
 import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
+import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
@@ -71,6 +72,7 @@ interface TestInstance {
     <eo-api-http-test-ui
       #testUIComponent
       [model]="model"
+      (afterTested)="afterTested.emit($event)"
       (modelChange)="valueChange()"
       [extraButtonTmp]="saveButtonTmp"
     ></eo-api-http-test-ui>
@@ -102,6 +104,14 @@ export class ApiTestComponent implements EditTabViewComponent {
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly afterSaved = new EventEmitter<testViewModel>();
+  @Output() readonly afterTested = new EventEmitter<{
+    id: string;
+    url: string;
+    model: {
+      testStartTime: number;
+      testResult: ApiTestResData;
+    };
+  }>();
   @ViewChild('saveButtonTmp', { read: TemplateRef, static: true }) saveButtonTmp: TemplateRef<HTMLDivElement>;
   @ViewChild('testUIComponent') testUIComponent: ApiTestUiComponent;
   isNameEdit = false;

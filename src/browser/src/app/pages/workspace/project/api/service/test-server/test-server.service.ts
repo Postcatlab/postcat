@@ -141,6 +141,9 @@ export abstract class TestServerService implements TestServer {
       }
     };
 
+    if (response.statusCode === 0) {
+      response.body = $localize`Service connection failed. The server test is currently being used.\nIf the current test URL is a local API, please download the desktop and re-initiate the test.`;
+    }
     result = {
       status: 'finish',
       id,
