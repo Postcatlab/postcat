@@ -20,7 +20,9 @@ export class DbMockService extends DbBaseService<Mock> {
     const { data: apiItem } = await this.DbApiDataService.read({
       apiUuid: result.data.apiUuid
     });
-    result.data.uri = apiItem.uri;
+    if (apiItem) {
+      result.data.uri = apiItem.uri;
+    }
     return result;
   }
   async delete(uuid) {

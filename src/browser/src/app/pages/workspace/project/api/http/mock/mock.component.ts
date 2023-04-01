@@ -56,7 +56,7 @@ export class MockComponent implements EditTabViewComponent {
 
   hoverStr: string = 'The system creates a Mock that cannot be operated';
 
-  titleTips = $localize`Postcat Client is required to use local mock.`;
+  titleTips = $localize`Postcat Client is required to use Mock.`;
   btnTitle = $localize`Use Client`;
   isInstalledClient: boolean = true;
 

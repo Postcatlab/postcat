@@ -1,7 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { action, autorun, reaction, toJS } from 'mobx';
-import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode } from 'ng-zorro-antd/tree';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import {
@@ -23,6 +24,7 @@ import {
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { eoDeepCopy, waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 import { findTreeNode, getExpandGroupByKey } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
+import { of } from 'rxjs';
 
 import { ElectronService } from '../../../../../../core/services';
 import { ProjectApiService } from '../../service/project-api.service';
@@ -88,6 +90,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private effect: ApiEffectService,
     private mockService: ApiMockService,
     private caseService: ApiCaseService,
+    private feedback: EoNgFeedbackMessageService,
     private router: Router,
     private route: ActivatedRoute,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
@@ -239,16 +242,31 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     //Get tree node by group id
     return [...new Set([...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])])];
   }
+  beforeDrop = (arg: NzFormatBeforeDropEvent) => {
+    const node = arg.dragNode?.origin;
+    const tips = {
+      [GroupModuleType.Mock]: 'Mock',
+      [GroupModuleType.Case]: $localize`Case`
+    };
+    if ([GroupModuleType.Mock, GroupModuleType.Case].includes(node.module)) {
+      this.feedback.warning($localize`${tips[node.module]} does not support sorting at the moment, please report to Github Issue`);
+      return of(false);
+    }
+    return of(true);
+  };
   /**
    * Drag & drop tree item.
    *
    * @param event
    */
-  treeItemDrop = ({ dragNode }: NzFormatEmitEvent) => {
+  drop = ({ dragNode }: NzFormatEmitEvent) => {
     const node = eoDeepCopy(dragNode.origin);
+    if ([GroupModuleType.Mock, GroupModuleType.Case].includes(node.module)) {
+      return;
+    }
     const parentNode = dragNode.parentNode;
     const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
-    // if([node.type])
+
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
     console.log('TODO: sort 可能不是按顺序的', [...children]);

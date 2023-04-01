@@ -89,7 +89,7 @@ export class DbGroupService extends DbBaseService<Group> {
 
   @ApiResponse()
   async update(params?: Record<string, any>) {
-    const { id, parentId, name, sort, type } = params;
+    const { id, parentId, module, sort, type } = params;
     const hasSort = Number.isInteger(sort);
 
     // 对分组下的数据进行重排
@@ -112,13 +112,14 @@ export class DbGroupService extends DbBaseService<Group> {
     };
 
     // 拖动的是 API
-    if (type === GroupType.Virtual) {
+    if (module === GroupModuleType.API) {
+      const uuid = params.relationInfo.uuid;
       const apiParams = serializeObj({
-        uuid: id,
+        uuid: uuid,
         groupId: parentId,
         sort
       });
-      const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
+      const { data: oldApiData } = await this.apiDataService.read({ uuid });
       const { data: groupList } = await this.baseService.bulkRead({
         parentId: parentId ?? oldApiData.groupId,
         type: GroupType.UserCreated
@@ -132,7 +133,7 @@ export class DbGroupService extends DbBaseService<Group> {
           apiDataList.filter(n => n.id !== oldApiData.id),
           { ...oldApiData, groupId: parentId }
         );
-        const { data: newApiData } = await this.apiDataService.read({ uuid: id });
+        const { data: newApiData } = await this.apiDataService.read({ uuid });
         return genFileGroup(GroupModuleType.API, newApiData);
       }
       // 如果 parentId 变了，则需要将其 sort = parent.children.length

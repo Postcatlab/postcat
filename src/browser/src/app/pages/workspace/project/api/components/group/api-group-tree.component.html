@@ -56,7 +56,8 @@
     (nzClick)="clickTreeItem($event)"
     [nzDraggable]="isEdit"
     nzBlockNode
-    (nzOnDrop)="treeItemDrop($event)"
+    [nzBeforeDrop]="beforeDrop"
+    (nzOnDrop)="drop($event)"
     [nzTreeTemplate]="nzTreeTemplate"
   ></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="isLoading && !apiGroupTree.length" [nzActive]="true">
