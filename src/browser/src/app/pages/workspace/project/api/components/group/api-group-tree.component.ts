@@ -139,6 +139,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         //Wait for the tree component to be rendered
         waitNextTick().then(() => {
           //Reset expandKeys
+          //TODO only when the tree component is added, the expandedNodeList will be updated
           this.expandKeys = this.getExpandKeys();
 
           //* Set expand/selecte key

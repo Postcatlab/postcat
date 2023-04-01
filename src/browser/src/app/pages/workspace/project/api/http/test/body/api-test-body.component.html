@@ -35,7 +35,14 @@
 ></eo-ng-table-pro>
 <ng-template #formValue let-item="item" let-index="index">
   <div [ngSwitch]="item.dataType">
-    <input *ngSwitchDefault eo-ng-input maxlength="65535" [(ngModel)]="item.paramAttr.example" (ngModelChange)="emitModelChange()" />
+    <input
+      *ngSwitchDefault
+      placeholder="Value"
+      eo-ng-input
+      maxlength="65535"
+      [(ngModel)]="item.paramAttr.example"
+      (ngModelChange)="emitModelChange()"
+    />
     <div *ngSwitchCase="API_PARAMS_TYPE.file">
       <label class="cursor-pointer px-[5px] py-[3px] border-all rounded" for="file_{{ index }}" i18n>Choose Files</label>
       <span class="ml-[10px]" *ngIf="item.files?.length">{{ item.files?.length }} <span i18n>files selected</span></span>

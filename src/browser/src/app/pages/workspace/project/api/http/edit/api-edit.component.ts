@@ -56,6 +56,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   expandKeys: string[] = [];
   REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
+  reactions = [];
   private destroy$: Subject<void> = new Subject<void>();
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
@@ -75,11 +76,12 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   ) {
     this.initBasicForm();
     //Get group list
-    autorun(() => {
-      if (!this.store.getRootGroup) return;
-      this.groups = this.store.getFolderList;
-      this.setGroupInfo();
-    });
+    this.reactions.push(
+      autorun(() => {
+        if (!this.store.getRootGroup) return;
+        this.groups = this.store.getFolderList;
+      })
+    );
   }
   /**
    * Init Api Data
@@ -101,13 +103,17 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
 
     //Reset ui form
-    this.setGroupInfo();
     this.initBasicForm();
     this.watchBasicForm();
+    this.setGroupInfo();
     this.validateForm.patchValue(this.model);
     waitNextTick().then(() => {
       this.editBody?.init();
       this.resEditBody?.init();
+      //Reset group prevent view delay
+      if (this.groups?.length) {
+        this.groups = [...this.groups];
+      }
     });
 
     //Only trigger onInit when first time
@@ -132,7 +138,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
-    console.log(this.expandKeys);
   }
   async beforeTabClose() {
     await this.saveAPI();
@@ -153,6 +158,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
     this.isSaving = true;
     let formData: ApiData = this.apiEditUtil.formatUIApiDataToStorage(this.model);
+    console.log(this.model.groupId, this.validateForm.getRawValue().groupId);
     await (formData.apiUuid ? this.editAPI(formData, ux) : this.addAPI(formData, ux));
     this.isSaving = false;
   }
@@ -209,6 +215,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.reactions.forEach(reaction => reaction());
   }
   /**
    * Rest need generate from url from initial model
@@ -226,7 +233,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    * @returns valid group id
    */
   getValidGroupID() {
-    const groupID = this.model.groupId || Number(this.route.snapshot.queryParams.uuid);
+    const groupID = this.model.groupId || Number(this.route.snapshot.queryParams.groupId);
 
     //Default from path or root group id
     if (!groupID) {
@@ -242,7 +249,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     return groupID;
   }
   setGroupInfo() {
-    if (!this.store.getRootGroup) return;
+    if (!this.store.getRootGroup || !this.groups.length) return;
     this.model.groupId = this.getValidGroupID();
     this.validateForm.patchValue({
       groupId: this.model.groupId

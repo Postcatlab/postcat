@@ -46,14 +46,16 @@ export class ApiStoreService {
     return this.groupList;
   }
   @computed get getFolderList() {
-    return getPureGroup(
-      eoDeepCopy([
-        {
-          ...this.rootGroup,
-          children: this.groupList
-        }
-      ])
-    );
+    return this.groupList
+      ? getPureGroup(
+          eoDeepCopy([
+            {
+              ...this.rootGroup,
+              children: this.groupList
+            }
+          ])
+        )
+      : [];
   }
 
   @computed get getTestHistory() {

@@ -24,13 +24,13 @@
           </nz-form-control>
         </nz-form-item>
       </eo-ng-input-group>
-      <!-- {{ model.groupId }} -->
       <eo-ng-input-group nzCompact>
         <nz-form-item class="w-[30%] !mb-0">
           <nz-form-control nz-col i18n-nzErrorTip required nzErrorTip="Please select an API group">
             <eo-ng-tree-select
               class="group-select"
               nzAllowClear="false"
+              *ngIf="groups"
               [nzExpandedKeys]="expandKeys"
               [nzDropdownMatchSelectWidth]="false"
               [nzNodes]="groups"

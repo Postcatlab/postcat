@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "codegen": "playwright codegen",
+    "codegen": "playwright codegen localhost:4200",
     "test": "playwright test",
-    "test:watch": "playwright test --ui"
+    "ui": "playwright test --ui"
   },
   "devDependencies": {
     "@playwright/test": "^1.32.1",

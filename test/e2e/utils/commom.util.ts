@@ -31,8 +31,20 @@ export const addTableParams = async (dom, value) => {
  * @param opts.index row index
  * @param opts.valueByKey input placeholder and value
  */
-export const adaTabledRow = async (page, opts: { index?: number; valueByKey: { [key: string]: string } }) => {
-  const index = opts.index || 0;
+export const adaTabledRow = async (
+  page,
+  opts: { index?: number; enums?: Array<{ [key: string]: string }>; valueByKey?: { [key: string]: string } }
+) => {
+  let index = opts.index || 0;
+  if (opts.enums) {
+    const promiseArr = opts.enums.map(async (item, key) => {
+      for (const name in item) {
+        const value = item[name];
+        await addTableParams(page.getByPlaceholder(name).nth(index + key), value);
+      }
+    });
+    await Promise.all(promiseArr);
+  }
   for (const name in opts.valueByKey) {
     const value = opts.valueByKey[name];
     await addTableParams(page.getByPlaceholder(name).nth(index), value);

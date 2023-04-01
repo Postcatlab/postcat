@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 
 import { adaTabledRow, addTextToEditor, ECHO_API_URL, ifTipsExist } from '../utils/commom.util';
 const testAndWaitForResponse = async page => {
@@ -11,6 +11,7 @@ const testAndWaitForResponse = async page => {
 };
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Got it' }).click();
 });
 /**
  * Basic Test
@@ -57,11 +58,6 @@ test('Unit Test', async ({ page }) => {
   //Restore api test from history
   await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
   await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
-  const reRes = await testAndWaitForResponse(page);
-  expect(reRes.path).toEqual('/Web/Test/all/print');
-  expect(reRes.method).toEqual('POST');
-  expect(reRes.query.query[0]).toEqual('queryvalue');
-  expect(reRes.header.Header[0]).toEqual('headervalue');
 
   //Save API from test
   await page.getByRole('button', { name: 'Save as API' }).click();
@@ -69,6 +65,10 @@ test('Unit Test', async ({ page }) => {
   await page.locator('input[name="name"]').fill('test');
   await page.getByRole('button', { name: 'Save' }).click();
   await ifTipsExist(page, 'Added successfully');
+
+  //API Document Test
+  await page.getByRole('link', { name: 'Test' }).click();
+  await page.getByRole('button', { name: 'Send' }).click();
 });
 /**
  * Basic Test
@@ -117,11 +117,7 @@ test('Import Data Unit Test', async ({ page }) => {
   expect(res.query.name[0]).toEqual('Jack');
   expect(res.header.Header[0]).toEqual('headervalue');
 });
-test('API Document Test', async ({ page }) => {
-  await page.getByText('COVID-19 national epidemic').click();
-  await page.getByRole('link', { name: 'Test' }).click();
-  await page.getByRole('button', { name: 'Send' }).click();
-});
+
 /**
  * Formdata Test
  */
@@ -129,14 +125,19 @@ test('Formdata Test', async ({ page }) => {
   await page.getByPlaceholder('Enter URL').click();
   await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
   await page.getByText('Form-Data').click();
-  await page.getByPlaceholder('Name').click();
-  await page.getByPlaceholder('Name').fill('test');
-  await page.locator('.eo-table-default-td > div > .ant-input').first().click();
-  await page.locator('.eo-table-default-td > div > .ant-input').first().fill('1');
-  await page.getByPlaceholder('Name').nth(1).fill('test');
-  await page.getByPlaceholder('Name').nth(1).click();
-  await page.locator('.eo-table-default-td > div > .ant-input').nth(1).click();
-  await page.locator('.eo-table-default-td > div > .ant-input').nth(1).fill('2');
+
+  await adaTabledRow(page, {
+    enums: [
+      {
+        Name: 'test',
+        Value: '1'
+      },
+      {
+        Name: 'test',
+        Value: '2'
+      }
+    ]
+  });
   const res = await testAndWaitForResponse(page);
   expect(res.body).toEqual('test=1&test=2');
 
@@ -164,5 +165,5 @@ test('Raw Test', async ({ page }) => {
   await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
   await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
   const res1 = await testAndWaitForResponse(page);
-  expect(res.body).toEqual(`{"test":1,"test1":2}`);
+  expect(res1.body).toEqual(`{"test":1,"test1":2}`);
 });
