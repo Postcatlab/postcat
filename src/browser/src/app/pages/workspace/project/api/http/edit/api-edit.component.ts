@@ -108,7 +108,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     waitNextTick().then(() => {
       this.editBody?.init();
       this.resEditBody?.init();
-      this.expandKeys = getExpandGroupByKey(this.apiGroup, id);
     });
 
     //Only trigger onInit when first time
@@ -133,6 +132,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
   openGroup() {
     this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupId);
+    console.log(this.expandKeys);
   }
   async beforeTabClose() {
     await this.saveAPI();
@@ -226,18 +226,20 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    * @returns valid group id
    */
   getValidGroupID() {
-    //Default root group id
-    if (!this.model.groupId) {
+    const groupID = this.model.groupId || Number(this.route.snapshot.queryParams.uuid);
+
+    //Default from path or root group id
+    if (!groupID) {
       return this.store.getRootGroup.id;
     }
 
     //If group has be deleted,reset to root group
     const groupObj = new PCTree(this.groups);
-    const existGroup = groupObj.findTreeNodeByID(this.model.groupId);
+    const existGroup = groupObj.findTreeNodeByID(groupID);
     if (!existGroup) {
       return this.store.getRootGroup.id;
     }
-    return this.model.groupId;
+    return groupID;
   }
   setGroupInfo() {
     if (!this.store.getRootGroup) return;

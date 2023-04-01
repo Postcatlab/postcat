@@ -120,7 +120,6 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   }
 
   private getMockUrl(mock) {
-    console.log(mock);
     //Generate Mock URL
     //TODO Mock URL = API Path
     const url = new URL(

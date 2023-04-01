@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { adaTabledRow, addTableParams, addTextToEditor, ifTipsExist } from './commom.util';
+import { adaTabledRow, addTableParams, addTextToEditor, ifTipsExist } from '../utils/commom.util';
 
 const addRowAndSettingMore = async (page, opts) => {
   await adaTabledRow(page, opts);

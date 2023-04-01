@@ -1,4 +1,9 @@
-import { INHERIT_AUTH_OPTION, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import {
+  AuthTypeValue,
+  INHERIT_AUTH_OPTION,
+  isInherited,
+  NONE_AUTH_OPTION
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.module';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
@@ -66,11 +71,19 @@ export class DbGroupService extends DbBaseService<Group> {
     super(dataSource.group);
   }
 
-  async bulkCreate(params = []) {
+  async bulkCreate(params: Group[] = []) {
     const { data: parentGroups } = await this.baseService.bulkRead({ id: params.map(n => n.parentId) });
     parentGroups.forEach((item, index) => {
       params[index].depth = item.depth + 1;
     });
+    params.forEach(val => {
+      val.authInfo = {
+        authType: NONE_AUTH_OPTION.name,
+        isInherited: val.depth === 1 ? isInherited.notInherit : isInherited.inherit,
+        authInfo: {}
+      };
+    });
+
     return this.baseService.bulkCreate(params);
   }
 
@@ -170,7 +183,7 @@ export class DbGroupService extends DbBaseService<Group> {
     const groupAuthType = group.authInfo?.authType;
 
     // 递归获取父级分组鉴权信息
-    if (group && (!groupAuthType || groupAuthType === INHERIT_AUTH_OPTION.name)) {
+    if (group && (!groupAuthType || groupAuthType === AuthTypeValue.Inherited)) {
       group.authInfo = {
         authType: NONE_AUTH_OPTION.name,
         isInherited: isInherited.notInherit,
@@ -181,7 +194,7 @@ export class DbGroupService extends DbBaseService<Group> {
         if (parentGroup.depth !== 0) {
           group.authInfo = parentGroup.authInfo;
         }
-        if (isCallByApiData || !groupAuthType || groupAuthType === INHERIT_AUTH_OPTION.name) {
+        if (isCallByApiData || !groupAuthType || groupAuthType === AuthTypeValue.Inherited) {
           group.authInfo.isInherited = (isCallByApiData ? group : parentGroup).depth ? 1 : 0;
         } else {
           group.authInfo.isInherited = isInherited.notInherit;

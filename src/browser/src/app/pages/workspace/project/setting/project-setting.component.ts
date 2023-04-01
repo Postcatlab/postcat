@@ -62,7 +62,7 @@ export class ProjectSettingComponent implements OnInit {
         {
           title: $localize`Sync`,
           type: 'sync',
-          traceID: 'sync_api_from_url_success',
+          traceID: 'sync_api_from_url',
           loading: () => this.syncLoading,
           show: () => this.store.getSyncSettingList?.length,
           onClick: async args => {

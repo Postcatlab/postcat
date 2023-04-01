@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { action, autorun, reaction, toJS } from 'mobx';
-import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode } from 'ng-zorro-antd/tree';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import {
@@ -96,7 +96,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   searchFunc = (node: NzTreeNodeOptions) => {
-    console.log('searchFunc');
     const { uri, name, title } = node;
     const searchVal = this.searchValue.toLowerCase();
     // console.log('node', uri, name, title);
@@ -105,12 +104,19 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   onSearchFocus($event) {
     this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
   }
+  shrinkLevelGroup(trees: NzTreeNode[]) {
+    trees.forEach(node => {
+      if (!node.isExpanded) return;
+      node.isExpanded = false;
+      if (node.children) {
+        this.shrinkLevelGroup(node.children);
+      }
+    });
+  }
   searchValueChange($event) {
     if (!this.searchValue) {
       //? All set false
-      this.apiGroup.getTreeNodes().forEach(node => {
-        node.isExpanded = false;
-      });
+      this.shrinkLevelGroup(this.apiGroup.getTreeNodes());
       this.expandKeys = [...this.expandKeys];
     }
   }
@@ -156,7 +162,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   initSelectKeys() {
     //Such as Env group tree
     const groupId = this.getCurrentGroupIDByModelID();
-    if (!groupId) return;
+    if (!groupId) {
+      this.nzSelectedKeys = [];
+      return;
+    }
     this.nzSelectedKeys = [groupId];
   }
   /**
@@ -239,6 +248,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const node = eoDeepCopy(dragNode.origin);
     const parentNode = dragNode.parentNode;
     const children = dragNode.parentNode ? dragNode.parentNode.getChildren() : this.apiGroup.getTreeNodes().filter(n => n.level === 0);
+    // if([node.type])
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
     console.log('TODO: sort 可能不是按顺序的', [...children]);

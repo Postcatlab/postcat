@@ -66,10 +66,17 @@ export const setupVersions = (db: DataSourceInstance) => {
   db.version(6).stores({
     workspace: '++id, &uuid',
     project: '++id, &uuid, workSpaceUuid',
-    group: '++id,projectUuid',
+    group: '++id,parentId,projectUuid',
     environment: '++id, projectUuid',
     apiData: '++id, &uuid, projectUuid ',
     mock: '++id, projectUuid,apiUuid',
     apiCase: '++id,projectUuid,apiUuid '
+  });
+  db.version(7).stores({
+    group: '++id,parentId,projectUuid',
+    environment: '++id, projectUuid,workSpaceUuid',
+    apiData: '++id, &uuid, projectUuid,workSpaceUuid',
+    mock: '++id,projectUuid,apiUuid,workSpaceUuid',
+    apiCase: '++id,projectUuid,apiUuid,workSpaceUuid'
   });
 };

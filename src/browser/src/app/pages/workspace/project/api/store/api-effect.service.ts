@@ -215,6 +215,7 @@ export class ApiEffectService {
     // * Unsaved auth Info/response
     model = eoDeepCopy(model);
     Reflect.deleteProperty(model, 'authInfo');
+    Reflect.deleteProperty(model, 'scriptList');
     Reflect.deleteProperty(model, 'responseList');
 
     const [data, err] = await this.api.api_apiCaseCreate({
@@ -231,6 +232,7 @@ export class ApiEffectService {
     // * Unsaved auth Info
     model = eoDeepCopy(model);
     Reflect.deleteProperty(model, 'authInfo');
+    Reflect.deleteProperty(model, 'scriptList');
     const [data, err] = await this.api.api_apiCaseUpdate(model as ApiCase);
     if (err) {
       return [null, err];

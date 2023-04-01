@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { login } from './commom.util';
+import { login } from '../utils/commom.util';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });

@@ -92,13 +92,8 @@ div.ant-typography {
     @apply h-full overflow-hidden;
   }
 
-  .stop-container {
+  .top-container {
     height: 100%;
-
-    > form {
-      position: sticky;
-      top: 0;
-    }
 
     > .ant-tabs {
       height: calc(100% - 60px);

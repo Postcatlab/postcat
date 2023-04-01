@@ -163,21 +163,6 @@ export class DbProjectService extends DbBaseService<Project> {
     return result;
   }
 
-  async update(params: ProjectUpdateDto) {
-    const { projectUuid, ...rest } = params;
-    const { data } = await this.read({ uuid: projectUuid });
-    rest['id'] = data.id;
-    return this.baseService.update(rest);
-  }
-
-  /** 批量删除项目  */
-  async bulkDelete(params: ProjectDeleteDto) {
-    const { projectUuids, ...rest } = params;
-    rest['uuid'] = projectUuids;
-    const result = await this.baseService.bulkDelete(rest);
-    await this.afterBulkDelete(rest, result);
-    return result;
-  }
   /** 获取项目列表  */
   page(params: ProjectPageDto) {
     const { projectUuids, ...rest } = params;
@@ -187,11 +172,16 @@ export class DbProjectService extends DbBaseService<Project> {
     return this.baseService.page(rest);
   }
 
+  /** 批量删除项目  */
+  async bulkDelete(params: ProjectDeleteDto) {
+    const { projectUuids, ...rest } = params;
+    const result = await this.baseService.bulkDelete(params);
+    await this.afterBulkDelete(projectUuids, result);
+    return result;
+  }
   /** 删除项目之后，将会删除与被删除的项目相关的所有数据 */
-  async afterBulkDelete(params, result) {
+  async afterBulkDelete(projectUuids, result) {
     if (result.code === 0 && result.data > 0) {
-      const projectUuids = params.uuid;
-
       const promises = dataSource.tables.map(table => table.filter(item => projectUuids.includes(item.projectUuid)).delete());
       const result = await Promise.all(promises);
       console.log('删除项目', result);

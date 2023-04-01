@@ -3,8 +3,6 @@ import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import {
   ApiDataBulkCreateDto,
   ApiDataBulkReadDetailDto,
-  ApiDataBulkReadDto,
-  ApiDataDeleteDto,
   ApiDataPageDto,
   ApiDataUpdateDto
 } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
@@ -24,7 +22,6 @@ export class DbApiDataService extends DbBaseService<ApiData> {
   async bulkCreate(params: ApiDataBulkCreateDto) {
     const { apiList, workSpaceUuid, projectUuid } = params;
     const items = apiList.map(item => {
-      Reflect.deleteProperty(item, 'uuid');
       return {
         ...item,
         workSpaceUuid,
@@ -46,13 +43,7 @@ export class DbApiDataService extends DbBaseService<ApiData> {
   }
 
   async bulkReadDetail(params: ApiDataBulkReadDetailDto) {
-    const { apiUuids, workSpaceUuid, projectUuid } = params;
-    const result = await this.baseService.bulkRead({
-      uuid: apiUuids.map(uuid => uuid),
-      workSpaceUuid,
-      projectUuid
-    });
-
+    const result = await this.baseService.bulkRead(params);
     const promiseArr = result.data.map(async item => {
       const { data: groupInfo } = await this.groupService.read({ id: item.groupId }, true);
       item.authInfo = groupInfo.authInfo;
@@ -61,14 +52,6 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     await Promise.all(promiseArr);
 
     return result;
-  }
-
-  bulkRead(params: ApiDataBulkReadDto) {
-    const { workSpaceUuid, projectUuid } = params;
-    return this.baseService.bulkRead({
-      workSpaceUuid,
-      projectUuid
-    });
   }
 
   page(params: ApiDataPageDto) {
@@ -93,21 +76,21 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     });
   }
 
+  /**
+   * Incremental update
+   *
+   * @param params
+   * @returns
+   */
   async update(params: ApiDataUpdateDto) {
     const { api, projectUuid, workSpaceUuid } = params;
-    console.log(api);
     const { data } = await this.baseService.read({ uuid: api.apiUuid });
+    //Prevent the id from being modified
     api['id'] = data.id;
     return this.baseService.update({
       ...api,
       projectUuid,
       workSpaceUuid
     });
-  }
-
-  bulkDelete(params: ApiDataDeleteDto) {
-    const { apiUuids, ...rest } = params;
-    rest['uuid'] = apiUuids.map(uuid => uuid);
-    return this.baseService.bulkDelete(rest);
   }
 }

@@ -19,7 +19,7 @@ import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/ap
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy, getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -152,7 +152,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     // console.log('api test origin:', origin, 'after:', after);
 
     if (!isEqual(origin, after)) {
-      // console.log('api test formChange true!', getDifference(origin, after));
+      console.log('api test formChange true!', getDifference(origin, after));
       return true;
     }
     return false;
@@ -210,6 +210,10 @@ export class ApiTestComponent implements EditTabViewComponent {
                   beforeInject: '',
                   afterInject: ''
                 },
+                scriptList: [
+                  { scriptType: 1, data: '' },
+                  { scriptType: 2, data: '' }
+                ],
                 requestParams: {
                   queryParams: [],
                   headerParams: [],
@@ -256,6 +260,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             return { ...defaultModel, request: this.apiTestUtil.getTestDataFromApi(apiData) };
           },
           save: () => {
+            //Save as case
             StorageUtil.set('test_data_will_be_save', this.model.request, 2000);
             this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpCase]], {
               queryParams: { apiUuid: this.model.request.apiUuid, pageID: this.route.snapshot.queryParams.pageID }
@@ -300,7 +305,7 @@ export class ApiTestComponent implements EditTabViewComponent {
               });
               setTimeout(() => {
                 this.isNameEdit = true;
-              }, 300);
+              }, 200);
               if (isFromTestPage) {
                 viewModel = { ...defaultModel, request: caseData };
               } else {

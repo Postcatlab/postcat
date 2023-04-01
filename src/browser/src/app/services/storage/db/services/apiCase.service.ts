@@ -38,13 +38,4 @@ export class DbApiCaseService extends DbBaseService<ApiCase> {
     await Promise.all(promiseArr);
     return result;
   }
-  async update(params: ApiCaseUpdateDto | any) {
-    params['id'] = params.apiCaseUuid;
-    return this.baseService.update(params);
-  }
-  bulkDelete(params: ApiCaseDeleteDto) {
-    const { apiCaseUuids, ...rest } = params;
-    rest['id'] = apiCaseUuids.map(uuid => uuid);
-    return this.baseService.bulkDelete(rest);
-  }
 }

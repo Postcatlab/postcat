@@ -7,7 +7,7 @@ import NEWBIE_GUIDE from 'pc/browser/src/app/shared/constans/newbie-guide';
   selector: 'pc-newbie-guide',
   template: `
     <div class="newbie-guide">
-      <img src="../../../../assets/images/newbie-guide.png" style="width: 100%" alt="" />
+      <img src="assets/images/newbie-guide.png" style="width: 100%" alt="" />
       <div id="newbie-guide-markdown"></div>
     </div>
   `,

@@ -13,7 +13,43 @@ import {
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { DbProjectService } from 'pc/browser/src/app/services/storage/db/services/project.service';
 import { DbWorkspaceService } from 'pc/browser/src/app/services/storage/db/services/workspace.service';
+/**
+ * The name of the alignment backend to use.
+ */
+export const UUID_MAP = {
+  workspace: {
+    uuid: 'workSpaceUuid'
+  },
+  project: {
+    uuid: 'projectUuid'
+  },
+  apiData: {
+    uuid: 'apiUuid'
+  },
+  apiCase: {
+    id: 'apiCaseUuid'
+  }
+};
+/**
+ * Convert the ID passed in from the front end to the database ID
+ *For example, apiUuid is converted to uuid
+ */
+export const convertID = (db, params: any = {}) => {
+  if (!params) return params;
+  if (!db) {
+    throw new Error(`db is not defined`);
+  }
+  const tableMap = UUID_MAP[db.name];
+  if (tableMap) {
+    const dbID = Object.keys(tableMap)[0];
+    const modelID = tableMap[dbID];
+    if (params[modelID] || params[`${modelID}s`]) {
+      params[dbID] = params[modelID] || params[`${modelID}s`];
+    }
+  }
 
+  return params;
+};
 class DataSource extends Dexie {
   workspace!: Table<Workspace, number>;
   project!: Table<Project, number>;
@@ -45,10 +81,18 @@ class DataSource extends Dexie {
 
   initHooks() {
     this.tables.forEach(table => {
-      const isDefUuid = table.schema.idxByName.uuid?.keyPath;
       table.hook('creating', (primKey, obj) => {
-        // 创建不应该使用用户传入的 id
+        // Filter out the ID passed in by the client
+        const tableMap = UUID_MAP[table.name];
+        if (tableMap) {
+          const dbID = Object.keys(tableMap)[0];
+          Reflect.deleteProperty(obj, dbID);
+          const modelID = tableMap[dbID];
+          Reflect.deleteProperty(obj, modelID);
+        }
         Reflect.deleteProperty(obj, 'id');
+
+        const isDefUuid = table.schema.idxByName.uuid?.keyPath;
         if (isDefUuid) {
           // dexie 貌似没有直接提供自动生成 uuid 功能，所以这里简单实现一下
           // 官方默认的语法支持：https://dexie.org/docs/Version/Version.stores()#schema-syntax
@@ -59,24 +103,15 @@ class DataSource extends Dexie {
       // https://dexie.org/docs/Table/Table.hook('reading')
       table.hook('reading', obj => {
         // 表字段映射
-        switch (table.name) {
-          case 'apiCase': {
-            obj['apiCaseUuid'] = obj.id;
-            break;
-          }
-          default: {
-            const uuidMap = {
-              workspace: 'workSpaceUuid',
-              project: 'projectUuid',
-              apiData: 'apiUuid'
-            };
-            const uuidName = uuidMap[table.name];
-            if (!uuidName) break;
-            // 在数据返回到前端之前，将数据库中的 uuid 字段转为特定名称的 xxxUuid，这里主要是为了对齐后端返回的字段
-            obj[uuidName] = obj.uuid;
-            break;
+        const tableMap = UUID_MAP[table.name];
+        if (tableMap) {
+          const dbID = Object.keys(tableMap)[0];
+          if (obj[dbID]) {
+            const modelID = tableMap[dbID];
+            obj[modelID] = obj[dbID];
           }
         }
+
         if (table.name === 'workspace') {
           // 主要用于区分本地空间和远程空间
           obj.isLocal = true;

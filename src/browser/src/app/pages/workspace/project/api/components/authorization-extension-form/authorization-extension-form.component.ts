@@ -6,6 +6,7 @@ import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/a
 import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import {
   AuthInfo,
+  AuthTypeValue,
   INHERIT_AUTH_OPTION,
   isInherited as IsInherited,
   NONE_AUTH_OPTION
@@ -72,7 +73,7 @@ const authInMap = {
 export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy {
   @Input() @observable parentInfo: Partial<Group>;
   @Input() @observable model: AuthInfo;
-  authType: string;
+  authType: AuthTypeValue | string;
   /**
    *
    */
@@ -97,7 +98,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
   }
 
   get isDefaultAuthType() {
-    return [INHERIT_AUTH_OPTION.name, NONE_AUTH_OPTION.name].includes(this.authType);
+    return [AuthTypeValue.Inherited, AuthTypeValue.None].includes(this.authType as AuthTypeValue);
   }
 
   get authTypeList() {
@@ -152,7 +153,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
     this.reactions.push(
       autorun(() => {
         if (!this.authType && this.model?.isInherited === IsInherited.inherit) {
-          this.authType = INHERIT_AUTH_OPTION.name;
+          this.authType = AuthTypeValue.Inherited;
           return;
         }
         if (this.model?.isInherited === IsInherited.notInherit) {
@@ -166,7 +167,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
     this.authAPIMap = this.extensionService.getValidExtensionsByFature('authAPI');
     // console.log('authAPIMap', this.authAPIMap);
     this.extensionList = [];
-    this.authAPIMap.forEach((value, key) => {
+    this.authAPIMap.forEach((value, key: AuthTypeValue) => {
       this.extensionList.push({ name: key, label: value.label });
     });
   }
@@ -175,7 +176,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
     const { model } = changes;
     // console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
-      if (this.model.authType !== INHERIT_AUTH_OPTION.name) {
+      if (this.model.authType !== AuthTypeValue.Inherited) {
         // console.log('this.authType', this.authType);
         this.updateSchema(this.authType);
       }
@@ -195,13 +196,26 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
   }
   handleAuthTypeChange(authType) {
     this.updateSchema(authType);
-    if (this.authType === INHERIT_AUTH_OPTION.name) {
-      this.model.isInherited = IsInherited.inherit;
-      this.model.authType = this.inheritAuthType;
-    } else {
-      this.model.isInherited = IsInherited.notInherit;
-      this.model.authType = authType;
+    switch (this.authType) {
+      case AuthTypeValue.Inherited: {
+        this.model.isInherited = IsInherited.inherit;
+        this.model.authType = this.inheritAuthType;
+        // this.model.authInfo = {};
+        break;
+      }
+      case AuthTypeValue.None: {
+        this.model.isInherited = IsInherited.notInherit;
+        this.model.authType = AuthTypeValue.None;
+        // this.model.authInfo = {};
+        break;
+      }
+      default: {
+        this.model.isInherited = IsInherited.notInherit;
+        this.model.authType = authType;
+        break;
+      }
     }
+
     this.modelChange.emit(this.model);
     // console.log('handleAuthTypeChange', authType, this.schemaObj);
   }

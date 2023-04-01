@@ -53,7 +53,7 @@ export class PagesComponent implements OnInit {
     // TODO: first use
     const result = this.web.getSystemInfo();
     const version = result.shift().value;
-    if (!this.store.getAppHasInitial && !StorageUtil.get('version')) {
+    if (!this.electron.isElectron && !this.store.getAppHasInitial && !StorageUtil.get('version')) {
       this.newbieGuide(version);
       return;
     }

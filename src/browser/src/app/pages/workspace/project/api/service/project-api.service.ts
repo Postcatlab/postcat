@@ -39,6 +39,10 @@ export class ProjectApiService {
         }
       }
     ];
+    result.scriptList ??= [
+      { scriptType: 1, data: '' },
+      { scriptType: 2, data: '' }
+    ];
     result.responseList[0].responseParams ??= {
       responseParams: {
         headerParams: [],

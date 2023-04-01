@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { ifTipsExist, login } from './commom.util';
+import { ifTipsExist, login } from '../utils/commom.util';
 test('User Opeate', async ({ page }) => {
   await page.goto('/');
   //Login

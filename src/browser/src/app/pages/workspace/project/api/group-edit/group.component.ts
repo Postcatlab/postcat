@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { INHERIT_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { AuthTypeValue } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -106,7 +106,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       const [res, err] = await this.api.api_groupDetail({ id });
       this.model = res;
     }
-    if (this.model?.authInfo?.authType === INHERIT_AUTH_OPTION.name) {
+    if (this.model?.authInfo?.authType === AuthTypeValue.Inherited) {
       this.model.authInfo.authInfo = {};
     } else if (this.model.authInfo) {
       this.model.authInfo.authInfo = JSONParse(this.model.authInfo?.authInfo) || {};

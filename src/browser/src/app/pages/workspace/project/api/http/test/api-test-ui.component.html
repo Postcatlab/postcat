@@ -1,7 +1,8 @@
 <nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
 </nz-skeleton>
 <div class="test-wrap" *ngIf="model?.request?.apiAttrInfo && validateForm">
-  <div class="stop-container scroll-container" style.height="calc(100% - {{ responseContainerHeight }}px)">
+  <!-- Request -->
+  <div class="top-container scroll-container" style.height="calc(100% - {{ responseContainerHeight }}px)">
     <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
       <eo-ng-input-group nzCompact>
         <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.apiAttrInfo.requestMethod" formControlName="method">
@@ -123,11 +124,7 @@
       <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Script Action</span>
-          <nz-badge
-            class="ml-1"
-            *ngIf="model.request.apiAttrInfo?.beforeInject?.trim() || model.request.apiAttrInfo?.afterInject?.trim()"
-            nzStatus="success"
-          ></nz-badge>
+          <nz-badge class="ml-1" *ngIf="beforeInject?.trim() || afterInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <pc-action>
           <eo-api-script
@@ -147,16 +144,10 @@
             class="h-[100%]"
           ></eo-api-script>
         </pc-action>
-        <!--        <eo-api-script-->
-        <!--          *ngIf="model.requestTabIndex === 5"-->
-        <!--          [(code)]="model.request.apiAttrInfo.beforeInject"-->
-        <!--          (codeChange)="emitChangeFun('beforeScript')"-->
-        <!--          [treeData]="BEFORE_DATA"-->
-        <!--          [completions]="beforeScriptCompletions"-->
-        <!--        ></eo-api-script>-->
       </eo-ng-tab>
     </eo-ng-tabset>
   </div>
+  <!-- Response -->
   <div
     class="bottom-container scroll-container"
     nz-resizable

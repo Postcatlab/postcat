@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { adaTabledRow, addTextToEditor, ECHO_API_URL, ifTipsExist } from './commom.util';
+import { adaTabledRow, addTextToEditor, ECHO_API_URL, ifTipsExist } from '../utils/commom.util';
 const testAndWaitForResponse = async page => {
   const responsePromise = page.waitForResponse('**/api/unit');
   await page.getByRole('button', { name: 'Send' }).click();
