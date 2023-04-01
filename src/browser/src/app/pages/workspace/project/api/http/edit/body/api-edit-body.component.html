@@ -31,6 +31,7 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
+<!-- {{ model | json }} -->
 <eo-ng-table-pro
   *ngIf="[TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray, TYPE_API_BODY.XML, TYPE_API_BODY['FormData']].includes(bodyType)"
   [columns]="listConf.columns"
@@ -40,8 +41,17 @@
   [nzCheckAddChild]="nzCheckAddChild"
   [nzDragCheck]="nzDragCheck"
   [(nzData)]="model"
-  (nzDataChange)="tableChange($event)"
+  (nzDataChange)="tableChange()"
 ></eo-ng-table-pro>
+<ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
+  <input
+    placeholder="{{ rowItem.placeholder }}"
+    eo-ng-input
+    maxlength="{{ rowItem.maxlength }}"
+    [(ngModel)]="item.paramAttr.example"
+    (ngModelChange)="tableChange()"
+  /> </ng-template
+>`
 <!-- [nzScroll]="{ y: '300px' }" -->
 <!-- Raw -->
 <eo-monaco-editor

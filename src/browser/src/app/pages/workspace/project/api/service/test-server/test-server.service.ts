@@ -32,7 +32,7 @@ export abstract class TestServerService implements TestServer {
         .filter(val => val.name && val.isRequired)
         .map((val: BodyParam) => ({
           headerName: val.name,
-          headerValue: val['paramAttr.example']
+          headerValue: val.paramAttr?.example
         }));
     };
     const formatBody = (inData: Partial<ApiData>) => {

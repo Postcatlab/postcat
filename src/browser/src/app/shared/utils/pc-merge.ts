@@ -46,7 +46,14 @@ export const pcMerge = (
         if (item.name === ele.name) {
           //Assigns the specified key
           mergerKey.forEach(e => {
-            ele[e] = item[e];
+            const namePath = e.split('.');
+            const lastKey = namePath.pop();
+            //Such as paramAttr.example
+            if (namePath.length && ele[namePath[0]]) {
+              ele[namePath[0]][lastKey] = item[namePath[0]]?.[lastKey];
+              return;
+            }
+            ele[lastKey] = item[lastKey];
           });
           if (item[childKey] && item[childKey].length !== 0) {
             if (ele[childKey]) {

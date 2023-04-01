@@ -196,7 +196,6 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
         },
         ...data
       } = this.model;
-      // * For 'paramAttr.example' key
       this.socket.emit('ws-server', {
         type: 'ws-connect',
         content: {
@@ -205,7 +204,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
             ...requestItem,
             requestParams: {
               ...requestParamsItem,
-              headerParams: headerParams.map(it => ({ ...it, paramAttr: { example: it['paramAttr.example'] || '' } }))
+              ...headerParams
             }
           }
         }

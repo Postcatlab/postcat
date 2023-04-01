@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges, ViewChild, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import {
   ApiBodyType,
@@ -29,6 +29,7 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
   @Input() bodyType: ApiBodyType | number;
   @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
+  @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
   checkAddRow: (item) => boolean;
   nzDragCheck: (current, next) => boolean;
   jsonRootType: number = JsonRootType.Object;
@@ -108,7 +109,7 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
   beforeHandleImport(result) {
     this.jsonRootType = Array.isArray(result) ? JsonRootType.Array : JsonRootType.Object;
   }
-  tableChange($event) {
+  tableChange() {
     this.modelChange.emit(this.model);
   }
   handleParamsImport(data) {
@@ -177,12 +178,13 @@ export class ApiEditBodyComponent implements OnInit, OnDestroy, OnChanges {
         in: 'body',
         id: this.tid,
         format: this.bodyType,
-        isEdit: true
+        isEdit: true,
+        exampleSlot: this.formValue
       },
       {
         manualAdd: true,
         changeFn: () => {
-          this.tableChange(this.model);
+          this.tableChange();
         }
       }
     );

@@ -33,13 +33,13 @@
   [(nzData)]="model"
   (nzDataChange)="emitModelChange()"
 ></eo-ng-table-pro>
-<ng-template #formValue let-item="item" let-index="index">
+<ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
   <div [ngSwitch]="item.dataType">
     <input
       *ngSwitchDefault
-      placeholder="Value"
+      placeholder="{{ rowItem.placeholder }}"
       eo-ng-input
-      maxlength="65535"
+      maxlength="{{ rowItem.maxlength }}"
       [(ngModel)]="item.paramAttr.example"
       (ngModelChange)="emitModelChange()"
     />

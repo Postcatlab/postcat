@@ -238,16 +238,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private initListConf() {
     const config = this.apiTable.initTestTable({
       in: 'body',
-      id: 'api_test_body'
+      id: 'api_test_body',
+      exampleSlot: this.formValue
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
     this.listConf.columns.forEach(col => {
       switch (col.key) {
-        case 'paramAttr.example': {
-          col.slot = this.formValue;
-          break;
-        }
         case 'dataType': {
           col.change = (item: BodyParam | any) => {
             if (item.dataType === ApiParamsType.file) {

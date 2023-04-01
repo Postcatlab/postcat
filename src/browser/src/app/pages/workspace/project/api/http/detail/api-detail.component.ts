@@ -12,7 +12,6 @@ import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { enumsToObject } from '../../../../../../shared/utils/index.utils';
 import { ProjectApiService } from '../../service/project-api.service';
 
-import { checkPrimeSync } from 'crypto';
 @Component({
   selector: 'pc-api-http-detail',
   templateUrl: './api-detail.component.html',

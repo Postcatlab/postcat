@@ -50,7 +50,6 @@ export class ApiEditUtilService {
           item.orderNo = 0;
           item.paramType = ParamTypeEnum.RESPONSE;
           item.partType = mui['bodyParams'];
-          Reflect.deleteProperty(item, 'paramAttr.example');
         }
         return;
       }
@@ -84,8 +83,6 @@ export class ApiEditUtilService {
     const result = this.parseApiUI2Storage(formData, val => {
       val.orderNo = 0;
       val.paramAttr ??= {};
-      val.paramAttr.example = val['paramAttr.example'] || val.paramAttr?.example;
-      Reflect.deleteProperty(val, 'paramAttr.example');
       return val?.name;
     });
     return result;
@@ -98,7 +95,6 @@ export class ApiEditUtilService {
    */
   formatStorageApiDataToUI(apiData) {
     return this.parseApiUI2Storage(apiData, val => {
-      val['paramAttr.example'] = val.paramAttr?.example || '';
       return true;
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -14,7 +14,16 @@ import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData
       [setting]="listConf.setting"
       [(nzData)]="model"
       (nzDataChange)="modelChange.emit($event)"
-    ></eo-ng-table-pro> `
+    ></eo-ng-table-pro>
+    <ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
+      <input
+        placeholder="{{ rowItem.placeholder }}"
+        eo-ng-input
+        maxlength="{{ rowItem.maxlength }}"
+        [(ngModel)]="item.paramAttr.example"
+        (ngModelChange)="modelChange.emit(model)"
+      />
+    </ng-template>`
 })
 export class ApiEditFormComponent implements OnInit {
   @Input() model: BodyParam[];
@@ -24,6 +33,7 @@ export class ApiEditFormComponent implements OnInit {
   @Input() tid: string;
   @Input() module: 'rest' | 'header' | 'query';
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
+  @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
   listConf: ApiTableConf = {
     columns: [],
     setting: {}
@@ -49,7 +59,8 @@ export class ApiEditFormComponent implements OnInit {
       {
         in: this.module,
         isEdit: true,
-        id: this.tid
+        id: this.tid,
+        exampleSlot: this.formValue
       },
       {
         changeFn: () => {

@@ -13,7 +13,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     return {
       name: key,
       isRequired: 1,
-      'paramAttr.example': '',
       paramAttr: {
         example: ''
       },
@@ -30,7 +29,6 @@ const parseTree = (key, value): BodyParam | unknown => {
       return {
         name: key,
         isRequired: 1,
-        'paramAttr.example': JSON.stringify(value),
         dataType: ApiParamsType.array,
         paramAttr: {
           example: JSON.stringify(value)
@@ -41,7 +39,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     return {
       name: key,
       isRequired: 1,
-      'paramAttr.example': '',
       paramAttr: {
         example: ''
       },
@@ -55,7 +52,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     name: key,
     isRequired: 1,
     description: '',
-    'paramAttr.example': value == null ? '' : value.toString(),
     paramAttr: {
       example: value == null ? '' : value.toString()
     },
@@ -293,7 +289,7 @@ export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAt
           inputObject['@eo_attr'][tmpKey] = (val.attribute || '').replace(/\s+/, ' ');
         }
       }
-      inputObject[tmpKey] = val['paramAttr.example'];
+      inputObject[tmpKey] = val.paramAttr?.example;
       if (val.childList && val.childList.length > 0) {
         switch (val.dataType) {
           case ApiParamsType.array: {

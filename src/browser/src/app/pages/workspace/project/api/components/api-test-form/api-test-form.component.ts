@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { ApiTableService } from '../../service/api-table.service';
       <div class="flex items-center h-10 param-box-header">
         <params-import
           [disabled]="disabled"
-          (baseDataChange)="changeFn($event)"
+          (baseDataChange)="importChange($event)"
           [(baseData)]="model"
           [contentType]="module"
         ></params-import>
@@ -25,7 +25,16 @@ import { ApiTableService } from '../../service/api-table.service';
       [nzTrClick]="nzTrClick"
       [(nzData)]="model"
       (nzDataChange)="modelChange.emit($event)"
-    ></eo-ng-table-pro> `
+    ></eo-ng-table-pro>
+    <ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
+      <input
+        placeholder="{{ rowItem.placeholder }}"
+        eo-ng-input
+        maxlength="{{ rowItem.maxlength }}"
+        [(ngModel)]="item.paramAttr.example"
+        (ngModelChange)="emitChangeFun()"
+      />
+    </ng-template>`
 })
 export class ApiTestFormComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
@@ -33,6 +42,7 @@ export class ApiTestFormComponent implements OnInit, OnDestroy {
   @Input() nzTrClick: (...rest: any[]) => any;
   @Input() module: 'rest' | 'header' | 'query';
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
+  @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
 
   listConf: ApiTableConf = {
     columns: [],
@@ -60,13 +70,17 @@ export class ApiTestFormComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  changeFn($event) {
+  importChange($event) {
     this.modelChange.emit($event);
+  }
+  emitChangeFun() {
+    this.modelChange.emit(this.model);
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
       in: this.module,
-      id: `api_test_${module}`
+      id: `api_test_${module}`,
+      exampleSlot: this.formValue
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

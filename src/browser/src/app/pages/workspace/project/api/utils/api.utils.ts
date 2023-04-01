@@ -19,7 +19,7 @@ const jointQuery = (url = '', query: QueryParam[]) => {
     if (!(val.name && val.isRequired)) {
       return;
     }
-    search += `${val.name}=${val['paramAttr.example'] || ''}&`;
+    search += `${val.name}=${val.paramAttr?.example || ''}&`;
   });
   search = search ? `?${search.slice(0, -1)}` : '';
   return `${url.split('?')[0]}${search}`;
@@ -52,7 +52,9 @@ export const syncUrlAndQuery = (
     const item: QueryParam | any = {
       isRequired: 1,
       name,
-      'paramAttr.example': val
+      paramAttr: {
+        example: val
+      }
     };
     urlQuery.push(item);
   });

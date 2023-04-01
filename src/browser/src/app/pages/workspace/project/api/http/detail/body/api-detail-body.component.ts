@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { ApiBodyType, ApiTableConf } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -15,6 +15,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tid: string;
   @Input() model: BodyParam[];
   @Input() bodyType: ApiBodyType | number;
+  @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
   listConf: ApiTableConf = {};
   cache: object = {};
   get TYPE_API_BODY(): typeof ApiBodyType {
@@ -51,6 +52,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     const config = this.apiTable.initTable({
       in: 'body',
       module: 'preview',
+      exampleSlot: this.formValue,
       format: this.bodyType as ApiBodyType,
       isEdit: false,
       id: this.tid
