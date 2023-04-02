@@ -139,7 +139,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">328</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -239,19 +239,19 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">323</context>
+          <context context-type="linenumber">324</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">351</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">366</context>
+          <context context-type="linenumber">367</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">390</context>
+          <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -278,15 +278,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">339</context>
+          <context context-type="linenumber">340</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">358</context>
+          <context context-type="linenumber">359</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">375</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/history/eo-history.component.html</context>
@@ -331,7 +331,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8254343427077061782" datatype="html">
@@ -784,6 +784,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
           <context context-type="linenumber">277</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8481244575805690440" datatype="html">
@@ -1999,7 +2003,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6006604033305558406" datatype="html">
@@ -2069,7 +2073,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">171</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
@@ -2116,11 +2120,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">244</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2293368426591938126" datatype="html">
@@ -2203,43 +2207,43 @@
         <source>Case</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5140115132095091817" datatype="html">
         <source><x id="PH" equiv-text="tips[node.module]"/> does not support sorting at the moment, please report to Github Issue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3464737374195885967" datatype="html">
         <source>Add Mock</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">327</context>
+          <context context-type="linenumber">328</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1250980317493747355" datatype="html">
         <source>Add Case</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">331</context>
+          <context context-type="linenumber">332</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">336</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">354</context>
+          <context context-type="linenumber">355</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">370</context>
+          <context context-type="linenumber">371</context>
         </context-group>
         <note priority="1" from="description">@Copy</note>
       </trans-unit>
@@ -2247,21 +2251,21 @@
         <source>Add API</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">382</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6661660398413994526" datatype="html">
         <source>Add Subgroup</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">386</context>
+          <context context-type="linenumber">387</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">394</context>
+          <context context-type="linenumber">395</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1623775429516238560" datatype="html">
@@ -2450,7 +2454,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Description" datatype="html">
@@ -2465,7 +2469,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5120319645740096878" datatype="html">
@@ -2705,7 +2709,7 @@
         <source>Please select an API group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5240263653624056032" datatype="html">
@@ -2726,21 +2730,21 @@
         <source>Added failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4397437262068626718" datatype="html">
         <source>Edited failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1271474425566205701" datatype="html">
         <source>Edited API successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
@@ -2754,14 +2758,14 @@
         <source>Binary Description</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/body/api-edit-body.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5456109674265120299" datatype="html">
         <source>XML can have only one root node</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/body/api-edit-body.component.ts</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2384026219516877038" datatype="html">
@@ -2772,7 +2776,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7320288230223571670" datatype="html">
@@ -2847,7 +2851,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4298763480371935463" datatype="html">
@@ -3258,21 +3262,21 @@
         <source>Choose Files</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5955498266411273280" datatype="html">
         <source>files selected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2572539757685539458" datatype="html">
         <source>No file chosen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/body/api-test-body.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9000284621353873635" datatype="html">
@@ -3336,25 +3340,25 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">109</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">140</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="HeaderName" datatype="html">
         <source>Key</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ParamName" datatype="html">
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2442218156395481088" datatype="html">
@@ -3516,28 +3520,28 @@ If the current test URL is a local API, please download the desktop and re-initi
         <source>Connect to <x id="PH" equiv-text="this.getLink()"/> is failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1163250179515496919" datatype="html">
         <source>Do you want to leave the page?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3828705763082853823" datatype="html">
         <source>After leaving, the current long connection is no longer maintained, whether to confirm to leave?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">324</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2273088133016853024" datatype="html">
         <source>Leave</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">337</context>
+          <context context-type="linenumber">336</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4157564596155275219" datatype="html">
@@ -3765,6 +3769,69 @@ If the current test URL is a local API, please download the desktop and re-initi
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/models/shared.model.ts</context>
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5103788378973384072" datatype="html">
+        <source>Desktop</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1002165214775409029" datatype="html">
+        <source>Mobile</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8660789270969799469" datatype="html">
+        <source>Engine</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2175024299064407052" datatype="html">
+        <source>Engine Version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4572191855678456894" datatype="html">
+        <source>Platform Version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="29832309535656200" datatype="html">
+        <source>System</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4025235656266852098" datatype="html">
+        <source>System Version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5848501149784858236" datatype="html">
+        <source>Shell</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1993098151713729744" datatype="html">
+        <source>Shell Version</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/browser-type.ts</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
     </body>

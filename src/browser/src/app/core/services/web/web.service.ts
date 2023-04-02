@@ -248,7 +248,7 @@ export class WebService {
       systemInfo = window.electron.getSystemInfo();
       descriptions.push(...electronDetails);
     } else {
-      systemInfo = getBrowserType(getSettings()?.['system.language']);
+      systemInfo = getBrowserType();
       descriptions.push(
         ...Object.entries<string>(systemInfo).map(([key, value]) => ({
           id: key,
