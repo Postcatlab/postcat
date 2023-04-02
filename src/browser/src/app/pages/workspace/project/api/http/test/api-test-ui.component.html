@@ -25,8 +25,9 @@
               type="text"
               class="rounded-r main-bg"
               i18n-placeholder
-              placeholder="Enter URL"
+              placeholder="Enter URL or Curl text"
               name="uri"
+              maxlength="65535"
               (blur)="blurUri()"
               eo-ng-input
               (input)="updateParamsbyUri()"
@@ -73,7 +74,7 @@
         </ng-template>
         <eo-api-test-body
           [(contentType)]="model.userSelectedContentType"
-          (contentTypeChange)="setHeaderContentType()"
+          (contentTypeChange)="changeUserSelectedContentType()"
           [(bodyType)]="model.request.apiAttrInfo.contentType"
           (bodyTypeChange)="changeBodyType($event)"
           [(model)]="model.request.requestParams.bodyParams"

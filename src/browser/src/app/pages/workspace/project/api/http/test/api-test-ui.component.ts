@@ -40,7 +40,8 @@ import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspa
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ScriptType } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { parseCurl } from 'pc/browser/src/app/pages/workspace/project/api/utils/parse-curl.utils';
+import { ApiData, ScriptType } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -60,6 +61,8 @@ import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiStoreService } from '../../store/api-state.service';
+
+import { copyFileSync } from 'fs';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -238,15 +241,15 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
    * @param bodyType
    * @returns
    */
-  getContentTypeByBodyType(bodyType: ApiBodyType = this.model.request?.apiAttrInfo?.contentType): ContentType | string {
+  private getContentTypeByBodyType(bodyType: ApiBodyType = this.model.request?.apiAttrInfo?.contentType): ContentType | string {
     switch (bodyType) {
       case ApiBodyType.Raw: {
         const isRawHeader = CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
         return isRawHeader ? this.model?.userSelectedContentType : ContentTypeMap[ApiBodyType.JSON];
       }
       case ApiBodyType.FormData: {
-        //If params has file，dataType must be multiple/form-data
-        if (this.model?.request?.requestParams?.bodyParams?.some(val => val.dataType === ApiParamsType.file)) return 'multiple/form-data';
+        //If params has file，dataType must be multipart/form-data
+        if (this.model?.request?.requestParams?.bodyParams?.some(val => val.dataType === ApiParamsType.file)) return 'multipart/form-data';
 
         const isFormHeader = FORMDATA_CONTENT_TYPE_BY_ABRIDGE.some(val => val.value === this.model?.userSelectedContentType);
         return isFormHeader ? this.model?.userSelectedContentType : ContentTypeMap[ApiBodyType.FormData];
@@ -256,16 +259,23 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
       }
     }
   }
-  setHeaderContentType() {
+  changeUserSelectedContentType() {
+    this.fixedHeaderAndContentType();
+  }
+  /**
+   * Set headerParams and userSelectedContentType by bodyType
+   *
+   * @returns
+   */
+  private fixedHeaderAndContentType() {
     const bodyType = this.model.request?.apiAttrInfo?.contentType;
-
     if (bodyType !== ApiBodyType.Binary) {
       const contentType = this.getContentTypeByBodyType();
       this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
         contentType,
         this.model.request.requestParams.headerParams
       );
-      this.model.userSelectedContentType = contentType as ContentType;
+      this.model.userSelectedContentType ??= contentType as ContentType;
       return;
     }
 
@@ -293,7 +303,9 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
       }
       case 'requestBody': {
         //When bodyType or params change,change header and content-type
-        this.setHeaderContentType();
+        if (this.model?.request?.apiAttrInfo?.contentType === ApiBodyType.FormData) {
+          this.fixedHeaderAndContentType();
+        }
         break;
       }
     }
@@ -445,6 +457,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.model.userSelectedContentType =
       this.apiTestUtil.getContentType(this.model.request.requestParams.headerParams) || this.getContentTypeByBodyType(bodyType);
   }
+
   /**
    * Init basic form,such as url,protocol,method
    */
@@ -455,8 +468,16 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     controls['method'] = [this.model.request.apiAttrInfo?.requestMethod, [Validators.required]];
     this.validateForm = this.fb.group(controls);
 
-    //Watch uri changes
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
+      //Watch uri changes
+      if (x?.uri?.trim().startsWith('curl')) {
+        this.model = this.apiTestUtil.getTestDataFromCurl(x.uri, this.model);
+        this.validateForm.patchValue({
+          uri: this.model.request.uri,
+          method: this.model.request.apiAttrInfo?.requestMethod
+        });
+        this.fixedHeaderAndContentType();
+      }
       //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       this.modelChange.emit(this.model);
     });

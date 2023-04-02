@@ -273,22 +273,6 @@ export const copy = text => {
   return !!flag;
 };
 
-/**
- * Returns the difference between two versions
- * If v1 is greater than v2, return greater than 0
- *
- * @param v1
- * @param v2
- * @returns difference
- */
-export const compareVersion = (v1, v2): number => {
-  const _v1 = v1.split('.');
-  const _v2 = v2.split('.');
-  const _r = parseInt(_v1[0] || 0, 10) - parseInt(_v2[0] || 0, 10);
-
-  return _r === 0 && v1 !== v2 ? compareVersion(_v1.splice(1).join('.'), _v2.splice(1).join('.')) : _r;
-};
-
 // more see https://developer.mozilla.org/zh-CN/docs/Glossary/Base64#solution_4_–_escaping_the_string_before_encoding_it
 export const b64DecodeUnicode = (str: string) => {
   // Going backwards: from bytestream, to percent-encoding, to original string.

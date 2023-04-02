@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, Protocol } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  IGNORE_HEADERS,
+  JsonRootType,
+  Protocol
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { parseCurl } from 'pc/browser/src/app/pages/workspace/project/api/utils/parse-curl.utils';
 import { ApiData, BodyParam, HeaderParam, RestParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { table2json, text2table, json2xml } from '../../../../../shared/utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
 import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
-import { ContentType } from '../http/test/api-test.model';
+import { ContentType, FORMDATA_CONTENT_TYPE_BY_ABRIDGE, testViewModel } from '../http/test/api-test.model';
 import { ApiTestResData } from './test-server/test-server.model';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -175,6 +181,90 @@ export class ApiTestUtilService {
 
     return result;
   }
+  /**
+   * Parse curl to test formdata
+   */
+  getTestDataFromCurl(text, originModel: testViewModel): testViewModel {
+    const result: testViewModel = eoDeepCopy(originModel);
+    try {
+      const requestObj = parseCurl(text || '');
+      console.log(requestObj);
+
+      result.request.uri = requestObj.url;
+      //Set Query
+      result.request.requestParams.queryParams = Object.keys(requestObj.query)
+        .map(name => ({
+          name,
+          value: requestObj.query[name]
+        }))
+        .map(val => {
+          return {
+            name: val.name,
+            isRequired: 1,
+            paramAttr: {
+              example: val.value
+            }
+          };
+        });
+
+      //Set Header
+      result.request.requestParams.headerParams = Object.keys(requestObj.header)
+        .map(name => ({
+          name,
+          value: requestObj.header[name]
+        }))
+        //Ignore some headers
+        .filter(val => !IGNORE_HEADERS.includes(val.name.toLowerCase()))
+        .map(val => {
+          return {
+            name: val.name,
+            isRequired: 1,
+            paramAttr: {
+              example: val.value
+            }
+          };
+        });
+
+      //Set body and contentType
+      if (FORMDATA_CONTENT_TYPE_BY_ABRIDGE.find(val => requestObj.contentType.includes(val.value))) {
+        result.request.apiAttrInfo.contentType = ApiBodyType.FormData;
+        //Get formdata
+        const formArr: BodyParam[] = [];
+        const nameReg = /name=\"(.+?)\"/;
+        requestObj.body
+          .split('\\r\\n')
+          .filter(val => val && !val.includes('------'))
+          .forEach((val, index) => {
+            const fIndex = Math.floor(index / 2);
+            //FormName
+            if (!formArr[fIndex]) {
+              const name = val.match(nameReg)[1];
+              formArr[fIndex] = {
+                name: name,
+                dataType: val.includes('filename=') ? ApiParamsType.file : ApiParamsType.string,
+                isRequired: 1,
+                paramAttr: {}
+              };
+              return;
+            }
+            //FormName
+            formArr[fIndex].paramAttr.example = val;
+          });
+        result.request.requestParams.bodyParams = formArr;
+      } else {
+        result.request.apiAttrInfo.contentType = ApiBodyType.Raw;
+        result.request.requestParams.bodyParams = [
+          {
+            binaryRawData: requestObj.body
+          }
+        ];
+      }
+    } catch (e) {
+      pcConsole.error(`parseCurl error: ${e}`);
+    }
+    console.log('getTestDataFromCurl', result);
+    return result;
+  }
   getContentType(headers = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (!existHeader) {
@@ -205,34 +295,7 @@ export class ApiTestUtilService {
     return result;
   }
   private filterCommonHeader(headers = []) {
-    const commonHeader = [
-      'content-type',
-      'accept',
-      'age',
-      'via',
-      'accept-ranges',
-      'nginx-hit',
-      'content-length',
-      'accept-encoding',
-      'accept-language',
-      'connection',
-      'host',
-      'date',
-      'referrer-policy',
-      'connection',
-      'location',
-      'range',
-      'transfer-encoding',
-      'content-security-policy',
-      'strict-transport-security',
-      'server',
-      'if-match',
-      'if-none-match',
-      'user-agent',
-      'vary',
-      'referrer-policy'
-    ];
-    const result = headers.filter(val => !commonHeader.includes(val.name));
+    const result = headers.filter(val => !IGNORE_HEADERS.includes(val.name));
     return result;
   }
 }

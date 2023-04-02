@@ -1,10 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { compareVersions } from 'compare-versions';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
+import pkgInfo from '../../../../../../../../package.json';
 import { WebService } from '../../../../core/services/web/web.service';
 import { ExtensionService } from '../../../../services/extensions/extension.service';
 import { EoExtensionInfo } from '../extension.model';
@@ -20,13 +22,16 @@ export class ExtensionDetailComponent implements OnInit {
   @Input() nzSelectedIndex = 0;
   isOperating = false;
   introLoading = false;
-  isAvailableElectron = true;
   changelogLoading = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   readonly APP_CONFIG = APP_CONFIG;
   changeLog = '';
   changeLogNotFound = false;
+
+  isAvailableVersion = true;
+  isAvailablePlatform = true;
+
   constructor(
     public extensionService: ExtensionService,
     private webService: WebService,
@@ -68,7 +73,8 @@ export class ExtensionDetailComponent implements OnInit {
     this.introLoading = false;
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
-    this.isAvailableElectron = this.checkisAvailableElectron(this.extensionDetail);
+    this.isAvailableVersion = compareVersions(pkgInfo.version, this.extensionDetail.engines?.postcat) >= 0 ? true : false;
+    this.isAvailablePlatform = this.checkisAvailablePlatform(this.extensionDetail);
     this.fetchChangelog(this.language.systemLanguage);
 
     setTimeout(() => {
@@ -140,7 +146,13 @@ ${log}
       this.fetchChangelog();
     }
   };
-  checkisAvailableElectron(pkgInfo): boolean {
+  /**
+   * Check current extension is available in current platform
+   *
+   * @param pkgInfo
+   * @returns
+   */
+  checkisAvailablePlatform(pkgInfo): boolean {
     if (this.electron.isElectron && this.extensionDetail.browser && !this.extensionDetail.main) return false;
     return true;
   }

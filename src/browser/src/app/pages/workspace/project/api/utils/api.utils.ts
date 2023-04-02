@@ -25,6 +25,14 @@ const jointQuery = (url = '', query: QueryParam[]) => {
   return `${url.split('?')[0]}${search}`;
 };
 
+export const getQueryFromURL = (url: string): { [key: string]: string } => {
+  const reuslt = {};
+  //? prevent double question mark
+  new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
+    reuslt[name] = val;
+  });
+  return reuslt;
+};
 /**
  * Sync URL and Query
  *
@@ -48,12 +56,14 @@ export const syncUrlAndQuery = (
   const urlQuery = [];
   const uiQuery = query;
   //Get url query
-  new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
+  const queryObj = getQueryFromURL(url);
+  Object.keys(queryObj).forEach(name => {
+    const value = queryObj[name];
     const item: QueryParam | any = {
       isRequired: 1,
       name,
       paramAttr: {
-        example: val
+        example: value
       }
     };
     urlQuery.push(item);

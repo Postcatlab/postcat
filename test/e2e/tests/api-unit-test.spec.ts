@@ -155,7 +155,7 @@ test('Raw Test', async ({ page }) => {
   await page.getByPlaceholder('Enter URL').click();
   await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
   //!Change to XML prevent JSON/Raw monaco editor autocompletel value
-  await page.getByText('JSON').click();
+  await page.getByText('Text').click();
   await page.getByText('XML').click();
   await addTextToEditor(page, `{"test":1,"test1":2}`);
   const res = await testAndWaitForResponse(page);

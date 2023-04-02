@@ -10,6 +10,7 @@ export interface TabsConfig {
   pathByName: { [key in PageUniqueName]?: string };
   BASIC_TABS: Array<Partial<TabItem>>;
 }
+
 export const BASIC_TABS_INFO = new InjectionToken<TabsConfig>('basic-tab-info', {
   providedIn: 'root',
   factory: () => ({
@@ -18,27 +19,6 @@ export const BASIC_TABS_INFO = new InjectionToken<TabsConfig>('basic-tab-info', 
   })
 });
 export const SYSTEM_MOCK_NAME = $localize`Default Mock`;
-/**
- * API body FormData param type
- */
-export enum ApiParamsType {
-  string = 0,
-  file = 1,
-  json = 2,
-  int = 3,
-  float = 4,
-  double = 5,
-  date = 6,
-  datetime = 7,
-  boolean = 8,
-  byte = 9,
-  short = 10,
-  long = 11,
-  array = 12,
-  object = 13,
-  number = 14,
-  null = 15
-}
 
 export const DEFAULT_UNIT_TEST_RESULT: { response: ApiTestResData } = {
   response: {
@@ -88,18 +68,13 @@ export enum Protocol {
 
 export const protocalMap = enumsToObject(Protocol);
 
-export const ApiParamsTypeByNumber = enumsToArr(ApiParamsType).map(val => ({
-  title: val.key,
-  value: val.value
-}));
 /**
- * API body Json or xml param type
+ * API body FormData param type
  */
-export enum ApiParamsTypeJsonOrXml {
-  string = ApiParamsType.string,
-  array = 12,
-  object = 13,
-  number = 14,
+export enum ApiParamsType {
+  string = 0,
+  file = 1,
+  byte = 9,
   json = 2,
   int = 3,
   float = 4,
@@ -109,7 +84,33 @@ export enum ApiParamsTypeJsonOrXml {
   boolean = 8,
   short = 10,
   long = 11,
+  array = 12,
+  object = 13,
+  number = 14,
   null = 15
+}
+export const ApiParamsTypeByNumber = enumsToArr(ApiParamsType).map(val => ({
+  title: val.key,
+  value: val.value
+}));
+/**
+ * API body Json or xml param type
+ */
+export enum ApiParamsTypeJsonOrXml {
+  string = ApiParamsType.string,
+  array = ApiParamsType.array,
+  object = ApiParamsType.object,
+  number = ApiParamsType.number,
+  json = ApiParamsType.json,
+  int = ApiParamsType.int,
+  float = ApiParamsType.float,
+  double = ApiParamsType.double,
+  date = ApiParamsType.date,
+  datetime = ApiParamsType.datetime,
+  boolean = ApiParamsType.boolean,
+  short = ApiParamsType.short,
+  long = ApiParamsType.long,
+  null = ApiParamsType.null
 }
 export interface ParamsEnum {
   /**
@@ -181,7 +182,19 @@ export const DEFAULT_HEADER = [
   { title: 'x-api-key', restricted: false },
   { title: 'Connection', restricted: true }
 ];
-
+export const IGNORE_HEADERS = [
+  'age',
+  'via',
+  'accept-ranges',
+  'nginx-hit',
+  'referrer-policy',
+  'location',
+  'content-security-policy',
+  'strict-transport-security',
+  'server',
+  'vary',
+  ...DEFAULT_HEADER.filter(item => item.restricted).map(val => val.title.toLowerCase())
+];
 export enum ApiBodyType {
   FormData = 0,
   JSON = 2,

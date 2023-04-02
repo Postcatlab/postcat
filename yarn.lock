@@ -2829,6 +2829,13 @@
   resolved "https://registry.npmmirror.com/@types/parse-json/-/parse-json-4.0.0.tgz"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/parse-multipart@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/@types/parse-multipart/-/parse-multipart-1.0.0.tgz#0626d256f9d664c2144553070bb172a67fad744e"
+  integrity sha512-8FClkxZvlFU/lme6c8CflkDJZuWPhd5DcBlpeZ7+QwJGf4A4zScuLMp+05fRD6sqL9JPZTtJhPadfxNQh8jzrA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/plist@^3.0.1":
   version "3.0.2"
   resolved "https://registry.npmmirror.com/@types/plist/-/plist-3.0.2.tgz#61b3727bba0f5c462fe333542534a0c3e19ccb01"
@@ -5216,6 +5223,11 @@ compare-version@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmmirror.com/compare-version/-/compare-version-0.1.2.tgz"
   integrity sha512-pJDh5/4wrEnXX/VWRZvruAGHkzKdr46z11OlTPN+VrATlWWhSKewNCJ1futCO5C7eJB3nPMFZA1LeYtcFboZ2A==
+
+compare-versions@6.0.0-rc.1:
+  version "6.0.0-rc.1"
+  resolved "https://registry.npmmirror.com/compare-versions/-/compare-versions-6.0.0-rc.1.tgz#93e6beb8767c2375333ee168fa64c28b75ace2c6"
+  integrity sha512-cFhkjbGY1jLFWIV7KegECbfuyYPxSGvgGkdkfM+ibboQDoPwg2FRHm5BSNTOApiauRBzJIQH7qvOJs2sW5ueKQ==
 
 component-emitter@^1.2.1:
   version "1.3.0"
@@ -12645,6 +12657,11 @@ parse-json@^5.0.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
+parse-multipart-data@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.npmmirror.com/parse-multipart-data/-/parse-multipart-data-1.5.0.tgz#ab894cc6c40229d0a2042500e120df7562d94b87"
+  integrity sha512-ck5zaMF0ydjGfejNMnlo5YU2oJ+pT+80Jb1y4ybanT27j+zbVP/jkYmCrUGsEln0Ox/hZmuvgy8Ra7AxbXP2Mw==
+
 parse-node-version@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmmirror.com/parse-node-version/-/parse-node-version-1.0.1.tgz"
@@ -14537,6 +14554,11 @@ shell-quote@^1.6.1:
   version "1.8.0"
   resolved "https://registry.npmmirror.com/shell-quote/-/shell-quote-1.8.0.tgz"
   integrity sha512-QHsz8GgQIGKlRi24yFc6a6lN69Idnx634w49ay6+jA5yFh7a1UY+4Rp6HPx/L/1zcEDPEij8cIsiqR6bQsE5VQ==
+
+shellwords-ts@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmmirror.com/shellwords-ts/-/shellwords-ts-3.0.1.tgz#7c2ed81ea6d0804705a95a5625682363972600e2"
+  integrity sha512-GabK4ApLMqHFRGlpgNqg8dmtHTnYHt0WUUJkIeMd3QaDrUUBEDXHSSNi3I0PzMimg8W+I0EN4TshQxsnHv1cwg==
 
 shimmer@^1.1.0, shimmer@^1.2.0:
   version "1.2.1"

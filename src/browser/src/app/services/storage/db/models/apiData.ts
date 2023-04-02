@@ -1,4 +1,4 @@
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiBodyType, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { RequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
 
@@ -205,7 +205,7 @@ export interface BodyParam {
   name?: string;
   paramType?: ParamTypeEnum;
   partType?: number;
-  dataType?: number;
+  dataType?: ApiParamsType;
   dataTypeValue?: string;
   structureId?: number;
   structureParamId?: string;

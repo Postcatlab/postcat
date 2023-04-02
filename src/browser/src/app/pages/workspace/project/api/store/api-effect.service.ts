@@ -161,6 +161,7 @@ export class ApiEffectService {
   //? API
   async addAPI(apiData: ApiData) {
     // * Unsaved auth Info
+    apiData = eoDeepCopy(apiData);
     Reflect.deleteProperty(apiData, 'authInfo');
 
     const [result, err] = await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
@@ -186,6 +187,8 @@ export class ApiEffectService {
     return [result[0], err];
   }
   async updateAPI(apiData) {
+    apiData = eoDeepCopy(apiData);
+    Reflect.deleteProperty(apiData, 'authInfo');
     const [result, err] = await this.api.api_apiDataUpdate({ api: apiData });
     if (err) {
       return [null, err];

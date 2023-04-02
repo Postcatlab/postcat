@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { resolveUrl } from 'ajv/dist/compile/resolve';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -53,7 +54,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     },
     API_BODY_TYPE: []
   };
-  autoSetContentType = true;
+  // autoSetContentType = false;
   IMPORT_MUI = IMPORT_MUI;
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
@@ -88,7 +89,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
 
   changeContentType(contentType) {
     this.contentTypeChange.emit(contentType);
-    this.autoSetContentType = false;
+    // this.autoSetContentType = false;
   }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
@@ -163,8 +164,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   rawDataChange(code: string) {
     this.model[0].binaryRawData = code;
     this.modelChange.emit(this.model);
+
+    if (!code) return;
     const contentType = whatTextTypeMap[whatTextType(code)];
-    if (contentType && contentType !== this.contentType && this.autoSetContentType !== false) {
+    // && this.autoSetContentType !== false
+    if (contentType && contentType !== this.contentType) {
       this.contentType = contentType;
       this.contentTypeChange.emit(contentType);
     }

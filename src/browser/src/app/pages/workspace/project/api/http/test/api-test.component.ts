@@ -73,7 +73,7 @@ interface TestInstance {
       #testUIComponent
       [model]="model"
       (afterTested)="afterTested.emit($event)"
-      (modelChange)="valueChange()"
+      (modelChange)="uiModelChange($event)"
       [extraButtonTmp]="saveButtonTmp"
     ></eo-api-http-test-ui>
     <ng-template #saveButtonTmp>
@@ -139,6 +139,11 @@ export class ApiTestComponent implements EditTabViewComponent {
     private apiTestUtil: ApiTestUtilService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
+  uiModelChange($event) {
+    //? prevent model reset slow than modelChange
+    this.model = $event;
+    this.modelChange.emit($event);
+  }
   valueChange() {
     this.modelChange.emit(this.model);
   }
@@ -152,7 +157,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     // console.log('api test origin:', origin, 'after:', after);
 
     if (!isEqual(origin, after)) {
-      console.log('api test formChange true!', getDifference(origin, after));
+      // console.log('api test formChange true!', getDifference(origin, after));
       return true;
     }
     return false;
@@ -406,20 +411,20 @@ export class ApiTestComponent implements EditTabViewComponent {
   }
   private getContentTypeInfo(model: Partial<testViewModel>): { contentType: ContentType; headers: HeaderParam[] } {
     const result = {
-      contentType: ContentTypeMap[ApiBodyType.JSON],
+      contentType: ContentTypeMap[ApiBodyType.Raw],
       headers: []
     };
     const bodyType = model?.request?.apiAttrInfo?.contentType;
     if (bodyType !== ApiBodyType.Binary) {
       switch (bodyType) {
         case ApiBodyType.Raw: {
-          result.contentType = ContentTypeMap[ApiBodyType.JSON];
+          result.contentType = ContentTypeMap[ApiBodyType.Raw];
           break;
         }
         case ApiBodyType.FormData: {
-          //If params has file，dataType must be multiple/form-data
+          //If params has file，dataType must be multipart/form-data
           if (model?.request?.requestParams?.bodyParams?.some(val => val.dataType === ApiParamsType.file)) {
-            result.contentType = 'multiple/form-data';
+            result.contentType = 'multipart/form-data';
             break;
           }
           result.contentType = ContentTypeMap[ApiBodyType.FormData];
