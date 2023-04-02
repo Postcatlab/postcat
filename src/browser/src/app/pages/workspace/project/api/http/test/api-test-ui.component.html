@@ -20,7 +20,7 @@
           {{ currentEnv.hostUri }}
         </div>
         <nz-form-item nz-col class="flex-1">
-          <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+          <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL or Curl text">
             <input
               type="text"
               class="rounded-r main-bg"
@@ -116,7 +116,6 @@
             #authExtForm
             [(model)]="model.request.authInfo"
             [inheritAuthType]="initialModelAuthType"
-            type="api-test"
             [parentInfo]="{ parentId: model.request?.groupId }"
             (modelChange)="emitChangeFun('authInfo')"
           ></authorization-extension-form>
@@ -128,22 +127,32 @@
           <nz-badge class="ml-1" *ngIf="beforeInject?.trim() || afterInject?.trim()" nzStatus="success"></nz-badge>
         </ng-template>
         <pc-action>
-          <eo-api-script
-            [(code)]="beforeInject"
-            (codeChange)="emitChangeFun('beforeScript')"
-            [treeData]="BEFORE_DATA"
-            [completions]="beforeScriptCompletions"
-            name="pre"
-            class="h-[100%]"
-          ></eo-api-script>
-          <eo-api-script
-            [(code)]="afterInject"
-            (codeChange)="emitChangeFun('afterScript')"
-            [treeData]="AFTER_DATA"
-            [completions]="afterScriptCompletions"
-            name="after"
-            class="h-[100%]"
-          ></eo-api-script>
+          <div name="pre">
+            <div class="text-tips p-[10px]" *ngIf="module === 'caseTest'" i18n>
+              This Case is using Script Action from <a (click)="toAPI('beforeInject')">API</a>
+            </div>
+            <eo-api-script
+              *ngIf="module !== 'caseTest'"
+              [(code)]="beforeInject"
+              (codeChange)="emitChangeFun('beforeScript')"
+              [treeData]="BEFORE_DATA"
+              [completions]="beforeScriptCompletions"
+              class="h-[100%]"
+            ></eo-api-script>
+          </div>
+          <div name="after">
+            <div class="text-tips p-[10px]" *ngIf="module === 'caseTest'" i18n>
+              This Case is using Script Action from <a href="toAPI('afterInject')">API</a>
+            </div>
+            <eo-api-script
+              *ngIf="module !== 'caseTest'"
+              [(code)]="afterInject"
+              (codeChange)="emitChangeFun('afterScript')"
+              [treeData]="AFTER_DATA"
+              [completions]="afterScriptCompletions"
+              class="h-[100%]"
+            ></eo-api-script>
+          </div>
         </pc-action>
       </eo-ng-tab>
     </eo-ng-tabset>

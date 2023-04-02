@@ -16,14 +16,8 @@ import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData
 import { transferFileToDataUrl, waitNextTick, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
-import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE, WHAT_TEXT_TYPE_MAP } from '../api-test.model';
 
-const whatTextTypeMap = {
-  xml: 'application/xml',
-  json: 'application/json',
-  html: 'text/html',
-  text: 'text/plain'
-} as const;
 @Component({
   selector: 'eo-api-test-body',
   templateUrl: './api-test-body.component.html',
@@ -166,7 +160,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.modelChange.emit(this.model);
 
     if (!code) return;
-    const contentType = whatTextTypeMap[whatTextType(code)];
+    const contentType = WHAT_TEXT_TYPE_MAP[whatTextType(code)];
     // && this.autoSetContentType !== false
     if (contentType && contentType !== this.contentType) {
       this.contentType = contentType;

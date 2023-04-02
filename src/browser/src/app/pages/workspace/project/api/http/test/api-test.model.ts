@@ -2,6 +2,12 @@ import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/s
 import { ApiCase } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
+export const WHAT_TEXT_TYPE_MAP = {
+  xml: 'application/xml',
+  json: 'application/json',
+  html: 'text/html',
+  text: 'text/plain'
+} as const;
 export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file'
@@ -50,4 +56,11 @@ export interface testViewModel {
   responseTabIndex: number;
   request: Partial<ApiData | ApiCase>;
   testResult: ApiTestResData;
+}
+
+export enum TestPage {
+  Blank = 'blankTest',
+  History = 'historyTest',
+  Case = 'caseTest',
+  API = 'apiTest'
 }

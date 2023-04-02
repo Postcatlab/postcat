@@ -5,6 +5,7 @@ import { ImportApiComponent } from 'pc/browser/src/app/components/extension-sele
 import { SyncApiComponent } from 'pc/browser/src/app/components/extension-select/sync-api/sync-api.component';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
@@ -21,6 +22,7 @@ export class ProjectApiService {
     private feedback: EoNgFeedbackMessageService,
     private router: Router,
     private effect: ApiEffectService,
+    private store: ApiStoreService,
     private modalService: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
@@ -57,9 +59,14 @@ export class ProjectApiService {
       queryParams: { uuid: id }
     });
   }
-  toAdd(groupID?) {
+  toAdd(groupID = this.store.getRootGroup.id) {
     this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpEdit]], {
       queryParams: { groupId: groupID, pageID: Date.now() }
+    });
+  }
+  toTest(id) {
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpTest]], {
+      queryParams: { uuid: id }
     });
   }
   toEdit(id) {

@@ -1,6 +1,8 @@
 import { expect } from '@playwright/test';
 export const ECHO_API_URL = 'http://demo.gokuapi.com:8280/Web/Test/all/print';
-export const addTextToEditor = async (page, text, monacoEditor = page.locator('.monaco-editor').nth(0)) => {
+export const addTextToEditor = async (page, text, monacoEditor = page.locator('.ant-modal-body .monaco-editor').first()) => {
+  const isExist = await monacoEditor.count();
+  monacoEditor = isExist ? monacoEditor : await page.locator('.monaco-editor').first();
   await monacoEditor.click();
   await page.keyboard.press('Meta+KeyA');
   await page.keyboard.type(text);

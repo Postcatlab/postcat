@@ -90,7 +90,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     const id = Number(uuid);
     this.authExtForm?.init?.();
     if (!id) {
-      const [data] = await this.effect.createGroup([
+      const [data] = await this.effect.addGroup([
         {
           type: 1,
           name: $localize`:@@AddGroup:New Group`,
@@ -156,7 +156,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       this.model.name = name;
       this.feedback.success($localize`Edited Group Name successfully`);
     } else {
-      const [data] = await this.effect.createGroup([{ ...this.model, name }]);
+      const [data] = await this.effect.addGroup([{ ...this.model, name }]);
       if (data) {
         this.model = data;
       }

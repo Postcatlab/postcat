@@ -62,7 +62,7 @@ export const API_TABS: Array<Partial<TabItem>> = [
     title: $localize`New Websocket`
   },
   { pathname: '/http/case', icon: 'diy-test', uniqueName: PageUniqueName.HttpCase, type: 'edit', title: $localize`New Case` },
-  { pathname: '/http/mock', icon: 'mock', uniqueName: PageUniqueName.HttpMock, type: 'edit', title: $localize`New Mock`, isFixed: true }
+  { pathname: '/http/mock', icon: 'mock', uniqueName: PageUniqueName.HttpMock, type: 'edit', title: $localize`New Mock` }
 ];
 interface TabEvent {
   when: 'activated' | 'editing' | 'saved' | 'afterTested';

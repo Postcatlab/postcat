@@ -4,7 +4,8 @@ import {
   ApiParamsType,
   IGNORE_HEADERS,
   JsonRootType,
-  Protocol
+  Protocol,
+  RequestMethod
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { parseCurl } from 'pc/browser/src/app/pages/workspace/project/api/utils/parse-curl.utils';
@@ -29,7 +30,14 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiData {
-    return this.apiEditUtil.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val.paramAttr?.example);
+    const result = this.apiEditUtil.parseApiUI2Storage(formData, (val: BodyParam) => val?.name || val.paramAttr?.example);
+
+    //Prevent editor  format change data
+    // const parseBody = JSONParse(formData.requestParams.bodyParams.binaryRawData);
+    // if (result.requestParams.bodyParams[0].binaryRawData && typeof parseBody === 'object') {
+    //   result.requestParams.bodyParams[0].binaryRawData = JSON.stringify(parseBody);
+    // }
+    return result;
   }
 
   /**
@@ -191,6 +199,7 @@ export class ApiTestUtilService {
       console.log(requestObj);
 
       result.request.uri = requestObj.url;
+      result.request.apiAttrInfo.requestMethod = RequestMethod[requestObj.method];
       //Set Query
       result.request.requestParams.queryParams = Object.keys(requestObj.query)
         .map(name => ({

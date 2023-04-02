@@ -95,7 +95,7 @@ export class ApiEffectService {
     // * for mock service
     // this.store.setApiList(items);
   }
-  async createGroup(groups: Group[] = []) {
+  async addGroup(groups: Group[] = []) {
     // * create group
     const [data, err] = await this.api.api_groupCreate(
       groups.map(n => ({

@@ -70,7 +70,7 @@ export enum JsonRootType {
   Array = 'array'
 }
 
-export enum RequestMethod {
+export enum OldRequestMethod {
   POST = 'POST',
   GET = 'GET',
   PUT = 'PUT',
@@ -209,9 +209,9 @@ export interface OldApiData {
   /**
    * Request method [POST, GET, PUT, ...]
    *
-   * @type {RequestMethod|string}
+   * @type {OldRequestMethod|string}
    */
-  method: RequestMethod | string;
+  method: OldRequestMethod | string;
 
   /**
    * api show order

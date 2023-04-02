@@ -2,12 +2,13 @@ import { Component, EventEmitter, HostListener, Input, OnDestroy, Output, ViewCh
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { isEqual } from 'lodash-es';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Environment } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../components/eo-ui/table-pro/table-pro.model';
 import { eoDeepCopy, isEmptyObj, JSONParse } from '../../../../../../shared/utils/index.utils';
@@ -147,7 +148,7 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   }
   isFormChange() {
     // console.log(JSON.stringify(this.formatEnvData(this.model)), JSON.stringify(this.formatEnvData(this.initialModel)));
-    const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
+    const hasChanged = !isEqual(this.formatEnvData(this.model), this.formatEnvData(this.initialModel));
     return hasChanged;
   }
   async getEnv(id: number) {

@@ -1,6 +1,6 @@
-import { ApiBodyType, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ApiBodyType, ApiParamsType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
-import { RequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
+import { OldRequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
 
 /**
  * Group list api data

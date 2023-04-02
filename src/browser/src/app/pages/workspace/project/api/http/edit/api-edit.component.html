@@ -30,7 +30,6 @@
             <eo-ng-tree-select
               class="group-select"
               nzAllowClear="false"
-              *ngIf="groups"
               [nzExpandedKeys]="expandKeys"
               [nzDropdownMatchSelectWidth]="false"
               [nzNodes]="groups"
@@ -50,7 +49,7 @@
         </nz-form-item>
       </eo-ng-input-group>
       <!-- Request -->
-      <nz-collapse class="eo_collapse mt-[20px]">
+      <nz-collapse class="mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
           <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
             <!-- Request Headers -->
@@ -151,14 +150,28 @@
         </nz-collapse-panel>
       </nz-collapse>
       <!-- Script Action -->
-      <!-- <nz-collapse class="eo_collapse mt-[20px]">
-        <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
-          <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
-            <eo-ng-tab i18-nzTitle nzTitle="Pre-request Script"> </eo-ng-tab>
-            <eo-ng-tab i18-nzTitle nzTitle="After-response Script "> </eo-ng-tab>
-          </eo-ng-tabset>
+      <nz-collapse *ngIf="model.scriptList" class="mt-[20px]">
+        <nz-collapse-panel class="relative" [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
+          <pc-action>
+            <div name="pre">
+              <eo-api-script
+                [(code)]="model.scriptList[0].data"
+                (codeChange)="emitChangeFun()"
+                [treeData]="BEFORE_DATA"
+                [completions]="beforeScriptCompletions"
+              ></eo-api-script>
+            </div>
+            <div name="after">
+              <eo-api-script
+                [(code)]="model.scriptList[1].data"
+                (codeChange)="emitChangeFun()"
+                [treeData]="AFTER_DATA"
+                [completions]="afterScriptCompletions"
+              ></eo-api-script>
+            </div>
+          </pc-action>
         </nz-collapse-panel>
-      </nz-collapse> -->
+      </nz-collapse>
     </div>
   </div>
 </form>

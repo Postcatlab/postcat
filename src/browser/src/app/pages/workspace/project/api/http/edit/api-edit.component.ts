@@ -2,11 +2,18 @@ import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListe
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { isEqual } from 'lodash-es';
 import { autorun } from 'mobx';
 import { NzTreeNode } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import {
+  afterScriptCompletions,
+  AFTER_DATA,
+  beforeScriptCompletions,
+  BEFORE_DATA
+} from 'pc/browser/src/app/pages/workspace/project/api/components/api-script/constant';
 import {
   ApiBodyType,
   BASIC_TABS_INFO,
@@ -57,6 +64,11 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   REQUEST_METHOD = enumsToArr(RequestMethod);
   nzSelectedIndex = 1;
   reactions = [];
+
+  BEFORE_DATA = BEFORE_DATA;
+  AFTER_DATA = AFTER_DATA;
+  beforeScriptCompletions = beforeScriptCompletions;
+  afterScriptCompletions = afterScriptCompletions;
   private destroy$: Subject<void> = new Subject<void>();
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
@@ -96,9 +108,9 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     if (!isFromCache) {
       const groupId = Number(this.route.snapshot.queryParams.groupId);
       this.model = await this.apiEdit.getApi({
-        id,
-        groupId
+        id
       });
+      this.model.groupId = this.model.groupId || groupId;
       this.resetRestFromUrl(this.model.uri);
     }
 
@@ -158,7 +170,6 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     }
     this.isSaving = true;
     let formData: ApiData = this.apiEditUtil.formatUIApiDataToStorage(this.model);
-    console.log(this.model.groupId, this.validateForm.getRawValue().groupId);
     await (formData.apiUuid ? this.editAPI(formData, ux) : this.addAPI(formData, ux));
     this.isSaving = false;
   }
@@ -206,7 +217,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
 
     console.log('api edit origin:', origin, 'after:', after);
 
-    if (JSON.stringify(origin) !== JSON.stringify(after)) {
+    if (!isEqual(origin, after)) {
       console.log('api edit formChange true!', getDifference(origin, after));
       return true;
     }
@@ -233,7 +244,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
    * @returns valid group id
    */
   getValidGroupID() {
-    const groupID = this.model.groupId || Number(this.route.snapshot.queryParams.groupId);
+    const groupID = this.model?.groupId || Number(this.route.snapshot.queryParams.groupId);
 
     //Default from path or root group id
     if (!groupID) {

@@ -13,7 +13,12 @@ import {
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiTestUiComponent, ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
-import { ContentType, testViewModel } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+import {
+  ContentType,
+  TestPage,
+  testViewModel,
+  WHAT_TEXT_TYPE_MAP
+} from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
@@ -21,15 +26,9 @@ import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { eoDeepCopy, getDifference, isEmptyObj, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { eoDeepCopy, getDifference, isEmptyObj, JSONParse, whatTextType } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
-enum TestPage {
-  Blank = 'blankTest',
-  History = 'historyTest',
-  Case = 'caseTest',
-  API = 'apiTest'
-}
 interface TestInstance {
   saveTips: string;
   getModel: () => Promise<testViewModel>;
@@ -72,6 +71,7 @@ interface TestInstance {
     <eo-api-http-test-ui
       #testUIComponent
       [model]="model"
+      [module]="currentPage"
       (afterTested)="afterTested.emit($event)"
       (modelChange)="uiModelChange($event)"
       [extraButtonTmp]="saveButtonTmp"
@@ -148,6 +148,9 @@ export class ApiTestComponent implements EditTabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange(): boolean {
+    if (this.currentPage === TestPage.API) {
+      return false;
+    }
     if (!(this.initialModel?.request && this.model?.request)) {
       return false;
     }
@@ -418,7 +421,8 @@ export class ApiTestComponent implements EditTabViewComponent {
     if (bodyType !== ApiBodyType.Binary) {
       switch (bodyType) {
         case ApiBodyType.Raw: {
-          result.contentType = ContentTypeMap[ApiBodyType.Raw];
+          const textType = whatTextType(model.request.requestParams?.bodyParams[0]?.binaryRawData);
+          result.contentType = WHAT_TEXT_TYPE_MAP[textType];
           break;
         }
         case ApiBodyType.FormData: {

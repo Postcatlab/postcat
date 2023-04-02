@@ -21,22 +21,24 @@ import { autorun, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
-import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
-import { NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
-import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   BEFORE_DATA,
   AFTER_DATA,
   beforeScriptCompletions,
   afterScriptCompletions
-} from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-script/constant';
+} from 'pc/browser/src/app/pages/workspace/project/api/components/api-script/constant';
+import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { ApiEditUtilService } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import {
   ContentType,
   CONTENT_TYPE_BY_ABRIDGE,
   FORMDATA_CONTENT_TYPE_BY_ABRIDGE,
+  TestPage,
   testViewModel
 } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
 import { ApiTestResultResponseComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/test/result-response/api-test-result-response.component';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiTestResData, TestServerRes } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { generateRestFromUrl, syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
@@ -62,8 +64,6 @@ import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
 import { ApiStoreService } from '../../store/api-state.service';
 
-import { copyFileSync } from 'fs';
-
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
 
@@ -88,6 +88,7 @@ export const ContentTypeMap: { [key in ApiBodyType]: ContentType } = {
 export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() model: testViewModel;
   @Input() extraButtonTmp: TemplateRef<HTMLDivElement>;
+  @Input() module: TestPage;
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly afterTested = new EventEmitter<{
     id: string;
@@ -100,11 +101,12 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('authExtForm') authExtForm: AuthorizationExtensionFormComponent;
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent;
   validateForm!: FormGroup;
-  BEFORE_DATA = BEFORE_DATA;
-  AFTER_DATA = AFTER_DATA;
   noAuth = NONE_AUTH_OPTION;
   isDragging = false;
   isEmpty = isEmpty;
+
+  BEFORE_DATA = BEFORE_DATA;
+  AFTER_DATA = AFTER_DATA;
   beforeScriptCompletions = beforeScriptCompletions;
   afterScriptCompletions = afterScriptCompletions;
 
@@ -139,6 +141,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
     private lang: LanguageService,
+    private project: ProjectApiService,
     private elementRef: ElementRef,
     private apiEdit: ApiEditUtilService,
     private trace: TraceService,
@@ -173,7 +176,9 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   set afterInject(value) {
     this.setScript(2, value);
   }
-
+  toAPI(actionType) {
+    this.project.toTest(this.model.request.apiUuid);
+  }
   getScript(scriptType: number) {
     return this.model?.request?.scriptList?.find(item => item.scriptType === scriptType)?.data;
   }
@@ -478,6 +483,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
         });
         this.fixedHeaderAndContentType();
       }
+
       //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       this.modelChange.emit(this.model);
     });
