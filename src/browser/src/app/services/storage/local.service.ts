@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { db } from './db';
 
@@ -172,6 +172,148 @@ export class LocalService {
         })
         .catch(error => {
           console.log('%c apiData - list 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_apiCaseCreate<T = any>({
+    apiCaseList,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
+    if (apiCaseList == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 apiCaseList %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 apiCaseList' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.apiCase
+        .bulkCreate({ apiCaseList, projectUuid, workSpaceUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiCase - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c apiCase - create 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_apiCaseUpdate<T = any>({
+    apiCaseUuid,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid,
+    ...items
+  }) {
+    if (apiCaseUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 apiCaseUuid' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.apiCase
+        .update({ apiCaseUuid, projectUuid, workSpaceUuid, ...items })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiCase - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c apiCase - update 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_apiCaseDetail<T = any>({
+    apiCaseUuids,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 apiCaseUuids' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.apiCase
+        .bulkReadDetail({ apiCaseUuids, projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiCase - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c apiCase - detail 接口调用失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        });
+    });
+  }
+
+  api_apiCaseDelete<T = any>({
+    apiCaseUuids,
+    projectUuid = this.store.getCurrentProjectID,
+    workSpaceUuid = this.store.getCurrentWorkspaceUuid
+  }) {
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 apiCaseUuids' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      db.apiCase
+        .bulkDelete({ apiCaseUuids, projectUuid, workSpaceUuid })
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiCase - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
+        })
+        .catch(error => {
+          console.log('%c apiCase - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });

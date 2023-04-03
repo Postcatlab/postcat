@@ -1,4 +1,5 @@
-import { Environment } from '../../../../../../services/storage/index.model';
+import { Environment } from 'pc/browser/src/app/services/storage/db/models';
+
 /**
  * Test response from  test server to ui
  */

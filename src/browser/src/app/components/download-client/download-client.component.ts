@@ -1,9 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgDropdownModule } from 'eo-ng-dropdown';
+import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
 
 import { ElectronService, WebService } from '../../core/services';
+import { EoIconparkIconModule } from '../eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
 @Component({
   selector: 'pc-download-client',
+  standalone: true,
+  imports: [CommonModule, EoIconparkIconModule, SharedModule, EoNgButtonModule, EoNgDropdownModule],
   template: `<ng-container *ngIf="!electron.isElectron">
     <button *ngIf="btnType === 'icon'" eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="download">
       <eo-iconpark-icon name="download" size="14px"></eo-iconpark-icon>

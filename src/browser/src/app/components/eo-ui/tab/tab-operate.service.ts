@@ -39,7 +39,7 @@ export class TabOperateService {
     private tabStorage: TabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoNgFeedbackMessageService
+    private feedback: EoNgFeedbackMessageService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -50,7 +50,6 @@ export class TabOperateService {
       : this.tabStorage.getPersistenceStorage({
           handleDataBeforeGetCache: inArg.handleDataBeforeGetCache
         });
-
     //parse result for router change
     const tabCache = this.filterValidTab(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);
@@ -140,10 +139,14 @@ export class TabOperateService {
    * */
   batchClose(ids) {
     const tabOrder = this.tabStorage.tabOrder.filter(uuid => !ids.includes(uuid));
-    this.tabStorage.resetTabsByOrdr(tabOrder);
+    this.tabStorage.resetTabsByOrder(tabOrder);
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
+      return;
     }
+
+    //Update childView
+    this.navigateByTab(this.getCurrentTab());
   }
 
   /**
@@ -155,8 +158,11 @@ export class TabOperateService {
     if (!tab) {
       return;
     }
-    const queryParams = { pageID: tab.params?.pageID, ...tab.params };
-    if (!queryParams.pageID) Reflect.deleteProperty(queryParams, 'pageID');
+    const queryParams = { ...tab.params };
+    //Reset params ID
+    if (tab.params?.pageID) {
+      queryParams.pageID = tab.params.pageID;
+    }
     this.router.navigate([tab.pathname], {
       queryParams
     });
@@ -168,31 +174,29 @@ export class TabOperateService {
    *
    * @param tab
    */
-  getSameTab(
-    tab: Partial<TabItem>,
-    opts: {
-      match: 'all' | 'uuid';
-    } = { match: 'all' }
-  ): TabItem | null {
+  getSameTab(tab: Partial<TabItem>): TabItem | null {
     let result = null;
-    if (!tab.params.uuid) {
-      const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
-      if (sameTabIDTab && sameTabIDTab.pathname === tab.pathname) {
-        return sameTabIDTab;
-      }
-      return result;
-    }
-    //Get exist params.uuid content tab,same pathname and uuid match
-    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
-    for (const key in mapObj) {
-      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
-        const tabInfo = mapObj[key];
-        if (tabInfo.pathname !== tab.pathname && opts.match === 'all') continue;
-        if (tabInfo.params.uuid === tab.params.uuid) {
-          result = tabInfo;
-          break;
-        }
-      }
+    //Uuid match first
+    // if (tab.params.uuid) {
+    //   //Get exist params.uuid content tab,same pathname and uuid match
+    //   const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    //   for (const key in mapObj) {
+    //     if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
+    //       const tabInfo = mapObj[key];
+    //       if (tabInfo.pathname !== tab.pathname) continue;
+    //       if (tabInfo.params.uuid === tab.params.uuid) {
+    //         result = tabInfo;
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return result;
+    // }
+
+    //PageID match second
+    const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
+    if (sameTabIDTab && sameTabIDTab.pathname === tab.pathname) {
+      return sameTabIDTab;
     }
     return result;
   }
@@ -280,10 +284,14 @@ export class TabOperateService {
      */
     if (existTab) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);
+      //* Update tab info,maybe params changed
+      //!Get newest tab content,If the initialization is too fast, the baseContent content will be overwritten here
+      const newestData = this.getSameTab(routeTab);
+
+      //Reload childView when reselected it
       this.updateChildView();
 
-      //* Update tab info,maybe params changed
-      this.tabStorage.tabsByID.set(existTab.uuid, { ...existTab, params: { ...existTab.params, ...nextTab.params } });
+      this.tabStorage.setTabByID({ ...newestData, params: { ...newestData.params, ...nextTab.params } });
       return;
     }
     //!Same params.uuid can only open one Tab
@@ -360,10 +368,10 @@ export class TabOperateService {
         break;
       }
     }
-    this.tabStorage.resetTabsByOrdr(tabsObj.left);
+    this.tabStorage.resetTabsByOrder(tabsObj.left);
     this.selectedIndex = tabsObj.selectedIndex;
     if (tabsObj.needTips) {
-      this.message.warning($localize`Program will not close unsaved tabs`);
+      this.feedback.warning($localize`Program will not close unsaved tabs`);
     }
   }
   /**
@@ -377,16 +385,16 @@ export class TabOperateService {
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tab = mapObj[key];
-        if (tab.params.uuid && tab.params.uuid === inTab.params.uuid) {
-          const mergeTab = this.preventBlankTab(tab, inTab);
-          mergeTab.content = tab.content;
-          mergeTab.baseContent = tab.baseContent;
-          mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
-          this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === tab.uuid);
-          this.tabStorage.updateTab(this.selectedIndex, mergeTab);
-          this.updateChildView();
-          return true;
-        }
+        if (tab.params?.uuid !== inTab.params.uuid) continue;
+
+        const mergeTab = this.preventBlankTab(tab, inTab);
+        mergeTab.content = tab.content;
+        mergeTab.baseContent = tab.baseContent;
+        mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
+        this.selectedIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === tab.uuid);
+        this.tabStorage.updateTab(this.selectedIndex, mergeTab);
+        this.updateChildView();
+        return true;
       }
     }
     return false;
@@ -409,7 +417,7 @@ export class TabOperateService {
         if (keepID && uuid === keepID) {
           return true;
         }
-        if (this.tabStorage.tabsByID.get(uuid).hasChanged) {
+        if (this.tabStorage.tabsByID.get(uuid)?.hasChanged) {
           tabsObj.needTips = true;
           return true;
         }
@@ -445,7 +453,7 @@ export class TabOperateService {
     return result;
   }
   private updateChildView() {
-    this.messageService.send({ type: 'tabContentInit', data: {} });
+    this.messageService.send({ type: 'tabContentInit', data: { uuid: this.getCurrentTab()?.uuid } });
   }
   /**
    * Get valid tab item
@@ -463,9 +471,9 @@ export class TabOperateService {
       if (!tabItem) {
         return false;
       }
-      const validTab = this.BASIC_TABS.find(val => val.id === tabItem.id);
+      const validTab = this.BASIC_TABS.find(val => val.uniqueName === tabItem.uniqueName);
       if (!validTab) {
-        delete cache.tabsByID[id];
+        Reflect.deleteProperty(cache.tabsByID, id);
       } else {
         tabItem.pathname = validTab.pathname;
       }

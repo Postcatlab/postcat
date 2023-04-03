@@ -34,8 +34,12 @@ const routes: Routes = [
             loadChildren: () => import('./http/test/api-test.module').then(m => m.ApiTestModule)
           },
           {
+            path: 'case',
+            loadChildren: () => import('./http/test/api-test.module').then(m => m.ApiTestModule)
+          },
+          {
             path: 'mock',
-            loadChildren: () => import('./http/mock/api-mock.module').then(m => m.ApiMockModule)
+            loadChildren: () => import('./http/mock/mock.module').then(m => m.MockModule)
           }
         ]
       },
@@ -54,7 +58,7 @@ const routes: Routes = [
       },
       {
         path: 'group',
-        loadChildren: () => import('./group/group.module').then(m => m.GroupModule)
+        loadChildren: () => import('./group-edit/group.module').then(m => m.GroupModule)
       }
       // {
       //   path: 'grpc',

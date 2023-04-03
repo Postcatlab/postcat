@@ -62,6 +62,9 @@ export class ThemeVariableService {
               'buttonTextHoverText',
               'menuItemText',
               'tabsText',
+              /**
+               * Tabs Active Color is default color
+               */
               'tabsActiveText',
               'tabsCardText',
               'tabsCardItemActiveText',

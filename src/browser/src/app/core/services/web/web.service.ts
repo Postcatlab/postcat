@@ -7,9 +7,9 @@ import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
 import packageJson from '../../../../../../../package.json';
+import { StoreService } from '../../../shared/store/state.service';
 import { getBrowserType } from '../../../shared/utils/browser-type';
 import StorageUtil from '../../../shared/utils/storage/storage.utils';
-import { StoreService } from '../../../store/state.service';
 
 type DescriptionsItem = {
   readonly id: string;
@@ -59,7 +59,7 @@ export class WebService {
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     } else {
-      this.settingService.putSettings({ 'backend.url': APP_CONFIG.serverUrl });
+      this.settingService.putSettings({ 'backend.url': !APP_CONFIG.production ? window.location.origin : APP_CONFIG.serverUrl });
     }
     this.getClientResource();
   }
@@ -248,7 +248,7 @@ export class WebService {
       systemInfo = window.electron.getSystemInfo();
       descriptions.push(...electronDetails);
     } else {
-      systemInfo = getBrowserType(getSettings()?.['system.language']);
+      systemInfo = getBrowserType();
       descriptions.push(
         ...Object.entries<string>(systemInfo).map(([key, value]) => ({
           id: key,

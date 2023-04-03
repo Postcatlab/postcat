@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'pc/browser/src/app/services/message';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 // implements StorageInterface
 

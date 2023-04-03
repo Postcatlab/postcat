@@ -2,89 +2,34 @@
 # yarn lockfile v1
 
 
-"@lukeed/csprng@^1.0.0":
-  "integrity" "sha512-uSvJdwQU5nK+Vdf6zxcWAY2A8r7uqe+gePwLWzJ+fsQehq18pc0I2hJKwypZ2aLM90+Er9u1xn4iLJPZ+xlL4g=="
-  "resolved" "https://registry.npmmirror.com/@lukeed/csprng/-/csprng-1.0.1.tgz"
-  "version" "1.0.1"
-
-"@playwright/test@^1.31.2":
-  "integrity" "sha512-BYVutxDI4JeZKV1+ups6dt5WiqKhjBtIYowyZIJ3kBDmJgsuPKsqqKNIMFbUePLSCmp2cZu+BDL427RcNKTRYw=="
-  "resolved" "https://registry.npmmirror.com/@playwright/test/-/test-1.31.2.tgz"
-  "version" "1.31.2"
+"@playwright/test@^1.32.1":
+  version "1.32.1"
+  resolved "https://registry.npmmirror.com/@playwright/test/-/test-1.32.1.tgz#749c9791adb048c266277a39ba0f7e33fe593ffe"
+  integrity sha512-FTwjCuhlm1qHUGf4hWjfr64UMJD/z0hXYbk+O387Ioe6WdyZQ+0TBDAc6P+pHjx2xCv1VYNgrKbYrNixFWy4Dg==
   dependencies:
     "@types/node" "*"
-    "playwright-core" "1.31.2"
+    playwright-core "1.32.1"
   optionalDependencies:
-    "fsevents" "2.3.2"
+    fsevents "2.3.2"
 
 "@types/node@*":
-  "integrity" "sha512-KZhFpSLlmK/sdocfSAjqPETTMd0ug6HIMIAwkwUpU79olnZdQtMxpQP+G1wDzCH7na+FltSIhbaZuKdwZ8RDrw=="
-  "resolved" "https://registry.npmmirror.com/@types/node/-/node-18.7.11.tgz"
-  "version" "18.7.11"
+  version "18.15.11"
+  resolved "https://registry.npmmirror.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
+  integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
 
-"ark-pkg@0.5.4":
-  "integrity" "sha512-h9mxAPJ+bt+H0gtoV7gtUxCgXss8qzuhBsNYBGlSDeIsQnWwQCy61THoMQvhIWLat2A/Meb/JM7cdaSibqN+5g=="
-  "resolved" "https://registry.npmmirror.com/ark-pkg/-/ark-pkg-0.5.4.tgz"
-  "version" "0.5.4"
+fsevents@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.npmmirror.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
+
+playwright-core@1.32.1:
+  version "1.32.1"
+  resolved "https://registry.npmmirror.com/playwright-core/-/playwright-core-1.32.1.tgz#5a10c32403323b07d75ea428ebeed866a80b76a1"
+  integrity sha512-KZYUQC10mXD2Am1rGlidaalNGYk3LU1vZqqNk0gT4XPty1jOqgup8KDP8l2CUlqoNKhXM5IfGjWgW37xvGllBA==
+
+playwright@^1.32.1:
+  version "1.32.1"
+  resolved "https://registry.npmmirror.com/playwright/-/playwright-1.32.1.tgz#c48195850740fbdbd7702f37e5a891b13259f689"
+  integrity sha512-GnEizysWMvoqHC3I9l8+4/ZxeLwLNdJJG76xdKGxzOcIZDcw5RSk/FKrFb5CuA+zcLpjIM2p9eR9Z4CuUDkWXg==
   dependencies:
-    "colors" "^1.4.0"
-    "commander" "^9.4.0"
-    "figlet" "^1.5.2"
-    "js-md5" "^0.7.3"
-    "lodash" "^4.17.21"
-    "prettier" "^2.7.1"
-    "uid" "^2.0.0"
-
-"colors@^1.4.0":
-  "integrity" "sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA=="
-  "resolved" "https://registry.npmmirror.com/colors/-/colors-1.4.0.tgz"
-  "version" "1.4.0"
-
-"commander@^9.4.0":
-  "integrity" "sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ=="
-  "resolved" "https://registry.npmmirror.com/commander/-/commander-9.5.0.tgz"
-  "version" "9.5.0"
-
-"figlet@^1.5.2":
-  "integrity" "sha512-WOn21V8AhyE1QqVfPIVxe3tupJacq1xGkPTB4iagT6o+P2cAgEOOwIxMftr4+ZCTI6d551ij9j61DFr0nsP2uQ=="
-  "resolved" "https://registry.npmmirror.com/figlet/-/figlet-1.5.2.tgz"
-  "version" "1.5.2"
-
-"fsevents@2.3.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmmirror.com/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
-
-"js-md5@^0.7.3":
-  "integrity" "sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ=="
-  "resolved" "https://registry.npmmirror.com/js-md5/-/js-md5-0.7.3.tgz"
-  "version" "0.7.3"
-
-"lodash@^4.17.21":
-  "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
-  "resolved" "https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz"
-  "version" "4.17.21"
-
-"playwright-core@1.31.2":
-  "integrity" "sha512-a1dFgCNQw4vCsG7bnojZjDnPewZcw7tZUNFN0ZkcLYKj+mPmXvg4MpaaKZ5SgqPsOmqIf2YsVRkgqiRDxD+fDQ=="
-  "resolved" "https://registry.npmmirror.com/playwright-core/-/playwright-core-1.31.2.tgz"
-  "version" "1.31.2"
-
-"playwright@^1.31.1":
-  "integrity" "sha512-jpC47n2PKQNtzB7clmBuWh6ftBRS/Bt5EGLigJ9k2QAKcNeYXZkEaDH5gmvb6+AbcE0DO6GnXdbl9ogG6Eh+og=="
-  "resolved" "https://registry.npmmirror.com/playwright/-/playwright-1.31.2.tgz"
-  "version" "1.31.2"
-  dependencies:
-    "playwright-core" "1.31.2"
-
-"prettier@^2.7.1":
-  "integrity" "sha512-BtRV9BcncDyI2tsuS19zzhzoxD8Dh8LiCx7j7tHzrkz8GFXAexeWFdi22mjE1d16dftH2qNaytVxqiRTGlMfpw=="
-  "resolved" "https://registry.npmmirror.com/prettier/-/prettier-2.8.2.tgz"
-  "version" "2.8.2"
-
-"uid@^2.0.0":
-  "integrity" "sha512-PF+1AnZgycpAIEmNtjxGBVmKbZAQguaa4pBUq6KNaGEcpzZ2klCNZLM34tsjp76maN00TttiiUf6zkIBpJQm2A=="
-  "resolved" "https://registry.npmmirror.com/uid/-/uid-2.0.1.tgz"
-  "version" "2.0.1"
-  dependencies:
-    "@lukeed/csprng" "^1.0.0"
+    playwright-core "1.32.1"

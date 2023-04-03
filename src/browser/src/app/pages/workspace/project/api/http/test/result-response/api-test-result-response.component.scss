@@ -1,14 +1,15 @@
 :host ::ng-deep {
-  .eo_alert_bar {
-    margin-bottom: 5px;
+  .eo-alert-bar {
+    display: block;
+    margin-bottom: 10px;
 
     .ant-alert-info {
       background-color: #fff;
-      border: 1px solid #4c9e81;
+      border: 1px solid var(--success-color);
     }
   }
 
   .ant-code-editor {
-    height: calc(var(--bottom-height) - 99px);
+    height: calc(var(--bottom-height) - 99px - 2px);
   }
 }

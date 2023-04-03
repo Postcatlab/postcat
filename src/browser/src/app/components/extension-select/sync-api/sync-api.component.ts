@@ -2,16 +2,15 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { debounce } from 'lodash-es';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { PULL_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
-import { Subject, takeUntil } from 'rxjs';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { Subject } from 'rxjs';
 
 import { eoDeepCopy } from '../../../shared/utils/index.utils';
 import { SYNC_API_SCHEMA } from './schema';
@@ -43,9 +42,8 @@ export class SyncApiComponent implements OnInit, OnChanges {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private extensionService: ExtensionService,
-    private eoMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private apiService: ApiService,
-    private messageService: MessageService,
     private store: StoreService,
     private effectService: EffectService,
     private trace: TraceService
@@ -170,7 +168,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     const [data, err] = await module[feature.action](this.validateForm?.value);
     console.log('data', data, err);
     if (err) {
-      this.eoMessage.error($localize`Sync API from URL error: ${err}`);
+      this.feedback.error($localize`Sync API from URL error: ${err?.message || err}`);
       return 'stayModal';
     }
     // this.eoMessage.success($localize`Sync API from URL Successfully`);
@@ -201,7 +199,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     };
     const [data, err] = await this.apiService[params.id ? 'api_projectUpdateSyncSetting' : 'api_projectCreateSyncSetting'](params);
     if (err) {
-      this.eoMessage.error(err.msg);
+      this.feedback.error(err.msg);
       console.error(err.msg);
       callback?.('stayModal');
       return;

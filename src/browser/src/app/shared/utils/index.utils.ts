@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash-es';
+import { isNumber, isObject } from 'lodash-es';
 
 window.pcConsole = {
   log(...args) {
@@ -54,6 +54,7 @@ export const whatType = (data: any): string => {
  * @returns textType - xml|json|html|text
  */
 export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
+  if (!tmpText) return 'text';
   // TODO it can be better
   const tmpCompareText = tmpText.replace(/\s/g, '');
   if (/^({|\[)(.*)(}|])$/.test(tmpCompareText)) {
@@ -273,14 +274,6 @@ export const copy = text => {
   return !!flag;
 };
 
-export const compareVersion = (v1, v2) => {
-  const _v1 = v1.split('.');
-  const _v2 = v2.split('.');
-  const _r = parseInt(_v1[0] || 0, 10) - parseInt(_v2[0] || 0, 10);
-
-  return _r === 0 && v1 !== v2 ? compareVersion(_v1.splice(1).join('.'), _v2.splice(1).join('.')) : _r;
-};
-
 // more see https://developer.mozilla.org/zh-CN/docs/Glossary/Base64#solution_4_–_escaping_the_string_before_encoding_it
 export const b64DecodeUnicode = (str: string) => {
   // Going backwards: from bytestream, to percent-encoding, to original string.
@@ -320,4 +313,9 @@ export const getUrlParams = url => {
   const obj = {};
   s.forEach((v, k) => (obj[k] = v));
   return obj;
+};
+export const getDifference = (a, b) => {
+  return Array.from(new Set([...Object.keys(a), ...Object.keys(b)]), k => ({
+    [k]: isObject(a[k]) && isObject(b[k]) ? getDifference(a[k], b[k]) : a[k] === b[k]
+  }));
 };

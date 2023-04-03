@@ -5,6 +5,7 @@ import { SystemSettingComponent } from './system-setting.component';
 
 export const LOCAL_SETTINGS_KEY = 'LOCAL_SETTINGS_KEY';
 
+//TODO use StorageUtils to replace this
 export const getSettings = () => {
   try {
     let result = JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');

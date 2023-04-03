@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { DownloadClientComponent } from 'pc/browser/src/app/components/download-client/download-client.component';
 
-import { DownloadClientModule } from '../../components/download-client/download-client.module';
 import { LogoModule } from '../../components/logo/logo.module';
 import { SharedModule } from '../../shared/shared.module';
 import { NavBreadcrumbComponent } from './breadcrumb/nav-breadcrumb.component';
@@ -14,7 +14,7 @@ import { NavbarComponent } from './navbar.component';
 import { ShareNavbarComponent } from './share-navbar/share-navbar.component';
 
 @NgModule({
-  imports: [SharedModule, DownloadClientModule, LogoModule, NzBreadCrumbModule],
+  imports: [SharedModule, DownloadClientComponent, LogoModule, NzBreadCrumbModule],
   declarations: [
     NavbarComponent,
     GetShareLinkComponent,

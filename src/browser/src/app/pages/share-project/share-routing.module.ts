@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group/group.component';
+import { GroupComponent } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.component';
 
 import { ShareComponent } from './view/share-project.component';
 
@@ -24,6 +24,14 @@ const routes: Routes = [
           {
             path: 'test',
             loadChildren: () => import('../workspace/project/api/http/test/api-test.module').then(m => m.ApiTestModule)
+          },
+          {
+            path: 'case',
+            loadChildren: () => import('../workspace/project/api/http/test/api-test.module').then(m => m.ApiTestModule)
+          },
+          {
+            path: 'mock',
+            loadChildren: () => import('../workspace/project/api/http/mock/mock.module').then(m => m.MockModule)
           }
         ]
       },

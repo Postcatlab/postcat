@@ -112,7 +112,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   constructor(
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private electron: ElectronService,
     private theme: ThemeService,
     elementRef: ElementRef
@@ -299,7 +299,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         const value = this.codeEdtor.getValue();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(value);
-          this.message.success($localize`Copied`);
+          this.feedback.success($localize`Copied`);
           return;
         }
         break;

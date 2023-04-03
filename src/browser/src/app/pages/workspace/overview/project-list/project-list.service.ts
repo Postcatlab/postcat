@@ -4,8 +4,8 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
 import { SettingService } from '../../../../components/system-setting/settings.service';
 import { ModalService } from '../../../../services/modal.service';
-import { EffectService } from '../../../../store/effect.service';
-import { StoreService } from '../../../../store/state.service';
+import { EffectService } from '../../../../shared/store/effect.service';
+import { StoreService } from '../../../../shared/store/state.service';
 import { OperateProjectFormComponent } from '../../project/components/operate-project-form.compoent';
 type ListType = 'list' | 'card';
 @Injectable({

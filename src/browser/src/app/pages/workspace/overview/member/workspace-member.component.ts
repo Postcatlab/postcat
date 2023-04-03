@@ -7,7 +7,7 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 
 import { MemberListComponent } from '../../../../components/member-list/member-list.component';
 import { MessageService } from '../../../../services/message/message.service';
-import { StoreService } from '../../../../store/state.service';
+import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
@@ -95,7 +95,7 @@ export class WorkspaceMemberComponent implements OnInit {
   isInvateModalVisible = false;
   constructor(
     public store: StoreService,
-    private eMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     public member: MemberService,
     private message: MessageService,
     private trace: TraceService,
@@ -150,17 +150,17 @@ export class WorkspaceMemberComponent implements OnInit {
     const btnSelectRunning = async () => {
       const userIds = this.userCache;
       if (userIds.length === 0) {
-        this.eMessage.error($localize`Please select a member`);
+        this.feedback.error($localize`Please select a member`);
         return;
       }
 
       const [aData, aErr]: any = await this.member.addMember(userIds);
       if (aErr) {
-        this.eMessage.error($localize`Add member failed`);
+        this.feedback.error($localize`Add member failed`);
         return;
       }
       this.trace.report('add_workspace_member_success');
-      this.eMessage.success($localize`Add member successfully`);
+      this.feedback.success($localize`Add member successfully`);
 
       // * 关闭弹窗
       this.isInvateModalVisible = false;

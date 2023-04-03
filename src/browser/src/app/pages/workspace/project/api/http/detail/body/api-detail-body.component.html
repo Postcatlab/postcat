@@ -1,12 +1,16 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
+<!-- {{ model | json }} -->
 <eo-ng-table-pro
   *ngIf="[TYPE_API_BODY['FormData'], TYPE_API_BODY.XML, TYPE_API_BODY.JSON, TYPE_API_BODY.JSONArray].includes(bodyType)"
   [columns]="listConf.columns"
   [setting]="listConf.setting"
   [(nzData)]="model"
 ></eo-ng-table-pro>
+<ng-template #formValue let-item="item">
+  <span>{{ item.paramAttr.example }}</span>
+</ng-template>
 <!-- Raw -->
 <eo-monaco-editor
   [(code)]="model[0].binaryRawData"

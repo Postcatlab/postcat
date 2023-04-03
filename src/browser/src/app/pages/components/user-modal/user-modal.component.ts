@@ -9,8 +9,8 @@ import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { LocalService } from 'pc/browser/src/app/services/storage/local.service';
 import { RemoteService } from 'pc/browser/src/app/services/storage/remote.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { EffectService } from 'pc/browser/src/app/store/effect.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
 
@@ -185,7 +185,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public store: StoreService,
     public message: MessageService,
     public api: ApiService,
-    public eMessage: EoNgFeedbackMessageService,
+    public feedback: EoNgFeedbackMessageService,
     public effect: EffectService,
     public dataSource: DataSourceService,
     public modal: ModalService,
@@ -235,19 +235,19 @@ export class UserModalComponent implements OnInit, OnDestroy {
           if (this.store.isLocal) {
             return;
           }
-          this.eMessage.error($localize`Oops, server fail`);
+          this.feedback.error($localize`Oops, server fail`);
           return;
         }
 
         if (type === 'ping-fail') {
-          this.eMessage.error($localize`Connect failed`);
+          this.feedback.error($localize`Connect failed`);
           // * 唤起弹窗
           this.isCheckConnectModalVisible = true;
           return;
         }
 
         if (type === 'ping-success') {
-          this.eMessage.success($localize`Connect success`);
+          this.feedback.success($localize`Connect success`);
           return;
         }
 
@@ -403,7 +403,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const isOk = this.validateLoginForm.valid;
 
       if (!isOk) {
-        this.eMessage.error($localize`Please check you username or password`);
+        this.feedback.error($localize`Please check you username or password`);
         return;
       }
       this.store.clearAuth();
@@ -413,10 +413,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
         if (err.code === 131000001) {
-          this.eMessage.error($localize`Username must a email`);
+          this.feedback.error($localize`Username must a email`);
           return;
         }
-        this.eMessage.error($localize`Please check you username or password`);
+        this.feedback.error($localize`Please check you username or password`);
         return;
       }
       this.trace.setUserID(data.userId);
@@ -493,10 +493,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
       // ! Attention: data is array
       const [data, err]: any = await this.remote.api_workspaceCreate({ titles: [titles] });
       if (err) {
-        this.eMessage.error($localize`New workspace Failed !`);
+        this.feedback.error($localize`New workspace Failed !`);
         return;
       }
-      this.eMessage.success($localize`New workspace successfully !`);
+      this.feedback.success($localize`New workspace successfully !`);
       this.trace.report('add_workspace_success');
       const workspace = data.at(0);
       // * 关闭弹窗
@@ -564,7 +564,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
                   }))
                 });
                 if (err) {
-                  this.eMessage.error($localize`Create Project Failed !`);
+                  this.feedback.error($localize`Create Project Failed !`);
                   return;
                 }
 

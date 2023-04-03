@@ -1,0 +1,62 @@
+<div class="flex w-full eo-api-script">
+  <div class="flex-1 overflow-hidden">
+    <eo-monaco-editor
+      [(code)]="code"
+      [config]="{ language: 'javascript' }"
+      [autoHeight]="true"
+      [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)"
+      [completions]="completions"
+    >
+    </eo-monaco-editor>
+  </div>
+  <div class="w-[230px] overflow-auto border-0 border-l-[1px] border-solid border-[#f0f0f0]">
+    <div class="flex justify-between p-3">
+      <div i18n>Snippets</div>
+      <div>
+        <a href="https://docs.postcat.com/docs/script-function.html" class="text-blue-400" target="_blank" rel="noopener noreferrer" i18n
+          >Learn more</a
+        >
+      </div>
+    </div>
+    <eo-ng-tree-default
+      #nzTreeComponent
+      nzBlockNode
+      [nzData]="dataSource"
+      [nzExpandedKeys]="expandedKeys"
+      (nzClick)="nzClick($event)"
+      [nzTreeTemplate]="nzTreeTemplate"
+    ></eo-ng-tree-default>
+    <ng-template #nzTreeTemplate let-node>
+      <ng-template [ngIf]="!node.isLeaf">
+        <span class="text-[14px]">{{ node.title }}</span>
+      </ng-template>
+      <ng-template [ngIf]="node.isLeaf">
+        <div class="flex items-center h-full">
+          <span class="text-xs text-blue-400">{{ node.title }}</span>
+          <ng-container *ngIf="node.origin.note">
+            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400" eoNgFeedbackTooltip>
+              [?]
+            </span>
+            <ng-template #titleTemplate let-thing>
+              <p style="color: #99c6da" *ngIf="node.origin.note.code">{{ node.origin.note.code }}</p>
+              <p *ngIf="node.origin.note.desc">{{ node.origin.note.desc }}</p>
+              <ng-container *ngIf="node.origin.note.input">
+                <br />
+                <p style="color: #999" i18n>---input---</p>
+                <p *ngFor="let item of node.origin.note.input">
+                  <span style="color: #ff9800">{{ item.key }}：</span>{{ item.value }}
+                </p>
+              </ng-container>
+              <ng-container *ngIf="node.origin.note.output">
+                <br />
+                <p style="color: #999" i18n>---return---</p>
+                <p>{{ node.origin.note.output }}</p>
+              </ng-container>
+            </ng-template>
+          </ng-container>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

@@ -31,7 +31,7 @@ export class ModalService {
       },
       nzFooter: [
         {
-          label: $localize`Cancel`,
+          label: inOpts.nzCancelText || $localize`Cancel`,
           onClick: () => {
             modal.destroy();
           }

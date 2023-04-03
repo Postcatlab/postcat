@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace',

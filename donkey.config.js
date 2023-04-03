@@ -1,4 +1,4 @@
-const baseUrl = './src/browser/src/app/shared/services/storage/';
+const baseUrl = './src/browser/src/app/services/storage/';
 module.exports = {
   entry: {
     // target: ["./test/apiData.ts", "./test/env.ts"]
