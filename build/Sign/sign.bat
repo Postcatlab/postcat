@@ -1,1 +1,0 @@
-call "%~dp0\signfile.bat" %1
