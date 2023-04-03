@@ -15,8 +15,6 @@ import { LanguageService } from 'pc/browser/src/app/core/services/language/langu
 import { NotificationService } from 'pc/browser/src/app/core/services/notification.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
 import { GlobalProvider } from 'pc/browser/src/app/services/globalProvider';
-import { IndexedDBStorage } from 'pc/browser/src/app/services/storage/IndexedDB/lib';
-import { HttpStorage } from 'pc/browser/src/app/services/storage/http/lib';
 import { BaseUrlInterceptor } from 'pc/browser/src/app/services/storage/http/lib/baseUrl.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
@@ -46,8 +44,6 @@ registerLocaleData(zh);
   providers: [
     MockService,
     ExtensionService,
-    IndexedDBStorage,
-    HttpStorage,
     ThemeService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     {

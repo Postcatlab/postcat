@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { EoNgCollapseModule } from 'pc/browser/src/app/components/eo-ui/collapse/collapse.module';
 import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
 import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
@@ -28,6 +29,7 @@ const COMPONENTS = [ApiEditComponent, ApiEditFormComponent, ApiEditBodyComponent
         component: ApiEditComponent
       }
     ]),
+    NzTreeSelectModule,
     EoMonacoEditorModule,
     FormsModule,
     ReactiveFormsModule,

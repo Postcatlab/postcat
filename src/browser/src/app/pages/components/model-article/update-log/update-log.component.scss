@@ -1,0 +1,24 @@
+::ng-deep {
+  .model-article {
+    .ant-modal-footer {
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 20px;
+      font-weight: bold;
+      color: var(--primary-color) !important;
+    }
+
+    p {
+      display: block;
+      font-size: 12px;
+      line-height: 30px !important;
+    }
+
+    strong {
+      display: inline-block;
+      margin-top: 20px !important;
+    }
+  }
+}

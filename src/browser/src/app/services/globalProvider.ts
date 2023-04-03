@@ -3,8 +3,9 @@ import { NavigationExtras, Router } from '@angular/router';
 import { SettingService } from 'pc/browser/src/app/components/system-setting/settings.service';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { parseAndCheckCollections } from 'pc/browser/src/app/services/storage/db/validate/validate';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
+import pkgInfo from '../../../../../package.json';
 import { MessageService } from './message';
 import { ApiService } from './storage/api.service';
 import { convertApiData } from './storage/db/dataSource/convert';
@@ -29,7 +30,11 @@ export class GlobalProvider {
   }
 
   injectGlobalData() {
-    window.pc = {};
+    window.pc = {
+      app: {
+        version: pkgInfo.version
+      }
+    };
     window.pc.modalService = this.modalService;
     window.pc.getExtensionSettings = this.setting.getConfiguration;
     window.pc.getProjectSettings = async name => {
@@ -142,6 +147,12 @@ export class GlobalProvider {
     };
     return result;
   };
+  /**
+   * @Deprecated just for apispace extensions
+   *
+   * @param params
+   * @returns
+   */
   importProject = async (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
     let { projectID, groupID, ...rest } = {
@@ -166,7 +177,6 @@ export class GlobalProvider {
         workSpaceUuid: this.store.getCurrentWorkspaceUuid
       }))
     );
-    console.log('groups', groups);
 
     const apiCreatePromises = rest.collections.map(async (item, index) => {
       const group = groups[index];

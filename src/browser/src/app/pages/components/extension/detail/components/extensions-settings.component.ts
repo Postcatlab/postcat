@@ -20,7 +20,7 @@ export class ExtensionSettingComponent implements OnInit {
   @Input() extName: string;
   localSettings = {} as Record<string, any>;
 
-  constructor(private settingService: SettingService, private message: EoNgFeedbackMessageService) {}
+  constructor(private settingService: SettingService, private feedback: EoNgFeedbackMessageService) {}
 
   ngOnInit(): void {
     this.init();
@@ -31,6 +31,6 @@ export class ExtensionSettingComponent implements OnInit {
   }
   handleSave = () => {
     this.settingService.saveSetting(this.localSettings);
-    this.message.success($localize`Save Success`);
+    this.feedback.success($localize`Save Success`);
   };
 }

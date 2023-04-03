@@ -4,7 +4,7 @@ import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/s
 @Component({
   selector: 'pc-test-status-bar',
   template: `
-    <div class="flex items-center">
+    <div class="flex items-center leading-none">
       <span class="mr-[15px] {{ codeStatus.class }}">{{ model.statusCode || 'No Response' }}</span>
       <span class="mr-[15px] text-[12px]">Size: {{ model.responseLength | byteToString }}</span>
       <span class="text-[12px]">Time: {{ model.time }} ms</span>

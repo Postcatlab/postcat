@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { BodyParam } from '../../../../../services/storage/db/models/apiData';
 @Pipe({
   name: 'apiParamsNum'
 })

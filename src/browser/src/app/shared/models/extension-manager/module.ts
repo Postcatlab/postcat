@@ -54,22 +54,32 @@ export interface ExtensionInfo {
   logo: string;
   //Contribution Feature
   features?: {
+    /**
+     * Show icon in api right sidebar
+     */
     apiPreviewTab: any;
+    /**
+     * Extension configuration in extension detail
+     */
     configuration: ModuleConfiguration;
     i18n?: FeatureI18nLocale;
-    extensionTabView: ExtensionTabView[];
+    /**
+     * Add page in left sidebar
+     */
     sidebarView: SidebarView;
     importAPI: FeatureInfo;
     exportAPI: FeatureInfo;
+    pullAPI: FeatureInfo;
     pushAPI: FeatureInfo;
     theme: ThemeItems[];
     //Random feature
     [index: string]: any;
+
     /**
+     *
      * @deprecated
      */
     syncAPI: FeatureInfo;
-    pullAPI: FeatureInfo;
   };
 
   //*Field for browser generate by code,not actually in package.json
@@ -104,7 +114,6 @@ interface ModuleConfigurationField {
   description?: string;
   required?: boolean;
 }
-export type ExtensionTabView = SidebarView;
 
 type HttpServer = ReturnType<typeof createServer>;
 export type SidebarView = {

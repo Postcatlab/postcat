@@ -1,21 +1,19 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { EoTabComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.component';
 import { WebService } from 'pc/browser/src/app/core/services';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/index.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { API_PREVIEW_TAB } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
-import { Message, MessageService } from '../../../../services/message';
-import { ExtensionInfo } from '../../../../shared/models/extension-manager';
 import StorageUtil from '../../../../shared/utils/storage/storage.utils';
-import { ApiTabService } from './api-tab.service';
+import { ApiTabService, PageUniqueName } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -58,27 +56,21 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'detail',
       isShare: true,
       //ID fit to the routerLink
-      id: 'api-http-detail',
+      id: PageUniqueName.HttpDetail,
       title: $localize`:@@API Detail:Preview`
     },
     {
       routerLink: 'edit',
-      id: 'api-http-edit',
+      id: PageUniqueName.HttpEdit,
       title: $localize`Edit`
     },
     {
       routerLink: 'test',
       isShare: true,
-      id: 'api-http-test',
+      id: PageUniqueName.HttpTest,
       title: $localize`Test`
-    },
-    {
-      routerLink: 'mock',
-      id: 'api-http-mock',
-      title: 'Mock'
     }
   ];
-  originModel: ApiData | any;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
   tabsIndex = StorageUtil.get('eo_group_tab_select') || 0;
@@ -90,17 +82,17 @@ export class ApiComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private router: Router,
     public web: WebService,
-    private messageService: MessageService,
     private extensionService: ExtensionService,
     public store: StoreService,
-    private trace: TraceService
+    private trace: TraceService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.initExtensionExtra();
   }
   @ExtensionChange(API_PREVIEW_TAB, true)
   async initExtensionExtra() {
     this.rightExtras = [];
-    if (!this.router.url.includes('home/workspace/project/api/http/detail')) return;
+    if (!this.router.url.includes(this.tabsConfig.pathByName[PageUniqueName.HttpDetail])) return;
     const apiPreviewTab = this.extensionService.getValidExtensionsByFature(API_PREVIEW_TAB);
     apiPreviewTab?.forEach(async (value, key) => {
       const module = await this.extensionService.getExtensionPackage(key);
@@ -131,10 +123,14 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   initChildBarShowStatus() {
-    const isEnvPage = this.router.url.includes('home/workspace/project/api/env/edit');
-    const isGroupPage = ['share/group/edit', 'home/workspace/project/api/group/edit'].some(n => this.router.url.includes(n));
+    const pathArr = [
+      this.tabsConfig.pathByName[PageUniqueName.HttpDetail],
+      this.tabsConfig.pathByName[PageUniqueName.HttpEdit],
+      this.tabsConfig.pathByName[PageUniqueName.HttpTest]
+    ];
+    const isApiPage = pathArr.some(path => this.router.url.includes(path));
     const isTestHistoryPage = this.route.snapshot.queryParams.uuid?.includes('history_');
-    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && !isEnvPage && !isGroupPage;
+    this.showChildBar = this.route.snapshot.queryParams.uuid && !isTestHistoryPage && isApiPage;
   }
   onGroupTabSelectChange($event) {
     StorageUtil.set('eo_group_tab_select', this.tabsIndex);

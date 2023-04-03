@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BodyParam, ApiData, ParamTypeEnum } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { filterTableData } from '../../../../../../shared/utils/tree/tree.utils';
@@ -22,7 +21,7 @@ export class ApiEditUtilService {
 
     //Parse Request body
     ['bodyParams', 'headerParams', 'queryParams', 'restParams'].forEach(tableName => {
-      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo.contentType)) {
+      if (tableName === 'bodyParams' && [ApiBodyType.Binary, ApiBodyType.Raw].includes(formData.apiAttrInfo?.contentType)) {
         if (result.requestParams.bodyParams?.[0]) {
           result.requestParams.bodyParams[0].orderNo = 0;
           result.requestParams.bodyParams[0].paramType = 0;
@@ -31,10 +30,10 @@ export class ApiEditUtilService {
         return;
       }
       result.requestParams[tableName] = filterTableData(result.requestParams[tableName], {
-        filterFn: item => {
+        filterFn: (item: BodyParam) => {
           item.partType = mui[tableName];
-          item.paramType = 0;
-          delete item['paramAttr.example'];
+          // 0: request, 1: response
+          item.paramType = ParamTypeEnum.REQUEST;
           return filterArrFun(item);
         }
       });
@@ -49,9 +48,8 @@ export class ApiEditUtilService {
         if (result.responseList[0].bodyParams?.[0]) {
           const item = result.responseList[0].bodyParams[0];
           item.orderNo = 0;
-          item.paramType = 1;
+          item.paramType = ParamTypeEnum.RESPONSE;
           item.partType = mui['bodyParams'];
-          delete item['paramAttr.example'];
         }
         return;
       }
@@ -85,8 +83,6 @@ export class ApiEditUtilService {
     const result = this.parseApiUI2Storage(formData, val => {
       val.orderNo = 0;
       val.paramAttr ??= {};
-      val.paramAttr.example = val['paramAttr.example'];
-      delete val['paramAttr.example'];
       return val?.name;
     });
     return result;
@@ -99,7 +95,6 @@ export class ApiEditUtilService {
    */
   formatStorageApiDataToUI(apiData) {
     return this.parseApiUI2Storage(apiData, val => {
-      val['paramAttr.example'] = val.paramAttr?.example || '';
       return true;
     });
   }

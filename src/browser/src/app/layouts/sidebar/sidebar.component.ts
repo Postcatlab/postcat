@@ -6,7 +6,7 @@ import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { SIDEBAR_VIEW } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange, ExtensionMessage } from 'pc/browser/src/app/shared/decorators';
 import { ExtensionInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

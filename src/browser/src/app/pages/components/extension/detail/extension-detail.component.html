@@ -32,7 +32,7 @@
             </nz-space>
           </div>
         </div>
-        <div class="flex items-center" *ngIf="isAvailableElectron">
+        <div class="flex items-center" *ngIf="isAvailablePlatform && isAvailableVersion">
           <div *ngIf="extensionDetail?.installed" class="mr-[20px]">
             <eo-ng-switch
               class="mr-[3px]"
@@ -59,7 +59,13 @@
             <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
           </button>
         </div>
-        <div class="flex flex-col" *ngIf="!isAvailableElectron">
+        <div class="flex flex-col items-end" *ngIf="!isAvailableVersion">
+          <pc-download-client i18n-title title="Upgrade"></pc-download-client>
+          <p class="text-[12px] mt-[10px] text-tips" i18n
+            >* You need to upgrade the client to {{ extensionDetail.engines?.postcat }} first</p
+          >
+        </div>
+        <div class="flex flex-col items-end" *ngIf="!isAvailablePlatform && isAvailableVersion">
           <a [href]="APP_CONFIG.serverUrl" target="_bank"><button eo-ng-button nzType="primary" i18n>Jump to Use</button></a>
           <p class="text-[12px] mt-[10px] text-tips" i18n>* This exension only support web</p>
         </div>

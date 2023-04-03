@@ -1,6 +1,6 @@
 <form nz-form auto-focus-form [formGroup]="validateForm" [nzLayout]="'vertical'">
   <div class="top-save-bar">
-    <button type="button" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveApi()" i18n
+    <button type="button" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveAPI()" i18n
       >Save</button
     >
   </div>
@@ -49,7 +49,7 @@
         </nz-form-item>
       </eo-ng-input-group>
       <!-- Request -->
-      <nz-collapse class="eo_collapse mt-[20px]">
+      <nz-collapse class="mt-[20px]">
         <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
           <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
             <!-- Request Headers -->
@@ -147,6 +147,29 @@
               </eo-api-edit-body>
             </eo-ng-tab>
           </eo-ng-tabset>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <!-- Script Action -->
+      <nz-collapse *ngIf="model.scriptList" class="mt-[20px]">
+        <nz-collapse-panel class="relative" [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
+          <pc-action>
+            <div name="pre">
+              <eo-api-script
+                [(code)]="model.scriptList[0].data"
+                (codeChange)="emitChangeFun()"
+                [treeData]="BEFORE_DATA"
+                [completions]="beforeScriptCompletions"
+              ></eo-api-script>
+            </div>
+            <div name="after">
+              <eo-api-script
+                [(code)]="model.scriptList[1].data"
+                (codeChange)="emitChangeFun()"
+                [treeData]="AFTER_DATA"
+                [completions]="afterScriptCompletions"
+              ></eo-api-script>
+            </div>
+          </pc-action>
         </nz-collapse-panel>
       </nz-collapse>
     </div>

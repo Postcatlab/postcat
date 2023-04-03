@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { has, omit } from 'lodash-es';
+import { Injectable, TemplateRef } from '@angular/core';
+import { has, omit, toPairs } from 'lodash-es';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ColumnItem, TableProSetting } from '../../../../../components/eo-ui/table-pro/table-pro.model';
 import { EoModalOptions, ModalService } from '../../../../../services/modal.service';
-import { BodyParam } from '../../../../../services/storage/db/models/apiData';
 import { REQURIED_ENUMS } from '../../../../../shared/models/shared.model';
 import { enumsToArr, eoDeepCopy, JSONParse } from '../../../../../shared/utils/index.utils';
 import { filterTableData } from '../../../../../shared/utils/tree/tree.utils';
-import { ApiBodyType, ApiParamsType, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from '../api.model';
+import { ApiBodyType, ApiParamsType, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from '../constants/api.model';
 import { ApiParamsExtraSettingComponent } from '../http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../http/test/api-test.model';
 @Injectable()
@@ -57,6 +57,7 @@ export class ApiTableService {
       id: string;
       in: 'body' | 'header' | 'query' | 'rest';
       module?: 'edit' | 'preview';
+      exampleSlot?: TemplateRef<HTMLDivElement>;
       isEdit: boolean;
       where?: 'request' | 'response';
       format?: ApiBodyType;
@@ -96,6 +97,7 @@ export class ApiTableService {
         title: $localize`Example`,
         type: 'input',
         maxlength: 65535,
+        slot: inArg.exampleSlot,
         key: 'paramAttr.example'
       },
       editOperate: {
@@ -227,6 +229,7 @@ export class ApiTableService {
       id: string;
       in: 'body' | 'header' | 'query' | 'rest';
       format?: 'FormData';
+      exampleSlot: TemplateRef<HTMLDivElement>;
     },
     opts: any = {}
   ): { columns: ColumnItem[]; setting: TableProSetting } {
@@ -256,7 +259,8 @@ export class ApiTableService {
         title: $localize`Value`,
         type: 'input',
         maxlength: 65535,
-        key: 'paramAttr.example'
+        key: 'paramAttr.example',
+        slot: inArg.exampleSlot
       },
       editOperate: {
         type: 'btnList',

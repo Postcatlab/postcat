@@ -1,16 +1,16 @@
+import { UpdateSpec } from 'dexie';
 import {
-  inheritAuth,
-  noAuth
-} from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+  AuthTypeValue,
+  INHERIT_AUTH_OPTION,
+  isInherited,
+  NONE_AUTH_OPTION
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.module';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
-import {
-  ApiResponse,
-  ApiResponseOptions,
-  ApiResponsePromise
-} from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
+import { ApiResponse } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { GroupDeleteDto } from 'pc/browser/src/app/services/storage/db/dto/group.dto';
-import { Group } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { serializeObj } from 'pc/browser/src/app/services/storage/db/utils';
 
 // 对数据重新进行升序编排
@@ -23,44 +23,84 @@ const formatSort = (arr: any[] = []) => {
     });
 };
 
-const genGroupType2 = apiData => {
+const genFileGroup = (module, model): ViewGroup | any => {
   // 不能直接返回 apiData, 要返回符合分组的格式
-  return {
-    ...apiData,
-    // 0默认分组 1普通分组 2外部数据参与排序分组
-    type: 2,
-    id: apiData.apiUuid,
-    uuid: apiData.apiUuid,
-    parentId: apiData.groupId,
-    relationInfo: {
-      ...apiData,
-      ...apiData?.apiAttrInfo
+  switch (module) {
+    case GroupModuleType.API: {
+      return {
+        type: GroupType.Virtual,
+        module: GroupModuleType.API,
+        id: `api_${model.apiUuid}`,
+        parentId: model.groupId,
+        relationInfo: {
+          ...model,
+          ...model?.apiAttrInfo
+        }
+      };
     }
-  };
+    case GroupModuleType.Mock: {
+      return {
+        type: GroupType.Virtual,
+        module: GroupModuleType.Mock,
+        id: `mock_${model.id}`,
+        parentId: `api_${model.apiUuid}`,
+        relationInfo: model
+      };
+    }
+    case GroupModuleType.Case: {
+      return {
+        type: GroupType.Virtual,
+        module: GroupModuleType.Case,
+        id: `case_${model.id}`,
+        parentId: `api_${model.apiUuid}`,
+        relationInfo: model
+      };
+    }
+  }
 };
 
-export class GroupService extends BaseService<Group> {
-  baseService = new BaseService(dataSource.group);
-  apiDataService = new BaseService(dataSource.apiData);
+export class DbGroupService extends DbBaseService<Group> {
+  baseService = new DbBaseService(dataSource.group);
+  apiDataService = new DbBaseService(dataSource.apiData);
+  mockDataService = new DbBaseService(dataSource.mock);
+  caseDataService = new DbBaseService(dataSource.apiCase);
 
   apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
 
   constructor() {
     super(dataSource.group);
+    //TODO delete at 2023-07-01
+    //Fixed root group authInfo
+    //@ts-ignore
+    this.baseService.db.update(1, {
+      authInfo: {
+        authType: NONE_AUTH_OPTION.name,
+        isInherited: isInherited.notInherit,
+        authInfo: {}
+      }
+    } as UpdateSpec<Group>);
   }
 
-  async bulkCreate(params = []) {
+  async bulkCreate(params: Group[] = []) {
     const { data: parentGroups } = await this.baseService.bulkRead({ id: params.map(n => n.parentId) });
     parentGroups.forEach((item, index) => {
       params[index].depth = item.depth + 1;
     });
+    params.forEach(val => {
+      val.authInfo = {
+        authType: NONE_AUTH_OPTION.name,
+        isInherited: val.depth === 0 || val.depth === 1 ? isInherited.notInherit : isInherited.inherit,
+        authInfo: {}
+      };
+    });
+
     return this.baseService.bulkCreate(params);
   }
 
   @ApiResponse()
   async update(params?: Record<string, any>) {
-    const { id, parentId, name, sort, type } = params;
+    const { id, parentId, module, sort, type } = params;
     const hasSort = Number.isInteger(sort);
 
     // 对分组下的数据进行重排
@@ -82,16 +122,19 @@ export class GroupService extends BaseService<Group> {
       apis && (await this.apiDataService.bulkUpdate(apis));
     };
 
-    // 0默认分组 1普通分组 2外部数据参与排序分组
     // 拖动的是 API
-    if (type === 2) {
+    if (module === GroupModuleType.API) {
+      const uuid = params.relationInfo.uuid;
       const apiParams = serializeObj({
-        uuid: id,
+        uuid: uuid,
         groupId: parentId,
         sort
       });
-      const { data: oldApiData } = await this.apiDataService.read({ uuid: id });
-      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldApiData.groupId, type: 1 });
+      const { data: oldApiData } = await this.apiDataService.read({ uuid });
+      const { data: groupList } = await this.baseService.bulkRead({
+        parentId: parentId ?? oldApiData.groupId,
+        type: GroupType.UserCreated
+      });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldApiData.groupId });
 
       // 如果指定了 sort，则需要重新排序
@@ -101,21 +144,21 @@ export class GroupService extends BaseService<Group> {
           apiDataList.filter(n => n.id !== oldApiData.id),
           { ...oldApiData, groupId: parentId }
         );
-        const { data: newApiData } = await this.apiDataService.read({ uuid: id });
-        return genGroupType2(newApiData);
+        const { data: newApiData } = await this.apiDataService.read({ uuid });
+        return genFileGroup(GroupModuleType.API, newApiData);
       }
       // 如果 parentId 变了，则需要将其 sort = parent.children.length
       if (parentId && oldApiData.groupId !== parentId) {
         // 没有指定 sort，则默认排在最后
         apiParams.sort = groupList.length + apiDataList.length + 1;
         const { data: newApiData } = await this.apiDataService.update(apiParams);
-        return genGroupType2(newApiData);
+        return genFileGroup(GroupModuleType.API, newApiData);
       }
     }
     // 修改分组
     else {
       const { data: oldGroup } = await this.baseService.read({ id });
-      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: 1 });
+      const { data: groupList } = await this.baseService.bulkRead({ parentId: parentId ?? oldGroup.parentId, type: GroupType.UserCreated });
       const { data: apiDataList } = await this.apiDataService.bulkRead({ groupId: parentId ?? oldGroup.parentId });
 
       // 如果指定了 sort，则需要重新排序
@@ -139,66 +182,74 @@ export class GroupService extends BaseService<Group> {
     }
   }
 
-  async read(params, isCallByApiData = false) {
+  async read(params) {
     const result = await this.baseService.read(params);
+    if (!result.data) {
+      return {
+        success: false,
+        code: 1,
+        data: null
+      };
+    }
     const group = result.data;
     const groupAuthType = group.authInfo?.authType;
-
-    // if (groupAuthType === inheritAuth.name) {
-    //   group.authInfo.authType = inheritAuth.name;
-    //   group.authInfo.isInherited = group.depth > 1 ? 1 : 0;
-    // }
-    // 递归获取父级分组鉴权信息
-    if (group && (!groupAuthType || groupAuthType === inheritAuth.name)) {
+    if (!groupAuthType) {
       group.authInfo = {
-        authType: noAuth.name,
-        isInherited: 0,
+        authType: NONE_AUTH_OPTION.name,
+        isInherited: isInherited.notInherit,
         authInfo: {}
       };
-      if (group.depth !== 0) {
-        const { data: parentGroup } = await this.read({ id: group.parentId });
-        if (parentGroup.depth !== 0) {
-          group.authInfo = parentGroup.authInfo;
-        }
-        if (isCallByApiData || !groupAuthType || groupAuthType === inheritAuth.name) {
-          group.authInfo.isInherited = (isCallByApiData ? group : parentGroup).depth ? 1 : 0;
-        } else {
-          group.authInfo.isInherited = 0;
-        }
+    }
+    if (groupAuthType === AuthTypeValue.Inherited) {
+      const { data: parentGroup } = await this.read({ id: group.parentId });
+      if (parentGroup.depth !== 0) {
+        group.authInfo = parentGroup.authInfo;
       }
-    } else if (groupAuthType) {
-      group.authInfo.isInherited = isCallByApiData ? 1 : 0;
+      if (!groupAuthType || groupAuthType === AuthTypeValue.Inherited) {
+        group.authInfo.isInherited = parentGroup.depth ? 1 : 0;
+      } else {
+        group.authInfo.isInherited = isInherited.notInherit;
+      }
     }
     return result;
   }
 
   async bulkRead(params) {
     const result = await this.baseService.bulkRead(params);
+    //! Warning  case/mock/group id may dupublicate in local
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
-
+    const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });
+    const { data: caseDataList } = await this.caseDataService.bulkRead({ projectUuid: params.projectUuid });
     const genGroupTree = (groups: Group[], paranId) => {
-      const apiFilters = apiDataList.filter(n => n.groupId === paranId);
       const groupFilters = groups.filter(n => n.parentId === paranId);
-      return [...apiFilters, ...groupFilters]
-        .map(m => {
-          // API
-          if ('uri' in m) {
-            return genGroupType2(m);
-          }
-          // group
-          else {
+      const apiFilters = apiDataList.filter(n => n.groupId === paranId).map(val => genFileGroup(GroupModuleType.API, val));
+      return [...groupFilters, ...apiFilters]
+        .map((m: any) => {
+          // Resource:api/case/mock
+          if (m.module === GroupModuleType.API) {
+            const mockFilters = mockDataList
+              .filter(n => n.apiUuid === m.relationInfo.apiUuid)
+              .map(val => genFileGroup(GroupModuleType.Mock, val));
+            const caseFilters = caseDataList
+              .filter(n => n.apiUuid === m.relationInfo.apiUuid)
+              .map(val => genFileGroup(GroupModuleType.Case, val));
             return {
               ...m,
-              children: genGroupTree(groups, m.id)
+              children: [...mockFilters, ...caseFilters].sort((a, b) => a.sort - b.sort)
             };
           }
+          // Group
+          return {
+            ...m,
+            type: GroupType.UserCreated,
+            children: genGroupTree(groups, m.id)
+          };
         })
         .sort((a, b) => a.sort - b.sort);
     };
     const rootGroup = result.data?.find(n => n.depth === 0);
-    rootGroup['children'] = genGroupTree(result.data, rootGroup?.id);
+    rootGroup.children = genGroupTree(result.data, rootGroup?.id);
     result.data = [rootGroup];
-    // console.log('result', result);
     return result;
   }
 

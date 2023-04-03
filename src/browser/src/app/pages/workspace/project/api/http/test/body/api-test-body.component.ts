@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { resolveUrl } from 'ajv/dist/compile/resolve';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -9,20 +10,14 @@ import {
   ApiTableConf,
   API_BODY_TYPE,
   IMPORT_MUI
-} from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTableService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-table.service';
 import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
-import { transferFileToDataUrl, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
+import { transferFileToDataUrl, waitNextTick, whatTextType, whatType } from 'pc/browser/src/app/shared/utils/index.utils';
 import { Observable, Observer, pairwise, Subject, takeUntil } from 'rxjs';
 
-import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
+import { ContentType, CONTENT_TYPE_BY_ABRIDGE, FORMDATA_CONTENT_TYPE_BY_ABRIDGE, WHAT_TEXT_TYPE_MAP } from '../api-test.model';
 
-const whatTextTypeMap = {
-  xml: 'application/xml',
-  json: 'application/json',
-  html: 'text/html',
-  text: 'text/plain'
-} as const;
 @Component({
   selector: 'eo-api-test-body',
   templateUrl: './api-test-body.component.html',
@@ -31,15 +26,14 @@ const whatTextTypeMap = {
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | BodyParam[] | any;
   @Input() supportType: ApiBodyType[] = [ApiBodyType.FormData, ApiBodyType.JSON, ApiBodyType.XML, ApiBodyType.Raw, ApiBodyType.Binary];
-  @Input() autoSetContentType = true;
   @Input() contentType: ContentType;
   @Input() bodyType: ApiBodyType | number;
   @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | number> = new EventEmitter();
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
-  @Output() readonly autoSetContentTypeChange: EventEmitter<boolean> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
+  @ViewChild('rawEditor') eoEditor?: EoMonacoEditorComponent;
 
   isReload = true;
   listConf: ApiTableConf = {
@@ -54,6 +48,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     },
     API_BODY_TYPE: []
   };
+  // autoSetContentType = false;
   IMPORT_MUI = IMPORT_MUI;
   get TYPE_API_BODY(): typeof ApiBodyType {
     return ApiBodyType;
@@ -69,6 +64,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     isRequired: 1,
     name: '',
     dataType: ApiParamsType.string,
+    binaryRawData: '',
     paramAttr: {
       example: ''
     }
@@ -78,7 +74,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   get editorType() {
     return this.contentType?.replace(/.*\//, '');
   }
-  constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
+  constructor(private apiTable: ApiTableService, private feedback: EoNgFeedbackMessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -87,7 +83,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
 
   changeContentType(contentType) {
     this.contentTypeChange.emit(contentType);
-    this.autoSetContentTypeChange.emit(false);
+    // this.autoSetContentType = false;
   }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
@@ -98,28 +94,26 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     this.modelChange.emit(this.model);
+    if (this.bodyType === 1) {
+      waitNextTick().then(() => {
+        this.eoEditor?.formatCode();
+      });
+    }
   }
 
   ngOnInit(): void {
+    if (this.bodyType === 1) {
+      waitNextTick().then(() => {
+        this.eoEditor?.formatCode();
+      });
+    }
     this.CONST.API_BODY_TYPE = API_BODY_TYPE.filter(val => this.supportType.includes(val.value));
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  private beforeChangeBodyByType(type) {
-    switch (type) {
-      case ApiBodyType.Binary:
-      case ApiBodyType.Raw: {
-        this.cache[type] = this.model || [{ binaryRawData: '' }];
-        break;
-      }
-      default: {
-        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
-        break;
-      }
-    }
-  }
+
   ngOnChanges(changes) {
     if (changes.model?.firstChange) {
       this.beforeChangeBodyByType(this.bodyType);
@@ -131,7 +125,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.model = {};
       this.binaryFiles = [];
       if (file.size >= 5 * 1024 * 1024) {
-        this.message.error($localize`The file is too large and needs to be less than 5 MB`);
+        this.feedback.error($localize`The file is too large and needs to be less than 5 MB`);
         observer.complete();
         return;
       }
@@ -164,8 +158,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   rawDataChange(code: string) {
     this.model[0].binaryRawData = code;
     this.modelChange.emit(this.model);
-    const contentType = whatTextTypeMap[whatTextType(code)];
-    if (contentType && contentType !== this.contentType && this.autoSetContentType !== false) {
+
+    if (!code) return;
+    const contentType = WHAT_TEXT_TYPE_MAP[whatTextType(code)];
+    // && this.autoSetContentType !== false
+    if (contentType && contentType !== this.contentType) {
       this.contentType = contentType;
       this.contentTypeChange.emit(contentType);
     }
@@ -179,11 +176,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     switch (this.bodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
-        this.model = this.cache[this.bodyType] || [
-          {
-            binaryRawData: this.model?.[0]?.binaryRawData || ''
-          }
-        ];
+        this.model = this.cache[this.bodyType]?.length
+          ? this.cache[this.bodyType]
+          : [
+              {
+                binaryRawData: this.model?.[0]?.binaryRawData || ''
+              }
+            ];
         break;
       }
       default: {
@@ -197,11 +196,28 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+  private beforeChangeBodyByType(type) {
+    switch (type) {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        this.cache[type] = this.model?.length ? this.model : [{ binaryRawData: '' }];
+        break;
+      }
+      default: {
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
+        break;
+      }
+    }
+  }
   formdataSelectFiles(target, item) {
     const files = Array.from(target.files);
+
+    //? Clear the input file prevent the same file not trigger change event
+    target.value = null;
+
     const execeedSize = files.some((file: File) => {
       if (file.size >= 2 * 1024 * 1024) {
-        this.message.error($localize`The file is too large and needs to be less than 2 MB`);
+        this.feedback.error($localize`The file is too large and needs to be less than 2 MB`);
         return true;
       }
     });
@@ -220,16 +236,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private initListConf() {
     const config = this.apiTable.initTestTable({
       in: 'body',
-      id: 'api_test_body'
+      id: 'api_test_body',
+      exampleSlot: this.formValue
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
     this.listConf.columns.forEach(col => {
       switch (col.key) {
-        case 'paramAttr.example': {
-          col.slot = this.formValue;
-          break;
-        }
         case 'dataType': {
           col.change = (item: BodyParam | any) => {
             if (item.dataType === ApiParamsType.file) {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { StoreService } from '../../store/state.service';
+import { StoreService } from '../../shared/store/state.service';
 
 @Injectable()
 export class RedirectSharedID implements CanActivate {

@@ -6,7 +6,7 @@ import { MessageService } from 'pc/browser/src/app/services/message';
 import { waitNextTick } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
-import { StoreService } from '../../../store/state.service';
+import { StoreService } from '../../../shared/store/state.service';
 import { ProjectListService } from './project-list/project-list.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class WorkspaceOverviewComponent implements OnInit {
     public projectList: ProjectListService,
     public store: StoreService,
     private router: Router,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     public feature: FeatureControlService,
     private postMessage: MessageService
   ) {}
@@ -31,7 +31,7 @@ export class WorkspaceOverviewComponent implements OnInit {
       this.router.navigate(['/home/workspace/overview/member']);
     }
     if (this.store.isLocal) {
-      this.message.info($localize`You should switch to cloud workspace and invite members.`);
+      this.feedback.info($localize`You should switch to cloud workspace and invite members.`);
       return;
     }
     await waitNextTick();

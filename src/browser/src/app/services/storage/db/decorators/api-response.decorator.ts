@@ -1,4 +1,5 @@
 import { isFunction } from 'lodash-es';
+import { convertViewIDtoIndexedDBID } from 'pc/browser/src/app/services/storage/db/dataSource';
 
 /** 普通响应 promise */
 export type ApiResponsePromise<T> = Promise<ApiResponseOptions<T>>;
@@ -46,8 +47,17 @@ export function ApiResponse(options: ApiResponseOptions = {}): MethodDecorator {
       descriptor.value = async function (...args) {
         const fnArr = args.filter(n => isFunction(n));
         try {
-          // 模拟 network，使用 JSON.stringify 将数据序列化
-          const params = JSON.parse(JSON.stringify(args))?.[0];
+          //Simulate network, use JSON.stringify to serialize data
+          let params = JSON.parse(JSON.stringify(args))?.[0];
+
+          //Convert View model id to database id,such as apiUuid to uuid
+          params = convertViewIDtoIndexedDBID(this.db, params);
+
+          if (typeof propertyKey === 'string' && ['bulkDelete'].includes(propertyKey) && params.ids) {
+            params.id = params.ids;
+          }
+
+          //Call Function
           const data = await original.call(this, params, ...fnArr);
           if (data instanceof ResObj) {
             return new ResObj(data.data, options);
@@ -55,6 +65,7 @@ export function ApiResponse(options: ApiResponseOptions = {}): MethodDecorator {
             return new ResObj(data, options);
           }
         } catch (error) {
+          console.error(`IndexedDB Error: ${error}`);
           return new ResObj(error, { ...options, code: error?.code ?? 1, success: false });
         }
       };

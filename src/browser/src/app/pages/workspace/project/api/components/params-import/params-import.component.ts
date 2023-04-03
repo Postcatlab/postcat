@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { cloneDeep, toArray, merge, isEmpty } from 'lodash-es';
-import { computed, observable, makeObservable, reaction } from 'mobx';
+import { cloneDeep, isEmpty } from 'lodash-es';
+import { computed, observable, makeObservable, reaction, action } from 'mobx';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { pcMerge } from 'pc/browser/src/app/shared/utils/pc-merge';
 import qs from 'qs';
 
-import { BodyParam } from '../../../../../../services/storage/db/models/apiData';
 import { form2json, xml2json, isXML, json2Table } from '../../../../../../shared/utils/data-transfer/data-transfer.utils';
-import { eoDeepCopy, whatType } from '../../../../../../shared/utils/index.utils';
-import { ApiParamsTypeJsonOrXml } from '../../api.model';
+import { whatType } from '../../../../../../shared/utils/index.utils';
+import { ApiParamsTypeJsonOrXml } from '../../constants/api.model';
 
 const titleHash = new Map()
   .set('xml', $localize`Import XML`)
@@ -55,7 +55,7 @@ export class ParamsImportComponent implements OnInit {
     return ['formData', 'header', 'json'].includes(this.contentType) ? 'text' : this.contentType;
   }
 
-  constructor(private message: EoNgFeedbackMessageService) {}
+  constructor(private feedback: EoNgFeedbackMessageService) {}
 
   ngOnInit() {
     makeObservable(this);
@@ -92,10 +92,10 @@ export class ParamsImportComponent implements OnInit {
     }
   }
 
-  showModal(type): void {
+  @action showModal(type): void {
     this.isVisible = true;
   }
-  handleCancel(): void {
+  @action handleCancel(): void {
     this.isVisible = false;
   }
 
@@ -152,7 +152,7 @@ export class ParamsImportComponent implements OnInit {
 
     const [res, err] = func[this.contentType](this.paramCode);
     if (err && 'msg' in err) {
-      this.message.error(err.msg);
+      this.feedback.error(err.msg);
       return;
     }
 

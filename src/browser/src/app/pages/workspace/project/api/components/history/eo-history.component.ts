@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun } from 'mobx';
 import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
-import { Protocol, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import {
+  BASIC_TABS_INFO,
+  Protocol,
+  requestMethodMap,
+  TabsConfig
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
@@ -21,7 +26,13 @@ export class HistoryComponent implements OnInit {
   requestMethodMap = requestMethodMap;
   nzSelectedKeys: NzTreeNodeKey[];
   getTestHistory = [];
-  constructor(private router: Router, private store: ApiStoreService, private trace: TraceService, private effect: ApiEffectService) {}
+  constructor(
+    private router: Router,
+    private store: ApiStoreService,
+    private trace: TraceService,
+    private effect: ApiEffectService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
+  ) {}
 
   ngOnInit(): void {
     this.effect.getHistoryList();
@@ -42,8 +53,11 @@ export class HistoryComponent implements OnInit {
     this.trace.report('click_api_test_history');
     this.nzSelectedKeys = [];
     const origin = e.node.origin;
-    const protocol = origin.request?.protocol === Protocol.WEBSOCKET ? 'ws' : 'http';
-    this.router.navigate([`home/workspace/project/api/${protocol}/test`], {
+    const path =
+      origin.request?.protocol === Protocol.WEBSOCKET
+        ? this.tabsConfig.pathByName[PageUniqueName.WsTest]
+        : this.tabsConfig.pathByName[PageUniqueName.HttpTest];
+    this.router.navigate([path], {
       queryParams: {
         uuid: `history_${origin.id}`
       }

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { Group } from 'pc/browser/src/app/services/storage/db/models';
-import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { ApiCase, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { ApiStoreService } from './api-state.service';
 
@@ -11,7 +14,13 @@ import { ApiStoreService } from './api-state.service';
   providedIn: 'root'
 })
 export class ApiEffectService {
-  constructor(private store: ApiStoreService, private globalStore: StoreService, private api: ApiService) {}
+  constructor(
+    private store: ApiStoreService,
+    private globalStore: StoreService,
+    private api: ApiService,
+    private trace: TraceService,
+    private feedback: EoNgFeedbackMessageService
+  ) {}
   async deleteMock(id) {
     // * delete mock
     const [, err] = await this.api.api_mockDelete({
@@ -25,6 +34,9 @@ export class ApiEffectService {
 
   //? History
   async createHistory(params) {
+    params.request = JSON.stringify(params.request);
+    params.response = JSON.stringify(params.response);
+    params.general = '{}';
     const [data] = await this.api.api_apiTestHistoryCreate(params);
     this.store.setHistory([...this.store.getTestHistory, data]);
     return data;
@@ -53,11 +65,11 @@ export class ApiEffectService {
       ids: this.store.getTestHistory.map(it => it.id)
     });
     if (err) {
+      this.feedback.error($localize`Delete history failed`);
       return;
     }
     this.store.setHistory([]);
   }
-
   //? Group
   async getGroupList(params = {}) {
     // * get group list data
@@ -83,7 +95,7 @@ export class ApiEffectService {
     // * for mock service
     // this.store.setApiList(items);
   }
-  async createGroup(groups: Group[] = []) {
+  async addGroup(groups: Group[] = []) {
     // * create group
     const [data, err] = await this.api.api_groupCreate(
       groups.map(n => ({
@@ -96,7 +108,6 @@ export class ApiEffectService {
       return [null, err];
     }
     const group = data[0];
-
     //* Transfer array proxy to real object
     const tree = new PCTree(this.store.getGroupList, {
       rootGroupID: this.store.getRootGroup.id
@@ -146,6 +157,107 @@ export class ApiEffectService {
     return [data, err];
   }
 
+  //? API
+  async addAPI(apiData: ApiData) {
+    // * Unsaved auth Info
+    apiData = eoDeepCopy(apiData);
+    Reflect.deleteProperty(apiData, 'authInfo');
+
+    const [result, err] = await this.api.api_apiDataCreate({ apiList: [].concat([apiData]) });
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [result[0], err];
+  }
+  async getAPI(uuid) {
+    const [result, err] = await (this.globalStore.isShare
+      ? this.api.api_shareApiDataDetail({ apiUuids: [uuid], withParams: 1, sharedUuid: this.globalStore.getShareID })
+      : this.api.api_apiDataDetail({ apiUuids: [uuid], withParams: 1 }));
+    if (err || !result?.[0]) {
+      console.error(err);
+      return [null, `cant'find this api:${err}`];
+    }
+    //Handle Auth
+    if (result[0]?.authInfo?.authInfo) {
+      result[0].authInfo.authInfo = JSONParse(result[0].authInfo.authInfo);
+    }
+
+    return [result[0], err];
+  }
+  async updateAPI(apiData) {
+    apiData = eoDeepCopy(apiData);
+    Reflect.deleteProperty(apiData, 'authInfo');
+    const [result, err] = await this.api.api_apiDataUpdate({ api: apiData });
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [result, err];
+  }
+  async deleteAPI(uuid) {
+    const [result, err] = await this.api.api_apiDataDelete({ apiUuids: [uuid] });
+    if (err) {
+      this.feedback.error($localize`Failed to delete API`);
+      return [null, err];
+    }
+    this.feedback.success($localize`Successfully deleted`);
+    this.getGroupList();
+    return [result, err];
+  }
+  //? Case
+  async detailCase(uuid) {
+    const [res, err] = this.globalStore.isShare
+      ? await this.api.api_shareCaseDetail({
+          sharedUuid: this.globalStore.getShareID,
+          apiCaseUuids: [uuid]
+        })
+      : await this.api.api_apiCaseDetail({ apiCaseUuids: [uuid] });
+    if (err || !res?.[0]) {
+      return [null, `cant'find this case:${err}`];
+    }
+    return [res[0], err];
+  }
+  async addCase(model: ApiCase) {
+    // * Unsaved auth Info/response
+    model = eoDeepCopy(model);
+    Reflect.deleteProperty(model, 'authInfo');
+    Reflect.deleteProperty(model, 'scriptList');
+    Reflect.deleteProperty(model, 'responseList');
+
+    const [data, err] = await this.api.api_apiCaseCreate({
+      apiCaseList: [model]
+    });
+    if (err || !data?.[0]) {
+      return [null, `cant'find this case:${err}`];
+    }
+    this.trace.report('add_case_success');
+    this.getGroupList();
+    return [data[0], err];
+  }
+  async updateCase(model: Partial<ApiCase>) {
+    // * Unsaved auth Info
+    model = eoDeepCopy(model);
+    Reflect.deleteProperty(model, 'authInfo');
+    Reflect.deleteProperty(model, 'scriptList');
+    const [data, err] = await this.api.api_apiCaseUpdate(model as ApiCase);
+    if (err) {
+      return [null, err];
+    }
+    this.getGroupList();
+    return [data, err];
+  }
+
+  async deleteCase(apiCaseUuid) {
+    const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuids: [apiCaseUuid] });
+    if (err) {
+      this.feedback.error($localize`Failed to delete`);
+      return;
+    }
+    this.feedback.success($localize`Successfully deleted`);
+    this.getGroupList();
+  }
+
   //? Env
   async addEnv(env) {
     const [data, err] = await this.api.api_environmentCreate(env);
@@ -189,5 +301,17 @@ export class ApiEffectService {
     }
     this.store.setEnvList(envList || []);
     return envList;
+  }
+
+  async deleteMockDetail() {
+    this.getGroupList();
+  }
+
+  async createMock() {
+    this.getGroupList();
+  }
+
+  async editMock() {
+    this.getGroupList();
   }
 }
