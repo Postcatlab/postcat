@@ -34,3 +34,5 @@ test('User Opeate', async ({ page }) => {
   await page.getByPlaceholder('Enter password').press('Enter');
   await ifTipsExist(page, 'Username must a email');
 });
+
+//Generate Token

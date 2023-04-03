@@ -128,7 +128,7 @@
             <nz-badge class="ml-1" *ngIf="beforeInject?.trim() || afterInject?.trim()" nzStatus="success"></nz-badge>
           </ng-template>
           <pc-action>
-            <div name="pre">
+            <div class="h-full" name="pre">
               <div class="text-tips p-[10px]" *ngIf="module === 'caseTest'" i18n>
                 This Case is using Script Action from <a (click)="toAPI('beforeInject')">API</a>
               </div>
@@ -141,7 +141,7 @@
                 class="h-[100%]"
               ></eo-api-script>
             </div>
-            <div name="after">
+            <div class="h-full" name="after">
               <div class="text-tips p-[10px]" *ngIf="module === 'caseTest'" i18n>
                 This Case is using Script Action from <a href="toAPI('afterInject')">API</a>
               </div>

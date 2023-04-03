@@ -24,6 +24,14 @@ const routes: Routes = [
           {
             path: 'test',
             loadChildren: () => import('../workspace/project/api/http/test/api-test.module').then(m => m.ApiTestModule)
+          },
+          {
+            path: 'case',
+            loadChildren: () => import('../workspace/project/api/http/test/api-test.module').then(m => m.ApiTestModule)
+          },
+          {
+            path: 'mock',
+            loadChildren: () => import('../workspace/project/api/http/mock/mock.module').then(m => m.MockModule)
           }
         ]
       },

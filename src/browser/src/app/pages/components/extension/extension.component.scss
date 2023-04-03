@@ -9,6 +9,10 @@
     height: calc(62vh - 32px);
     overflow: auto;
     display: block;
+
+    .ant-tree-switcher {
+      display: none;
+    }
   }
 
   eo-ng-auto-complete input {

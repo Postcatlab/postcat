@@ -159,7 +159,7 @@ export class ExtensionService {
         },
         error: () => {
           this.requestPending = null;
-          reject([]);
+          resolve([]);
         }
       });
     });
