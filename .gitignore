@@ -2,11 +2,7 @@
 
 # compiled output
 dist/
-/build/ElectronInstall/
-/build/FilesToInstall/
-/build/Output/
-/build/NiuNiuCaptureElectronDemo/
-/build/SetupScripts/skinpwd.nsh
+/build/
 out/
 /tmp
 /out-tsc
