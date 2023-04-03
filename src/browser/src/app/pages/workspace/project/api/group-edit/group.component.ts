@@ -93,7 +93,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
       const [data] = await this.effect.addGroup([
         {
           type: 1,
-          name: $localize`:@@AddGroup:New Group`,
+          name: $localize`:@@NewGroupTitle:New Group`,
           parentId: Number(parentId)
         }
       ]);

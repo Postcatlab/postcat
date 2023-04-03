@@ -314,10 +314,12 @@ export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewCompone
     return new Promise(resolve => {
       if (this.leaveModal) {
         resolve(false);
+        return;
       }
       const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
       if (this.wsStatus === 'disconnect' || isCloseOther) {
         resolve(true);
+        return;
       }
       this.leaveModal = this.modal.create({
         nzTitle: $localize`Do you want to leave the page?`,

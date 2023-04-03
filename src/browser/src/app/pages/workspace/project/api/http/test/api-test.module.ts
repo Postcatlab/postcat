@@ -75,9 +75,9 @@ const COMPONENTS = [
         if (electron.isElectron) {
           return new TestServerLocalNodeService(electron, locale, test);
         } else if (!web.isVercel) {
-          return new TestServerRemoteService(locale, test);
+          return new TestServerRemoteService(electron, locale, test);
         } else {
-          return new TestServerServerlessService(locale, test);
+          return new TestServerServerlessService(electron, locale, test);
         }
       },
       deps: [ElectronService, WebService, LOCALE_ID, ApiTestUtilService]

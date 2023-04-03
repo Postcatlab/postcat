@@ -154,7 +154,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">328</context>
+          <context context-type="linenumber">330</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -1884,11 +1884,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">135</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/store/api-effect.service.ts</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">254</context>
         </context-group>
         <target state="translated">删除失败</target>
       </trans-unit>
@@ -1900,7 +1900,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
-          <context context-type="linenumber">140</context>
+          <context context-type="linenumber">138</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/store/api-effect.service.ts</context>
@@ -1908,7 +1908,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/store/api-effect.service.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">257</context>
         </context-group>
         <target state="translated">删除成功</target>
       </trans-unit>
@@ -2132,7 +2132,7 @@
         </context-group>
         <target state="translated">新建环境</target>
       </trans-unit>
-      <trans-unit id="AddGroup" datatype="html">
+      <trans-unit id="NewGroupTitle" datatype="html">
         <source>New Group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/api-tab.service.ts</context>
@@ -2168,7 +2168,7 @@
         </context-group>
         <target state="translated">测试 Websocket</target>
       </trans-unit>
-      <trans-unit id="5342917002778887163" datatype="html">
+      <trans-unit id="5342917002778887163" datatype="html" approved="yes">
         <source>New Case</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/api-tab.service.ts</context>
@@ -2182,9 +2182,9 @@
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test.component.ts</context>
           <context context-type="linenumber">248</context>
         </context-group>
-        <target state="translated">新建用例</target>
+        <target state="final">新建用例</target>
       </trans-unit>
-      <trans-unit id="238943392198923505" datatype="html">
+      <trans-unit id="NewMockTitle" datatype="html">
         <source>New Mock</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/api-tab.service.ts</context>
@@ -2192,7 +2192,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <target state="translated">新建 Mock</target>
       </trans-unit>
@@ -2312,7 +2312,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/mock.component.ts</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">207</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -2332,7 +2332,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">122</context>
         </context-group>
         <target state="translated">添加失败</target>
       </trans-unit>
@@ -2352,7 +2352,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">125</context>
         </context-group>
         <target state="translated">添加成功</target>
       </trans-unit>
@@ -2652,7 +2652,7 @@
         </context-group>
         <target state="translated"> 新建 API </target>
       </trans-unit>
-      <trans-unit id="4150099050666823002" datatype="html">
+      <trans-unit id="AddGroup" datatype="html">
         <source>New Group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
@@ -3453,7 +3453,7 @@
         <source>Postcat Client is required to use Mock.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/mock.component.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <target state="translated">Mock 需要下载 Postcat 客户端.</target>
       </trans-unit>
@@ -3461,7 +3461,7 @@
         <source>Use Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/mock.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <target state="translated">使用客户端</target>
       </trans-unit>
@@ -3469,7 +3469,7 @@
         <source>No change in data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/mock.component.ts</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">184</context>
         </context-group>
         <target state="translated">数据无变化</target>
       </trans-unit>
@@ -3854,7 +3854,7 @@
 If the current test URL is a local API, please download the desktop and re-initiate the test.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/test-server/test-server.service.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">150</context>
         </context-group>
         <target state="translated">服务连接失败。
 当前正在使用服务器测试，如果当前测试 URL 为 本地 API，请下载桌面端后重新发起测试。</target>
@@ -3971,7 +3971,7 @@ If the current test URL is a local API, please download the desktop and re-initi
         <source>Do you want to leave the page?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">323</context>
+          <context context-type="linenumber">325</context>
         </context-group>
         <target state="translated">你想要离开当前页面吗？</target>
       </trans-unit>
@@ -3979,7 +3979,7 @@ If the current test URL is a local API, please download the desktop and re-initi
         <source>After leaving, the current long connection is no longer maintained, whether to confirm to leave?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">326</context>
         </context-group>
         <target state="translated">当前的长连接将会断开，是否确认离开？</target>
       </trans-unit>
@@ -3987,7 +3987,7 @@ If the current test URL is a local API, please download the desktop and re-initi
         <source>Leave</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
-          <context context-type="linenumber">336</context>
+          <context context-type="linenumber">338</context>
         </context-group>
         <target state="translated">离开</target>
       </trans-unit>
