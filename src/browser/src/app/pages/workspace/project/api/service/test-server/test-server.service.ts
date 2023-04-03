@@ -1,5 +1,6 @@
 import { formatDate } from '@angular/common';
 import { Inject, Injectable, Input, LOCALE_ID } from '@angular/core';
+import { ElectronService } from 'pc/browser/src/app/core/services';
 import {
   ApiBodyType,
   ApiParamsType,
@@ -20,7 +21,11 @@ import { TestLocalNodeData } from './local-node/api-server-data.model';
 
 @Injectable()
 export abstract class TestServerService implements TestServer {
-  constructor(@Inject(LOCALE_ID) protected locale: string, protected apiTestUtil: ApiTestUtilService) {}
+  constructor(
+    protected electron: ElectronService,
+    @Inject(LOCALE_ID) protected locale: string,
+    protected apiTestUtil: ApiTestUtilService
+  ) {}
   abstract init(receiveMessage: (message: any) => void): void;
   abstract send(action: string, message: any): void;
   formatRequestData(data: Partial<ApiData>, opts: requestDataOpts = { env: {}, lang: 'en', globals: {} }) {
@@ -141,7 +146,7 @@ export abstract class TestServerService implements TestServer {
       }
     };
 
-    if (response.statusCode === 0) {
+    if (response.statusCode === 0 && !this.electron.isElectron) {
       response.body = $localize`Service connection failed. The server test is currently being used.\nIf the current test URL is a local API, please download the desktop and re-initiate the test.`;
     }
     result = {
