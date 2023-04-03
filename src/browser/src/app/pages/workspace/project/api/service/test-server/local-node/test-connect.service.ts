@@ -6,8 +6,8 @@ import { ApiTestUtilService } from '../../api-test-util.service';
 import { TestServerService } from '../test-server.service';
 @Injectable()
 export class TestServerLocalNodeService extends TestServerService {
-  constructor(private electron: ElectronService, @Inject(LOCALE_ID) public locale: string, public apiTestUtil: ApiTestUtilService) {
-    super(locale, apiTestUtil);
+  constructor(public electron: ElectronService, @Inject(LOCALE_ID) public locale: string, public apiTestUtil: ApiTestUtilService) {
+    super(electron, locale, apiTestUtil);
   }
   init(receiveMessage: (message) => void) {
     this.electron.ipcRenderer.on('unitTest', (event, args) => {

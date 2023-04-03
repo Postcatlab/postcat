@@ -108,7 +108,7 @@ export class ApiMockService {
     // });
     const apiData = await this.projectApi.get(apiUuid);
     const data = {
-      name: $localize`New Mock`,
+      name: $localize`:@@NewMockTitle:New Mock`,
       response: this.getMockResponseByAPI(apiData),
       apiUuid: apiUuid
     };
