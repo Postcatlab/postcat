@@ -39,6 +39,7 @@ EOF
             `,
             'yarn install',
             'yarn release',
+            `yarn upload`,
             `nvm use ${originNodeVersion}`,
             'echo Windows 打包发布完成!'
           ].join('\r\n')

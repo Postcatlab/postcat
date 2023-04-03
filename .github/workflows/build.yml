@@ -72,6 +72,7 @@ jobs:
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
           yarn release
+          yarn upload
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
@@ -80,5 +81,6 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           yarn release
+          yarn upload
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
