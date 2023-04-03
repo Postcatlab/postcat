@@ -2562,6 +2562,70 @@ export class RemoteService {
     });
   }
 
+  api_shareMockDetail<T = any>({ sharedUuid, id }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - mockDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return [null, { message: 'mockDetail 接口 缺失参数 sharedUuid' }];
+    }
+    if (id == null) {
+      console.log('%c Error: share - mockDetail 接口 缺失参数 id %c', ErrorStyle, '');
+      return [null, { message: 'mockDetail 接口 缺失参数 id' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project-shared/mock`, {
+          params: { sharedUuid, id }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c share:mockDetail - api_shareMockDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c share:mockDetail - api_shareMockDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareCaseDetail<T = any>({ sharedUuid, apiCaseUuids }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - caseDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return [null, { message: 'caseDetail 接口 缺失参数 sharedUuid' }];
+    }
+    if (apiCaseUuids == null) {
+      console.log('%c Error: share - caseDetail 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'caseDetail 接口 缺失参数 apiCaseUuids' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api//project-shared/api-case`, {
+          params: { sharedUuid, apiCaseUuids }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c share:caseDetail - api_shareCaseDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c share:caseDetail - api_shareCaseDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
   api_shareEnvironmentList<T = any>({ sharedUuid }, prefix = '') {
     if (sharedUuid == null) {
       console.log('%c Error: share - environmentList 接口 缺失参数 sharedUuid %c', ErrorStyle, '');

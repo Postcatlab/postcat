@@ -13,6 +13,7 @@ import { MockService } from 'pc/browser/src/app/services/mock.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { PROTOCOL } from 'pc/browser/src/app/shared/models/protocol.constant';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import storageUtils from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 interface ModelType {
@@ -70,6 +71,7 @@ export class MockComponent implements EditTabViewComponent {
 
   constructor(
     private apiHttp: ApiService,
+    private globalStore: StoreService,
     private mockService: MockService,
     private api: ProjectApiService,
     private apiMock: ApiMockService,
@@ -116,7 +118,12 @@ export class MockComponent implements EditTabViewComponent {
         url: '',
         response: ''
       } as ModelType;
-    const [res] = await this.apiHttp.api_mockDetail({ id: mock_id });
+    const [res] = this.globalStore.isShare
+      ? await this.apiHttp.api_shareMockDetail({
+          sharedUuid: this.globalStore.getShareID,
+          id: mock_id
+        })
+      : await this.apiHttp.api_mockDetail({ id: mock_id });
     this.model = res;
     const apiData = await this.getApiDetail(res.apiUuid);
     this.mockPrefix = this.apiMock.getMockPrefix(apiData);

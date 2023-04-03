@@ -71,7 +71,6 @@ export class ApiMockService {
     return data;
   }
   async deleteMock(id: number) {
-    console.log(id);
     const [data, err] = await this.api.api_mockDelete({ id });
     return data;
   }
@@ -93,7 +92,6 @@ export class ApiMockService {
     }
   }
   toDetail(model) {
-    console.log(model);
     this.router.navigate([this.mockOperateUrl], {
       queryParams: { uuid: model.id, apiUuid: model.apiUuid, pageID: Date.now() }
     });

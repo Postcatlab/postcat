@@ -207,7 +207,12 @@ export class ApiEffectService {
   }
   //? Case
   async detailCase(uuid) {
-    const [res, err] = await this.api.api_apiCaseDetail({ apiCaseUuids: [uuid] });
+    const [res, err] = this.globalStore.isShare
+      ? await this.api.api_shareCaseDetail({
+          sharedUuid: this.globalStore.getShareID,
+          apiCaseUuids: [uuid]
+        })
+      : await this.api.api_apiCaseDetail({ apiCaseUuids: [uuid] });
     if (err || !res?.[0]) {
       return [null, `cant'find this case:${err}`];
     }

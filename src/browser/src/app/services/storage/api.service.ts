@@ -333,6 +333,14 @@ export class ApiService {
     return this.remote.api_shareApiDataDetail<T>(params);
   }
 
+  api_shareMockDetail<T = any>(params: { sharedUuid: any; id: any }) {
+    return this.remote.api_shareMockDetail<T>(params);
+  }
+
+  api_shareCaseDetail<T = any>(params: { sharedUuid: any; apiCaseUuids: any }) {
+    return this.remote.api_shareCaseDetail<T>(params);
+  }
+
   api_shareEnvironmentList<T = any>(params: { sharedUuid: any }) {
     return this.remote.api_shareEnvironmentList<T>(params);
   }

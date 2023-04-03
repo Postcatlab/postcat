@@ -134,6 +134,8 @@ const http = {
         { 'projectDetail @get': '/api/project-shared/project', query: 'sharedUuid' },
         { 'groupList @get': '/api/project-shared/group/list', query: 'sharedUuid, withItem' },
         { 'apiDataDetail @get': '/api/project-shared/api/list', query: 'apiUuids, sharedUuid, ...' },
+        { 'mockDetail @get': '/api/project-shared/mock', query: 'sharedUuid,id' },
+        { 'caseDetail @get': '/api//project-shared/api-case', query: 'sharedUuid,apiCaseUuids' },
         { 'environmentList @get': '/api/project-shared/env/list', query: 'sharedUuid' }
       ]
     }
