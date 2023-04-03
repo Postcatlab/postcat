@@ -1,3 +1,4 @@
+import { UpdateSpec } from 'dexie';
 import {
   AuthTypeValue,
   INHERIT_AUTH_OPTION,
@@ -69,6 +70,16 @@ export class DbGroupService extends DbBaseService<Group> {
 
   constructor() {
     super(dataSource.group);
+    //TODO delete at 2023-07-01
+    //Fixed root group authInfo
+    //@ts-ignore
+    this.baseService.db.update(1, {
+      authInfo: {
+        authType: NONE_AUTH_OPTION.name,
+        isInherited: isInherited.notInherit,
+        authInfo: {}
+      }
+    } as UpdateSpec<Group>);
   }
 
   async bulkCreate(params: Group[] = []) {
@@ -79,7 +90,7 @@ export class DbGroupService extends DbBaseService<Group> {
     params.forEach(val => {
       val.authInfo = {
         authType: NONE_AUTH_OPTION.name,
-        isInherited: val.depth === 1 ? isInherited.notInherit : isInherited.inherit,
+        isInherited: val.depth === 0 || val.depth === 1 ? isInherited.notInherit : isInherited.inherit,
         authInfo: {}
       };
     });
@@ -171,7 +182,7 @@ export class DbGroupService extends DbBaseService<Group> {
     }
   }
 
-  async read(params, isCallByApiData = false) {
+  async read(params) {
     const result = await this.baseService.read(params);
     if (!result.data) {
       return {
@@ -182,27 +193,23 @@ export class DbGroupService extends DbBaseService<Group> {
     }
     const group = result.data;
     const groupAuthType = group.authInfo?.authType;
-
-    // 递归获取父级分组鉴权信息
-    if (group && (!groupAuthType || groupAuthType === AuthTypeValue.Inherited)) {
+    if (!groupAuthType) {
       group.authInfo = {
         authType: NONE_AUTH_OPTION.name,
         isInherited: isInherited.notInherit,
         authInfo: {}
       };
-      if (group.depth !== 0) {
-        const { data: parentGroup } = await this.read({ id: group.parentId });
-        if (parentGroup.depth !== 0) {
-          group.authInfo = parentGroup.authInfo;
-        }
-        if (isCallByApiData || !groupAuthType || groupAuthType === AuthTypeValue.Inherited) {
-          group.authInfo.isInherited = (isCallByApiData ? group : parentGroup).depth ? 1 : 0;
-        } else {
-          group.authInfo.isInherited = isInherited.notInherit;
-        }
+    }
+    if (groupAuthType === AuthTypeValue.Inherited) {
+      const { data: parentGroup } = await this.read({ id: group.parentId });
+      if (parentGroup.depth !== 0) {
+        group.authInfo = parentGroup.authInfo;
       }
-    } else if (groupAuthType) {
-      group.authInfo.isInherited = isCallByApiData ? 1 : 0;
+      if (!groupAuthType || groupAuthType === AuthTypeValue.Inherited) {
+        group.authInfo.isInherited = parentGroup.depth ? 1 : 0;
+      } else {
+        group.authInfo.isInherited = isInherited.notInherit;
+      }
     }
     return result;
   }

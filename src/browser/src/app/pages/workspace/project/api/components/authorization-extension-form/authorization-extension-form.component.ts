@@ -200,13 +200,13 @@ export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy
       case AuthTypeValue.Inherited: {
         this.model.isInherited = IsInherited.inherit;
         this.model.authType = this.inheritAuthType;
-        // this.model.authInfo = {};
+        this.model.authInfo = {};
         break;
       }
       case AuthTypeValue.None: {
         this.model.isInherited = IsInherited.notInherit;
         this.model.authType = AuthTypeValue.None;
-        // this.model.authInfo = {};
+        this.model.authInfo = {};
         break;
       }
       default: {

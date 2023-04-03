@@ -1,4 +1,5 @@
 import { SYSTEM_MOCK_NAME } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { isInherited } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import {
   ApiDataBulkCreateDto,
@@ -45,8 +46,11 @@ export class DbApiDataService extends DbBaseService<ApiData> {
   async bulkReadDetail(params: ApiDataBulkReadDetailDto) {
     const result = await this.baseService.bulkRead(params);
     const promiseArr = result.data.map(async item => {
-      const { data: groupInfo } = await this.groupService.read({ id: item.groupId }, true);
+      const { data: groupInfo } = await this.groupService.read({ id: item.groupId });
       item.authInfo = groupInfo?.authInfo;
+      if (groupInfo.depth !== 0) {
+        item.authInfo.isInherited = isInherited.inherit;
+      }
     });
 
     await Promise.all(promiseArr);

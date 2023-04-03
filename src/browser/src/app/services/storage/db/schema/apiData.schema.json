@@ -36,9 +36,6 @@
         "dataType": {
           "type": "number"
         },
-        "dataTypeValue": {
-          "type": "string"
-        },
         "description": {
           "type": "string"
         },
@@ -75,7 +72,7 @@
         }
       },
       "type": "object",
-      "oneOf": [
+      "anyOf": [
         {
           "required": ["name", "dataType"]
         },
@@ -84,77 +81,9 @@
         }
       ]
     },
-    "DubboApiAttrInfo": {
-      "properties": {
-        "apiNumber": {
-          "type": "number"
-        },
-        "appName": {
-          "type": "string"
-        },
-        "group": {
-          "type": "string"
-        },
-        "interfaceName": {
-          "type": "string"
-        },
-        "methodName": {
-          "type": "string"
-        },
-        "serverHost": {
-          "type": "string"
-        },
-        "version": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "GrpcApiAttrInfo": {
-      "properties": {
-        "apiRequestMetadata": {
-          "type": "string"
-        },
-        "appName": {
-          "type": "string"
-        },
-        "authInfo": {
-          "type": "string"
-        },
-        "group": {
-          "type": "string"
-        },
-        "interfaceName": {
-          "type": "string"
-        },
-        "methodName": {
-          "type": "string"
-        },
-        "proto": {
-          "type": "string"
-        },
-        "responseMetadata": {
-          "type": "string"
-        },
-        "responseTrailingMetadata": {
-          "type": "string"
-        },
-        "serverHost": {
-          "type": "string"
-        },
-
-        "version": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "HeaderParam": {
       "properties": {
         "binaryRawData": {
-          "type": "string"
-        },
-        "contentType": {
           "type": "string"
         },
         "description": {
@@ -191,38 +120,16 @@
       },
       "type": "object"
     },
-    "HistoryInfo": {
+    "ScriptItem": {
       "properties": {
-        "oldId": {
+        "scriptType": {
           "type": "number"
         },
-        "projectVersionId": {
-          "type": "number"
-        },
-        "updateDesc": {
+        "data": {
           "type": "string"
-        },
-        "versionId": {
-          "type": "number"
         }
       },
-      "type": "object"
-    },
-    "Introduction": {
-      "properties": {
-        "apiUuid": {
-          "type": "string"
-        },
-        "note": {
-          "type": "string"
-        },
-        "noteRaw": {
-          "type": "string"
-        },
-        "noteType": {
-          "type": "number"
-        }
-      },
+      "required": ["scriptType"],
       "type": "object"
     },
     "ParamAttr": {
@@ -277,9 +184,6 @@
           },
           "type": "array"
         },
-        "contentType": {
-          "type": "string"
-        },
         "description": {
           "type": "string"
         },
@@ -312,29 +216,6 @@
           "type": "number"
         },
         "structureParamId": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Relation": {
-      "properties": {
-        "apiUuid": {
-          "type": "string"
-        },
-        "bindAmtApiId": {
-          "type": "number"
-        },
-        "fileId": {
-          "type": "string"
-        },
-        "fileName": {
-          "type": "string"
-        },
-        "fileUrl": {
-          "type": "string"
-        },
-        "swaggerId": {
           "type": "string"
         }
       },
@@ -375,9 +256,6 @@
     },
     "ResponseList": {
       "properties": {
-        "apiUuid": {
-          "type": "string"
-        },
         "contentType": {
           "type": "number"
         },
@@ -414,7 +292,8 @@
           "type": "array"
         }
       },
-      "type": "object"
+      "required": ["bodyParams", "headerParams"],
+      "type": ["object", "null"]
     },
     "RestParam": {
       "properties": {
@@ -426,12 +305,6 @@
             "$ref": "#/definitions/RestParam"
           },
           "type": "array"
-        },
-        "contentType": {
-          "type": "string"
-        },
-        "dataTypeValue": {
-          "type": "string"
         },
         "description": {
           "type": "string"
@@ -469,68 +342,6 @@
         }
       },
       "type": "object"
-    },
-    "ResultList": {
-      "properties": {
-        "content": {
-          "type": "string"
-        },
-        "httpCode": {
-          "type": "string"
-        },
-        "httpContentType": {
-          "type": "string"
-        },
-        "id": {
-          "type": "number"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "SoapApiAttrInfo": {
-      "properties": {
-        "afterInject": {
-          "type": "string"
-        },
-        "authInfo": {
-          "type": "string"
-        },
-        "beforeInject": {
-          "type": "string"
-        },
-        "contentType": {
-          "type": "number"
-        },
-        "requestMethod": {
-          "type": "number"
-        },
-        "soapAction": {
-          "type": "string"
-        },
-        "soapBinding": {
-          "type": "string"
-        },
-        "soapOperation": {
-          "type": "string"
-        },
-        "soapService": {
-          "type": "string"
-        },
-        "testData": {
-          "type": "string"
-        },
-
-        "wsdlContent": {
-          "type": "string"
-        }
-      },
-      "type": "object"
     }
   },
   "properties": {
@@ -539,14 +350,21 @@
       "const": 1,
       "default": 1
     },
+    "scriptList": {
+      "items": {
+        "$ref": "#/definitions/ScriptItem"
+      },
+      "default": [
+        { "scriptType": 1, "data": "" },
+        { "scriptType": 2, "data": "" }
+      ],
+      "type": "array"
+    },
     "apiAttrInfo": {
       "$ref": "#/definitions/ApiAttrInfo"
     },
     "apiUuid": {
       "type": "string"
-    },
-    "dubboApiAttrInfo": {
-      "$ref": "#/definitions/DubboApiAttrInfo"
     },
     "encoding": {
       "type": "string"
@@ -557,19 +375,7 @@
     "groupName": {
       "type": "string"
     },
-    "grpcApiAttrInfo": {
-      "$ref": "#/definitions/GrpcApiAttrInfo"
-    },
-    "historyInfo": {
-      "$ref": "#/definitions/HistoryInfo"
-    },
     "id": {
-      "type": "number"
-    },
-    "introduction": {
-      "$ref": "#/definitions/Introduction"
-    },
-    "isShared": {
       "type": "number"
     },
     "name": {
@@ -587,21 +393,12 @@
     "protocol": {
       "type": "number"
     },
-    "relation": {
-      "$ref": "#/definitions/Relation"
-    },
     "requestParams": {
       "$ref": "#/definitions/RequestParams"
     },
     "responseList": {
       "items": {
         "$ref": "#/definitions/ResponseList"
-      },
-      "type": "array"
-    },
-    "resultList": {
-      "items": {
-        "$ref": "#/definitions/ResultList"
       },
       "type": "array"
     },
@@ -617,9 +414,6 @@
         }
       },
       "type": "object"
-    },
-    "soapApiAttrInfo": {
-      "$ref": "#/definitions/SoapApiAttrInfo"
     },
     "starred": {
       "type": "number"
@@ -642,6 +436,5 @@
     }
   },
   "required": ["apiAttrInfo", "uri", "protocol", "name", "requestParams", "responseList", "collectionType"],
-  "additionalProperties": false,
   "type": "object"
 }

@@ -55,6 +55,7 @@ export const whatType = (data: any): string => {
  */
 export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
   if (!tmpText) return 'text';
+  // TODO it can be better
   const tmpCompareText = tmpText.replace(/\s/g, '');
   if (/^({|\[)(.*)(}|])$/.test(tmpCompareText)) {
     try {

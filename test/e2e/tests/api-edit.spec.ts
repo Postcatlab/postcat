@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { adaTabledRow, addTableParams, addTextToEditor, ifTipsExist } from '../utils/commom.util';
+import { adaTabledRow, addTableParams, addTextToEditor, ifTipsExist, operateGroup } from '../utils/commom.util';
 
 const addRowAndSettingMore = async (page, opts) => {
   await adaTabledRow(page, opts);
@@ -55,9 +55,7 @@ test('Basic Operate', async ({ page }) => {
   await page.keyboard.press('Meta+s');
   await ifTipsExist(page, 'Edited API successfully');
   //Delete API
-  await page.locator('eo-ng-tree-default').getByText(name).hover();
-  await page.getByTitle(name).getByRole('button').click();
-  await page.getByText('Delete', { exact: true }).click();
+  await operateGroup(page, name, 'Delete');
   await page.getByRole('button', { name: 'OK' }).click();
   await ifTipsExist(page, 'Successfully deleted');
 });

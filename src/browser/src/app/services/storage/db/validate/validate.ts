@@ -14,17 +14,23 @@ const ajvHandler = {
   env: null,
   group: null
 };
-export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
+export const parseAndCheckApiData = (apiData: ApiData): { validate: boolean; data?: ApiData; error?: any } => {
   let validate = ajvHandler.api;
   if (!validate) {
     const ajv = new Ajv({
       useDefaults: true,
-      removeAdditional: true
+      removeAdditional: 'all'
     });
     validate = ajv.compile<ApiData>(apiDataSchema);
   }
 
   if (validate(apiData)) {
+    if (!apiData.responseList[0].responseParams) {
+      apiData.responseList[0].responseParams = {
+        bodyParams: [],
+        headerParams: []
+      };
+    }
     return { validate: true, data: apiData };
   } else {
     console.error(validate.errors, apiData);

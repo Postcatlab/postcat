@@ -89,6 +89,7 @@ class DataSource extends Dexie {
           Reflect.deleteProperty(obj, dbID);
           const modelID = tableMap[dbID];
           Reflect.deleteProperty(obj, modelID);
+          console.log(modelID);
         }
         Reflect.deleteProperty(obj, 'id');
 

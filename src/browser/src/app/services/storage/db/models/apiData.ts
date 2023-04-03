@@ -73,14 +73,9 @@ export interface ApiData extends ApiBaseRequest {
   grpcApiAttrInfo?: GrpcApiAttrInfo;
   responseList: ResponseList[];
   resultList?: ResultList[];
+  scriptList?: ScriptType[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
-  //Use for view
-  script?: {
-    beforeScript: '';
-    afterScript: '';
-  };
-  scriptList?: ScriptType[];
 }
 
 export interface Introduction {

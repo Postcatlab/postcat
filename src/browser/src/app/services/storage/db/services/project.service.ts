@@ -1,3 +1,4 @@
+import { isInherited } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse, ApiResponsePromise } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { QueryAllDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
@@ -143,6 +144,11 @@ export class DbProjectService extends DbBaseService<Project> {
       type: GroupType.System,
       name: $localize`Root Group`,
       depth: 0,
+      authInfo: {
+        authInfo: {},
+        authType: 'none',
+        isInherited: isInherited.notInherit
+      },
       projectUuid: item.projectUuid,
       workSpaceUuid: item.workSpaceUuid
     }));

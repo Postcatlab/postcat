@@ -147,6 +147,12 @@ export class GlobalProvider {
     };
     return result;
   };
+  /**
+   * @Deprecated just for apispace extensions
+   *
+   * @param params
+   * @returns
+   */
   importProject = async (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
     let { projectID, groupID, ...rest } = {
@@ -171,7 +177,6 @@ export class GlobalProvider {
         workSpaceUuid: this.store.getCurrentWorkspaceUuid
       }))
     );
-    console.log('groups', groups);
 
     const apiCreatePromises = rest.collections.map(async (item, index) => {
       const group = groups[index];

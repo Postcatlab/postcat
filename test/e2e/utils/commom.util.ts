@@ -7,7 +7,26 @@ export const addTextToEditor = async (page, text, monacoEditor = page.locator('.
   await page.keyboard.press('Meta+KeyA');
   await page.keyboard.type(text);
 };
-
+export const clickButtonByIconName = async (page, name) => {
+  await page.locator(`eo-iconpark-icon[name="${name}"]`).click();
+};
+export const seletGroup = async (page, groupName) => {
+  await page.locator('eo-ng-tree-default').getByText(groupName).click();
+};
+/**
+ * Operate group by name and operateName
+ *
+ * @param page
+ * @param groupName operted group name
+ * @param operateName such as 'Add', 'Edit', 'Delete'
+ */
+export const operateGroup = async (page, groupName, operateName) => {
+  await page.locator('eo-ng-tree-default').getByText(groupName).hover();
+  await page.getByTitle(groupName).getByRole('button').click();
+  if (operateName) {
+    await page.getByText(operateName, { exact: true }).click();
+  }
+};
 export const ifTipsExist = async (page, tips) => {
   await expect(page.locator(`text=${tips}`)).toBeVisible();
 };
