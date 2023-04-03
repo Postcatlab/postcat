@@ -1,3 +1,4 @@
+import { isInherited } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse, ApiResponsePromise } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { QueryAllDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
@@ -7,25 +8,23 @@ import {
   ProjectDeleteDto,
   ProjectUpdateDto,
   ImportProjectDto,
-  Collection,
-  CollectionTypeEnum
+  Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
-import { genSimpleApiData } from 'pc/browser/src/app/services/storage/db/initData/apiData';
-import { Group, Project } from 'pc/browser/src/app/services/storage/db/models';
-import { ApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
-import { EnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
-import { GroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
+import { SampleCollection } from 'pc/browser/src/app/services/storage/db/initData/apiData';
+import { CollectionTypeEnum, Group, GroupType, Project } from 'pc/browser/src/app/services/storage/db/models';
+import { DbApiDataService } from 'pc/browser/src/app/services/storage/db/services/apiData.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbEnvironmentService } from 'pc/browser/src/app/services/storage/db/services/environment.service';
+import { DbGroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
 import { parseAndCheckApiData } from 'pc/browser/src/app/services/storage/db/validate/validate';
 
-export class ProjectService extends BaseService<Project> {
-  baseService = new BaseService(dataSource.project);
-  projectSyncSettingService = new BaseService(dataSource.projectSyncSetting);
-  apiDataService = new ApiDataService();
-  groupService = new GroupService();
-  environmentService = new EnvironmentService();
+export class DbProjectService extends DbBaseService<Project> {
+  baseService = new DbBaseService(dataSource.project);
+  projectSyncSettingService = new DbBaseService(dataSource.projectSyncSetting);
+  DbApiDataService = new DbApiDataService();
+  groupService = new DbGroupService();
+  DbEnvironmentService = new DbEnvironmentService();
 
-  apiDataTable = dataSource.apiData;
   apiGroupTable = dataSource.group;
 
   constructor() {
@@ -45,7 +44,7 @@ export class ProjectService extends BaseService<Project> {
     const { projectUuid, workSpaceUuid, depth, id: parentId } = parentGroup;
 
     const promises = collections.map(async (item, sort) => {
-      if (item.collectionType === CollectionTypeEnum.GROUP) {
+      if (item.collectionType === CollectionTypeEnum.Group) {
         const { data: targetGroup } = await this.groupService.read({
           name: item.name,
           depth: depth + 1,
@@ -54,44 +53,53 @@ export class ProjectService extends BaseService<Project> {
           workSpaceUuid
         });
         if (targetGroup) {
-          // @ts-ignore
+          //@ts-ignore
           this.apiGroupTable.update(targetGroup.id, { sort });
           if (item.children?.length) {
             await this.deepIncreUpdateGroup(item.children, targetGroup);
           }
         } else {
-          const groupID = await this.apiGroupTable.add({ ...item, parentId, sort, depth: depth + 1, projectUuid, workSpaceUuid });
-          const group = await this.apiGroupTable.get(groupID);
-
+          const { data: group } = await this.groupService.create({ ...item, parentId, sort, depth: depth + 1, projectUuid, workSpaceUuid });
           if (item.children?.length) {
             await this.deepIncreUpdateGroup(item.children, group);
           }
         }
-      } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
-        const { data: apiData } = await this.apiDataService.read({
-          projectUuid,
-          uri: item.uri,
-          'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
-        });
-        if (apiData) {
-          // @ts-ignore
-          await this.apiDataTable.update(apiData.id, {
+        return;
+      }
+
+      if (item.collectionType !== CollectionTypeEnum.API) return;
+      const { data: apiData } = await this.DbApiDataService.read({
+        projectUuid,
+        uri: item.uri,
+        'apiAttrInfo.requestMethod': item.apiAttrInfo?.requestMethod
+      });
+      if (apiData) {
+        await this.DbApiDataService.update({
+          api: {
             ...apiData,
             ...item,
             sort,
             groupId: parentId,
             projectUuid,
             workSpaceUuid
-          });
-        } else {
-          await this.apiDataTable.add({
-            ...item,
-            sort,
-            groupId: parentId,
-            projectUuid,
-            workSpaceUuid
-          });
-        }
+          },
+          projectUuid,
+          workSpaceUuid
+        });
+      } else {
+        await this.DbApiDataService.bulkCreate({
+          apiList: [
+            {
+              ...item,
+              sort,
+              groupId: parentId,
+              projectUuid,
+              workSpaceUuid
+            }
+          ],
+          projectUuid,
+          workSpaceUuid
+        });
       }
     });
     await Promise.all(promises);
@@ -133,9 +141,14 @@ export class ProjectService extends BaseService<Project> {
       }))
     );
     const groups = result.data?.map(item => ({
-      type: 0,
+      type: GroupType.System,
       name: $localize`Root Group`,
       depth: 0,
+      authInfo: {
+        authInfo: {},
+        authType: 'none',
+        isInherited: isInherited.notInherit
+      },
       projectUuid: item.projectUuid,
       workSpaceUuid: item.workSpaceUuid
     }));
@@ -143,9 +156,12 @@ export class ProjectService extends BaseService<Project> {
     this.groupService.bulkCreate(groups).then(({ data }) => {
       if (isInitApiData) {
         data.forEach(group => {
-          const sampleApiData = genSimpleApiData({ workSpaceUuid, projectUuid: group.projectUuid, groupId: group.id });
-          // @ts-ignore
-          this.apiDataService.bulkCreate(sampleApiData);
+          this.import({
+            //@ts-ignore
+            collections: SampleCollection.collections,
+            workSpaceUuid,
+            projectUuid: group.projectUuid
+          });
         });
       }
     });
@@ -153,21 +169,6 @@ export class ProjectService extends BaseService<Project> {
     return result;
   }
 
-  async update(params: ProjectUpdateDto) {
-    const { projectUuid, ...rest } = params;
-    const { data } = await this.read({ uuid: projectUuid });
-    rest['id'] = data.id;
-    return this.baseService.update(rest);
-  }
-
-  /** 批量删除项目  */
-  async bulkDelete(params: ProjectDeleteDto) {
-    const { projectUuids, ...rest } = params;
-    rest['uuid'] = projectUuids;
-    const result = await this.baseService.bulkDelete(rest);
-    await this.afterBulkDelete(rest, result);
-    return result;
-  }
   /** 获取项目列表  */
   page(params: ProjectPageDto) {
     const { projectUuids, ...rest } = params;
@@ -177,11 +178,16 @@ export class ProjectService extends BaseService<Project> {
     return this.baseService.page(rest);
   }
 
+  /** 批量删除项目  */
+  async bulkDelete(params: ProjectDeleteDto) {
+    const { projectUuids, ...rest } = params;
+    const result = await this.baseService.bulkDelete(params);
+    await this.afterBulkDelete(projectUuids, result);
+    return result;
+  }
   /** 删除项目之后，将会删除与被删除的项目相关的所有数据 */
-  async afterBulkDelete(params, result) {
+  async afterBulkDelete(projectUuids, result) {
     if (result.code === 0 && result.data > 0) {
-      const projectUuids = params.uuid;
-
       const promises = dataSource.tables.map(table => table.filter(item => projectUuids.includes(item.projectUuid)).delete());
       const result = await Promise.all(promises);
       console.log('删除项目', result);
@@ -192,19 +198,18 @@ export class ProjectService extends BaseService<Project> {
   @ApiResponse()
   async exports(params: QueryAllDto) {
     const { data: projectInfo } = await this.baseService.read({ uuid: params.projectUuid });
-    const { data: environmentList } = await this.environmentService.bulkRead(params);
+    const { data: environmentList } = await this.DbEnvironmentService.bulkRead(params);
     const { data: apiGroupTree } = await this.groupService.bulkRead({ projectUuid: params.projectUuid });
 
     const formatTree = (arr = []) => {
       return arr.map(item => {
-        if (item.type === 2) {
+        if (item.type === GroupType.Virtual) {
           return {
             ...item.relationInfo,
-            collectionType: CollectionTypeEnum.API_DATA
+            collectionType: CollectionTypeEnum.API
           };
         } else {
-          item.collectionType = CollectionTypeEnum.GROUP;
-          // ...
+          item.collectionType = CollectionTypeEnum.Group;
           if (item.children?.length) {
             item.children = formatTree(item.children);
           }
@@ -227,7 +232,7 @@ export class ProjectService extends BaseService<Project> {
     const { collections, environmentList = [], workSpaceUuid, projectUuid } = params;
 
     if (environmentList.length) {
-      this.environmentService.bulkCreate(
+      this.DbEnvironmentService.bulkCreate(
         environmentList.map(e => ({
           ...e,
           workSpaceUuid,
@@ -275,7 +280,7 @@ export class ProjectService extends BaseService<Project> {
       });
 
     if (apiFilters.length) {
-      const createResult = await this.apiDataService.bulkCreate({
+      const createResult = await this.DbApiDataService.bulkCreate({
         apiList: apiFilters,
         projectUuid,
         workSpaceUuid
@@ -317,12 +322,13 @@ export class ProjectService extends BaseService<Project> {
       .group((item, index) => {
         // 排序号根据原始数组索引来
         item.sort = index;
-        if (item.collectionType === CollectionTypeEnum.GROUP) {
+        const isAPI = item.collectionType == CollectionTypeEnum.API;
+        if (!isAPI) {
           return 'groupList';
-        } else if (item.collectionType === CollectionTypeEnum.API_DATA) {
+        } else if (isAPI) {
           return 'apiDataList';
         } else {
-          return '垃圾数据分类';
+          return 'uselessData';
         }
       });
     return { groupList, apiDataList };

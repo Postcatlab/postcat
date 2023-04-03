@@ -1,10 +1,10 @@
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse, ResObj } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
 import { Environment } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 
-export class EnvironmentService extends BaseService<Environment> {
-  baseService = new BaseService(dataSource.environment);
+export class DbEnvironmentService extends DbBaseService<Environment> {
+  baseService = new DbBaseService(dataSource.environment);
   constructor() {
     super(dataSource.environment);
   }

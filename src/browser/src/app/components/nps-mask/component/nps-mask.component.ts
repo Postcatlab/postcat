@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NpsPositionDirective } from 'pc/browser/src/app/components/nps-mask/nps-mask-postion.directive';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
 
-import { StoreService } from '../../../store/state.service';
+import { StoreService } from '../../../shared/store/state.service';
 
 @Component({
   selector: 'pc-nps-mask',

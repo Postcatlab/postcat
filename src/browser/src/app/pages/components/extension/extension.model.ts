@@ -33,10 +33,6 @@ export const featuresTipsMap = {
     name: $localize`format`,
     suggest: '@feature:pushAPI'
   },
-  syncAPI: {
-    name: $localize`format`,
-    suggest: '@feature:syncAPI'
-  },
   pullAPI: {
     name: $localize`format`,
     suggest: '@feature:pullAPI'

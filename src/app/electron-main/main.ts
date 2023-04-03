@@ -4,7 +4,6 @@ import Store from 'electron-store';
 import { LanguageService } from 'pc/app/electron-main/language.service';
 import { MockServer } from 'pc/platform/node/mock-server';
 import {
-  GET_EXT_TABS,
   GET_FEATURE,
   GET_MOCK_URL,
   GET_MODULE,
@@ -229,8 +228,6 @@ try {
 
   const getWebsocketPort = () => Promise.resolve(websocketPort);
 
-  const getExtTabs = arg => Promise.resolve(moduleManager.getExtTabs(arg.data.extName));
-
   const loginWith = arg => {
     if (loginWindow) {
       loginWindow.destroy();
@@ -278,7 +275,6 @@ try {
     [GET_FEATURE]: getFeature,
     [GET_MOCK_URL]: getMockUrl,
     [GET_WEBSOCKET_PORT]: getWebsocketPort,
-    [GET_EXT_TABS]: getExtTabs,
     // * It is eletron, open a new window for login
     [LOGIN_WITH]: loginWith,
     [GET_SIDEBAR_VIEW]: getSidebarView,

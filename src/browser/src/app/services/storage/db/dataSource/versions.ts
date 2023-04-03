@@ -12,31 +12,34 @@ export const setupVersions = (db: DataSourceInstance) => {
   // Add intermediate version and copy table to temp table, deleting origin version.
   db.version(3)
     .stores({
-      project: null, // Delete table
-      environment: null, // Delete table
-      group: null, // Delete table
-      apiData: null, // Delete table
-      apiTestHistory: null, // Delete table
-      mock: null, // Delete table
+      //Delete table
+      project: null,
+      environment: null,
+      group: null,
+      apiData: null,
+      apiTestHistory: null,
+      mock: null,
 
-      projectTemp: '++id', // Create temp table
-      environmentTemp: '++id', // Create temp table
-      groupTemp: '++id', // Create temp table
-      apiDataTemp: '++id', // Create temp table
-      apiTestHistoryTemp: '++id', // Create temp table
-      mockTemp: '++id' // Create temp table
+      //Create temporary table
+      projectTemp: '++id',
+      environmentTemp: '++id',
+      groupTemp: '++id',
+      apiDataTemp: '++id',
+      apiTestHistoryTemp: '++id',
+      mockTemp: '++id'
     })
     .upgrade(migrationToV3);
 
   //  Copy table to new table, deleting temp table:
   db.version(4)
     .stores({
-      projectTemp: null, // Delete temp table
-      environmentTemp: null, // Delete temp table
-      groupTemp: null, // Delete temp table
-      apiDataTemp: null, // Delete temp table
-      apiTestHistoryTemp: null, // Delete temp table
-      mockTemp: null, // Delete temp table
+      // Delete temp table
+      projectTemp: null,
+      environmentTemp: null,
+      groupTemp: null,
+      apiDataTemp: null,
+      apiTestHistoryTemp: null,
+      mockTemp: null,
 
       workspace: '++id, &uuid, name',
       project: '++id, &uuid, name, workSpaceUuid',
@@ -44,15 +47,36 @@ export const setupVersions = (db: DataSourceInstance) => {
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
       apiData: '++id, &uuid, projectUuid, workSpaceUuid, name',
       apiTestHistory: '++id, projectUuid, apiUuid, workSpaceUuid',
-      mock: '++id, name, projectUuid, workSpaceUuid'
+      mock: '++id, name, projectUuid,apiUuid, workSpaceUuid'
     })
     .upgrade(migrationToV4);
 
   /**
    * 0.3.0
-   * 新增项目同步配置
+   * Add projectSetting
    */
   db.version(5).stores({
-    projectSyncSetting: '++id, &uuid, pluginId, pluginSettingJson, projectUuid, workSpaceUuid'
+    projectSyncSetting: '++id, projectUuid'
+  });
+
+  /**
+   * 0.5.0
+   * Add apiCase
+   */
+  db.version(6).stores({
+    workspace: '++id, &uuid',
+    project: '++id, &uuid, workSpaceUuid',
+    group: '++id,parentId,projectUuid',
+    environment: '++id, projectUuid',
+    apiData: '++id, &uuid, projectUuid ',
+    mock: '++id, projectUuid,apiUuid',
+    apiCase: '++id,projectUuid,apiUuid '
+  });
+  db.version(7).stores({
+    group: '++id,parentId,projectUuid',
+    environment: '++id, projectUuid,workSpaceUuid',
+    apiData: '++id, &uuid, projectUuid,workSpaceUuid',
+    mock: '++id,projectUuid,apiUuid,workSpaceUuid',
+    apiCase: '++id,projectUuid,apiUuid,workSpaceUuid'
   });
 };

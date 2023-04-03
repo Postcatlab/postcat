@@ -1,12 +1,10 @@
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
-import { ApiMockEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
+import { Mock, MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy, copy } from 'pc/browser/src/app/shared/utils/index.utils';
-
-import { ApiData } from '../../../../../services/storage/db/models/apiData';
-import { ApiMockEntity } from '../../../../../services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -36,18 +34,12 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
 
   mockListColumns = [];
   mockPrefix: string;
-  mockList: ApiMockEntity[] = [];
+  mockList: Array<{ url: string } & Mock> = [];
 
   constructor(private message: EoNgFeedbackMessageService, private modal: ModalService, private apiMock: ApiMockService) {}
 
   ngOnInit() {
     this.initTable();
-  }
-  async handleDeleteMockItem(item, index) {
-    await this.apiMock.deleteMock(item.id);
-    this.mockList.splice(index, 1)[0];
-    this.mockList = [...this.mockList];
-    this.message.success($localize`Delete Succeeded`);
   }
 
   private initTable() {
@@ -58,8 +50,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         key: 'createWay',
         width: 150,
         enums: [
-          { title: $localize`System creation`, value: 'system' },
-          { title: $localize`Manual creation`, value: 'custom' }
+          { title: $localize`System creation`, value: MockCreateWay.System },
+          { title: $localize`Manual creation`, value: MockCreateWay.Custom }
         ]
       },
       { title: 'URL', slot: this.urlCell },
@@ -67,36 +59,10 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         type: 'btnList',
         btns: [
           {
-            title: $localize`:@@MockPreview:Preview`,
-            icon: 'preview-open',
-            click: item => {
-              const modal = this.modal.create({
-                nzTitle: $localize`Preview Mock`,
-                nzWidth: '70%',
-                nzContent: ApiMockEditComponent,
-                nzComponentParams: {
-                  model: item.data,
-                  isEdit: false
-                }
-              });
-            }
-          },
-          {
             action: 'edit',
             showFn: item => item.data.createWay !== 'system',
             click: (item, index) => {
-              const modal = this.modal.create({
-                nzTitle: $localize`Edit Mock`,
-                nzWidth: '70%',
-                nzContent: ApiMockEditComponent,
-                nzComponentParams: {
-                  model: eoDeepCopy(item.data)
-                },
-                nzOnOk: async () => {
-                  await this.addOrEditModal(modal.componentInstance.model, index);
-                  modal.destroy();
-                }
-              });
+              this.apiMock.toEdit(item.data);
             }
           },
           {
@@ -104,7 +70,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
             showFn: item => item.data.createWay !== 'system',
             confirm: true,
             confirmFn: (item, index) => {
-              this.handleDeleteMockItem(item.data, index);
+              this.apiMock.toDelete(item.data.id);
             }
           }
         ]
@@ -119,7 +85,9 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
           item.response = this.apiMock.getMockResponseByAPI(this.apiData);
         }
       });
+      console.log(this.apiData);
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
+      console.log(this.mockPrefix);
       this.setMocksUrl();
     }
   }

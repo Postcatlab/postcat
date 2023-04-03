@@ -1,7 +1,7 @@
 import isXml from 'is-xml';
+import { BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/api.model';
-import { BodyParam } from '../../../services/storage/db/models/apiData';
+import { ApiBodyType, ApiParamsType, JsonRootType } from '../../../pages/workspace/project/api/constants/api.model';
 import { whatType, whatTextType, JSONParse } from '../index.utils';
 
 export const isXML = data => isXml(data);
@@ -13,7 +13,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     return {
       name: key,
       isRequired: 1,
-      'paramAttr.example': '',
       paramAttr: {
         example: ''
       },
@@ -30,7 +29,6 @@ const parseTree = (key, value): BodyParam | unknown => {
       return {
         name: key,
         isRequired: 1,
-        'paramAttr.example': JSON.stringify(value),
         dataType: ApiParamsType.array,
         paramAttr: {
           example: JSON.stringify(value)
@@ -41,7 +39,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     return {
       name: key,
       isRequired: 1,
-      'paramAttr.example': '',
       paramAttr: {
         example: ''
       },
@@ -55,7 +52,6 @@ const parseTree = (key, value): BodyParam | unknown => {
     name: key,
     isRequired: 1,
     description: '',
-    'paramAttr.example': value == null ? '' : value.toString(),
     paramAttr: {
       example: value == null ? '' : value.toString()
     },
@@ -154,12 +150,6 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; childList: any[]; content: 
   // console.log(JSON.stringify(result, null, 2));
   return result;
 };
-
-type uiData = {
-  contentType: ApiBodyType;
-  data: BodyParam | any;
-};
-
 export const xml2json = text => {
   const data: any[] = xml2jsonArr(text);
   const deep = (list = []) =>
@@ -224,6 +214,10 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
   return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, '');
 };
 
+type uiData = {
+  contentType: ApiBodyType;
+  data: BodyParam[];
+};
 /**
  * Transfer text to json/xml/raw table data,such as request body/response body
  *
@@ -232,7 +226,11 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
 export const text2table: (text: string) => uiData = text => {
   const result: uiData = {
     contentType: ApiBodyType.Raw,
-    data: text
+    data: [
+      {
+        binaryRawData: text
+      }
+    ]
   };
   const textType = whatTextType(text);
   result.contentType =
@@ -249,7 +247,7 @@ export const text2table: (text: string) => uiData = text => {
       break;
     }
     case ApiBodyType.JSON: {
-      result.data = json2Table(JSON.parse(result.data));
+      result.data = json2Table(JSON.parse(text));
       break;
     }
     default: {
@@ -291,7 +289,7 @@ export const table2json = function (arr: BodyParam[], inputOptions: { checkXmlAt
           inputObject['@eo_attr'][tmpKey] = (val.attribute || '').replace(/\s+/, ' ');
         }
       }
-      inputObject[tmpKey] = val['paramAttr.example'];
+      inputObject[tmpKey] = val.paramAttr?.example;
       if (val.childList && val.childList.length > 0) {
         switch (val.dataType) {
           case ApiParamsType.array: {

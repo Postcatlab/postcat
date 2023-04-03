@@ -1,10 +1,11 @@
 import type { Collection, IndexableType, Table, UpdateSpec } from 'dexie';
+import { convertViewIDtoIndexedDBID, UUID_MAP } from 'pc/browser/src/app/services/storage/db/dataSource';
 
 import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 
 type PageCallback<T> = (collection: Collection<T, IndexableType>) => Collection | Promise<T[]>;
 
-export class BaseService<T extends object> {
+export class DbBaseService<T extends object> {
   constructor(readonly db: Table<T>) {}
 
   private filterData(params: Record<string, any> = {}) {
@@ -70,6 +71,7 @@ export class BaseService<T extends object> {
   async bulkUpdate(params: any[]) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
     const promiseArr = params.map(item => {
+      item = convertViewIDtoIndexedDBID(this.db, item);
       const { id, ...rest } = item;
       return this.db.update(id, rest);
     });

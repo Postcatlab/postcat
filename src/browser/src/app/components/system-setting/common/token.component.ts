@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 
 import { DataSourceService } from '../../../services/data-source/data-source.service';
 
@@ -46,13 +43,7 @@ import { DataSourceService } from '../../../services/data-source/data-source.ser
 })
 export class TokenComponent {
   token;
-  constructor(
-    private api: ApiService,
-    private message: MessageService,
-    private eoMessage: EoNgFeedbackMessageService,
-    private store: StoreService,
-    private dataSource: DataSourceService
-  ) {
+  constructor(private api: ApiService, private dataSource: DataSourceService) {
     this.token = '';
   }
 

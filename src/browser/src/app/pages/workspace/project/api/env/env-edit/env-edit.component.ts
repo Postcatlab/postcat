@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { isEqual } from 'lodash-es';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
+import { Environment } from 'pc/browser/src/app/services/storage/db/models';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
-import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
+import { Subject } from 'rxjs';
 
 import { ColumnItem } from '../../../../../../components/eo-ui/table-pro/table-pro.model';
-import { Environment } from '../../../../../../services/storage/index.model';
-import { eoDeepCopy, JSONParse } from '../../../../../../shared/utils/index.utils';
+import { eoDeepCopy, isEmptyObj, JSONParse } from '../../../../../../shared/utils/index.utils';
 import { ApiEffectService } from '../../store/api-effect.service';
 import { ApiStoreService } from '../../store/api-state.service';
 
@@ -20,7 +21,7 @@ export type EnvironmentView = Partial<Environment>;
   templateUrl: './env-edit.component.html',
   styleUrls: ['./env-edit.component.scss']
 })
-export class EnvEditComponent implements OnDestroy, TabViewComponent {
+export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   @Input() model: EnvironmentView;
   @Input() initialModel: EnvironmentView;
   @Output() readonly modelChange = new EventEmitter<EnvironmentView>();
@@ -55,30 +56,16 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     private store: ApiStoreService,
     public globalStore: StoreService,
     private fb: FormBuilder,
-    private message: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,
     private trace: TraceService
   ) {
-    this.initShortcutKey();
     this.initForm();
-  }
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          // 或者 return false;
-          event.preventDefault();
-          this.saveEnv('shortcut');
-        }
-      });
   }
   formatEnvData(data) {
     const result = eoDeepCopy(data);
-    const parameters = this.envParamsComponent.getPureNzData()?.filter(it => it.name || it.value);
+    const parameters = this.envParamsComponent?.getPureNzData()?.filter(it => it.name || it.value);
     return { ...result, parameters };
   }
   private checkForm(): boolean {
@@ -90,11 +77,11 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
   private async createEnv(form, ux = 'ui') {
     const [data, err] = await this.effect.addEnv(form);
     if (err) {
-      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
+      this.feedback.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to add`);
       return;
     }
     this.trace.report('add_environment_success', { trigger_way: ux });
-    this.message.success($localize`Added successfully`);
+    this.feedback.success($localize`Added successfully`);
     // * Would not refresh page
     this.router.navigate(['home/workspace/project/api/env/edit'], {
       queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: data.id }
@@ -104,43 +91,48 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
   private async editEnv(form) {
     const [data, err] = await this.effect.updateEnv(form);
     if (err) {
-      this.message.error(err.code == 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
+      this.feedback.error(err.code === 131000001 ? $localize`Environment name length needs to be less than 32` : $localize`Failed to edit`);
       return;
     }
-    this.message.success($localize`Edited successfully`);
+    this.feedback.success($localize`Edited successfully`);
     return data;
   }
-  async saveEnv(ux = 'ui') {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  async saveEnv($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     const isEdit = !!this.route.snapshot.queryParams.uuid;
     if (!this.checkForm()) {
       return;
     }
     this.isSaving = true;
     const formdata = this.formatEnvData(this.model);
-    this.initialModel = eoDeepCopy(formdata);
     formdata.parameters = JSON.stringify(formdata.parameters);
     const data = isEdit ? await this.editEnv(formdata) : await this.createEnv(formdata, ux);
     this.isSaving = false;
-    this.afterSaved.emit(this.initialModel);
+    this.afterSaved.emit(this.model);
     if (!this.store.getEnvUuid) {
       this.store.setEnvUuid(data.id || formdata.id);
     }
   }
-  async init() {
+  async afterTabActivated() {
+    console.log('afterTabActivated');
+    const isFromCache: boolean = this.model && !isEmptyObj(this.model);
+    if (isFromCache) {
+      return;
+    }
     const id = Number(this.route.snapshot.queryParams.uuid);
     if (!id) {
+      //Add env
       this.model = {
         name: '',
         hostUri: '',
         parameters: []
       };
-      this.initialModel = eoDeepCopy(this.model);
     } else {
-      if (!this.model) {
-        const [res, err]: any = await this.getEnv(id);
-        this.model = res;
-        this.initialModel = eoDeepCopy(this.model);
-      }
+      //Edit env
+      const [res, err]: any = await this.getEnv(id);
+      this.model = res;
     }
     this.initForm();
     this.eoOnInit.emit(this.model);
@@ -155,7 +147,8 @@ export class EnvEditComponent implements OnDestroy, TabViewComponent {
     this.modelChange.emit(this.model);
   }
   isFormChange() {
-    const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
+    // console.log(JSON.stringify(this.formatEnvData(this.model)), JSON.stringify(this.formatEnvData(this.initialModel)));
+    const hasChanged = !isEqual(this.formatEnvData(this.model), this.formatEnvData(this.initialModel));
     return hasChanged;
   }
   async getEnv(id: number) {

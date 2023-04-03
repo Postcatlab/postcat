@@ -1,3 +1,5 @@
+import { GroupModuleType, GroupType } from 'pc/browser/src/app/services/storage/db/models';
+
 export interface GroupDeleteDto {
   id?: number;
   projectUuid: string;
@@ -6,7 +8,8 @@ export interface GroupDeleteDto {
 
 export interface GroupCreateDto {
   name: string;
-  type?: number;
+  type?: GroupType;
+  module?: GroupModuleType;
   path?: string;
   depth?: number;
   parentId?: number;
@@ -14,7 +17,6 @@ export interface GroupCreateDto {
   projectUuid?: string;
   workSpaceUuid?: string;
 }
-
 export interface GroupUpdateDto extends GroupCreateDto {
   id: number;
 }

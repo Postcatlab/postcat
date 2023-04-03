@@ -1,6 +1,11 @@
 import { formatDate } from '@angular/common';
 import { Inject, Injectable, Input, LOCALE_ID } from '@angular/core';
-import { ApiBodyType, ApiParamsType, JsonRootType, requestMethodMap } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import {
+  ApiBodyType,
+  ApiParamsType,
+  JsonRootType,
+  requestMethodMap
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/api/service/api-test-util.service';
 import {
   ApiTestResData,
@@ -27,7 +32,7 @@ export abstract class TestServerService implements TestServer {
         .filter(val => val.name && val.isRequired)
         .map((val: BodyParam) => ({
           headerName: val.name,
-          headerValue: val['paramAttr.example']
+          headerValue: val.paramAttr?.example
         }));
     };
     const formatBody = (inData: Partial<ApiData>) => {
@@ -42,8 +47,10 @@ export abstract class TestServerService implements TestServer {
             .map(val => ({
               listDepth: 0,
               paramKey: val.name,
+              //@ts-ignore files only for view
               files: val.files?.map(file => file.content),
               paramType: val.dataType === ApiParamsType.file ? '1' : '0',
+              //@ts-ignore files only for view
               paramInfo: val.dataType === ApiParamsType.file ? val.files?.map(val => val.name).join(',') : val.paramAttr?.example || ''
             }));
         }
@@ -67,8 +74,8 @@ export abstract class TestServerService implements TestServer {
         frontURI: opts.env.hostUri
       },
       authInfo: data.authInfo || {},
-      beforeInject: data.apiAttrInfo.beforeInject || '',
-      afterInject: data.apiAttrInfo.afterInject || '',
+      beforeInject: data.scriptList?.find(item => item.scriptType === 1)?.data || '',
+      afterInject: data.scriptList?.find(item => item.scriptType === 2)?.data || '',
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale)
     };
     const rootType = [JsonRootType.Object, JsonRootType.Array].indexOf(data.apiAttrInfo.contentType);
@@ -134,6 +141,9 @@ export abstract class TestServerService implements TestServer {
       }
     };
 
+    if (response.statusCode === 0) {
+      response.body = $localize`Service connection failed. The server test is currently being used.\nIf the current test URL is a local API, please download the desktop and re-initiate the test.`;
+    }
     result = {
       status: 'finish',
       id,

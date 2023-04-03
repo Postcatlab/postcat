@@ -1,4 +1,4 @@
-@import '../../workspace/project/api/components/group/tree/api-group-tree.component';
+@import '../../workspace/project/api/components/group/api-group-tree.component';
 
 :host ::ng-deep {
   display: flex;
@@ -9,6 +9,10 @@
     height: calc(62vh - 32px);
     overflow: auto;
     display: block;
+
+    .ant-tree-switcher {
+      display: none;
+    }
   }
 
   eo-ng-auto-complete input {

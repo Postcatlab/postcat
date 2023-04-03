@@ -1,8 +1,8 @@
-import { ApiParamsType, ContentType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { ApiParamsType, BodyContentType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { mui } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit-util.service';
 import { ApiData, BodyParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
-import { ApiData as OldApiData, Environment as OldEnvironment, BasiApiEditParams, ApiEditBody } from './oldApiData';
+import { OldApiData, Environment as OldEnvironment, ApiEditBody } from './oldApiData';
 
 export const convertApiData = (apiData: OldApiData): ApiData => {
   const {
@@ -51,13 +51,13 @@ export const convertApiData = (apiData: OldApiData): ApiData => {
 const transformContentType = (requestBodyType: OldApiData['responseBodyType'], requestBodyJsonType: OldApiData['requestBodyJsonType']) => {
   const type = requestBodyType?.toLocaleUpperCase();
   if (type === 'FORMDATA') {
-    return ContentType.FROM_DATA;
+    return BodyContentType.FROM_DATA;
   } else if (['RAW', 'XML', 'BINARY'].includes(type)) {
-    return ContentType[type];
+    return BodyContentType[type];
   } else if (type === 'JSON') {
-    return requestBodyJsonType === 'object' ? ContentType.JSON_OBJECT : ContentType.JSON_ARRAY;
+    return requestBodyJsonType === 'object' ? BodyContentType.JSON_OBJECT : BodyContentType.JSON_ARRAY;
   } else {
-    return ContentType.RAW;
+    return BodyContentType.RAW;
   }
 };
 

@@ -1,0 +1,13 @@
+<div class="action-contain h-[100%]">
+  <eo-ng-tabset [(nzSelectedIndex)]="selectedIndex" nzTabPosition="left" class="h-[100%]">
+    <eo-ng-tab *ngFor="let item of operationArr" [nzTitle]="item.title" class="h-[100%]">
+      <ng-container *ngIf="item.type === 'pre'">
+        <ng-content select="[name=pre]"></ng-content>
+      </ng-container>
+
+      <ng-container *ngIf="item.type === 'after'">
+        <ng-content select="[name=after]"></ng-content>
+      </ng-container>
+    </eo-ng-tab>
+  </eo-ng-tabset>
+</div>

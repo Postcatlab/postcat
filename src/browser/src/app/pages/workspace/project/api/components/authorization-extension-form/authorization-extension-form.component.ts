@@ -1,39 +1,30 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter, Inject, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { autorun, makeObservable, observable } from 'mobx';
+import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
+import { BASIC_TABS_INFO, TabsConfig } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import {
+  AuthInfo,
+  AuthTypeValue,
+  INHERIT_AUTH_OPTION,
+  isInherited as IsInherited,
+  NONE_AUTH_OPTION
+} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiStoreService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-state.service';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
 import { EoSchemaFormComponent } from 'pc/browser/src/app/shared/components/schema-form/schema-form.component';
 import { AUTH_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { PCTree } from 'pc/browser/src/app/shared/utils/tree/tree.utils';
-import { Subject, takeUntil } from 'rxjs';
-
-export const noAuth = {
-  name: 'none',
-  label: $localize`No Auth`
-};
-
-export const inheritAuth = {
-  name: 'inherited',
-  label: $localize`Inherit auth from parent`
-};
-
-export type AuthInfo = {
-  authType: string;
-  isInherited?: 0 | 1;
-  authInfo: Record<string, any>;
-};
-
-export type AuthIn = 'group' | 'api-test' | 'api-test-history';
 
 const authInMap = {
-  group: $localize`API Group`,
-  'api-test': $localize`API Request`
+  [PageUniqueName.GroupEdit]: $localize`API Group`,
+  [PageUniqueName.HttpTest]: $localize`API Request`,
+  [PageUniqueName.HttpCase]: $localize`API Case`
 };
 
 @Component({
@@ -58,7 +49,7 @@ const authInMap = {
       <div class="my-[24px]">
         <ng-container *ngIf="authType === inheritAuth.name && parentGroup?.depth !== 0">
           <div class="text-tips" i18n>
-            This {{ authInMap[type] }} is using <b>{{ inheritAuthType || model.authType }}</b> from
+            This {{ authInMap[currentPage] }} is using <b>{{ inheritAuthType || model.authType }}</b> from
             <a (click)="nav2group()">{{ parentGroup?.name }}</a>
           </div>
         </ng-container>
@@ -79,52 +70,54 @@ const authInMap = {
     </ng-container>
   `
 })
-export class AuthorizationExtensionFormComponent implements OnChanges {
-  @Input() @observable groupInfo: Partial<Group>;
+export class AuthorizationExtensionFormComponent implements OnChanges, OnDestroy {
+  @Input() @observable parentInfo: Partial<Group>;
   @Input() @observable model: AuthInfo;
-  authType: string;
+  authType: AuthTypeValue | string;
+  /**
+   *
+   */
   @Input() inheritAuthType: string;
-  @Input() type: AuthIn = 'group';
   @Output() readonly modelChange = new EventEmitter<AuthInfo>();
   @Output() readonly authTypeChange = new EventEmitter<string>();
   @ViewChild('schemaForm') schemaForm: EoSchemaFormComponent;
   authInMap = authInMap;
-  inheritAuth = inheritAuth;
-  noAuth = noAuth;
+  inheritAuth = INHERIT_AUTH_OPTION;
+  noAuth = NONE_AUTH_OPTION;
   schemaObj: Record<string, any> | null;
   authAPIMap: Map<string, FeatureInfo> = new Map();
-  extensionList: Array<typeof noAuth> = [];
-
+  extensionList: Array<typeof NONE_AUTH_OPTION> = [];
+  reactions = [];
+  currentPage: PageUniqueName;
   parentGroup: Partial<Group>;
 
   tipsText = $localize`Authorization`;
-
-  private destroy$: Subject<void> = new Subject<void>();
 
   get validateForm() {
     return this.schemaForm?.validateForm;
   }
 
-  // get defaultAuthType() {
-
-  // }
-
   get isDefaultAuthType() {
-    return [inheritAuth.name, noAuth.name].includes(this.authType);
+    return [AuthTypeValue.Inherited, AuthTypeValue.None].includes(this.authType as AuthTypeValue);
   }
 
   get authTypeList() {
     const isRootGroup =
       this.parentGroup && (Reflect.has(this.parentGroup, 'depth') ? this.parentGroup.depth : this.parentGroup?.depth !== 0);
-    if (isRootGroup && this.type !== 'api-test-history') return [inheritAuth, noAuth, ...this.extensionList];
-    return [noAuth, ...this.extensionList];
+    const isBlankTest =
+      this.currentPage === PageUniqueName.HttpTest &&
+      (!this.route.snapshot.queryParams?.uuid || this.route.snapshot.queryParams?.uuid?.includes('history_'));
+    if (isRootGroup && !isBlankTest) return [INHERIT_AUTH_OPTION, NONE_AUTH_OPTION, ...this.extensionList];
+    return [NONE_AUTH_OPTION, ...this.extensionList];
   }
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private extensionService: ExtensionService,
     private store: ApiStoreService,
-    private messageService: MessageService
+    private globalStore: StoreService,
+    @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     makeObservable(this);
     this.initExtensions();
@@ -139,30 +132,42 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
 
   init() {
-    this.authType = '';
+    this.authType = this.inheritAuthType || '';
     this.parentGroup = undefined;
   }
 
   initAutorun() {
-    autorun(() => {
-      if (!this.groupInfo?.parentId) return;
-      const groupObj = new PCTree(this.store.getGroupTree);
-      this.parentGroup = groupObj.findGroupByID(this.groupInfo.parentId);
-    });
-    autorun(() => {
-      if (!this.authType && this.model?.isInherited === 1) {
-        this.authType = inheritAuth.name;
-      } else if (this.model?.isInherited === 0) {
-        this.authType = this.model?.authType;
-      }
-    });
+    this.reactions.push(
+      autorun(() => {
+        this.currentPage = this.tabsConfig.BASIC_TABS.find(val => this.globalStore.getUrl.includes(val.pathname))
+          .uniqueName as PageUniqueName;
+      })
+    );
+    this.reactions.push(
+      autorun(() => {
+        if (!this.parentInfo?.parentId) return;
+        const groupObj = new PCTree(this.store.getFolderList);
+        this.parentGroup = groupObj.findTreeNodeByID(this.parentInfo.parentId);
+      })
+    );
+    this.reactions.push(
+      autorun(() => {
+        if (!this.authType && this.model?.isInherited === IsInherited.inherit) {
+          this.authType = AuthTypeValue.Inherited;
+          return;
+        }
+        if (this.model?.isInherited === IsInherited.notInherit) {
+          this.authType = this.model?.authType;
+        }
+      })
+    );
   }
 
   initExtensions() {
     this.authAPIMap = this.extensionService.getValidExtensionsByFature('authAPI');
     // console.log('authAPIMap', this.authAPIMap);
     this.extensionList = [];
-    this.authAPIMap.forEach((value, key) => {
+    this.authAPIMap.forEach((value, key: AuthTypeValue) => {
       this.extensionList.push({ name: key, label: value.label });
     });
   }
@@ -171,7 +176,7 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
     const { model } = changes;
     // console.log('this.model.inherited', this.model);
     if (model && (!isEqual(this.model, model?.previousValue) || this.model?.authType !== model?.previousValue?.authType)) {
-      if (this.model.authType !== inheritAuth.name) {
+      if (this.model.authType !== AuthTypeValue.Inherited) {
         // console.log('this.authType', this.authType);
         this.updateSchema(this.authType);
       }
@@ -191,13 +196,33 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
   }
   handleAuthTypeChange(authType) {
     this.updateSchema(authType);
-    this.model.authType = authType;
-    console.log('handleAuthTypeChange', authType, this.schemaObj);
+    switch (this.authType) {
+      case AuthTypeValue.Inherited: {
+        this.model.isInherited = IsInherited.inherit;
+        this.model.authType = this.inheritAuthType;
+        this.model.authInfo = {};
+        break;
+      }
+      case AuthTypeValue.None: {
+        this.model.isInherited = IsInherited.notInherit;
+        this.model.authType = AuthTypeValue.None;
+        this.model.authInfo = {};
+        break;
+      }
+      default: {
+        this.model.isInherited = IsInherited.notInherit;
+        this.model.authType = authType;
+        break;
+      }
+    }
+
+    this.modelChange.emit(this.model);
+    // console.log('handleAuthTypeChange', authType, this.schemaObj);
   }
 
   nav2group() {
-    this.router.navigate([`/home/workspace/project/api/group/edit`], {
-      queryParams: { uuid: this.parentGroup.id, pageID: Date.now().toString() }
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.GroupEdit]], {
+      queryParams: { uuid: this.parentGroup.id, pageID: Date.now() }
     });
   }
 
@@ -212,5 +237,8 @@ export class AuthorizationExtensionFormComponent implements OnChanges {
       return false;
     }
     return true;
+  }
+  ngOnDestroy() {
+    this.reactions.forEach(reaction => reaction());
   }
 }

@@ -1,24 +1,24 @@
-import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy, Input, EventEmitter, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-operate.service';
-import { TabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
+import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { ElectronService } from 'pc/browser/src/app/core/services';
-import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { Protocol, ApiBodyType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { ApiParamsNumPipe } from 'pc/browser/src/app/pages/workspace/project/api/pipe/api-param-num.pipe';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { isEmptyObj } from 'pc/browser/src/app/shared/utils/index.utils';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
-import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
 import { ModalService } from '../../../../../services/modal.service';
-import { ApiTestService } from '../http/test/api-test.service';
 
 interface testViewModel {
   requestTabIndex: number;
@@ -33,7 +33,7 @@ const UIHash = new Map().set('requestHeaders', 'Request Headers').set('responseH
   templateUrl: './websocket.component.html',
   styleUrls: ['./websocket.component.scss']
 })
-export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
+export class WebsocketComponent implements OnInit, OnDestroy, EditTabViewComponent {
   @Input() bodyType = 'json';
   @Output() readonly modelChange = new EventEmitter<testViewModel>();
   @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
@@ -57,20 +57,20 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     public route: ActivatedRoute,
     private fb: FormBuilder,
     private electron: ElectronService,
-    private testService: ApiTestService,
     private modal: ModalService,
-    private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
+    private effect: ApiEffectService,
+    private feedback: EoNgFeedbackMessageService,
     private store: StoreService,
     public tabOperate: TabOperateService
   ) {
     this.initBasicForm();
   }
-  async init() {
+  async afterTabActivated() {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;
-      if (id && id.includes('history_')) {
-        const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
+      if (id?.includes('history_')) {
+        const historyData: unknown = await this.effect.getHistory(Number(id.replace('history_', '')));
         this.model = historyData as testViewModel;
         this.model.requestTabIndex = 2;
       }
@@ -78,20 +78,6 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
     this.initBasicForm();
-    this.initShortcutKey();
-  }
-
-  initShortcutKey() {
-    fromEvent(document, 'keydown')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, metaKey, code } = event;
-        // 判断 Ctrl+S
-        if ([ctrlKey, metaKey].includes(true) && code === 'Enter') {
-          console.log('EO_LOG[postcat-websocket-test]: Ctrl + enter');
-          this.handleSendMsg();
-        }
-      });
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -117,7 +103,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
 
   handleTestQueryTableClick = () => {
     if (this.isConnecting) {
-      this.eoNgFeedbackMessageService.info('连接状态无法编辑');
+      this.feedback.info('连接状态无法编辑');
     }
   };
 
@@ -189,7 +175,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
       if (this.store.isShare) {
         return;
       }
-      await this.testService.addHistory(data);
+      await this.effect.createHistory(data);
       return;
     }
     // * connecting
@@ -210,7 +196,6 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
         },
         ...data
       } = this.model;
-      // * For 'paramAttr.example' key
       this.socket.emit('ws-server', {
         type: 'ws-connect',
         content: {
@@ -219,7 +204,7 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
             ...requestItem,
             requestParams: {
               ...requestParamsItem,
-              headerParams: headerParams.map(it => ({ ...it, paramAttr: { example: it['paramAttr.example'] || '' } }))
+              ...headerParams
             }
           }
         }
@@ -232,7 +217,10 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     return new ApiParamsNumPipe().transform(params);
   }
 
-  handleSendMsg() {
+  @HostListener('keydown.control.s', ['$event', "'shortcut'"])
+  @HostListener('keydown.meta.s', ['$event', "'shortcut'"])
+  handleSendMsg($event?, ux = 'ui') {
+    $event?.preventDefault?.();
     // * 通过 SocketIO 通知后端
     // send a message to the server
     if (!this.model.msg || this.wsStatus !== 'connected') {
@@ -322,15 +310,15 @@ export class WebsocketComponent implements OnInit, OnDestroy, TabViewComponent {
     this.socket.close();
     this.unListen();
   }
-  checkTabCanLeave = closeTarget => {
-    if (this.leaveModal) {
-      return false;
-    }
-    const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
-    if (this.wsStatus === 'disconnect' || isCloseOther) {
-      return true;
-    }
+  checkTabCanLeave = (closeTarget): Promise<boolean> => {
     return new Promise(resolve => {
+      if (this.leaveModal) {
+        resolve(false);
+      }
+      const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
+      if (this.wsStatus === 'disconnect' || isCloseOther) {
+        resolve(true);
+      }
       this.leaveModal = this.modal.create({
         nzTitle: $localize`Do you want to leave the page?`,
         nzContent: $localize`After leaving, the current long connection is no longer maintained, whether to confirm to leave?`,

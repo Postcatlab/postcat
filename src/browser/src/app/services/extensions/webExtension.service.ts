@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { DISABLE_EXTENSION_NAMES } from 'pc/browser/src/app/shared/models/storageKeys.constant';
-import { eoDeepCopy, JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
+import { eoDeepCopy } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 import { APP_CONFIG } from 'pc/browser/src/environments/environment';
-import { TranslateService } from 'pc/platform/common/i18n';
 
 import { WebService } from '../../core/services';
 import { LanguageService } from '../../core/services/language/language.service';
@@ -73,11 +71,11 @@ export class WebExtensionService {
     if (!entry) return;
     const url = `${name}@${version}${entry ? `/${entry}` : ''}`;
     const fullPath = new URL(url, this.resourceUrl);
-    const res = await fetch(fullPath);
-    if (res.status === 200) {
-      const data = await res.text();
-      this.insertScript(data);
-    }
+    const data = await fetch(fullPath)
+      .then(res => res.text())
+      .catch(e => {});
+    if (!data) return;
+    this.insertScript(data);
   }
   getExtensionsByFeature(featureKey, installedList) {
     let extensions = new Map();

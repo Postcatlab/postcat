@@ -17,9 +17,9 @@ import { PagesComponent } from './pages.component';
 
 @NgModule({
   declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ThirdLoginComponent],
-  exports: [],
   providers: [],
   schemas: [],
+  exports: [],
   imports: [
     ChatgptRobotComponent,
     PagesRoutingModule,

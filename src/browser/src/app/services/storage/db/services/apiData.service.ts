@@ -1,29 +1,28 @@
+import { SYSTEM_MOCK_NAME } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { isInherited } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import {
   ApiDataBulkCreateDto,
   ApiDataBulkReadDetailDto,
-  ApiDataBulkReadDto,
-  ApiDataDeleteDto,
   ApiDataPageDto,
   ApiDataUpdateDto
 } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
-import type { ApiData } from 'pc/browser/src/app/services/storage/db/models';
-import { BaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
-import { GroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
+import { MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
+import type { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
+import { DbGroupService } from 'pc/browser/src/app/services/storage/db/services/group.service';
 
-export class ApiDataService extends BaseService<ApiData> {
-  baseService = new BaseService(dataSource.apiData);
-  mockService = new BaseService(dataSource.mock);
-  groupService = new GroupService();
+export class DbApiDataService extends DbBaseService<ApiData> {
+  baseService = new DbBaseService(dataSource.apiData);
+  mockService = new DbBaseService(dataSource.mock);
+  groupService = new DbGroupService();
 
   constructor() {
     super(dataSource.apiData);
   }
-
   async bulkCreate(params: ApiDataBulkCreateDto) {
     const { apiList, workSpaceUuid, projectUuid } = params;
     const items = apiList.map(item => {
-      Reflect.deleteProperty(item, 'uuid');
       return {
         ...item,
         workSpaceUuid,
@@ -32,10 +31,10 @@ export class ApiDataService extends BaseService<ApiData> {
     });
     const result = await this.baseService.bulkCreate(items);
     const systemMocks = result.data?.map(n => ({
-      name: '默认 Mock',
+      name: SYSTEM_MOCK_NAME,
       description: '',
       apiUuid: n.apiUuid,
-      createWay: 'system',
+      createWay: MockCreateWay.System,
       response: '',
       projectUuid: n.projectUuid,
       workSpaceUuid: n.workSpaceUuid
@@ -45,29 +44,19 @@ export class ApiDataService extends BaseService<ApiData> {
   }
 
   async bulkReadDetail(params: ApiDataBulkReadDetailDto) {
-    const { apiUuids, workSpaceUuid, projectUuid } = params;
-    const result = await this.baseService.bulkRead({
-      uuid: apiUuids.map(uuid => uuid),
-      workSpaceUuid,
-      projectUuid
-    });
-
+    const result = await this.baseService.bulkRead(params);
     const promiseArr = result.data.map(async item => {
-      const { data: groupInfo } = await this.groupService.read({ id: item.groupId }, true);
-      item.authInfo = groupInfo.authInfo;
+      const { data: groupInfo } = await this.groupService.read({ id: item.groupId });
+      if (!groupInfo) return;
+      item.authInfo = groupInfo?.authInfo;
+      if (groupInfo.depth !== 0) {
+        item.authInfo.isInherited = isInherited.inherit;
+      }
     });
 
     await Promise.all(promiseArr);
 
     return result;
-  }
-
-  bulkRead(params: ApiDataBulkReadDto) {
-    const { workSpaceUuid, projectUuid } = params;
-    return this.baseService.bulkRead({
-      workSpaceUuid,
-      projectUuid
-    });
   }
 
   page(params: ApiDataPageDto) {
@@ -92,20 +81,21 @@ export class ApiDataService extends BaseService<ApiData> {
     });
   }
 
+  /**
+   * Incremental update
+   *
+   * @param params
+   * @returns
+   */
   async update(params: ApiDataUpdateDto) {
     const { api, projectUuid, workSpaceUuid } = params;
     const { data } = await this.baseService.read({ uuid: api.apiUuid });
+    //Prevent the id from being modified
     api['id'] = data.id;
     return this.baseService.update({
       ...api,
       projectUuid,
       workSpaceUuid
     });
-  }
-
-  bulkDelete(params: ApiDataDeleteDto) {
-    const { apiUuids, ...rest } = params;
-    rest['uuid'] = apiUuids.map(uuid => uuid);
-    return this.baseService.bulkDelete(rest);
   }
 }
