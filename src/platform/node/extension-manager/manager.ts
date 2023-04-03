@@ -1,4 +1,5 @@
 import { createServer } from 'http-server/lib/http-server';
+import nodeTest from 'node:test';
 import { LanguageService } from 'pc/app/electron-main/language.service';
 import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { ExtensionInfo, SidebarView, FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
@@ -55,19 +56,26 @@ export class ModuleManager {
   async getRemoteExtension(): Promise<ModuleManagerInfo[]> {
     return new Promise(resolve => {
       let data = '';
-      https.get(`${COMMON_APP_CONFIG.EXTENSION_URL}/list`, res => {
-        res.on('data', chunk => {
-          data += chunk;
+      https
+        .get(`${COMMON_APP_CONFIG.EXTENSION_URL}/list`, res => {
+          if (res.statusCode != 200) {
+            return;
+          }
+          res.on('data', chunk => {
+            data += chunk;
+          });
+          res.on('end', () => {
+            let exts = [];
+            try {
+              exts = JSON.parse(data).data;
+            } catch (e) {}
+            exts = exts.map(({ name, version }) => ({ name, version }));
+            resolve(exts);
+          });
+        })
+        .on('error', err => {
+          resolve([]);
         });
-        res.on('end', () => {
-          let exts = [];
-          try {
-            exts = JSON.parse(data).data;
-          } catch (e) {}
-          exts = exts.map(({ name, version }) => ({ name, version }));
-          resolve(exts);
-        });
-      });
     });
   }
 
@@ -124,13 +132,20 @@ export class ModuleManager {
       debugExtension = extensions;
     }
     const localExtensionName = [...new Set(list.map(it => it.name).concat(defaultExtensions))];
-    this.installExtension = remoteExtension
-      .filter(it => localExtensionName.includes(it.name))
-      .filter(it => !debugExtension.includes(it.name));
-    this.moduleHandler.update(this.installExtension);
-    this.installExtension.forEach(it => {
-      this.install(it);
-    });
+    if (remoteExtension.length) {
+      this.installExtension = remoteExtension
+        .filter(it => localExtensionName.includes(it.name))
+        .filter(it => !debugExtension.includes(it.name));
+      this.moduleHandler.update(this.installExtension);
+      this.installExtension.forEach(it => {
+        this.install(it);
+      });
+    } else {
+      list.forEach(async val => {
+        const moduleInfo: ExtensionInfo = await this.moduleHandler.info(val.name);
+        this.set(moduleInfo);
+      });
+    }
   }
 
   /**
@@ -292,10 +307,11 @@ export class ModuleManager {
     this.features = new Map();
 
     const names: string[] = this.moduleHandler.list();
-    names.forEach(async (name: string) => {
+    for (let index = 0; index < names.length; index++) {
+      const name = names[index];
       const moduleInfo: ExtensionInfo = await this.moduleHandler.info(name);
       this.setup(moduleInfo);
-    });
+    }
     this.updateAll();
   }
 
@@ -347,19 +363,6 @@ export class ModuleManager {
       return Promise.reject('该插件package.json缺少sidebarView字段');
     } catch (error) {
       return Promise.reject(error);
-    }
-  }
-
-  async getExtTabs(extName: string): Promise<SidebarView[]> {
-    try {
-      const features = this.getExtFeatures(extName);
-      const list = features.extensionTabView.map(item => {
-        return this.getExtPageInfo(extName, item, `${extName}-extensionTabView-${item.name}`);
-      });
-      const result = await Promise.all(list);
-      return result;
-    } catch (error) {
-      return [];
     }
   }
 

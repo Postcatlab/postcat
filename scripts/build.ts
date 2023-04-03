@@ -52,8 +52,7 @@ function hashFile(file: string, algorithm = 'sha512', encoding: 'base64' | 'hex'
       .pipe(hash, { end: false });
   });
 }
-
-const config: Configuration = {
+export const ELECTRON_BUILD_CONFIG: Configuration = {
   appId: '.postcat.io',
   productName: 'Postcat',
   asar: true,
@@ -95,6 +94,34 @@ const config: Configuration = {
       schemes: ['eoapi']
     }
   ],
+  portable: {
+    splashImage: 'src/app/common/images/postcat.bmp'
+  },
+  dmg: {
+    sign: false
+  },
+  afterSign: 'scripts/notarize.js',
+  linux: {
+    icon: 'src/app/common/images/',
+    target: ['AppImage']
+  },
+  mac: {
+    icon: 'src/app/common/images/512x512.png',
+    hardenedRuntime: true,
+    category: 'public.app-category.productivity',
+    gatekeeperAssess: false,
+    entitlements: 'scripts/entitlements.mac.plist',
+    entitlementsInherit: 'scripts/entitlements.mac.plist',
+    target: [
+      {
+        target: 'default',
+        arch: ['x64', 'arm64']
+      }
+    ]
+  }
+};
+const config: Configuration = {
+  ...ELECTRON_BUILD_CONFIG,
   win: {
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
@@ -108,32 +135,6 @@ const config: Configuration = {
       signOptions = [configuration, packager!];
       return doSign(configuration, packager!);
     }
-  },
-  portable: {
-    splashImage: 'src/app/common/images/postcat.bmp'
-  },
-  mac: {
-    icon: 'src/app/common/images/512x512.png',
-    hardenedRuntime: true,
-    category: 'public.app-category.productivity',
-    gatekeeperAssess: false,
-    entitlements: 'scripts/entitlements.mac.plist',
-    entitlementsInherit: 'scripts/entitlements.mac.plist',
-    // target: ['dmg', 'zip']
-    target: [
-      {
-        target: 'default',
-        arch: ['x64', 'arm64']
-      }
-    ]
-  },
-  dmg: {
-    sign: false
-  },
-  afterSign: 'scripts/notarize.js',
-  linux: {
-    icon: 'src/app/common/images/',
-    target: ['AppImage']
   }
 };
 

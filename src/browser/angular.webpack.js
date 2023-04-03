@@ -50,12 +50,19 @@ module.exports = (config, options) => {
       type: 'asset/resource',
       resourceQuery: { not: [/\?ngResource/] }
     },
+    {
+      // .md结尾的文件使用markdown-loader规则
+      test: /\.md$/,
+      use: ['html-loader', './markdown-loader']
+    },
     ...config.module.rules
   ];
 
-  config.experiments = {
-    topLevelAwait: true
-  };
+  Object.assign(config, {
+    experiments: {
+      topLevelAwait: true
+    }
+  });
 
   // console.log('config', config.module.rules);
 

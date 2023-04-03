@@ -1,11 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { isNil } from 'ng-zorro-antd/core/util';
 import { ColumnItem } from 'pc/browser/src/app/components/eo-ui/table-pro/table-pro.model';
-import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { BodyParam } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
+import { ParamsEnum, ApiParamsTypeByNumber, ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { BodyParam, ViewParamAttr } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { REQURIED_ENUMS } from 'pc/browser/src/app/shared/models/shared.model';
-
-import { cpSync } from 'fs';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
@@ -13,7 +11,7 @@ import { cpSync } from 'fs';
   styleUrls: ['./api-params-extra-setting.component.scss']
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
-  @Input() model: BodyParam;
+  @Input() model: BodyParam & { paramAttr: ViewParamAttr };
   @Input() isEdit = true;
   @Input() in: 'body' | 'header' | 'query' | 'rest';
   showValueTable = false;
@@ -141,7 +139,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       } else {
         this.showLengthTable = !isNil(this.model.paramAttr.minLength || this.model.paramAttr.maxLength);
         this.showValueTable = !isNil(this.model.paramAttr.minValue || this.model.paramAttr.maxValue);
-        this.showEnums = this.model.paramAttr?.paramValueList?.length;
+        this.showEnums = !!this.model.paramAttr?.paramValueList?.length;
       }
     }
   }

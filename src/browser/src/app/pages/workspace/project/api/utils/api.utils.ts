@@ -1,6 +1,4 @@
-import { method } from 'lodash-es';
-
-import { QueryParam, RestParam } from '../../../../../services/storage/db/models/apiData';
+import { QueryParam, RestParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 /**
  * get rest param from url,format like {restName}
@@ -21,12 +19,20 @@ const jointQuery = (url = '', query: QueryParam[]) => {
     if (!(val.name && val.isRequired)) {
       return;
     }
-    search += `${val.name}=${val['paramAttr.example'] || ''}&`;
+    search += `${val.name}=${val.paramAttr?.example || ''}&`;
   });
   search = search ? `?${search.slice(0, -1)}` : '';
   return `${url.split('?')[0]}${search}`;
 };
 
+export const getQueryFromURL = (url: string): { [key: string]: string } => {
+  const reuslt = {};
+  //? prevent double question mark
+  new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
+    reuslt[name] = val;
+  });
+  return reuslt;
+};
 /**
  * Sync URL and Query
  *
@@ -50,11 +56,15 @@ export const syncUrlAndQuery = (
   const urlQuery = [];
   const uiQuery = query;
   //Get url query
-  new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
+  const queryObj = getQueryFromURL(url);
+  Object.keys(queryObj).forEach(name => {
+    const value = queryObj[name];
     const item: QueryParam | any = {
       isRequired: 1,
       name,
-      'paramAttr.example': val
+      paramAttr: {
+        example: value
+      }
     };
     urlQuery.push(item);
   });

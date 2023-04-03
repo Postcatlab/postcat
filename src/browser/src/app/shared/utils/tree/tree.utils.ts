@@ -1,9 +1,10 @@
+import { flatten, map, union } from 'lodash';
 import { toJS } from 'mobx';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import omitDeep from 'omit-deep-lodash';
-import { ApiParamsType, ApiParamsTypeByNumber } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { Group, ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiParamsType } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 
 import { eoDeepCopy, whatType } from '../index.utils';
 
@@ -82,16 +83,6 @@ export const filterTableData = (
   opts.childKey = opts.childKey || 'childList';
   opts.omitBy = opts.omitBy || ['eoKey'];
   const result = inData.map(val => omitDeep(val, opts.omitBy));
-  //Omit useless fieild
-  // const result = JSON.parse(
-  //   JSON.stringify(inData, (key, value) => {
-  //     if (typeof key === 'string' && opts.omitBy.includes(key)) {
-  //       return undefined;
-  //     } else {
-  //       return value;
-  //     }
-  //   })
-  // );
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
       pcConsole.error('filterTableData need primaryKey');
@@ -103,20 +94,20 @@ export const filterTableData = (
     childKey: opts.childKey
   });
 };
-export const flatData = data => {
+export const flatTree = trees => {
   // * DFS
   const arr = [];
-  data.forEach(item => {
-    const loop = ({ childList = [], ...it }) => {
+  trees.forEach(item => {
+    const loop = ({ children = [], ...it }) => {
       arr.push(it);
-      childList.forEach(x => loop(x));
+      children?.forEach(x => loop(x));
     };
     loop(item);
   });
   return arr;
 };
 
-export const getExpandGroupByKey: (component: NzTreeComponent | NzTreeSelectComponent, key) => string[] = (component, key) => {
+export const getExpandGroupByKey: (tree: NzTreeComponent | NzTreeSelectComponent, key) => string[] = (component, key) => {
   if (!component) {
     return [];
   }
@@ -169,31 +160,14 @@ export const fieldTypeMap = new Map<number, any>([
 ]);
 
 /**
- * Generate Group for tree view
- *
- * @param apiGroups
- * @param groupId
- * @returns
- */
-export const genApiGroupTree = (apiGroups: Group[] = []) => {
-  return [
-    ...apiGroups.map(group => ({
-      ...group,
-      title: group.name || '',
-      key: group.id,
-      children: genApiGroupTree([...(group?.children || [])])
-    }))
-  ];
-};
-/**
  * Get group after shrink api data
  */
 export const getPureGroup = groupList => {
   return [
     ...groupList.filter(group => {
       if (!group) return;
-      const isApi = group._group?.type === 2;
-      if (isApi) return false;
+      const isGroup = group?.type !== GroupType.Virtual;
+      if (!isGroup) return false;
       Object.assign(group, {
         title: group.name || '',
         key: group.id,
@@ -202,6 +176,19 @@ export const getPureGroup = groupList => {
       return true;
     })
   ];
+};
+
+export const findTreeNode = (list, func): Group => {
+  let result;
+  list.some(group => {
+    if (func(group)) {
+      return (result = group);
+    }
+    if (group.children) {
+      return (result = findTreeNode(group.children, func));
+    }
+  });
+  return result;
 };
 export class PCTree {
   private list: Group[];
@@ -213,38 +200,31 @@ export class PCTree {
   getList() {
     return this.list;
   }
-  findGroupByID(id): Group {
-    return this.loopFindGroupByID(this.list, id);
+  findTreeNodeByID(id): Group {
+    return findTreeNode(this.list, val => val.id === id);
   }
-  private loopFindGroupByID(list, id): Group {
-    let result;
-    list.find(group => {
-      if (group.id === id) {
-        return (result = group);
-      }
-      if (group.children) {
-        return (result = this.loopFindGroupByID(group.children, id));
-      }
-    });
-    return result;
-  }
+
   add(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;
     if (isRootDir) {
       this.list.push(group);
       return;
     }
-
-    const parent = this.findGroupByID(group.parentId);
-    parent?.children.push(group);
+    const parent = this.findTreeNodeByID(group.parentId);
+    if (!parent) {
+      console.log(parent);
+      throw new Error('parent is not a group');
+    }
+    parent.children ??= [];
+    parent.children.push(group);
   }
   update(group: Group) {
-    const origin = this.findGroupByID(group.id);
+    const origin = this.findTreeNodeByID(group.id);
     Object.assign(origin, group);
   }
   delete(group: Group) {
     const isRootDir = group.parentId === this.rootGroupID;
-    const list = isRootDir ? this.list : this.findGroupByID(group.parentId).children;
+    const list = isRootDir ? this.list : this.findTreeNodeByID(group.parentId).children;
     list.splice(
       list.findIndex(val => val.id === group.id),
       1
@@ -252,25 +232,13 @@ export class PCTree {
   }
   sort() {}
 }
-export const hangGroupToApi = list => {
-  return list.map(it => {
-    if (it.type === 2) {
-      return {
-        ...it.relationInfo,
-        id: it.relationInfo.apiUuid,
-        isLeaf: true,
-        parentId: it.parentId,
-        _group: {
-          id: it.id,
-          type: it.type,
-          parentId: it.parentId,
-          sort: it.sort
-        }
-      };
+
+export const getSubGroupIds = (groups: Group[] = [], defaultIds = []) => {
+  return groups.reduce((prev, curr) => {
+    if (curr.children?.length) {
+      getSubGroupIds(curr.children, prev);
     }
-    return {
-      ...it,
-      children: hangGroupToApi(it.children || [])
-    };
-  });
+    prev.push(curr.id);
+    return prev;
+  }, defaultIds);
 };

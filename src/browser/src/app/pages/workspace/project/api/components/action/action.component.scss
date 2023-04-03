@@ -1,0 +1,28 @@
+:host ::ng-deep .action-contain {
+  .ant-tabs-tabpane {
+    padding-left: unset !important;
+    border-left: 1px solid var(--border-color);
+  }
+
+  .ant-tabs-content-holder {
+    height: 100% !important;
+  }
+
+  .ant-tabs-tab {
+    text-align: left !important;
+    margin: 5px !important;
+    border: 1px solid transparent;
+    padding: 5px 20px !important;
+  }
+
+  .ant-tabs-tab:hover,
+  .ant-tabs-tab-active {
+    border: 1px solid var(--border-color);
+    background: var(--bar-background-color);
+    border-radius: 3px;
+  }
+
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
+    align-items: unset;
+  }
+}

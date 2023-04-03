@@ -10,6 +10,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { DownloadClientComponent } from 'pc/browser/src/app/components/download-client/download-client.component';
 import { ExtensionDetailComponent } from 'pc/browser/src/app/pages/components/extension/detail/extension-detail.component';
 import { DownloadCountFormaterPipe } from 'pc/browser/src/app/pages/components/extension/download-count-formater.pipe';
 import { SharedModule } from 'pc/browser/src/app/shared/shared.module';
@@ -31,6 +32,7 @@ import { ExtensionListComponent } from './list/extension-list.component';
     EoNgSwitchModule,
     EoNgTreeModule,
     NzResultModule,
+    DownloadClientComponent,
     ShadowDomEncapsulationModule,
     NzTagModule,
     EoNgAutoCompleteModule,

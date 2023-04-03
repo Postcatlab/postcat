@@ -1,0 +1,440 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ApiAttrInfo": {
+      "properties": {
+        "afterInject": {
+          "type": "string"
+        },
+        "authInfo": {
+          "type": "string"
+        },
+        "beforeInject": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "number"
+        },
+        "requestMethod": {
+          "$ref": "#/definitions/RequestMethod"
+        }
+      },
+      "type": "object",
+      "required": ["requestMethod", "contentType"]
+    },
+    "BodyParam": {
+      "properties": {
+        "binaryRawData": {
+          "type": "string"
+        },
+        "childList": {
+          "items": {
+            "$ref": "#/definitions/BodyParam"
+          },
+          "type": "array"
+        },
+        "dataType": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "orderNo": {
+          "type": "number"
+        },
+        "paramAttr": {
+          "$ref": "#/definitions/ParamAttr"
+        },
+        "paramType": {
+          "type": "number"
+        },
+        "partType": {
+          "type": "number",
+          "const": 1,
+          "default": 1
+        },
+        "responseUuid": {
+          "type": "string"
+        },
+        "structureId": {
+          "type": "number"
+        },
+        "structureParamId": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "anyOf": [
+        {
+          "required": ["name", "dataType"]
+        },
+        {
+          "required": ["binaryRawData"]
+        }
+      ]
+    },
+    "HeaderParam": {
+      "properties": {
+        "binaryRawData": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "orderNo": {
+          "type": "number"
+        },
+        "paramAttr": {
+          "$ref": "#/definitions/ParamAttr"
+        },
+        "partType": {
+          "type": "number",
+          "const": 0,
+          "default": 0
+        },
+        "responseUuid": {
+          "type": "string"
+        },
+        "structureId": {
+          "type": "number"
+        },
+        "structureParamId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ScriptItem": {
+      "properties": {
+        "scriptType": {
+          "type": "number"
+        },
+        "data": {
+          "type": "string"
+        }
+      },
+      "required": ["scriptType"],
+      "type": "object"
+    },
+    "ParamAttr": {
+      "properties": {
+        "attr": {
+          "type": "string"
+        },
+        "dbArr": {
+          "type": "string"
+        },
+        "example": {
+          "type": "string"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "maxValue": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "minValue": {
+          "type": "number"
+        },
+        "paramLimit": {
+          "type": "string"
+        },
+        "paramMock": {
+          "type": "string"
+        },
+        "paramNote": {
+          "type": "string"
+        },
+        "paramValueList": {
+          "type": "string"
+        },
+        "structureIsHide": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "QueryParam": {
+      "properties": {
+        "binaryRawData": {
+          "type": "string"
+        },
+        "childList": {
+          "items": {
+            "$ref": "#/definitions/QueryParam"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "orderNo": {
+          "type": "number"
+        },
+        "paramAttr": {
+          "$ref": "#/definitions/ParamAttr"
+        },
+        "paramType": {
+          "type": "number"
+        },
+        "partType": {
+          "type": "number",
+          "const": 2,
+          "default": 2
+        },
+        "responseUuid": {
+          "type": "string"
+        },
+        "structureId": {
+          "type": "number"
+        },
+        "structureParamId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RequestMethod": {
+      "enum": [0, 1, 2, 3, 4, 5, 6],
+      "type": "number"
+    },
+    "RequestParams": {
+      "properties": {
+        "bodyParams": {
+          "items": {
+            "$ref": "#/definitions/BodyParam"
+          },
+          "type": "array"
+        },
+        "headerParams": {
+          "items": {
+            "$ref": "#/definitions/HeaderParam"
+          },
+          "type": "array"
+        },
+        "queryParams": {
+          "items": {
+            "$ref": "#/definitions/QueryParam"
+          },
+          "type": "array"
+        },
+        "restParams": {
+          "items": {
+            "$ref": "#/definitions/RestParam"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ResponseList": {
+      "properties": {
+        "contentType": {
+          "type": "number"
+        },
+        "httpCode": {
+          "type": "string"
+        },
+        "isDefault": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "responseParams": {
+          "$ref": "#/definitions/ResponseParams"
+        },
+        "responseUuid": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ResponseParams": {
+      "properties": {
+        "bodyParams": {
+          "items": {
+            "$ref": "#/definitions/BodyParam"
+          },
+          "type": "array"
+        },
+        "headerParams": {
+          "items": {
+            "$ref": "#/definitions/HeaderParam"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["bodyParams", "headerParams"],
+      "type": ["object", "null"]
+    },
+    "RestParam": {
+      "properties": {
+        "binaryRawData": {
+          "type": "string"
+        },
+        "childList": {
+          "items": {
+            "$ref": "#/definitions/RestParam"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "number",
+          "enum": [0, 1],
+          "default": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "orderNo": {
+          "type": "number"
+        },
+        "paramAttr": {
+          "$ref": "#/definitions/ParamAttr"
+        },
+        "paramType": {
+          "type": "number"
+        },
+        "partType": {
+          "type": "number",
+          "const": 3,
+          "default": 3
+        },
+        "responseUuid": {
+          "type": "string"
+        },
+        "structureId": {
+          "type": "number"
+        },
+        "structureParamId": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "properties": {
+    "collectionType": {
+      "type": "number",
+      "const": 1,
+      "default": 1
+    },
+    "scriptList": {
+      "items": {
+        "$ref": "#/definitions/ScriptItem"
+      },
+      "default": [
+        { "scriptType": 1, "data": "" },
+        { "scriptType": 2, "data": "" }
+      ],
+      "type": "array"
+    },
+    "apiAttrInfo": {
+      "$ref": "#/definitions/ApiAttrInfo"
+    },
+    "apiUuid": {
+      "type": "string"
+    },
+    "encoding": {
+      "type": "string"
+    },
+    "groupId": {
+      "type": "number"
+    },
+    "groupName": {
+      "type": "string"
+    },
+    "id": {
+      "type": "number"
+    },
+    "name": {
+      "type": "string"
+    },
+    "orderNum": {
+      "type": "number"
+    },
+    "projectId": {
+      "type": "number"
+    },
+    "projectUuid": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "number"
+    },
+    "requestParams": {
+      "$ref": "#/definitions/RequestParams"
+    },
+    "responseList": {
+      "items": {
+        "$ref": "#/definitions/ResponseList"
+      },
+      "type": "array"
+    },
+    "script": {
+      "properties": {
+        "afterScript": {
+          "enum": [""],
+          "type": "string"
+        },
+        "beforeScript": {
+          "enum": [""],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "starred": {
+      "type": "number"
+    },
+    "status": {
+      "type": "number"
+    },
+    "tag": {
+      "type": "string"
+    },
+    "uri": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workSpaceUuid": {
+      "type": "string"
+    },
+    "writeHistory": {
+      "type": "number"
+    }
+  },
+  "required": ["apiAttrInfo", "uri", "protocol", "name", "requestParams", "responseList", "collectionType"],
+  "type": "object"
+}

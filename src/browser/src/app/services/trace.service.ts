@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 
+import packageJson from '../../../../../package.json';
 import { ElectronService } from '../core/services/electron/electron.service';
-
 declare const gio;
 
+/**
+ * GrowingIO Event Tracking Service
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class TraceService {
   constructor(private electron: ElectronService) {
-    this.setUser({ client_type: this.electron.isElectron ? 'client' : 'web' });
+    this.setVisitor({ client_type: this.electron.isElectron ? 'client' : 'web', app_version: packageJson.version });
   }
 
   report(eventId, params = {}) {
@@ -24,6 +27,9 @@ export class TraceService {
   }
   setUser(data = {}) {
     gio('people.set', data);
+  }
+  setVisitor(data = {}) {
+    gio('visitor.set', data);
   }
   start() {
     gio('config', { dataCollect: false });

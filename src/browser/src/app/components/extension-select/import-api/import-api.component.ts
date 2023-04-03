@@ -9,7 +9,7 @@ import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { IMPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -67,7 +67,7 @@ export class ImportApiComponent implements OnInit {
   constructor(
     private router: Router,
     private trace: TraceService,
-    private eoMessage: EoNgFeedbackMessageService,
+    private feedback: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
     private apiService: ApiService,
@@ -103,7 +103,7 @@ export class ImportApiComponent implements OnInit {
   async submit(callback) {
     StorageUtil.set('import_api_modal', this.currentExtension);
     if (!this.uploadData) {
-      this.eoMessage.error($localize`Please import the file first`);
+      this.feedback.error($localize`Please import the file first`);
       callback('stayModal');
       return;
     }
@@ -116,16 +116,20 @@ export class ImportApiComponent implements OnInit {
       const [data, err] = module[action](content);
       console.log('import data', window.structuredClone?.(data));
       if (err) {
-        this.eoMessage.error(err.msg);
+        this.feedback.error(err.msg);
         console.error(err.msg);
-        callback(false);
+        callback('stayModal');
         return;
       }
 
       try {
-        console.log('content', content);
-        data.collections = parseAndCheckCollections(data.collections);
-        data.environmentList = data.environmentList.filter(n => {
+        data.collections = parseAndCheckCollections(data.collections || []);
+        if (!data.collections?.length && !data.environmentList?.length) {
+          this.feedback.warning($localize`The imported file contains ${data.collections.length} APIs, which will be ignored`);
+          callback('stayModal');
+          return;
+        }
+        data.environmentList = (data.environmentList || []).filter(n => {
           const { validate, data } = parseAndCheckEnv(n);
           if (validate) {
             return data;

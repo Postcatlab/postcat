@@ -26,7 +26,7 @@ export class ExtensionSelectComponent {
   filename = '';
   tipsMap = { ...featuresTipsMap, ...categoriesTipsMap };
 
-  constructor(private message: EoNgFeedbackMessageService) {}
+  constructor(private feedback: EoNgFeedbackMessageService) {}
 
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);
@@ -44,7 +44,7 @@ export class ExtensionSelectComponent {
   parserFile = file =>
     new Observable((observer: Observer<boolean>) => {
       if (file.type !== 'application/json') {
-        this.message.error($localize`Only files in JSON format are supported`);
+        this.feedback.error($localize`Only files in JSON format are supported`);
         observer.complete();
         return;
       }
@@ -55,7 +55,7 @@ export class ExtensionSelectComponent {
           observer.complete();
         })
         .catch(err => {
-          this.message.error(err);
+          this.feedback.error(err);
         });
     });
 }

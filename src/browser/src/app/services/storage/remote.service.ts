@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 const ErrorStyle = 'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;';
 
@@ -218,6 +218,168 @@ export class RemoteService {
           resolve([null, error]);
         }
       });
+    });
+  }
+
+  api_apiCaseCreate<T = any>(
+    { apiCaseList, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
+    prefix = ''
+  ) {
+    if (apiCaseList == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 apiCaseList %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 apiCaseList' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'create 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .post(`${prefix}/api/api-case`, {
+          apiCaseList,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:create - api_apiCaseCreate 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:create - api_apiCaseCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseUpdate<T = any>(
+    { apiCaseUuid, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid, ...items },
+    prefix = ''
+  ) {
+    if (apiCaseUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 apiCaseUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 apiCaseUuid' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'update 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .put(`${prefix}/api/api-case`, {
+          apiCaseUuid,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:update - api_apiCaseUpdate 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:update - api_apiCaseUpdate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseDetail<T = any>(
+    { apiCaseUuids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 apiCaseUuids' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'detail 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/api-case`, {
+          params: { apiCaseUuids, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:detail - api_apiCaseDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:detail - api_apiCaseDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiCaseDelete<T = any>(
+    { apiCaseUuids, projectUuid = this.store.getCurrentProjectID, workSpaceUuid = this.store.getCurrentWorkspaceUuid },
+    prefix = ''
+  ) {
+    if (apiCaseUuids == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 apiCaseUuids' }];
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 projectUuid' }];
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiCase - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return [null, { message: 'delete 接口 缺失参数 workSpaceUuid' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .delete(`${prefix}/api/api-case`, {
+          params: { apiCaseUuids, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c apiCase:delete - api_apiCaseDelete 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c apiCase:delete - api_apiCaseDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
     });
   }
 
@@ -2394,6 +2556,70 @@ export class RemoteService {
           },
           error: error => {
             console.log('%c share:apiDataDetail - api_shareApiDataDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareMockDetail<T = any>({ sharedUuid, id }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - mockDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return [null, { message: 'mockDetail 接口 缺失参数 sharedUuid' }];
+    }
+    if (id == null) {
+      console.log('%c Error: share - mockDetail 接口 缺失参数 id %c', ErrorStyle, '');
+      return [null, { message: 'mockDetail 接口 缺失参数 id' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api/project-shared/mock`, {
+          params: { sharedUuid, id }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c share:mockDetail - api_shareMockDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c share:mockDetail - api_shareMockDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_shareCaseDetail<T = any>({ sharedUuid, apiCaseUuids }, prefix = '') {
+    if (sharedUuid == null) {
+      console.log('%c Error: share - caseDetail 接口 缺失参数 sharedUuid %c', ErrorStyle, '');
+      return [null, { message: 'caseDetail 接口 缺失参数 sharedUuid' }];
+    }
+    if (apiCaseUuids == null) {
+      console.log('%c Error: share - caseDetail 接口 缺失参数 apiCaseUuids %c', ErrorStyle, '');
+      return [null, { message: 'caseDetail 接口 缺失参数 apiCaseUuids' }];
+    }
+
+    return new Promise<[T, null] | [null, any]>(resolve => {
+      this.http
+        .get(`${prefix}/api//project-shared/api-case`, {
+          params: { sharedUuid, apiCaseUuids }
+        })
+        .subscribe({
+          next: ({ code, data, message }: any) => {
+            if (code === 0) {
+              console.log('%c share:caseDetail - api_shareCaseDetail 接口请求成功 %c', SuccessStyle, '');
+              return resolve([data, null]);
+            }
+            console.log('Error: ', message);
+            resolve([null, { code, message, data }]);
+          },
+          error: error => {
+            console.log('%c share:caseDetail - api_shareCaseDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });

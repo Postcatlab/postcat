@@ -1,6 +1,43 @@
-import { ApiBodyType, RequestMethod } from '../../../../pages/workspace/project/api/api.model';
+import { ApiBodyType, ApiParamsType, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { AuthInfo } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { OldRequestMethod } from 'pc/browser/src/app/services/storage/db/dataSource/oldApiData';
 
-export interface ApiData {
+/**
+ * Group list api data
+ */
+export interface ApiDataFromList extends ApiData {
+  requestMethod?: number;
+}
+
+export interface ViewParamAttr extends ParamAttr {
+  //string[]
+  paramValueList?: any;
+}
+
+export interface ApiBaseRequest {
+  apiAttrInfo: ApiAttrInfo;
+  requestParams: RequestParams;
+  authInfo?: AuthInfo;
+}
+
+export interface ScriptType {
+  id?: number;
+  scriptUuid?: string;
+  scriptType: number;
+  type?: number;
+  data: any;
+  sort?: any;
+  status?: number;
+  name?: string;
+  targetId?: string;
+  targetType?: number;
+  workSpaceUuid?: string;
+  projectUuid?: string;
+  createUserId?: number | string;
+  createTime?: number | string;
+  updateTime?: number | string;
+}
+export interface ApiData extends ApiBaseRequest {
   id?: number;
   apiUuid?: string;
   projectUuid?: string;
@@ -12,7 +49,6 @@ export interface ApiData {
   name: string;
   uri: string;
   protocol: number;
-  requestMethod?: number;
   status?: number;
   starred?: number;
   encoding?: string;
@@ -32,20 +68,14 @@ export interface ApiData {
   updateTime?: number;
   introduction?: Introduction;
   relation?: Relation;
-  apiAttrInfo: ApiAttrInfo;
   dubboApiAttrInfo?: DubboApiAttrInfo;
   soapApiAttrInfo?: SoapApiAttrInfo;
   grpcApiAttrInfo?: GrpcApiAttrInfo;
-  requestParams: RequestParams;
   responseList: ResponseList[];
   resultList?: ResultList[];
+  scriptList?: ScriptType[];
   writeHistory?: number;
   historyInfo?: HistoryInfo;
-  authInfo?: any;
-  script?: {
-    beforeScript: '';
-    afterScript: '';
-  };
 }
 
 export interface Introduction {
@@ -71,7 +101,7 @@ export interface ApiAttrInfo {
   requestMethod?: RequestMethod;
   beforeInject?: string;
   afterInject?: string;
-  authInfo?: string;
+  authInfo?: AuthInfo;
   createTime?: number;
   updateTime?: number;
 }
@@ -143,7 +173,7 @@ export interface HeaderParam {
   paramAttr?: ParamAttr;
 }
 
-export interface ParamAttr {
+interface ParamAttr {
   minLength?: number;
   maxLength?: number;
   minValue?: number;
@@ -160,18 +190,21 @@ export interface ParamAttr {
   paramNote?: string;
 }
 
+export enum ParamTypeEnum {
+  REQUEST = 0,
+  RESPONSE = 1
+}
+
 export interface BodyParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
-  dataType?: number;
+  dataType?: ApiParamsType;
   dataTypeValue?: string;
   structureId?: number;
   structureParamId?: string;
   isRequired?: number;
-  //Use in test page
-  files?: any[];
   binaryRawData?: string;
   description?: string;
   orderNo?: number;
@@ -184,7 +217,7 @@ export interface BodyParam {
 export interface QueryParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
   structureId?: number;
   structureParamId?: string;
@@ -202,7 +235,7 @@ export interface QueryParam {
 export interface RestParam {
   responseUuid?: string;
   name?: string;
-  paramType?: number;
+  paramType?: ParamTypeEnum;
   partType?: number;
   dataTypeValue?: string;
   structureId?: number;

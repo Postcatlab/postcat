@@ -1,6 +1,6 @@
-import { ApiList } from 'pc/browser/src/app/services/storage/db/dto/apiData.dto';
 import { PageDto } from 'pc/browser/src/app/services/storage/db/dto/common.dto';
-import { Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { CollectionTypeEnum, Environment, Group } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 export interface ProjectBulkCreateDto {
   projectMsgs: ProjectMsg[];
@@ -32,16 +32,11 @@ export interface ImportProjectDto {
   projectUuid?: string;
   workSpaceUuid?: string;
 }
-
-export type Collection = (ApiList | Group) & {
+export type Collection = ApiData | Group;
+export type ImportCollection = Collection & {
   /**
    * 0：group
    * 1: apiData
    */
   collectionType: CollectionTypeEnum;
 };
-
-export enum CollectionTypeEnum {
-  GROUP = 0,
-  API_DATA = 1
-}

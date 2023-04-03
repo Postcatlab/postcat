@@ -33,9 +33,16 @@
   [(nzData)]="model"
   (nzDataChange)="emitModelChange()"
 ></eo-ng-table-pro>
-<ng-template #formValue let-item="item" let-index="index">
+<ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
   <div [ngSwitch]="item.dataType">
-    <input *ngSwitchDefault eo-ng-input maxlength="65535" [(ngModel)]="item.paramAttr.example" (ngModelChange)="emitModelChange()" />
+    <input
+      *ngSwitchDefault
+      placeholder="{{ rowItem.placeholder }}"
+      eo-ng-input
+      maxlength="{{ rowItem.maxlength }}"
+      [(ngModel)]="item.paramAttr.example"
+      (ngModelChange)="emitModelChange()"
+    />
     <div *ngSwitchCase="API_PARAMS_TYPE.file">
       <label class="cursor-pointer px-[5px] py-[3px] border-all rounded" for="file_{{ index }}" i18n>Choose Files</label>
       <span class="ml-[10px]" *ngIf="item.files?.length">{{ item.files?.length }} <span i18n>files selected</span></span>
@@ -55,6 +62,7 @@
   [editorType]="editorType"
   [config]="editorConfig"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+  #rawEditor
 >
 </eo-monaco-editor>
 <!-- Binary -->

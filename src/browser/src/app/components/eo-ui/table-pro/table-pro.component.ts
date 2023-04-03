@@ -130,23 +130,23 @@ export class EoTableProComponent implements OnInit, OnChanges {
           this.nzData.push(eoDeepCopy(this.nzDataItem));
         }
       }
-      const hasQuoteKey = this.columns.some(col => col.key?.includes('.'));
-      if (hasQuoteKey && !this.setting.isEdit) {
-        const chains = this.columns
-          .filter(col => col.key?.includes('.'))
-          .map(val => {
-            const arr = val.key.split('.');
-            const valResult = {
-              arr,
-              str: val.key,
-              name: arr.at(-1)
-            };
-            return valResult;
-          });
-        this.nzData = generateQuoteKeyValue(chains, this.nzData, {
-          childKey: this.tableConfig.childKey
-        });
-      }
+      // const hasQuoteKey = this.columns.some(col => col.key?.includes('.'));
+      // if (hasQuoteKey && !this.setting.isEdit) {
+      //   const chains = this.columns
+      //     .filter(col => col.key?.includes('.'))
+      //     .map(val => {
+      //       const arr = val.key.split('.');
+      //       const valResult = {
+      //         arr,
+      //         str: val.key,
+      //         name: arr.at(-1)
+      //       };
+      //       return valResult;
+      //     });
+      //   this.nzData = generateQuoteKeyValue(chains, this.nzData, {
+      //     childKey: this.tableConfig.childKey
+      //   });
+      // }
     }
   }
   getPureNzData() {

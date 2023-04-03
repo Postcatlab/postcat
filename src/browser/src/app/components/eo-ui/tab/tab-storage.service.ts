@@ -19,18 +19,21 @@ export class TabStorageService {
     this.tabStorageKey = inArg.tabStorageKey;
   }
   addTab(tabItem) {
-    if (this.tabsByID.has(tabItem.uuid)) {
+    if (this.tabsByID.has(tabItem.uuid) && this.tabOrder.some(uuid => uuid === tabItem.uuid)) {
       throw new Error(`EO_ERROR: can't add same id tab`);
     }
     this.tabOrder.push(tabItem.uuid);
-    this.tabsByID.set(tabItem.uuid, tabItem);
+    this.setTabByID(tabItem);
   }
   updateTab(index, tabItem) {
     this.tabsByID.delete(this.tabOrder[index]);
     this.tabOrder[index] = tabItem.uuid;
+    this.setTabByID(tabItem);
+  }
+  setTabByID(tabItem) {
     this.tabsByID.set(tabItem.uuid, tabItem);
   }
-  resetTabsByOrdr(order) {
+  resetTabsByOrder(order) {
     const tabs = new Map();
     this.tabsByID.forEach((value, key) => {
       if (!order.includes(key)) {
@@ -55,7 +58,8 @@ export class TabStorageService {
   setPersistenceStorage(selectedIndex, opts) {
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach(val => {
-      if (val.type === 'preview') {
+      //Remove cache when no change
+      if (val.type === 'preview' || (val.type === 'edit' && !val.hasChanged)) {
         ['baseContent', 'content'].forEach(keyName => {
           val[keyName] = null;
         });

@@ -1,24 +1,29 @@
 import { Injectable } from '@angular/core';
-import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
-import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/api.service';
-import { ApiData } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiBodyType, Protocol, RequestMethod } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
+import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
+import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 
 @Injectable()
 export class ApiEditService {
-  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService) {}
-  getPureApi({ groupId }): ApiData {
+  constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService, private effect: ApiEffectService) {}
+  getPureApi(): ApiData {
     return {
       name: '',
       uri: '/',
-      groupId,
+      groupId: 0,
       protocol: Protocol.HTTP,
       apiAttrInfo: {
         requestMethod: RequestMethod.POST,
         contentType: ApiBodyType.JSON
       },
+      scriptList: [
+        { scriptType: 1, data: '' },
+        { scriptType: 2, data: '' }
+      ],
       requestParams: {
         headerParams: [],
         bodyParams: [],
@@ -39,39 +44,44 @@ export class ApiEditService {
       ]
     };
   }
-  async getApi({ id, groupId }): Promise<ApiData> {
-    let result = this.getPureApi({ groupId }) as ApiData;
-    if (!id) {
-      // From test page/copy api data;
-      let tmpApiData = StorageUtil.get('apiDataWillbeSave');
-      const pureApi = this.getPureApi({ groupId });
-      if (tmpApiData) {
+  async getApi({ id }): Promise<ApiData> {
+    let result;
+    const tmpApiData = StorageUtil.get('api_data_will_be_save');
+    const addType = !id ? (tmpApiData ? 'from_test' : 'blank') : 'edit';
+    switch (addType) {
+      case 'from_test': {
         //Add From Test
-        StorageUtil.remove('apiDataWillbeSave');
+        const pureApi = this.getPureApi();
         Object.keys(pureApi).forEach(keyName => {
           //Filter useless keyName
-          result[keyName] = tmpApiData[keyName];
+          pureApi[keyName] = tmpApiData[keyName];
         });
-      } else {
-        //Add directly
         result = pureApi;
+        StorageUtil.remove('api_data_will_be_save');
+        break;
       }
-    } else {
-      result = await this.projectApi.get(id);
+      case 'blank': {
+        //Add directly
+        const pureApi = this.getPureApi();
+        result = pureApi;
+        break;
+      }
+      case 'edit': {
+        const pureApi = this.getPureApi() as ApiData;
+        result = await this.projectApi.get(id);
+        Object.keys(pureApi).forEach(keyName => {
+          //Filter useless keyName
+          result[keyName] ??= pureApi[keyName];
+        });
+        break;
+      }
     }
     return this.apiEditUtil.formatStorageApiDataToUI(result);
-  }
-  async addApi(apiData): Promise<[ApiData, any]> {
-    const [result, err] = await this.projectApi.add(apiData);
-    if (err) {
-      return [result, err];
-    }
-    return [result[0], err];
   }
   async editApi(apiData) {
     apiData.updateApiAttr = 1;
     apiData.updateRequestParams = 1;
     apiData.updateResponseList = 1;
-    return await this.projectApi.edit(apiData);
+    return await this.effect.updateAPI(apiData);
   }
 }

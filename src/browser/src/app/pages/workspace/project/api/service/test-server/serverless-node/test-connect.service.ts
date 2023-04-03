@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DEFAULT_UNIT_TEST_RESULT } from 'pc/browser/src/app/pages/workspace/project/api/api.model';
+import { DEFAULT_UNIT_TEST_RESULT } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { JSONParse } from 'pc/browser/src/app/shared/utils/index.utils';
 
 import { TestServerService } from '../test-server.service';

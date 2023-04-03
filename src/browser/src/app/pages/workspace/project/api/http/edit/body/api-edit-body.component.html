@@ -40,9 +40,17 @@
   [nzCheckAddChild]="nzCheckAddChild"
   [nzDragCheck]="nzDragCheck"
   [(nzData)]="model"
-  (nzDataChange)="tableChange($event)"
+  (nzDataChange)="tableChange()"
 ></eo-ng-table-pro>
-<!-- [nzScroll]="{ y: '300px' }" -->
+<ng-template #formValue let-item="item" let-rowItem="rowItem" let-index="index">
+  <input
+    placeholder="{{ rowItem.placeholder }}"
+    eo-ng-input
+    maxlength="{{ rowItem.maxlength }}"
+    [(ngModel)]="item.paramAttr.example"
+    (ngModelChange)="tableChange()"
+  />
+</ng-template>
 <!-- Raw -->
 <eo-monaco-editor
   *ngIf="bodyType === TYPE_API_BODY.Raw && model[0]"

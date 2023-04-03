@@ -20,7 +20,6 @@ export class LanguageService {
       this.languages.find(val => window.location.pathname.includes(`/${val.path}/`))?.value ||
       this.setting.settings?.['system.language'] ||
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
-    this.trace.setUser({ app_language: this.systemLanguage });
   }
   get langHash() {
     return this.langHashMap.get(this.systemLanguage);
@@ -28,6 +27,7 @@ export class LanguageService {
   init() {
     //System language First
     this.changeLanguage(this.setting.settings?.['system.language']);
+    this.trace.setVisitor({ app_language: this.systemLanguage });
   }
   changeLanguage(localeID) {
     if (!localeID || localeID === this.systemLanguage) {

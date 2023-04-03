@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StoreService } from 'pc/browser/src/app/store/state.service';
+import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 
 import { LocalService } from './local.service';
 import { RemoteService } from './remote.service';
@@ -32,6 +32,22 @@ export class ApiService {
 
   api_apiDataGetGroup<T = any>(params: { projectUuid?: any }) {
     return this.remote.api_apiDataGetGroup<T>(params);
+  }
+
+  api_apiCaseCreate<T = any>(params: { apiCaseList: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseCreate<T>(params) : this.remote.api_apiCaseCreate<T>(params);
+  }
+
+  api_apiCaseUpdate<T = any>(params: { apiCaseUuid: any; projectUuid?: any; workSpaceUuid?: any; [key: string]: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseUpdate<T>(params) : this.remote.api_apiCaseUpdate<T>(params);
+  }
+
+  api_apiCaseDetail<T = any>(params: { apiCaseUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseDetail<T>(params) : this.remote.api_apiCaseDetail<T>(params);
+  }
+
+  api_apiCaseDelete<T = any>(params: { apiCaseUuids: any; projectUuid?: any; workSpaceUuid?: any }) {
+    return this.store.isLocal ? this.local.api_apiCaseDelete<T>(params) : this.remote.api_apiCaseDelete<T>(params);
   }
 
   api_mockCreate<T = any>(params: {
@@ -315,6 +331,14 @@ export class ApiService {
 
   api_shareApiDataDetail<T = any>(params: { apiUuids: any; sharedUuid: any; [key: string]: any }) {
     return this.remote.api_shareApiDataDetail<T>(params);
+  }
+
+  api_shareMockDetail<T = any>(params: { sharedUuid: any; id: any }) {
+    return this.remote.api_shareMockDetail<T>(params);
+  }
+
+  api_shareCaseDetail<T = any>(params: { sharedUuid: any; apiCaseUuids: any }) {
+    return this.remote.api_shareCaseDetail<T>(params);
   }
 
   api_shareEnvironmentList<T = any>(params: { sharedUuid: any }) {
