@@ -168,7 +168,7 @@ export class SyncApiComponent implements OnInit, OnChanges {
     const [data, err] = await module[feature.action](this.validateForm?.value);
     console.log('data', data, err);
     if (err) {
-      this.feedback.error($localize`Sync API from URL error: ${err?.data?.message || err}`);
+      this.feedback.error($localize`Sync API from URL error: ${err?.message || err}`);
       return 'stayModal';
     }
     // this.eoMessage.success($localize`Sync API from URL Successfully`);

@@ -421,7 +421,7 @@ export class ApiTestComponent implements EditTabViewComponent {
     if (bodyType !== ApiBodyType.Binary) {
       switch (bodyType) {
         case ApiBodyType.Raw: {
-          const textType = whatTextType(model.request.requestParams?.bodyParams[0]?.binaryRawData);
+          const textType = whatTextType(model.request.requestParams?.bodyParams[0]?.binaryRawData || '');
           result.contentType = WHAT_TEXT_TYPE_MAP[textType];
           break;
         }
