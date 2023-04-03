@@ -30,7 +30,7 @@ import { ElectronService } from '../../core/services';
         nzType="text"
         (click)="toggleMaximize()"
       >
-        <eo-iconpark-icon [name]="isMaximized ? 'off-screen' : 'full-screen'"></eo-iconpark-icon>
+        <eo-iconpark-icon [name]="isMaximized ? 'quanjusuoxiao211' : 'quanjufangda21'"></eo-iconpark-icon>
       </button>
       <button
         eo-ng-button
@@ -49,6 +49,7 @@ import { ElectronService } from '../../core/services';
 export class NavOperateComponent {
   isMaximized = false;
   isElectron: boolean;
+  // isMac = false;
   isMac = navigator.platform.toLowerCase().includes('mac');
   constructor(private electron: ElectronService, private router: Router, private route: ActivatedRoute) {
     this.isElectron = this.electron.isElectron;
