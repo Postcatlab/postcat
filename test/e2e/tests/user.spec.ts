@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 import { ifTipsExist, login } from '../utils/commom.util';
-test('User Opeate', async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Got it' }).click();
+});
+
+test('User Opeate', async ({ page }) => {
   //Login
   await login(page);
 

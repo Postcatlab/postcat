@@ -5,7 +5,9 @@ export enum TabOperate {
   closeOther = 'closeOther',
   closeAll = 'closeAll',
   closeLeft = 'closeLeft',
-  closeRight = 'closeRight'
+  closeRight = 'closeRight',
+  forceCloseAll = 'forceCloseAll',
+  forceCloseOther = 'forceCloseOther'
 }
 export type storageTab = {
   selectedIndex: number;

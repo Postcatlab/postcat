@@ -1,5 +1,5 @@
 import type { Collection, IndexableType, Table, UpdateSpec } from 'dexie';
-import { convertID, UUID_MAP } from 'pc/browser/src/app/services/storage/db/dataSource';
+import { convertViewIDtoIndexedDBID, UUID_MAP } from 'pc/browser/src/app/services/storage/db/dataSource';
 
 import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 
@@ -71,7 +71,7 @@ export class DbBaseService<T extends object> {
   async bulkUpdate(params: any[]) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
     const promiseArr = params.map(item => {
-      item = convertID(this.db, item);
+      item = convertViewIDtoIndexedDBID(this.db, item);
       const { id, ...rest } = item;
       return this.db.update(id, rest);
     });

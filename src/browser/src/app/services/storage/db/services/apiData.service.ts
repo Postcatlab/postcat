@@ -47,6 +47,7 @@ export class DbApiDataService extends DbBaseService<ApiData> {
     const result = await this.baseService.bulkRead(params);
     const promiseArr = result.data.map(async item => {
       const { data: groupInfo } = await this.groupService.read({ id: item.groupId });
+      if (!groupInfo) return;
       item.authInfo = groupInfo?.authInfo;
       if (groupInfo.depth !== 0) {
         item.authInfo.isInherited = isInherited.inherit;

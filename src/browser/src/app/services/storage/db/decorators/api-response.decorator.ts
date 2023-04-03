@@ -1,5 +1,5 @@
 import { isFunction } from 'lodash-es';
-import { convertID as convertViewIDtoIndexedDBID } from 'pc/browser/src/app/services/storage/db/dataSource';
+import { convertViewIDtoIndexedDBID } from 'pc/browser/src/app/services/storage/db/dataSource';
 
 /** 普通响应 promise */
 export type ApiResponsePromise<T> = Promise<ApiResponseOptions<T>>;

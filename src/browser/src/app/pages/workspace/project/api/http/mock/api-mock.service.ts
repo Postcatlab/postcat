@@ -137,7 +137,7 @@ export class ApiMockService {
       this.message.error($localize`Failed to delete`);
       return;
     }
-    this.message.success($localize`Delete Succeeded`);
+    this.message.success($localize`Successfully deleted`);
     this.apiEffect.deleteMockDetail();
   }
   async copy(mock_id: string) {

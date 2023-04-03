@@ -118,14 +118,18 @@ export class ImportApiComponent implements OnInit {
       if (err) {
         this.feedback.error(err.msg);
         console.error(err.msg);
-        callback(false);
+        callback('stayModal');
         return;
       }
 
       try {
-        data.collections = parseAndCheckCollections(data.collections);
-        console.log('collections', data.collections);
-        data.environmentList = data.environmentList.filter(n => {
+        data.collections = parseAndCheckCollections(data.collections || []);
+        if (!data.collections?.length && !data.environmentList?.length) {
+          this.feedback.warning($localize`The imported file contains ${data.collections.length} APIs, which will be ignored`);
+          callback('stayModal');
+          return;
+        }
+        data.environmentList = (data.environmentList || []).filter(n => {
           const { validate, data } = parseAndCheckEnv(n);
           if (validate) {
             return data;

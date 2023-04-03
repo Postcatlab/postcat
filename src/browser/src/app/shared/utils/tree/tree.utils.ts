@@ -210,9 +210,13 @@ export class PCTree {
       this.list.push(group);
       return;
     }
-
     const parent = this.findTreeNodeByID(group.parentId);
-    parent?.children?.push(group);
+    if (!parent) {
+      console.log(parent);
+      throw new Error('parent is not a group');
+    }
+    parent.children ??= [];
+    parent.children.push(group);
   }
   update(group: Group) {
     const origin = this.findTreeNodeByID(group.id);

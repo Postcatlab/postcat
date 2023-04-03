@@ -1179,5 +1179,5 @@ export const SampleCollection = {
       id: 5
     }
   ],
-  postcatVersion: '0.5.0'
+  postcat: '0.5.0'
 };

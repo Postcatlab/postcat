@@ -108,7 +108,6 @@ export class ApiEffectService {
       return [null, err];
     }
     const group = data[0];
-
     //* Transfer array proxy to real object
     const tree = new PCTree(this.store.getGroupList, {
       rootGroupID: this.store.getRootGroup.id
@@ -247,7 +246,7 @@ export class ApiEffectService {
   async deleteCase(apiCaseUuid) {
     const [, err] = await this.api.api_apiCaseDelete({ apiCaseUuids: [apiCaseUuid] });
     if (err) {
-      this.feedback.error($localize`Delete failed`);
+      this.feedback.error($localize`Failed to delete`);
       return;
     }
     this.feedback.success($localize`Successfully deleted`);

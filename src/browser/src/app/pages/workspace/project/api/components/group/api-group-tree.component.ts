@@ -99,10 +99,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   searchFunc = (node: NzTreeNodeOptions) => {
-    const { uri, name, title } = node;
+    const { title } = node;
+    const uri = node.relationInfo?.uri;
     const searchVal = this.searchValue.toLowerCase();
-    // console.log('node', uri, name, title);
-    return [uri, name, title].some(n => n?.toLowerCase()?.includes?.(searchVal));
+    return [uri, title].some(n => n?.toLowerCase()?.includes?.(searchVal));
   };
   onSearchFocus($event) {
     this.expandKeys = this.apiGroup?.getExpandedNodeList().map(node => node.key) || [];
@@ -244,13 +244,19 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     return [...new Set([...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, groupId) || [])])];
   }
   beforeDrop = (arg: NzFormatBeforeDropEvent) => {
-    const node = arg.dragNode?.origin;
+    const targetItem = arg.node?.origin;
+    const dragItem = arg.dragNode?.origin;
+    const post = arg.pos === -1 ? 'bofore' : arg.pos === 1 ? 'in' : 'behind';
     const tips = {
       [GroupModuleType.Mock]: 'Mock',
       [GroupModuleType.Case]: $localize`Case`
     };
-    if ([GroupModuleType.Mock, GroupModuleType.Case].includes(node.module)) {
-      this.feedback.warning($localize`${tips[node.module]} does not support sorting at the moment, please report to Github Issue`);
+    if ([GroupModuleType.Mock, GroupModuleType.Case].includes(dragItem.module)) {
+      this.feedback.warning($localize`${tips[dragItem.module]} does not support sorting at the moment, please report to Github Issue`);
+      return of(false);
+    }
+    if (dragItem.module === GroupModuleType.API && targetItem.module === GroupModuleType.API && post === 'in') {
+      this.feedback.warning($localize`${tips[dragItem.module]} does not support sorting at the moment, please report to Github Issue`);
       return of(false);
     }
     return of(true);
@@ -389,7 +395,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           },
           {
             title: $localize`Edit`,
-            click: item => this.groupService.toEdit(item.uuid)
+            click: item => this.groupService.toEdit(item.id)
           },
           {
             title: $localize`:@@Delete:Delete`,

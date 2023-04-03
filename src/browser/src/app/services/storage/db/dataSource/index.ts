@@ -34,7 +34,7 @@ export const UUID_MAP = {
  * Convert the ID passed in from the front end to the database ID
  *For example, apiUuid is converted to uuid
  */
-export const convertID = (db, params: any = {}) => {
+export const convertViewIDtoIndexedDBID = (db, params: any = {}) => {
   if (!params) return params;
   if (!db) {
     throw new Error(`db is not defined`);
@@ -89,7 +89,6 @@ class DataSource extends Dexie {
           Reflect.deleteProperty(obj, dbID);
           const modelID = tableMap[dbID];
           Reflect.deleteProperty(obj, modelID);
-          console.log(modelID);
         }
         Reflect.deleteProperty(obj, 'id');
 

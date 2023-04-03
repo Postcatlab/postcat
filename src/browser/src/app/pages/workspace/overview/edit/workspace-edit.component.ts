@@ -119,7 +119,7 @@ export class WorkspaceSettingComponent {
           workSpaceUuids: [wid]
         });
         if (err) {
-          this.feedback.error($localize`Delete failed`);
+          this.feedback.error($localize`Failed to delete`);
           return;
         }
         this.feedback.success($localize`Successfully deleted`);

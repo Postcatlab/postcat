@@ -31,6 +31,10 @@ eo-api-test-body {
     overflow-y: auto;
   }
 
+  .test-body-container {
+    height: calc(100% - 60px);
+  }
+
   .bottom-container {
     height: 100%;
   }
@@ -84,11 +88,11 @@ div.ant-typography {
   }
 
   .ant-tabs-content-holder {
-    height: calc(100% - 35px);
+    height: calc(100% - 20px);
     overflow: auto;
   }
 
-  .response_container {
+  .response-container {
     @apply h-full overflow-hidden;
   }
 
@@ -96,8 +100,6 @@ div.ant-typography {
     height: 100%;
 
     > .ant-tabs {
-      height: calc(100% - 60px);
-
       .ant-tabs-tabpane {
         height: 100%;
         overflow: hidden;

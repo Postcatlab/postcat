@@ -106,6 +106,8 @@ export interface Group extends Base {
 export interface ViewGroup {
   id: number;
   type: number;
+  title?: string;
+  //Same as title
   name?: string;
   depth?: number;
   parentId?: number;

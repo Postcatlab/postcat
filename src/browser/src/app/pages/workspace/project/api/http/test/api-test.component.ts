@@ -38,60 +38,7 @@ interface TestInstance {
 }
 @Component({
   selector: 'eo-api-http-test',
-  template: `<div class="test-page-container test-page-{{ currentPage }}"
-    ><ng-container *ngIf="currentPage === 'caseTest'">
-      <form nz-form nzLayout="inline" class="flex px-[15px] py-[8px]" *ngIf="model?.request" (ngSubmit)="saveName()">
-        <nz-form-item class="flex items-center h-[30px]">
-          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input case name" *ngIf="isNameEdit">
-            <input
-              nz-input
-              [(ngModel)]="name"
-              name="required"
-              required
-              nzSize="small"
-              eo-ng-input
-              autofocus
-              (ngModelChange)="valueChange()"
-              (blur)="saveName()"
-            />
-          </nz-form-control>
-          <ng-container *ngIf="!isNameEdit">
-            <h5 nz-typography class="!mb-[0px]">{{ model.request.name }}</h5>
-            <button nzSize="small" (click)="isNameEdit = !isNameEdit" eo-ng-button nzType="text" class="ml-[5px]">
-              <eo-iconpark-icon size="12px" name="edit"></eo-iconpark-icon>
-            </button>
-            <button nzSize="small" (click)="delete()" eo-ng-button nzType="text" class="ml-[5px]">
-              <eo-iconpark-icon size="12px" name="delete"></eo-iconpark-icon>
-            </button>
-          </ng-container>
-        </nz-form-item>
-      </form>
-      <nz-divider class="my-0"></nz-divider>
-    </ng-container>
-    <eo-api-http-test-ui
-      #testUIComponent
-      [model]="model"
-      [module]="currentPage"
-      (afterTested)="afterTested.emit($event)"
-      (modelChange)="uiModelChange($event)"
-      [extraButtonTmp]="saveButtonTmp"
-    ></eo-api-http-test-ui>
-    <ng-template #saveButtonTmp>
-      <!-- Disabled when testing -->
-      <button
-        type="button"
-        [nzLoading]="isSaving"
-        eo-ng-button
-        nzType="default"
-        [disabled]="!!model?.testStartTime"
-        (click)="save($event)"
-        trace
-        traceID="save_api_document_from_test"
-      >
-        {{ instance.saveTips }}
-      </button>
-    </ng-template></div
-  >`,
+  templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss']
 })
 export class ApiTestComponent implements EditTabViewComponent {

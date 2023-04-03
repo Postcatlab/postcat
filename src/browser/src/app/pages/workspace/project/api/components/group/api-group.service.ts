@@ -40,7 +40,13 @@ export class ApiGroupService {
         group.name.length > 50 ? `${group.name.slice(0, 50)}...` : group.name
       }</strong>`,
       nzOnOk: async () => {
-        await this.effect.deleteGroup(group);
+        const [, err] = await this.effect.deleteGroup(group);
+        if (err) {
+          this.feedback.error('Failed to delete');
+          modelRef.destroy();
+          return;
+        }
+        this.feedback.success('Successfully deleted');
         modelRef.destroy();
       }
     });

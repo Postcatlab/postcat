@@ -83,7 +83,7 @@ export class ExportApiComponent implements OnInit {
       if (data) {
         console.log('projectExport result', data);
         try {
-          data.postcatVersion = pkgInfo.version;
+          data.postcat = pkgInfo.version;
           let output = module[action]({ data: data || {} });
           //Change format
           if (has(output, 'status') && output.status === 0) {
