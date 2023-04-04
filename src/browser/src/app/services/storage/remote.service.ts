@@ -6,6 +6,8 @@ const ErrorStyle = 'background-color: #a73836; color: #fff;padding:3px;box-sizin
 
 const SuccessStyle = 'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;';
 
+const MessageStyle = 'color: #a73836;padding:3px;box-sizing: border-box;text-decoration-line: underline; font-weight: bold;';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,10 +38,11 @@ export class RemoteService {
             console.log('%c apiData:create - api_apiDataCreate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c apiData:create - api_apiDataCreate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -71,10 +74,11 @@ export class RemoteService {
             console.log('%c apiData:update - api_apiDataUpdate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c apiData:update - api_apiDataUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -112,10 +116,11 @@ export class RemoteService {
               console.log('%c apiData:delete - api_apiDataDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiData:delete - api_apiDataDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -151,10 +156,11 @@ export class RemoteService {
               console.log('%c apiData:detail - api_apiDataDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiData:detail - api_apiDataDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -186,10 +192,11 @@ export class RemoteService {
               console.log('%c apiData:list - api_apiDataList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiData:list - api_apiDataList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -210,10 +217,11 @@ export class RemoteService {
             console.log('%c apiData:getGroup - api_apiDataGetGroup 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c apiData:getGroup - api_apiDataGetGroup 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -252,10 +260,11 @@ export class RemoteService {
               console.log('%c apiCase:create - api_apiCaseCreate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiCase:create - api_apiCaseCreate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -294,10 +303,11 @@ export class RemoteService {
               console.log('%c apiCase:update - api_apiCaseUpdate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiCase:update - api_apiCaseUpdate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -333,10 +343,11 @@ export class RemoteService {
               console.log('%c apiCase:detail - api_apiCaseDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiCase:detail - api_apiCaseDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -372,10 +383,11 @@ export class RemoteService {
               console.log('%c apiCase:delete - api_apiCaseDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiCase:delete - api_apiCaseDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -437,10 +449,11 @@ export class RemoteService {
               console.log('%c mock:create - api_mockCreate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c mock:create - api_mockCreate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -472,10 +485,11 @@ export class RemoteService {
             console.log('%c mock:update - api_mockUpdate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c mock:update - api_mockUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -519,10 +533,11 @@ export class RemoteService {
               console.log('%c mock:list - api_mockList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c mock:list - api_mockList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -558,10 +573,11 @@ export class RemoteService {
               console.log('%c mock:detail - api_mockDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c mock:detail - api_mockDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -597,10 +613,11 @@ export class RemoteService {
               console.log('%c mock:delete - api_mockDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c mock:delete - api_mockDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -621,10 +638,11 @@ export class RemoteService {
             console.log('%c group:create - api_groupCreate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c group:create - api_groupCreate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -663,10 +681,11 @@ export class RemoteService {
               console.log('%c group:update - api_groupUpdate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c group:update - api_groupUpdate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -702,10 +721,11 @@ export class RemoteService {
               console.log('%c group:delete - api_groupDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c group:delete - api_groupDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -741,10 +761,11 @@ export class RemoteService {
               console.log('%c group:detail - api_groupDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c group:detail - api_groupDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -780,10 +801,11 @@ export class RemoteService {
               console.log('%c group:list - api_groupList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c group:list - api_groupList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -843,10 +865,11 @@ export class RemoteService {
               console.log('%c apiTestHistory:create - api_apiTestHistoryCreate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiTestHistory:create - api_apiTestHistoryCreate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -886,10 +909,11 @@ export class RemoteService {
               console.log('%c apiTestHistory:list - api_apiTestHistoryList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiTestHistory:list - api_apiTestHistoryList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -925,10 +949,11 @@ export class RemoteService {
               console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -966,10 +991,11 @@ export class RemoteService {
               console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1008,10 +1034,11 @@ export class RemoteService {
               console.log('%c environment:create - api_environmentCreate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c environment:create - api_environmentCreate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1055,10 +1082,11 @@ export class RemoteService {
               console.log('%c environment:update - api_environmentUpdate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c environment:update - api_environmentUpdate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1094,10 +1122,11 @@ export class RemoteService {
               console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1133,10 +1162,11 @@ export class RemoteService {
               console.log('%c environment:detail - api_environmentDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c environment:detail - api_environmentDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1168,10 +1198,11 @@ export class RemoteService {
               console.log('%c environment:list - api_environmentList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c environment:list - api_environmentList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1187,10 +1218,11 @@ export class RemoteService {
             console.log('%c user:readInfo - api_userReadInfo 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:readInfo - api_userReadInfo 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1206,10 +1238,11 @@ export class RemoteService {
             console.log('%c user:updateInfo - api_userUpdateInfo 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:updateInfo - api_userUpdateInfo 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1230,10 +1263,11 @@ export class RemoteService {
             console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1258,10 +1292,11 @@ export class RemoteService {
             console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1277,10 +1312,11 @@ export class RemoteService {
             console.log('%c user:refreshToken - api_userRefreshToken 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:refreshToken - api_userRefreshToken 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1296,10 +1332,11 @@ export class RemoteService {
             console.log('%c user:logout - api_userLogout 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:logout - api_userLogout 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1324,10 +1361,11 @@ export class RemoteService {
               console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1368,10 +1406,11 @@ export class RemoteService {
               console.log('%c user:thirdLogin - api_userThirdLogin 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c user:thirdLogin - api_userThirdLogin 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1392,10 +1431,11 @@ export class RemoteService {
             console.log('%c user:thirdLoginResult - api_userThirdLoginResult 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:thirdLoginResult - api_userThirdLoginResult 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1411,10 +1451,11 @@ export class RemoteService {
             console.log('%c user:getToken - api_userGetToken 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:getToken - api_userGetToken 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1430,10 +1471,11 @@ export class RemoteService {
             console.log('%c user:resetToken - api_userResetToken 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c user:resetToken - api_userResetToken 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1454,10 +1496,11 @@ export class RemoteService {
             console.log('%c workspace:create - api_workspaceCreate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c workspace:create - api_workspaceCreate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1482,10 +1525,11 @@ export class RemoteService {
             console.log('%c workspace:update - api_workspaceUpdate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c workspace:update - api_workspaceUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1510,10 +1554,11 @@ export class RemoteService {
               console.log('%c workspace:delete - api_workspaceDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1550,10 +1595,11 @@ export class RemoteService {
               console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1578,10 +1624,11 @@ export class RemoteService {
             console.log('%c workspace:addMember - api_workspaceAddMember 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c workspace:addMember - api_workspaceAddMember 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1610,10 +1657,11 @@ export class RemoteService {
               console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1638,10 +1686,11 @@ export class RemoteService {
               console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1671,10 +1720,11 @@ export class RemoteService {
               console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1699,10 +1749,11 @@ export class RemoteService {
               console.log('%c workspace:getMemberPermiss - api_workspaceGetMemberPermiss 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:getMemberPermiss - api_workspaceGetMemberPermiss 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1718,10 +1769,11 @@ export class RemoteService {
             console.log('%c workspace:list - api_workspaceList 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c workspace:list - api_workspaceList 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1746,10 +1798,11 @@ export class RemoteService {
               console.log('%c workspace:roles - api_workspaceRoles 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:roles - api_workspaceRoles 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1779,10 +1832,11 @@ export class RemoteService {
               console.log('%c workspace:setRole - api_workspaceSetRole 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c workspace:setRole - api_workspaceSetRole 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1814,10 +1868,11 @@ export class RemoteService {
               console.log('%c project:exportProject - api_projectExportProject 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:exportProject - api_projectExportProject 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1846,10 +1901,11 @@ export class RemoteService {
               console.log('%c project:memberList - api_projectMemberList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:memberList - api_projectMemberList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1874,10 +1930,11 @@ export class RemoteService {
             console.log('%c project:addMember - api_projectAddMember 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c project:addMember - api_projectAddMember 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1906,10 +1963,11 @@ export class RemoteService {
               console.log('%c project:delMember - api_projectDelMember 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:delMember - api_projectDelMember 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1938,10 +1996,11 @@ export class RemoteService {
               console.log('%c project:memberQuit - api_projectMemberQuit 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:memberQuit - api_projectMemberQuit 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -1966,10 +2025,11 @@ export class RemoteService {
             console.log('%c project:setRole - api_projectSetRole 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c project:setRole - api_projectSetRole 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -1994,10 +2054,11 @@ export class RemoteService {
               console.log('%c project:getRole - api_projectGetRole 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:getRole - api_projectGetRole 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2022,10 +2083,11 @@ export class RemoteService {
               console.log('%c project:userPermission - api_projectUserPermission 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:userPermission - api_projectUserPermission 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2050,10 +2112,11 @@ export class RemoteService {
             console.log('%c project:create - api_projectCreate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c project:create - api_projectCreate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -2082,10 +2145,11 @@ export class RemoteService {
               console.log('%c project:list - api_projectList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:list - api_projectList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2114,10 +2178,11 @@ export class RemoteService {
             console.log('%c project:update - api_projectUpdate 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c project:update - api_projectUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -2142,10 +2207,11 @@ export class RemoteService {
               console.log('%c project:delete - api_projectDelete 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:delete - api_projectDelete 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2161,10 +2227,11 @@ export class RemoteService {
             console.log('%c project:import - api_projectImport 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c project:import - api_projectImport 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -2198,10 +2265,11 @@ export class RemoteService {
               console.log('%c project:createSyncSetting - api_projectCreateSyncSetting 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:createSyncSetting - api_projectCreateSyncSetting 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2235,10 +2303,11 @@ export class RemoteService {
               console.log('%c project:updateSyncSetting - api_projectUpdateSyncSetting 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:updateSyncSetting - api_projectUpdateSyncSetting 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2274,10 +2343,11 @@ export class RemoteService {
               console.log('%c project:delSyncSetting - api_projectDelSyncSetting 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:delSyncSetting - api_projectDelSyncSetting 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2309,10 +2379,11 @@ export class RemoteService {
               console.log('%c project:getSyncSettingList - api_projectGetSyncSettingList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:getSyncSettingList - api_projectGetSyncSettingList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2346,10 +2417,11 @@ export class RemoteService {
               console.log('%c project:syncBatchUpdate - api_projectSyncBatchUpdate 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c project:syncBatchUpdate - api_projectSyncBatchUpdate 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2365,10 +2437,11 @@ export class RemoteService {
             console.log('%c role:list - api_roleList 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c role:list - api_roleList 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -2396,10 +2469,11 @@ export class RemoteService {
             console.log('%c projectShare:createShare - api_projectShareCreateShare 接口请求成功 %c', SuccessStyle, '');
             return resolve([data, null]);
           }
-          console.log('Error: ', message);
+          console.log(`%c Error: ${message} %c`, MessageStyle, '');
           resolve([null, { code, message, data }]);
         },
         error: error => {
+          console.log(error);
           console.log('%c projectShare:createShare - api_projectShareCreateShare 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
@@ -2431,10 +2505,11 @@ export class RemoteService {
               console.log('%c projectShare:getShareLink - api_projectShareGetShareLink 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c projectShare:getShareLink - api_projectShareGetShareLink 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2459,10 +2534,11 @@ export class RemoteService {
               console.log('%c projectShare:deleteShare - api_projectShareDeleteShare 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c projectShare:deleteShare - api_projectShareDeleteShare 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2487,10 +2563,11 @@ export class RemoteService {
               console.log('%c share:projectDetail - api_shareProjectDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:projectDetail - api_shareProjectDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2519,10 +2596,11 @@ export class RemoteService {
               console.log('%c share:groupList - api_shareGroupList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:groupList - api_shareGroupList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2551,10 +2629,11 @@ export class RemoteService {
               console.log('%c share:apiDataDetail - api_shareApiDataDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:apiDataDetail - api_shareApiDataDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2583,10 +2662,11 @@ export class RemoteService {
               console.log('%c share:mockDetail - api_shareMockDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:mockDetail - api_shareMockDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2615,10 +2695,11 @@ export class RemoteService {
               console.log('%c share:caseDetail - api_shareCaseDetail 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:caseDetail - api_shareCaseDetail 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
@@ -2643,10 +2724,11 @@ export class RemoteService {
               console.log('%c share:environmentList - api_shareEnvironmentList 接口请求成功 %c', SuccessStyle, '');
               return resolve([data, null]);
             }
-            console.log('Error: ', message);
+            console.log(`%c Error: ${message} %c`, MessageStyle, '');
             resolve([null, { code, message, data }]);
           },
           error: error => {
+            console.log(error);
             console.log('%c share:environmentList - api_shareEnvironmentList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
