@@ -1,8 +1,8 @@
 <div class="h-full flex flex-col test-page-{{ currentPage }}">
   <ng-container *ngIf="currentPage === 'caseTest'">
-    <form nz-form nzLayout="inline" class="px-[15px] py-[8px]" *ngIf="model?.request" (ngSubmit)="saveName()">
+    <form nz-form nzLayout="inline" class="px-[15px] min-h-[50px]" *ngIf="model?.request" (ngSubmit)="saveName()">
       <nz-form-item class="flex items-center">
-        <nz-form-control i18n-nzErrorTip nzErrorTip="Please input case name" *ngIf="isNameEdit">
+        <nz-form-control *ngIf="isNameEdit">
           <input
             nz-input
             [(ngModel)]="name"

@@ -32,7 +32,6 @@ export class TestServerRemoteService extends TestServerService {
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = e => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        console.log(xhr.status);
         switch (xhr.status) {
           case 200: {
             this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));

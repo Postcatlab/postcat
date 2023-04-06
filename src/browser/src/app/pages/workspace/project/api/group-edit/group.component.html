@@ -20,6 +20,9 @@
           <button eo-ng-button nzType="text" class="ml-[5px]" (click)="startEditGroupName()">
             <eo-iconpark-icon name="edit"></eo-iconpark-icon>
           </button>
+          <button (click)="group.toDelete(model)" eo-ng-button nzType="text" class="ml-[5px]">
+            <eo-iconpark-icon name="delete"></eo-iconpark-icon>
+          </button>
         </ng-container>
       </div>
     </nz-form-control>

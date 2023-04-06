@@ -62,9 +62,9 @@ test('Basic Operate', async ({ page }) => {
 
 test('Check All Param Operate', async ({ page }) => {
   await page.getByRole('banner').getByRole('button').click();
-  // //Url
+  //Url
   await page.locator('input[name="uri"]').fill('/?json');
-  // //Name
+  //Name
   await page.locator('input[name="name"]').click();
   await page.locator('input[name="name"]').fill('JSON');
   //?example descript isRequire addChild delete
@@ -155,9 +155,6 @@ test('Save Form Data  API', async ({ page }) => {
   //Save API
   await page.locator('input[name="uri"]').press('Meta+s');
   await ifTipsExist(page, 'Added successfully');
-
-  //XML
-  //Raw
 });
 
 test('Save XML API', async ({ page }) => {
@@ -182,9 +179,6 @@ test('Save XML API', async ({ page }) => {
   //Save API
   await page.locator('input[name="uri"]').press('Meta+s');
   await ifTipsExist(page, 'Added successfully');
-
-  //XML
-  //Raw
 });
 
 test('Save Raw API', async ({ page }) => {
@@ -204,12 +198,7 @@ test('Save Raw API', async ({ page }) => {
       Example: 'value'
     }
   });
-  //Import
-
   //Save API
   await page.locator('input[name="uri"]').press('Meta+s');
   await ifTipsExist(page, 'Added successfully');
-
-  //XML
-  //Raw
 });
