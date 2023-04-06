@@ -7,6 +7,7 @@ import { ApiTestUtilService } from 'pc/browser/src/app/pages/workspace/project/a
 import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/api/service/project-api.service';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
+import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -27,6 +28,7 @@ export class ApiMockService {
     private message: EoNgFeedbackMessageService,
     private apiEffect: ApiEffectService,
     private projectApi: ProjectApiService,
+    private modalService: ModalService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.mockOperateUrl = this.tabsConfig.pathByName[PageUniqueName.HttpMock];
@@ -130,13 +132,19 @@ export class ApiMockService {
     });
   }
   async toDelete(id: number) {
-    const data = await this.deleteMock(id);
-    if (!data) {
-      this.message.error($localize`Failed to delete`);
-      return;
-    }
-    this.message.success($localize`Successfully deleted`);
-    this.apiEffect.deleteMockDetail();
+    const modelRef = this.modalService.confirm({
+      nzTitle: $localize`Deletion Confirmation?`,
+      nzContent: $localize``,
+      nzOnOk: async () => {
+        const data = await this.deleteMock(id);
+        if (!data) {
+          this.message.error($localize`Failed to delete`);
+          return;
+        }
+        this.message.success($localize`Successfully deleted`);
+        this.apiEffect.deleteMockDetail();
+      }
+    });
   }
   async copy(mock_id: string) {
     const [res] = await this.api.api_mockDetail({ id: mock_id });

@@ -1,7 +1,7 @@
 import { KeyValue } from '@angular/common';
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
 import { TabOperateService } from 'pc/browser/src/app/components/eo-ui/tab/tab-operate.service';
 import { TabStorageService } from 'pc/browser/src/app/components/eo-ui/tab/tab-storage.service';
@@ -35,8 +35,12 @@ export class EoTabComponent implements OnInit, OnDestroy {
     private modal: ModalService,
     private router: Router,
     public store: StoreService,
-    private trace: TraceService
+    private trace: TraceService,
+    private nzContextMenuService: NzContextMenuService
   ) {}
+  contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent, tabID): void {
+    this.nzContextMenuService.create($event, menu);
+  }
   ngOnInit(): void {
     this.watchRouterChange();
     this.watchPageLeave();
@@ -49,6 +53,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
       handleDataBeforeGetCache: this.handleDataBeforeGetCache
     });
   }
+
   async newTab(key = undefined) {
     if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
       return false;
@@ -200,13 +205,19 @@ export class EoTabComponent implements OnInit, OnDestroy {
       handleDataBeforeCache: this.handleDataBeforeCache
     });
   }
+  checkIsFirstTab(uuid) {
+    return this.tabStorage.tabOrder.findIndex(val => val === uuid) === 0;
+  }
+  checkIsLastTab(uuid) {
+    return this.tabStorage.tabOrder.length - 1 === this.tabStorage.tabOrder.findIndex(val => val === uuid);
+  }
   /**
    * Tab  Close Operate
    *
    * @param action
    */
-  closeTabByOperate(action: TabOperate | string) {
-    this.tabOperate.closeTabByOperate(action);
+  closeTabByOperate(action: TabOperate | string, uuid?) {
+    this.tabOperate.closeTabByOperate(action, uuid);
   }
   private watchRouterChange() {
     this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
