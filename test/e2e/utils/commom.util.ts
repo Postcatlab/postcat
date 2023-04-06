@@ -1,10 +1,13 @@
 import { expect } from '@playwright/test';
 export const ECHO_API_URL = 'http://demo.gokuapi.com:8280/Web/Test/all/print';
 export const addTextToEditor = async (page, text, monacoEditor = page.locator('.ant-modal-body .monaco-editor').first()) => {
-  const isExist = await monacoEditor.count();
+  const isExist = await monacoEditor.isVisible();
   monacoEditor = isExist ? monacoEditor : await page.locator('.monaco-editor').first();
+  //? some times monaco editor not ready
+  await page.waitForTimeout(500);
   await monacoEditor.click();
   await page.keyboard.press('Meta+KeyA');
+  await page.keyboard.press('Delete');
   await page.keyboard.type(text);
 };
 export const clickButtonByIconName = async (page, name) => {
@@ -27,8 +30,42 @@ export const operateGroup = async (page, groupName, operateName) => {
     await page.getByText(operateName, { exact: true }).click();
   }
 };
+export const closeTab = async (page, tabName) => {
+  await page.getByRole('tab').getByText(tabName).hover();
+  await page.getByRole('button', { name: 'Close tab' }).click();
+};
 export const ifTipsExist = async (page, tips) => {
   await expect(page.locator(`text=${tips}`)).toBeVisible();
+};
+export const addEnv = async (page, env?) => {
+  env = {
+    name: 'DEV',
+    host: 'http://demo.gokuapi.com:8280',
+    globalVariable: [
+      {
+        Name: 'globalName',
+        Value: 'globalVariable',
+        Description: 'globalDescription'
+      },
+      {
+        Name: 'pathVariable',
+        Value: 'print'
+      }
+    ],
+    ...env
+  };
+  //Add env
+  await page.locator('a').filter({ hasText: 'Environment' }).click();
+  await page.getByRole('banner').getByRole('button').click();
+  await page.getByLabel('Name').fill(env.name);
+  await page.getByLabel('Host').click({ timeout: 1000 });
+  await page.getByLabel('Host').fill(env.host);
+  await adaTabledRow(page, {
+    enums: env.globalVariable
+  });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await ifTipsExist(page, 'Added successfully');
+  await closeTab(page, env.name);
 };
 
 export const login = async page => {

@@ -68,7 +68,16 @@ export class ThemeService {
 
   queryExtensionThemes() {
     const extensions = this.themeExtension.getExtensionThemes(this.coreThemes);
-    this.themes.push(...extensions);
+    extensions.forEach(val => {
+      const index = this.themes.findIndex(val1 => val1.id === val.id);
+      //Not exsit
+      if (index === -1) {
+        this.themes.push(val);
+        return;
+      }
+      //Has exist
+      this.themes.splice(index, 1, val);
+    });
   }
   changeEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
     const editorTheme = this.getEditorTheme(currentTheme);
