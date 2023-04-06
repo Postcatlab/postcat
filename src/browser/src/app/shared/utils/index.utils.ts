@@ -79,10 +79,12 @@ export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
  * @param enum
  */
 export const enumsToObject = tEnum =>
-  Object.entries<any>(tEnum).reduce((acc, [key, value]) => {
-    acc[value] = key;
-    return acc;
-  }, {});
+  Object.values<any>(tEnum)
+    .filter(val => !isNumber(val))
+    .reduce((acc, val) => {
+      acc[tEnum[val]] = val;
+      return acc;
+    }, {});
 /**
  * Reverse Typescript enums key and value
  *

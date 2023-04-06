@@ -439,6 +439,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
 
       //Get runtime instance
       const ctx = await pmRuntime.createContextAsync({ timeout: 10000, disableLegacyAPIs: true });
+      let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpBasicEnv.envParam || {});
       const context = {
         enviroment: [],
         request: {
@@ -463,7 +464,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
           },
           header: Object.keys(inputData.headers).map(keyName => ({ key: keyName, value: inputData.headers[keyName] }))
         },
-        globals: Object.keys(global.eoTestGlobals).map(keyName => ({ key: keyName, type: 'any', value: global.eoTestGlobals[keyName] }))
+        globals: Object.keys(tmpEnvGlobals).map(keyName => ({ key: keyName, type: 'any', value: tmpEnvGlobals[keyName] }))
       };
       switch (inputData.requestType) {
         case '0': {
@@ -751,6 +752,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
       }
     }
     let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpEnviroments || {});
+    tmpOutput.url = tmpTargetTypeData.apiUrl.split('?')[0];
     for (let key in tmpEnvGlobals) {
       let val = tmpEnvGlobals[key];
       let templateParamObject = {};
@@ -760,7 +762,7 @@ privateFun.parseBeforeCode = async function (scritEngines = 'pm', inputData, inp
         delete tmp_query_param_obj[tmp_query_param_key];
         tmp_query_param_obj[_LibsCommon.replaceAll('{{' + key + '}}', val || '', tmp_query_param_key)] = tmp_query_param_val;
       }
-      tmpOutput.url = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmpTargetTypeData.apiUrl.split('?')[0]);
+      tmpOutput.url = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmpOutput.url);
       for (let childKey in tmpHeaders) {
         tmpHeaders[childKey] = _LibsCommon.replaceAll('{{' + key + '}}', val, tmpHeaders[childKey]);
         if (childKey.indexOf('{{' + key + '}}') > -1) {
