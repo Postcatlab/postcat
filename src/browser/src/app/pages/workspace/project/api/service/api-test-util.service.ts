@@ -5,8 +5,10 @@ import {
   IGNORE_HEADERS,
   JsonRootType,
   Protocol,
-  RequestMethod
+  RequestMethod,
+  requestMethodMap
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
+import { ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import { syncUrlAndQuery } from 'pc/browser/src/app/pages/workspace/project/api/utils/api.utils';
 import { parseCurl } from 'pc/browser/src/app/pages/workspace/project/api/utils/parse-curl.utils';
 import { ApiData, BodyParam, HeaderParam, RestParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
@@ -192,52 +194,73 @@ export class ApiTestUtilService {
   /**
    * Parse curl to test formdata
    */
-  getTestDataFromCurl(text, originModel: testViewModel): testViewModel {
+  getTestDataFromCurl(text, originModel: testViewModel): [testViewModel, string?] {
     const result: testViewModel = eoDeepCopy(originModel);
+    let requestObj;
     try {
-      const requestObj = parseCurl(text || '');
-      console.log(requestObj);
+      requestObj = parseCurl(text || '');
+      console.log('getTestDataFromCurl', requestObj);
+    } catch (e) {
+      pcConsole.error(`parseCurl error: ${e}`);
+      return [result, e.message];
+    }
+    result.request.uri = requestObj.url;
+    //@ts-ignore
+    result.request.apiAttrInfo.requestMethod = RequestMethod[requestObj.method];
+    //Set Query
+    result.request.requestParams.queryParams = Object.keys(requestObj.query)
+      .map(name => ({
+        name,
+        value: requestObj.query[name]
+      }))
+      .map(val => {
+        return {
+          name: val.name,
+          isRequired: 1,
+          paramAttr: {
+            example: val.value
+          }
+        };
+      });
 
-      result.request.uri = requestObj.url;
-      result.request.apiAttrInfo.requestMethod = RequestMethod[requestObj.method];
-      //Set Query
-      result.request.requestParams.queryParams = Object.keys(requestObj.query)
-        .map(name => ({
-          name,
-          value: requestObj.query[name]
-        }))
-        .map(val => {
-          return {
-            name: val.name,
+    //Set Header
+    result.request.requestParams.headerParams = Object.keys(requestObj.header)
+      .map(name => ({
+        name,
+        value: requestObj.header[name]
+      }))
+      //Ignore some headers
+      .filter(val => !IGNORE_HEADERS.includes(val.name.toLowerCase()))
+      .map(val => {
+        return {
+          name: val.name,
+          isRequired: 1,
+          paramAttr: {
+            example: val.value
+          }
+        };
+      });
+
+    //Set body and contentType
+    const formDataContentType = FORMDATA_CONTENT_TYPE_BY_ABRIDGE.find(val => requestObj.contentType?.includes(val.value));
+    if (formDataContentType) {
+      result.request.apiAttrInfo.contentType = ApiBodyType.FormData;
+      if (formDataContentType.value === 'application/x-www-form-urlencoded') {
+        //Urlencode formdata
+        const formArr: BodyParam[] = [];
+        new URLSearchParams(requestObj.body).forEach((val, name) => {
+          formArr.push({
+            name,
+            dataType: ApiParamsType.string,
             isRequired: 1,
             paramAttr: {
-              example: val.value
+              example: val
             }
-          };
+          });
         });
-
-      //Set Header
-      result.request.requestParams.headerParams = Object.keys(requestObj.header)
-        .map(name => ({
-          name,
-          value: requestObj.header[name]
-        }))
-        //Ignore some headers
-        .filter(val => !IGNORE_HEADERS.includes(val.name.toLowerCase()))
-        .map(val => {
-          return {
-            name: val.name,
-            isRequired: 1,
-            paramAttr: {
-              example: val.value
-            }
-          };
-        });
-
-      //Set body and contentType
-      if (FORMDATA_CONTENT_TYPE_BY_ABRIDGE.find(val => requestObj.contentType.includes(val.value))) {
-        result.request.apiAttrInfo.contentType = ApiBodyType.FormData;
-        //Get formdata
+        result.request.requestParams.bodyParams = formArr;
+      } else {
+        //Multipart-formdata
         const formArr: BodyParam[] = [];
         const nameReg = /name=\"(.+?)\"/;
         requestObj.body
@@ -247,6 +270,7 @@ export class ApiTestUtilService {
             const fIndex = Math.floor(index / 2);
             //FormName
             if (!formArr[fIndex]) {
+              debugger;
               const name = val.match(nameReg)[1];
               formArr[fIndex] = {
                 name: name,
@@ -260,19 +284,17 @@ export class ApiTestUtilService {
             formArr[fIndex].paramAttr.example = val;
           });
         result.request.requestParams.bodyParams = formArr;
-      } else {
-        result.request.apiAttrInfo.contentType = ApiBodyType.Raw;
-        result.request.requestParams.bodyParams = [
-          {
-            binaryRawData: requestObj.body
-          }
-        ];
       }
-    } catch (e) {
-      pcConsole.error(`parseCurl error: ${e}`);
+    } else {
+      result.request.apiAttrInfo.contentType = ApiBodyType.Raw;
+      result.request.requestParams.bodyParams = [
+        {
+          binaryRawData: requestObj.body
+        }
+      ];
     }
     console.log('getTestDataFromCurl', result);
-    return result;
+    return [result];
   }
   getContentType(headers = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
@@ -287,7 +309,7 @@ export class ApiTestUtilService {
    */
   addOrReplaceContentType(contentType: ContentType | string, headers: HeaderParam[] | any = []) {
     const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
-    if (existHeader?.paramAttr) {
+    if (existHeader?.paramAttr && existHeader.disableEdit) {
       existHeader.paramAttr.example = contentType;
       return headers;
     }
@@ -297,7 +319,8 @@ export class ApiTestUtilService {
         name: 'content-type',
         paramAttr: {
           example: contentType
-        }
+        },
+        disableEdit: true
       },
       ...headers
     ];

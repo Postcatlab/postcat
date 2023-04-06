@@ -226,19 +226,42 @@ test('Global Variable Test', async ({ page }) => {
   expect(res2.body).toEqual(`globalVariable=globalVariable`);
 });
 
-// test('Import Curl Test', async ({ page }) => {
-//   await page.getByPlaceholder('Enter URL').click();
-//   await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
-//   //!Change to XML prevent JSON/Raw monaco editor autocompletel value
-//   await page.getByText('Text').click();
-//   await page.getByText('XML').click();
-//   await addTextToEditor(page, `{"test":1,"test1":2}`);
-//   const res = await testAndWaitForResponse(page);
-//   expect(res.body).toEqual(`{"test":1,"test1":2}`);
+test('Import Curl Test', async ({ page }) => {
+  await page.getByPlaceholder('Enter URL').click();
+  //Form-Data application/x-www-form-urlencoded
+  await page.getByPlaceholder('Enter URL').fill(`curl 'http://demo.gokuapi.com:8280/Web/Test/all/print?query=query' \
+  -H 'Accept: */*' \
+  -H 'Accept-Language: en,zh-CN;q=0.9,zh;q=0.8' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Cookie: uid=1' \
+  -H 'Eo-Token: 85f3cfbb-e185-48d9-8dc0-f5da86177329' \
+  -H 'Origin: chrome-extension://plecpgbpgkbmgigendedfaahcajeaimi' \
+  -H 'Proxy-Connection: keep-alive' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
+  -H 'header: header' \
+  --data-raw 'form=value&form2=value' \
+  --compressed \
+  --insecure`);
+  const res = await testAndWaitForResponse(page);
+  expect(res.body).toEqual(`form=value&form2=value`);
+  expect(res.query.query[0]).toEqual('query');
+  expect(res.header.Header[0]).toEqual('header');
 
-//   //restore from history
-//   await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
-//   await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
-//   const res1 = await testAndWaitForResponse(page);
-//   expect(res1.body).toEqual(`{"test":1,"test1":2}`);
-// });
+  //Form-Dara
+  // await page.getByPlaceholder('Enter URL').click();
+  // await page.getByPlaceholder('Enter URL').fill(`curl 'http://demo.gokuapi.com:8280/Web/Test/all/print?query=query' \
+  // -H 'Accept: */*' \
+  // -H 'Accept-Language: en,zh-CN;q=0.9,zh;q=0.8' \
+  // -H 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryVBz1dMCpoC5JE3xx' \
+  // -H 'Cookie: uid=1' \
+  // -H 'Eo-Token: 5815ecc4-20ab-40ba-a943-f5e7c3624274' \
+  // -H 'Origin: chrome-extension://plecpgbpgkbmgigendedfaahcajeaimi' \
+  // -H 'Proxy-Connection: keep-alive' \
+  // -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36' \
+  // -H 'header: header' \
+  // --data-raw $'------WebKitFormBoundaryVBz1dMCpoC5JE3xx\r\nContent-Disposition: form-data; name="form"\r\n\r\nvalue\r\n------WebKitFormBoundaryVBz1dMCpoC5JE3xx\r\nContent-Disposition: form-data; name="file"; filename="latest.yml"\r\nContent-Type: application/x-yaml\r\n\r\nversion: 0.5.0\nfiles:\n  - url: Postcat-Setup-0.5.0.exe\n    sha512: Hu07AiOfO9xGuddFfvP9BItyWjylYi5Kc2BLbGTj22P4damBk8oR+2yacaW4t/M0fMdHnmyXMXGRYLN/u6PhAQ==\n    size: 90365912\npath: Postcat-Setup-0.5.0.exe\nsha512: Hu07AiOfO9xGuddFfvP9BItyWjylYi5Kc2BLbGTj22P4damBk8oR+2yacaW4t/M0fMdHnmyXMXGRYLN/u6PhAQ==\nreleaseDate: \'2023-04-04T12:03:57.000Z\'\n\r\n------WebKitFormBoundaryVBz1dMCpoC5JE3xx--\r\n' \
+  // --compressed \
+  // --insecure`);
+  // const res1 = await testAndWaitForResponse(page);
+  // expect(res1.body).toEqual(`form=value&f1orm2=value`);
+});

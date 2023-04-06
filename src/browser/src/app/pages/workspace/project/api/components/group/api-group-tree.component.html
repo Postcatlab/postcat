@@ -64,7 +64,7 @@
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <div class="flex items-center justify-between tree-node" [ngSwitch]="origin.module">
-          <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
+          <div class="flex items-center" (contextmenu)="contextMenu($event, groupMenu)" [style.width]="'calc(100% - 30px)'">
             <!-- Folder -->
             <ng-container *ngSwitchDefault>
               <eo-iconpark-icon
@@ -91,6 +91,15 @@
               <span class="text-[12px] truncate">{{ origin.title }}</span>
             </ng-container>
           </div>
+          <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <ng-container *ngFor="let item of operateByModule[origin.module || groupModuleName].list">
+                <li nz-menu-item (click)="item.click(origin)">
+                  {{ item.title }}
+                </li>
+              </ng-container>
+            </ul>
+          </eo-ng-dropdown-menu>
           <span
             class="flex tree-node-operate"
             *ngIf="isEdit&&(!operateByModule[origin.module || groupModuleName].showFn||operateByModule[origin.module || groupModuleName].showFn?.(origin))"
@@ -99,15 +108,6 @@
             <button eo-ng-button nzType="text" class="tree-item-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
               <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
             </button>
-            <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
-              <ul nz-menu>
-                <ng-container *ngFor="let item of operateByModule[origin.module || groupModuleName].list">
-                  <li nz-menu-item (click)="item.click(origin)">
-                    {{ item.title }}
-                  </li>
-                </ng-container>
-              </ul>
-            </eo-ng-dropdown-menu>
           </span>
         </div>
       </div>

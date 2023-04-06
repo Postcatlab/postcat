@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   OnDestroy,
   ChangeDetectorRef,
   Input,
@@ -9,13 +8,13 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  HostListener,
   OnChanges,
   Inject,
   TemplateRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { isEmpty, isEqual } from 'lodash-es';
 import { autorun, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
@@ -51,14 +50,7 @@ import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 
 import { enumsToArr, JSONParse } from '../../../../../../shared/utils/index.utils';
-import {
-  ApiBodyType,
-  ApiParamsType,
-  BASIC_TABS_INFO,
-  BodyContentType as ContentTypeEnum,
-  RequestMethod,
-  TabsConfig
-} from '../../constants/api.model';
+import { ApiBodyType, ApiParamsType, BASIC_TABS_INFO, RequestMethod, TabsConfig } from '../../constants/api.model';
 import { ApiParamsNumPipe } from '../../pipe/api-param-num.pipe';
 import { ApiTestUtilService } from '../../service/api-test-util.service';
 import { TestServerService } from '../../service/test-server/test-server.service';
@@ -144,6 +136,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     private project: ProjectApiService,
     private elementRef: ElementRef,
     private apiEdit: ApiEditUtilService,
+    private feedback: EoNgFeedbackMessageService,
     private trace: TraceService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
@@ -275,6 +268,18 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   private fixedHeaderAndContentType() {
     const bodyType = this.model.request?.apiAttrInfo?.contentType;
     if (bodyType !== ApiBodyType.Binary) {
+      //* User customer headers first
+      const userCustomerHeader = this.model.request.requestParams.headerParams.find(
+        //@ts-ignore
+        val => val.name.toLowerCase() === 'content-type' && !val.disableEdit
+      );
+      if (userCustomerHeader) {
+        const contentType = this.getContentTypeByBodyType();
+        this.model.userSelectedContentType ??= contentType as ContentType;
+        return;
+      }
+
+      //* app set header default
       const contentType = this.getContentTypeByBodyType();
       this.model.request.requestParams.headerParams = this.apiTestUtil.addOrReplaceContentType(
         contentType,
@@ -474,9 +479,14 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.validateForm = this.fb.group(controls);
 
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
-      //Watch uri changes
+      //Import curl when uri match
       if (x?.uri?.trim().startsWith('curl')) {
-        this.model = this.apiTestUtil.getTestDataFromCurl(x.uri, this.model);
+        const [result, err] = this.apiTestUtil.getTestDataFromCurl(x.uri, this.model);
+        if (err) {
+          this.feedback.error($localize`Curl text error: ${err}`);
+          return;
+        }
+        this.model = result;
         this.validateForm.patchValue({
           uri: this.model.request.uri,
           method: this.model.request.apiAttrInfo?.requestMethod

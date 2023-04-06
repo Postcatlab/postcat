@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { closeTab, ifTipsExist, operateGroup, seletGroup } from '../utils/commom.util';
+import { clickButtonByIconName, closeTab, ifTipsExist, operateGroup, seletGroup } from '../utils/commom.util';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Got it' }).click();
@@ -24,13 +24,19 @@ test.beforeEach(async ({ page }) => {
 test('Basic Operate', async ({ page }) => {
   //Edit group
   await operateGroup(page, 'Sub Group', 'Edit');
-  await page.locator('nz-form-control').filter({ hasText: 'Sub Group' }).getByRole('button').click();
+  await clickButtonByIconName(page, 'edit');
   await page.getByPlaceholder('Group Name').fill('Sub Group after');
   await page.getByPlaceholder('Group Name').press('Enter');
 
-  //Delete group
+  //Delete group from tree
   await operateGroup(page, 'Sub Group', 'Delete');
   await page.getByRole('button', { name: 'Ok' }).click();
+  await ifTipsExist(page, 'Successfully deleted');
+
+  //Delete group from edit page
+  await page.locator('nz-tree-node-title div').first().click();
+  await clickButtonByIconName(page, 'delete');
+  await page.getByRole('button', { name: 'OK' }).click();
   await ifTipsExist(page, 'Successfully deleted');
 });
 test('Search', async ({ page }) => {
