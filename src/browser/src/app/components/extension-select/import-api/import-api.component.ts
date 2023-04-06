@@ -112,6 +112,7 @@ export class ImportApiComponent implements OnInit {
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     let { name, content } = this.uploadData;
+    console.log(content);
     try {
       const [data, err] = module[action](content);
       console.log('import data', window.structuredClone?.(data));

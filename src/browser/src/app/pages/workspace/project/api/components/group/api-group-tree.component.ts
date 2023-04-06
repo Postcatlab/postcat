@@ -363,7 +363,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           },
           {
             title: $localize`:@Delete:Delete`,
-            click: ({ relationInfo: item }) => this.mockService.toDelete(item.id)
+            click: ({ relationInfo: item }) => this.mockService.toDelete(item.id, item.name)
           }
         ]
       },
