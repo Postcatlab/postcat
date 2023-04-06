@@ -52,7 +52,7 @@ export class ApiTestUtilService {
    */
   formatUIApiDataToStorage(inData: { request: Partial<ApiData>; response: ApiTestResData }): ApiData {
     inData = eoDeepCopy(inData);
-    pcConsole.log('formatUIApiDataToStorage', inData);
+    // pcConsole.log('formatUIApiDataToStorage', inData);
     const result = {
       ...inData.request,
       protocol: Protocol.HTTP,

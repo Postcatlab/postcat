@@ -339,8 +339,7 @@ export class TabOperateService {
   getCurrentTab() {
     return this.getTabByIndex(this.selectedIndex);
   }
-  closeTabByOperate(uuid, action: string | TabOperate) {
-    const currentTabID = uuid || this.tabStorage.tabOrder[this.selectedIndex];
+  closeTabByOperate(action: string | TabOperate, currentTabID = this.tabStorage.tabOrder[this.selectedIndex]) {
     let tabsObj = {
       //Close tab has hasChanged tab
       needTips: false,

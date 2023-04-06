@@ -208,14 +208,14 @@
               errObj: /getaddrinfo enotfound/i.test(tmpInputErr.message)
                 ? {
                     name: 'API请求地址有误',
-                    message: `请检查是否正确填写URL以及URL是否允许访问：${tmpInputErr.message}`
+                    message: `请检查是否正确填写URL以及URL是否允许访问，${tmpInputErr.message}`
                   }
                 : /socket hang up/i.test(tmpInputErr.message)
                 ? {
                     name: '请求错误',
                     message:
                       SOCKET_HANG_UP_TIP_TEXT_OBJ['SAAS_SERVER'] ||
-                      `无法访问目标地址，请检查接口是否能被正常访问，是否存在网络隔离或防火墙：${tmpInputErr.message}`
+                      `无法访问目标地址，请检查接口是否能被正常访问，是否存在网络隔离或防火墙，${tmpInputErr.message}`
                   }
                 : tmpInputErr
             },

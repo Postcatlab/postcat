@@ -145,10 +145,10 @@ export abstract class TestServerService implements TestServer {
         contentType: ['formData', 'raw', 'json', 'xml', 'binary'][history.requestInfo.requestType] || 'raw'
       }
     };
-
+    console.log(response.body);
     if (
       response.statusCode === 0 &&
-      ['getaddrinfo enotfound', 'socket hang up'].some(val => response.body.includes(val)) &&
+      ['getaddrinfo enotfound'].some(val => response.body.toLowerCase().includes(val)) &&
       !this.electron.isElectron
     ) {
       response.body = $localize`Service connection failed. The server test is currently being used.\nIf the current test URL is a local API, please download the desktop and re-initiate the test.`;

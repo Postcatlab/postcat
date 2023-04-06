@@ -216,8 +216,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
    *
    * @param action
    */
-  closeTabByOperate(uuid, action: TabOperate | string) {
-    this.tabOperate.closeTabByOperate(uuid, action);
+  closeTabByOperate(action: TabOperate | string, uuid?) {
+    this.tabOperate.closeTabByOperate(action, uuid);
   }
   private watchRouterChange() {
     this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {

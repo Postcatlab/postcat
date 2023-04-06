@@ -275,7 +275,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
       );
       if (userCustomerHeader) {
         const contentType = this.getContentTypeByBodyType();
-        this.model.userSelectedContentType ??= contentType as ContentType;
+        this.model.userSelectedContentType = contentType as ContentType;
         return;
       }
 
@@ -285,7 +285,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
         contentType,
         this.model.request.requestParams.headerParams
       );
-      this.model.userSelectedContentType ??= contentType as ContentType;
+      this.model.userSelectedContentType = contentType as ContentType;
       return;
     }
 
@@ -299,6 +299,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
   changeBodyType($event) {
     StorageUtil.set('api_test_body_type', $event);
+    this.fixedHeaderAndContentType();
   }
   handleBottomTabSelect(tab) {
     if (tab.index === 2) {
