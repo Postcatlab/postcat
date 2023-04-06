@@ -146,7 +146,11 @@ export abstract class TestServerService implements TestServer {
       }
     };
 
-    if (response.statusCode === 0 && !this.electron.isElectron) {
+    if (
+      response.statusCode === 0 &&
+      ['getaddrinfo enotfound', 'socket hang up'].some(val => response.body.includes(val)) &&
+      !this.electron.isElectron
+    ) {
       response.body = $localize`Service connection failed. The server test is currently being used.\nIf the current test URL is a local API, please download the desktop and re-initiate the test.`;
     }
     result = {

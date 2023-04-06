@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 
-import { adaTabledRow, addTextToEditor, ECHO_API_URL, ifTipsExist } from '../utils/commom.util';
+import { adaTabledRow, addEnv, addTextToEditor, ECHO_API_URL, ifTipsExist } from '../utils/commom.util';
 const testAndWaitForResponse = async page => {
   const responsePromise = page.waitForResponse('**/api/unit');
   await page.getByRole('button', { name: 'Send' }).click();
@@ -75,7 +75,7 @@ test('Unit Test', async ({ page }) => {
  */
 test('Import Data Unit Test', async ({ page }) => {
   await page.getByPlaceholder('Enter URL').click();
-  await page.getByPlaceholder('Enter URL').fill('http://demo.gokuapi.com:8280/Web/Test/all/print');
+  await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
   //Header
   await page.getByText('Headers').click();
   await adaTabledRow(page, {
@@ -167,3 +167,78 @@ test('Raw Test', async ({ page }) => {
   const res1 = await testAndWaitForResponse(page);
   expect(res1.body).toEqual(`{"test":1,"test1":2}`);
 });
+
+/**
+ * Global Varibale Test
+ */
+test('Global Variable Test', async ({ page }) => {
+  //Env Globals
+  await addEnv(page);
+
+  await page.getByPlaceholder('Enter URL').click();
+  await page.getByPlaceholder('Enter URL').fill('/Web/Test/all/{{pathVariable}}');
+  //JSON Body
+  await addTextToEditor(page, `{"{{globalName}}":"{{globalName}}"}`);
+  //Header
+  await page.getByText('Headers').click();
+  //First row is content-type
+  await adaTabledRow(page, {
+    index: 1,
+    valueByKey: {
+      Name: '{{globalName}}',
+      Value: '{{globalName}}'
+    }
+  });
+
+  //Query
+  await page.getByText('Query').click();
+  await adaTabledRow(page, {
+    index: 0,
+    valueByKey: {
+      Name: '{{globalName}}',
+      Value: '{{globalName}}'
+    }
+  });
+  const res = await testAndWaitForResponse(page);
+  expect(res.path).toEqual('/Web/Test/all/print');
+  expect(res.body).toEqual(`{"globalVariable":"globalVariable"}`);
+  expect(res.query.globalVariable[0]).toEqual('globalVariable');
+  expect(res.header.Globalvariable[0]).toEqual('globalVariable');
+
+  //Script Globals
+  await page.getByText('Script Action').click();
+  await addTextToEditor(page, `pc.globals.set("scriptVariable","scriptVariable");`);
+  await page.getByText('Body').first().click();
+  await addTextToEditor(page, `{"{{globalName}}":"{{globalName}}","{{scriptVariable}}":"{{scriptVariable}}"}`);
+  const res1 = await testAndWaitForResponse(page);
+  expect(res1.body).toEqual(`{"globalVariable":"globalVariable","scriptVariable":"scriptVariable"}`);
+
+  //Form-data
+  await page.getByText('Form-Data').click();
+  await adaTabledRow(page, {
+    index: 0,
+    valueByKey: {
+      Name: '{{globalName}}',
+      Value: '{{globalName}}'
+    }
+  });
+  const res2 = await testAndWaitForResponse(page);
+  expect(res2.body).toEqual(`globalVariable=globalVariable`);
+});
+
+// test('Import Curl Test', async ({ page }) => {
+//   await page.getByPlaceholder('Enter URL').click();
+//   await page.getByPlaceholder('Enter URL').fill(ECHO_API_URL);
+//   //!Change to XML prevent JSON/Raw monaco editor autocompletel value
+//   await page.getByText('Text').click();
+//   await page.getByText('XML').click();
+//   await addTextToEditor(page, `{"test":1,"test1":2}`);
+//   const res = await testAndWaitForResponse(page);
+//   expect(res.body).toEqual(`{"test":1,"test1":2}`);
+
+//   //restore from history
+//   await page.locator('.ant-tabs-nav-list > div:nth-child(2)').first().click();
+//   await page.getByTitle('---').getByText(ECHO_API_URL).click({ timeout: 500 });
+//   const res1 = await testAndWaitForResponse(page);
+//   expect(res1.body).toEqual(`{"test":1,"test1":2}`);
+// });

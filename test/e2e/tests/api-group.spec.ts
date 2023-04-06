@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { ifTipsExist, operateGroup, seletGroup } from '../utils/commom.util';
+import { closeTab, ifTipsExist, operateGroup, seletGroup } from '../utils/commom.util';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Got it' }).click();
@@ -18,8 +18,7 @@ test.beforeEach(async ({ page }) => {
   await page.getByPlaceholder('Group Name').press('Enter');
 
   //Close group tab
-  await page.getByRole('tab').getByText(subGroupName).hover();
-  await page.getByRole('button', { name: 'Close tab' }).click();
+  await closeTab(page, subGroupName);
 });
 
 test('Basic Operate', async ({ page }) => {
