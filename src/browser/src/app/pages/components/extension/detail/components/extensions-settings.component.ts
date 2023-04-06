@@ -9,7 +9,7 @@ import { SettingService } from 'pc/browser/src/app/components/system-setting/set
       class="sticky top-0 py-[12px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
       style="border-color: var(--border-color); background-color: var(--background-color); border-bottom: 1px solid var(--system-border-color);"
     >
-      <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
+      <button eo-ng-button nzType="primary" i18n (click)="handleSave()">Save</button>
     </div>
 
     <eo-schema-form [model]="localSettings" [configuration]="configuration" />
@@ -31,6 +31,6 @@ export class ExtensionSettingComponent implements OnInit {
   }
   handleSave = () => {
     this.settingService.saveSetting(this.localSettings);
-    this.feedback.success($localize`Save Success`);
+    this.feedback.success($localize`Saved successfully`);
   };
 }
