@@ -53,5 +53,6 @@ test('Add Test From API Test', async ({ page }) => {
   await ifTipsExist(page, 'Edited Case successfully');
   //Delete Case
   await clickButtonByIconName(page, 'delete');
+  await page.getByRole('button', { name: 'OK' }).click();
   await ifTipsExist(page, 'Successfully deleted');
 });

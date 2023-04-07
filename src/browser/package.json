@@ -105,7 +105,7 @@
     "karma-jasmine-html-reporter": "2.0.0",
     "node-polyfill-webpack-plugin": "2.0.1",
     "npm-run-all": "4.1.5",
-    "tailwindcss": "3.3.1",
+    "tailwindcss": "3.3.0",
     "ts-node": "10.9.1",
     "typescript": "~5.0.3",
     "webpack": "5.77.0",

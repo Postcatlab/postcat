@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { Message, MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { parseAndCheckCollections, parseAndCheckEnv } from 'pc/browser/src/app/services/storage/db/validate/validate';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
@@ -10,8 +9,6 @@ import { IMPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
 import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import StorageUtil from '../../../shared/utils/storage/storage.utils';
 
@@ -52,6 +49,7 @@ import StorageUtil from '../../../shared/utils/storage/storage.utils';
     [allowDrag]="true"
     tipsType="importAPI"
     [(extension)]="currentExtension"
+    (extensionChange)="selectChange($event)"
     [extensionList]="supportList"
     (uploadChange)="uploadChange($event)"
   ></extension-select>`
@@ -62,7 +60,6 @@ export class ImportApiComponent implements OnInit {
   uploadData = null;
   isValid = true;
   featureMap: Map<string, FeatureInfo>;
-  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -70,17 +67,14 @@ export class ImportApiComponent implements OnInit {
     private feedback: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService,
-    private apiService: ApiService,
-    private messageService: MessageService
+    private apiService: ApiService
   ) {}
   ngOnInit(): void {
     this.initData();
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {});
   }
-
+  selectChange($event) {
+    StorageUtil.set('import_api_modal', this.currentExtension);
+  }
   @ExtensionChange(IMPORT_API, true)
   initData() {
     this.featureMap = this.extensionService.getValidExtensionsByFature(IMPORT_API);
@@ -101,7 +95,6 @@ export class ImportApiComponent implements OnInit {
     this.uploadData = data;
   }
   async submit(callback) {
-    StorageUtil.set('import_api_modal', this.currentExtension);
     if (!this.uploadData) {
       this.feedback.error($localize`Please import the file first`);
       callback('stayModal');
