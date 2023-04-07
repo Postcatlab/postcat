@@ -27,8 +27,12 @@ const loadExtension = async ({ name, version = 'latest' }) => {
   //* Chek latest version
   const allExtensionRes = await axios.get('https://extensions.postcat.com/list').catch(error => {});
   const extensionPkgInfo = allExtensionRes?.data?.data.find(val => val.name === name);
-  if (!extensionPkgInfo) return [null, `Can't Find Extension #${name}`];
-  version = extensionPkgInfo.version || version;
+
+  //GET version when not in electron,becasue electron may has debug extension
+  if (!isElectron) {
+    if (!extensionPkgInfo) return [null, `Can't Find Extension ${name}`];
+    version = extensionPkgInfo.version || version;
+  }
 
   // * Is extension in Map cache ?
   //TODO save version at extensionMap
