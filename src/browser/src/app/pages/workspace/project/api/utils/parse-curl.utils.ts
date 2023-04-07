@@ -63,7 +63,7 @@ export const parseCurl = function (s) {
   args.forEach(function (arg) {
     switch (true) {
       case isURL(arg):
-        out.url = arg.split('?')[0];
+        out.url = arg;
         out.query = getQueryFromURL(arg);
         break;
 
@@ -115,7 +115,10 @@ export const parseCurl = function (s) {
             break;
           case 'data':
             if (out.method === 'GET' || out.method === 'HEAD') out.method = 'POST';
-            out.header['Content-Type'] ??= out.header['Content-Type'] || out.header['content-type'] || 'application/x-www-form-urlencoded';
+            if (!out.header['content-Type'] && !out.header['Content-Type']) {
+              out.header['content-type'] ??=
+                out.header['Content-Type'] || out.header['content-type'] || 'application/x-www-form-urlencoded';
+            }
             out.body = out.body ? `${out.body}&${arg}` : arg;
             state = '';
             break;
@@ -135,6 +138,6 @@ export const parseCurl = function (s) {
         break;
     }
   });
-  out.contentType = out.header['Content-Type'];
+  out.contentType = out.header['Content-Type'] || out.header['content-type'];
   return out;
 };

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EditTabViewComponent } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { AuthorizationExtensionFormComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/authorization-extension-form/authorization-extension-form.component';
+import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import { AuthTypeValue } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { Group } from 'pc/browser/src/app/services/storage/db/models';
@@ -39,6 +40,7 @@ export class GroupComponent implements OnDestroy, EditTabViewComponent {
     private effect: ApiEffectService,
     public globalStore: StoreService,
     private fb: FormBuilder,
+    public group: ApiGroupService,
     private feedback: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,

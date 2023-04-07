@@ -281,6 +281,7 @@ export class ApiEffectService {
     if (err) {
       return;
     }
+    this.feedback.success($localize`Successfully deleted`);
     const envList = this.store.getEnvList.filter(it => it.id !== id);
     this.store.setEnvList(envList);
   }

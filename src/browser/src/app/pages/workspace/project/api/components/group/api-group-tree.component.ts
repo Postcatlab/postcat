@@ -2,6 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { action, autorun, reaction, toJS } from 'mobx';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
@@ -93,11 +94,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private feedback: EoNgFeedbackMessageService,
     private router: Router,
     private route: ActivatedRoute,
+    private nzContextMenuService: NzContextMenuService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.operateByModule = this.getGroupOperate();
   }
-
+  contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
+    this.nzContextMenuService.create($event, menu);
+  }
   searchFunc = (node: NzTreeNodeOptions) => {
     const { title } = node;
     const uri = node.relationInfo?.uri;

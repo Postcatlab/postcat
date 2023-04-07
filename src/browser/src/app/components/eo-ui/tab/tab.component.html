@@ -6,7 +6,25 @@
   (nzSelectChange)="selectChange($event)"
   [nzTabBarExtraContent]="extraTemplate"
 >
-  <eo-ng-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
+  <eo-ng-tab
+    *ngFor="let uuid of tabStorage.tabOrder; let i = index"
+    (nzContextmenu)="contextMenu($event, menu, uuid)"
+    [nzTitle]="titleTemplate"
+  >
+    <eo-ng-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="closeTabByOperate('closeOther', uuid)" [nzDisabled]="tabStorage.tabOrder.length === 1" i18n>
+          Close Other Tags (excluding current tabs)
+        </li>
+        <li nz-menu-item (click)="closeTabByOperate('closeAll', uuid)" i18n>Close All Tabs</li>
+        <li nz-menu-item (click)="closeTabByOperate('closeLeft', uuid)" [nzDisabled]="checkIsFirstTab(uuid)" i18n>
+          Close Tabs To the Left
+        </li>
+        <li nz-menu-item [nzDisabled]="checkIsLastTab(uuid)" (click)="closeTabByOperate('closeRight', uuid)" i18n>
+          Close Tabs to the Right
+        </li>
+      </ul>
+    </eo-ng-dropdown-menu>
     <ng-template #titleTemplate>
       <div
         (dblclick)="doubleClickTab($event, uuid)"
