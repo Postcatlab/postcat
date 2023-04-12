@@ -153,6 +153,13 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
         { fireImmediately: true }
       )
     );
+
+    reaction(
+      () => [this.model.request.scriptList],
+      value => {
+        console.log(value);
+      }
+    );
   }
   get beforeInject() {
     return this.getScript(1);
