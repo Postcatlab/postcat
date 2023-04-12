@@ -389,7 +389,7 @@ export class ApiTestComponent implements EditTabViewComponent {
 
     //Binary unset request header
     const headerIndex = model?.request.requestParams.headerParams.findIndex(val => val.name.toLowerCase() === 'content-type');
-    if (headerIndex === -1) return;
+    if (headerIndex === -1) return result;
     model?.request.requestParams.headerParams.splice(headerIndex, 1);
     result.headers = model?.request.requestParams.headerParams;
     return result;

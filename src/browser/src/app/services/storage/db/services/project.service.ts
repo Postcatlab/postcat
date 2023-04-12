@@ -6,7 +6,6 @@ import {
   ProjectBulkCreateDto,
   ProjectPageDto,
   ProjectDeleteDto,
-  ProjectUpdateDto,
   ImportProjectDto,
   Collection
 } from 'pc/browser/src/app/services/storage/db/dto/project.dto';
@@ -303,7 +302,7 @@ export class DbProjectService extends DbBaseService<Project> {
     });
 
     if (groups.length) {
-      const groupIds = await this.apiGroupTable.bulkAdd(groups, { allKeys: true });
+      const groupIds = (await this.groupService.bulkCreate(groups)).data.map(val => val.id);
       const remoteGroups = await this.apiGroupTable.bulkGet(groupIds);
 
       for (const [index, localGroup] of groupList.entries()) {
