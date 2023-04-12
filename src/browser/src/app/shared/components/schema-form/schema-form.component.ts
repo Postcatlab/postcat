@@ -253,6 +253,7 @@ export class EoSchemaFormComponent implements OnChanges {
       };
       return { ...value, key: key };
     });
+    this.properties2Model(this.properties);
     this.updateControls();
   }
 
