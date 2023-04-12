@@ -266,6 +266,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
   changeUserSelectedContentType() {
     this.fixedHeaderAndContentType();
+    this.modelChange.emit(this.model);
   }
   /**
    * Set headerParams and userSelectedContentType by bodyType

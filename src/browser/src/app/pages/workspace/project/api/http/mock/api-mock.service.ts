@@ -11,6 +11,7 @@ import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { MockCreateWay } from 'pc/browser/src/app/services/storage/db/models';
 import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
+import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import { json2xml, table2json } from 'pc/browser/src/app/shared/utils/data-transfer/data-transfer.utils';
 import storageUtils from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -26,6 +27,7 @@ export class ApiMockService {
     private testUtils: ApiTestUtilService,
     private router: Router,
     private message: EoNgFeedbackMessageService,
+    private trace: TraceService,
     private apiEffect: ApiEffectService,
     private projectApi: ProjectApiService,
     private modalService: ModalService,
@@ -114,6 +116,7 @@ export class ApiMockService {
       response: this.getMockResponseByAPI(apiData),
       apiUuid: apiUuid
     };
+    this.trace.report('add_mock_success');
     this.addNewMock(data);
   }
 
