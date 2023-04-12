@@ -134,10 +134,12 @@ export class ApiMockService {
       queryParams: { uuid: data.id, pageID: Date.now().toString() }
     });
   }
-  async toDelete(id: number) {
+  async toDelete(id: number, mock_name: string) {
     const modelRef = this.modalService.confirm({
       nzTitle: $localize`Deletion Confirmation?`,
-      nzContent: $localize``,
+      nzContent: $localize`Are you sure you want to delete the data <strong title="${mock_name}">${
+        mock_name.length > 50 ? `${mock_name.slice(0, 50)}...` : mock_name
+      }</strong> ? You cannot restore it once deleted!`,
       nzOnOk: async () => {
         const data = await this.deleteMock(id);
         if (!data) {

@@ -218,6 +218,6 @@ export class MockComponent implements EditTabViewComponent {
   }
 
   async handleDeleteMockItem() {
-    await this.apiMock.toDelete(this.model.id);
+    await this.apiMock.toDelete(this.model.id, this.model.name);
   }
 }

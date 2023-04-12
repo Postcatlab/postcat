@@ -70,7 +70,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
             showFn: item => item.data.createWay !== 'system',
             confirm: true,
             confirmFn: (item, index) => {
-              this.apiMock.toDelete(item.data.id);
+              this.apiMock.toDelete(item.data.id, item.data.name);
             }
           }
         ]
