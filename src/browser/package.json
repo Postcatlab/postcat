@@ -40,7 +40,7 @@
     "color": "^4.2.3",
     "compare-versions": "6.0.0-rc.1",
     "core-js": "3.30.0",
-    "eo-ng-auto-complete": "0.1.16",
+    "eo-ng-auto-complete": "0.1.18",
     "eo-ng-button": "0.1.10",
     "eo-ng-checkbox": "0.1.12",
     "eo-ng-dropdown": "0.1.14",

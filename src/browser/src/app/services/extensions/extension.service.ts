@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'pc/browser/src/app/core/services';
 import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
-import { MessageService } from 'pc/browser/src/app/services/message';
+import { CategoryContributionPoints, FeatureContributionPoints } from 'pc/browser/src/app/pages/components/extension/extension.model';
 import { extensionMessageSubject } from 'pc/browser/src/app/shared/decorators';
 import { defaultExtensions } from 'pc/browser/src/app/shared/models/extension';
 import { FeatureInfo, ExtensionInfo, SidebarView } from 'pc/browser/src/app/shared/models/extension-manager';
@@ -33,7 +33,6 @@ export class ExtensionService {
     private extensionCommon: ExtensionCommonService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
-    private messageService: MessageService,
     public store: StoreService
   ) {}
   async init() {
@@ -45,7 +44,11 @@ export class ExtensionService {
       });
       return;
     }
+
     //* Web Installl
+    this.updateInstalledInfo(new Map(this.webExtensionService.installedList.map(obj => [obj.name, obj.pkgInfo])), {
+      action: 'init'
+    });
     const installedName = [];
     //Get extensions
     [...this.webExtensionService.installedList, ...(!this.store.getAppHasInitial ? defaultExtensions.map(name => ({ name })) : [])].forEach(
@@ -104,27 +107,33 @@ export class ExtensionService {
   isInstalled(name) {
     return this.installedList.includes(name);
   }
-  public async requestList(type = 'list', queryParams = {}) {
+  public async requestList(
+    type = 'list',
+    queryParams: { category?: CategoryContributionPoints; author?: string; keyword?: string; feature?: FeatureContributionPoints } = {}
+  ) {
     if (type === 'list' && !this.isFirstInit) {
       this.requestPending?.unsubscribe();
     }
     return new Promise((resolve, reject) => {
       const params = JSON.parse(JSON.stringify({ locale: this.language.systemLanguage, ...queryParams }));
-
       this.requestPending = this.http.get<any>(`${this.HOST}/list`, { params }).subscribe({
         next: async result => {
-          const debugExtensions = [];
+          let debugExtensions = [];
           const originData = structuredClone(result.data);
 
           if (type !== 'init') {
-            for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
-              const name = this.webExtensionService.debugExtensionNames[i];
-              const hasExist = this.installedList.some(val => val.name === name);
-              if (hasExist) continue;
-              debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+            //Debug extension
+            if (this.electron.isElectron) {
+              debugExtensions = this.installedList.filter(val => result.data.every(remoteExt => remoteExt.name !== val.name));
+            } else {
+              for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
+                const name = this.webExtensionService.debugExtensionNames[i];
+                const hasExist = this.installedList.some(val => val.name === name);
+                if (hasExist) continue;
+                debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+              }
             }
           }
-
           result.data = [
             ...debugExtensions,
             //Installed package
@@ -147,6 +156,28 @@ export class ExtensionService {
           result.data = result.data.map(module => {
             let result = this.extensionCommon.parseExtensionInfo(module);
             return result;
+          });
+
+          //Search Condition
+          //? Prevent offiline and debug extension show in search result
+          result.data = result.data.filter(n => {
+            const isMatchCategories = queryParams.category && n.categories?.length ? n.categories?.includes(queryParams.category) : true;
+            const isMatchFeature =
+              queryParams.feature && n.features ? Object.keys(n.features).some(key => queryParams.feature === key) : true;
+            const isMatchAuthor =
+              !queryParams.author && !queryParams.keyword
+                ? true
+                : n.author.toLocaleUpperCase().includes?.((queryParams.author || queryParams.keyword).toLocaleUpperCase());
+            const isMatchKeyword = () => {
+              if (!queryParams.keyword) return true;
+              const info = n.i18n[0];
+              const { title = n.title, description = n.description } = info.package;
+              return (
+                title.toLocaleUpperCase().includes(queryParams.keyword.toLocaleUpperCase()) &&
+                description?.toLocaleUpperCase?.().includes(queryParams.keyword.toLocaleUpperCase())
+              );
+            };
+            return isMatchFeature && isMatchCategories && isMatchAuthor && isMatchKeyword();
           });
 
           //Get debug extensions

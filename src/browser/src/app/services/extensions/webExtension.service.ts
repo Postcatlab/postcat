@@ -36,6 +36,7 @@ export class WebExtensionService {
   constructor(private web: WebService, private language: LanguageService, private extensionCommon: ExtensionCommonService) {
     const isDevEnv = !APP_CONFIG.production || this.web.isVercel || 'http://52.76.76.88:8080'.includes(window.location.hostname);
     this.debugExtensionNames = isDevEnv && this.web.isWeb ? [] : [];
+    console.log(this.installedList);
   }
   async installExtension(extName: string, { version = 'latest' }) {
     //Get package.json
@@ -156,6 +157,7 @@ export class WebExtensionService {
   }
 
   async getPkgInfo(extName: string, version = 'latest') {
+    if (!this.extensionCommon.getExtensionList?.length) return null;
     const newestExt = this.extensionCommon.getExtensionList.find(val => val.name === extName);
     version = version === 'latest' ? newestExt?.version || 'latest' : version;
     let pkgInfo;
