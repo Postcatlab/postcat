@@ -190,6 +190,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
     });
 
+    // TODO: resolve inject
     const isAIToAPIPath = '/home/workspace/project/api/http/detail';
     this.router.navigate([this.isAIToAPI ? isAIToAPIPath : this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
       queryParams: {
