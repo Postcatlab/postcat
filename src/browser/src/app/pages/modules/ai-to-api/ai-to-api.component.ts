@@ -51,8 +51,16 @@ export class AiToApiComponent {
 
     this.aiToApi.generateAPI(this.aiPrompt).subscribe({
       next: (res: any) => {
-        this.requestLoading = true;
-        this.getAIAPI(res.data);
+        // this.requestLoading = true;
+        // this.getAIAPI(res.data);
+
+        const a =
+          "\nopenapi: 3.0.0\ninfo:\n  title: User Login API\n  version: 1.0.0\n  description: Generates user login token by encrypting password with MD5 algorithm\n\nservers:\n  - url: http://localhost:8080/api\n\npaths:\n  /login:\n    post:\n      summary: Login API\n      description: Generates user token by logging in with encrypted password\n      requestBody:\n        description: User login details with encrypted password\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                username:\n                  type: string\n                  description: The username of the user.\n                  example: user123\n                password:\n                  type: string\n                  description: The encrypted password of the user.\n                  example: 5f4dcc3b5aa765d61d8327deb882cf99\n\n      responses:\n        '200':\n          description: OK\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  token:\n                    type: string\n                    description: The user token for authentication.\n                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\n\n        '400':\n          description: Bad Request\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  message:\n                    type: string\n                    description: The error message.\n                    example: Invalid credentials\n\n      requestBody:\n        description: User login details with encrypted password\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                username:\n                  type: string\n                  description: The username of the user\n                  example: user123\n                password:\n                  type: string\n                  description: The encrypted password of the user\n                  example: 5f4dcc3b5aa765d61d8327deb882cf99          \n";
+        const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(a, null, 2)))) as any)[0].collections[0].children[0];
+
+        const checkedData = parseAndCheckApiData(editData);
+
+        console.log(checkedData);
       }
     });
   }
@@ -90,6 +98,7 @@ export class AiToApiComponent {
               this.error = true;
           }
         } catch (err) {
+          console.error(err);
           this.error = true;
         }
       }
