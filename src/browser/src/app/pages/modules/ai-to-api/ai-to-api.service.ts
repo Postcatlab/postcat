@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AiToApiComponent } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.component';
 import { ModalService } from 'pc/browser/src/app/services/modal.service';
 import { RemoteService } from 'pc/browser/src/app/services/storage/remote.service';
+import { MODAL_NORMAL_SIZE } from 'pc/browser/src/app/shared/constans/modal-size';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class AiToApiService {
       nzClosable: false,
       nzAutofocus: false,
       nzFooter: null,
-      nzWidth: '650px',
+      nzWidth: MODAL_NORMAL_SIZE,
       nzMaskClosable: false
     });
   }

@@ -72,6 +72,7 @@ export class AiToApiComponent {
               } else {
                 this.error = true;
                 return;
+                break;
               }
               storageUtils.set('api_data_will_be_save', checkedApiData);
               this.editShow = true;

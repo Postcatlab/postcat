@@ -66,6 +66,6 @@ export class AiInputGroupComponent {
   }
 
   showHowUseAi() {
-    this.showHowUse = true;
+    this.aiPrompt = '生成一个用户登录接口，密码需要进行MD5加密，返回用户token';
   }
 }
