@@ -41,6 +41,7 @@ export class AiToApiComponent {
   }
 
   generateAPI() {
+    this.error = false;
     if (this.hasGenGenerated) {
       this.requestLoading = true;
       this.editShow = false;
