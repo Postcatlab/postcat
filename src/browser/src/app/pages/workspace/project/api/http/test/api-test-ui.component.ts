@@ -94,6 +94,8 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent;
   validateForm!: FormGroup;
   noAuth = NONE_AUTH_OPTION;
+
+  inputToAI = false;
   isDragging = false;
   isEmpty = isEmpty;
 
@@ -219,6 +221,10 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     }).url;
   }
   updateParamsbyUri() {
+    if (this.model.request.uri === '# ') {
+      this.inputToAI = true;
+    }
+
     this.model.request.requestParams.queryParams = syncUrlAndQuery(
       this.model.request.uri,
       this.model.request.requestParams.queryParams
@@ -498,5 +504,10 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
       //? Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       this.modelChange.emit(this.model);
     });
+  }
+
+  closeInput() {
+    this.inputToAI = false;
+    this.model.request.uri = '';
   }
 }

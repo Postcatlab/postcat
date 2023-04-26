@@ -1,0 +1,39 @@
+<div class="ai-input-group">
+  <ng-template #AIToAPITitle>
+    <span>AI generate API</span>
+    <nz-tag [nzColor]="primaryColor" class="ml-[10px]">实验</nz-tag>
+  </ng-template>
+
+  <div class="flex">
+    <eo-ng-input-group [nzPrefix]="aiPreixTem" [nzSuffix]="closeIconTem" class="flex items-center">
+      <input type="text" eo-ng-input placeholder="请输入AI Prompt" (input)="inputChange()" [(ngModel)]="aiPrompt" />
+
+      <ng-template #closeIconTem>
+        <button eo-ng-button nzType="text" *ngIf="fromPage === 'apiTest'" (click)="closeInput()">
+          <svg class="iconpark-icon">
+            <use href="#close-small"></use>
+          </svg>
+        </button>
+      </ng-template>
+      <ng-template #aiPreixTem>
+        <div class="aiPreix px-[5px] rounded-[5px] bg-white">
+          <eo-iconpark-icon name="robot" class="-mt-[3px]"></eo-iconpark-icon>
+          <span class="ml-[5px] text-[12px] text-[#101010]">AI生成</span>
+        </div>
+      </ng-template>
+    </eo-ng-input-group>
+
+    <button [nzLoading]="requestLoading" (click)="generateAPI()" eo-ng-button class="generateBtn ml-[10px]" nzType="primary">
+      {{ getAiBtnText() }}
+    </button>
+
+    <button (click)="showHowUseAi()" *ngIf="fromPage === 'apiTest'" eo-ng-button class="generateBtn ml-[10px]" nzType="default">
+      如何使用？
+    </button>
+  </div>
+
+  <div class="use-tip mt-[11px]" *ngIf="fromPage !== 'apiTest' || showHowUse">
+    <nz-tag [nzColor]="primaryColor">例子</nz-tag>
+    <span class="text-[12px]">生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token</span>
+  </div>
+</div>

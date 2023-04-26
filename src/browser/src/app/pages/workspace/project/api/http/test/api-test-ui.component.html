@@ -1,7 +1,7 @@
 <nz-skeleton class="p-base" *ngIf="!model?.request?.apiAttrInfo" [nzLoading]="!model?.request?.apiAttrInfo" [nzActive]="true">
 </nz-skeleton>
 <div class="test-wrap" *ngIf="model?.request?.apiAttrInfo && validateForm">
-  <form auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
+  <form *ngIf="!inputToAI" auto-focus-form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="flex header-container">
     <eo-ng-input-group nzCompact>
       <eo-ng-select class="!w-[106px] flex-none main-bg" [(ngModel)]="model.request.apiAttrInfo.requestMethod" formControlName="method">
         <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
@@ -18,12 +18,16 @@
         {{ currentEnv.hostUri }}
       </div>
       <nz-form-item nz-col class="flex-1">
-        <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL or Curl text">
+        <nz-form-control
+          [nzValidateStatus]="validateForm.controls.uri"
+          i18n-nzErrorTip
+          nzErrorTip="Please enter URL, #AI Prompt or Curl text"
+        >
           <input
             type="text"
             class="rounded-r main-bg"
             i18n-placeholder
-            placeholder="Enter URL or Curl text"
+            placeholder="Enter URL, #AI Prompt or Curl text"
             name="uri"
             maxlength="65535"
             (blur)="blurUri()"
@@ -42,6 +46,9 @@
     </button>
     <ng-container *ngTemplateOutlet="extraButtonTmp"></ng-container>
   </form>
+  <div *ngIf="inputToAI" class="px-[11px] py-[10px]">
+    <pc-ai-input-group fromPage="apiTest" (closeInputEmit)="closeInput()"></pc-ai-input-group>
+  </div>
   <div class="test-body-container">
     <!-- Request -->
     <div class="top-container scroll-container" style.height="calc(100% - {{ responseContainerHeight }}px)">

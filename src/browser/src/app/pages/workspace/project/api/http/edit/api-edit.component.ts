@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListener, Inject } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input, Output, EventEmitter, HostListener, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -45,6 +45,8 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
   @ViewChild('editBody') editBody: ApiEditBodyComponent;
   @ViewChild('resEditBody') resEditBody: ApiEditBodyComponent;
   @Input() model: ApiData;
+
+  @Input() isAIToAPI = false;
   /**
    * Intial model from outside,check form is change
    * * Usually restored from tab
@@ -105,7 +107,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     const id = this.route.snapshot.queryParams.uuid;
 
     //Get api data from request
-    if (!isFromCache) {
+    if (!isFromCache || this.isAIToAPI) {
       const groupId = Number(this.route.snapshot.queryParams.groupId);
       this.model = await this.apiEdit.getApi({
         id
@@ -132,6 +134,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     if (isFromCache) return;
     this.eoOnInit.emit(this.model);
   }
+
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
@@ -172,6 +175,7 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
     let formData: ApiData = this.apiEditUtil.formatUIApiDataToStorage(this.model);
     await (formData.apiUuid ? this.editAPI(formData, ux) : this.addAPI(formData, ux));
     this.isSaving = false;
+    return null;
   }
   async addAPI(formData, ux) {
     const [result, err] = await this.effect.addAPI(formData);
@@ -185,12 +189,14 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
       param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
     });
-    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
-      queryParams: {
-        pageID: Number(this.route.snapshot.queryParams.pageID),
-        uuid: result?.apiUuid
-      }
-    });
+    if (!this.isAIToAPI) {
+      this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
+        queryParams: {
+          pageID: Number(this.route.snapshot.queryParams.pageID),
+          uuid: result?.apiUuid
+        }
+      });
+    }
     this.afterSaved.emit(this.model);
   }
   async editAPI(formData, ux) {

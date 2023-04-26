@@ -30,14 +30,35 @@
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <a>
-        <li nz-menu-item i18n="@@AddAPI" (click)="projectApi.toAdd()"> New API </li>
+        <li nz-menu-item i18n="@@AddAPI" (click)="projectApi.toAdd()">
+          <eo-iconpark-icon name="add" class="mr-[10px]"></eo-iconpark-icon>
+          New API
+        </li>
       </a>
       <a>
-        <li nz-menu-item (click)="groupService.toAdd()" i18n="@@AddGroup">New Group</li>
+        <li nz-menu-item (click)="groupService.toAdd()" i18n="@@AddGroup">
+          <eo-iconpark-icon name="folder-close" class="mr-[10px]"></eo-iconpark-icon>
+          New Group
+        </li>
+      </a>
+      <a>
+        <li nz-menu-item (click)="aiToAPI()" i18n="@@AddGroup">
+          <eo-iconpark-icon name="robot" class="mr-[10px]"></eo-iconpark-icon>
+          AI generate API
+          <nz-tag [nzColor]="primaryColor" class="ml-[10px]">实验</nz-tag>
+        </li>
+
+        <ng-template #AIToAPITitle>
+          <span>AI generate API</span>
+          <nz-tag [nzColor]="primaryColor" class="ml-[10px]">实验</nz-tag>
+        </ng-template>
       </a>
       <li nz-menu-divider></li>
       <a *ngFor="let item of extensionActions">
-        <li nz-menu-item trace [traceID]="item.traceID" (click)="item.click(item.title)">{{ item.menuTitle }} </li>
+        <li nz-menu-item trace [traceID]="item.traceID" (click)="item.click(item.title)">
+          <eo-iconpark-icon class="mr-[5px] flex-shrink-0" [name]="item.iconName"></eo-iconpark-icon>
+          {{ item.menuTitle }}
+        </li>
       </a>
     </ul>
   </eo-ng-dropdown-menu>
