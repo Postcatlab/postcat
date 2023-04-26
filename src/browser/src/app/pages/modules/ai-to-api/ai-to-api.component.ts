@@ -111,7 +111,7 @@ export class AiToApiComponent {
 
     this.saveLoading = false;
 
-    // this.modalRef.close();
+    this.modalRef.close();
   }
 
   cancel() {

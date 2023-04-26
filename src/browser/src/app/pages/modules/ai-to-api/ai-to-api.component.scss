@@ -3,4 +3,13 @@
     padding: 5px 15px;
     box-sizing: border-box;
   }
+
+  .error-contain {
+    background-color: var(--item-hover-background-color);
+
+    span,
+    .error-text {
+      color: var(--text-color);
+    }
+  }
 }

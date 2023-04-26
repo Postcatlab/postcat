@@ -189,14 +189,15 @@ export class ApiEditComponent implements OnDestroy, EditTabViewComponent {
       workspace_type: this.globalStore.isLocal ? 'local' : 'cloud',
       param_type: IMPORT_MUI[this.model.apiAttrInfo.contentType] || ''
     });
-    if (!this.isAIToAPI) {
-      this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
-        queryParams: {
-          pageID: Number(this.route.snapshot.queryParams.pageID),
-          uuid: result?.apiUuid
-        }
-      });
-    }
+
+    const a = [this.tabsConfig.pathByName[PageUniqueName.HttpDetail]];
+    const b = result?.apiUuid;
+    this.router.navigate([this.tabsConfig.pathByName[PageUniqueName.HttpDetail]], {
+      queryParams: {
+        pageID: this.isAIToAPI ? Date.now().toString() : Number(this.route.snapshot.queryParams.pageID),
+        uuid: result?.apiUuid
+      }
+    });
     this.afterSaved.emit(this.model);
   }
   async editAPI(formData, ux) {

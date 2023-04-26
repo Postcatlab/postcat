@@ -7,6 +7,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { EoIconparkIconModule } from 'pc/browser/src/app/components/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { AiToApiService } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.service';
+import { memo } from 'pc/browser/src/app/shared/decorators/memo';
 
 @Component({
   standalone: true,
@@ -38,8 +39,10 @@ export class AiInputGroupComponent {
 
   showHowUse = false;
   constructor(private message: EoNgFeedbackMessageService, private AiToApiService: AiToApiService) {}
-  getAiBtnText() {
-    return this.hasGenGenerated ? '重新生成' : 'AI 生成';
+
+  @memo()
+  getAiBtnText(hasGenGenerated) {
+    return hasGenGenerated ? '重新生成' : 'AI 生成';
   }
 
   generateAPI() {
@@ -54,9 +57,8 @@ export class AiInputGroupComponent {
     this.emitGenerateAPI.emit();
   }
 
-  inputChange() {
-    console.log(this.aiPrompt);
-    this.aiPromptChange.emit(this.aiPrompt);
+  inputChange(e) {
+    this.aiPromptChange.emit(e);
   }
 
   closeInput() {
