@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
 import { EoNgInputModule } from 'eo-ng-input';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { EoIconparkIconModule } from 'pc/browser/src/app/components/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { AiInputGroupComponent } from 'pc/browser/src/app/pages/components/ai-input-group/ai-input-group.component';
 import { AiToApiComponent } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.component';
@@ -31,7 +33,9 @@ const tabs = API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/a
     NzIconModule,
     NzResultModule,
     AiInputGroupComponent,
-    NzAlertModule
+    NzAlertModule,
+    EoNgFeedbackTooltipModule,
+    NzToolTipModule
   ],
   providers: [
     {

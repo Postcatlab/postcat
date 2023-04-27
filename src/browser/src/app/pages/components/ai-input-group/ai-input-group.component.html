@@ -1,4 +1,4 @@
-<div class="ai-input-group">
+<div class="ai-input-group" (keyup.enter)="generateAPI()">
   <ng-template #AIToAPITitle>
     <span>AI generate API</span>
     <nz-tag [nzColor]="primaryColor" class="ml-[10px]">实验</nz-tag>
@@ -6,10 +6,22 @@
 
   <div class="flex">
     <eo-ng-input-group [nzPrefix]="aiPreixTem" [nzSuffix]="closeIconTem" class="flex items-center">
-      <input type="text" eo-ng-input placeholder="请输入AI Prompt" (ngModelChange)="inputChange($event)" [(ngModel)]="aiPrompt" />
-
+      <input
+        type="text"
+        eo-ng-input
+        placeholder="请输入AI Prompt"
+        (ngModelChange)="inputChange($event)"
+        [(ngModel)]="aiPrompt"
+        eoNgFeedbackTooltip
+        nzTooltipPlacement="top"
+        [nzTooltipTitle]="aiTip"
+        [nzTooltipOverlayStyle]="{
+          maxWidth: '750px'
+        }"
+        autofocus
+      />
       <ng-template #closeIconTem>
-        <button eo-ng-button nzType="text" *ngIf="fromPage === 'apiTest'" (click)="closeInput()">
+        <button nztype="default" eo-ng-button *ngIf="fromPage === 'apiTest'" (click)="closeInput()">
           <svg class="iconpark-icon">
             <use href="#close-small"></use>
           </svg>
@@ -32,7 +44,7 @@
     </button>
   </div>
 
-  <div class="use-tip mt-[11px]" *ngIf="fromPage !== 'apiTest'">
+  <div class="use-tip mt-[11px]" *ngIf="fromPage !== 'apiTest' && !hasGenGenerated">
     <nz-tag [nzColor]="primaryColor">例子</nz-tag>
     <span class="text-[12px]">生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token</span>
   </div>

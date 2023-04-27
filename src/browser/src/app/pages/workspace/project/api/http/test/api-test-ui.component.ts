@@ -221,7 +221,16 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
     }).url;
   }
   updateParamsbyUri() {
-    if (this.model.request.uri === '# ') {
+    const regex = /^#.+/;
+    // if (regex.test(this.model.request.uri)) {
+    //   this.inputToAI = true;
+    // }
+
+    if (this.model.request.uri === '#' || regex.test(this.model.request.uri)) {
+      // if(regex.test(this.model.request.uri)) {
+      //   const regexMatch = /#(.+)/;
+      //   const match = this.model.request.uri.match(regex);
+      // }
       this.inputToAI = true;
     }
 

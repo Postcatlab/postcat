@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, TemplateRef, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { debounce } from 'lodash-es';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -52,7 +52,6 @@ export class AiToApiComponent {
     if (this.hasGenGenerated) {
       this.requestLoading = true;
       this.editShow = false;
-      this.error = false;
       storageUtils.remove('api_data_will_be_save');
     }
 
@@ -84,7 +83,6 @@ export class AiToApiComponent {
                 checkedApiData = parseAndCheckApiData(editData).data;
               } else {
                 this.error = true;
-                return;
                 break;
               }
               storageUtils.set('api_data_will_be_save', checkedApiData);

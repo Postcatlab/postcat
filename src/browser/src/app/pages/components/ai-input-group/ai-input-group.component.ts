@@ -1,17 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EoNgButtonModule } from 'eo-ng-button';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { EoNgFeedbackMessageService, EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
 import { EoNgInputModule } from 'eo-ng-input';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { EoIconparkIconModule } from 'pc/browser/src/app/components/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { AiToApiService } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.service';
 import { memo } from 'pc/browser/src/app/shared/decorators/memo';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, NzTagModule, EoNgButtonModule, EoNgInputModule, EoIconparkIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    EoNgFeedbackTooltipModule,
+    NzToolTipModule,
+    NzTagModule,
+    EoNgButtonModule,
+    EoNgInputModule,
+    EoIconparkIconModule
+  ],
   selector: 'pc-ai-input-group',
   templateUrl: './ai-input-group.component.html',
   styleUrls: ['./ai-input-group.component.scss']
@@ -36,6 +46,8 @@ export class AiInputGroupComponent {
   @Output() readonly closeInputEmit = new EventEmitter();
 
   @Input() fromPage = 'ai';
+
+  aiTip = '🤩支持AI生成文档啦，赶快输入“#提示语”试一下吧！';
 
   showHowUse = false;
   constructor(private message: EoNgFeedbackMessageService, private AiToApiService: AiToApiService) {}
