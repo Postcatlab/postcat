@@ -7,6 +7,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { EoIconparkIconModule } from 'pc/browser/src/app/components/eo-ui/iconpark-icon/eo-iconpark-icon.module';
+import { LanguageService } from 'pc/browser/src/app/core/services/language/language.service';
 import { AiToApiService } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.service';
 import { memo } from 'pc/browser/src/app/shared/decorators/memo';
 
@@ -47,19 +48,19 @@ export class AiInputGroupComponent {
 
   @Input() fromPage = 'ai';
 
-  aiTip = '🤩支持AI生成文档啦，赶快输入“#提示语”试一下吧！';
+  aiTip = $localize`🤩To generate a document with AI, type "# prompt" and give it a try!`;
 
   showHowUse = false;
-  constructor(private message: EoNgFeedbackMessageService, private AiToApiService: AiToApiService) {}
+  constructor(private message: EoNgFeedbackMessageService, private AiToApiService: AiToApiService, public lang: LanguageService) {}
 
   @memo()
   getAiBtnText(hasGenGenerated) {
-    return hasGenGenerated ? '重新生成' : 'AI 生成';
+    return hasGenGenerated ? $localize`rebuild` : $localize`AI generate`;
   }
 
   generateAPI() {
     if (!this.aiPrompt) {
-      this.message.info('请输入AI Prompt');
+      this.message.info($localize`Please enter AI Prompt`);
       return;
     }
     if (this.fromPage === 'apiTest') {
@@ -78,6 +79,9 @@ export class AiInputGroupComponent {
   }
 
   showHowUseAi() {
-    this.aiPrompt = '生成一个用户登录接口，密码需要进行MD5加密，返回用户token';
+    this.aiPrompt =
+      this.lang.langHash === 'zh'
+        ? '生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token'
+        : 'Generate a user login API, password needs to be encrypted with MD5, and return the user token';
   }
 }

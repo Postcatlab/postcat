@@ -1,7 +1,7 @@
 <div class="ai-input-group" (keyup.enter)="generateAPI()">
   <ng-template #AIToAPITitle>
-    <span>AI generate API</span>
-    <nz-tag [nzColor]="primaryColor" class="ml-[10px]">实验</nz-tag>
+    <span i18n>AI generate API</span>
+    <nz-tag [nzColor]="primaryColor" class="ml-[10px]" i18n>experiment</nz-tag>
   </ng-template>
 
   <div class="flex">
@@ -9,7 +9,8 @@
       <input
         type="text"
         eo-ng-input
-        placeholder="请输入AI Prompt"
+        placeholder="Please enter AI Prompt"
+        i18n-placeholder
         (ngModelChange)="inputChange($event)"
         [(ngModel)]="aiPrompt"
         eoNgFeedbackTooltip
@@ -30,7 +31,7 @@
       <ng-template #aiPreixTem>
         <div class="aiPreix px-[5px] rounded-[5px] bg-white">
           <eo-iconpark-icon name="robot" class="-mt-[3px]"></eo-iconpark-icon>
-          <span class="ml-[5px] text-[12px] text-[#101010]">AI生成</span>
+          <span class="ml-[5px] text-[12px] text-[#101010]" i18n>AI generate</span>
         </div>
       </ng-template>
     </eo-ng-input-group>
@@ -39,13 +40,13 @@
       {{ getAiBtnText(hasGenGenerated) }}
     </button>
 
-    <button (click)="showHowUseAi()" *ngIf="fromPage === 'apiTest'" eo-ng-button class="generateBtn ml-[10px]" nzType="default">
-      如何使用？
+    <button (click)="showHowUseAi()" i18n *ngIf="fromPage === 'apiTest'" eo-ng-button class="generateBtn ml-[10px]" nzType="default">
+      how to use ?
     </button>
   </div>
 
   <div class="use-tip mt-[11px]" *ngIf="fromPage !== 'apiTest' && !hasGenGenerated">
-    <nz-tag [nzColor]="primaryColor">例子</nz-tag>
-    <span class="text-[12px]">生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token</span>
+    <nz-tag [nzColor]="primaryColor" i18n>example</nz-tag>
+    <span class="text-[12px]" i18n>Generate a user login API, password needs to be encrypted with MD5, and return the user token</span>
   </div>
 </div>

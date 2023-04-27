@@ -78,7 +78,7 @@
         <source>Program will not close unsaved tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab-operate.service.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">373</context>
         </context-group>
         <target state="translated">程序将不会关闭未保存的标签</target>
       </trans-unit>
@@ -88,6 +88,10 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
         <target state="translated"> 关闭其它标签(不包括当前标签) </target>
       </trans-unit>
       <trans-unit id="4540787302079589597" datatype="html">
@@ -95,6 +99,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <target state="translated">关闭所有标签</target>
       </trans-unit>
@@ -104,6 +112,10 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
         <target state="translated"> 关闭左侧标签页 </target>
       </trans-unit>
       <trans-unit id="974792392187340268" datatype="html">
@@ -111,6 +123,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">104,105</context>
         </context-group>
         <target state="translated"> 关闭右边的标签 </target>
       </trans-unit>
@@ -142,15 +158,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/params-import/params-import.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">120</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.ts</context>
@@ -266,19 +282,19 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">341</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">361</context>
+          <context context-type="linenumber">368</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">384</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">401</context>
+          <context context-type="linenumber">408</context>
         </context-group>
         <target state="translated">编辑</target>
       </trans-unit>
@@ -306,15 +322,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">357</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">376</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">392</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/history/eo-history.component.html</context>
@@ -358,7 +374,7 @@
         <source>The imported file contains <x id="PH" equiv-text="data.collections.length"/> APIs, which will be ignored</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/extension-select/import-api/import-api.component.ts</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">129</context>
         </context-group>
         <target state="translated">导入的文件包含 <x id="PH" equiv-text="data.collections.length"/> API，将被忽略</target>
       </trans-unit>
@@ -1201,6 +1217,86 @@
           <context context-type="linenumber">18</context>
         </context-group>
         <target state="translated">展示侧边栏</target>
+      </trans-unit>
+      <trans-unit id="138362113452036598" datatype="html">
+        <source>AI generate API</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <target state="translated">AI 生成 API</target>
+      </trans-unit>
+      <trans-unit id="4130352729909702476" datatype="html">
+        <source>experiment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <target state="translated">实验</target>
+      </trans-unit>
+      <trans-unit id="7091079087219841652" datatype="html">
+        <source>Please enter AI Prompt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <target state="translated">请输入 AI Prompt</target>
+      </trans-unit>
+      <trans-unit id="4494155708636666118" datatype="html">
+        <source>AI generate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <target state="translated">AI 生成</target>
+      </trans-unit>
+      <trans-unit id="5002283226890980097" datatype="html">
+        <source> how to use ? </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+        <target state="translated"> 如何使用？ </target>
+      </trans-unit>
+      <trans-unit id="4486697465964037852" datatype="html">
+        <source>example</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <target state="translated">例子</target>
+      </trans-unit>
+      <trans-unit id="229651618036285871" datatype="html">
+        <source>Generate a user login API, password needs to be encrypted with MD5, and return the user token</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <target state="translated">生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token</target>
+      </trans-unit>
+      <trans-unit id="6136499315104410560" datatype="html" approved="yes">
+        <source>🤩To generate a document with AI, type &quot;# prompt&quot; and give it a try!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <target state="final">🤩支持 AI 生成文档啦，赶快输入“#提示语”试一下吧！</target>
+      </trans-unit>
+      <trans-unit id="4734645910590604766" datatype="html">
+        <source>rebuild</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <target state="translated">重新生成</target>
       </trans-unit>
       <trans-unit id="5297023397385032752" datatype="html">
         <source>ChatGPT Extensions</source>
@@ -2280,7 +2376,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">240</context>
         </context-group>
         <target state="translated">名称</target>
       </trans-unit>
@@ -2356,7 +2452,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">186</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/mock/api-mock.service.ts</context>
@@ -2612,11 +2708,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">249</context>
         </context-group>
         <target state="translated">类型</target>
       </trans-unit>
@@ -2648,31 +2744,31 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">119</context>
         </context-group>
         <target state="translated">鉴权</target>
       </trans-unit>
       <trans-unit id="AddAPI" datatype="html">
-        <source> New API </source>
+        <source><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;add&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/> New API </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">34,36</context>
         </context-group>
-        <target state="translated"> 新建 API </target>
+        <target state="translated"><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;add&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/>新建 API </target>
       </trans-unit>
       <trans-unit id="AddGroup" datatype="html">
-        <source>New Group</source>
+        <source><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;folder-close&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/> New Group </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
-        <target state="translated">新建分组</target>
+        <target state="translated"><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;folder-close&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/> 新建分组</target>
       </trans-unit>
       <trans-unit id="ImportAPI" datatype="html">
         <source>Import API</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">64</context>
         </context-group>
         <target state="translated">导入 API</target>
       </trans-unit>
@@ -2680,7 +2776,7 @@
         <source>Import From File</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <target state="translated">从文件导入 API</target>
       </trans-unit>
@@ -2688,11 +2784,11 @@
         <source>Sync API from URL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -2708,7 +2804,7 @@
         <source>Case</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">263</context>
         </context-group>
         <target state="translated">用例</target>
       </trans-unit>
@@ -2716,11 +2812,11 @@
         <source><x id="PH" equiv-text="tips[dragItem.module]"/> does not support sorting at the moment, please report to Github Issue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">266</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">263</context>
+          <context context-type="linenumber">270</context>
         </context-group>
         <target state="translated"><x id="PH" equiv-text="tips[dragItem.module]"/> 目前不支持排序，请反馈到 Github Issue</target>
       </trans-unit>
@@ -2728,7 +2824,7 @@
         <source>Add Mock</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">338</context>
+          <context context-type="linenumber">345</context>
         </context-group>
         <target state="translated">添加 Mock</target>
       </trans-unit>
@@ -2736,7 +2832,7 @@
         <source>Add Case</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">342</context>
+          <context context-type="linenumber">349</context>
         </context-group>
         <target state="translated">添加用例</target>
       </trans-unit>
@@ -2744,15 +2840,15 @@
         <source>Copy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">346</context>
+          <context context-type="linenumber">353</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">372</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">388</context>
         </context-group>
         <note priority="1" from="description">@Copy</note>
         <target state="translated">复制</target>
@@ -2761,7 +2857,7 @@
         <source>Add API</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">393</context>
+          <context context-type="linenumber">400</context>
         </context-group>
         <target state="translated">添加 API</target>
       </trans-unit>
@@ -2769,7 +2865,7 @@
         <source>Add Subgroup</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">404</context>
         </context-group>
         <target state="translated">添加子分组</target>
       </trans-unit>
@@ -2777,7 +2873,7 @@
         <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.ts</context>
-          <context context-type="linenumber">405</context>
+          <context context-type="linenumber">412</context>
         </context-group>
         <target state="translated">删除</target>
       </trans-unit>
@@ -2797,7 +2893,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <target state="translated">确认删除？</target>
       </trans-unit>
@@ -2833,7 +2929,7 @@
         <source> Import like this:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre class=&quot;mb-0&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/pre&gt;"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/params-import/params-import.component.html</context>
-          <context context-type="linenumber">9,11</context>
+          <context context-type="linenumber">16,18</context>
         </context-group>
         <target state="translated"> 导入格式：<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre class=&quot;mb-0&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/pre&gt;"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
       </trans-unit>
@@ -2841,7 +2937,7 @@
         <source>Replace All</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/params-import/params-import.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <target state="translated">全量替换</target>
       </trans-unit>
@@ -2849,7 +2945,7 @@
         <source>Insert at the end</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/params-import/params-import.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <target state="translated">在末端插入</target>
       </trans-unit>
@@ -2857,7 +2953,7 @@
         <source>Replace Changed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/params-import/params-import.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target state="translated">增量更新</target>
       </trans-unit>
@@ -2993,7 +3089,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">261</context>
         </context-group>
         <target state="translated">参数值</target>
       </trans-unit>
@@ -3009,7 +3105,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <target state="translated">说明</target>
       </trans-unit>
@@ -3161,7 +3257,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">208</context>
         </context-group>
         <target state="translated">请求头部</target>
       </trans-unit>
@@ -3177,7 +3273,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">96</context>
         </context-group>
         <target state="translated">Query 参数</target>
       </trans-unit>
@@ -3193,7 +3289,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <target state="translated">REST 参数</target>
       </trans-unit>
@@ -3209,11 +3305,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">199</context>
         </context-group>
         <target state="translated">请求体</target>
       </trans-unit>
@@ -3233,7 +3329,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">191</context>
         </context-group>
         <target state="translated">返回值</target>
       </trans-unit>
@@ -3249,7 +3345,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">195</context>
         </context-group>
         <target state="translated">返回头部</target>
       </trans-unit>
@@ -3301,7 +3397,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">134</context>
         </context-group>
         <target state="translated">脚本操作</target>
       </trans-unit>
@@ -3309,7 +3405,7 @@
         <source>Added failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">183</context>
         </context-group>
         <target state="translated">添加失败</target>
       </trans-unit>
@@ -3317,7 +3413,7 @@
         <source>Edited failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">206</context>
         </context-group>
         <target state="translated">编辑失败</target>
       </trans-unit>
@@ -3325,7 +3421,7 @@
         <source>Edited API successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">209</context>
         </context-group>
         <target state="translated">编辑 API 成功</target>
       </trans-unit>
@@ -3333,7 +3429,7 @@
         <source>Default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/edit/api-edit.service.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <target state="translated">默认</target>
       </trans-unit>
@@ -3361,7 +3457,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">99</context>
         </context-group>
         <target state="translated">参数示例</target>
       </trans-unit>
@@ -3433,7 +3529,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <target state="translated">必填</target>
       </trans-unit>
@@ -3500,7 +3596,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">80,82</context>
+          <context context-type="linenumber">82,84</context>
         </context-group>
         <target state="translated">确认要删除数据 &lt;strong title="<x id="PH" equiv-text="apiInfo.name"/>"&gt;<x id="PH_1" equiv-text="apiInfo.name.length &gt; 50 ? apiInfo.name.slice(0, 50) + '...' : apiInfo.name"/>&lt;/strong&gt; 吗？删除后不可恢复！</target>
       </trans-unit>
@@ -3524,27 +3620,27 @@
         </context-group>
         <target state="translated">复制成功</target>
       </trans-unit>
-      <trans-unit id="3577163640469999566" datatype="html">
-        <source>Please enter URL or Curl text</source>
+      <trans-unit id="1602289569420882251" datatype="html">
+        <source>Please enter URL, #AI Prompt or Curl text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">24</context>
         </context-group>
-        <target state="translated">请输入 URL 或 Curl 文本</target>
+        <target state="translated">输入 URL, #AI 提示或 Curl 文本</target>
       </trans-unit>
-      <trans-unit id="865995936377009610" datatype="html">
-        <source>Enter URL or Curl text</source>
+      <trans-unit id="8635035281612770733" datatype="html">
+        <source>Enter URL, #AI Prompt or Curl text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">30</context>
         </context-group>
-        <target state="translated">请输入 URL 或 Curl 文本</target>
+        <target state="translated">输入 URL, #AI 提示或 Curl 文本</target>
       </trans-unit>
       <trans-unit id="6564680352634729497" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Send<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="Send&lt;/"/>发送<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
       </trans-unit>
@@ -3552,7 +3648,7 @@
         <source>Abort</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <target state="translated">中止</target>
       </trans-unit>
@@ -3560,7 +3656,7 @@
         <source>Headers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/websocket/websocket.component.html</context>
@@ -3572,11 +3668,11 @@
         <source> This Case is using Script Action from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;toAPI(&apos;beforeInject&apos;)&quot;&gt;"/>API<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">132,133</context>
+          <context context-type="linenumber">139,140</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">145,146</context>
+          <context context-type="linenumber">152,153</context>
         </context-group>
         <target state="translated"> 此用例正在使用来自 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;toAPI('beforeInject')&quot;&gt;"/>API 的脚本操作<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
       </trans-unit>
@@ -3584,7 +3680,7 @@
         <source>Save As File</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.html</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">225</context>
         </context-group>
         <target state="translated">保存为文件</target>
       </trans-unit>
@@ -3592,7 +3688,7 @@
         <source>Curl text error: <x id="PH" equiv-text="err"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.ts</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">500</context>
         </context-group>
         <target state="translated">Curl 文本错误： <x id="PH" equiv-text="err"/></target>
       </trans-unit>
@@ -3760,15 +3856,15 @@
         <source>More Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">144</context>
         </context-group>
         <target state="translated">更多设置</target>
       </trans-unit>
@@ -3776,7 +3872,7 @@
         <source>Key</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <target state="translated">标签</target>
       </trans-unit>
@@ -3784,7 +3880,7 @@
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/api-table.service.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <target state="translated">参数名</target>
       </trans-unit>
@@ -3792,7 +3888,7 @@
         <source>Can&apos;t find this API</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target state="translated">找不到这个 API</target>
       </trans-unit>
@@ -3800,11 +3896,11 @@
         <source>Copy API failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">95</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <target state="translated">复制 API 失败</target>
       </trans-unit>
@@ -3812,7 +3908,7 @@
         <source>Save and Sync</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -3824,7 +3920,7 @@
         <source>Confirm</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -3840,7 +3936,7 @@
         <source>Failed to <x id="PH" equiv-text="title"/>,Please upgrade extension or try again later</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">131</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -3852,7 +3948,7 @@
         <source><x id="PH" equiv-text="title"/> successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/service/project-api.service.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">139</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>

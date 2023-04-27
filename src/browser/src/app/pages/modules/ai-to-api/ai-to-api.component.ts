@@ -53,29 +53,12 @@ export class AiToApiComponent {
     this.error = false;
 
     if (this.aiPrompt === '生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token') {
-      this.requestLoading = true;
-
-      const zhYaml = zhExampleYaml;
-
-      const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(zhYaml, null, 2)))) as any)[0].collections[0].children[0];
-
-      setTimeout(() => {
-        this.requestLoading = false;
-        this.generateData(editData);
-      }, 1000);
+      this.exampleGenerate(zhExampleYaml);
 
       return;
     } else if (this.aiPrompt === 'Generate a user login API, password needs to be encrypted with MD5, and return the user token') {
-      this.requestLoading = true;
+      this.exampleGenerate(enExampleYaml);
 
-      const enYaml = enExampleYaml;
-
-      const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(enYaml, null, 2)))) as any)[0].collections[0].children[0];
-
-      setTimeout(() => {
-        this.requestLoading = false;
-        this.generateData(editData);
-      }, 1000);
       return;
     }
 
@@ -163,5 +146,16 @@ export class AiToApiComponent {
     this.editShow = true;
     this.apiEditDom.afterTabActivated();
     this.hasGenGenerated = true;
+  }
+
+  exampleGenerate(exampleYaml) {
+    this.requestLoading = true;
+
+    const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(exampleYaml, null, 2)))) as any)[0].collections[0].children[0];
+
+    setTimeout(() => {
+      this.requestLoading = false;
+      this.generateData(editData);
+    }, 1000);
   }
 }
