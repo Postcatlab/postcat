@@ -47,7 +47,7 @@
     <ng-container *ngTemplateOutlet="extraButtonTmp"></ng-container>
   </form>
   <div *ngIf="inputToAI" class="px-[11px] py-[10px]">
-    <pc-ai-input-group fromPage="apiTest" (closeInputEmit)="closeInput()"></pc-ai-input-group>
+    <pc-ai-input-group [(aiPrompt)]="aiPrompt" fromPage="apiTest" (closeInputEmit)="closeInput()"></pc-ai-input-group>
   </div>
   <div class="test-body-container">
     <!-- Request -->
