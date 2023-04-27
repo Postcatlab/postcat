@@ -3,6 +3,8 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { debounce } from 'lodash-es';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { AiToApiService } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.service';
+import { enExampleYaml } from 'pc/browser/src/app/pages/modules/ai-to-api/example-yaml/en-yaml';
+import { zhExampleYaml } from 'pc/browser/src/app/pages/modules/ai-to-api/example-yaml/zh-yaml';
 import { ApiEditComponent } from 'pc/browser/src/app/pages/workspace/project/api/http/edit/api-edit.component';
 import { DataSourceService } from 'pc/browser/src/app/services/data-source/data-source.service';
 import { parseAndCheckApiData } from 'pc/browser/src/app/services/storage/db/validate/validate';
@@ -49,6 +51,34 @@ export class AiToApiComponent {
 
   generateAPI() {
     this.error = false;
+
+    if (this.aiPrompt === '生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token') {
+      this.requestLoading = true;
+
+      const zhYaml = zhExampleYaml;
+
+      const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(zhYaml, null, 2)))) as any)[0].collections[0].children[0];
+
+      setTimeout(() => {
+        this.requestLoading = false;
+        this.generateData(editData);
+      }, 1000);
+
+      return;
+    } else if (this.aiPrompt === 'Generate a user login API, password needs to be encrypted with MD5, and return the user token') {
+      this.requestLoading = true;
+
+      const enYaml = enExampleYaml;
+
+      const editData = (parseOpenAPI(JSON.parse(JSON.stringify(yaml.load(enYaml, null, 2)))) as any)[0].collections[0].children[0];
+
+      setTimeout(() => {
+        this.requestLoading = false;
+        this.generateData(editData);
+      }, 1000);
+      return;
+    }
+
     if (this.hasGenGenerated) {
       this.requestLoading = true;
       this.editShow = false;
@@ -80,15 +110,12 @@ export class AiToApiComponent {
               const checkedData = parseAndCheckApiData(editData);
               let checkedApiData = null;
               if (checkedData.validate) {
-                checkedApiData = parseAndCheckApiData(editData).data;
+                checkedApiData = checkedData.data;
               } else {
                 this.error = true;
                 break;
               }
-              storageUtils.set('api_data_will_be_save', checkedApiData);
-              this.editShow = true;
-              this.apiEditDom.afterTabActivated();
-              this.hasGenGenerated = true;
+              this.generateData(checkedApiData);
               break;
             case res.code === 232000008:
               debounce(() => {
@@ -129,5 +156,12 @@ export class AiToApiComponent {
 
   cancel() {
     this.modalRef.close();
+  }
+
+  generateData(data) {
+    storageUtils.set('api_data_will_be_save', data);
+    this.editShow = true;
+    this.apiEditDom.afterTabActivated();
+    this.hasGenGenerated = true;
   }
 }

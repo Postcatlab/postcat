@@ -94,6 +94,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent;
   validateForm!: FormGroup;
   noAuth = NONE_AUTH_OPTION;
+  aiPrompt = '';
 
   inputToAI = false;
   isDragging = false;
@@ -222,15 +223,12 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
   updateParamsbyUri() {
     const regex = /^#.+/;
-    // if (regex.test(this.model.request.uri)) {
-    //   this.inputToAI = true;
-    // }
-
     if (this.model.request.uri === '#' || regex.test(this.model.request.uri)) {
-      // if(regex.test(this.model.request.uri)) {
-      //   const regexMatch = /#(.+)/;
-      //   const match = this.model.request.uri.match(regex);
-      // }
+      if (regex.test(this.model.request.uri)) {
+        const regexMatch = /#(.+)/;
+        const match = this.model.request.uri.match(regexMatch)[1];
+        this.aiPrompt = match;
+      }
       this.inputToAI = true;
     }
 
