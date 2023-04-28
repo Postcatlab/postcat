@@ -150,7 +150,7 @@
         </nz-collapse-panel>
       </nz-collapse>
       <!-- Script Action -->
-      <nz-collapse *ngIf="model.scriptList" class="mt-[20px]">
+      <nz-collapse *ngIf="model.scriptList && !isAIToAPI" class="mt-[20px]">
         <nz-collapse-panel class="relative" [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
           <pc-action>
             <div name="pre">
