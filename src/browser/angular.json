@@ -6,17 +6,14 @@
   "projects": {
     "postcat": {
       "root": "",
-      "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
-        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
-      },
+      "i18n": { "sourceLocale": { "code": "en" }, "locales": { "zh": { "translation": "locale/messages.zh.xlf" } } },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": { "@schematics/angular:application": { "strict": true } },
       "architect": {
         "build": {
           "inlineStyleLanguage": "scss",
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "localize": true,
             "aot": true,
