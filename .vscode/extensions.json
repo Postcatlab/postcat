@@ -4,6 +4,7 @@
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "esbenp.prettier-vscode",
-    "heybourn.headwind"
+    "heybourn.headwind",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

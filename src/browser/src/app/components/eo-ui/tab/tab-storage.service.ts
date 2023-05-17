@@ -6,7 +6,7 @@ import { storageTab, TabItem } from './tab.model';
 @Injectable()
 /**
  * Storage tab data
- * All data chagne in this service
+ * All data change in this service
  */
 export class TabStorageService {
   tabOrder: number[] = [];

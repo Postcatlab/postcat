@@ -29,7 +29,7 @@ export class ChatRobotFormComponent {
   @Input() loading: boolean = false;
 
   /**
-   * Send message triggle event
+   * Send message trigger event
    */
   @Output() readonly send = new EventEmitter<{ message: string }>();
   sendMessage() {

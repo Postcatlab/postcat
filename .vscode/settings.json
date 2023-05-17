@@ -89,5 +89,11 @@
   },
   "[xml]": {
     "editor.defaultFormatter": "DotJoshJohnson.xml"
-  }
+  },
+  "cSpell.words": [
+    "antd",
+    "borderless",
+    "iconpark",
+    "Postcat"
+  ]
 }
