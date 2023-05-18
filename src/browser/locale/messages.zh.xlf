@@ -78,7 +78,7 @@
         <source>Program will not close unsaved tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab-operate.service.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">373</context>
         </context-group>
         <target state="translated">程序将不会关闭未保存的标签</target>
       </trans-unit>
@@ -88,6 +88,10 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
         <target state="translated"> 关闭其它标签(不包括当前标签) </target>
       </trans-unit>
       <trans-unit id="4540787302079589597" datatype="html">
@@ -95,6 +99,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <target state="translated">关闭所有标签</target>
       </trans-unit>
@@ -104,6 +112,10 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
         <target state="translated"> 关闭左侧标签页 </target>
       </trans-unit>
       <trans-unit id="974792392187340268" datatype="html">
@@ -111,6 +123,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">104,105</context>
         </context-group>
         <target state="translated"> 关闭右边的标签 </target>
       </trans-unit>
@@ -1218,19 +1234,27 @@
         </context-group>
         <target state="translated"> 您今天 ChatGPT 次数已使用完。请 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button eo-ng-button class=&quot;mb-[2px]&quot; nzType=&quot;primary&quot; (click)=&quot;login()&quot; nzSize=&quot;small&quot;&gt;"/>登录<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/> 您的 Github 账号 Star/Fork 项目获取更多次数。 </target>
       </trans-unit>
-      <trans-unit id="3964296369329537542" datatype="html">
-        <source>Send message to AI</source>
+      <trans-unit id="7471644056248177813" datatype="html">
+        <source>#OPENAPI_KEY Send message to AI</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
-        <target state="translated">发送消息给 AI</target>
+        <target state="translated">#OPENAPI_KEY 发送消息到 AI</target>
+      </trans-unit>
+      <trans-unit id="4256482988459333308" datatype="html">
+        <source>Please send the OpenAI Key in the input box, starting with #</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+        <target state="translated">请在输入框中发送 OpenAI 密钥，开始于 #</target>
       </trans-unit>
       <trans-unit id="2895747618881739814" datatype="html">
         <source>Visitor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">231</context>
         </context-group>
         <target state="translated">游客</target>
       </trans-unit>
@@ -3592,7 +3616,7 @@
         <source>Curl text error: <x id="PH" equiv-text="err"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.ts</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">487</context>
         </context-group>
         <target state="translated">Curl 文本错误： <x id="PH" equiv-text="err"/></target>
       </trans-unit>

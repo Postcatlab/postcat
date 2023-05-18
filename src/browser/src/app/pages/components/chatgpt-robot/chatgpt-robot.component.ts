@@ -71,7 +71,7 @@ type messageItem = {
       <pc-chat-robot-form
         (send)="sendMessage($event)"
         [loading]="loading"
-        placeholder="Send message to AI"
+        placeholder="#OPENAPI_KEY Send message to AI"
         i18n-placeholder
       ></pc-chat-robot-form>
     </pc-chat-robot>
@@ -84,7 +84,6 @@ export class ChatgptRobotComponent implements OnInit {
   MAX_LIMIT = 5;
   MAX_TOKEN_LENTH_LIMIT = 4000;
   appName = 'Postcat';
-  nowUsage = StorageUtil.get('cr_usage');
   initMessage = {
     date: new Date(),
     reply: true,
@@ -98,7 +97,19 @@ export class ChatgptRobotComponent implements OnInit {
     title: 'APISpace',
     link: 'https://www.apispace.com?utm_source=postcat&utm_medium=robot&utm_term=chatgptturbo'
   };
-  messages: messageItem[] = [];
+  APIKey = StorageUtil.get('OPENAPI_KEY');
+  messages: messageItem[] = [
+    {
+      text: $localize`Please send the OpenAI Key in the input box, starting with #`,
+      date: new Date(),
+      reply: true,
+      type: 'text',
+      user: {
+        name: this.appName,
+        avatar: './assets/images/logo.svg'
+      }
+    }
+  ];
   @ViewChild('moreTwice') moreTwiceTmp: TemplateRef<any>;
   constructor(
     private http: HttpClient,
@@ -115,10 +126,6 @@ export class ChatgptRobotComponent implements OnInit {
     this.trace.report('jump_to_github', {
       where_jump_to_github: 'chatGPT_extension'
     });
-    setTimeout(() => {
-      this.nowUsage = 0;
-      StorageUtil.set('cr_usage', this.nowUsage);
-    }, 5000);
   }
   private getTextLenth(text: string) {
     const tokenizer = new GPT3Tokenizer({ type: 'gpt3' }); // or 'codex'
@@ -168,6 +175,7 @@ export class ChatgptRobotComponent implements OnInit {
     this.trace.report('send_chatGPT');
     this.http
       .post(`${APP_CONFIG.EXTENSION_URL}/chatGPT`, {
+        key: this.APIKey,
         message: this.transferMessage2Body(this.getMessage())
       })
       .subscribe({
@@ -187,8 +195,6 @@ export class ChatgptRobotComponent implements OnInit {
             });
             return;
           }
-          this.nowUsage++;
-          StorageUtil.set('cr_usage', this.nowUsage, 24 * 60 * 60);
           this.messages.push({
             text: res.result,
             date: new Date(),
@@ -215,9 +221,9 @@ export class ChatgptRobotComponent implements OnInit {
         }
       });
   }
-  sendMessage($event) {
+  addMessageTextToChat(text) {
     this.messages.push({
-      text: $event.message,
+      text: text,
       date: new Date(),
       reply: false,
       type: 'text',
@@ -226,9 +232,14 @@ export class ChatgptRobotComponent implements OnInit {
         avatar: 'https://data.eolink.com/PXMbLGmc2f0b29596764f7456eefb75478ed77b4fd172d9'
       }
     });
-    if (this.nowUsage >= this.MAX_LIMIT) {
+  }
+  sendMessage($event) {
+    if ($event.message.startsWith('#')) {
+      this.APIKey = $event.message.slice(1);
+      StorageUtil.set('OPENAPI_KEY', this.APIKey, 5 * 60 * 1000 * 60 * 24);
+      this.addMessageTextToChat($event.message);
       this.messages.push({
-        content: this.moreTwiceTmp,
+        text: `You can now start chatting with ChatGPT`,
         date: new Date(),
         reply: true,
         type: 'text',
@@ -239,6 +250,12 @@ export class ChatgptRobotComponent implements OnInit {
       });
       return;
     }
+    if (!this.APIKey) {
+      this.messages.push(this.messages[0]);
+      return;
+    }
+
+    this.addMessageTextToChat($event.message);
     this.sendChatGPTMessage($event);
   }
   @ExtensionChange(FEATURE_CONTROL)
@@ -250,6 +267,5 @@ export class ChatgptRobotComponent implements OnInit {
         break;
       }
     }
-    // });
   }
 }

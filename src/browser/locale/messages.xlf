@@ -70,7 +70,7 @@
         <source>Program will not close unsaved tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab-operate.service.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="277155456923036596" datatype="html">
@@ -79,12 +79,20 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="4540787302079589597" datatype="html">
         <source>Close All Tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5555596397221201782" datatype="html">
@@ -93,12 +101,20 @@
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="974792392187340268" datatype="html">
         <source> Close Tabs to the Right </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
           <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/eo-ui/tab/tab.component.html</context>
+          <context context-type="linenumber">104,105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7762169316697380309" datatype="html">
@@ -1093,18 +1109,25 @@
           <context context-type="linenumber">66,70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3964296369329537542" datatype="html">
-        <source>Send message to AI</source>
+      <trans-unit id="7471644056248177813" datatype="html">
+        <source>#OPENAPI_KEY Send message to AI</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
           <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4256482988459333308" datatype="html">
+        <source>Please send the OpenAI Key in the input box, starting with #</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2895747618881739814" datatype="html">
         <source>Visitor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3022316336875255085" datatype="html">
@@ -3233,7 +3256,7 @@
         <source>Curl text error: <x id="PH" equiv-text="err"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/http/test/api-test-ui.component.ts</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1153957724275241408" datatype="html">
