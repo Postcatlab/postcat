@@ -8,6 +8,9 @@ import { EoNgTreeModule } from 'eo-ng-tree';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { AiInputGroupComponent } from 'pc/browser/src/app/pages/components/ai-input-group/ai-input-group.component';
+import { AiToApiModule } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.module';
 import { ApiTabService, API_TABS } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupTreeDirective } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group-tree.directive';
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
@@ -43,7 +46,10 @@ const tabs = API_TABS.map(val => ({ ...val, pathname: `/home/workspace/project/a
     EoNgLayoutModule,
     EoNgTabsModule,
     EoNgTreeModule,
-    ResponseStepsComponent
+    ResponseStepsComponent,
+    NzTagModule,
+    AiToApiModule,
+    AiInputGroupComponent
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],

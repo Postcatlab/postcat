@@ -19,7 +19,8 @@ export class TraceService {
     if (!eventId) {
       return;
     }
-    // console.log('trace =>>', eventId, JSON.stringify(params, null, 2));
+    // scheduler.postTask(report, {priority: 'background'});
+    //TODO Use background priority to optimize job: https://web.dev/optimize-long-tasks/#a-dedicated-scheduler-api
     gio('track', eventId, params);
   }
   setUserID(id) {

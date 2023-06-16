@@ -321,3 +321,18 @@ export const getDifference = (a, b) => {
     [k]: isObject(a[k]) && isObject(b[k]) ? getDifference(a[k], b[k]) : a[k] === b[k]
   }));
 };
+
+export const getDataType = data => {
+  return toString.call(data).slice(8, -1).toLocaleLowerCase();
+};
+
+export const safeStringify = val => {
+  try {
+    if (typeof val === 'string') {
+      return val;
+    }
+    return JSON.stringify(val);
+  } catch (error) {
+    return String(val);
+  }
+};

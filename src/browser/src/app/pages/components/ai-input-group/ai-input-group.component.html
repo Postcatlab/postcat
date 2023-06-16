@@ -1,0 +1,52 @@
+<div class="ai-input-group" (keyup.enter)="generateAPI()">
+  <ng-template #AIToAPITitle>
+    <span i18n>AI generate API</span>
+    <nz-tag [nzColor]="primaryColor" class="ml-[10px]" i18n>experiment</nz-tag>
+  </ng-template>
+
+  <div class="flex">
+    <eo-ng-input-group [nzPrefix]="aiPreixTem" [nzSuffix]="closeIconTem" class="flex items-center">
+      <input
+        type="text"
+        eo-ng-input
+        placeholder="Please enter AI Prompt"
+        i18n-placeholder
+        (ngModelChange)="inputChange($event)"
+        [(ngModel)]="aiPrompt"
+        eoNgFeedbackTooltip
+        nzTooltipPlacement="top"
+        [nzTooltipTitle]="aiTip"
+        [nzTooltipOverlayStyle]="{
+          maxWidth: '750px'
+        }"
+        autofocus
+      />
+      <ng-template #closeIconTem>
+        <button nztype="default" eo-ng-button *ngIf="fromPage === 'apiTest'" (click)="closeInput()">
+          <svg class="iconpark-icon">
+            <use href="#close-small"></use>
+          </svg>
+        </button>
+      </ng-template>
+      <ng-template #aiPreixTem>
+        <div class="aiPreix px-[5px] rounded-[5px] bg-white">
+          <eo-iconpark-icon name="robot" class="-mt-[3px]"></eo-iconpark-icon>
+          <span class="ml-[5px] text-[12px] text-[#101010]" i18n>AI generate</span>
+        </div>
+      </ng-template>
+    </eo-ng-input-group>
+
+    <button [nzLoading]="requestLoading" (click)="generateAPI()" eo-ng-button class="generateBtn ml-[10px]" nzType="primary">
+      {{ getAiBtnText(hasGenGenerated) }}
+    </button>
+
+    <button (click)="showHowUseAi()" i18n *ngIf="fromPage === 'apiTest'" eo-ng-button class="generateBtn ml-[10px]" nzType="default">
+      how to use ?
+    </button>
+  </div>
+
+  <div class="use-tip mt-[11px]" *ngIf="fromPage !== 'apiTest' && !hasGenGenerated">
+    <nz-tag [nzColor]="primaryColor" i18n>example</nz-tag>
+    <span class="text-[12px]" i18n>Generate a user login API, password needs to be encrypted with MD5, and return the user token</span>
+  </div>
+</div>

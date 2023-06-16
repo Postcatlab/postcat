@@ -10,7 +10,9 @@ import { filterTableData } from '../../../../../shared/utils/tree/tree.utils';
 import { ApiBodyType, ApiParamsType, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from '../constants/api.model';
 import { ApiParamsExtraSettingComponent } from '../http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../http/test/api-test.model';
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
   showMore(item, opts: { in: string; isEdit: boolean }) {

@@ -11,7 +11,9 @@ import { ApiData } from 'pc/browser/src/app/services/storage/db/models/apiData';
 
 import { ApiEffectService } from '../store/api-effect.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProjectApiService {
   actionComponent = {
     sync: SyncApiComponent,
