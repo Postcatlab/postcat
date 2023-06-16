@@ -38,6 +38,7 @@ const COMPONENTS = [ApiEditComponent, ApiEditFormComponent, ApiEditBodyComponent
     ...NZ_COMPONETS,
     SharedModule
   ],
-  providers: [ApiEditUtilService, ApiEditService]
+  providers: [ApiEditUtilService, ApiEditService],
+  exports: [...COMPONENTS]
 })
 export class ApiEditModule {}

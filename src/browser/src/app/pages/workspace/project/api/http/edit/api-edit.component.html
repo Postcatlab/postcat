@@ -1,10 +1,10 @@
 <form nz-form auto-focus-form [formGroup]="validateForm" [nzLayout]="'vertical'">
-  <div class="top-save-bar">
+  <div class="top-save-bar" *ngIf="!isAIToAPI">
     <button type="button" eo-ng-button nzType="primary" [nzLoading]="!globalStore.isLocal && isSaving" (click)="saveAPI()" i18n
       >Save</button
     >
   </div>
-  <div class="p-base">
+  <div [class]="{ 'p-base': !isAIToAPI }">
     <nz-skeleton [nzLoading]="!model?.apiAttrInfo" [nzActive]="true"> </nz-skeleton>
     <div class="save-container" *ngIf="model?.apiAttrInfo">
       <eo-ng-input-group nzCompact>
@@ -150,7 +150,7 @@
         </nz-collapse-panel>
       </nz-collapse>
       <!-- Script Action -->
-      <nz-collapse *ngIf="model.scriptList" class="mt-[20px]">
+      <nz-collapse *ngIf="model.scriptList && !isAIToAPI" class="mt-[20px]">
         <nz-collapse-panel class="relative" [nzActive]="true" i18n-nzHeader nzHeader="Script Action">
           <pc-action>
             <div name="pre">

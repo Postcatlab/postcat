@@ -12,6 +12,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorModule } from 'pc/browser/src/app/components/eo-ui/monaco-editor/monaco.module';
 import { ElectronService, WebService } from 'pc/browser/src/app/core/services';
+import { AiInputGroupComponent } from 'pc/browser/src/app/pages/components/ai-input-group/ai-input-group.component';
 import { ApiSharedModule } from 'pc/browser/src/app/pages/workspace/project/api/api-shared.module';
 import { ResponseStepsComponent } from 'pc/browser/src/app/pages/workspace/project/api/components/response-steps/response-steps.component';
 import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
@@ -64,7 +65,8 @@ const COMPONENTS = [
     SharedModule,
     ApiSharedModule,
     NzResizableModule,
-    ResponseStepsComponent
+    ResponseStepsComponent,
+    AiInputGroupComponent
   ],
   providers: [
     NzResizableService,

@@ -7,6 +7,11 @@
   padding-right: var(--padding-x);
 }
 
+.py-base {
+  padding-top: var(--padding-y);
+  padding-bottom: var(--padding-y);
+}
+
 .border {
   border: 1px solid var(--border-color);
 }

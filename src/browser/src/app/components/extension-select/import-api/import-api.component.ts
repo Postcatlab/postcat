@@ -114,6 +114,7 @@ export class ImportApiComponent implements OnInit {
     let { name, content } = this.uploadData;
     try {
       const [data, err] = module[action](content);
+      console.log(data, 555);
       console.log('import data', window.structuredClone?.(data));
       if (err) {
         this.feedback.error(err.msg);
