@@ -1,0 +1,27 @@
+:host ::ng-deep {
+  .ai-input-group {
+    .ant-input-affix-wrapper {
+      background: linear-gradient(266.83deg, rgb(181 87 249 / 14%) 8.65%, rgb(115 113 252 / 8%) 94.57%);
+
+      eo-iconpark-icon svg {
+        color: #b557f9;
+      }
+
+      .ant-input {
+        background: transparent !important;
+      }
+    }
+
+    eo-ng-input-group,
+    .ant-input,
+    .generateBtn {
+      height: 40px !important;
+      box-sizing: border-box;
+    }
+  }
+
+  .param-box-header {
+    padding: 5px 15px;
+    box-sizing: border-box;
+  }
+}

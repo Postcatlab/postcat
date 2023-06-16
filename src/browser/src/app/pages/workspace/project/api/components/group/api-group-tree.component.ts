@@ -1,9 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { action, autorun, reaction, toJS } from 'mobx';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzTreeComponent, NzFormatEmitEvent, NzTreeNodeOptions, NzTreeNode, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
+import { AiToApiService } from 'pc/browser/src/app/pages/modules/ai-to-api/ai-to-api.service';
 import { PageUniqueName } from 'pc/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupService } from 'pc/browser/src/app/pages/workspace/project/api/components/group/api-group.service';
 import {
@@ -42,6 +43,9 @@ const getAllAPIId = ({ id, children = [] }: any) => [id, ...children.map(getAllA
 })
 export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeComponent;
+  @ViewChild('AIToAPITitle') AIToAPITitle: TemplateRef<HTMLDivElement>;
+  primaryColor = 'var(--primary-color)';
+
   /**
    * Expanded keys of tree.
    */
@@ -60,12 +64,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       title: $localize`:@@ImportAPI:Import API`,
       menuTitle: $localize`Import From File`,
       traceID: 'click_import_project',
+      iconName: 'file-addition',
       click: title => this.projectApi.importProject('import', title)
     },
     {
       title: $localize`Sync API from URL`,
       menuTitle: $localize`Sync API from URL`,
       traceID: 'sync_api_from_url',
+      iconName: 'upload-file',
       click: title => this.projectApi.importProject('sync', title)
     }
   ];
@@ -95,6 +101,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private nzContextMenuService: NzContextMenuService,
+    private AiToApiService: AiToApiService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {
     this.operateByModule = this.getGroupOperate();
@@ -409,6 +416,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       }
     };
   };
+
+  aiToAPI() {
+    this.AiToApiService.openAIToAPIModal(this.AIToAPITitle);
+  }
   ngOnDestroy(): void {
     //Clear all subscriptions
     this.reactions.forEach(reaction => reaction());

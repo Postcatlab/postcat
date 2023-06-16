@@ -119,7 +119,7 @@
   },
   "defaultProject": "postcat",
   "schematics": {
-    "@schematics/angular:component": { "prefix": "pc", "style": "scss", "inlineStyle": false, "inlineTemplate": true },
+    "@schematics/angular:component": { "prefix": "pc", "style": "scss", "inlineStyle": false, "inlineTemplate": false },
     "@schematics/angular:directive": { "prefix": "pc" }
   }
 }

@@ -42,11 +42,11 @@ export class ApiGroupService {
       nzOnOk: async () => {
         const [, err] = await this.effect.deleteGroup(group);
         if (err) {
-          this.feedback.error('Failed to delete');
+          this.feedback.error($localize`Failed to delete`);
           modelRef.destroy();
           return;
         }
-        this.feedback.success('Successfully deleted');
+        this.feedback.success($localize`Successfully deleted`);
         modelRef.destroy();
       }
     });

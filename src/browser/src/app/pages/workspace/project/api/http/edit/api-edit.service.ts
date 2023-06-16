@@ -7,7 +7,9 @@ import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
 
 import { ApiEditUtilService } from './api-edit-util.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiEditService {
   constructor(private apiEditUtil: ApiEditUtilService, private projectApi: ProjectApiService, private effect: ApiEffectService) {}
   getPureApi(): ApiData {
@@ -47,7 +49,7 @@ export class ApiEditService {
   async getApi({ id }): Promise<ApiData> {
     let result;
     const tmpApiData = StorageUtil.get('api_data_will_be_save');
-    const addType = !id ? (tmpApiData ? 'from_test' : 'blank') : 'edit';
+    const addType = !id || StorageUtil.get('openAIToAPI') ? (tmpApiData ? 'from_test' : 'blank') : 'edit';
     switch (addType) {
       case 'from_test': {
         //Add From Test
