@@ -1224,6 +1224,14 @@
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
         <target state="translated">AI 生成 API</target>
       </trans-unit>
       <trans-unit id="4130352729909702476" datatype="html">
@@ -1231,6 +1239,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <target state="translated">实验</target>
       </trans-unit>
@@ -1242,9 +1258,9 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">63</context>
         </context-group>
-        <target state="translated">请输入 AI Prompt</target>
+        <target state="translated">请输入 AI 指令</target>
       </trans-unit>
       <trans-unit id="4494155708636666118" datatype="html">
         <source>AI generate</source>
@@ -1254,7 +1270,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target state="translated">AI 生成</target>
       </trans-unit>
@@ -1272,7 +1288,7 @@
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-        <target state="translated">例子</target>
+        <target state="translated">示例</target>
       </trans-unit>
       <trans-unit id="229651618036285871" datatype="html">
         <source>Generate a user login API, password needs to be encrypted with MD5, and return the user token</source>
@@ -1282,19 +1298,19 @@
         </context-group>
         <target state="translated">生成一个用户登录接口，密码需要进行 MD5 加密，返回用户 Token</target>
       </trans-unit>
-      <trans-unit id="6136499315104410560" datatype="html" approved="yes">
+      <trans-unit id="6136499315104410560" datatype="html">
         <source>🤩To generate a document with AI, type &quot;# prompt&quot; and give it a try!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target state="final">🤩支持 AI 生成文档啦，赶快输入“#提示语”试一下吧！</target>
+        <target state="translated">🤩支持 AI 生成文档啦，赶快输入“#提示语”试一下吧！</target>
       </trans-unit>
       <trans-unit id="4734645910590604766" datatype="html">
         <source>rebuild</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/ai-input-group/ai-input-group.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target state="translated">重新生成</target>
       </trans-unit>
@@ -1314,19 +1330,27 @@
         </context-group>
         <target state="translated"> 您今天 ChatGPT 次数已使用完。请 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button eo-ng-button class=&quot;mb-[2px]&quot; nzType=&quot;primary&quot; (click)=&quot;login()&quot; nzSize=&quot;small&quot;&gt;"/>登录<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/> 您的 Github 账号 Star/Fork 项目获取更多次数。 </target>
       </trans-unit>
-      <trans-unit id="3964296369329537542" datatype="html">
-        <source>Send message to AI</source>
+      <trans-unit id="7471644056248177813" datatype="html">
+        <source>#OPENAPI_KEY Send message to AI</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
-        <target state="translated">发送消息给 AI</target>
+        <target state="translated">#OPENAPI_KEY 发送消息到 AI</target>
+      </trans-unit>
+      <trans-unit id="4256482988459333308" datatype="html">
+        <source>Please send the OpenAI Key in the input box, starting with #</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+        <target state="translated">请在输入框中发送 OpenAI 密钥，开始于 #</target>
       </trans-unit>
       <trans-unit id="2895747618881739814" datatype="html">
         <source>Visitor</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/components/chatgpt-robot/chatgpt-robot.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">231</context>
         </context-group>
         <target state="translated">游客</target>
       </trans-unit>
@@ -2762,7 +2786,7 @@
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/api-group-tree.component.html</context>
           <context context-type="linenumber">40,42</context>
         </context-group>
-        <target state="translated"><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;folder-close&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/> 新建分组</target>
+        <target state="translated"><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;folder-close&quot; class=&quot;mr-[10px]&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/> 新建分组 </target>
       </trans-unit>
       <trans-unit id="ImportAPI" datatype="html">
         <source>Import API</source>
