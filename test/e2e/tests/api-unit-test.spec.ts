@@ -265,3 +265,8 @@ test('Import Curl Test', async ({ page }) => {
   // const res1 = await testAndWaitForResponse(page);
   // expect(res1.body).toEqual(`form=value&f1orm2=value`);
 });
+
+/**
+ * Global Varibale Test
+ */
+test('Auth Request', async ({ page }) => {});

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
-import { NpsMaskModule } from '../components/nps-mask/nps-mask.module';
+// import { NpsMaskModule } from '../components/nps-mask/nps-mask.module';
 import { SystemSettingModule } from '../components/system-setting/system-setting.module';
 import { LocalWorkspaceTipComponent } from '../layouts/local-workspace-tip/local-workspace-tip.component';
 import { NavbarModule } from '../layouts/navbar/navbar.module';
@@ -23,7 +23,7 @@ import { PagesComponent } from './pages.component';
   imports: [
     ChatgptRobotComponent,
     PagesRoutingModule,
-    NpsMaskModule,
+    // NpsMaskModule,
     NzNotificationModule,
     SystemSettingModule,
     CommonModule,

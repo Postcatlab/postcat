@@ -3,7 +3,7 @@ import { autorun, observable, makeObservable } from 'mobx';
 import { WebService } from 'pc/browser/src/app/core/services';
 
 import { ExtensionService } from '../../../../services/extensions/extension.service';
-import { ContributionPointsPrefix, ExtensionGroupType, suggestList } from '../extension.model';
+import { CategoryContributionPoints, ContributionPointsPrefix, ExtensionGroupType, suggestList } from '../extension.model';
 
 const extensionSearch = list => {
   return (keyword = '') => {
@@ -23,7 +23,7 @@ const extensionSearch = list => {
 export class ExtensionListComponent implements OnInit {
   @Input() @observable type: string = ExtensionGroupType.all;
   @Input() @observable keyword = '';
-  @Input() @observable category = '';
+  @Input() @observable category: CategoryContributionPoints;
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
   extensionList = [];
   loading = false;
@@ -46,10 +46,10 @@ export class ExtensionListComponent implements OnInit {
       let type = this.type;
       if (type.startsWith(ContributionPointsPrefix.category)) {
         type = 'category';
-        this.category = this.type.slice(ContributionPointsPrefix.category.length);
+        this.category = this.type.slice(ContributionPointsPrefix.category.length) as CategoryContributionPoints;
       }
       this.extensionList = [];
-      const data = await this.searchPlugin(type, { keyword: this.keyword, category: this.category });
+      const data = await this.searchPlugin(type, { keyword: this.keyword, category: this.category, feature: '' });
       // 避免频繁切换，导致侧边栏选中状态与右侧展示不一致
       if (originType === this.type) {
         this.extensionList = data;
@@ -61,11 +61,12 @@ export class ExtensionListComponent implements OnInit {
     item.nzSelectedIndex = nzSelectedIndex;
     this.selectChange.emit(item);
   }
-  async searchPlugin(groupType, { keyword = '', category = '', feature = '' }) {
+  async searchPlugin(groupType, { keyword = '', category, feature }) {
     this.loading = true;
     const suggest = suggestList.find(n => keyword.startsWith(n));
 
     if (suggest) {
+      //Re Generate feature or catory by keyword
       const prefix = Object.values(ContributionPointsPrefix).find(n => keyword.startsWith(n));
       const text = suggest.slice(prefix.length);
       keyword = keyword.slice(suggest.length).trim();

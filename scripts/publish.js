@@ -31,7 +31,6 @@ const cpFile = (fromFile, toFile) =>
 const version = package.version;
 const fileList = [
   'release/Postcat-Setup-?.exe',
-  'release/Postcat Setup ?.exe.blockmap',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',

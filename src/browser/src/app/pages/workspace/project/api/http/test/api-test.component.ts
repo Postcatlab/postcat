@@ -12,6 +12,7 @@ import {
   TabsConfig
 } from 'pc/browser/src/app/pages/workspace/project/api/constants/api.model';
 import { isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { ApiCaseService } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-case.service';
 import { ApiTestUiComponent, ContentTypeMap } from 'pc/browser/src/app/pages/workspace/project/api/http/test/api-test-ui.component';
 import {
   ContentType,
@@ -24,7 +25,7 @@ import { ProjectApiService } from 'pc/browser/src/app/pages/workspace/project/ap
 import { ApiTestResData } from 'pc/browser/src/app/pages/workspace/project/api/service/test-server/test-server.model';
 import { ApiEffectService } from 'pc/browser/src/app/pages/workspace/project/api/store/api-effect.service';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
-import { ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
+import { ApiCase, ApiTestHistory } from 'pc/browser/src/app/services/storage/db/models';
 import { HeaderParam } from 'pc/browser/src/app/services/storage/db/models/apiData';
 import { eoDeepCopy, getDifference, isEmptyObj, JSONParse, whatTextType } from 'pc/browser/src/app/shared/utils/index.utils';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
@@ -82,8 +83,8 @@ export class ApiTestComponent implements EditTabViewComponent {
     private effect: ApiEffectService,
     private projectApi: ProjectApiService,
     private feedback: EoNgFeedbackMessageService,
-    private api: ApiService,
     private apiTestUtil: ApiTestUtilService,
+    private apiCase: ApiCaseService,
     @Inject(BASIC_TABS_INFO) public tabsConfig: TabsConfig
   ) {}
   uiModelChange($event) {
@@ -311,7 +312,7 @@ export class ApiTestComponent implements EditTabViewComponent {
             this.isNameEdit = false;
           },
           delete: async () => {
-            await this.effect.deleteCase(apiCaseUuid);
+            this.apiCase.toDelete(this.model.request as ApiCase);
           }
         };
         break;

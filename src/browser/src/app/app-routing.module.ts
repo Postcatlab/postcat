@@ -29,7 +29,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      //Electron user hash to keep router after page refresh
+      //Electron use hash to keep router after page refresh
       useHash: !!(window && window.process && window.process.type) ? true : false,
       preloadingStrategy: PreloadAllModules
     }),

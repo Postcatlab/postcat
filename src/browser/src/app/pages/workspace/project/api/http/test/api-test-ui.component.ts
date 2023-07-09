@@ -156,6 +156,13 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
         { fireImmediately: true }
       )
     );
+
+    reaction(
+      () => [this.model.request.scriptList],
+      value => {
+        console.log(value);
+      }
+    );
   }
   get beforeInject() {
     return this.getScript(1);
@@ -272,6 +279,7 @@ export class ApiTestUiComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
   changeUserSelectedContentType() {
     this.fixedHeaderAndContentType();
+    this.modelChange.emit(this.model);
   }
   /**
    * Set headerParams and userSelectedContentType by bodyType
