@@ -1,10 +1,5 @@
 import { UpdateSpec } from 'dexie';
-import {
-  AuthTypeValue,
-  INHERIT_AUTH_OPTION,
-  isInherited,
-  NONE_AUTH_OPTION
-} from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
+import { AuthTypeValue, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.module';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
 import { ApiResponse } from 'pc/browser/src/app/services/storage/db/decorators/api-response.decorator';
@@ -12,7 +7,6 @@ import { GroupDeleteDto } from 'pc/browser/src/app/services/storage/db/dto/group
 import { Group, GroupModuleType, GroupType, ViewGroup } from 'pc/browser/src/app/services/storage/db/models';
 import { DbBaseService } from 'pc/browser/src/app/services/storage/db/services/base.service';
 import { serializeObj } from 'pc/browser/src/app/services/storage/db/utils';
-
 // 对数据重新进行升序编排
 const formatSort = (arr: any[] = []) => {
   return arr
@@ -216,6 +210,13 @@ export class DbGroupService extends DbBaseService<Group> {
 
   async bulkRead(params) {
     const result = await this.baseService.bulkRead(params);
+    if (!result.data) {
+      return {
+        success: false,
+        code: 1,
+        data: null
+      };
+    }
     //! Warning  case/mock/group id may dupublicate in local
     const { data: apiDataList } = await this.apiDataService.bulkRead({ projectUuid: params.projectUuid });
     const { data: mockDataList } = await this.mockDataService.bulkRead({ projectUuid: params.projectUuid });

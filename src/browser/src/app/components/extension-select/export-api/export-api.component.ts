@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { has } from 'lodash-es';
 import { ExtensionService } from 'pc/browser/src/app/services/extensions/extension.service';
-import { MessageService } from 'pc/browser/src/app/services/message';
 import { ApiService } from 'pc/browser/src/app/services/storage/api.service';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { EXPORT_API } from 'pc/browser/src/app/shared/constans/featureName';
@@ -9,24 +8,26 @@ import { ExtensionChange } from 'pc/browser/src/app/shared/decorators';
 import { FeatureInfo } from 'pc/browser/src/app/shared/models/extension-manager';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
 import StorageUtil from 'pc/browser/src/app/shared/utils/storage/storage.utils';
-import { Subject } from 'rxjs';
 
 import pkgInfo from '../../../../../../../package.json';
 
 @Component({
   selector: 'eo-export-api',
-  template: `<extension-select [(extension)]="currentExtension" tipsType="exportAPI" [extensionList]="supportList"></extension-select> `
+  template: `<extension-select
+    [(extension)]="currentExtension"
+    tipsType="exportAPI"
+    [extensionList]="supportList"
+    (extensionChange)="selectChange($event)"
+  ></extension-select> `
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   isValid = true;
   featureMap: Map<string, FeatureInfo>;
-  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private extensionService: ExtensionService,
     private apiService: ApiService,
-    private messageService: MessageService,
     private trace: TraceService,
     private store: StoreService
   ) {}
@@ -35,7 +36,6 @@ export class ExportApiComponent implements OnInit {
   }
   @ExtensionChange(EXPORT_API, true)
   initData() {
-    console.log('initData');
     this.featureMap = this.extensionService.getValidExtensionsByFature(EXPORT_API);
     this.supportList = [];
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -49,6 +49,9 @@ export class ExportApiComponent implements OnInit {
     if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
       this.currentExtension = key || '';
     }
+  }
+  selectChange($event) {
+    StorageUtil.set('export_api_modal', this.currentExtension);
   }
   submit(callback: () => boolean) {
     this.export(callback);
@@ -73,7 +76,6 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private async export(callback) {
-    StorageUtil.set('export_api_modal', this.currentExtension);
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || 'export.json';

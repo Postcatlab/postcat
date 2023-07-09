@@ -64,7 +64,7 @@ import { ApiStoreService } from '../../store/api-state.service';
           </div>
         </div>
       </ng-template>
-      <nz-select
+      <eo-ng-select
         [nzDropdownMatchSelectWidth]="false"
         [(ngModel)]="envUuid"
         class="env-select-componnet"
@@ -78,7 +78,7 @@ import { ApiStoreService } from '../../store/api-state.service';
         nzPlaceHolder="Environment"
         [nzClearIcon]="clearIconTemplate"
       >
-      </nz-select>
+      </eo-ng-select>
       <ng-template #renderTemplate>
         <ng-container *ngIf="!globalStore.isShare">
           <nz-divider></nz-divider>

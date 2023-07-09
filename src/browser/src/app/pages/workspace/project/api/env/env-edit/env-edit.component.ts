@@ -30,8 +30,8 @@ export class EnvEditComponent implements OnDestroy, EditTabViewComponent {
   varName = $localize`{{Variable Name}}`;
   envDataItem = { name: '', value: '', description: '' };
   envListColumns: ColumnItem[] = [
-    { title: $localize`Name`, type: 'input', key: 'name' },
-    { title: $localize`Value`, type: 'input', key: 'value' },
+    { title: $localize`Name`, type: 'input', key: 'name', maxlength: 65535 },
+    { title: $localize`Value`, type: 'input', key: 'value', maxlength: 65535 },
     { title: $localize`:@@Description:Description`, type: 'input', key: 'description' },
     {
       title: $localize`Operate`,

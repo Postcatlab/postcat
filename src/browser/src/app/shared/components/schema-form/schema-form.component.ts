@@ -29,109 +29,95 @@ const compMap = {
   ],
   template: `
     <form @animateTrigger *ngIf="isInited && validateForm" nz-form [formGroup]="validateForm" [nzNoColon]="true" class="form">
-      <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
-        <ng-container *ngIf="properties[field]?.label">
-          <nz-form-label
-            nzFor="{{ field }}"
-            [nzSpan]="properties[field]?.span ?? 24"
-            [nzRequired]="properties[field]?.required"
-            class="label font-bold"
-          >
-            {{ properties[field]?.label }}
+      <nz-form-item nz-col class="flex-1" *ngFor="let item of properties">
+        <ng-container *ngIf="item?.label">
+          <nz-form-label nzFor="{{ item.key }}" [nzSpan]="item?.span ?? 24" [nzRequired]="item?.required" class="label font-bold">
+            {{ item?.label }}
           </nz-form-label>
         </ng-container>
 
-        <nz-form-control nzErrorTip="{{ placeholderTips }} {{ properties[field]?.label }}" class="form-control">
+        <nz-form-control nzErrorTip="{{ placeholderTips }} {{ item?.label }}" class="form-control">
           <!-- Description -->
-          <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-tips">
-            {{ properties[field]?.description }}
+          <div *ngIf="item?.type !== 'boolean' && item?.description" class="text-[12px] mb-[8px] text-tips">
+            {{ item?.description }}
           </div>
           <!-- String -->
-          <ng-container *ngIf="properties[field].ui.widget === compMap.string">
+          <ng-container *ngIf="item.ui.widget === compMap.string">
             <input
               type="text"
               eo-ng-input
-              id="{{ field }}"
-              [disabled]="properties[field]?.disabled"
-              placeholder="{{ properties[field]?.placeholder ?? placeholderTips + (properties[field]?.label || '') }}"
-              formControlName="{{ field }}"
-              [(ngModel)]="model[field]"
+              id="{{ item.key }}"
+              [disabled]="item?.disabled"
+              placeholder="{{ item?.placeholder ?? placeholderTips + (item?.label || '') }}"
+              formControlName="{{ item.key }}"
+              [(ngModel)]="model[item.key]"
+              maxlength="65535"
             />
           </ng-container>
 
           <!-- String -->
-          <ng-container *ngIf="properties[field].ui.widget === 'textarea'">
+          <ng-container *ngIf="item.ui.widget === 'textarea'">
             <textarea
               type="text"
               eo-ng-input
-              id="{{ field }}"
-              [disabled]="properties[field]?.disabled"
-              placeholder="{{ properties[field]?.placeholder ?? placeholderTips + (properties[field]?.label || '') }}"
-              formControlName="{{ field }}"
-              [rows]="properties[field].ui.rows ?? 4"
-              [(ngModel)]="model[field]"
+              id="{{ item.key }}"
+              [disabled]="item?.disabled"
+              placeholder="{{ item?.placeholder ?? placeholderTips + (item?.label || '') }}"
+              formControlName="{{ item.key }}"
+              [rows]="item.ui.rows ?? 4"
+              [(ngModel)]="model[item.key]"
             ></textarea>
           </ng-container>
 
           <!-- Switch -->
-          <ng-container *ngIf="properties[field].ui.widget === compMap.boolean">
-            <eo-ng-switch
-              [(ngModel)]="model[field]"
-              id="{{ field }}"
-              [nzDisabled]="properties[field]?.disabled"
-              formControlName="{{ field }}"
-            >
-              {{ properties[field]?.description }}
+          <ng-container *ngIf="item.ui.widget === compMap.boolean">
+            <eo-ng-switch [(ngModel)]="model[item.key]" id="{{ item.key }}" [nzDisabled]="item?.disabled" formControlName="{{ item.key }}">
+              {{ item?.description }}
             </eo-ng-switch>
           </ng-container>
 
           <!-- Number -->
-          <ng-container *ngIf="properties[field]?.ui.widget === compMap.number">
+          <ng-container *ngIf="item?.ui.widget === compMap.number">
             <nz-input-number
-              [(ngModel)]="model[field]"
-              id="{{ field }}"
-              [nzDisabled]="properties[field]?.disabled"
-              formControlName="{{ field }}"
+              [(ngModel)]="model[item.key]"
+              id="{{ item.key }}"
+              [nzDisabled]="item?.disabled"
+              formControlName="{{ item.key }}"
             >
-              {{ properties[field]?.description }}
+              {{ item?.description }}
             </nz-input-number>
           </ng-container>
 
           <!-- Radio -->
-          <ng-container *ngIf="properties[field]?.type !== 'array' && properties[field].ui.widget === 'radio'">
+          <ng-container *ngIf="item?.type !== 'array' && item.ui.widget === 'radio'">
             <eo-ng-radio-group
-              [(ngModel)]="model[field]"
-              id="{{ field }}"
-              [nzDisabled]="properties[field]?.disabled"
-              formControlName="{{ field }}"
+              [(ngModel)]="model[item.key]"
+              id="{{ item.key }}"
+              [nzDisabled]="item?.disabled"
+              formControlName="{{ item.key }}"
             >
-              <label *ngFor="let item of properties[field]?.oneOf" eo-ng-radio [nzValue]="item.default ?? item.const">
+              <label *ngFor="let item of item?.oneOf" eo-ng-radio [nzValue]="item.default ?? item.const">
                 {{ item.title }}
               </label>
             </eo-ng-radio-group>
           </ng-container>
 
           <!-- Select -->
-          <ng-container *ngIf="properties[field].ui.widget === 'select'">
-            <eo-ng-select
-              [(ngModel)]="model[field]"
-              id="{{ field }}"
-              [nzDisabled]="properties[field]?.disabled"
-              formControlName="{{ field }}"
-            >
-              <eo-ng-option *ngFor="let item of properties[field]?.enum" [nzValue]="item.value" [nzLabel]="item.label"></eo-ng-option>
+          <ng-container *ngIf="item.ui.widget === 'select'">
+            <eo-ng-select [(ngModel)]="model[item.key]" id="{{ item.key }}" [nzDisabled]="item?.disabled" formControlName="{{ item.key }}">
+              <eo-ng-option *ngFor="let item of item?.enum" [nzValue]="item.value" [nzLabel]="item.label"></eo-ng-option>
             </eo-ng-select>
           </ng-container>
 
           <!-- Checkbox -->
-          <ng-container *ngIf="properties[field]?.type === 'boolean' && properties[field].ui.widget === 'checkbox'">
+          <ng-container *ngIf="item?.type === 'boolean' && item.ui.widget === 'checkbox'">
             <label
               eo-ng-checkbox
-              [(ngModel)]="model[field]"
-              id="{{ field }}"
-              [nzDisabled]="properties[field]?.disabled"
-              formControlName="{{ field }}"
-              >{{ properties[field]?.title }}</label
+              [(ngModel)]="model[item.key]"
+              id="{{ item.key }}"
+              [nzDisabled]="item?.disabled"
+              formControlName="{{ item.key }}"
+              >{{ item?.title }}</label
             >
           </ng-container>
         </nz-form-control>
@@ -145,9 +131,10 @@ export class EoSchemaFormComponent implements OnChanges {
   @Output() readonly valueChanges: EventEmitter<any> = new EventEmitter<any>();
   validateForm!: FormGroup;
   objectKeys = Object.keys;
-  properties = {};
+  properties = [];
   compMap = compMap;
   isInited = true;
+  thenMap = {};
   placeholderTips = $localize`Please enter `;
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({});
@@ -184,16 +171,16 @@ export class EoSchemaFormComponent implements OnChanges {
   updateControls() {
     if (this.validateForm?.controls) {
       Object.keys(this.validateForm.controls).forEach(key => {
-        if (!Reflect.has(this.properties, key)) {
+        if (this.properties.findIndex(item => item.key === key) === -1) {
           this.validateForm.removeControl(key);
         }
       });
     }
-    Object.entries<any>(this.properties).forEach(([key, value]) => {
-      if (value.required) {
-        this.validateForm.addControl(key, new UntypedFormControl(null, Validators.required));
+    this.properties.forEach(item => {
+      if (item.required) {
+        this.validateForm.addControl(item.key, new UntypedFormControl(null, Validators.required));
       } else {
-        this.validateForm.addControl(key, new UntypedFormControl(null));
+        this.validateForm.addControl(item.key, new UntypedFormControl(null));
       }
     });
   }
@@ -208,6 +195,11 @@ export class EoSchemaFormComponent implements OnChanges {
             if (Reflect.has(value, 'const')) {
               prev[key] ??= {};
               prev[key][value.const] = curr;
+            } else if (Reflect.has(value, 'enum')) {
+              prev[key] ??= {};
+              value.enum.forEach(ele => {
+                prev[key][ele] = curr;
+              });
             }
           });
         }
@@ -221,14 +213,21 @@ export class EoSchemaFormComponent implements OnChanges {
             let __value = this.model[key];
             Object.defineProperty(this.model, key, {
               configurable: true,
+              enumerable: true,
               get: () => {
                 return __value;
               },
               set: val => {
                 const conf = ifFields[key]?.[val]?.then;
+                this.thenMap[key] = { then: conf };
                 if (isInit || val !== this.model[key]) {
                   if (conf?.properties) {
-                    this.formatProperties({ ...configuration?.properties, ...conf.properties });
+                    const propertiesArr: any = Object.entries(this.configuration?.properties);
+                    Object.entries(this.thenMap).forEach(([key, value]) => {
+                      const findIndex = propertiesArr.findIndex(ele => ele[0] === key);
+                      propertiesArr.splice(findIndex + 1, 0, ...Object.entries((value as { then: any }).then.properties));
+                    });
+                    this.formatProperties(propertiesArr);
                     isInit = false;
                   }
                   if (conf) {
@@ -244,16 +243,17 @@ export class EoSchemaFormComponent implements OnChanges {
     }
   }
 
-  formatProperties(properties = {}) {
-    this.properties = Object.entries<any>({ ...this.configuration?.properties, ...properties }).reduce((prev, [key, value]) => {
-      prev[key] = value;
-      // 不指定组件 则默认根据数据类型生成对应组件
+  formatProperties(properties: any = []) {
+    const propertiesArr = properties.length > 0 ? properties : Object.entries(this.configuration?.properties);
+    // const propertiesArr = [...Object.entries(this.configuration?.properties), ...properties];
+    this.properties = propertiesArr.map(([key, value]) => {
       value.ui = {
         widget: compMap[value.type],
         ...value.ui
       };
-      return prev;
-    }, {});
+      return { ...value, key: key };
+    });
+    this.properties2Model(this.properties);
     this.updateControls();
   }
 
@@ -264,8 +264,8 @@ export class EoSchemaFormComponent implements OnChanges {
    */
   private properties2Model(properties) {
     //  Flat configuration object
-    Object.entries<any>(properties).forEach(([fieldKey, fieldValue]) => {
-      this.model[fieldKey] ??= fieldValue.default ?? fieldValue.const;
+    this.properties.forEach(item => {
+      this.model[item.key] ??= item.default ?? item.const;
     });
   }
 }

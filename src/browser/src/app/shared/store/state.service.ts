@@ -205,7 +205,7 @@ export class StoreService {
         this.setPageLevel();
       }
     });
-
+    //TODO Only add beforeunload listeners conditionally: https://web.dev/bfcache/?utm_source=devtools#never-use-the-unload-event
     window.addEventListener('beforeunload', e => {
       this.setAppHasInitial();
     });

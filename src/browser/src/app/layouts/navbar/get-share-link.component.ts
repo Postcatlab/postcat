@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EffectService } from 'pc/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { copy } from 'pc/browser/src/app/shared/utils/index.utils';
-import { interval } from 'rxjs';
 
 import { DataSourceService } from '../../services/data-source/data-source.service';
 @Component({
@@ -38,7 +36,7 @@ import { DataSourceService } from '../../services/data-source/data-source.servic
         <ng-container *ngIf="link">
           <p nz-typography [nzContent]="link" nzCopyable nzEllipsis [nzCopyText]="link" [nzCopyIcons]="[copedIcon, copedIcon]"> </p>
           <ng-template #copedIcon>
-            <button eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+            <button trace traceID="copy_share_link" eo-ng-button nzType="text"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
           </ng-template>
         </ng-container>
       </div>

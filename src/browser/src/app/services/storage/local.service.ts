@@ -7,6 +7,8 @@ const ErrorStyle = 'background-color: #a73836; color: #fff;padding:3px;box-sizin
 
 const SuccessStyle = 'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;';
 
+const MessageStyle = 'color: #a73836;padding:3px;box-sizing: border-box;text-decoration-line: underline; font-weight: bold;';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,6 +44,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiData - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -73,6 +76,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiData - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -108,6 +112,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiData - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -144,6 +149,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiData - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -171,6 +177,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiData - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -207,6 +214,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiCase - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -243,6 +251,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiCase - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -278,6 +287,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiCase - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -313,6 +323,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiCase - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -372,6 +383,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c mock - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -408,6 +420,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c mock - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -453,6 +466,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c mock - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -484,6 +498,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c mock - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -515,6 +530,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c mock - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -538,6 +554,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -574,6 +591,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -605,6 +623,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -636,6 +655,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -671,6 +691,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c group - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -728,6 +749,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiTestHistory - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -768,6 +790,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiTestHistory - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -803,6 +826,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiTestHistory - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -838,6 +862,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c apiTestHistory - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -874,6 +899,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c environment - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -915,6 +941,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c environment - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -946,6 +973,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c environment - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -977,6 +1005,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c environment - detail 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1004,6 +1033,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c environment - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1027,6 +1057,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c workspace - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1054,6 +1085,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c workspace - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1077,6 +1109,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c workspace - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1104,6 +1137,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - exportProject 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1131,6 +1165,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1158,6 +1193,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - list 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1189,6 +1225,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - update 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1212,6 +1249,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - delete 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1230,6 +1268,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - import 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1261,6 +1300,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - createSyncSetting 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1292,6 +1332,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - updateSyncSetting 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1327,6 +1368,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - delSyncSetting 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1357,6 +1399,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - getSyncSettingList 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
@@ -1388,6 +1431,7 @@ export class LocalService {
           return resolve([null, { code, data }]);
         })
         .catch(error => {
+          console.log(error);
           console.log('%c project - syncBatchUpdate 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });

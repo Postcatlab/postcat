@@ -11,6 +11,7 @@ import { MessageService } from '../../../../services/message';
   template: ` <button
       nzTrigger="click"
       eo-ng-button
+      (nzVisibleChange)="dropdownVisibleChange($event)"
       nzType="text"
       nzOverlayClassName="select-workspace-class"
       eo-ng-dropdown
@@ -88,7 +89,10 @@ export class SelectWorkspaceComponent {
       this.store.getWorkspaceList.filter(val => !val?.isLocal)
     );
   }
-
+  dropdownVisibleChange(isVisible) {
+    if (!isVisible) return;
+    this.effect.updateWorkspaceList();
+  }
   changeWorkspace(workspaceID) {
     this.effect.switchWorkspace(workspaceID);
   }

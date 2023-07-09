@@ -18,7 +18,7 @@ test('Basic Operate', async ({ page }) => {
   await page.locator('form').first().click();
   await ifTipsExist(page, 'Edited Case Name successfully');
   //Edit Case
-  await page.getByPlaceholder('Enter URL or Curl text').fill('/pet1');
+  await page.getByPlaceholder('Enter URL, #AI Prompt or Curl text').fill('/pet1');
   await page.getByText('REST').click();
   await page.getByText('Query').click();
   await page.getByText('Headers').click();
@@ -44,7 +44,7 @@ test('Add Test From API Test', async ({ page }) => {
   await page.locator('form').first().click();
   await ifTipsExist(page, 'Edited Case Name successfully');
   //Edit Case
-  await page.getByPlaceholder('Enter URL or Curl text').fill('/pet1');
+  await page.getByPlaceholder('Enter URL, #AI Prompt or Curl text').fill('/pet1');
   await page.getByText('REST').click();
   await page.getByText('Query').click();
   await page.getByText('Headers').click();
@@ -53,5 +53,6 @@ test('Add Test From API Test', async ({ page }) => {
   await ifTipsExist(page, 'Edited Case successfully');
   //Delete Case
   await clickButtonByIconName(page, 'delete');
+  await page.getByRole('button', { name: 'OK' }).click();
   await ifTipsExist(page, 'Successfully deleted');
 });
