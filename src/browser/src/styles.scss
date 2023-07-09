@@ -3,18 +3,18 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import './styles/atom';
-@import '../../../node_modules/eo-ng-checkbox/styles';
-@import '../../../node_modules/eo-ng-select/styles';
-@import '../../../node_modules/eo-ng-button/styles';
-@import '../../../node_modules/eo-ng-radio/styles';
-@import '../../../node_modules/eo-ng-input/styles';
-@import '../../../node_modules/eo-ng-auto-complete/styles';
-@import '../../../node_modules/eo-ng-tabs/styles';
-@import '../../../node_modules/eo-ng-tree/styles';
-@import '../../../node_modules/eo-ng-table/styles';
-@import '../../../node_modules/eo-ng-layout/styles';
-@import '../../../node_modules/eo-ng-feedback/styles';
-@import '../../../node_modules/eo-ng-dropdown/styles';
+@import '../node_modules/eo-ng-checkbox/styles';
+@import '../node_modules/eo-ng-select/styles';
+@import '../node_modules/eo-ng-button/styles';
+@import '../node_modules/eo-ng-radio/styles';
+@import '../node_modules/eo-ng-input/styles';
+@import '../node_modules/eo-ng-auto-complete/styles';
+@import '../node_modules/eo-ng-tabs/styles';
+@import '../node_modules/eo-ng-tree/styles';
+@import '../node_modules/eo-ng-table/styles';
+@import '../node_modules/eo-ng-layout/styles';
+@import '../node_modules/eo-ng-feedback/styles';
+@import '../node_modules/eo-ng-dropdown/styles';
 
 html,
 body {
