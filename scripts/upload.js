@@ -48,6 +48,7 @@ const version = package.version;
 //! Dont't upload .blockmap when use nsis package windows
 const fileList = [
   'release/Postcat-Setup-?.exe',
+  'release/Postcat Setup ?.exe.blockmap',
   'release/Postcat-?-arm64.dmg',
   'release/Postcat-?-arm64-mac.zip',
   'release/Postcat-?.dmg',

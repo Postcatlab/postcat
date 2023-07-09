@@ -34,6 +34,9 @@ export class ApiEditUtilService {
           item.partType = mui[tableName];
           // 0: request, 1: response
           item.paramType = ParamTypeEnum.REQUEST;
+          item.paramAttr ??= {
+            example: ''
+          };
           return filterArrFun(item);
         }
       });
@@ -57,6 +60,9 @@ export class ApiEditUtilService {
         filterFn: item => {
           item.partType = mui[tableName];
           item.paramType = 1;
+          item.paramAttr ??= {
+            example: ''
+          };
           return filterArrFun(item);
         }
       });

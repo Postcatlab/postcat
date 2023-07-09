@@ -5,7 +5,7 @@ import StorageUtil from '../../../shared/utils/storage/storage.utils';
 
 @Component({
   selector: 'pc-debug-theme',
-  template: `<div class="h-[80%]"
+  template: `<div class="h-[80vh]"
       ><eo-monaco-editor
         [autoFormat]="true"
         class="border-all"

@@ -156,6 +156,7 @@ export class WebExtensionService {
   }
 
   async getPkgInfo(extName: string, version = 'latest') {
+    if (!this.extensionCommon.getExtensionList?.length) return null;
     const newestExt = this.extensionCommon.getExtensionList.find(val => val.name === extName);
     version = version === 'latest' ? newestExt?.version || 'latest' : version;
     let pkgInfo;

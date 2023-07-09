@@ -229,6 +229,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.cacheData();
   }
   private watchPageLeave = () => {
+    //TODO Only add beforeunload listeners conditionally: https://web.dev/bfcache/?utm_source=devtools#never-use-the-unload-event
     window.addEventListener('beforeunload', e => {
       this.cacheData();
     });

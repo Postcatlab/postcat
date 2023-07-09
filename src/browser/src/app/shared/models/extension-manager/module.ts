@@ -39,11 +39,13 @@ export interface ExtensionInfo {
   name: string;
   version: string;
   browser: string;
-  author: string | { name: 'string' };
+  author: string;
   //Entry js file,webRender environment
   main: string;
   // extension description
   description: string;
+  //CategoryContributionPoints
+  categories: any[];
 
   //* Postcat extend
   //Entry js file,node environment

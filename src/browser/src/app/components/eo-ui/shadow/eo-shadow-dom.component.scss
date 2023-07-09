@@ -5,7 +5,7 @@
   * {
     max-width: 100%;
   }
-  /* stylelint-disable  max-line-length,font-family-no-duplicate-names,no-duplicate-selectors,selector-pseudo-element-no-unknown */
+  /* stylelint-disable  max-line-length,font-family-no-duplicate-names,no-duplicate-selectors,selector-pseudo-element-no-unknown,selector-anb-no-unmatchable */
   .markdown-body {
     text-size-adjust: 100%;
     margin: 0;
@@ -102,6 +102,7 @@
   .markdown-body img {
     border-style: none;
     max-width: 100%;
+    display: block;
     box-sizing: content-box;
     background-color: #fff;
   }
@@ -892,10 +893,7 @@
 
   .markdown-body .footnotes li:target::before {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    bottom: -8px;
-    left: -24px;
+    inset: -8px -8px -8px -24px;
     pointer-events: none;
     content: '';
     border: 2px solid #0969da;
