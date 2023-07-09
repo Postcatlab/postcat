@@ -127,7 +127,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
       ]
     });
   }
-  //Quick see tabs change in templete,for debug,can be deleted
+  //Quick see tabs change in template,for debug,can be deleted
   // ! just for debug
   getConsoleTabs() {
     const tabs = [];
@@ -163,7 +163,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   /**
    * Get Tab id by child component resource id
    *
-   * @param uuid queryparams uuid
+   * @param uuid queryParams uuid
    * @returns
    */
   getTabByParamsID(uuid: TabItem['params']['uuid']) {

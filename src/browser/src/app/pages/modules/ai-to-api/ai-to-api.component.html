@@ -1,0 +1,33 @@
+<div class="ai-to-api">
+  <pc-ai-input-group
+    [(aiPrompt)]="aiPrompt"
+    [(requestLoading)]="requestLoading"
+    [(hasGenGenerated)]="hasGenGenerated"
+    (emitGenerateAPI)="generateAPI()"
+  >
+  </pc-ai-input-group>
+
+  <!--  The generated api information dom-->
+  <ng-container>
+    <nz-skeleton [nzLoading]="requestLoading" [nzActive]="true"> </nz-skeleton>
+    <div [hidden]="!(editShow && !error)" class="py-[15px]">
+      <pc-api-http-edit #apiEditDom [isAIToAPI]="true"></pc-api-http-edit>
+    </div>
+
+    <div *ngIf="error" class="error-contain mt-[25px] w-full h-[85px] flex items-center justify-center bg-[#F8F8F8]">
+      <span nz-icon nzType="info-circle" nzTheme="outline"></span>
+      <span class="ml-[9px] error-text">遇到了一些意外，请修改 Prompt 提示语并重试吧</span>
+    </div>
+  </ng-container>
+
+  <nz-modal [nzVisible]="false">
+    <div *nzModalFooter>
+      <div [hidden]="!editShow">
+        <button eo-ng-button nzType="default" (click)="cancel()">Cancel</button>
+        <button [nzLoading]="saveLoading" eo-ng-button nzType="primary" (click)="saveApi()">Save as an API document</button>
+      </div>
+    </div>
+  </nz-modal>
+
+  <!--  <button (click)="changetestshow()">切换</button>-->
+</div>
