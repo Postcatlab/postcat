@@ -1,15 +1,14 @@
-import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
-import { build, BuildResult, Platform } from 'electron-builder';
+import { sign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import type { Configuration } from 'electron-builder';
+import { Platform, build } from 'electron-builder';
 import minimist from 'minimist';
-import YAML from 'yaml';
 
 import pkgInfo from '../package.json';
-import { ELECTRON_BUILD_CONFIG } from './build';
+import { ELECTRON_BUILD_CONFIG } from './baseConfig';
 
 import { exec, spawn } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
-import path, { resolve } from 'node:path';
+import path from 'node:path';
 import { exit, platform } from 'node:process';
 
 const pkgPath = path.join(__dirname, '../package.json');
