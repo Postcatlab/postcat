@@ -70,6 +70,18 @@
 </br>也欢迎给我们多多提需求~
 </br>
 
+## 💪 贡献者 💪
+<p align="center">
+感谢你们让美好发生！
+</p>
+
+<a href="https://github.com/Postcatlab/postcat/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Postcatlab/postcat" />
+</a>
+
+<div align="center">
+<sub>Power by <a href="https://contrib.rocks">contrib.rocks</a>.</sub>
+</div>
 
 ## Bug 和需求反馈
 
@@ -84,7 +96,6 @@
 - 微信群：
 
 ![](http://data.eolinker.com/course/NKhRRF668370911c8b8ea8a0887b5d62e71b0f1a22ad76a.png)
-
 
 
 ## 开发 Postcat
@@ -160,5 +171,4 @@ yarn add @angular/cli --global
 |命令 |描述 |
 | ------------ | ------------ |
 |yarn test |执行单元测试 |
-
 
