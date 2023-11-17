@@ -19,6 +19,9 @@ export class ProjectMemberService {
   ) {
     autorun(async () => {
       this.role = this.store.getProjectRole;
+      console.log('workspace role: ', this.store.getWorkspaceRole);
+      console.log('project role: ', this.store.getProjectRole);
+      debugger;
       this.isOwner =
         this.store.getWorkspaceRole.some(it => it.name === 'Workspace Owner') ||
         this.store.getProjectRole.some(it => it.name === 'Project Owner');

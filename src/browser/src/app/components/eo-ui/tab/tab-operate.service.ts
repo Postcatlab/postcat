@@ -253,7 +253,7 @@ export class TabOperateService {
   }
 
   /**
-   * Operate tab after router change,router triggle tab change
+   * Operate tab after router change,router trigger tab change
    * Such as new tab,pick tab,close tab...
    *
    * @param res.url location.pathname+location.search

@@ -42,6 +42,7 @@ export class WorkspaceOverviewComponent implements OnInit {
       () => this.store.getWorkspaceRole,
       value => {
         this.isOwner = value?.some(it => ['Workspace Owner'].includes(it.name));
+        debugger;
       }
     );
     autorun(async () => {

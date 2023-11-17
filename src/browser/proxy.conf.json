@@ -1,14 +1,14 @@
 {
   "/api": {
-    // "targe": "https://postcat.com",
-    "target": "http://52.76.76.88:8080",
+    "target": "https://postcat.com",
+    // "target": "http://52.76.76.88:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/usercenter": {
-    // "targe": "https://postcat.com",
-    "target": "http://52.76.76.88:8080",
+    "target": "https://postcat.com",
+    // "target": "http://52.76.76.88:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

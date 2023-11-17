@@ -190,7 +190,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @returns
    */
   parseGroupDataToViewTree(list) {
-    return list.map((it: ViewGroup) => {
+    const data = list.map((it: ViewGroup) => {
       //* Group
       if (it.type === GroupType.UserCreated) {
         return {
@@ -226,6 +226,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       }
       return result;
     });
+    console.log('_data:', data);
+    return data;
   }
   /**
    * Generate Group for tree view
