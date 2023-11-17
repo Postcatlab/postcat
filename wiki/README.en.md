@@ -10,6 +10,18 @@
   <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
+## `🛠️ A Little Update, A Big Transformation: Postcat is Undergoing a Revamp! 🚀
+
+Hey there, Postcat friends!
+
+Just a quick shout-out to let you all know that our project is currently on an exciting journey of restructuring. It's not that Postcat is unattended; in fact, we're actively injecting new energy into it!
+
+Things might seem a bit quiet for now, but rest assured, we're busy behind the scenes. We're committed to making Postcat cooler and more user-friendly - it just takes a bit of time to polish and perfect.
+
+So, stay tuned! Soon, you'll be meeting a revamped and rejuvenated Postcat. Your support and patience mean the world to us!
+
+Exciting updates are on the horizon, stay tuned!`
+
 ![Postcat UI](https://data.eolink.com/ADAR6cL7e479c785ec305f5c60de95ce1a2a88da408039b)
 
 Postcat is a powerful open source, cross-platform (Windows, Mac, Linux, Browsers...) **API development and testing tool** that supports REST, Websocket and other protocols (soon to support GraphQL, gRPC, TCP, UDP), helping you speed up the completion of API Development and testing work.
