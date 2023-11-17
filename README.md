@@ -10,6 +10,18 @@
   <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
+## 🛠️ 小更新，大改变：Postcat 正在重构中！ 🚀
+
+嘿，Postcat 的朋友们！
+
+只是想快速告诉大家，我们的项目现在正处在一次激动人心的重构旅程中。这并不意味着 Postcat 没有得到维护，恰恰相反，我们正在给它注入新的活力！
+
+在这个阶段，可能会有些静悄悄的，但请相信，我们在幕后正忙得不可开交。我们致力于让 Postcat 变得更酷、更易用，只是需要一点时间来打磨和完善。
+
+所以，请继续关注，不久的将来，你们会见到一个焕然一新的 Postcat。你的支持和耐心是我们最宝贵的动力！
+
+敬请期待，更多精彩即将来临！
+
 ## 概述
 
 **Postcat** 是一个强大的开源、免费的、跨平台（Windows、Mac、Linux、Browsers...）的 **API 开发测试工具**，支持 REST、Websocket 等协议（即将支持 GraphQL、gRPC、TCP、UDP），帮助你加速完成 API 开发和测试工作。它非常适合中小团队及个人使用。
