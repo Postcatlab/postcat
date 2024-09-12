@@ -1,5 +1,5 @@
 import { KeyValue } from '@angular/common';
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
@@ -8,7 +8,7 @@ import { TabStorageService } from 'pc/browser/src/app/components/eo-ui/tab/tab-s
 import { TabItem, TabOperate } from 'pc/browser/src/app/components/eo-ui/tab/tab.model';
 import { TraceService } from 'pc/browser/src/app/services/trace.service';
 import { StoreService } from 'pc/browser/src/app/shared/store/state.service';
-import { filter, Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 
 import { ModalService } from '../../../services/modal.service';
 @Component({
@@ -84,6 +84,12 @@ export class EoTabComponent implements OnInit, OnDestroy {
    */
   selectChange($event) {
     this.tabOperate.navigateByTab(this.getCurrentTab());
+  }
+  handleMouseMiddleClick({ $event, index, tab }: { $event: MouseEvent; index: number; tab: any }) {
+    if ($event.button === 1) {
+      $event.stopPropagation();
+      this.closeTab({ $event, index, tab });
+    }
   }
   async closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
     if (this.checkTabCanLeave && !(await this.checkTabCanLeave(tab))) {
