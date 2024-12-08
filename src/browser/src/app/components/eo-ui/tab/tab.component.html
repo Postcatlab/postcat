@@ -52,7 +52,11 @@
           "
         >
         </ng-container>
-        <span class="flex-1 truncate tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title">
+        <span
+          (mousedown)="handleMouseMiddleClick({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"
+          class="flex-1 truncate tab-text"
+          [title]="tabStorage.tabsByID.get(uuid)?.title"
+        >
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
         <!-- Close/HasEdit -->
