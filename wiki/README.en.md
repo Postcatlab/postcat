@@ -1,3 +1,15 @@
+## ⚠️ Project Status Notice
+
+This project is now in a **maintenance suspended** state.
+
+Due to unforeseen circumstances beyond our control, the Postcat open source project is no longer actively maintained as of now.  
+No new features, regular maintenance, or security fixes will be provided in the future.
+
+If you are using this project in production, please carefully evaluate the risks and consider migrating to actively maintained alternatives.
+
+Thank you to all contributors and users for your support over the years.
+
+
 # Postcat API Client
 
 ![Postcat API Client](http://data.eolinker.com/course/QbLMSaJ7f3dcd0b075a7031b31f8acb486e0a090f1bdc8d.jpeg)
