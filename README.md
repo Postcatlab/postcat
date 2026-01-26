@@ -1,3 +1,15 @@
+## ⚠️ 项目状态说明 
+
+本项目目前已进入 **暂停维护**。
+
+由于不可抗力因素，Postcat 开源项目自即日起将不再进行功能迭代与日常维护，未来也将不再提供新的功能更新与安全修复。
+
+如果你仍在生产环境中使用本项目，请务必自行评估风险，并考虑迁移到 Apikit.com 或其他替代方案。
+
+感谢所有贡献者与用户多年来的支持与陪伴。
+
+
+
 # Postcat API 客户端（Client）
 
 ![Postcat API Client](http://data.eolinker.com/course/QbLMSaJ7f3dcd0b075a7031b31f8acb486e0a090f1bdc8d.jpeg)
