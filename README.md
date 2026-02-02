@@ -24,7 +24,7 @@
 
 ## 概述
 
-**Postcat** 是一个强大的开源、免费的、跨平台（Windows、Mac、Linux、Browsers...）的 **API 开发测试工具**，支持 REST、Websocket 等协议（即将支持 GraphQL、gRPC、TCP、UDP），帮助你加速完成 API 开发和测试工作。它非常适合中小团队及个人使用。
+**Postcat** 是一个强大的开源、免费的、跨平台（Windows、Mac、Linux、Browsers...）的 **API 开发测试工具**，支持 REST、Websocket 等协议（即将支持 GraphQL、gRPC、TCP、UDP），帮助您加速完成 API 开发和测试工作。它非常适合中小团队及个人使用。
 
 ![Postcat UI](https://data.eolink.com/ImGzhCi79d0beb5b8221670dffceb61bf642af1960d3881)
 
