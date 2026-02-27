@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Node.js
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v4
         with:
           node-version: '16'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install OpenVPN
         run: |
           echo "${{ secrets.OPENVPN_CONFIG_FILE }}" > .github/workflows/client.ovpn

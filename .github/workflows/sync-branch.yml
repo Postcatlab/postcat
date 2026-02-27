@@ -11,7 +11,7 @@ jobs:
   merge-branch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
 
       - name: Merge main -> build/windows
         uses: devmasx/merge-branch@master

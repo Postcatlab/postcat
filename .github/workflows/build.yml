@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Check out git repository
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v4
         with:
           node-version: '16'
 
@@ -28,7 +28,7 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
