@@ -16,7 +16,6 @@ export class EoUpdater {
     // 是否自动更新
     // autoUpdater.autoDownload = window.pc.getExtensionSettings('common.app.autoUpdate') !== false;
     if (appVersion.includes('beta')) autoUpdater.channel = 'beta';
-    console.log('appVersion', appVersion, autoUpdater.channel);
 
     // autoUpdater.on('update-downloaded', info => {
     //   log.info('Update downloaded.');

@@ -65,7 +65,7 @@ export class CoreHandler {
         extensionInfo.logo = `file://${path.join(extensionInfo.baseDir, extensionInfo.logo)}`;
       }
     } catch (e) {
-      console.log(`Get module ${extensionInfo?.name} error:${e}`);
+      console.error(`Get module ${extensionInfo?.name} error:${e}`);
       extensionInfo = {} as ExtensionInfo;
     }
     return extensionInfo;

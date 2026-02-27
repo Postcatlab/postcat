@@ -179,7 +179,6 @@ try {
     }
   });
   ipcMain.on('message', function (event, arg) {
-    console.log('recieve render msg=>', arg, arg.action);
     //only action from mainView can be executed
     // if (event.frameId !== 1) return;
     switch (arg.action) {

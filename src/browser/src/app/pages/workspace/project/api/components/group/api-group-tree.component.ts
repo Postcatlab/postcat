@@ -287,7 +287,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
 
     // * Get group sort index
     const sort = children.findIndex(val => val.key === node.key);
-    console.log('TODO: sort 可能不是按顺序的', [...children]);
     // * It will be update group list automatic
     this.expandKeys = parentNode?.isLeaf ? this.expandKeys : [...new Set([parentNode?.key, ...this.expandKeys])];
     this.effect.sortGroup(
