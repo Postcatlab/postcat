@@ -1,4 +1,3 @@
-import { UpdateSpec } from 'dexie';
 import { AuthTypeValue, isInherited, NONE_AUTH_OPTION } from 'pc/browser/src/app/pages/workspace/project/api/constants/auth.model';
 import { GroupModule } from 'pc/browser/src/app/pages/workspace/project/api/group-edit/group.module';
 import { dataSource } from 'pc/browser/src/app/services/storage/db/dataSource';
@@ -64,16 +63,6 @@ export class DbGroupService extends DbBaseService<Group> {
 
   constructor() {
     super(dataSource.group);
-    //TODO delete at 2023-07-01
-    //Fixed root group authInfo
-    //@ts-ignore
-    this.baseService.db.update(1, {
-      authInfo: {
-        authType: NONE_AUTH_OPTION.name,
-        isInherited: isInherited.notInherit,
-        authInfo: {}
-      }
-    } as UpdateSpec<Group>);
   }
 
   async bulkCreate(params: Group[] = []) {
